@@ -1,6 +1,7 @@
-import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
 import { BodyShort, Button, Table, Tag } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
+import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+
 import {
   finnOverstyrMuligRettFra,
   finnOverstyrMuligRettFraFraLøsning,
@@ -8,7 +9,7 @@ import {
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
 } from 'components/behandlinger/krav/kravutils';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 type Props = {
   readOnly?: boolean;
@@ -89,7 +90,7 @@ export const KravTabell = ({
                   <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
                   <Table.DataCell>{formaterSøknadsdatoRad(vurdering, aktivLøsning)}</Table.DataCell>
                   <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering, aktivLøsning)}</Table.DataCell>
-                  <Table.DataCell>{vurdering.vurdertAv.ident}</Table.DataCell>
+                  <Table.DataCell>{vurdering.vurdertAv}</Table.DataCell>
                   <Table.DataCell>
                     {aktivLøsning ? (
                       <Tag variant="warning" size="small">
@@ -171,7 +172,7 @@ export const KravTabell = ({
                 <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
                 <Table.DataCell>{formaterSøknadsdatoRad(vurdering, aktivLøsning)}</Table.DataCell>
                 <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering, aktivLøsning)}</Table.DataCell>
-                <Table.DataCell>{vurdering.vurdertAv.ident}</Table.DataCell>
+                <Table.DataCell>{vurdering.vurdertAv}</Table.DataCell>
                 <Table.DataCell>
                   {aktivLøsning ? (
                     <Tag variant="warning" size="small">
