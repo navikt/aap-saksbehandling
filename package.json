@@ -78,7 +78,6 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "happy-dom": "20.10.6",
     "husky": "9.1.7",
-    "jsdom": "29.1.1",
     "lint-staged": "16.4.0",
     "openapi-typescript": "7.13.0",
     "pino-pretty": "13.1.3",
