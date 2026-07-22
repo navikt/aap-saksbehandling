@@ -32,7 +32,7 @@ export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeG
             <Table.ExpandableRow key={rad.status + rad.referanse} content={innhold(rad)}>
               <Table.DataCell>{rad.status}</Table.DataCell>
               <Table.DataCell>{rad.referanse}</Table.DataCell>
-              <Table.DataCell>{tag(rad.relevantKravType)}</Table.DataCell>
+              <Table.DataCell>{KravTag(rad.relevantKravType)}</Table.DataCell>
               <Table.DataCell>{`${rad.vurdertAv} (${formaterDatoForFrontend(rad.opprettet)})`}</Table.DataCell>
             </Table.ExpandableRow>
           ))}
@@ -61,7 +61,7 @@ function innhold(rad: Rad) {
   );
 }
 
-function tag(type: StønadsperiodeVurdering['relevantKravType']) {
+function KravTag(type: StønadsperiodeVurdering['relevantKravType']) {
   const [farge, tekst] = ((): [AkselColorRole, string] => {
     switch (type) {
       case 'AVSLAG':

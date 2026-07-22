@@ -11,8 +11,7 @@ interface Props {
   grunnlag: StønadsperiodeGrunnlag;
   readOnly: boolean;
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const Stønadsperiode = ({ behandlingVersjon, grunnlag, readOnly }: Props) => {
+export const Stønadsperiode = ({ grunnlag }: Props) => {
   return (
     <VilkårsKort heading={'Forskrift om AAP § 12. Ny stønadsperiode'} steg={'AVKLAR_STØNADSPERIODE'}>
       <List size={'small'}>
