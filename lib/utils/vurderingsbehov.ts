@@ -125,15 +125,11 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'ETABLERING_EGEN_VIRKSOMHET':
       return '§ 11-15 Etablering av egen virksomhet';
     case 'REVURDER_SYKESTIPEND':
-      return 'Revurder sykestipend';
+      return '§ 11-29 Sykestipend fra lånekassen';
     case 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT':
       return 'Behandling avbrutt';
     case 'REVURDER_INNTEKTSBORTFALL':
       return 'Revurder inntektsbortfall';
-    case 'OVERGANG_UFORE_AUTOMATISK_STANS':
-      return '..';
-    case 'VURDER_KRAV':
-      return 'Vurder krav';
     case 'VURDER_AVSLAG_11_27':
       return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
     default:
