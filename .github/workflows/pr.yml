@@ -2,9 +2,9 @@ name: Bygg pull request
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths-ignore:
-      - '**.md'
+  # pull_request:
+  #   paths-ignore:
+  #     - '**.md'
 
 jobs:
   buildDevPullRequest:
