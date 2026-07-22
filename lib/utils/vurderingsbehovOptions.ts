@@ -1,45 +1,50 @@
-import { ValuePair } from 'components/form/FormField';
-import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+
+import { ValuePair } from 'components/form/FormField';
+
+import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 
 export const vurderingsbehovOptions = (
   erKravEnabled: boolean,
   erAvslag11_27Enabled: boolean | undefined
 ): ValuePair<Vurderingsbehov>[] => {
-  const behov: Vurderingsbehov[] = [
-    // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
-    'VURDER_RETTIGHETSPERIODE',
-    'LOVVALG_OG_MEDLEMSKAP',
-    'REVURDER_STUDENT',
-    'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
-    'OVERGANG_ARBEID',
-    'OVERGANG_UFORE',
-    'REVURDER_YRKESSKADE',
-    'REVURDER_SYKEPENGEERSTATNING',
-    'REVURDER_BEREGNING',
-    'REVURDER_MANUELL_INNTEKT',
-    'REVURDER_INNTEKTSBORTFALL',
-    'FORUTGAENDE_MEDLEMSKAP',
-    'OPPHOLDSKRAV',
-    'BARNETILLEGG',
-    'DØDSFALL_BARN',
-    'INSTITUSJONSOPPHOLD',
-    'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
-    'REVURDER_SAMORDNING_UFØRE',
-    'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
-    'ETABLERING_EGEN_VIRKSOMHET',
-    'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
-    'REVURDER_SAMORDNING_ARBEIDSGIVER',
-    'REVURDER_SAMORDNING_TJENESTEPENSJON',
-    'DØDSFALL_BRUKER',
-    'REVURDER_SAMORDNING_BARNEPENSJON',
-    'VEDTAKSLENGDE_MANUELT',
-    'VURDER_AVSLAG_11_27',
-    'VURDER_KRAV',
-  ].filter(
+  const behov: Vurderingsbehov[] = (
+    [
+      'VURDER_RETTIGHETSPERIODE',
+      'LOVVALG_OG_MEDLEMSKAP',
+      'REVURDER_STUDENT',
+      'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
+      'OVERGANG_ARBEID',
+      'OVERGANG_UFORE',
+      'REFUSJONSKRAV',
+      'REVURDER_YRKESSKADE',
+      'REVURDER_SYKEPENGEERSTATNING',
+      'REVURDER_BEREGNING',
+      'REVURDER_MANUELL_INNTEKT',
+      'REVURDER_INNTEKTSBORTFALL',
+      'FORUTGAENDE_MEDLEMSKAP',
+      'OPPHOLDSKRAV',
+      'BARNETILLEGG',
+      'DØDSFALL_BARN',
+      'INSTITUSJONSOPPHOLD',
+      'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
+      'REVURDER_SAMORDNING_UFØRE',
+      'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
+      'ETABLERING_EGEN_VIRKSOMHET',
+      'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
+      'REVURDER_SAMORDNING_ARBEIDSGIVER',
+      'REVURDER_SAMORDNING_TJENESTEPENSJON',
+      'REVURDER_SYKESTIPEND',
+      'DØDSFALL_BRUKER',
+      'REVURDER_SAMORDNING_BARNEPENSJON',
+      'VEDTAKSLENGDE_MANUELT',
+      'VURDER_AVSLAG_11_27',
+      'VURDER_KRAV',
+    ] satisfies Vurderingsbehov[]
+  ).filter(
     (option) =>
       (erKravEnabled || option !== 'VURDER_KRAV') && (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27')
-  ) as Vurderingsbehov[];
+  );
 
   return behov.map((behov) => ({
     value: behov,
