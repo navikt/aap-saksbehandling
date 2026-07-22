@@ -100,7 +100,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
             <SaksinfoBanner
               behandling={behandling.data}
               sak={sak}
-              oppgaveVisninginfo={oppgaveVisningsinfo.data}
+              oppgaveVisningsinfo={oppgaveVisningsinfo.data}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
             />

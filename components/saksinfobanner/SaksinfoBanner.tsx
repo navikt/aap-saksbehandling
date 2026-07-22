@@ -26,18 +26,18 @@ import styles from './SaksinfoBanner.module.css';
 interface Props {
   sak: SaksInfoType;
   behandling?: DetaljertBehandling;
-  oppgaveVisninginfo?: OppgaveVisningsinformasjon;
+  oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
 }
 
-export const SaksinfoBanner = ({ sak, behandling, oppgaveVisninginfo, flyt, visning }: Props) => {
+export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
-  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisninginfo?.harUlesteDokumenter);
-  const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisninginfo?.reservertAvIdent;
+  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
+  const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
 
-  const adressebeskyttelser = oppgaveVisninginfo ? utledAdressebeskyttelse(oppgaveVisninginfo) : [];
+  const adressebeskyttelser = oppgaveVisningsinfo ? utledAdressebeskyttelse(oppgaveVisningsinfo) : [];
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (visning?.visVentekort) {
@@ -50,17 +50,17 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisninginfo, flyt, visn
   };
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgaveVisninginfo?.reservertAvIdent) {
+    if (!oppgaveVisningsinfo?.reservertAvIdent) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT_INNLOGGET_BRUKER',
-        label: `Tildelt: ${oppgaveVisninginfo.reservertAvNavn ?? oppgaveVisninginfo.reservertAvIdent}`,
+        label: `Tildelt: ${oppgaveVisningsinfo.reservertAvNavn ?? oppgaveVisningsinfo.reservertAvIdent}`,
       };
-    } else if (oppgaveVisninginfo?.reservertAvIdent && !erReservertAvInnloggetBruker) {
+    } else if (oppgaveVisningsinfo?.reservertAvIdent && !erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT',
-        label: `Tildelt: ${oppgaveVisninginfo.reservertAvNavn ?? oppgaveVisninginfo.reservertAvIdent}`,
+        label: `Tildelt: ${oppgaveVisningsinfo.reservertAvNavn ?? oppgaveVisningsinfo.reservertAvIdent}`,
       };
     }
   };
@@ -138,12 +138,12 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisninginfo, flyt, visn
               <OppgaveStatus oppgaveStatus={oppgaveTildelingStatus} />
             </div>
           )}
-          {oppgaveVisninginfo?.utløptVenteInfo && (
+          {oppgaveVisningsinfo?.utløptVenteInfo && (
             <div className={styles.oppgavestatus}>
               <UtløptVentefristBoks
-                frist={oppgaveVisninginfo.utløptVenteInfo.påVentTil}
-                årsak={oppgaveVisninginfo.utløptVenteInfo.påVentÅrsak}
-                begrunnelse={oppgaveVisninginfo.utløptVenteInfo.venteBegrunnelse}
+                frist={oppgaveVisningsinfo.utløptVenteInfo.påVentTil}
+                årsak={oppgaveVisningsinfo.utløptVenteInfo.påVentÅrsak}
+                begrunnelse={oppgaveVisningsinfo.utløptVenteInfo.venteBegrunnelse}
               />
             </div>
           )}
@@ -152,12 +152,12 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisninginfo, flyt, visn
               <OppgaveStatus oppgaveStatus={oppgaveStatus} />
             </div>
           )}
-          {oppgaveVisninginfo?.returInformasjon?.status && (
+          {oppgaveVisningsinfo?.returInformasjon?.status && (
             <div className={styles.oppgavestatus}>
-              <ReturStatus returStatus={oppgaveVisninginfo.returInformasjon.status} />
+              <ReturStatus returStatus={oppgaveVisningsinfo.returInformasjon.status} />
             </div>
           )}
-          {oppgaveVisninginfo?.markeringer?.map((markering) => (
+          {oppgaveVisningsinfo?.markeringer?.map((markering) => (
             <div className={styles.oppgavestatus} key={markering.markeringType}>
               <MarkeringInfoboks markering={markering} referanse={behandling.referanse} showLabel={true} />
             </div>
@@ -166,7 +166,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisninginfo, flyt, visn
             flyt={flyt}
             visning={visning}
             behandling={behandling}
-            reservertAvIdent={oppgaveVisninginfo?.reservertAvIdent}
+            reservertAvIdent={oppgaveVisningsinfo?.reservertAvIdent}
             brukerInformasjon={brukerInformasjon}
           />
         </HStack>
@@ -176,7 +176,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisninginfo, flyt, visn
 };
 
 function utledAdressebeskyttelse(visningInfo?: OppgaveVisningsinformasjon): Adressebeskyttelsesgrad[] {
-  let adressebeskyttelser = [];
+  let adressebeskyttelser: Adressebeskyttelsesgrad[] = [];
   if (visningInfo?.skjermingInfo.harStrengtFortroligAdresse) {
     adressebeskyttelser.push(Adressebeskyttelsesgrad.STRENGT_FORTROLIG);
   } else if (visningInfo?.skjermingInfo.harFortroligAdresse) {

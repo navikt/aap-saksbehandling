@@ -47,7 +47,7 @@ export const LedigeOppgaverMeny = ({
             return;
           }
         } else {
-          setFeilmelding(`Feil ved henting av oppgave: ${tildeltStatusForOppgave.apiException?.message}`);
+          setFeilmelding(`Feil ved henting av tildelt-status for oppgave: ${tildeltStatusForOppgave.apiException?.message}`);
         }
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
