@@ -1,12 +1,12 @@
-import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Dispatch, SetStateAction, useTransition } from 'react';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
-import { isSuccess } from 'lib/utils/api';
-import { useRouter } from 'next/navigation';
+import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { hentTildeltStatusClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
+import { Oppgave } from 'lib/types/oppgaveTypes';
+import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL, byggKelvinURLFraOppgave } from 'lib/utils/request';
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useTransition } from 'react';
 
 interface Props {
   oppgave: Oppgave;
@@ -35,15 +35,19 @@ export const LedigeOppgaverMeny = ({
   async function plukkOgGåTilOppgave(oppgave: Oppgave) {
     startTransitionBehandle(async () => {
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
-        if (isSuccess(nyesteOppgave)) {
-          if (nyesteOppgave.data.reservertAv != null) {
-            setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent');
+        const tildeltStatusForOppgave = await hentTildeltStatusClient(oppgave.behandlingRef);
+        if (isSuccess(tildeltStatusForOppgave)) {
+          if (tildeltStatusForOppgave.data.tildeltSaksbehandlerIdent != null) {
+            setSaksbehandlerNavn(
+              tildeltStatusForOppgave.data.tildeltSaksbehandlerNavn ??
+                tildeltStatusForOppgave.data.tildeltSaksbehandlerIdent ??
+                'Ukjent'
+            );
             setVisOppgaveIkkeLedigModal(true);
             return;
           }
         } else {
-          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException?.message}`);
+          setFeilmelding(`Feil ved henting av tildelt-status for oppgave: ${tildeltStatusForOppgave.apiException?.message}`);
         }
 
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
@@ -53,7 +57,7 @@ export const LedigeOppgaverMeny = ({
           if (plukketOppgave.status == 401) {
             setÅpenModal(true);
           } else {
-            setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
+            setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException?.message}`);
           }
         }
       }

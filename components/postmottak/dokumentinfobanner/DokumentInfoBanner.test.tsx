@@ -1,13 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it, test } from 'vitest';
-import { DokumentInfoBanner } from 'components/postmottak/dokumentinfobanner/DokumentInfoBanner';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
-import { ReactElement } from 'react';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
+import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
+import { ReactElement } from 'react';
+import { beforeEach, describe, expect, it, test } from 'vitest';
+
+import { DokumentInfoBanner } from 'components/postmottak/dokumentinfobanner/DokumentInfoBanner';
 
 function renderMedInnloggetBruker(ui: ReactElement) {
   return render(
@@ -25,22 +22,13 @@ const journalpostInfo = {
   dokumenter: [],
 };
 
-const oppgave: Oppgave = {
-  id: 123,
-  personIdent: '123456',
-  behandlingRef: 'gasg',
+const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
   saksnummer: '12345',
-  vurderingsbehov: [],
-  avklaringsbehovKode: '',
-  behandlingOpprettet: '',
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.DOKUMENT_H_NDTERING,
-  enhet: '',
-  opprettetAv: '',
-  opprettetTidspunkt: '',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
+  harUlesteDokumenter: false,
+  id: 1,
+  markeringer: [],
+  skjermingInfo: { erSkjermet: false, harFortroligAdresse: false, harStrengtFortroligAdresse: false },
   versjon: 0,
-  årsakerTilBehandling: [],
-  markeringer: []
 };
 
 describe('Dokumentinfobanner', () => {
@@ -51,7 +39,7 @@ describe('Dokumentinfobanner', () => {
         behandlingsVersjon={1}
         journalpostInfo={journalpostInfo}
         påVent={false}
-        oppgave={oppgave}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
       />
     );
   });
@@ -101,7 +89,7 @@ test('skal vise en tag dersom behandlingen er på vent', () => {
       behandlingsVersjon={1}
       journalpostInfo={journalpostInfo}
       påVent={true}
-      oppgave={oppgave}
+      oppgaveVisningsinfo={oppgaveVisningsinfo}
     />
   );
 
@@ -116,7 +104,10 @@ test('skal vise en tag dersom behandlingen har utløpt ventefrist', () => {
       behandlingsVersjon={1}
       journalpostInfo={journalpostInfo}
       påVent={false}
-      oppgave={{ ...oppgave, utløptVentefrist: '2026-01-01' }}
+      oppgaveVisningsinfo={{
+        ...oppgaveVisningsinfo,
+        utløptVenteInfo: { påVentTil: '2026-01-01', påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER' },
+      }}
     />
   );
 
@@ -131,7 +122,7 @@ test('skal vise en tag dersom oppgaven er reservert', () => {
       behandlingsVersjon={1}
       journalpostInfo={journalpostInfo}
       påVent={false}
-      oppgave={{ ...oppgave, reservertAv: 'z123' }}
+      oppgaveVisningsinfo={{ ...oppgaveVisningsinfo, reservertAvIdent: 'z123' }}
     />
   );
 
@@ -149,7 +140,7 @@ test('skal vise tag dersom oppgaven er ledig', () => {
       behandlingsVersjon={1}
       journalpostInfo={journalpostInfo}
       påVent={false}
-      oppgave={oppgave}
+      oppgaveVisningsinfo={oppgaveVisningsinfo}
     />
   );
 
@@ -167,7 +158,7 @@ test('skal vise søker som tekst når saksnummer mangler', () => {
       behandlingsVersjon={1}
       journalpostInfo={journalpostInfo}
       påVent={false}
-      oppgave={{ ...oppgave, saksnummer: undefined }}
+      oppgaveVisningsinfo={{ ...oppgaveVisningsinfo, saksnummer: undefined }}
     />
   );
 
