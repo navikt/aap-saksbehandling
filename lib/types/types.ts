@@ -1,7 +1,12 @@
-import { components, paths } from './schema';
 import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 
+import { components, paths } from './schema';
+
 // Grunnlag
+export type StønadsperiodeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.stønadsperiode.StønadsperiodeGrunnlagResponse'];
+export type StønadsperiodeVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'];
 export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
 export type SykestipendGrunnlag =

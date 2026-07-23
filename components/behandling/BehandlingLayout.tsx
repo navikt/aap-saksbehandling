@@ -1,12 +1,9 @@
-import { SWRConfig } from 'swr';
-import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
-import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/layout.module.css';
-import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
-import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
-import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { VStack } from '@navikt/ds-react';
-import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
-import { ReactNode } from 'react';
+import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/layout.module.css';
+import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
+import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { SakContextProvider } from 'context/saksbehandling/SakContext';
+import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   auditlog,
   hentBehandling,
@@ -15,16 +12,21 @@ import {
   hentKlageresultat,
   hentSak,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { StegGruppe } from 'lib/types/types';
-import { SakContextProvider } from 'context/saksbehandling/SakContext';
-import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
-import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
-import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
-import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
+import { isError } from 'lib/utils/api';
+import { ReactNode } from 'react';
+import { SWRConfig } from 'swr';
+
 import { Kolonnelayout } from 'components/behandling/Kolonnelayout';
+import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
+import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
+import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
+import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
+
+import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
 
 interface Props {
   saksnummer: string;
@@ -46,18 +48,18 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgave, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
-    hentOppgave(behandlingsreferanse),
+  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
+    hentOppgaveVisningsinfo(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
     hentSak(saksnummer),
     hentKabalKlageresultat(behandlingsreferanse),
     hentKlageresultat(behandlingsreferanse),
   ]);
 
-  if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
+  if (isError(flytResponse) || isError(klageresultat) || isError(oppgaveVisningsinfo)) {
     return (
       <VStack padding={'space-16'}>
-        <ApiException apiResponses={[flytResponse, klageresultat, oppgave]} />
+        <ApiException apiResponses={[flytResponse, klageresultat, oppgaveVisningsinfo]} />
       </VStack>
     );
   }
@@ -98,7 +100,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
             <SaksinfoBanner
               behandling={behandling.data}
               sak={sak}
-              oppgave={oppgave.data}
+              oppgaveVisningsinfo={oppgaveVisningsinfo.data}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
             />

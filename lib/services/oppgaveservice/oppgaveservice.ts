@@ -1,5 +1,9 @@
-import 'server-only';
-
+import {
+  NoNavAapOppgaveOppgaveDtoBehandlingstype,
+  NoNavAapOppgaveOppgaveDtoStatus,
+} from '@navikt/aap-oppgave-typescript-types';
+import { apiFetch } from 'lib/services/apiFetch';
+import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
 import {
   AvreserverOppgaveDto,
   Enhet,
@@ -9,6 +13,7 @@ import {
   MineOppgaverQueryParams,
   Oppgave,
   OppgaveInfoTilSøk,
+  OppgaveVisningsinformasjon,
   OppgavelisteRequest,
   OppgavelisteResponse,
   PlukkOppgaveResponse,
@@ -20,15 +25,10 @@ import {
   TildelOppgaveResponse,
   TildeltStatus,
 } from 'lib/types/oppgaveTypes';
-import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
-import { apiFetch } from 'lib/services/apiFetch';
-import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
-import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
+import { isLocal } from 'lib/utils/environment';
+import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
+import 'server-only';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -74,6 +74,30 @@ export async function hentOppgave(behandlingReferanse: string) {
 
   const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave`;
   return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
+}
+
+export async function hentOppgaveVisningsinfo(behandlingReferanse: string) {
+  if (lokalFakeOppgave) {
+    const mockResponse: FetchResponse<OppgaveVisningsinformasjon> = {
+      type: 'SUCCESS',
+      data: {
+        id: 123,
+        markeringer: [],
+        versjon: 0,
+        harUlesteDokumenter: false,
+        skjermingInfo: {
+          erSkjermet: false,
+          harFortroligAdresse: false,
+          harStrengtFortroligAdresse: false,
+        },
+      },
+    };
+
+    return mockResponse;
+  }
+
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave-visningsinformasjon`;
+  return await apiFetch<OppgaveVisningsinformasjon>(url, oppgaveApiScope, 'GET');
 }
 
 export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => {

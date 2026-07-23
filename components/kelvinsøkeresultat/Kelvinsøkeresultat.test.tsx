@@ -4,7 +4,7 @@ import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøker
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 
 const søkeresultat: SøkeResultat = {
-  harTilgang: false,
+  kanSaksbehandle: false,
   harAdressebeskyttelse: true,
   oppgaver: [
     {
@@ -34,7 +34,7 @@ const søkeresultat: SøkeResultat = {
 };
 
 const søkeresultatUtenSak: SøkeResultat = {
-  harTilgang: false,
+  kanSaksbehandle: false,
   harAdressebeskyttelse: true,
   oppgaver: [
     {
@@ -59,7 +59,7 @@ const søkeresultatUtenSak: SøkeResultat = {
 
 describe('Kelvinsøkeresultat', () => {
   it('skal ikke lenke til saksside eller behandling når saksbehandler ikke har lesetilgang', () => {
-    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, kanSaksbehandle: false }} />);
 
     const lenker = screen.queryAllByRole('link');
     expect(lenker).toHaveLength(0);
@@ -71,14 +71,14 @@ describe('Kelvinsøkeresultat', () => {
   });
 
   it('skal vise lenker når saksbehandler har lesetilgang', () => {
-    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: true }} />);
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, kanSaksbehandle: true }} />);
 
     const lenker = screen.getAllByRole('link');
     expect(lenker.length).toBeGreaterThan(0);
   });
 
   it('skal vise infoboks når saksbehandler ikke har lesetilgang pga adressebeskyttelse', () => {
-    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false }} />);
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, kanSaksbehandle: false }} />);
 
     const infotekst = screen.getByText(
       'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
@@ -87,7 +87,7 @@ describe('Kelvinsøkeresultat', () => {
   });
 
   it('skal vise infoboks når saksbehandler ikke har lesetilgang uten adressebeskyttelse', () => {
-    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, harTilgang: false, harAdressebeskyttelse: false }} />);
+    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, kanSaksbehandle: false, harAdressebeskyttelse: false }} />);
 
     const infotekst = screen.getByText('Du har ikke tilgang til saken.');
     expect(infotekst).toBeInTheDocument();
