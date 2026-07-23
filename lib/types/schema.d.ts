@@ -2261,6 +2261,48 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/drift/api/jobb/{jobbId}/leggTilKommentar': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID */
+          jobbId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.motor.api.`MotorApiKt$motorApi$1$5$LeggTilKommentarRequest`'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.motor.Kommentar'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/drift/api/jobb/rekjor/{jobbId}': {
     parameters: {
       query?: never;
@@ -2845,6 +2887,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -2923,6 +2966,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -3124,6 +3168,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/grunnlag/stonadsperiode': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagResponse'];
           };
         };
       };
@@ -5310,6 +5392,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -5388,6 +5471,7 @@ export interface paths {
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
+            | 'AVKLAR_STØNADSPERIODE'
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
@@ -6072,6 +6156,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -6447,7 +6532,7 @@ export interface components {
         | 'RETURNERT_FRA_KVALITETSSIKRER'
         | 'SENDT_TIL_BESLUTTER'
         | 'SENDT_TIL_KVALITETSSIKRER';
-      avIdent: string;
+      avIdent: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -14690,6 +14775,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -14736,7 +14822,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -15275,6 +15363,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -15321,7 +15410,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -15351,6 +15442,7 @@ export interface components {
             | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
             | 'ETABLERING_EGEN_VIRKSOMHET'
             | 'FASTSATT_PERIODE_PASSERT'
+            | 'FASTSETT_ARBEIDSEVNE'
             | 'FORUTGAENDE_MEDLEMSKAP'
             | 'FRITAK_MELDEPLIKT'
             | 'G_REGULERING'
@@ -15397,7 +15489,9 @@ export interface components {
             | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
             | 'UTVID_VEDTAKSLENGDE'
             | 'VEDTAKSLENGDE_MANUELT'
+            | 'VURDER_ARBEIDSOPPTRAPPING'
             | 'VURDER_AVSLAG_11_27'
+            | 'VURDER_FRITAK_MELDEPLIKT'
             | 'VURDER_KRAV'
             | 'VURDER_RETTIGHETSPERIODE'
           )[]
@@ -15524,6 +15618,26 @@ export interface components {
       begrunnelse: string;
       perioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeGrunnlagResponse': {
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'][];
+      vedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'][];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse': {
+      begrunnelse: string;
+      'harGjenv\u00E6rendeKvote': boolean;
+      'harHattOrdin\u00E6rSiste52Uker': boolean;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      referanse: string;
+      /** @enum {string} */
+      relevantKravType: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto': {
       /**
@@ -16135,6 +16249,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -16181,7 +16296,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -16215,7 +16332,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.drift.ForenkletAvklaringsbehov': {
       definisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
-      endretAv: string;
+      endretAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       /**
        * Format: date
        * @example 2025-04-01
@@ -16429,6 +16546,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -17788,6 +17906,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -17915,6 +18034,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18005,6 +18125,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18121,7 +18242,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.flyt.EndringDTO': {
       begrunnelse?: string | null;
-      endretAv: string;
+      endretAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       /** @enum {string} */
       status:
         | 'AVBRUTT'
@@ -18194,6 +18315,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18527,6 +18649,7 @@ export interface components {
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
@@ -18756,6 +18879,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -18799,7 +18923,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -18844,6 +18970,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -18887,7 +19014,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -19123,6 +19252,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19166,7 +19296,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -19225,6 +19357,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19268,7 +19401,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -19304,6 +19439,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19347,7 +19483,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -19372,6 +19510,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT'
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19415,7 +19554,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -19647,6 +19788,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19693,7 +19835,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE';
     };
@@ -19704,7 +19848,7 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettet: string;
-      opprettetAv?: string | null;
+      opprettetAv?: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurderingsbehov: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovMedPeriode'][];
       /** @enum {string} */
       '\u00E5rsak':
@@ -19798,6 +19942,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19844,7 +19989,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | null
@@ -19887,6 +20034,7 @@ export interface components {
         | 'EFFEKTUER_AKTIVITETSPLIKT_11_9'
         | 'ETABLERING_EGEN_VIRKSOMHET'
         | 'FASTSATT_PERIODE_PASSERT'
+        | 'FASTSETT_ARBEIDSEVNE'
         | 'FORUTGAENDE_MEDLEMSKAP'
         | 'FRITAK_MELDEPLIKT'
         | 'G_REGULERING'
@@ -19933,7 +20081,9 @@ export interface components {
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
+        | 'VURDER_ARBEIDSOPPTRAPPING'
         | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_FRITAK_MELDEPLIKT'
         | 'VURDER_KRAV'
         | 'VURDER_RETTIGHETSPERIODE'
       )[];
@@ -20342,12 +20492,22 @@ export interface components {
     'no.nav.aap.komponenter.verdityper.Bel\u00F8p': {
       verdi: number;
     };
-    'no.nav.aap.komponenter.verdityper.Bruker': {
-      ident: string;
-    };
+    'no.nav.aap.komponenter.verdityper.Bruker': string;
     'no.nav.aap.komponenter.verdityper.Dagsatser': {
       /** Format: int32 */
       antall: number;
+    };
+    'no.nav.aap.motor.JobbTilleggsinfo': {
+      kommentarer: components['schemas']['no.nav.aap.motor.Kommentar'][];
+    };
+    'no.nav.aap.motor.Kommentar': {
+      skrevetAv: string;
+      tekst: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      tidspunkt: string;
     };
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
@@ -20373,7 +20533,11 @@ export interface components {
       'planlagtKj\u00F8retidspunkt': string;
       /** @enum {string} */
       status: 'AVBRUTT' | 'FEILET' | 'FERDIG' | 'KLAR' | 'PLUKKET';
+      tilleggsinfo?: components['schemas']['no.nav.aap.motor.JobbTilleggsinfo'];
       type: string;
+    };
+    'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$5$LeggTilKommentarRequest`': {
+      kommentar: string;
     };
     'no.nav.aap.utbetal.simulering.SimuleringDto': {
       perioder: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringsperiodeDto'][];
