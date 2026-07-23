@@ -18,7 +18,7 @@ export interface SøkeResultat {
     status: string;
     markeringer: MarkeringType[];
   }[];
-  harTilgang: boolean;
+  kanSaksbehandle: boolean;
   harAdressebeskyttelse: boolean;
   saker?: { href: string; label: string }[];
   kontor?: { enhet: string }[];
@@ -75,9 +75,11 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
   let oppgaveData: SøkeResultat['oppgaver'] = [];
   let kontorData: SøkeResultat['kontor'] = [];
   let harAdressebeskyttelse: boolean = true;
+  let harTilgangTilOppgaver: boolean = true;
   try {
     const oppgavesøkRes = await oppgaveTekstSøk(søketekst);
     if (isSuccess(oppgavesøkRes)) {
+      harTilgangTilOppgaver = oppgavesøkRes.data.harTilgang;
       harAdressebeskyttelse = oppgavesøkRes.data.harAdressebeskyttelse;
       oppgavesøkRes.data.oppgaver.forEach((oppgaveISøk) => {
         const isReservert =
@@ -109,10 +111,12 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
     label: `${sak.saksnummer} (${formaterDatoForFrontend(sak.opprettetTidspunkt)})`,
   }));
 
+  const harTilgang = sakData.every((sak) => sak.harTilgang) && harTilgangTilOppgaver;
+
   return {
     oppgaver: oppgaveData,
     saker: saker,
-    harTilgang: sakData[0]?.harTilgang ?? true,
+    kanSaksbehandle: harTilgang,
     harAdressebeskyttelse: harAdressebeskyttelse,
     kontor: kontorData,
     person: personData

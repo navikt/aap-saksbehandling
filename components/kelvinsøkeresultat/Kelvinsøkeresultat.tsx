@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const Kelvinsøkeresultat = ({
-  søkeresultat: { oppgaver, saker, kontor, person, harTilgang, harAdressebeskyttelse },
+  søkeresultat: { oppgaver, saker, kontor, person, kanSaksbehandle, harAdressebeskyttelse },
 }: Props) => {
   if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
@@ -30,7 +30,7 @@ export const Kelvinsøkeresultat = ({
 
   return (
     <VStack gap={'space-8'}>
-      {!harTilgang && (
+      {!kanSaksbehandle && (
         <HStack>
           <Alert variant={'info'} className={styles.info}>
             {harAdressebeskyttelse
@@ -51,7 +51,7 @@ export const Kelvinsøkeresultat = ({
                   className={styles.linkName}
                   key={`sak-resultat-${index}`}
                   href={søk.href}
-                  skalViseLenke={harTilgang}
+                  skalViseLenke={kanSaksbehandle}
                 >
                   <BodyShort size={'small'}>{storForbokstavIHvertOrd(søk.label)}</BodyShort>
                 </LenkeHvisHarTilgang>
@@ -71,7 +71,7 @@ export const Kelvinsøkeresultat = ({
                   className={styles.link}
                   key={`sak-resultat-${index}`}
                   href={søk.href}
-                  skalViseLenke={harTilgang}
+                  skalViseLenke={kanSaksbehandle}
                 >
                   <BodyShort size={'small'}>{søk.label}</BodyShort>
                 </LenkeHvisHarTilgang>
@@ -95,7 +95,7 @@ export const Kelvinsøkeresultat = ({
                       className={styles.link}
                       key={`oppgave-resultat-${index}`}
                       href={søk.href}
-                      skalViseLenke={harTilgang}
+                      skalViseLenke={kanSaksbehandle}
                     >
                       <BodyShort size={'small'}>{søk.label}</BodyShort>
                     </LenkeHvisHarTilgang>
