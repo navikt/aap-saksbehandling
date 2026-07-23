@@ -2372,7 +2372,33 @@ export interface paths {
       };
     };
     put?: never;
-    post?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description ID */
+          jobbId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
     delete?: never;
     options?: never;
     head?: never;
@@ -14781,6 +14807,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MIGRER_RETTIGHETSPERIODE'
@@ -15369,6 +15397,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MIGRER_RETTIGHETSPERIODE'
@@ -15448,6 +15478,8 @@ export interface components {
             | 'G_REGULERING'
             | 'HELHETLIG_VURDERING'
             | 'INSTITUSJONSOPPHOLD'
+            | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+            | 'INSTITUSJONSOPPHOLD_SONING'
             | 'KLAGE_TRUKKET'
             | 'LOVVALG_OG_MEDLEMSKAP'
             | 'MIGRER_RETTIGHETSPERIODE'
@@ -15636,6 +15668,11 @@ export interface components {
       referanse: string;
       /** @enum {string} */
       relevantKravType: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      startDato: string;
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
@@ -16255,6 +16292,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MIGRER_RETTIGHETSPERIODE'
@@ -18885,6 +18924,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE'
         | 'KLAGE_TRUKKET'
         | 'LEGEERKLÆRING'
@@ -18976,6 +19017,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE'
         | 'KLAGE_TRUKKET'
         | 'LEGEERKLÆRING'
@@ -19258,6 +19301,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE'
         | 'KLAGE_TRUKKET'
         | 'LEGEERKLÆRING'
@@ -19363,6 +19408,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE'
         | 'KLAGE_TRUKKET'
         | 'LEGEERKLÆRING'
@@ -19445,6 +19492,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE'
         | 'KLAGE_TRUKKET'
         | 'LEGEERKLÆRING'
@@ -19516,6 +19565,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE'
         | 'KLAGE_TRUKKET'
         | 'LEGEERKLÆRING'
@@ -19794,6 +19845,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MIGRER_RETTIGHETSPERIODE'
@@ -19948,6 +20001,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MIGRER_RETTIGHETSPERIODE'
@@ -20040,6 +20095,8 @@ export interface components {
         | 'G_REGULERING'
         | 'HELHETLIG_VURDERING'
         | 'INSTITUSJONSOPPHOLD'
+        | 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON'
+        | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MIGRER_RETTIGHETSPERIODE'
@@ -20538,6 +20595,9 @@ export interface components {
     };
     'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$5$LeggTilKommentarRequest`': {
       kommentar: string;
+    };
+    'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`': {
+      begrunnelse: string;
     };
     'no.nav.aap.utbetal.simulering.SimuleringDto': {
       perioder: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringsperiodeDto'][];

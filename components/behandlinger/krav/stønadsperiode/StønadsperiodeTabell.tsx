@@ -24,6 +24,7 @@ export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeG
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell>Relevant krav</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
+            <Table.HeaderCell>Vurderes fra</Table.HeaderCell>
             <Table.HeaderCell>Vurdert av</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -32,7 +33,10 @@ export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeG
             <Table.ExpandableRow key={rad.status + rad.referanse} content={innhold(rad)}>
               <Table.DataCell>{rad.status}</Table.DataCell>
               <Table.DataCell>{rad.referanse}</Table.DataCell>
-              <Table.DataCell>{KravTag(rad.relevantKravType)}</Table.DataCell>
+              <Table.DataCell>
+                <KravTag type={rad.relevantKravType} />
+              </Table.DataCell>
+              <Table.DataCell>{formaterDatoForFrontend(rad.startDato)}</Table.DataCell>
               <Table.DataCell>{`${rad.vurdertAv} (${formaterDatoForFrontend(rad.opprettet)})`}</Table.DataCell>
             </Table.ExpandableRow>
           ))}
@@ -57,11 +61,34 @@ function innhold(rad: Rad) {
         <Label>Har brukeren hatt ordinær AAP innen 52 uker før datoen kravet skal vurderes for?</Label>
         <BodyShort>{getJaEllerNei(rad.harHattOrdinærSiste52Uker)}</BodyShort>
       </div>
+      <Startdato rad={rad} />
     </VStack>
   );
 }
 
-function KravTag(type: StønadsperiodeVurdering['relevantKravType']) {
+function Startdato({ rad }: { rad: Rad }) {
+  return (
+    <>
+      {rad.relevantKravType === 'NY_STØNADSPERIODE' && (
+        <div>
+          <Label>Dato for ny rettighet</Label>
+          <BodyShort textColor={'subtle'}>
+            Dette er første mulige dato med rett etter tidligere stønadsperiode utløper
+          </BodyShort>
+          <BodyShort>{formaterDatoForFrontend(rad.startDato)}</BodyShort>
+        </div>
+      )}
+      {['GJENINNTREDEN_ETTER_OPPHØR', 'GJENOPPTAK_ETTER_STANS'].includes(rad.relevantKravType) && (
+        <div>
+          <Label>Vurderes fra</Label>
+          <BodyShort>{formaterDatoForFrontend(rad.startDato)}</BodyShort>
+        </div>
+      )}
+    </>
+  );
+}
+
+function KravTag({ type }: { type: StønadsperiodeVurdering['relevantKravType'] }) {
   const [farge, tekst] = ((): [AkselColorRole, string] => {
     switch (type) {
       case 'AVSLAG':
