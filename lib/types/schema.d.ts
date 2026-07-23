@@ -14220,7 +14220,7 @@ export interface components {
       harAnnenFullYtelse: boolean;
       harSykepengegrunnlagOver2G?: boolean | null;
       referanse: string;
-      'skalAvsl\u00E5s1127': boolean;
+      'skalAvsl\u00E5s1127'?: boolean | null;
       vurderingerMeta?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto': {
@@ -17333,7 +17333,7 @@ export interface components {
       harAnnenFullYtelse: boolean;
       harSykepengegrunnlagOver2G?: boolean | null;
       referanse: string;
-      'skalAvsl\u00E5s1127': boolean;
+      'skalAvsl\u00E5s1127'?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.avslag11_27.flate.Avslag11_27VurderingerDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.avslag11_27.flate.Avslag11_27VurderingDto'][];

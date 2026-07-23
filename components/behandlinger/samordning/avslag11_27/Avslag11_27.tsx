@@ -139,13 +139,16 @@ export const Avslag11_27 = ({
 
   const mapTilVurderingPayload = (krav: KravMedVurderinger) => {
     const vurdering = krav.vurdering;
+    const harAnnenFullYtelse = vurdering.harAnnenFullYtelse === JaEllerNei.Ja;
     return {
       referanse: vurdering.referanse,
       begrunnelse: vurdering.begrunnelse,
-      harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
-      brukersYtelse: vurdering.brukersYtelse,
-      harSykepengegrunnlagOver2G: vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja,
-      skalAvslås1127: vurdering.skalAvslås1127 === JaEllerNei.Ja,
+      harAnnenFullYtelse,
+      brukersYtelse: harAnnenFullYtelse ? vurdering.brukersYtelse : undefined,
+      harSykepengegrunnlagOver2G: harAnnenFullYtelse
+        ? vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja
+        : undefined,
+      skalAvslås1127: harAnnenFullYtelse ? vurdering.skalAvslås1127 === JaEllerNei.Ja : undefined,
     };
   };
 
@@ -254,7 +257,9 @@ export const Avslag11_27 = ({
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
               visLeggTilVurderingKnapp={visLeggTilVurderingKnapp}
-              brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer}
+              brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer.filter(
+                (ytelse) => ytelse !== 'FERIE_I_SYKEPENGEPERIODE'
+              )}
             />
           );
         })}
@@ -305,7 +310,7 @@ function mapVurderingToDraftFormFields(
           harAnnenFullYtelse: nåværende.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
           brukersYtelse: nåværende.brukersYtelse ?? undefined,
           harSykepengegrunnlagOver2G,
-          skalAvslås1127: nåværende.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei,
+          skalAvslås1127: nåværende.skalAvslås1127 ? JaEllerNei.Ja : undefined,
         },
       };
     }),
