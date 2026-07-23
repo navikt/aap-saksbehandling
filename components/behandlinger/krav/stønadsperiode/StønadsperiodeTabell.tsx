@@ -50,11 +50,11 @@ function innhold(rad: Rad) {
         <BodyShort>{rad.begrunnelse}</BodyShort>
       </div>
       <div>
-        <Label>Har gjenværende kvote</Label>
+        <Label>Har brukeren en gjenværende § 11-12 kvote å gjeninntre i?</Label>
         <BodyShort>{getJaEllerNei(rad.harGjenværendeKvote)}</BodyShort>
       </div>
       <div>
-        <Label>Har hatt ordinær siste 52 uker</Label>
+        <Label>Har brukeren hatt ordinær AAP innen 52 uker før datoen kravet skal vurderes for?</Label>
         <BodyShort>{getJaEllerNei(rad.harHattOrdinærSiste52Uker)}</BodyShort>
       </div>
     </VStack>
