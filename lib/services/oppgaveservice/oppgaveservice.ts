@@ -151,7 +151,7 @@ export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
   return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
 }
 export async function plukkOppgave(oppgaveId: number, versjon: number) {
-  const url = `${oppgaveApiBaseURL}/plukk-oppgave/v2`;
+  const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
   return await apiFetch<PlukkOppgaveResponse>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
 }
 
@@ -192,7 +192,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
 
     return mockData;
   }
-  const url = `${oppgaveApiBaseURL}/sok/v2`;
+  const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
 }
 
