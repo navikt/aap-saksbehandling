@@ -1,15 +1,9 @@
 'use client';
 
 import { BodyShort, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { mutate } from 'swr';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
-import { getTrueFalseEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
-import { useOpprettSak } from 'hooks/FetchHook';
-import { FormField } from 'components/form/FormField';
-import { useConfigForm } from 'components/form/FormHook';
 import { differenceInCalendarYears, parse } from 'date-fns';
+import { useOpprettSak } from 'hooks/FetchHook';
+import { Dato } from 'lib/types/Dato';
 import {
   DagpengerKilde,
   DagpengerYtelserType,
@@ -18,11 +12,18 @@ import {
   TiltakspengerKilde,
   TiltakspengerYtelserType,
 } from 'lib/types/types';
-import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
-import { Dato } from 'lib/types/Dato';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { JaEllerNei, JaEllerNeiOptions, getTrueFalseEllerUndefined } from 'lib/utils/form';
+import { mutate } from 'swr';
+
 import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
-import { OpprettSamordning } from 'components/opprettsak/samordning/OpprettSamordning';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
+import { OpprettInntekter } from 'components/opprettsak/inntekter/OpprettInntekter';
 import { OpprettKravVurdering } from 'components/opprettsak/krav/OpprettKravVurdering';
+import { OpprettSamordning } from 'components/opprettsak/samordning/OpprettSamordning';
+import { OpprettYrkesskade } from 'components/opprettsak/yrkesskade/OpprettYrkesskade';
 
 interface Barn {
   fodselsdato: string;
@@ -177,7 +178,11 @@ export const OpprettSakLocal = () => {
       },
       inntekter: {
         type: 'fieldArray',
-        defaultValue: [{ år: '2024', beløp: '200000' }],
+        defaultValue: [
+          { år: '2025', beløp: '200000' },
+          { år: '2024', beløp: '200000' },
+          { år: '2023', beløp: '200000' },
+        ],
       },
       uføre: {
         type: 'number',

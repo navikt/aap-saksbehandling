@@ -70,6 +70,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-20 Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
       return 'Institusjonsopphold';
+    case 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON':
+      return '§ 11-25 Opphold på helseinstititusjon';
+    case 'INSTITUSJONSOPPHOLD_SONING':
+      return '§ 11-26 Soning';
     case 'SAMORDNING_OG_AVREGNING':
       return 'Samordning og avregning';
     case 'REFUSJONSKRAV':
