@@ -1,28 +1,30 @@
 'use client';
 
-import { BodyShort, Button, Chips, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Chips, HStack, Heading, Table, VStack } from '@navikt/ds-react';
+import { useHentOppgaverForSak } from 'hooks/oppgave/OppgaverPåSakHook';
+import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
+import { Dato } from 'lib/types/Dato';
 import { RettighetsinfoDto, SaksInfo, Vurderingsbehov } from 'lib/types/types';
-import { capitalize } from 'lodash';
-import { SakDevTools } from 'components/saksoversikt/SakDevTools';
-import { useRouter } from 'next/navigation';
-import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
-import { isLocal } from 'lib/utils/environment';
-import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import {
   erAktivFørstegangsbehandling,
   erAvsluttet,
   erAvsluttetFørstegangsbehandling,
   formatterÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/behandling';
+import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
+import { isLocal } from 'lib/utils/environment';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { capitalize } from 'lodash';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { BehandlingsflytEllerPostmottakBehandling } from './types';
-import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
-import { useHentOppgaverForBehandlinger } from 'hooks/oppgave/OppgaverPåSakHook';
-import { Dato } from 'lib/types/Dato';
-import { Kort } from 'components/kort/Kort';
+
 import { Alert } from 'components/alert/Alert';
+import { Kort } from 'components/kort/Kort';
+import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
+import { SakDevTools } from 'components/saksoversikt/SakDevTools';
+
+import { BehandlingsflytEllerPostmottakBehandling } from './types';
 
 /**
  * Slår sammen duplikater i vurderingsbehov og legger til en teller for hvor mange ganger hvert behov forekommer.
@@ -77,13 +79,17 @@ export const SakMedBehandlinger = ({
 
   const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b.behandling));
 
-  const oppgaverPerBehandling = useHentOppgaverForBehandlinger(åpne.map((b) => b.behandling.referanse));
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
+  const åpneOppgaverPåSak = useHentOppgaverForSak(sak.saksnummer).oppgaver.filter((oppgave) =>
+    åpne.some((b) => b.behandling.referanse === oppgave.behandlingsreferanse)
+  );
 
   function hentTildeling(referanse: string) {
-    const oppgaveInfo = oppgaverPerBehandling.get(referanse);
-    if (!oppgaveInfo) return null;
-    return oppgaveInfo.feilmelding ?? oppgaveInfo.reservertAvNavn ?? oppgaveInfo.reservertAvIdent ?? 'Ledig';
+    const oppgaveForBehandling = åpneOppgaverPåSak.find((oppgave) => oppgave.behandlingsreferanse === referanse);
+    if (!oppgaveForBehandling) {
+      return 'Kunne ikke hente tildeling.';
+    }
+    return oppgaveForBehandling.reservertAvNavn ?? oppgaveForBehandling.reservertAvIdent ?? 'Ledig';
   }
 
   return (
@@ -190,7 +196,9 @@ export const SakMedBehandlinger = ({
                     key={behandling.behandling.referanse}
                     sak={sak}
                     behandling={behandling}
-                    oppgaveInfo={oppgaverPerBehandling.get(behandling.behandling.referanse)}
+                    oppgavePåBehandling={åpneOppgaverPåSak.find(
+                      (oppgave) => oppgave.behandlingsreferanse === behandling.behandling.referanse
+                    )}
                     setFeilmelding={setFeilmelding}
                   ></BehandlingButtons>
                 </Table.DataCell>
