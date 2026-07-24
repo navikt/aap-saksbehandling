@@ -1,6 +1,6 @@
 import { logError } from 'lib/serverutlis/logger';
 import { sendLokalHendelse } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
+import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
@@ -8,7 +8,7 @@ export async function POST(req: NextRequest, props: { params: Promise<{ saksnumm
 
   const res = await sendLokalHendelse((await props.params).saksnummer, body);
 
-  if (isError(res) && res.status >= 500) {
+  if (isServerError(res)) {
     logError('Feil oppsto ved sending av hendelse', res.apiException.message);
   }
 

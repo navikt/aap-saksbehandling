@@ -1,6 +1,6 @@
 import { logError } from 'lib/serverutlis/logger';
 import { oppdaterBrevdata } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
+import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(req: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
@@ -9,7 +9,7 @@ export async function PUT(req: NextRequest, props: { params: Promise<{ brevbesti
 
   try {
     const res = await oppdaterBrevdata(params.brevbestillingReferanse, body);
-    if (isError(res) && res.status >= 500) {
+    if (isServerError(res)) {
       logError(
         `/api/brev/brevbestillingsreferanse/oppdater-brevdata ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );
