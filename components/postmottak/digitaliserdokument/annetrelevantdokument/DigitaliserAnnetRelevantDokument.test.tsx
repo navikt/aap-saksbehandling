@@ -1,7 +1,8 @@
-import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
+import { describe, expect, it, vi } from 'vitest';
+
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
 
 const grunnlag: DigitaliseringsGrunnlag = {
@@ -26,6 +27,7 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
+        erRevurdereFrivilligeEnabled={true}
       />
     );
 
@@ -66,6 +68,7 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
+        erRevurdereFrivilligeEnabled={true}
       />
     );
 

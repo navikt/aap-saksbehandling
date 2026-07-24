@@ -1,19 +1,21 @@
 'use client';
 
-import { Kategoriser } from './kategoriser/Kategoriser';
-import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
-import { useState } from 'react';
-import { DigitaliserSøknad } from './søknad/DigitaliserSøknad';
-import { Behovstype } from 'lib/postmottakForm';
-import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { VStack } from '@navikt/ds-react';
-import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
-import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
+import { Behovstype } from 'lib/postmottakForm';
 import { Oppgave } from 'lib/types/oppgaveTypes';
+import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { useState } from 'react';
+
+import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 import { DigitaliserMeldekort } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
+import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
+
+import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
+import { Kategoriser } from './kategoriser/Kategoriser';
+import { DigitaliserSøknad } from './søknad/DigitaliserSøknad';
 
 interface Props {
   behandlingsVersjon: number;
@@ -53,6 +55,7 @@ export const DigitaliserDokument = ({
   }
 
   const erKravEnabled = useFeatureFlag('KravSteg');
+  const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
   const erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled = useFeatureFlag('VarselNaarDetFinnesTimerPaaMeldeperiode');
 
   return (
@@ -96,6 +99,7 @@ export const DigitaliserDokument = ({
           readOnly={readOnly}
           isLoading={isLoading}
           erKravEnabled={erKravEnabled}
+          erRevurdereFrivilligeEnabled={erRevurdereFrivilligeEnabled}
         />
       )}
     </VStack>

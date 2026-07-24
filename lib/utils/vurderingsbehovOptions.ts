@@ -6,7 +6,8 @@ import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 
 export const vurderingsbehovOptions = (
   erKravEnabled: boolean,
-  erAvslag11_27Enabled: boolean | undefined
+  erAvslag11_27Enabled: boolean | undefined,
+  erRevurdereFrivilligeEnabled: boolean | undefined = false
 ): ValuePair<Vurderingsbehov>[] => {
   const behov: Vurderingsbehov[] = (
     [
@@ -16,6 +17,9 @@ export const vurderingsbehovOptions = (
       'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
       'OVERGANG_ARBEID',
       'OVERGANG_UFORE',
+      'VURDER_FRITAK_MELDEPLIKT',
+      'VURDER_ARBEIDSOPPTRAPPING',
+      'FASTSETT_ARBEIDSEVNE',
       'REFUSJONSKRAV',
       'REVURDER_YRKESSKADE',
       'REVURDER_SYKEPENGEERSTATNING',
@@ -43,7 +47,12 @@ export const vurderingsbehovOptions = (
     ] satisfies Vurderingsbehov[]
   ).filter(
     (option) =>
-      (erKravEnabled || option !== 'VURDER_KRAV') && (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27')
+      (erKravEnabled || option !== 'VURDER_KRAV') &&
+      (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27') &&
+      (erRevurdereFrivilligeEnabled ||
+        (option !== 'VURDER_FRITAK_MELDEPLIKT' &&
+          option !== 'FASTSETT_ARBEIDSEVNE' &&
+          option !== 'VURDER_ARBEIDSOPPTRAPPING'))
   );
 
   return behov.map((behov) => ({
