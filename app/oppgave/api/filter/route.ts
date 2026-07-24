@@ -1,15 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-import { hentKøer } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
-import { isError } from 'lib/utils/api';
+import { hentKøer } from 'lib/services/oppgaveservice/oppgaveservice';
+import { isServerError } from 'lib/utils/api';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const enheter = req.nextUrl.searchParams.getAll('enheter');
 
   try {
     const res = await hentKøer(enheter);
-    if (isError(res) && res.status >= 500) {
+    if (isServerError(res)) {
       logError('oppgave/api/filter', res.apiException);
     }
     return NextResponse.json(res, { status: res.status });

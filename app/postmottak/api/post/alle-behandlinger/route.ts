@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { alleBehandlinger } from 'lib/services/postmottakservice/postmottakservice';
 import { logError } from 'lib/serverutlis/logger';
-import { isError } from 'lib/utils/api';
+import { alleBehandlinger } from 'lib/services/postmottakservice/postmottakservice';
+import { isServerError } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   if (isLocal()) {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const ident = payload.ident;
   try {
     const res = await alleBehandlinger(ident);
-    if (isError(res)) {
+    if (isServerError(res)) {
       logError(
         `postmottak/api/alle-behandlinger ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );
