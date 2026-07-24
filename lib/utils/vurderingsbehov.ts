@@ -142,6 +142,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
     case 'VURDER_ARBEIDSOPPTRAPPING':
       return '§ 11-23 sjette ledd. Arbeidsopptrapping';
+    case 'BRUKER_TILBAKE_I_ARBEID':
+      return 'Bruker tilbake i arbeid';
+    case 'FERIE_I_SYKEPENGEPERIODE':
+      return 'Ferie i sykepengeperiode';
     default:
       return vurderingsbehov;
   }
