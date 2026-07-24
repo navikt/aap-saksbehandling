@@ -32,7 +32,7 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
           if (revalidateFunction) {
             revalidateFunction();
           }
-        } else if (res.status == 401) {
+        } else if (res.status == 403) {
           setÅpenModal(true);
         } else {
           setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
@@ -49,7 +49,7 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
         if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
-        } else if (plukketOppgave.status == 401) {
+        } else if (plukketOppgave.status == 403) {
           setÅpenModal(true);
         } else {
           setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);

@@ -59,7 +59,7 @@ export const BehandlingButtons = ({
       if (isSuccess(plukketOppgave)) {
         router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
       } else {
-        if (plukketOppgave.status == 401) {
+        if (plukketOppgave.status == 403) {
           setFeilmelding('Du har ikke tilgang til å behandle denne oppgaven.');
         }
       }
