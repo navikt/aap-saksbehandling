@@ -51,10 +51,6 @@ export const BehandlingButtons = ({
   async function plukkOgGåTilBehandling(oppgave: OppgavePåBehandling) {
     setFeilmelding('');
     startTransitionPlukk(async () => {
-      if (oppgave.id == null || oppgave.versjon == null) {
-        setFeilmelding('Kunne ikke plukke oppgave.');
-        return;
-      }
       const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
       if (isSuccess(plukketOppgave)) {
         router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
