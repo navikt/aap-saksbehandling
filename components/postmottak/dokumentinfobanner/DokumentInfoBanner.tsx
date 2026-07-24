@@ -20,7 +20,7 @@ interface Props {
   behandlingsVersjon: number;
   journalpostInfo: JournalpostInfo;
   påVent: boolean;
-  oppgaveVisningsinfo: OppgaveVisningsinformasjon;
+  oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
 }
 
 export const DokumentInfoBanner = ({
@@ -33,10 +33,10 @@ export const DokumentInfoBanner = ({
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const bruker = useInnloggetBruker();
 
-  const erReservertAvInnloggetBruker = bruker.NAVident === oppgaveVisningsinfo.reservertAvIdent;
+  const erReservertAvInnloggetBruker = bruker.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgaveVisningsinfo.reservertAvIdent) {
+    if (!oppgaveVisningsinfo?.reservertAvIdent) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {
