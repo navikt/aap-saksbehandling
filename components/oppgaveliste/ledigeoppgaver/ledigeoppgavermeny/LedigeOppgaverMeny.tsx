@@ -54,7 +54,7 @@ export const LedigeOppgaverMeny = ({
         if (isSuccess(plukketOppgave)) {
           router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
         } else {
-          if (plukketOppgave.status == 401) {
+          if (plukketOppgave.status == 403) {
             setÅpenModal(true);
           } else {
             setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException?.message}`);
