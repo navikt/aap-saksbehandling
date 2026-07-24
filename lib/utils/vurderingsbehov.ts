@@ -70,6 +70,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-20 Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
       return 'Institusjonsopphold';
+    case 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON':
+      return '§ 11-25 Opphold på helseinstititusjon';
+    case 'INSTITUSJONSOPPHOLD_SONING':
+      return '§ 11-26 Soning';
     case 'SAMORDNING_OG_AVREGNING':
       return 'Samordning og avregning';
     case 'REFUSJONSKRAV':
@@ -138,6 +142,10 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
     case 'VURDER_ARBEIDSOPPTRAPPING':
       return '§ 11-23 sjette ledd. Arbeidsopptrapping';
+    case 'BRUKER_TILBAKE_I_ARBEID':
+      return 'Bruker tilbake i arbeid';
+    case 'FERIE_I_SYKEPENGEPERIODE':
+      return 'Ferie i sykepengeperiode';
     default:
       return vurderingsbehov;
   }
