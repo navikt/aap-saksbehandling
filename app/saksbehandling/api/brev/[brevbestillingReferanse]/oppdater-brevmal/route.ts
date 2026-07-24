@@ -8,7 +8,7 @@ export async function PUT(req: NextRequest, props: { params: Promise<{ brevbesti
 
   try {
     const res = await oppdaterBrevmal(params.brevbestillingReferanse);
-    if (isError(res)) {
+    if (isError(res) && res.status >= 500) {
       logError(
         `/api/brev/brevbestillingsreferanse/oppdater-brevmal ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );

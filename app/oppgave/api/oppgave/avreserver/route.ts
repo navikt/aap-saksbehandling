@@ -1,18 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { avreserverOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
-import { isError } from 'lib/utils/api';
+import { avreserverOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { AvreserverOppgaveDto } from 'lib/types/oppgaveTypes';
+import { isError } from 'lib/utils/api';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
     const body: AvreserverOppgaveDto = await req.json();
     const res = await avreserverOppgave(body);
-    if (isError(res)) {
+    if (isError(res) && res.status >= 500) {
       logError(`/oppgave/api/avreserver`, res.apiException);
-      return NextResponse.json(res, { status: 500 });
     }
-    return NextResponse.json(res, { status: 200 });
+    return NextResponse.json(res, { status: res.status });
   } catch (error) {
     logError('Feil ved avreservering av oppgave', error);
     return NextResponse.json({ message: JSON.stringify(error) }, { status: 500 });

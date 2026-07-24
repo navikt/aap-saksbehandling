@@ -1,14 +1,14 @@
-import { opprettDummySakTest } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { NextRequest, NextResponse } from 'next/server';
-import { revalidatePath } from 'next/cache';
 import { logInfo } from 'lib/serverutlis/logger';
+import { opprettDummySakTest } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
+import { revalidatePath } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
   const res = await opprettDummySakTest(body);
-  if (isError(res)) {
+  if (isError(res) && res.status >= 500) {
     logInfo(`/test/opprettDummySak/, status: ${res.status}, message: ${res.apiException.message}`);
   }
   revalidatePath('/saksoversikt', 'page');
