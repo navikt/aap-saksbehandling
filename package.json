@@ -53,7 +53,7 @@
     "@eslint/js": "9.39.5",
     "@navikt/aap-felles-prettier": "5.9.0",
     "@navikt/aap-oppgave-typescript-types": "0.0.856",
-    "@navikt/aap-postmottak-backend-typescript-types": "0.0.791",
+    "@navikt/aap-postmottak-backend-typescript-types": "0.0.794",
     "@navikt/aksel": "8.15.0",
     "@navikt/eslint-config-aap": "5.6.3",
     "@testing-library/dom": "10.4.1",
