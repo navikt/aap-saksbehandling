@@ -1,3 +1,7 @@
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { clientFetch } from 'lib/clientApi';
+
 import {
   AvreserverOppgaveDto,
   Kø,
@@ -5,15 +9,13 @@ import {
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  OppgaverPåSak,
   PlukkOppgaveRequest,
   PlukkOppgaveResponse,
   SakOgAvklaringsbehov,
   TildeltStatus,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
-import { clientFetch } from 'lib/clientApi';
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
-import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
@@ -25,6 +27,10 @@ export async function hentOppgaveClient(behandlingsreferanse: string) {
 
 export async function hentTildeltStatusClient(behandlingsreferanse: string) {
   return clientFetch<TildeltStatus>(`/oppgave/api/oppgave/${behandlingsreferanse}/tildelt-status`, 'GET');
+}
+
+export async function hentOppgaverPåSakClient(saksnummer: string) {
+  return clientFetch<OppgaverPåSak>(`/oppgave/api/oppgave/sak/${saksnummer}/hent-oppgaver-paa-sak`, 'GET');
 }
 
 export async function hentMineOppgaverClient(
