@@ -54,7 +54,7 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
     meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
     begrunnelse: data.begrunnelse,
-    underkategori: data.underkategori,
+    underkategori: data.underkategori || undefined,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
 }

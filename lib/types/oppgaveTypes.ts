@@ -20,6 +20,8 @@ export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.O
   hastemarkeringerFørst?: boolean;
 };
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
+export type OppgaverPåSak = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaverPåSakResponse'];
+export type OppgavePåBehandling = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse'];
 export type OppgaveVisningsinformasjon =
   oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse'];
 export type Paging = OppgavelisteRequest['paging'];
