@@ -484,6 +484,8 @@ export type VedtakslengdeVurderingResponse =
 export type VedtakslengdeVurderingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.vedtakslengde.VedtakslengdeVurderingDto'];
 
+export type VedtakslengdeÅrsak = VedtakslengdeVurderingDto['årsaker'][number];
+
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
