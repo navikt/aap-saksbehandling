@@ -1,7 +1,8 @@
-import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
+import { describe, expect, it, vi } from 'vitest';
+
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
 
 const grunnlag: DigitaliseringsGrunnlag = {
@@ -26,6 +27,7 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
+        erRevurdereFrivilligeEnabled={true}
       />
     );
 
@@ -66,6 +68,7 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
+        erRevurdereFrivilligeEnabled={true}
       />
     );
 
@@ -81,6 +84,38 @@ describe('DigitaliserAnnetDokument', () => {
     expect(submit).toHaveBeenCalledExactlyOnceWith(
       'ANNET_RELEVANT_DOKUMENT',
       '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse med underkategori","underkategori":"YRKESSKADE"}',
+      null
+    );
+  });
+
+  it('at underkategori er fraværende når den ikke er valgt', async () => {
+    const submit = vi.fn(() => {});
+
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        erKravEnabled={true}
+        erRevurdereFrivilligeEnabled={true}
+      />
+    );
+
+    // Select a category, then deselect it to get empty string
+    await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
+    await user.selectOptions(screen.getByLabelText('Underkategori'), '');
+
+    await user.click(screen.getByRole('combobox', { name: /Hvilke opplysninger/ }));
+    await user.click(within(screen.getByRole('listbox')).getByText(/Yrkesskade/));
+
+    await user.type(screen.getByLabelText('Begrunnelse'), 'begrunnelse uten underkategori');
+
+    await user.click(screen.getByRole('button', { name: /Neste/ }));
+
+    expect(submit).toHaveBeenCalledExactlyOnceWith(
+      'ANNET_RELEVANT_DOKUMENT',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse uten underkategori"}',
       null
     );
   });

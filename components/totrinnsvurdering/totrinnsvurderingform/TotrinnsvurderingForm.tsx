@@ -38,7 +38,7 @@ import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
-import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
+import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -192,7 +192,7 @@ export const TotrinnsvurderingForm = ({
             if (!erKvalitetssikring) {
               loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
             } else {
-              clientMottattDokumenterLest(behandlingsreferanse);
+              clientFjernHelseopplysningIkon(behandlingsreferanse);
             }
 
             nullstillMellomlagretVurdering();
@@ -204,6 +204,9 @@ export const TotrinnsvurderingForm = ({
     >
       {fields.map((field, index) => {
         const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
+        const endretSidenForrigeGang =
+          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)
+            ?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter
@@ -215,6 +218,7 @@ export const TotrinnsvurderingForm = ({
               link={link}
               readOnly={readOnly}
               felterOnBlur={addHendelse}
+              endretSidenForrigeGang={endretSidenForrigeGang}
             />
           );
         }
@@ -228,6 +232,7 @@ export const TotrinnsvurderingForm = ({
             link={link}
             readOnly={readOnly}
             felterOnBlur={addHendelse}
+            endretSidenForrigeGang={endretSidenForrigeGang}
           />
         );
       })}

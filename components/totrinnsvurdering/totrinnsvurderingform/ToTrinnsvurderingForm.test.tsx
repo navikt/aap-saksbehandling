@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { FatteVedtakGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
@@ -344,6 +344,30 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     ],
     historikk: [],
   };
+
+  const grunnlagMedEndringSidenSist: KvalitetssikringGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
+      harTilgangTilÅSaksbehandle: true,
+      vurderinger: [
+      {
+        definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+        endretSidenSist: true
+      },
+    ],
+      historikk: [],
+  }
+
+  const grunnlagUtenEndringSidenSist: KvalitetssikringGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [
+      {
+        definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+        endretSidenSist: false,
+      },
+    ],
+    historikk: [],
+  };
   it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
     render(
       <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlaget} erKvalitetssikring={true} readOnly={false} />
@@ -362,6 +386,25 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     expect(screen.getByRole('checkbox', { name: /For detaljerte beskrivelser/ })).toBeVisible();
     expect(screen.getByRole('checkbox', { name: /Ikke individuell og konkret nok/ })).toBeVisible();
     expect(screen.getByRole('checkbox', { name: /Annen returårsak/ })).toBeVisible();
+  });
+
+  it('skal vise at vurdering er endret siden forrige retur', () => {
+    render(
+      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlagMedEndringSidenSist} erKvalitetssikring={true} readOnly={false} />
+    );
+    expect(screen.getByText('Vurderingen er endret siden forrige retur')).toBeVisible();
+  });
+
+  it('skal vise at vurdering ikke endret siden forrige retur', () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenEndringSidenSist}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+    expect(screen.getByText('Ingen endring siden forrige retur')).toBeVisible();
   });
 });
 

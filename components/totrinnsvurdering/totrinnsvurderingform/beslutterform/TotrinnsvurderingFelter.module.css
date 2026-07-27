@@ -1,23 +1,31 @@
-.totrinnsvurderingform {
+.totrinnsvurderingFormUtenEndring {
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--ax-neutral-500);
-  border-radius: var(--ax-radius-8);
+  border: 1px solid var(--ax-border-neutral-subtle);
+  border-radius: var(--ax-radius-12);
+}
+
+.totrinnsvurderingFormMedEndring {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ax-text-warning-subtle);
+  border-radius: var(--ax-radius-12);
 }
 
 .heading {
   padding: 1rem;
-  border-top-left-radius: var(--ax-radius-8);
-  border-top-right-radius: var(--ax-radius-8);
-  border-bottom: 2px solid var(--ax-neutral-500);
+  border-top-left-radius: var(--ax-radius-12);
+  border-top-right-radius: var(--ax-radius-12);
+  border-bottom: 1px solid var(--ax-border-neutral-subtle);
+  background-color: var(--ax-bg-neutral-soft);
 }
 
-.headingBeslutter {
-  background-color: var(--ax-accent-100);
+.endretSidenSistHeading {
+  background-color: var(--ax-bg-warning-moderate);
 }
 
-.headingKvalitetssikrer {
-  background-color: var(--ax-bg-meta-purple-soft);
+.endretSidenSistIkon {
+  color: var(--ax-text-warning-subtle);
 }
 
 .felter {

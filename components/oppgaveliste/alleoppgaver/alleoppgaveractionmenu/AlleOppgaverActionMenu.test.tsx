@@ -10,6 +10,8 @@ import { screen } from '@testing-library/react';
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 
 const oppgave: Oppgave = {
+  id: 123,
+  personIdent: '12345678910',
   behandlingRef: 'sdgasd',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
@@ -22,9 +24,6 @@ const oppgave: Oppgave = {
   versjon: 0,
   årsakerTilBehandling: [],
   markeringer: [],
-  enhetForKø: '4491',
-  erPåVent: false,
-  erÅpen: true,
 };
 
 const setSync = () => undefined;

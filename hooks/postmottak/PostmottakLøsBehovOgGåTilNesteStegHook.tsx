@@ -1,16 +1,16 @@
-import { useRef, useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
 } from 'app/postmottak/api/post/[behandlingsreferanse]/hent/[gruppe]/[steg]/nesteSteg/route';
-import { useRouter } from 'next/navigation';
-import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
+import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
+import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
-import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
-import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useRouter } from 'next/navigation';
+import { useRef, useState, useTransition } from 'react';
 
 export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   steg: StegType
@@ -77,7 +77,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
         withCredentials: true,
       }
     );
-    eventSource.onmessage = async (event: any) => {
+    eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();
@@ -98,8 +98,8 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
         setStatus(eventData.status);
       }
     };
-    eventSource.onerror = (event: any) => {
-      throw new Error('event onError', event);
+    eventSource.onerror = (event: Event) => {
+      throw new Error('event onError', { cause: event });
     };
   };
 

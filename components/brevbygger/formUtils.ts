@@ -14,11 +14,12 @@ export function initialiserFormVerdier(brevmal: BrevmalType, brevdata: BrevdataD
 
     for (const node of delmalRef.delmal.teksteditor) {
       if (node._type === 'fritekst') {
+        const sammensattNøkkel = `${delmalId}###${node._key}`;
         const lagretDelmalFritekst = brevdata?.fritekster.find(
           (f) => f.parentId === delmalId && f.key === node._key
         )?.fritekst;
 
-        fritekster[node._key] = lagretDelmalFritekst ? (JSON.parse(lagretDelmalFritekst).tekst ?? '') : '';
+        fritekster[sammensattNøkkel] = lagretDelmalFritekst ? (JSON.parse(lagretDelmalFritekst).tekst ?? '') : '';
       } else if (node._type === 'valgRef') {
         const valgId = node.valg._id;
 
@@ -52,8 +53,9 @@ export function byggBrevdataPayload(
 
     for (const node of delmalRef.delmal.teksteditor) {
       if (node._type === 'fritekst') {
+        const sammensattNøkkel = `${delmalId}###${node._key}`;
         fritekster.push({
-          fritekst: JSON.stringify({ tekst: formVerdier.fritekster[node._key] ?? '' }),
+          fritekst: JSON.stringify({ tekst: formVerdier.fritekster[sammensattNøkkel] ?? '' }),
           key: node._key,
           parentId: delmalId,
         });

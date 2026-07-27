@@ -6,17 +6,19 @@ import {
 import { DigitaliserDokument } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 
 interface Props {
   behandlingsreferanse: string;
 }
 export const DigitaliserDokumentMedDatafetching = async ({ behandlingsreferanse }: Props) => {
-  const [flyt, grunnlag, journalpostInfo] = await Promise.all([
+  const [flyt, grunnlag, journalpostInfo, oppgave] = await Promise.all([
     hentFlyt(behandlingsreferanse),
     hentDigitaliseringGrunnlag(behandlingsreferanse),
     hentJournalpostInfo(behandlingsreferanse),
+    hentOppgave(behandlingsreferanse),
   ]);
-  if (isError(flyt) || isError(grunnlag) || isError(journalpostInfo)) {
+  if (isError(flyt) || isError(grunnlag) || isError(journalpostInfo) || isError(oppgave)) {
     return <ApiException apiResponses={[flyt, grunnlag]} />;
   }
 
@@ -27,6 +29,7 @@ export const DigitaliserDokumentMedDatafetching = async ({ behandlingsreferanse 
       behandlingsreferanse={behandlingsreferanse}
       registrertDato={journalpostInfo.data.registrertDato}
       grunnlag={grunnlag.data}
+      oppgave={oppgave.data}
       readOnly={isReadOnly}
     />
   );

@@ -10,6 +10,8 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 const oppgaver: Oppgave = {
+  id: 123,
+  personIdent: '12345678910',
   behandlingRef: 'asdf',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
@@ -22,9 +24,6 @@ const oppgaver: Oppgave = {
   versjon: 0,
   årsakerTilBehandling: [],
   markeringer: [],
-  enhetForKø: '4491',
-  erÅpen: true,
-  erPåVent: false,
 };
 
 describe('MineOppgaverMeny', () => {

@@ -1,6 +1,7 @@
-import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
 import { BodyShort, Button, Table, Tag } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
+import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+
 import {
   finnOverstyrMuligRettFra,
   finnOverstyrMuligRettFraFraLøsning,
@@ -8,7 +9,7 @@ import {
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
 } from 'components/behandlinger/krav/kravutils';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 type Props = {
   readOnly?: boolean;
@@ -63,6 +64,7 @@ export const KravTabell = ({
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell>JournalpostId</Table.HeaderCell>
+            <Table.HeaderCell>Journalpost mottatt</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Søknadsdato</Table.HeaderCell>
             <Table.HeaderCell>Mulig rett fra</Table.HeaderCell>
@@ -76,16 +78,22 @@ export const KravTabell = ({
             .filter((v) => !slettedeNyeReferanser.includes(v.referanse))
             .map((vurdering) => {
               const aktivLøsning = endredeNye[vurdering.referanse];
+              const journalpost = grunnlag.søknader.find(
+                (s) => s.journalpostId.identifikator === vurdering.journalpostId.identifikator
+              );
               return (
                 <Table.ExpandableRow
                   content={aktivLøsning?.begrunnelse ?? vurdering.begrunnelse}
                   key={vurdering.referanse}
                 >
                   <Table.DataCell>{vurdering.journalpostId.identifikator}</Table.DataCell>
+                  <Table.DataCell>
+                    {journalpost ? formaterDatoForFrontend(journalpost.mottattTidspunkt) : '-'}
+                  </Table.DataCell>
                   <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
                   <Table.DataCell>{formaterSøknadsdatoRad(vurdering, aktivLøsning)}</Table.DataCell>
                   <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering, aktivLøsning)}</Table.DataCell>
-                  <Table.DataCell>{vurdering.vurdertAv.ident}</Table.DataCell>
+                  <Table.DataCell>{vurdering.vurdertAv}</Table.DataCell>
                   <Table.DataCell>
                     {aktivLøsning ? (
                       <Tag variant="warning" size="small">
@@ -167,7 +175,7 @@ export const KravTabell = ({
                 <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
                 <Table.DataCell>{formaterSøknadsdatoRad(vurdering, aktivLøsning)}</Table.DataCell>
                 <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering, aktivLøsning)}</Table.DataCell>
-                <Table.DataCell>{vurdering.vurdertAv.ident}</Table.DataCell>
+                <Table.DataCell>{vurdering.vurdertAv}</Table.DataCell>
                 <Table.DataCell>
                   {aktivLøsning ? (
                     <Tag variant="warning" size="small">

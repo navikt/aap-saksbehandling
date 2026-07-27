@@ -1,15 +1,15 @@
 'use client';
 
-import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
-
 import { Button, VStack } from '@navikt/ds-react';
+import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { AnnetRelevantDokument, AnnetRelevantDokumentUnderkategori, DokumentÅrsakTilBehandling } from 'lib/types/types';
-import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
-import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
+import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { SubmitEventHandler } from 'react';
+
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { SubmitEventHandler } from 'react';
-import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: string[];
@@ -22,11 +22,14 @@ interface Props extends Submittable {
   readOnly: boolean;
   isLoading: boolean;
   erKravEnabled: boolean;
+  erRevurdereFrivilligeEnabled: boolean;
 }
 
-const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
+const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
   { label: 'Arbeidsutprøving', value: 'ARBEIDSUTPROVING' },
   { label: 'Barnetillegg', value: 'BARNETILLEGG' },
+  { label: 'Søknad om å beholde AAP i utlandet', value: 'BEHOLDE_AAP_I_UTLANDET' },
+  { label: 'Dokumentasjon på trekk av søknad', value: 'DOKUMENTASJON_TREKK_SOKNAD' },
   { label: 'Etablering', value: 'ETABLERING' },
   { label: 'Ettersendelse til feilutbetaling', value: 'ETTERSENDELSE_TIL_FEILUTBETALING' },
   { label: 'Ettersendelse til klage', value: 'ETTERSENDELSE_TIL_KLAGE' },
@@ -43,6 +46,7 @@ const kategorierOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategor
   { label: 'Studentbestemmelsen', value: 'STUDENTBESTEMMELSEN' },
   { label: 'Tiltaksrapport', value: 'TILTAKSRAPPORT' },
   { label: 'Yrkesskade', value: 'YRKESSKADE' },
+  { label: 'Meldekort', value: 'MELDEKORT' },
 ];
 
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
@@ -50,17 +54,24 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
     meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
     begrunnelse: data.begrunnelse,
-    underkategori: data.underkategori,
+    underkategori: data.underkategori || undefined,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
 }
 
-export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading, erKravEnabled }: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({
+  grunnlag,
+  readOnly,
+  submit,
+  isLoading,
+  erKravEnabled,
+  erRevurdereFrivilligeEnabled,
+}: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
 
-  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled);
+  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled, undefined, erRevurdereFrivilligeEnabled);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
     .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)
@@ -88,7 +99,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         label: 'Underkategori',
         defaultValue: annetRelevantDokumentGrunnlag.underkategori || '',
         description: 'Velg kategorien som passer best for dokumentet. Dette gjør dokumentet enklere å finne og forstå.',
-        options: ['', ...kategorierOptions],
+        options: ['', ...underkategoriOptions],
       },
     },
     { readOnly }

@@ -9,6 +9,8 @@ import {
 } from '@navikt/aap-oppgave-typescript-types';
 
 const baseOppgave: Oppgave = {
+  id: 123,
+  personIdent: '12345678910',
   behandlingRef: 'dgklasdf',
   vurderingsbehov: [],
   avklaringsbehovKode: '',
@@ -23,9 +25,6 @@ const baseOppgave: Oppgave = {
   markeringer: [],
   reservertAv: 'ident',
   reservertAvNavn: 'Test Testesen',
-  enhetForKø: '4491',
-  erPåVent: false,
-  erÅpen: true,
 };
 
 const oppgaver: Oppgave[] = [
@@ -88,7 +87,6 @@ describe('AlleOppgaverTabell', () => {
       behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.TILBAKEKREVING,
       påVentTil: '2025-12-31',
       påVentÅrsak: 'AVVENTER_BRUKERUTTALELSE',
-      erPåVent: true,
     };
 
     customRenderWithTildelOppgaveContext(

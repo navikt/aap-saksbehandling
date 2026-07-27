@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
-import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
 import { Button, Modal, VStack } from '@navikt/ds-react';
 
@@ -118,8 +118,6 @@ const markeringTypeTilEnum = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
-    case 'KREVER_SPESIALKOMPETANSE':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
     case 'AVSLAG_11_5':
       return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.AVSLAG_11_5;
     default:
@@ -131,7 +129,5 @@ const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
       return { heading: 'Marker behandling som haster', icon: <ExclamationmarkTriangleIcon /> };
-    case 'KREVER_SPESIALKOMPETANSE':
-      return { heading: 'Marker behandlingen med krever spesialkompetanse', icon: <BookIcon /> };
   }
 };

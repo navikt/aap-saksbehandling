@@ -49,6 +49,7 @@ const behovskodeMap = {
   '5038': 'Vurder krav',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5041': 'Skriv vedtaksbrev',
+  '5042': 'Avslag § 11-27',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -144,6 +145,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Avbryt revurdering';
     case 'ALDER':
       return 'Alder';
+    case 'AVSLAG_11_27':
+      return 'Avslag § 11-27';
     case 'LOVVALG':
       return 'Lovvalg og medlemskap';
     case 'START_BEHANDLING':

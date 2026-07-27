@@ -1,14 +1,14 @@
 import { logError } from 'lib/serverutlis/logger';
 import { oppdaterBrevmal } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
+import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function PUT(req: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
+export async function PUT(_: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
   const params = await props.params;
 
   try {
     const res = await oppdaterBrevmal(params.brevbestillingReferanse);
-    if (isError(res)) {
+    if (isServerError(res)) {
       logError(
         `/api/brev/brevbestillingsreferanse/oppdater-brevmal ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );

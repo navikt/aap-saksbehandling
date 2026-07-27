@@ -68,6 +68,7 @@ export enum Behovstype {
   FASTSETT_VEDTAKSLENGDE = '5059',
   FORESLÅ_VEDTAK_VEDTAKSLENGDE = '5060',
   AVBRYT_AKTIVITETSPLIKTBEHANDLING = '4301',
+  VURDER_AVSLAG_11_27 = '5042'
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -158,6 +159,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år';
     case '5041':
       return 'Skriv brev';
+    case '5042':
+      return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
     case '5050':
       return 'Skriv brev';
     case '5051':

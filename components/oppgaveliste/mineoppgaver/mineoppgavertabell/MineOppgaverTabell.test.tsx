@@ -35,10 +35,7 @@ const oppgaver: Oppgave[] = [
     endretTidspunkt: '2025-05-21T09:28:56.725',
     versjon: 8,
     markeringer: [],
-    vurderingsbehov: [],
-    enhetForKø: '0300',
-    erÅpen: true,
-    erPåVent: false,
+    vurderingsbehov: []
   },
 ];
 

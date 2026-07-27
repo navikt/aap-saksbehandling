@@ -11,12 +11,11 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';
 import { subMonths } from 'date-fns';
 
-type KravType = 'NYTT_KRAV_AAP' | 'GJENOPPTAK' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
+type KravType = 'RELEVANT_KRAV' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
 
 interface KravVurderingEntry {
   kravType: KravType;
   søknadsdato?: string;
-  kravdato?: string;
   muligRettFra?: string;
 }
 
@@ -25,12 +24,11 @@ interface FormFields {
 }
 
 const defaultDato = formaterDatoForBackend(subMonths(new Date(), 3));
-const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['NYTT_KRAV_AAP', 'GJENOPPTAK']);
+const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['RELEVANT_KRAV']);
 
 const defaultKrav = (): KravVurderingEntry => ({
-  kravType: 'NYTT_KRAV_AAP',
+  kravType: 'RELEVANT_KRAV',
   søknadsdato: defaultDato,
-  kravdato: defaultDato,
   muligRettFra: undefined,
 });
 
@@ -42,7 +40,6 @@ const KravRadFelter = ({ form, index }: { form: ReturnType<typeof useForm<FormFi
   return (
     <>
       <DateInputWrapper label="Søknadsdato" control={form.control} name={`kravVurderinger.${index}.søknadsdato`} />
-      <DateInputWrapper label="Kravdato" control={form.control} name={`kravVurderinger.${index}.kravdato`} />
       <DateInputWrapper label="Mulig rett fra" control={form.control} name={`kravVurderinger.${index}.muligRettFra`} />
     </>
   );
@@ -65,9 +62,8 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
     await leggTilKravVurdering(saksnummer, {
       kravVurderinger: kravVurderinger.map((k) => ({
         kravType: k.kravType,
-        søknadsdato: k.søknadsdato || undefined,
-        kravdato: k.kravdato || undefined,
-        muligRettFra: k.muligRettFra || undefined,
+        søknadsdato: k.søknadsdato,
+        muligRettFra: k.muligRettFra,
       })),
     });
   };
@@ -87,17 +83,14 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
                 const type = e.target.value as KravType;
                 if (kravTyperMedDatofelter.has(type)) {
                   form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
-                  form.setValue(`kravVurderinger.${index}.kravdato`, defaultDato);
                 } else {
                   form.setValue(`kravVurderinger.${index}.søknadsdato`, undefined);
-                  form.setValue(`kravVurderinger.${index}.kravdato`, undefined);
                   form.setValue(`kravVurderinger.${index}.muligRettFra`, undefined);
                 }
               },
             }}
           >
-            <option value="NYTT_KRAV_AAP">Nytt krav AAP</option>
-            <option value="GJENOPPTAK">Gjenopptak</option>
+            <option value="RELEVANT_KRAV">Nytt krav AAP</option>
             <option value="TRUKKET_SØKNAD">Trukket søknad</option>
             <option value="KLAGE">Klage</option>
             <option value="TILLEGGSOPPLYSNING">Tilleggsopplysning</option>

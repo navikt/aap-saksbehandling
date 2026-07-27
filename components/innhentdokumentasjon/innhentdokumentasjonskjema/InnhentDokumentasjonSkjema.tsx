@@ -90,7 +90,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
         { label: 'Velg dokument', value: '' },
         { label: 'Tilleggsopplysninger (L8)', value: 'L8' },
         { label: 'Legeerklæring ved arbeidsuførhet (L40)', value: 'L40' },
-        { label: 'Dialogmelding', value: 'MELDING_FRA_NAV' },
+        { label: 'Melding fra Nav', value: 'MELDING_FRA_NAV' },
       ]
     : [
         { label: 'Velg dokumentasjonstype', value: '' },

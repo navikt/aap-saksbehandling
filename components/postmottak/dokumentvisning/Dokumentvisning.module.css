@@ -1,6 +1,6 @@
 .dokumentvisning {
   background-color: var(--ax-bg-default);
-  border-radius: var(--ax-radius-8);
+  border-radius: var(--ax-radius-12);
   border: 1px solid var(--ax-border-neutral-subtle);
   overflow: hidden;
 }

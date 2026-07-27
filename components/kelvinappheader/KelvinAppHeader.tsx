@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import {
+  ActionMenu,
   BodyShort,
   Box,
   Button,
-  Dropdown,
   Heading,
   HStack,
   InternalHeader,
@@ -26,44 +26,58 @@ import Endringslogg from '@navikt/endringslogg';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { Roller } from 'lib/types/types';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { SisteBehandledeSakerOgOppgaver } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
 
 const bytteBrukerForDevOgLokalt = !isProd();
 const lokalBrukerbytte = isLocal();
+
 const Brukermeny = ({ brukerInformasjon, roller }: { brukerInformasjon: BrukerInformasjon; roller?: Roller[] }) => {
   return (
-    <Dropdown>
-      <InternalHeader.UserButton name={brukerInformasjon.navn} as={Dropdown.Toggle} />
-      <Dropdown.Menu>
-        <Dropdown.Menu.GroupedList>
-          <Dropdown.Menu.GroupedList.Heading>
-            Roller: {roller?.map((rolle) => rolle).join(', ')}
-          </Dropdown.Menu.GroupedList.Heading>
-          <Dropdown.Menu.Divider />
+    <ActionMenu>
+      <ActionMenu.Trigger>
+        <InternalHeader.UserButton name={brukerInformasjon.navn} />
+      </ActionMenu.Trigger>
+
+      <ActionMenu.Content>
+        <SisteBehandledeSakerOgOppgaver />
+
+        <ActionMenu.Sub>
+          <ActionMenu.SubTrigger>Mine roller</ActionMenu.SubTrigger>
+          <ActionMenu.SubContent>
+            {roller?.map((rolle) => (
+              <ActionMenu.Item key={`brukermeny-${rolle}`} as={BodyShort}>
+                {rolle}
+              </ActionMenu.Item>
+            ))}
+          </ActionMenu.SubContent>
+        </ActionMenu.Sub>
+
+        <ActionMenu.Divider />
+
+        <ActionMenu.Group aria-label="temp">
           {bytteBrukerForDevOgLokalt && (
-            <>
-              <Dropdown.Menu.List.Item as={Link} href={'/oauth2/login?prompt=select_account'}>
-                <BodyShort>Bytt bruker</BodyShort>
-                <Spacer />
-                <ArrowRightLeftIcon aria-hidden fontSize="1.5rem" />
-              </Dropdown.Menu.List.Item>
-            </>
+            <ActionMenu.Item as="a" href={'/oauth2/login?prompt=select_account'} rel="noreferrer noopener">
+              <BodyShort>Bytt bruker</BodyShort>
+              <Spacer />
+              <ArrowRightLeftIcon aria-hidden fontSize="1.5rem" />
+            </ActionMenu.Item>
           )}
 
-          <Dropdown.Menu.List.Item as={Link} href={'/oauth2/logout'}>
+          <ActionMenu.Item as="a" href={'/oauth2/logout'} rel="noreferrer noopener">
             <BodyShort>Logg ut</BodyShort>
             <Spacer />
             <LeaveIcon aria-hidden fontSize="1.5rem" />
-          </Dropdown.Menu.List.Item>
-        </Dropdown.Menu.GroupedList>
+          </ActionMenu.Item>
+        </ActionMenu.Group>
 
         {lokalBrukerbytte && (
           <>
-            <Dropdown.Menu.Divider />
+            <ActionMenu.Divider />
             <LokalBrukerBytte />
           </>
         )}
-      </Dropdown.Menu>
-    </Dropdown>
+      </ActionMenu.Content>
+    </ActionMenu>
   );
 };
 

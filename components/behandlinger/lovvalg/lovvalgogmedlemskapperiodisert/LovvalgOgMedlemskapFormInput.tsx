@@ -11,7 +11,7 @@ import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lo
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
-import { UmamiTag } from 'components/umami/Umami';
+import { UmamiTag } from 'lib/types/types';
 
 type Props = {
   form: UseFormReturn<LovOgMedlemskapVurderingForm>;

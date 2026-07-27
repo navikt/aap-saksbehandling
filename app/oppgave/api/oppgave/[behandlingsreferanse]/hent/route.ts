@@ -1,12 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
-import { isError } from 'lib/utils/api';
 import { logError } from 'lib/serverutlis/logger';
+import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { isServerError } from 'lib/utils/api';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(_: NextRequest, context: { params: Promise<{ behandlingsreferanse: string }> }) {
   try {
     const res = await hentOppgave((await context.params).behandlingsreferanse);
-    if (isError(res)) {
+    if (isServerError(res)) {
       logError(`/api/oppgave/${(await context.params).behandlingsreferanse}/hent`, res.apiException);
     }
 
