@@ -1,16 +1,11 @@
-import { useRef, useState, useTransition } from 'react';
 import {
   ServerSentEventData,
   ServerSentEventStatus,
 } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
-import { useRouter } from 'next/navigation';
-import {
-  FatteVedtakLøsning,
-  KvalitetssikringLøsning,
-  LøsAvklaringsbehovPåBehandling,
-  LøsPeriodisertBehovPåBehandling,
-  StegType,
-} from 'lib/types/types';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
+import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 import {
   clientHentFlyt,
   clientHentTilgangForKvalitetssikring,
@@ -18,15 +13,20 @@ import {
   clientLøsPeriodisertBehov,
   clientSjekkTilgang,
 } from 'lib/clientApi';
-import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
-import { ApiException, isError, isSuccess } from 'lib/utils/api';
-import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { Behovstype } from 'lib/utils/form';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import {
+  FatteVedtakLøsning,
+  KvalitetssikringLøsning,
+  LøsAvklaringsbehovPåBehandling,
+  LøsPeriodisertBehovPåBehandling,
+  StegType,
+} from 'lib/types/types';
+import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
-import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { Behovstype } from 'lib/utils/form';
+import { useRouter } from 'next/navigation';
+import { useRef, useState, useTransition } from 'react';
 
 export type LøsBehovOgGåTilNesteStegStatus = ServerSentEventStatus | undefined;
 
@@ -172,7 +172,7 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         withCredentials: true,
       }
     );
-    eventSource.onmessage = async (event: any) => {
+    eventSource.onmessage = async (event: MessageEvent) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       const {
         status,
@@ -242,8 +242,8 @@ export function useLøsBehovOgGåTilNesteSteg(steg: StegType): {
         setStatus(status);
       }
     };
-    eventSource.onerror = (event: any) => {
-      throw new Error('event onError', event);
+    eventSource.onerror = (event: Event) => {
+      throw new Error('event onError', { cause: event });
     };
   };
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Button, Dialog } from '@navikt/ds-react';
+import { Button, Dialog, HStack } from '@navikt/ds-react';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
 import styles from './FerdigstillBrevDialog.module.css';
@@ -61,18 +61,22 @@ export const FerdigstillBrevDialog = ({
         </Dialog.Header>
         <Dialog.Body className={styles.dialogBody}>
           <ForhåndsvisBrev isLoading={lasterPdf} dataUri={pdfDataUri} />
-          <LøsBehovOgGåTilNesteStegStatusAlert
-            status={løsBehovStatus}
-            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-          />
         </Dialog.Body>
-        <Dialog.Footer>
-          <Button type={'button'} variant={'secondary'} size={'small'} onClick={onClose} disabled={senderBrev}>
-            Lukk
-          </Button>
-          <Button type={'button'} variant={'primary'} size={'small'} onClick={sendBrev} loading={senderBrev}>
-            Send brev
-          </Button>
+        <Dialog.Footer className={styles.dialogFooter}>
+          <div>
+            <LøsBehovOgGåTilNesteStegStatusAlert
+              status={løsBehovStatus}
+              løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+            />
+          </div>
+          <HStack gap={'space-12'} align={'start'}>
+            <Button type={'button'} variant={'secondary'} size={'medium'} onClick={onClose} disabled={senderBrev}>
+              Lukk
+            </Button>
+            <Button type={'button'} variant={'primary'} size={'medium'} onClick={sendBrev} loading={senderBrev}>
+              Send brev
+            </Button>
+          </HStack>
         </Dialog.Footer>
       </Dialog.Popup>
     </Dialog>

@@ -30,3 +30,8 @@
 .textarea {
   max-width: 90ch;
 }
+
+.aksel-action-menu__sub-trigger,
+a.aksel-action-menu__item:not(:disabled) {
+  cursor: pointer;
+}

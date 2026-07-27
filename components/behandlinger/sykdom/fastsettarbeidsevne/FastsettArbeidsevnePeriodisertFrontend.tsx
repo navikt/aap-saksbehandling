@@ -246,13 +246,15 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
                     label={'Oppgi arbeidsevnen som ikke er utnyttet i prosent'}
                     hideLabel={true}
                     rules={{
-                      required: 'Du må angi hvor stor arbeidsevne brukeren har',
+                      required: 'Du må angi hvor stor arbeidsevne brukeren har.',
+                      min: { value: 0, message: 'Arbeidsevnen må være minst 0 prosent.' },
+                      max: { value: 100, message: 'Arbeidsevnen kan være maksimalt 100 prosent.' },
                       validate: (value) => {
                         const valueAsNumber = Number(value);
                         if (isNaN(valueAsNumber)) {
                           return 'Prosent må være et tall';
                         } else if (!erProsent(valueAsNumber)) {
-                          return 'Prosent kan bare være mellom 0 og 100';
+                          return 'Prosent kan bare være mellom 0 og 100.';
                         }
                       },
                     }}

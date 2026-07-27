@@ -64,9 +64,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
     <div
       className={`${visEndretTekst ? styles.totrinnsvurderingFormMedEndring : styles.totrinnsvurderingFormUtenEndring}`}
     >
-      <div
-        className={`${styles.heading} ${erKvalitetssikring ? (visEndretTekst ? styles.endretSidenSistHeading : styles.headingKvalitetssikrer) : styles.headingBeslutter}`}
-      >
+      <div className={`${styles.heading} ${visEndretTekst && styles.endretSidenSistHeading}`}>
         <VStack gap={'space-6'}>
           {visEndretTekst && (
             <HStack gap={'space-4'}>

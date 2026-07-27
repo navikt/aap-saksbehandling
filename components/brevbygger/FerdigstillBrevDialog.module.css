@@ -1,3 +1,7 @@
 .dialogBody {
   height: 100%;
 }
+
+.dialogFooter {
+  justify-content: space-between;
+}

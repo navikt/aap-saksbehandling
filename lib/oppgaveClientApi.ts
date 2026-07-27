@@ -1,3 +1,7 @@
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { clientFetch } from 'lib/clientApi';
+
 import {
   AvreserverOppgaveDto,
   Kø,
@@ -5,13 +9,13 @@ import {
   Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
-  PlukkOppgaveDto,
+  OppgaverPåSak,
+  PlukkOppgaveRequest,
+  PlukkOppgaveResponse,
+  SakOgAvklaringsbehov,
   TildeltStatus,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
-import { clientFetch } from 'lib/clientApi';
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
-import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
@@ -23,6 +27,10 @@ export async function hentOppgaveClient(behandlingsreferanse: string) {
 
 export async function hentTildeltStatusClient(behandlingsreferanse: string) {
   return clientFetch<TildeltStatus>(`/oppgave/api/oppgave/${behandlingsreferanse}/tildelt-status`, 'GET');
+}
+
+export async function hentOppgaverPåSakClient(saksnummer: string) {
+  return clientFetch<OppgaverPåSak>(`/oppgave/api/oppgave/sak/${saksnummer}/hent-oppgaver-paa-sak`, 'GET');
 }
 
 export async function hentMineOppgaverClient(
@@ -47,8 +55,8 @@ export async function hentKøerForEnheterClient(enheter: string[]) {
   return clientFetch<Kø[]>(url, 'GET');
 }
 export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
-  const payload: PlukkOppgaveDto = { oppgaveId, versjon };
-  return await clientFetch<Oppgave>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
+  const payload: PlukkOppgaveRequest = { oppgaveId, versjon };
+  return await clientFetch<PlukkOppgaveResponse>('/oppgave/api/oppgave/plukk-oppgave', 'POST', payload);
 }
 export async function synkroniserOppgaveMedEnhetClient(oppgaveId: number) {
   return await clientFetch<void>('/oppgave/api/oppgave/synkroniser-enhet-paa-oppgave', 'POST', {
@@ -59,4 +67,14 @@ export function clientMottattDokumenterLest(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/mottatt-dokumenter-lest`, 'POST', {
     behandlingRef: behandlingsreferanse,
   });
+}
+
+export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
+  return clientFetch(`/oppgave/api/oppgave/fjern-helseopplysning-ikon`, 'POST', {
+    behandlingRef: behandlingsreferanse,
+  });
+}
+
+export async function clientHentMineSisteOppgaver() {
+  return await clientFetch<SakOgAvklaringsbehov[]>('/oppgave/api/oppgave/mine-siste-oppgaver', 'GET');
 }

@@ -13,7 +13,7 @@ export function finnesFeilForVurdering(index: number, errorList: ErrorList) {
 export function hentFeilmeldingerForForm(errors: unknown): FlatError[] {
   const flatErrors: FlatError[] = [];
 
-  function samleFeilmeldinger(obj: any, index?: number) {
+  function samleFeilmeldinger(obj: unknown, index?: number) {
     if (!obj) return;
 
     if (Array.isArray(obj)) {
@@ -22,18 +22,25 @@ export function hentFeilmeldingerForForm(errors: unknown): FlatError[] {
     }
 
     if (typeof obj === 'object') {
-      if (obj.message && obj.ref?.name) {
+      const ref = isRecord(obj) && isRecord(obj.ref) ? obj.ref : undefined;
+      if (isRecord(obj) && typeof obj.message === 'string' && typeof ref?.name === 'string') {
         flatErrors.push({
-          name: obj.ref.name,
+          name: ref.name,
           message: obj.message,
           index,
         });
       }
 
-      Object.values(obj).forEach((value) => samleFeilmeldinger(value, index));
+      if (isRecord(obj)) {
+        Object.values(obj).forEach((value) => samleFeilmeldinger(value, index));
+      }
     }
   }
 
   samleFeilmeldinger(errors);
   return flatErrors;
+}
+
+function isRecord(val: unknown): val is Record<string, unknown> {
+  return typeof val === 'object' && val !== null && !Array.isArray(val);
 }

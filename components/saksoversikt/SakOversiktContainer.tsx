@@ -65,7 +65,7 @@ export const SakOversiktContainer = ({
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.MELDEKORT}>
-              <MeldekortOversikt />
+              <MeldekortOversikt sak={sak} />
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.TREKK}>

@@ -200,7 +200,7 @@ describe('FastsettArbeidsevne', () => {
       );
       await klikkPåNyVurdering();
       await klikkPåBekreft();
-      const errors = screen.getAllByText('Du må angi hvor stor arbeidsevne brukeren har');
+      const errors = screen.getAllByText('Du må angi hvor stor arbeidsevne brukeren har.');
       expect(errors[0]).toBeVisible();
     });
 

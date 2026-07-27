@@ -1,39 +1,40 @@
 'use client';
 
-import { Button, Dropdown } from '@navikt/ds-react';
-import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
-import { useState } from 'react';
-import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
+import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { Button, Dropdown } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
+import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
+import { useState } from 'react';
+
+import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
+import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
+import { Avslag11_27Dialog } from 'components/saksinfobanner/avslag11_27dialog/Avslag11_27Dialog';
+import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
+import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
+import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbehandlingmodal/SettMarkeringForBehandlingModal';
 
 import styles from './SaksinfoBanner.module.css';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
-import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbehandlingmodal/SettMarkeringForBehandlingModal';
-import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
-import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
-import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
-import { Avslag11_27Dialog } from 'components/saksinfobanner/avslag11_27dialog/Avslag11_27Dialog';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
   flyt,
   visning,
   brukerInformasjon,
   behandling,
-  oppgave,
+  reservertAvIdent,
 }: {
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
   brukerInformasjon?: BrukerInformasjon;
   behandling: DetaljertBehandling;
-  oppgave?: Oppgave;
+  reservertAvIdent?: string | null;
 }) => {
   const { saksnummer } = useParamsMedType();
   const innloggetBruker = useInnloggetBruker();
@@ -177,7 +178,7 @@ export const SaksmenyDropdown = ({
       </Dropdown>
 
       <SettBehandlingPåVentModal
-        reservert={!!oppgave?.reservertAv}
+        reservert={!!reservertAvIdent}
         isOpen={settBehandlingPåVentmodalIsOpen}
         onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
       />

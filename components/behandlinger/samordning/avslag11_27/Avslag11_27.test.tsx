@@ -32,7 +32,7 @@ const grunnlagUtenVurdering: Avslag11_27Grunnlag = {
     {
       referanse: ref1,
       søknadsdokument: 'JP-001',
-      type: 'NYTT_KRAV_AAP',
+      type: 'RELEVANT_KRAV',
       søknadsdato: '2026-01-15',
       muligRettighetFra: '2026-02-01',
     },
@@ -48,7 +48,7 @@ const grunnlagMedVurdering: Avslag11_27Grunnlag = {
     {
       referanse: ref1,
       søknadsdokument: 'JP-001',
-      type: 'NYTT_KRAV_AAP',
+      type: 'RELEVANT_KRAV',
       søknadsdato: '2026-01-15',
       muligRettighetFra: '2026-02-01',
     },
@@ -73,14 +73,14 @@ const grunnlagMedVedtattOgNyVurdering: Avslag11_27Grunnlag = {
     {
       referanse: ref1,
       søknadsdokument: 'JP-001',
-      type: 'NYTT_KRAV_AAP',
+      type: 'RELEVANT_KRAV',
       søknadsdato: '2026-01-15',
       muligRettighetFra: '2026-02-01',
     },
     {
       referanse: ref2,
       søknadsdokument: 'JP-002',
-      type: 'GJENOPPTAK',
+      type: 'RELEVANT_KRAV',
       søknadsdato: '2026-03-01',
       muligRettighetFra: '2026-03-15',
     },

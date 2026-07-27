@@ -35,10 +35,7 @@ const baseOppgave: Oppgave = {
   endretTidspunkt: '2025-01-15T10:00:00.000',
   versjon: 1,
   markeringer: [],
-  vurderingsbehov: [],
-  enhetForKø: '0300',
-  erÅpen: true,
-  erPåVent: false,
+  vurderingsbehov: []
 };
 
 const lagOppgaveMedBeløp = (id: number, beløp: number): Oppgave => ({

@@ -3,8 +3,7 @@ import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt
 import styles from './MarkeringInfoBoks.module.css';
 import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
-import { BookIcon, ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
+import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -50,11 +49,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
             icon={ikonForMarkeringType(markering.markeringType)}
             variant={variantFraType(markering.markeringType)}
             size={'medium'}
-            className={
-              markering.markeringType == NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
-                ? styles.hasterTag
-                : styles.spesialkompetanseTag
-            }
+            className={styles.hasterTag}
           >
             <BodyShort size={'small'} weight={'semibold'}>
               {markeringTypeTilTekst(markering.markeringType)}
@@ -108,8 +103,6 @@ function markeringTypeTilTekst(type: MarkeringType): string {
   switch (type) {
     case 'HASTER':
       return 'Haster';
-    case 'KREVER_SPESIALKOMPETANSE':
-      return 'Krever spesialkompetanse';
     case 'AVSLAG_11_5':
       return 'Avslag § 11-5';
     default:
@@ -121,8 +114,6 @@ export function ikonForMarkeringType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return <ExclamationmarkTriangleIcon />;
-    case 'KREVER_SPESIALKOMPETANSE':
-      return <BookIcon />;
     case 'AVSLAG_11_5':
       return <XMarkOctagonIcon />;
   }
@@ -132,8 +123,6 @@ export function variantFraType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return 'error-moderate';
-    case 'KREVER_SPESIALKOMPETANSE':
-      return 'alt1-moderate';
     case 'AVSLAG_11_5':
       return 'alt1-moderate';
 

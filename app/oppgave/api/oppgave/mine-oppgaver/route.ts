@@ -1,8 +1,8 @@
-import { hentMineOppgaver } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
-import { isError } from 'lib/utils/api';
-import { NextRequest, NextResponse } from 'next/server';
 import { hentMineOppgaverQueryParams } from 'lib/serverutlis/mine-oppgaver';
+import { hentMineOppgaver } from 'lib/services/oppgaveservice/oppgaveservice';
+import { isServerError } from 'lib/utils/api';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const params = hentMineOppgaverQueryParams(req);
@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       sortorder: params?.sortorder,
       kunPaaVent: params?.kunPaaVent,
     });
-    if (isError(res) && res.status >= 500) {
+    if (isServerError(res)) {
       logError(`/api/oppgave/mine-oppgaver`, res.apiException);
     }
     return NextResponse.json(res, { status: res.status });

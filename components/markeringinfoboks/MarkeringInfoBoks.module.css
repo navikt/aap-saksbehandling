@@ -4,14 +4,6 @@
   height: var(--ax-space-40);
 }
 
-.spesialkompetanseTag {
-  background-color: var(--ax-bg-meta-purple-moderate);
-  border-top-left-radius: var(--ax-radius-8);
-  border-top-right-radius: var(--ax-radius-8);
-  justify-content: left;
-  height: var(--ax-space-40);
-}
-
 .boks > * {
   padding-left: var(--ax-space-12);
   padding-right: var(--ax-space-12);

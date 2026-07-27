@@ -53,6 +53,7 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const oppgittYrkesskadeInfoSteg = hentStegDataForOppgittYrkesskadeInfo(yrkesskadeVurderingGrunnlag.data);
 
   const skalViseStudentV2 = unleashService.isEnabled('StudentV2');
+  const skalViseAlleSykdomSteg = unleashService.isEnabled('SkalViseAlleSykdomssteg');
 
   return (
     <GruppeSteg
@@ -64,7 +65,11 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
     >
       {sykdomSteg.skalViseSteg && (
         <StegSuspense>
-          <SykdomsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykdomSteg} />
+          <SykdomsvurderingMedDataFetching
+            behandlingsreferanse={behandlingsreferanse}
+            stegData={sykdomSteg}
+            skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
+          />
         </StegSuspense>
       )}
       {vurderBistandsbehovSteg.skalViseSteg && (

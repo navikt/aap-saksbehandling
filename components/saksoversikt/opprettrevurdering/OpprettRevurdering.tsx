@@ -1,19 +1,20 @@
 'use client';
 
 import { Button, HStack, Page, VStack } from '@navikt/ds-react';
-import { ManuellRevurderingV0, SaksInfo } from 'lib/types/types';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { clientSendHendelse } from 'lib/clientApi';
-import { useState } from 'react';
-import { Spinner } from 'components/felles/Spinner';
-import { useRouter } from 'next/navigation';
+import { ManuellRevurderingV0, SaksInfo } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { Kort } from 'components/kort/Kort';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
 import { Alert } from 'components/alert/Alert';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { Spinner } from 'components/felles/Spinner';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { Kort } from 'components/kort/Kort';
 
 export interface ManuellRevurderingFormFields {
   årsaker: string[];
@@ -72,21 +73,23 @@ export const OpprettRevurdering = ({
   const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
   const erKravEnabled = useFeatureFlag('KravSteg');
   const avslag11_27Enable = useFeatureFlag('Avslag11_27');
+  const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
       type: 'textarea',
       label: 'Hva er årsaken?',
-      description: 'Utdyp så det er tydelig for andre i Kelvin hva som er årsak til vurderingsbehovet',
+      description: 'Utdyp så det er tydelig for andre i Kelvin hva som er årsak til vurderingsbehovet.',
       rules: {
-        required: `Skriv litt om hvorfor du skal ${erFørstegangsbehandling ? 'opprette vurdering' : 'revurdere saken'}`,
+        required: `Skriv litt om hvorfor du skal ${erFørstegangsbehandling ? 'opprette vurdering' : 'revurdere saken'}.`,
       },
       defaultValue: defaultBegrunnelse ?? '',
     },
     årsaker: {
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
-      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable),
+      description: 'Skriv i feltet for å filtrere listen.',
+      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable, erRevurdereFrivilligeEnabled),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,

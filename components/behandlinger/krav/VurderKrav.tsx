@@ -1,16 +1,18 @@
 'use client';
 
-import { KravGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { BodyShort, Box, VStack } from '@navikt/ds-react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { VStack } from '@navikt/ds-react';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { KravGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+
 import { KravTabell } from 'components/behandlinger/krav/KravTabell';
 import { KravVurderingModal } from 'components/behandlinger/krav/KravVurderingModal';
 import { LeggTilKravModal } from 'components/behandlinger/krav/LeggTilKravModal';
 import { useKravVurderingerState } from 'components/behandlinger/krav/useKravVurderingerState';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedMellomlagring } from 'components/vilkårskort/vilkårskortmedmellomlagring/VilkårskortMedMellomlagring';
-import { Behovstype } from 'lib/utils/form';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 type Props = {
   grunnlag?: KravGrunnlag;
@@ -83,6 +85,16 @@ export const VurderKrav = ({ readOnly, grunnlag, behandlingVersjon, initialMello
       onNullstill={nullstill}
     >
       <VStack gap="space-16">
+        {grunnlag?.søknaderUtenKravvurdering && grunnlag.søknaderUtenKravvurdering.length > 0 && (
+          <Box>
+            <BodyShort>Søknader som mangler vurdering: </BodyShort>
+            {grunnlag?.søknaderUtenKravvurdering.map((søknad) => (
+              <BodyShort key={søknad.journalpostId.identifikator}>
+                {søknad.journalpostId.identifikator}: {formaterDatoForFrontend(søknad.mottattTidspunkt)}{' '}
+              </BodyShort>
+            ))}
+          </Box>
+        )}
         <KravTabell
           grunnlag={grunnlag}
           endredeVedtatte={endredeVedtatte}

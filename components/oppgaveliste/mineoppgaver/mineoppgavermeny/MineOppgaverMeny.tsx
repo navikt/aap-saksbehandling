@@ -3,11 +3,11 @@ import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
-import { byggKelvinURL } from 'lib/utils/request';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './MineOppgaverMeny.module.css';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { byggKelvinURL } from 'lib/utils/request';
 
 interface Props {
   oppgave: Oppgave;
@@ -32,7 +32,7 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
           if (revalidateFunction) {
             revalidateFunction();
           }
-        } else if (res.status == 401) {
+        } else if (res.status == 403) {
           setÅpenModal(true);
         } else {
           setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
@@ -48,8 +48,8 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
       if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
         const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
         if (isSuccess(plukketOppgave)) {
-          router.push(byggKelvinURL(plukketOppgave.data));
-        } else if (plukketOppgave.status == 401) {
+          router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
+        } else if (plukketOppgave.status == 403) {
           setÅpenModal(true);
         } else {
           setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);

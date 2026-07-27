@@ -17,6 +17,8 @@ export const FLAGS = [
   'KvalitetssikringDiff',
   'Avslag11_27',
   'VarselNaarDetFinnesTimerPaaMeldeperiode',
+  'SkalViseAlleSykdomssteg',
+  'RevurdereFrivillige',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -41,4 +43,6 @@ export const mockedFlags: Flags = {
   KvalitetssikringDiff: true,
   Avslag11_27: true,
   VarselNaarDetFinnesTimerPaaMeldeperiode: true,
+  SkalViseAlleSykdomssteg: true,
+  RevurdereFrivillige: true,
 };

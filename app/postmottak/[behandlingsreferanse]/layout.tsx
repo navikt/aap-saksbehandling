@@ -1,8 +1,6 @@
-import { ReactNode } from 'react';
-import { DokumentInfoBanner } from 'components/postmottak/dokumentinfobanner/DokumentInfoBanner';
-import styles from './layout.module.css';
-import { StegGruppeIndikatorAksel } from 'components/postmottak/steggruppeindikator/StegGruppeIndikatorAksel';
-import { SplitVindu } from 'components/postmottak/splitvindu/SplitVindu';
+import { VStack } from '@navikt/ds-react';
+import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   auditlog,
   forberedBehandlingOgVentPåProsessering,
@@ -10,15 +8,19 @@ import {
   hentFlyt,
   hentJournalpostInfo,
 } from 'lib/services/postmottakservice/postmottakservice';
-import { BehandlingPVentMedDataFetching } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentMedDataFetching';
-import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
-import { VStack } from '@navikt/ds-react';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
+import { ReactNode } from 'react';
 import { SWRConfig } from 'swr';
-import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+
+import { FlytProsesseringAlert } from 'components/flytprosesseringalert/FlytProsesseringAlert';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
+import { DokumentInfoBanner } from 'components/postmottak/dokumentinfobanner/DokumentInfoBanner';
+import { BehandlingPVentMedDataFetching } from 'components/postmottak/postmottakbehandlingpåvent/PostmottakBehandlingPåVentMedDataFetching';
+import { SplitVindu } from 'components/postmottak/splitvindu/SplitVindu';
+import { StegGruppeIndikatorAksel } from 'components/postmottak/steggruppeindikator/StegGruppeIndikatorAksel';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+import styles from './layout.module.css';
 
 interface LayoutProps {
   children: ReactNode;
@@ -29,13 +31,13 @@ const Layout = async (props: LayoutProps) => {
   const params = await props.params;
   const { children } = props;
 
-  const [behandling, oppgave] = await Promise.all([
+  const [behandling, oppgaveVisningsinfo] = await Promise.all([
     hentBehandling(params.behandlingsreferanse),
-    hentOppgave(params.behandlingsreferanse),
+    hentOppgaveVisningsinfo(params.behandlingsreferanse),
   ]);
 
-  if (isError(behandling) || isError(oppgave)) {
-    return <ApiException apiResponses={[behandling, oppgave]} />;
+  if (isError(behandling) || isError(oppgaveVisningsinfo)) {
+    return <ApiException apiResponses={[behandling, oppgaveVisningsinfo]} />;
   }
 
   if (behandling.data.skalForberede) {
@@ -74,7 +76,7 @@ const Layout = async (props: LayoutProps) => {
             behandlingsVersjon={flytResponse.data.behandlingVersjon}
             journalpostInfo={journalpostInfo.data}
             påVent={flytResponse.data.visning.visVentekort}
-            oppgave={oppgave.data}
+            oppgaveVisningsinfo={oppgaveVisningsinfo.data}
           />
           <StegGruppeIndikatorAksel
             behandlingsreferanse={params.behandlingsreferanse}
