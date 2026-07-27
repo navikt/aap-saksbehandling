@@ -1,5 +1,6 @@
-import { ValuePair } from 'components/form/FormField';
 import { ArbeidsevneNedsattValg } from 'lib/types/types';
+
+import { ValuePair } from 'components/form/FormField';
 
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
@@ -34,6 +35,7 @@ export enum Behovstype {
   AVKLAR_SAMORDNING_SYKESTIPEND_KODE = '5034',
   AVKLAR_SAMORDNING_BARNEPENSJON_KODE = '5036',
   VURDER_KRAV_KODE = '5038',
+  AVKLAR_STØNADSPERIODE_KODE = '5039',
   OVERGANG_UFORE = '5031',
   SKRIV_VEDTAKSBREV_SAKSBEHANDLER_KODE = '5041',
   SKRIV_BREV_KODE = '5050',
@@ -68,7 +70,7 @@ export enum Behovstype {
   FASTSETT_VEDTAKSLENGDE = '5059',
   FORESLÅ_VEDTAK_VEDTAKSLENGDE = '5060',
   AVBRYT_AKTIVITETSPLIKTBEHANDLING = '4301',
-  VURDER_AVSLAG_11_27 = '5042'
+  VURDER_AVSLAG_11_27 = '5042',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -155,6 +157,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-27 Samordning barnepensjon';
     case '5038':
       return 'Vurder krav';
+    case '5039':
+      return 'Avklar stønadsperiode';
     case '5040':
       return '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år';
     case '5041':
