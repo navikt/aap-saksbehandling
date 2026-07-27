@@ -19,7 +19,11 @@ export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.O
   /** Sorter hastemarkerte oppgaver først. Ikke del av OpenAPI-skjema ennå. */
   hastemarkeringerFørst?: boolean;
 };
-export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
+export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteResponsV2'];
+export type OppgaveMedKontekst = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse'];
+export type ReturInformasjon = oppgave['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
+export type SkjermingInfo =
+  oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse']['oppgavelisteTags']['skjermingInfo'];
 export type OppgaverPåSak = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaverPåSakResponse'];
 export type OppgavePåBehandling = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse'];
 export type OppgaveVisningsinformasjon =
