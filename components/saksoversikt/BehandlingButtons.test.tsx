@@ -1,9 +1,10 @@
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
+import { OppgavePåBehandling } from 'lib/types/oppgaveTypes';
+import { describe, expect, it, vi } from 'vitest';
+
 import { BehandlingButtons } from 'components/saksoversikt/BehandlingButtons';
 import { lagBehandling, lagSak } from 'components/saksoversikt/SakMedBehandlinger.test';
 import { BehandlingsflytEllerPostmottakBehandling } from 'components/saksoversikt/types';
-import { OppgaveInfo } from 'hooks/oppgave/OppgaverPåSakHook';
 
 describe('BehandlingButtons', () => {
   it('skal kun vise behandle-knapp når oppgave er reservert til innlogget bruker', () => {
@@ -14,14 +15,22 @@ describe('BehandlingButtons', () => {
       kilde: 'BEHANDLINGSFLYT',
     };
 
-    const oppgaveInfo: OppgaveInfo = {
+    const oppgavePåBehandling: OppgavePåBehandling = {
       id: 123,
       versjon: 1,
+      behandlingsreferanse: '123',
       reservertAvIdent: 'Z000000',
       reservertAvNavn: 'Saksbehandler Saksbehandlersen',
     };
 
-    render(<BehandlingButtons sak={sak} behandling={behandling} setFeilmelding={vi.fn()} oppgaveInfo={oppgaveInfo} />);
+    render(
+      <BehandlingButtons
+        sak={sak}
+        behandling={behandling}
+        setFeilmelding={vi.fn()}
+        oppgavePåBehandling={oppgavePåBehandling}
+      />
+    );
 
     const behandleknapp = screen.getByText('Behandle');
     expect(behandleknapp).toBeInTheDocument();
@@ -35,14 +44,22 @@ describe('BehandlingButtons', () => {
       kilde: 'BEHANDLINGSFLYT',
     };
 
-    const oppgaveInfo: OppgaveInfo = {
+    const oppgavePåBehandling: OppgavePåBehandling = {
       id: 123,
       versjon: 1,
+      behandlingsreferanse: '123',
       reservertAvIdent: 'z456',
       reservertAvNavn: 'Saksbehandler Saksbehandlersen',
     };
 
-    render(<BehandlingButtons sak={sak} behandling={behandling} setFeilmelding={vi.fn()} oppgaveInfo={oppgaveInfo} />);
+    render(
+      <BehandlingButtons
+        sak={sak}
+        behandling={behandling}
+        setFeilmelding={vi.fn()}
+        oppgavePåBehandling={oppgavePåBehandling}
+      />
+    );
 
     const behandleknapp = screen.queryByText('Behandle');
     expect(behandleknapp).not.toBeInTheDocument();
@@ -59,14 +76,22 @@ describe('BehandlingButtons', () => {
       kilde: 'BEHANDLINGSFLYT',
     };
 
-    const oppgaveInfo: OppgaveInfo = {
+    const oppgavePåBehandling: OppgavePåBehandling = {
       id: 123,
       versjon: 1,
+      behandlingsreferanse: '123',
       reservertAvIdent: null,
       reservertAvNavn: null,
     };
 
-    render(<BehandlingButtons sak={sak} behandling={behandling} setFeilmelding={vi.fn()} oppgaveInfo={oppgaveInfo} />);
+    render(
+      <BehandlingButtons
+        sak={sak}
+        behandling={behandling}
+        setFeilmelding={vi.fn()}
+        oppgavePåBehandling={oppgavePåBehandling}
+      />
+    );
 
     const behandleknapp = screen.getByText('Behandle');
     expect(behandleknapp).toBeInTheDocument();
@@ -83,7 +108,9 @@ describe('BehandlingButtons', () => {
       kilde: 'BEHANDLINGSFLYT',
     };
 
-    render(<BehandlingButtons sak={sak} behandling={behandling} setFeilmelding={vi.fn()} oppgaveInfo={undefined} />);
+    render(
+      <BehandlingButtons sak={sak} behandling={behandling} setFeilmelding={vi.fn()} oppgavePåBehandling={undefined} />
+    );
     const behandleknapp = screen.queryByText('Behandle');
     expect(behandleknapp).not.toBeInTheDocument();
 
@@ -107,13 +134,7 @@ describe('BehandlingButtons', () => {
         sak={sak}
         behandling={behandling}
         setFeilmelding={vi.fn()}
-        oppgaveInfo={{
-          feilmelding: 'noe gikk galt',
-          id: null,
-          reservertAvIdent: null,
-          reservertAvNavn: null,
-          versjon: null,
-        }}
+        oppgavePåBehandling={undefined}
       />
     );
     const behandleknapp = screen.queryByText('Behandle');

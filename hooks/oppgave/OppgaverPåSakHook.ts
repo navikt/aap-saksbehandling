@@ -1,56 +1,22 @@
-import useSWR from 'swr';
+import { hentOppgaverPåSakClient } from 'lib/oppgaveClientApi';
+import { OppgaverPåSak } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
-import { hentOppgaveClient } from 'lib/oppgaveClientApi';
+import useSWR from 'swr';
 
-export function useHentOppgaverForBehandlinger(behandlingsreferanser: string[]): Map<string, OppgaveInfo> {
+export function useHentOppgaverForSak(saksnummer: string): OppgaverPåSak {
   const { data: oppgaveData } = useSWR(
-    `oppgave-reservasjoner-${behandlingsreferanser.join(',')}`,
-    () => utledOppgaveInfo(behandlingsreferanser),
+    `oppgave-reservasjoner-${saksnummer}`,
+    () => hentOppgaverPåSakClient(saksnummer),
     {
       revalidateOnFocus: true,
       shouldRetryOnError: true,
     }
   );
+  if (!isSuccess(oppgaveData)) {
+    return {
+      oppgaver: [],
+    };
+  }
 
-  return oppgaveData ?? new Map<string, OppgaveInfo>();
-}
-
-export interface OppgaveInfo {
-  reservertAvNavn: string | null;
-  reservertAvIdent: string | null;
-  id: number | null;
-  versjon: number | null;
-  feilmelding?: string;
-}
-
-async function utledOppgaveInfo(behandlingsreferanser: string[]): Promise<Map<string, OppgaveInfo>> {
-  const oppgaveInfoMap = new Map<string, OppgaveInfo>();
-
-  const oppgaver = await Promise.all(
-    behandlingsreferanser.map(async (referanse) => {
-      const oppgave = await hentOppgaveClient(referanse);
-      return [referanse, oppgave] as const;
-    })
-  );
-
-  oppgaver.forEach(([referanse, oppgave]) => {
-    if (isSuccess(oppgave)) {
-      oppgaveInfoMap.set(referanse, {
-        reservertAvNavn: oppgave.data.reservertAvNavn ?? null,
-        reservertAvIdent: oppgave.data.reservertAv ?? null,
-        id: oppgave.data.id ?? null,
-        versjon: oppgave.data.versjon ?? null,
-      });
-    } else {
-      // trenger ikke krasje hvis oppgave ikke kan hentes
-      oppgaveInfoMap.set(referanse, {
-        reservertAvNavn: null,
-        reservertAvIdent: null,
-        id: null,
-        versjon: null,
-        feilmelding: 'Kunne ikke hente tildeling.',
-      });
-    }
-  });
-  return oppgaveInfoMap;
+  return oppgaveData.data;
 }

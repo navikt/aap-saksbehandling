@@ -16,6 +16,7 @@ import {
   OppgaveVisningsinformasjon,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  OppgaverPåSak,
   PlukkOppgaveResponse,
   SakOgAvklaringsbehov,
   SaksbehandlerSøkRequest,
@@ -194,6 +195,11 @@ export async function oppgaveTekstSøk(søketekst: string) {
   }
   const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
+}
+
+export async function hentOppgaverPåSak(saksnummer: string) {
+  const url = `${oppgaveApiBaseURL}/${saksnummer}/hent-oppgaver-paa-sak`;
+  return await apiFetch<OppgaverPåSak>(url, oppgaveApiScope, 'GET');
 }
 
 export const hentGjeldendeMarkeringerForBehandling = async (referanse: string) => {
