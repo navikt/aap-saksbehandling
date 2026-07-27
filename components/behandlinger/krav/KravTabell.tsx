@@ -78,15 +78,18 @@ export const KravTabell = ({
             .filter((v) => !slettedeNyeReferanser.includes(v.referanse))
             .map((vurdering) => {
               const aktivLøsning = endredeNye[vurdering.referanse];
-              const journalpostMottatt = grunnlag.søknader.find((s) => s.journalpostId === vurdering.journalpostId);
-
+              const journalpost = grunnlag.søknader.find(
+                (s) => s.journalpostId.identifikator === vurdering.journalpostId.identifikator
+              );
               return (
                 <Table.ExpandableRow
                   content={aktivLøsning?.begrunnelse ?? vurdering.begrunnelse}
                   key={vurdering.referanse}
                 >
                   <Table.DataCell>{vurdering.journalpostId.identifikator}</Table.DataCell>
-                  <Table.DataCell>{journalpostMottatt?.mottattTidspunkt ?? '-'}</Table.DataCell>
+                  <Table.DataCell>
+                    {journalpost ? formaterDatoForFrontend(journalpost.mottattTidspunkt) : '-'}
+                  </Table.DataCell>
                   <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
                   <Table.DataCell>{formaterSøknadsdatoRad(vurdering, aktivLøsning)}</Table.DataCell>
                   <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering, aktivLøsning)}</Table.DataCell>

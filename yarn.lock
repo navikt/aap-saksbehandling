@@ -1460,17 +1460,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.859":
-  version: 0.0.859
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.859::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.859%2F4b7e5a4ddd9c0a7e10d27e408fa2a6764f53f9f5"
-  checksum: 10c0/780c8c65e6c255f98925b13eb3a5854b29c4839137b6fd3928e7a3aa78c6ff46a8fc2ae7bacc5edf283b8d2a4c9a2268f757c326584e5422236e14851f271338
+"@navikt/aap-oppgave-typescript-types@npm:0.0.864":
+  version: 0.0.864
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.864::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.864%2F48dcf295bd3988e1201eb61d1118a1baffaf3c6d"
+  checksum: 10c0/fb6d2bf582ec6a529399aef8020e2e69aa0befaebdf0d8fdb9e4a5a94b1633b79517156e7fc1ed27e9b8f68799a0aae83d6ceb1c3ac195eada9e58506aa3e553
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.794":
-  version: 0.0.794
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.794::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.794%2F7c6a8b74ec8c84ff6bf21db4d92cb4c35ea65eab"
-  checksum: 10c0/c4b03cff5d0bdde7b53c3459f22af7ec328b4b82d37f6096aff49579ec8080a80d6e38a6ff8ffcb6b242a076bc631777ae532d044d41b98f7bcc1c846a4c45a2
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.796":
+  version: 0.0.796
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.796::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.796%2F9d58e90e07a226f9233899029e5a89e9e90736d3"
+  checksum: 10c0/7761222ebec674c3fc106336b1ed1ee01163c366213936343c12bf292a2912118157d9990897a573ff7c3cf85483370d0d4b6c5fffa797cb994575e201a659d3
   languageName: node
   linkType: hard
 
@@ -3030,8 +3030,8 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
     "@navikt/aap-felles-prettier": "npm:5.9.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.859"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.794"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.864"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.796"
     "@navikt/aksel": "npm:8.15.0"
     "@navikt/aksel-icons": "npm:8.15.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
@@ -3068,7 +3068,7 @@ __metadata:
     eslint-plugin-react: "npm:7.37.5"
     eslint-plugin-react-hooks: "npm:7.1.1"
     fuse.js: "npm:7.4.2"
-    happy-dom: "npm:20.10.6"
+    happy-dom: "npm:20.11.0"
     husky: "npm:9.1.7"
     i18n-iso-countries: "npm:7.14.0"
     is-european: "npm:1.0.10"
@@ -5248,9 +5248,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:20.10.6":
-  version: 20.10.6
-  resolution: "happy-dom@npm:20.10.6"
+"happy-dom@npm:20.11.0":
+  version: 20.11.0
+  resolution: "happy-dom@npm:20.11.0"
   dependencies:
     "@types/node": "npm:>=20.0.0"
     "@types/whatwg-mimetype": "npm:^3.0.2"
@@ -5259,7 +5259,7 @@ __metadata:
     entities: "npm:^7.0.1"
     whatwg-mimetype: "npm:^3.0.0"
     ws: "npm:^8.21.0"
-  checksum: 10c0/3cf22def886b0876b00bb04b9fbaab6c05c041fbcf0869978b6fba9eddccc45a5fc6dab14e369502be9019da43eda44ad1bee3019029ef71bb0c7db3351f4a42
+  checksum: 10c0/ef63674e3c3485c3793bbf4b18f842bc443cc53f430a36c278008fed6b2c873c14e29cd840d010565cc99038b851a47a566c96b984bcf534ab94ead099aa0529
   languageName: node
   linkType: hard
 
