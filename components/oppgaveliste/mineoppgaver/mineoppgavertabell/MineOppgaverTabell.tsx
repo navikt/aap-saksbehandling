@@ -1,15 +1,16 @@
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { useState } from 'react';
+import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { SortState, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { useState } from 'react';
+
+import { Alert } from 'components/alert/Alert';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
-import { Alert } from 'components/alert/Alert';
 
 interface Props {
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   revalidateFunction: () => void;
   setSortBy: (orderBy: PathsMineOppgaverGetParametersQuerySortby) => void;
   sort: SortState | undefined;
@@ -79,7 +80,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
         <Table.Body>
           {oppgaver.map((oppgave) => (
             <MineOppgaverTabellRad
-              key={oppgave.id}
+              key={oppgave.oppgaveMetadata.id}
               oppgave={oppgave}
               setFeilmelding={setFeilmelding}
               setIsModalOpen={setIsModalOpen}

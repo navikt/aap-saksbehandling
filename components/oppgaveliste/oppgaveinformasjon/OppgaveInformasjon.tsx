@@ -1,45 +1,58 @@
 'use client';
 
+import { HStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
+
+import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
+import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks';
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { SvarFraBehandler } from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler';
-import { HStack } from '@navikt/ds-react';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { Returboks } from '../returboks/Returboks';
-import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks';
-import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
-import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
-import { useFeatureFlag } from 'context/UnleashContext';
+
+import { Returboks } from '../returboks/Returboks';
 
 interface Props {
-  oppgave: Oppgave;
+  oppgave: OppgaveMedKontekst;
 }
 
 export const OppgaveInformasjon = ({ oppgave }: Props) => {
-  const adressebeskyttelser = utledAdressebeskyttelse(oppgave);
+  const adressebeskyttelser = utledAdressebeskyttelse(oppgave.oppgavelisteTags.skjermingInfo);
   const ventStatusForTilbakekreving = useFeatureFlag('VentStatusForTilbakekreving');
   return (
     <HStack gap={'space-4'}>
-      {oppgave.påVentTil && (oppgave.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
-        <PåVentInfoboks frist={oppgave.påVentTil} årsak={oppgave.påVentÅrsak} begrunnelse={oppgave.venteBegrunnelse} />
-      )}
-      {oppgave.utløptVentefrist && (oppgave.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
-        <UtløptVentefristBoks
-          frist={oppgave.utløptVentefrist}
-          årsak={oppgave.forrigePåVentÅrsak}
-          begrunnelse={oppgave.forrigeVenteBegrunnelse}
+      {oppgave.oppgavelisteTags.påVentInfo &&
+        (oppgave.behandlingskontekst.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
+          <PåVentInfoboks
+            frist={oppgave.oppgavelisteTags.påVentInfo.påVentTil}
+            årsak={oppgave.oppgavelisteTags.påVentInfo.påVentÅrsak}
+            begrunnelse={oppgave.oppgavelisteTags.påVentInfo.venteBegrunnelse}
+          />
+        )}
+      {oppgave.oppgavelisteTags.forrigePåVentInfo &&
+        (oppgave.behandlingskontekst.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
+          <UtløptVentefristBoks
+            frist={oppgave.oppgavelisteTags.forrigePåVentInfo.påVentTil}
+            årsak={oppgave.oppgavelisteTags.forrigePåVentInfo.påVentÅrsak}
+            begrunnelse={oppgave.oppgavelisteTags.forrigePåVentInfo.venteBegrunnelse}
+          />
+        )}
+      {oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
+      {oppgave.oppgavelisteTags.returInformasjon && (
+        <Returboks
+          returInformasjon={oppgave.oppgavelisteTags.returInformasjon}
+          forrigeKvalitetssikrerInfo={oppgave.oppgavelisteTags.forrigeKvalitetssikrerInfo}
         />
       )}
-      {oppgave.harUlesteDokumenter && <SvarFraBehandler />}
-      {oppgave.returInformasjon && <Returboks oppgave={oppgave} />}
       {adressebeskyttelser.map((adressebeskyttelse) => (
         <AdressebeskyttelseInfoBoks key={adressebeskyttelse} adressebeskyttelseGrad={adressebeskyttelse} />
       ))}
-      {oppgave.markeringer.map((markering) => (
+      {oppgave.oppgavelisteTags.markeringer.map((markering) => (
         <MarkeringInfoboks
           markering={markering}
           key={markering.markeringType}
-          referanse={oppgave.behandlingRef}
+          referanse={oppgave.behandlingskontekst.behandlingsreferanse}
           size={'xsmall'}
         />
       ))}

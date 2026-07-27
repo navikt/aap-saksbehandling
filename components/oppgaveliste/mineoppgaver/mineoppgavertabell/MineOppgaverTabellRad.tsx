@@ -1,18 +1,19 @@
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { BodyShort, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
-import Link from 'next/link';
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { Link as AkselLink, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
   mapTilÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/oversettelser';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
-import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
+import Link from 'next/link';
 import { memo } from 'react';
+
+import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
+import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
 
 const OppgaveRad = ({
   oppgave,
@@ -20,31 +21,36 @@ const OppgaveRad = ({
   setIsModalOpen,
   revalidateFunction,
 }: {
-  oppgave: Oppgave;
+  oppgave: OppgaveMedKontekst;
   setFeilmelding: React.Dispatch<React.SetStateAction<string | undefined>>;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   revalidateFunction: () => void;
 }) => {
   return (
-    <Table.Row key={oppgave.saksnummer || oppgave.journalpostId}>
+    <Table.Row key={oppgave.behandlingskontekst.saksnummer || oppgave.behandlingskontekst.journalpostId}>
       <Table.DataCell textSize={'small'}>
-        {oppgave.saksnummer ? (
-          <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
-            {storForbokstavIHvertOrd(oppgave.personNavn)}
+        {oppgave.behandlingskontekst.saksnummer ? (
+          <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.behandlingskontekst.saksnummer}`}>
+            {storForbokstavIHvertOrd(oppgave.personOgEnhet.personNavn)}
           </AkselLink>
         ) : (
-          <span>{storForbokstavIHvertOrd(oppgave.personNavn)}</span>
+          <span>{storForbokstavIHvertOrd(oppgave.personOgEnhet.personNavn)}</span>
         )}
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
-        {oppgave.personIdent ? (
-          <CopyButton copyText={oppgave.personIdent} size="xsmall" text={oppgave.personIdent} iconPosition="right" />
-        ) : (
-          'Ukjent'
-        )}
+        <CopyButton
+          copyText={oppgave.personOgEnhet.personIdent}
+          size="xsmall"
+          text={oppgave.personOgEnhet.personIdent}
+          iconPosition="right"
+        />
       </Table.DataCell>
-      <Table.DataCell textSize={'small'}>{oppgave.saksnummer || oppgave.journalpostId}</Table.DataCell>
-      <Table.DataCell textSize={'small'}>{mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {oppgave.behandlingskontekst.saksnummer || oppgave.behandlingskontekst.journalpostId}
+      </Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingskontekst.behandlingstype)}
+      </Table.DataCell>
       <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
       <Table.DataCell textSize={'small'}>
         {oppgave.årsakTilOpprettelse != null
@@ -69,7 +75,9 @@ const OppgaveRad = ({
           </BodyShort>
         </Tooltip>
       </Table.DataCell>
-      <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
+      <Table.DataCell textSize={'small'}>
+        {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
+      </Table.DataCell>
       <Table.DataCell textSize={'small'}>
         <OppgaveInformasjon oppgave={oppgave} />
       </Table.DataCell>

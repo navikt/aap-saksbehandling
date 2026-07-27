@@ -1,15 +1,15 @@
-import { useRouter } from 'next/navigation';
-import { ActionMenu, Button } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
-import { isSuccess } from 'lib/utils/api';
-import { Dispatch, SetStateAction, useState, useTransition } from 'react';
+import { ActionMenu, Button } from '@navikt/ds-react';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
-import { byggKelvinURLFraOppgave } from 'lib/utils/request';
+import { avreserverOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { isSuccess } from 'lib/utils/api';
+import { byggKelvinURL } from 'lib/utils/request';
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 
 interface Props {
-  oppgave: Oppgave;
+  oppgave: OppgaveMedKontekst;
   revalidateFunction: () => Promise<unknown>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
 }
@@ -21,26 +21,22 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
   const erReservert = oppgave.reservertAv != null;
   const { setOppgaveIder, visModal } = useTildelOppgaver();
 
-  async function frigiOppgave(oppgave: Oppgave) {
+  async function frigiOppgave(oppgaveId: number) {
     startTransitionFrigi(async () => {
-      if (oppgave.id) {
-        const res = await avreserverOppgaveClient([oppgave.id]);
+      const res = await avreserverOppgaveClient([oppgaveId]);
 
-        if (isSuccess(res)) {
-          await revalidateFunction();
-        }
+      if (isSuccess(res)) {
+        await revalidateFunction();
       }
     });
   }
 
-  async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
+  async function synkroniserEnhetPåOppgave(oppgaveId: number) {
     startTransitionFrigi(async () => {
-      if (oppgave.id) {
-        const res = await synkroniserOppgaveMedEnhetClient(oppgave.id);
-        if (isSuccess(res)) {
-          await revalidateFunction();
-          setVisSynkroniserEnhetModal(true);
-        }
+      const res = await synkroniserOppgaveMedEnhetClient(oppgaveId);
+      if (isSuccess(res)) {
+        await revalidateFunction();
+        setVisSynkroniserEnhetModal(true);
       }
     });
   }
@@ -61,14 +57,14 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
           <ActionMenu.Item
             onSelect={() => {
               setIsLoading(true);
-              router.push(byggKelvinURLFraOppgave(oppgave));
+              router.push(byggKelvinURL(oppgave.behandlingskontekst));
             }}
           >
             Åpne oppgave
           </ActionMenu.Item>
           <ActionMenu.Item
             onSelect={async () => {
-              await synkroniserEnhetPåOppgave(oppgave);
+              await synkroniserEnhetPåOppgave(oppgave.oppgaveMetadata.id);
             }}
           >
             Sjekk kontortilhørighet
@@ -76,7 +72,7 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
           {erReservert && (
             <ActionMenu.Item
               onSelect={async () => {
-                await frigiOppgave(oppgave);
+                await frigiOppgave(oppgave.oppgaveMetadata.id);
               }}
             >
               Frigi oppgave
@@ -84,7 +80,7 @@ export const AlleOppgaverActionMenu = ({ setVisSynkroniserEnhetModal, oppgave, r
           )}
           <ActionMenu.Item
             onSelect={() => {
-              oppgave.id && setOppgaveIder([oppgave.id]);
+              setOppgaveIder([oppgave.oppgaveMetadata.id]);
               visModal();
             }}
           >
