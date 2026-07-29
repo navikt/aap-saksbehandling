@@ -8,11 +8,10 @@ import {
 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
 import { Oppgave } from 'lib/types/oppgaveTypes';
 import { NoNavAapOppgaveOppgaveDtoBehandlingstype, NoNavAapOppgaveOppgaveDtoStatus } from '@navikt/aap-oppgave-typescript-types';
+import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
 
 vi.mock('lib/clientApi', () => ({
-  clientHentHarRegistrertTimerIMeldeperioden: vi.fn().mockResolvedValue({
-    data: { harRegistrertTimerForMeldeperioden: false },
-  }),
+  clientHentHarRegistrertTimerIMeldeperioden: vi.fn(),
 }));
 
 const user = userEvent.setup();
@@ -40,6 +39,10 @@ const oppgave: Oppgave = {
 
 describe('Validering av mottatt dato på digitalisert meldekort', () => {
   beforeEach(() => {
+    vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
+      type: 'SUCCESS' as const,
+      data: { harRegistrertTimerForMeldeperioden: false },
+    });
     render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
   });
 
@@ -91,5 +94,80 @@ describe('Validering av mottatt dato på digitalisert meldekort', () => {
     expect(
       screen.queryByText('Mottatt dato kan ikke være før dagen etter valgt meldeperiode.')
     ).not.toBeInTheDocument();
+  });
+});
+
+describe('Meldekort allerede registrert i Kelvin', () => {
+  async function velgToPåfølgendeUker() {
+    const combobox = screen.getByRole('combobox', { name: 'Hvilke uker gjelder meldekortet for?' });
+    await user.click(combobox);
+    const option1 = screen.getByRole('option', { name: ukestarterSisteHalvår[0].label });
+    await user.click(option1);
+
+    await user.click(combobox);
+    const option2 = screen.getByRole('option', { name: ukestarterSisteHalvår[1].label });
+    await user.click(option2);
+  }
+
+  it('viser ikke checkbox for registrering i Kelvin når det ikke finnes timer for meldeperioden', async () => {
+    vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
+      type: 'SUCCESS' as const,
+      data: { harRegistrertTimerForMeldeperioden: false },
+    });
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+
+    await velgToPåfølgendeUker();
+
+    expect(
+      screen.queryByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('viser checkbox for registrering i Kelvin når det allerede finnes timer for meldeperioden', async () => {
+    vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
+      type: 'SUCCESS' as const,
+      data: { harRegistrertTimerForMeldeperioden: true },
+    });
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+
+    await velgToPåfølgendeUker();
+
+    expect(
+      await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' })
+    ).toBeVisible();
+  });
+
+  it('skjuler innsendt dato og meldeperioder når checkboxen for Kelvin-registrering krysses av', async () => {
+    vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
+      type: 'SUCCESS' as const,
+      data: { harRegistrertTimerForMeldeperioden: true },
+    });
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+
+    await velgToPåfølgendeUker();
+
+    expect(screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).toBeVisible();
+
+    const checkbox = await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' });
+    await user.click(checkbox);
+
+    expect(screen.queryByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).not.toBeInTheDocument();
+  });
+
+  it('viser innsendt dato og meldeperioder igjen når checkboxen for Kelvin-registrering fjernes', async () => {
+    vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
+      type: 'SUCCESS' as const,
+      data: { harRegistrertTimerForMeldeperioden: true },
+    });
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+
+    await velgToPåfølgendeUker();
+
+    const checkbox = await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' });
+    await user.click(checkbox);
+    expect(screen.queryByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).not.toBeInTheDocument();
+
+    await user.click(checkbox);
+    expect(screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).toBeVisible();
   });
 });

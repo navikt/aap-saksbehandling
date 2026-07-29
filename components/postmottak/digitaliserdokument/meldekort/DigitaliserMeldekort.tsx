@@ -1,21 +1,22 @@
 'use client';
 
-import { MeldekortV0 } from 'lib/types/types';
-import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
-import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
 import { addWeeks, format, getISOWeek, isBefore, lastDayOfISOWeek, startOfWeek, subMonths } from 'date-fns';
-import { SubmitEventHandler, useEffect, useState } from 'react';
-import { Dato } from 'lib/types/Dato';
-import { Alert } from 'components/alert/Alert';
 import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
-import { isError } from 'lib/utils/api';
+import { Dato } from 'lib/types/Dato';
 import { Oppgave } from 'lib/types/oppgaveTypes';
-import { Meldeperioder } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioder';
-import { erDatoFoerDato } from 'lib/validation/dateValidation';
+import { MeldekortV0 } from 'lib/types/types';
+import { isError } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { erDatoFoerDato } from 'lib/validation/dateValidation';
+import { SubmitEventHandler, useEffect, useState } from 'react';
+
+import { Alert } from 'components/alert/Alert';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
+import { Meldeperioder } from 'components/postmottak/digitaliserdokument/meldekort/MeldePerioder';
+import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 interface Props extends Submittable {
   readOnly: boolean;
@@ -34,6 +35,7 @@ export interface MeldekortFormFields {
   gjelderForUker: string[];
   innsendtDato: Date;
   meldeperioder: Meldeperiode[];
+  meldekortErAlleredeRegistrertIKelvin?: string[];
 }
 
 export const ukestartSisteHalvår = (): ValuePair[] => {
@@ -84,6 +86,10 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
           },
         },
       },
+      meldekortErAlleredeRegistrertIKelvin: {
+        type: 'checkbox',
+        options: [{ value: 'meldekortErAlleredeRegistrertIKelvin', label: 'Meldekort er allerede registert i Kelvin' }],
+      },
       meldeperioder: {
         type: 'fieldArray',
         defaultValue: [],
@@ -109,8 +115,18 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     return JSON.stringify(meldekort);
   }
 
+  const meldekortEralleredeRegistrertIKelvin = form
+    .watch('meldekortErAlleredeRegistrertIKelvin')
+    ?.includes('meldekortErAlleredeRegistrertIKelvin');
+
   const handleSubmit: SubmitEventHandler = (event) => {
-    form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), data.innsendtDato))(event);
+    form.handleSubmit((data) =>
+      submit(
+        'MELDEKORT',
+        meldekortEralleredeRegistrertIKelvin ? null : mapTilMeldekortKontrakt(data),
+        data.innsendtDato
+      )
+    )(event);
   };
 
   const meldeperioder = form.watch('meldeperioder');
@@ -155,13 +171,21 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
         <FormField form={form} formField={formFields.gjelderForUker} />
 
         {finnesTimerForMeldeperiode && (
-          <Alert
-            variant={'warning'}
-          >{`Det er allerede levert meldekort for denne meldeperioden. Hvis du ikke trenger å endre arbeidede timer, så kan du kategorisere dokumentet som "Annet relevant dokument" med underkategorien Meldekort.`}</Alert>
+          <>
+            <Alert
+              variant={'warning'}
+            >{`Det er allerede levert meldekort for denne meldeperioden. Hvis du ikke trenger å endre arbeidede timer, så kan du kategorisere dokumentet som "Annet relevant dokument" med underkategorien Meldekort.`}</Alert>
+
+            <FormField form={form} formField={formFields.meldekortErAlleredeRegistrertIKelvin} />
+          </>
         )}
 
-        <FormField form={form} formField={formFields.innsendtDato} />
-        <Meldeperioder form={form} readOnly={readOnly} />
+        {!meldekortEralleredeRegistrertIKelvin && (
+          <>
+            <FormField form={form} formField={formFields.innsendtDato} />
+            <Meldeperioder form={form} readOnly={readOnly} />
+          </>
+        )}
 
         {!readOnly && (
           <Button loading={isLoading} className={'fit-content'}>
