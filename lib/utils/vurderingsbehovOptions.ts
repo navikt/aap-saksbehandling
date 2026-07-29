@@ -9,20 +9,26 @@ export const vurderingsbehovOptions = (
   erAvslag11_27Enabled: boolean | undefined,
   erRevurdereFrivilligeEnabled: boolean | undefined = false
 ): ValuePair<Vurderingsbehov>[] => {
+  // Disse skal vises i samme rekkefølge som definert i flyten
+  // Se https://nav.atlassian.net/browse/AAP-2335
+  // og https://app.mural.co/t/navdesign3580/m/navdesign3580/1691741508416/fd5f7a66bff6d60858a803726f0485840d12fdac
   const behov: Vurderingsbehov[] = (
     [
+      'VURDER_KRAV',
       'VURDER_RETTIGHETSPERIODE',
       'LOVVALG_OG_MEDLEMSKAP',
-      'REVURDER_STUDENT',
       'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
       'BRUKER_TILBAKE_I_ARBEID',
-      'OVERGANG_ARBEID',
+      'DØDSFALL_BRUKER',
       'OVERGANG_UFORE',
+      'OVERGANG_ARBEID',
       'VURDER_FRITAK_MELDEPLIKT',
-      'VURDER_ARBEIDSOPPTRAPPING',
+      'ETABLERING_EGEN_VIRKSOMHET',
       'FASTSETT_ARBEIDSEVNE',
+      'VURDER_ARBEIDSOPPTRAPPING',
       'REFUSJONSKRAV',
       'REVURDER_YRKESSKADE',
+      'REVURDER_STUDENT',
       'REVURDER_SYKEPENGEERSTATNING',
       'REVURDER_BEREGNING',
       'REVURDER_MANUELL_INNTEKT',
@@ -35,19 +41,16 @@ export const vurderingsbehovOptions = (
       'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON',
       'INSTITUSJONSOPPHOLD_SONING',
       'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
+      'VURDER_AVSLAG_11_27',
       'FERIE_I_SYKEPENGEPERIODE',
       'REVURDER_SAMORDNING_UFØRE',
-      'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
-      'ETABLERING_EGEN_VIRKSOMHET',
-      'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
       'REVURDER_SAMORDNING_ARBEIDSGIVER',
       'REVURDER_SAMORDNING_TJENESTEPENSJON',
-      'REVURDER_SYKESTIPEND',
-      'DØDSFALL_BRUKER',
       'REVURDER_SAMORDNING_BARNEPENSJON',
+      'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
+      'REVURDER_SYKESTIPEND',
+      'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
       'VEDTAKSLENGDE_MANUELT',
-      'VURDER_AVSLAG_11_27',
-      'VURDER_KRAV',
     ] satisfies Vurderingsbehov[]
   ).filter(
     (option) =>
