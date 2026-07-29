@@ -35,7 +35,7 @@ const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
 
 export const hentKøer = async (enheter: string[]) => {
-  const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
+  const url = `${oppgaveApiBaseURL}/filter/v2?${queryParamsArray('enheter', enheter)}`;
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET', undefined, {
     revalidate: CACHE_1_TIME,
     tags: [await genererTagMedNavIdent('køer')],
