@@ -1,5 +1,5 @@
+import { BrevGrunnlagBrev, StegType, UmamiKelvinEvent, UmamiTag } from 'lib/types/types';
 import { RefObject, useEffect, useRef } from 'react';
-import { BrevGrunnlagBrev, UmamiKelvinEvent, UmamiTag } from 'lib/types/types';
 
 async function clientLoggUmamiEvent(data: UmamiKelvinEvent) {
   if (typeof window === 'undefined') return;
@@ -10,6 +10,7 @@ async function clientLoggUmamiEvent(data: UmamiKelvinEvent) {
     console.error(`Umami Failed to track event ${data.name}:`, error);
   }
 }
+
 export function loggUmamiBrevVarighet(
   hendelse: UmamiTag,
   start: number,
@@ -34,6 +35,20 @@ export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: numbe
     hendelser_serie: null,
     hendelser_serie_id: null,
     tidsstempel: null,
+    varighet_sekunder_siden_forrige: null,
+    brevtype: null,
+  });
+}
+
+export function loggUmamiEksternLenkeKlikk(steg: StegType, lenkeTekst: string) {
+  clientLoggUmamiEvent({
+    name: 'EKSTERN_LENKE_KLIKK',
+    hendelse: lenkeTekst,
+    steg: steg,
+    hendelser_serie: null,
+    hendelser_serie_id: null,
+    tidsstempel: null,
+    varighet_sekunder: null,
     varighet_sekunder_siden_forrige: null,
     brevtype: null,
   });

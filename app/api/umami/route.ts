@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   const eventData: UmamiKelvinEvent = {
     name: payload.name,
     hendelse: payload.hendelse,
+    steg: payload.steg,
     hendelser_serie: payload.hendelser_serie,
     hendelser_serie_id: payload.hendelser_serie_id,
     tidsstempel: payload.tidsstempel,
@@ -26,6 +27,7 @@ export async function POST(req: Request) {
   };
   const filtrertEventData: UmamiEventData = {
     ...(eventData.hendelse ? { hendelse: eventData.hendelse } : {}),
+    ...(eventData.steg ? { steg: eventData.steg } : {}),
     ...(eventData.hendelser_serie ? { hendelser_serie: eventData.hendelser_serie } : {}),
     ...(eventData.hendelser_serie_id ? { hendelser_serie_id: eventData.hendelser_serie_id } : {}),
     ...(eventData.tidsstempel ? { tidsstempel: eventData.tidsstempel } : {}),

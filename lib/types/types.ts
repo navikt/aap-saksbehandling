@@ -784,6 +784,7 @@ export enum Roller {
 export interface UmamiKelvinEvent {
   name: string;
   hendelse?: string;
+  steg?: string;
   hendelser_serie: string | null;
   hendelser_serie_id: string | null;
   tidsstempel: number | null;
@@ -834,4 +835,5 @@ export type UmamiTag =
   | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE'
   | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN'
   | 'BESLUTTER_VARIGHET_HENDELSER'
-  | 'KVALITETSSIKRER_VARIGHET_HENDELSER';
+  | 'KVALITETSSIKRER_VARIGHET_HENDELSER'
+  | 'EKSTERN_LENKE_KLIKK';
