@@ -5,6 +5,7 @@ import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientAp
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
+import { loggUmamiFrigiOppgave, loggUmamiGåTilBehandlingOgReserver, loggUmamiTildelOppgave } from 'lib/utils/umami';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 
@@ -25,6 +26,7 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
   const router = useRouter();
 
   async function frigiOppgave(oppgaveId: number) {
+    loggUmamiFrigiOppgave('MINE_OPPGAVER');
     startTransitionFrigi(async () => {
       const res = await avreserverOppgaveClient([oppgaveId]);
 
@@ -41,6 +43,7 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
   }
 
   async function plukkOgGåTilOppgave(oppgave: OppgaveMedKontekst) {
+    loggUmamiGåTilBehandlingOgReserver('MINE_OPPGAVER');
     startTransitionBehandle(async () => {
       const plukketOppgave = await plukkOppgaveClient(oppgave.oppgaveMetadata.id, oppgave.oppgaveMetadata.versjon);
       if (isSuccess(plukketOppgave)) {
@@ -76,6 +79,7 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item
               onClick={() => {
+                loggUmamiTildelOppgave('MINE_OPPGAVER');
                 setOppgaveIder([oppgave.oppgaveMetadata.id]);
                 visModal();
               }}
