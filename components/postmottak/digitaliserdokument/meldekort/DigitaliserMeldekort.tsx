@@ -180,12 +180,9 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
           </>
         )}
 
-        {!meldekortEralleredeRegistrertIKelvin && (
-          <>
-            <FormField form={form} formField={formFields.innsendtDato} />
-            <Meldeperioder form={form} readOnly={readOnly} />
-          </>
-        )}
+        <FormField form={form} formField={formFields.innsendtDato} />
+
+        {!meldekortEralleredeRegistrertIKelvin && <Meldeperioder form={form} readOnly={readOnly} />}
 
         {!readOnly && (
           <Button loading={isLoading} className={'fit-content'}>

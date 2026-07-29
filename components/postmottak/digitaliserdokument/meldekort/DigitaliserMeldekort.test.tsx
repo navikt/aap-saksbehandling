@@ -1,14 +1,17 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  NoNavAapOppgaveOppgaveDtoBehandlingstype,
+  NoNavAapOppgaveOppgaveDtoStatus,
+} from '@navikt/aap-oppgave-typescript-types';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
+import { Oppgave } from 'lib/types/oppgaveTypes';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   DigitaliserMeldekort,
   ukestartSisteHalvår,
 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveOppgaveDtoBehandlingstype, NoNavAapOppgaveOppgaveDtoStatus } from '@navikt/aap-oppgave-typescript-types';
-import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
 
 vi.mock('lib/clientApi', () => ({
   clientHentHarRegistrertTimerIMeldeperioden: vi.fn(),
@@ -132,12 +135,10 @@ describe('Meldekort allerede registrert i Kelvin', () => {
 
     await velgToPåfølgendeUker();
 
-    expect(
-      await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' })
-    ).toBeVisible();
+    expect(await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' })).toBeVisible();
   });
 
-  it('skjuler innsendt dato og meldeperioder når checkboxen for Kelvin-registrering krysses av', async () => {
+  it('skjuler meldeperioder når checkboxen for Kelvin-registrering krysses av', async () => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
@@ -146,15 +147,15 @@ describe('Meldekort allerede registrert i Kelvin', () => {
 
     await velgToPåfølgendeUker();
 
-    expect(screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).toBeVisible();
+    expect((await screen.findAllByRole('spinbutton', { name: 'Arbeidstimer' })).length).toBeGreaterThan(0);
 
     const checkbox = await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' });
     await user.click(checkbox);
 
-    expect(screen.queryByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('spinbutton', { name: 'Arbeidstimer' })).not.toBeInTheDocument();
   });
 
-  it('viser innsendt dato og meldeperioder igjen når checkboxen for Kelvin-registrering fjernes', async () => {
+  it('viser meldeperioder igjen når checkboxen for Kelvin-registrering fjernes', async () => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
@@ -165,9 +166,9 @@ describe('Meldekort allerede registrert i Kelvin', () => {
 
     const checkbox = await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' });
     await user.click(checkbox);
-    expect(screen.queryByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('spinbutton', { name: 'Arbeidstimer' })).not.toBeInTheDocument();
 
     await user.click(checkbox);
-    expect(screen.getByRole('textbox', { name: 'Dato bruker oppga opplysninger' })).toBeVisible();
+    expect((await screen.findAllByRole('spinbutton', { name: 'Arbeidstimer' })).length).toBeGreaterThan(0);
   });
 });
