@@ -1,5 +1,5 @@
 import {
-  NoNavAapOppgaveFilterFilterDtoType,
+  NoNavAapOppgaveFilterFilterResponseType,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   NoNavAapOppgaveOppgaveDtoBehandlingstype,
   components as oppgave,
@@ -13,7 +13,7 @@ export type PostmottakAvklaringsbehovKode =
   postmottak['schemas']['no.nav.aap.postmottak.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
 // oppgave
-export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterDto'];
+export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterResponse'];
 export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
 export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'] & {
   /** Sorter hastemarkerte oppgaver først. Ikke del av OpenAPI-skjema ennå. */
@@ -55,5 +55,5 @@ export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | Po
 
 export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters']['query'];
 
-export const Køtype = NoNavAapOppgaveFilterFilterDtoType;
-export type Køtype = NoNavAapOppgaveFilterFilterDtoType;
+export const Køtype = NoNavAapOppgaveFilterFilterResponseType;
+export type Køtype = NoNavAapOppgaveFilterFilterResponseType;

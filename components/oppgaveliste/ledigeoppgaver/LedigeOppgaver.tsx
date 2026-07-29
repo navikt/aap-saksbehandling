@@ -1,40 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
-import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
-import { queryParamsArray } from 'lib/utils/request';
-import { Enhet } from 'lib/types/oppgaveTypes';
-import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
-import { isError, isSuccess } from 'lib/utils/api';
-import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
-import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
-import { useConfigForm } from 'components/form/FormHook';
-import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { formaterDatoForBackend } from 'lib/utils/date';
-
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
 import {
-  NoNavAapOppgaveFilterFilterDtoBehandlingstyper,
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
-import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
-import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
-import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
-import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
-import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
-import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
-import { ValuePair } from 'components/form/FormField';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { Alert } from 'components/alert/Alert';
+import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { useLedigeOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
+import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
+import { Enhet } from 'lib/types/oppgaveTypes';
+import { isError, isSuccess } from 'lib/utils/api';
+import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { OppgaveStatuser, oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { queryParamsArray } from 'lib/utils/request';
+import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+
+import { Alert } from 'components/alert/Alert';
+import { ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { LedigeOppgaverFiltrering } from 'components/oppgaveliste/filtrering/ledigeoppgaverfiltrering/LedigeOppgaverFiltrering';
+import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
+import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
+import { LedigeOppgaverTabell } from 'components/oppgaveliste/ledigeoppgaver/ledigeoppgavertabell/LedigeOppgaverTabell';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 
 interface Props {
   enheter: Enhet[];
@@ -286,10 +285,7 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
               aktivKø={aktivKø}
               visBeløpKolonne={
                 oppgavelisteMedBeløp &&
-                (oppgaveKøer
-                  ?.find((e) => e.id === aktivKø.id)
-                  ?.behandlingstyper?.includes(NoNavAapOppgaveFilterFilterDtoBehandlingstyper.TILBAKEKREVING) ??
-                  false)
+                (oppgaveKøer?.find((e) => e.id === aktivKø.id)?.inneholderTilbakekreving ?? false)
               }
             />
           ) : (
