@@ -11,7 +11,6 @@ import { useState } from 'react';
 
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 import { DigitaliserMeldekort } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
-import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 
 import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { Kategoriser } from './kategoriser/Kategoriser';
@@ -56,7 +55,6 @@ export const DigitaliserDokument = ({
 
   const erKravEnabled = useFeatureFlag('KravSteg');
   const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
-  const erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled = useFeatureFlag('VarselNaarDetFinnesTimerPaaMeldeperiode');
 
   return (
     <VStack gap={'space-16'}>
@@ -76,10 +74,7 @@ export const DigitaliserDokument = ({
           isLoading={isLoading}
         />
       )}
-      {kategori === 'MELDEKORT' && !erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled && (
-        <DigitaliserMeldekortV2 submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
-      )}
-      {kategori === 'MELDEKORT' && erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled && (
+      {kategori === 'MELDEKORT' && (
         <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} oppgave={oppgave} />
       )}
 

@@ -1,5 +1,5 @@
+import { BrevGrunnlagBrev, StegType, UmamiKelvinEvent, UmamiTag } from 'lib/types/types';
 import { RefObject, useEffect, useRef } from 'react';
-import { BrevGrunnlagBrev, UmamiKelvinEvent, UmamiTag } from 'lib/types/types';
 
 async function clientLoggUmamiEvent(data: UmamiKelvinEvent) {
   if (typeof window === 'undefined') return;
@@ -10,6 +10,22 @@ async function clientLoggUmamiEvent(data: UmamiKelvinEvent) {
     console.error(`Umami Failed to track event ${data.name}:`, error);
   }
 }
+
+function loggEvent(name: UmamiTag, hendelse?: string, steg?: StegType) {
+  const event: UmamiKelvinEvent = {
+    name,
+    hendelser_serie: null,
+    hendelser_serie_id: null,
+    tidsstempel: null,
+    varighet_sekunder: null,
+    varighet_sekunder_siden_forrige: null,
+    brevtype: null,
+  };
+  if (hendelse) event.hendelse = hendelse;
+  if (steg) event.steg = steg;
+  clientLoggUmamiEvent(event);
+}
+
 export function loggUmamiBrevVarighet(
   hendelse: UmamiTag,
   start: number,
@@ -38,6 +54,29 @@ export function loggUmamiVarighet(hendelse: UmamiTag, start: number, stop: numbe
     brevtype: null,
   });
 }
+
+export function loggUmamiEksternLenkeKlikk(steg: StegType, lenkeTekst: string) {
+  loggEvent('EKSTERN_LENKE_KLIKK', lenkeTekst, steg);
+}
+
+export type BehandlingInngang = 'SAKSOVERSIKT' | 'SAKSOVERSIKT_EKSTERN_LØSNING' | 'SØK_OPPGAVE' | 'MINE_OPPGAVER';
+
+export type SaksoversiktInngang = 'MINE_OPPGAVER' | 'SØK_PERSON' | 'SØK_SAK';
+
+export type OppgaveInngang = 'MINE_OPPGAVER';
+
+export const loggUmamiGåTilBehandling = (inngang: BehandlingInngang) => loggEvent('GÅ_TIL_BEHANDLING', inngang);
+
+export const loggUmamiGåTilBehandlingOgReserver = (inngang: BehandlingInngang) =>
+  loggEvent('GÅ_TIL_BEHANDLING_OG_RESERVER', inngang);
+
+export const loggUmamiGåTilSaksoversikt = (inngang: SaksoversiktInngang) => loggEvent('GÅ_TIL_SAKSOVERSIKT', inngang);
+
+export const loggUmamiReserverOppgave = (inngang: BehandlingInngang) => loggEvent('RESERVER_OPPGAVE', inngang);
+
+export const loggUmamiFrigiOppgave = (inngang: OppgaveInngang) => loggEvent('FRIGI_OPPGAVE', inngang);
+
+export const loggUmamiTildelOppgave = (inngang: OppgaveInngang) => loggEvent('TILDEL_OPPGAVE', inngang);
 
 export function loggUmamiVarighetHendelser(
   hendelser: UmamiVarighetHendelse[],

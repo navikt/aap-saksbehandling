@@ -35,7 +35,7 @@ const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
 
 export const hentKøer = async (enheter: string[]) => {
-  const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
+  const url = `${oppgaveApiBaseURL}/filter/v2?${queryParamsArray('enheter', enheter)}`;
   return await apiFetch<Kø[]>(url, oppgaveApiScope, 'GET', undefined, {
     revalidate: CACHE_1_TIME,
     tags: [await genererTagMedNavIdent('køer')],
@@ -43,7 +43,7 @@ export const hentKøer = async (enheter: string[]) => {
 };
 
 export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
-  const url = `${oppgaveApiBaseURL}/oppgaveliste/v2`;
+  const url = `${oppgaveApiBaseURL}/oppgaveliste`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
 
@@ -105,7 +105,7 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
   const query = queryParams?.sortby
     ? mineOppgaverQueryParams({ sortby: queryParams?.sortby, sortorder: queryParams.sortorder })
     : '';
-  const url = `${oppgaveApiBaseURL}/mine-oppgaver/v2${query ? `?${query}` : ''}`;
+  const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
 };
 

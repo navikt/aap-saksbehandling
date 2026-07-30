@@ -1460,17 +1460,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.868":
-  version: 0.0.868
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.868::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.868%2F3ae43ef7d42e2bab129b5d4548a2d6fb698ab1e2"
-  checksum: 10c0/8af48724788d5e1017f2c4342ecd044d0e28c8146e105cfd351e5225da4870247a83a5f9d3709fd09813537851ac4683102d707f2f82e7c479a7619066bfc1af
+"@navikt/aap-oppgave-typescript-types@npm:0.0.877":
+  version: 0.0.877
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.877::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.877%2Fee9cc185ffbc6896f46b969fe90fafd394cec823"
+  checksum: 10c0/4307052a8e203c59ea06f4e5635504f58ed1a62fe0d9f9925f703f5ff1bb406997fb18e9e8fb01ed568d9c3e1b7311eaa4459626da928f5e5e408eb818b2b561
   languageName: node
   linkType: hard
 
-"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.801":
-  version: 0.0.801
-  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.801::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.801%2F1ef607628a9b150db81b92a180be0c2249ac9166"
-  checksum: 10c0/1dcab8717e3e8b4eea53d8445f270b8248d3038138d68397fb863fb3b2e7cc8cb6a7a5adffc76f679ff74f958809ed52bcc1c85c8c77a44d7ff2624d508206e9
+"@navikt/aap-postmottak-backend-typescript-types@npm:0.0.804":
+  version: 0.0.804
+  resolution: "@navikt/aap-postmottak-backend-typescript-types@npm:0.0.804::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-postmottak-backend-typescript-types%2F0.0.804%2Fb53418791efb1f46c4f694aaa0c2cd191bbf7221"
+  checksum: 10c0/16d81eaca997907b942b7f528d7b42500d25c4753e1eecbbda1e80914b465d9bbd18d2aac3d408d081e2f7c01fa540394f36e852e3d6a45a4525cbf485453858
   languageName: node
   linkType: hard
 
@@ -3030,8 +3030,8 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
     "@navikt/aap-felles-prettier": "npm:5.9.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.868"
-    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.801"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.877"
+    "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.804"
     "@navikt/aksel": "npm:8.15.0"
     "@navikt/aksel-icons": "npm:8.15.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
@@ -3068,7 +3068,7 @@ __metadata:
     eslint-plugin-react: "npm:7.37.5"
     eslint-plugin-react-hooks: "npm:7.1.1"
     fuse.js: "npm:7.5.0"
-    happy-dom: "npm:20.11.0"
+    happy-dom: "npm:20.11.1"
     husky: "npm:9.1.7"
     i18n-iso-countries: "npm:7.14.0"
     is-european: "npm:1.0.10"
@@ -3081,8 +3081,8 @@ __metadata:
     pino: "npm:10.3.1"
     pino-pretty: "npm:13.1.3"
     prettier: "npm:3.8.4"
-    react: "npm:19.2.7"
-    react-dom: "npm:19.2.7"
+    react: "npm:19.2.8"
+    react-dom: "npm:19.2.8"
     react-hook-form: "npm:7.80.0"
     react-select: "npm:5.10.2"
     server-only: "npm:0.0.1"
@@ -5248,9 +5248,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:20.11.0":
-  version: 20.11.0
-  resolution: "happy-dom@npm:20.11.0"
+"happy-dom@npm:20.11.1":
+  version: 20.11.1
+  resolution: "happy-dom@npm:20.11.1"
   dependencies:
     "@types/node": "npm:>=20.0.0"
     "@types/whatwg-mimetype": "npm:^3.0.2"
@@ -5259,7 +5259,7 @@ __metadata:
     entities: "npm:^7.0.1"
     whatwg-mimetype: "npm:^3.0.0"
     ws: "npm:^8.21.0"
-  checksum: 10c0/ef63674e3c3485c3793bbf4b18f842bc443cc53f430a36c278008fed6b2c873c14e29cd840d010565cc99038b851a47a566c96b984bcf534ab94ead099aa0529
+  checksum: 10c0/f2335e8b87f1917c3725051c22dd7dafef13229af0dde9412d146fbaa961713a81ca4dcc741ecef8bf5fb64ea4182e3886305ac93ecb822dec7be028a6f7c51e
   languageName: node
   linkType: hard
 
@@ -7564,14 +7564,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.2.7":
-  version: 19.2.7
-  resolution: "react-dom@npm:19.2.7"
+"react-dom@npm:19.2.8":
+  version: 19.2.8
+  resolution: "react-dom@npm:19.2.8"
   dependencies:
     scheduler: "npm:^0.27.0"
   peerDependencies:
-    react: ^19.2.7
-  checksum: 10c0/970ff600f6e80d47d39e2f226f12f226173b3cba3382efc97c5f0cd663de9af38c7a4c11c213fb936094faeac83060d660247accaa96b752180d5b951b9cfecb
+    react: ^19.2.8
+  checksum: 10c0/41ba2247b76f687fcfe5bbc99f514d6b851d8c8041c2f5ded36ed05bd7fdc5208cacbac9de51e3e6633e77f96f44cec9f0d4a5a55184dba4e00738f224439134
   languageName: node
   linkType: hard
 
@@ -7644,10 +7644,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.2.7":
-  version: 19.2.7
-  resolution: "react@npm:19.2.7"
-  checksum: 10c0/0bd0e2f1bbd4ba97561c6597bf8a5fec05e6476fe61e165c1065598d16668efc6715205599c94d3ddd49d36cb0f21cbf1b9bcc18ee840b805ce222c3e8d558ac
+"react@npm:19.2.8":
+  version: 19.2.8
+  resolution: "react@npm:19.2.8"
+  checksum: 10c0/5f86bdb56426652fd6d989d30a6f2e603c057272c47c9ca3a3fbe190a3a39ee9ccce937d63cfc039717abed1b8891d6a499134bc35311acc07eafdacd86537cd
   languageName: node
   linkType: hard
 
