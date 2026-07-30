@@ -1,11 +1,6 @@
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -98,7 +93,7 @@ describe('Meldekort allerede registrert i Kelvin', () => {
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: false },
     });
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
 
     await velgToPåfølgendeUker();
 
@@ -112,16 +107,12 @@ describe('Meldekort allerede registrert i Kelvin', () => {
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
     });
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
 
     await velgToPåfølgendeUker();
 
-    expect(
-      await screen.findByRole('radio', { name: 'Ja, registrer arbeidstimer for meldeperioden' })
-    ).toBeVisible();
-    expect(
-      screen.getByRole('radio', { name: 'Nei, meldekortet er allerede registrert i Kelvin' })
-    ).toBeVisible();
+    expect(await screen.findByRole('radio', { name: 'Ja, registrer arbeidstimer for meldeperioden' })).toBeVisible();
+    expect(screen.getByRole('radio', { name: 'Nei, meldekortet er allerede registrert i Kelvin' })).toBeVisible();
   });
 
   it('velger "Ja" som standard slik at meldeperioder vises', async () => {
@@ -129,7 +120,7 @@ describe('Meldekort allerede registrert i Kelvin', () => {
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
     });
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
 
     await velgToPåfølgendeUker();
 
@@ -142,7 +133,7 @@ describe('Meldekort allerede registrert i Kelvin', () => {
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
     });
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
 
     await velgToPåfølgendeUker();
 
@@ -159,7 +150,7 @@ describe('Meldekort allerede registrert i Kelvin', () => {
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
     });
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
 
     await velgToPåfølgendeUker();
 

@@ -4,10 +4,6 @@ import { Button } from '@navikt/ds-react';
 import { addWeeks, format, getISOWeek, isBefore, lastDayOfISOWeek, startOfWeek, subMonths } from 'date-fns';
 import { clientHentHarRegistrertTimerIMeldeperioden } from 'lib/clientApi';
 import { Dato } from 'lib/types/Dato';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { MeldekortV0 } from 'lib/types/types';
-import { isError } from 'lib/utils/api';
-import { formaterDatoForFrontend } from 'lib/utils/date';
 import { MeldekortV0 } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -101,8 +97,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }
           {
             value: 'nei',
             label: 'Nei, meldekortet er allerede registrert i Kelvin',
-            description:
-              'Arbeidstimer registreres ikke på nytt.',
+            description: 'Arbeidstimer registreres ikke på nytt.',
           },
         ],
       },
@@ -135,11 +130,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) =>
-      submit(
-        'MELDEKORT',
-        registrerArbeidstimerNå ? null : mapTilMeldekortKontrakt(data),
-        data.innsendtDato
-      )
+      submit('MELDEKORT', registrerArbeidstimerNå ? null : mapTilMeldekortKontrakt(data), data.innsendtDato)
     )(event);
   };
 
@@ -183,7 +174,9 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }
         {finnesTimerForMeldeperiode && (
           <>
             <Alert variant={'warning'}>
-              {'Det er allerede levert meldekort for denne meldeperioden. Velg om arbeidstimene skal registreres på nytt.'}
+              {
+                'Det er allerede levert meldekort for denne meldeperioden. Velg om arbeidstimene skal registreres på nytt.'
+              }
             </Alert>
 
             <FormField form={form} formField={formFields.registrerArbeidstimerNaa} />
