@@ -28,6 +28,7 @@ export type OppgaverPåSak = oppgave['schemas']['no.nav.aap.oppgave.hent.Oppgave
 export type OppgavePåBehandling = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse'];
 export type OppgaveVisningsinformasjon =
   oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse'];
+export type SaksnummerResponse = oppgave['schemas']['no.nav.aap.oppgave.hent.SaksnummerResponse'];
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
 export type PlukkOppgaveRequest = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveRequest'];

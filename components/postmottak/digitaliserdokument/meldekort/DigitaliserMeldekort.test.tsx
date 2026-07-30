@@ -21,32 +21,13 @@ const user = userEvent.setup();
 
 const ukestarterSisteHalvår = ukestartSisteHalvår();
 
-const oppgave: Oppgave = {
-  id: 123,
-  personIdent: '12345678910',
-  behandlingRef: 'gasg',
-  vurderingsbehov: [],
-  avklaringsbehovKode: '',
-  behandlingOpprettet: '',
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-  enhet: '',
-  opprettetAv: '',
-  opprettetTidspunkt: '',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-  versjon: 0,
-  årsakerTilBehandling: [],
-  markeringer: [],
-  reservertAv: 'navIdent',
-  saksnummer: '12345',
-};
-
 describe('Validering av mottatt dato på digitalisert meldekort', () => {
   beforeEach(() => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: false },
     });
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
   });
 
   async function velgToPåfølgendeUker() {

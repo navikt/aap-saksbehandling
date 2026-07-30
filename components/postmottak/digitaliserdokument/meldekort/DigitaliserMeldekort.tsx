@@ -8,6 +8,9 @@ import { Oppgave } from 'lib/types/oppgaveTypes';
 import { MeldekortV0 } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { MeldekortV0 } from 'lib/types/types';
+import { isError } from 'lib/utils/api';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler, useEffect, useState } from 'react';
 
@@ -21,7 +24,7 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 interface Props extends Submittable {
   readOnly: boolean;
   isLoading: boolean;
-  oppgave: Oppgave;
+  saksnummer: string | undefined;
 }
 export type Meldedag = {
   dato: Date;
@@ -57,7 +60,7 @@ export const ukestartSisteHalvår = (): ValuePair[] => {
   return opts;
 };
 
-export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: Props) => {
+export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }: Props) => {
   const [finnesTimerForMeldeperiode, setFinnesTimerForMeldeperiode] = useState<boolean>();
 
   const { form, formFields } = useConfigForm<MeldekortFormFields>(
@@ -147,7 +150,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
       meldeperioder.length === 2 &&
       getISOWeek(addWeeks(meldeperioder[0].ukestart, 1)) === getISOWeek(meldeperioder[1].ukestart);
 
-    if (!erGyldigMeldeperiode || !oppgave.saksnummer) {
+    if (!erGyldigMeldeperiode || !saksnummer) {
       setFinnesTimerForMeldeperiode(undefined);
       return;
     }
@@ -158,11 +161,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
       const meldeperiodeFom = new Date(meldeperioder[0].ukestart);
       const meldeperiodeTom = lastDayOfISOWeek(new Date(meldeperioder[1].ukestart));
 
-      const respons = await clientHentHarRegistrertTimerIMeldeperioden(
-        oppgave.saksnummer!,
-        meldeperiodeFom,
-        meldeperiodeTom
-      );
+      const respons = await clientHentHarRegistrertTimerIMeldeperioden(saksnummer, meldeperiodeFom, meldeperiodeTom);
 
       if (!avbrutt && !isError(respons)) {
         setFinnesTimerForMeldeperiode(respons.data.harRegistrertTimerForMeldeperioden);
@@ -174,7 +173,7 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     return () => {
       avbrutt = true;
     };
-  }, [meldeperioder, oppgave.saksnummer]);
+  }, [meldeperioder, saksnummer]);
 
   return (
     <VilkårsKort heading={'Meldekort'}>
