@@ -1,7 +1,7 @@
 import {
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
   NoNavAapOppgaveFilterFilterResponseType,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
   components as oppgave,
   paths,
 } from '@navikt/aap-oppgave-typescript-types';
@@ -14,11 +14,7 @@ export type PostmottakAvklaringsbehovKode =
 
 // oppgave
 export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterResponse'];
-export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
-export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'] & {
-  /** Sorter hastemarkerte oppgaver først. Ikke del av OpenAPI-skjema ennå. */
-  hastemarkeringerFørst?: boolean;
-};
+export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest']
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
 export type OppgaveMedKontekst = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse'];
 export type ReturInformasjon = oppgave['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
@@ -48,7 +44,7 @@ export type TildeltStatus = oppgave['schemas']['no.nav.aap.oppgave.tildel.Tildel
 export type SakOgAvklaringsbehov = oppgave['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 
 // typer fra enums
-export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;
+export type OppgaveBehandlingstype = `${NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype}`;
 export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
 export const MarkeringHaster = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
 

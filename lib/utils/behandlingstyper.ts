@@ -1,11 +1,12 @@
+import { NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype } from '@navikt/aap-oppgave-typescript-types';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { NoNavAapOppgaveOppgaveDtoBehandlingstype } from '@navikt/aap-oppgave-typescript-types';
+
 import { ValuePair } from 'components/form/FormField';
 
 export const oppgaveBehandlingstyper = Object.keys(
-  NoNavAapOppgaveOppgaveDtoBehandlingstype as unknown as keyof (typeof NoNavAapOppgaveOppgaveDtoBehandlingstype)[]
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype as unknown as keyof (typeof NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype)[]
 )
-  .map((key) => key as keyof typeof NoNavAapOppgaveOppgaveDtoBehandlingstype)
+  .map((key) => key as keyof typeof NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype)
   .map((key) => {
     switch (key) {
       case 'F_RSTEGANGSBEHANDLING':
