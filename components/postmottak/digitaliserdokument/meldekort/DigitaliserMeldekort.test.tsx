@@ -1,13 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   DigitaliserMeldekort,
   ukestartSisteHalvår,
 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveOppgaveDtoBehandlingstype, NoNavAapOppgaveOppgaveDtoStatus } from '@navikt/aap-oppgave-typescript-types';
 
 vi.mock('lib/clientApi', () => ({
   clientHentHarRegistrertTimerIMeldeperioden: vi.fn().mockResolvedValue({
@@ -19,28 +17,9 @@ const user = userEvent.setup();
 
 const ukestarterSisteHalvår = ukestartSisteHalvår();
 
-const oppgave: Oppgave = {
-  id: 123,
-  personIdent: '12345678910',
-  behandlingRef: 'gasg',
-  vurderingsbehov: [],
-  avklaringsbehovKode: '',
-  behandlingOpprettet: '',
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-  enhet: '',
-  opprettetAv: '',
-  opprettetTidspunkt: '',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-  versjon: 0,
-  årsakerTilBehandling: [],
-  markeringer: [],
-  reservertAv: 'navIdent',
-  saksnummer: '12345',
-};
-
 describe('Validering av mottatt dato på digitalisert meldekort', () => {
   beforeEach(() => {
-    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} saksnummer={'123456'} />);
   });
 
   async function velgToPåfølgendeUker() {
