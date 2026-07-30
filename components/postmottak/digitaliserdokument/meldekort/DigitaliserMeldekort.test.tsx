@@ -112,7 +112,7 @@ describe('Meldekort allerede registrert i Kelvin', () => {
     await user.click(option2);
   }
 
-  it('viser ikke checkbox for registrering i Kelvin når det ikke finnes timer for meldeperioden', async () => {
+  it('viser ikke valg for Kelvin-registrering når det ikke finnes timer for meldeperioden', async () => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: false },
@@ -122,11 +122,11 @@ describe('Meldekort allerede registrert i Kelvin', () => {
     await velgToPåfølgendeUker();
 
     expect(
-      screen.queryByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' })
+      screen.queryByRole('radio', { name: 'Nei, meldekortet er allerede registrert i Kelvin' })
     ).not.toBeInTheDocument();
   });
 
-  it('viser checkbox for registrering i Kelvin når det allerede finnes timer for meldeperioden', async () => {
+  it('viser valg for Kelvin-registrering når det allerede finnes timer for meldeperioden', async () => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
@@ -135,10 +135,28 @@ describe('Meldekort allerede registrert i Kelvin', () => {
 
     await velgToPåfølgendeUker();
 
-    expect(await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' })).toBeVisible();
+    expect(
+      await screen.findByRole('radio', { name: 'Ja, registrer arbeidstimer for meldeperioden' })
+    ).toBeVisible();
+    expect(
+      screen.getByRole('radio', { name: 'Nei, meldekortet er allerede registrert i Kelvin' })
+    ).toBeVisible();
   });
 
-  it('skjuler meldeperioder når checkboxen for Kelvin-registrering krysses av', async () => {
+  it('velger "Ja" som standard slik at meldeperioder vises', async () => {
+    vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
+      type: 'SUCCESS' as const,
+      data: { harRegistrertTimerForMeldeperioden: true },
+    });
+    render(<DigitaliserMeldekort submit={() => {}} isLoading={false} readOnly={false} oppgave={oppgave} />);
+
+    await velgToPåfølgendeUker();
+
+    expect(await screen.findByRole('radio', { name: 'Ja, registrer arbeidstimer for meldeperioden' })).toBeChecked();
+    expect((await screen.findAllByRole('spinbutton', { name: 'Arbeidstimer' })).length).toBeGreaterThan(0);
+  });
+
+  it('skjuler meldeperioder når "Nei, meldekortet er allerede registrert i Kelvin" velges', async () => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
@@ -149,13 +167,13 @@ describe('Meldekort allerede registrert i Kelvin', () => {
 
     expect((await screen.findAllByRole('spinbutton', { name: 'Arbeidstimer' })).length).toBeGreaterThan(0);
 
-    const checkbox = await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' });
-    await user.click(checkbox);
+    const neiRadio = await screen.findByRole('radio', { name: 'Nei, meldekortet er allerede registrert i Kelvin' });
+    await user.click(neiRadio);
 
     expect(screen.queryByRole('spinbutton', { name: 'Arbeidstimer' })).not.toBeInTheDocument();
   });
 
-  it('viser meldeperioder igjen når checkboxen for Kelvin-registrering fjernes', async () => {
+  it('viser meldeperioder igjen når "Ja" velges etter "Nei"', async () => {
     vi.mocked(clientHentHarRegistrertTimerIMeldeperioden).mockResolvedValue({
       type: 'SUCCESS' as const,
       data: { harRegistrertTimerForMeldeperioden: true },
@@ -164,11 +182,12 @@ describe('Meldekort allerede registrert i Kelvin', () => {
 
     await velgToPåfølgendeUker();
 
-    const checkbox = await screen.findByRole('checkbox', { name: 'Meldekort er allerede registert i Kelvin' });
-    await user.click(checkbox);
+    const neiRadio = await screen.findByRole('radio', { name: 'Nei, meldekortet er allerede registrert i Kelvin' });
+    await user.click(neiRadio);
     expect(screen.queryByRole('spinbutton', { name: 'Arbeidstimer' })).not.toBeInTheDocument();
 
-    await user.click(checkbox);
+    const jaRadio = screen.getByRole('radio', { name: 'Ja, registrer arbeidstimer for meldeperioden' });
+    await user.click(jaRadio);
     expect((await screen.findAllByRole('spinbutton', { name: 'Arbeidstimer' })).length).toBeGreaterThan(0);
   });
 });

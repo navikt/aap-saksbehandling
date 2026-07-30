@@ -35,7 +35,7 @@ export interface MeldekortFormFields {
   gjelderForUker: string[];
   innsendtDato: Date;
   meldeperioder: Meldeperiode[];
-  meldekortErAlleredeRegistrertIKelvin?: string[];
+  registrerArbeidstimerNaa?: string;
 }
 
 export const ukestartSisteHalvår = (): ValuePair[] => {
@@ -86,9 +86,22 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
           },
         },
       },
-      meldekortErAlleredeRegistrertIKelvin: {
-        type: 'checkbox',
-        options: [{ value: 'meldekortErAlleredeRegistrertIKelvin', label: 'Meldekort er allerede registert i Kelvin' }],
+      registrerArbeidstimerNaa: {
+        type: 'radio',
+        label: 'Skal arbeidstimer registreres nå?',
+        defaultValue: 'ja',
+        options: [
+          {
+            value: 'ja',
+            label: 'Ja, registrer arbeidstimer for meldeperioden',
+          },
+          {
+            value: 'nei',
+            label: 'Nei, meldekortet er allerede registrert i Kelvin',
+            description:
+              'Arbeidstimer registreres ikke på nytt.',
+          },
+        ],
       },
       meldeperioder: {
         type: 'fieldArray',
@@ -115,15 +128,13 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
     return JSON.stringify(meldekort);
   }
 
-  const meldekortEralleredeRegistrertIKelvin = form
-    .watch('meldekortErAlleredeRegistrertIKelvin')
-    ?.includes('meldekortErAlleredeRegistrertIKelvin');
+  const registrerArbeidstimerNå = form.watch('registrerArbeidstimerNaa') === 'nei';
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) =>
       submit(
         'MELDEKORT',
-        meldekortEralleredeRegistrertIKelvin ? null : mapTilMeldekortKontrakt(data),
+        registrerArbeidstimerNå ? null : mapTilMeldekortKontrakt(data),
         data.innsendtDato
       )
     )(event);
@@ -172,17 +183,17 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, oppgave }: P
 
         {finnesTimerForMeldeperiode && (
           <>
-            <Alert
-              variant={'warning'}
-            >{`Det er allerede levert meldekort for denne meldeperioden. Hvis du ikke trenger å endre arbeidede timer, så kan du kategorisere dokumentet som "Annet relevant dokument" med underkategorien Meldekort.`}</Alert>
+            <Alert variant={'warning'}>
+              {'Det er allerede levert meldekort for denne meldeperioden. Velg om arbeidstimene skal registreres på nytt.'}
+            </Alert>
 
-            <FormField form={form} formField={formFields.meldekortErAlleredeRegistrertIKelvin} />
+            <FormField form={form} formField={formFields.registrerArbeidstimerNaa} />
           </>
         )}
 
         <FormField form={form} formField={formFields.innsendtDato} />
 
-        {!meldekortEralleredeRegistrertIKelvin && <Meldeperioder form={form} readOnly={readOnly} />}
+        {!registrerArbeidstimerNå && <Meldeperioder form={form} readOnly={readOnly} />}
 
         {!readOnly && (
           <Button loading={isLoading} className={'fit-content'}>
