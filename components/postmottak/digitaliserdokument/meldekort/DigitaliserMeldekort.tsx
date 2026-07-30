@@ -34,6 +34,7 @@ export interface MeldekortFormFields {
   gjelderForUker: string[];
   innsendtDato: Date;
   meldeperioder: Meldeperiode[];
+  registrerArbeidstimerNaa?: string;
 }
 
 export const ukestartSisteHalvår = (): ValuePair[] => {
@@ -84,6 +85,22 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }
           },
         },
       },
+      registrerArbeidstimerNaa: {
+        type: 'radio',
+        label: 'Skal arbeidstimer registreres nå?',
+        defaultValue: 'ja',
+        options: [
+          {
+            value: 'ja',
+            label: 'Ja, registrer arbeidstimer for meldeperioden',
+          },
+          {
+            value: 'nei',
+            label: 'Nei, meldekortet er allerede registrert i Kelvin',
+            description: 'Arbeidstimer registreres ikke på nytt.',
+          },
+        ],
+      },
       meldeperioder: {
         type: 'fieldArray',
         defaultValue: [],
@@ -109,8 +126,12 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }
     return JSON.stringify(meldekort);
   }
 
+  const registrerArbeidstimerNå = form.watch('registrerArbeidstimerNaa') === 'nei';
+
   const handleSubmit: SubmitEventHandler = (event) => {
-    form.handleSubmit((data) => submit('MELDEKORT', mapTilMeldekortKontrakt(data), data.innsendtDato))(event);
+    form.handleSubmit((data) =>
+      submit('MELDEKORT', registrerArbeidstimerNå ? null : mapTilMeldekortKontrakt(data), data.innsendtDato)
+    )(event);
   };
 
   const meldeperioder = form.watch('meldeperioder');
@@ -151,13 +172,20 @@ export const DigitaliserMeldekort = ({ readOnly, submit, isLoading, saksnummer }
         <FormField form={form} formField={formFields.gjelderForUker} />
 
         {finnesTimerForMeldeperiode && (
-          <Alert
-            variant={'warning'}
-          >{`Det er allerede levert meldekort for denne meldeperioden. Hvis du ikke trenger å endre arbeidede timer, så kan du kategorisere dokumentet som "Annet relevant dokument" med underkategorien Meldekort.`}</Alert>
+          <>
+            <Alert variant={'warning'}>
+              {
+                'Det er allerede levert meldekort for denne meldeperioden. Velg om arbeidstimene skal registreres på nytt.'
+              }
+            </Alert>
+
+            <FormField form={form} formField={formFields.registrerArbeidstimerNaa} />
+          </>
         )}
 
         <FormField form={form} formField={formFields.innsendtDato} />
-        <Meldeperioder form={form} readOnly={readOnly} />
+
+        {!registrerArbeidstimerNå && <Meldeperioder form={form} readOnly={readOnly} />}
 
         {!readOnly && (
           <Button loading={isLoading} className={'fit-content'}>
