@@ -4,7 +4,6 @@ import { VStack } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/postmottakForm';
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { useState } from 'react';
@@ -21,7 +20,7 @@ interface Props {
   behandlingsreferanse: string;
   registrertDato?: string | null;
   grunnlag: DigitaliseringsGrunnlag;
-  oppgave: Oppgave;
+  saksnummer: string | undefined;
   readOnly: boolean;
 }
 
@@ -34,7 +33,7 @@ export const DigitaliserDokument = ({
   behandlingsreferanse,
   grunnlag,
   readOnly,
-  oppgave,
+  saksnummer,
   registrertDato,
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
@@ -75,7 +74,7 @@ export const DigitaliserDokument = ({
         />
       )}
       {kategori === 'MELDEKORT' && (
-        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} oppgave={oppgave} />
+        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} saksnummer={saksnummer} />
       )}
 
       {kategori === 'KLAGE' && (

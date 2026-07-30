@@ -21,6 +21,7 @@ import {
   SakOgAvklaringsbehov,
   SaksbehandlerSøkRequest,
   SaksbehandlerSøkRespons,
+  SaksnummerResponse,
   SøkResponse,
   TildelOppgaveRequest,
   TildelOppgaveResponse,
@@ -75,6 +76,22 @@ export async function hentOppgave(behandlingReferanse: string) {
 
   const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave`;
   return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
+}
+
+export async function hentSaksnummerGittBehandling(behandlingReferanse: string) {
+  if (lokalFakeOppgave) {
+    const mockResponse: FetchResponse<SaksnummerResponse> = {
+      type: 'SUCCESS',
+      data: {
+        saksnummer: '123456',
+      },
+    };
+
+    return mockResponse;
+  }
+
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-saksnummer`;
+  return await apiFetch<SaksnummerResponse>(url, oppgaveApiScope, 'GET');
 }
 
 export async function hentOppgaveVisningsinfo(behandlingReferanse: string) {
