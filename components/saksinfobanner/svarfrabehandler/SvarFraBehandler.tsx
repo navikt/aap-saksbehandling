@@ -1,19 +1,24 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
+import { BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
+import { useRef, useState } from 'react';
 
-import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
 
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
   oppdaterVisHarUlesteDokumenter: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  dokumenttype: 'Dialogmelding' | 'Legeerklæring' | 'Dokument';
 }
 
-export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDokumenter }: SvarFraBehandlerProps) => {
+export const SvarFraBehandler = ({
+  behandlingReferanse,
+  oppdaterVisHarUlesteDokumenter,
+  dokumenttype,
+}: SvarFraBehandlerProps) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
   const { mottattDokumenterLest, isLoading, error } = useMottattDokumenterLest();
@@ -27,7 +32,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
         ref={buttonRef}
         size="xsmall"
       >
-        Svar fra behandler
+        {dokumenttype}
       </Button>
       <Popover
         onClose={() => setVis(false)}
@@ -46,7 +51,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
               className={styles.tag}
             >
               <BodyShort size={'small'} weight={'semibold'}>
-                Svar fra behandler
+                {dokumenttype}
               </BodyShort>
             </Tag>
             <Box padding={'space-8'}>
