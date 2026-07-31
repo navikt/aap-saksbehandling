@@ -1,31 +1,33 @@
 'use client';
 
-import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
-import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { Heading } from '@navikt/ds-react';
+import { isBefore, parse } from 'date-fns';
+import { useSak } from 'hooks/SakHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
-  BeregningstidspunktVurderingResponse,
   BeregningTidspunktGrunnlag,
+  BeregningstidspunktVurderingResponse,
   MellomlagretVurdering,
   ÅrsakBeregningstidspunkt,
   ÅrsakYtterligereNedsatt,
 } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SubmitEventHandler } from 'react';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { isBefore, parse } from 'date-fns';
+import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { Behovstype, getStringEllerUndefined } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
-import styles from './FastsettBeregning.module.css';
-import { Heading } from '@navikt/ds-react';
-import { useConfigForm } from 'components/form/FormHook';
+import { SubmitEventHandler } from 'react';
+
+import { Alert } from 'components/alert/Alert';
 import { FormField, ValuePair } from 'components/form/FormField';
-import { useSak } from 'hooks/SakHook';
+import { useConfigForm } from 'components/form/FormHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
+
+import styles from './FastsettBeregning.module.css';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -204,6 +206,11 @@ export const FastsettBeregning = ({
     form.watch('nedsattArbeidsevneDato') &&
     erDatoFoerDato(formaterDatoForFrontend(sak.virkningsTidspunkt), form.watch('nedsattArbeidsevneDato'));
 
+  const erBeregningsTidspunktEtterSøknadstidspunkt =
+    sak.periode.fom &&
+    form.watch('nedsattArbeidsevneDato') &&
+    erDatoFoerDato(formaterDatoForFrontend(sak.periode.fom), form.watch('nedsattArbeidsevneDato'));
+
   const historiskeVurderinger = grunnlag?.historiskeVurderinger.sort((a, b) => {
     return sorterEtterNyesteDato(a.vurderingerMeta.vurdertAv?.dato ?? '', b.vurderingerMeta.vurdertAv?.dato ?? '');
   });
@@ -242,6 +249,11 @@ export const FastsettBeregning = ({
 
       <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
+      {erBeregningsTidspunktEtterSøknadstidspunkt && (
+        <Alert variant={'warning'}>
+          Du har satt beregningsdato etter søknadsdato. Hvis det er korrekt kan du bekrefte vilkåret.
+        </Alert>
+      )}
       {visAarsakDropdowns && <FormField form={form} formField={formFields.årsak} />}
       {grunnlag?.skalVurdereYtterligere && (
         <div className={styles.ytterligerenedsattfelter}>
