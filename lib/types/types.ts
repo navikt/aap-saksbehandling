@@ -1,5 +1,3 @@
-import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
-
 import { components, paths } from './schema';
 
 // Grunnlag
@@ -676,10 +674,6 @@ export type ÅrsakTilOpprettelse =
 export type VurderingsbehovOgÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOgÅrsak'];
 
-// oppgave
-export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
-
-export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];
 
