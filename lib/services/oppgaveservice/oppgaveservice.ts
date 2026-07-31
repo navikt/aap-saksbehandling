@@ -1,7 +1,3 @@
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { apiFetch } from 'lib/services/apiFetch';
 import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
 import {
@@ -11,7 +7,6 @@ import {
   Kø,
   Markering,
   MineOppgaverQueryParams,
-  Oppgave,
   OppgaveInfoTilSøk,
   OppgaveVisningsinformasjon,
   OppgavelisteRequest,
@@ -49,35 +44,6 @@ export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
 };
 
 const lokalFakeOppgave = isLocal();
-export async function hentOppgave(behandlingReferanse: string) {
-  if (lokalFakeOppgave) {
-    const mockResponse: FetchResponse<Oppgave> = {
-      type: 'SUCCESS',
-      data: {
-        id: 123,
-        personIdent: '123456',
-        behandlingRef: 'dsfad',
-        avklaringsbehovKode: '5008',
-        behandlingOpprettet: '2025-08-20',
-        behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.REVURDERING,
-        enhet: 'ASKER',
-        markeringer: [],
-        opprettetAv: 'Kelvin',
-        opprettetTidspunkt: '2025-08-20',
-        status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-        versjon: 0,
-        vurderingsbehov: [],
-        årsakerTilBehandling: [],
-      },
-    };
-
-    return mockResponse;
-  }
-
-  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave`;
-  return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
-}
-
 export async function hentSaksnummerGittBehandling(behandlingReferanse: string) {
   if (lokalFakeOppgave) {
     const mockResponse: FetchResponse<SaksnummerResponse> = {
