@@ -20,6 +20,12 @@ interface Props {
 export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave.oppgavelisteTags.skjermingInfo);
   const ventStatusForTilbakekreving = useFeatureFlag('VentStatusForTilbakekreving');
+
+  const mottattDialogmelding = oppgave.vurderingsbehov.some((x) => x == 'MOTTATT_DIALOGMELDING');
+  const mottattLegeerklæring = oppgave.vurderingsbehov.some((x) => x == 'MOTTATT_LEGEERKLÆRING');
+  const mottattAnnenMelding =
+    oppgave.oppgavelisteTags.harUlesteDokumenter && !mottattDialogmelding && !mottattLegeerklæring;
+
   return (
     <HStack gap={'space-4'}>
       {oppgave.oppgavelisteTags.påVentInfo &&
@@ -38,7 +44,9 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
             begrunnelse={oppgave.oppgavelisteTags.forrigePåVentInfo.venteBegrunnelse}
           />
         )}
-      {oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
+      {mottattDialogmelding && <SvarFraBehandler dokumenttype={'Dialogmelding'} />}
+      {mottattLegeerklæring && <SvarFraBehandler dokumenttype={'Legeerklæring'} />}
+      {mottattAnnenMelding && <SvarFraBehandler dokumenttype={'Dokument'} />}
       {oppgave.oppgavelisteTags.returInformasjon && (
         <Returboks
           returInformasjon={oppgave.oppgavelisteTags.returInformasjon}

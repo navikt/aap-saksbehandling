@@ -1,11 +1,16 @@
 'use client';
 
+import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useRef, useState } from 'react';
-import { FirstAidKitIcon } from '@navikt/aksel-icons';
+
 import styles from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler.module.css';
 
-export const SvarFraBehandler = () => {
+interface Props {
+  dokumenttype: 'Dialogmelding' | 'Legeerklæring' | 'Dokument';
+}
+
+export const SvarFraBehandler = ({ dokumenttype }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
@@ -34,7 +39,7 @@ export const SvarFraBehandler = () => {
             className={styles.tag}
           >
             <BodyShort size={'small'} weight={'semibold'}>
-              Svar fra behandler
+              {dokumenttype}
             </BodyShort>
           </Tag>
         </VStack>
