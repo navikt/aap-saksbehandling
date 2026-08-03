@@ -241,6 +241,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/sak/migrerFraArena': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.MigrerArenasakDTO'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sak/siste/{antall}': {
     parameters: {
       query?: never;
@@ -14030,6 +14069,7 @@ export interface components {
         | 'KRAVDATO'
         | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
+        | 'UFØRETIDSPUNKT'
         | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeBel\u00F8pVurderingResponse': {
@@ -14511,8 +14551,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningVurderingDTO': {
       /** Format: int32 */
       gradering?: number | null;
-      /** Format: int32 */
-      kronesum?: number | null;
       manuell?: boolean | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
@@ -14531,8 +14569,6 @@ export interface components {
       /** Format: int32 */
       gradering?: number | null;
       kilde: string;
-      /** Format: int32 */
-      kronesum?: number | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       saksRef?: string | null;
       /** @enum {string} */
@@ -14958,6 +14994,7 @@ export interface components {
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -14978,6 +15015,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -15039,6 +15077,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -15552,6 +15591,7 @@ export interface components {
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -15572,6 +15612,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -15635,6 +15676,7 @@ export interface components {
             | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
             | 'AKTIVITETSPLIKT_11_7'
             | 'AKTIVITETSPLIKT_11_9'
+            | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
             | 'BARNETILLEGG'
             | 'BARNETILLEGG_SATS_REGULERING'
             | 'BRUKER_TILBAKE_I_ARBEID'
@@ -15655,6 +15697,7 @@ export interface components {
             | 'INSTITUSJONSOPPHOLD_SONING'
             | 'KLAGE_TRUKKET'
             | 'LOVVALG_OG_MEDLEMSKAP'
+            | 'MIGRERING_FRA_ARENA'
             | 'MIGRER_RETTIGHETSPERIODE'
             | 'MOTATT_KLAGE'
             | 'MOTTATT_AKTIVITETSMELDING'
@@ -16452,6 +16495,7 @@ export interface components {
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -16472,6 +16516,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -16533,6 +16578,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -16658,6 +16704,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -17627,6 +17674,7 @@ export interface components {
         | 'KRAVDATO'
         | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
+        | 'UFØRETIDSPUNKT'
         | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.beregning.InntektsbortfallVurderingDto': {
@@ -17875,7 +17923,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.SamordningVurderingData': {
       /** Format: int32 */
       gradering?: number | null;
-      kronesum?: number | null;
       manuell?: boolean | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
@@ -17890,18 +17937,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.VurderingerForSamordning': {
       begrunnelse?: string | null;
-      /**
-       * Format: date
-       * @deprecated
-       * @description Ikke lenger i bruk
-       * @example 2025-04-01
-       */
-      fristNyRevurdering?: string | null;
-      /**
-       * @deprecated
-       * @description Ikke lenger i bruk
-       */
-      maksDatoEndelig?: boolean | null;
       vurderteSamordningerData: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.SamordningVurderingData'][];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.refusjonskrav.TjenestepensjonRefusjonskravVurdering': {
@@ -17940,7 +17975,6 @@ export interface components {
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
-      bidiagnoser?: string[] | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -17949,8 +17983,6 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
-      hoveddiagnose?: string | null;
-      kodeverk?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -19017,6 +19049,7 @@ export interface components {
         | 'JOURNALPOST'
         | 'KABAL_HENDELSE_ID'
         | 'MANUELL_OPPRETTELSE'
+        | 'MIGRERING_FRA_ARENA'
         | 'PDL_HENDELSE_ID'
         | 'REVURDERING_ID'
         | 'SAKSBEHANDLER_KELVIN_REFERANSE'
@@ -19141,6 +19174,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -19164,6 +19198,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19236,6 +19271,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -19259,6 +19295,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19427,6 +19464,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19522,6 +19560,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -19545,6 +19584,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19612,6 +19652,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Meldekort']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MigreringFraArenaV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Omgj\u00F8ringKlageRevurdering']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgave']
@@ -19620,6 +19661,9 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.S\u00F8knad']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uf\u00F8revedtak'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MigreringFraArenaV0': {
+      beskrivelse: string;
+    };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandling': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Ny\u00C5rsakTilBehandlingV0': {
       behandlingReferanse: string;
@@ -19631,6 +19675,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -19654,6 +19699,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19717,6 +19763,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -19740,6 +19787,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19792,6 +19840,7 @@ export interface components {
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
         | 'AVVIST_LEGEERKLÆRING'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -19815,6 +19864,7 @@ export interface components {
         | 'LEGEERKLÆRING'
         | 'LOVVALG_OG_MEDLEMSKAP'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTTATT_KABAL_HENDELSE'
         | 'OPPFØLGINGSOPPGAVE'
@@ -19898,6 +19948,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -20074,6 +20125,7 @@ export interface components {
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -20094,6 +20146,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -20164,6 +20217,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -20232,6 +20286,7 @@ export interface components {
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -20252,6 +20307,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -20328,6 +20384,7 @@ export interface components {
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
         | 'AKTIVITETSPLIKT_11_9'
+        | 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET'
         | 'BARNETILLEGG'
         | 'BARNETILLEGG_SATS_REGULERING'
         | 'BRUKER_TILBAKE_I_ARBEID'
@@ -20348,6 +20405,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD_SONING'
         | 'KLAGE_TRUKKET'
         | 'LOVVALG_OG_MEDLEMSKAP'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'MOTATT_KLAGE'
         | 'MOTTATT_AKTIVITETSMELDING'
@@ -20409,6 +20467,7 @@ export interface components {
         | 'KLAGE'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'MIGRER_RETTIGHETSPERIODE'
         | 'OMGJØRING_ETTER_KLAGE'
         | 'OMGJØRING_ETTER_SVAR_FRA_KLAGEINSTANS'
@@ -20445,6 +20504,10 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO': {
       ident: string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.MigrerArenasakDTO': {
+      ident: string;
+      saksnummerArena: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.NullableSakOgBehandlingDTO': {
       sakOgBehandlingDTO?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakOgBehandlingDTO'];
