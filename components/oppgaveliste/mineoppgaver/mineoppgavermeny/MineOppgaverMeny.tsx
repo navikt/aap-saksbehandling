@@ -5,7 +5,7 @@ import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientAp
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
-import { loggUmamiFrigiOppgave, loggUmamiGåTilBehandlingOgReserver, loggUmamiTildelOppgave } from 'lib/utils/umami';
+import { loggUmamiFrigiOppgave, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 
@@ -79,7 +79,6 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item
               onClick={() => {
-                loggUmamiTildelOppgave('MINE_OPPGAVER');
                 setOppgaveIder([oppgave.oppgaveMetadata.id]);
                 visModal();
               }}
