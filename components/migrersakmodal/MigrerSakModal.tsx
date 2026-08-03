@@ -1,3 +1,4 @@
+import { MigrationIcon } from '@navikt/aksel-icons';
 import {
   BodyLong,
   BodyShort,
@@ -10,12 +11,12 @@ import {
   Tag,
   VStack,
 } from '@navikt/ds-react';
-import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
-import { MigrationIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Spinner } from 'components/felles/Spinner';
 import { ArenaSakMedVedtakResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+import { Spinner } from 'components/felles/Spinner';
+import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 
 type Props = {
   isOpen: boolean;
@@ -52,7 +53,7 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          saksnummer: `${arenasak.opprettetAar}-${arenasak.lopenr}`,
+          saksnummerArena: `${arenasak.opprettetAar}-${arenasak.lopenr}`,
           ident: arenasak.person.fodselsnummer,
         }),
       });

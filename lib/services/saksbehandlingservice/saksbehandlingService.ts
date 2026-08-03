@@ -182,9 +182,9 @@ export const finnSakerForIdent = async (ident: string) => {
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
 };
 
-export const migrerArenasak = async (saksnummer: string, ident: string) => {
+export const migrerArenasak = async (saksnummerArena: string, ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/migrerFraArena`;
-  return await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'POST', { ident, saksnummer });
+  return await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'POST', { ident, saksnummerArena });
 };
 
 export const hentSiste = async (antall: number) => {
