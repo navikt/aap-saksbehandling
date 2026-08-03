@@ -1,5 +1,6 @@
 arbeidOgInntektApp: arbeid-og-inntekt-q2
 fssCluster: dev-fss
+umamiHost: reops-event-proxy.ekstern.dev.nav.no
 
 ingresses:
   - 'https://kelvin.ansatt.dev.nav.no'

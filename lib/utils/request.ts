@@ -6,7 +6,6 @@ import {
 import { SortState } from '@navikt/ds-react';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { BehandlingskontekstForOppgave, MineOppgaverQueryParams, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
-import { Oppgave } from 'lib/types/types';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -96,19 +95,3 @@ export function byggKelvinURL(oppgaveInfo: BehandlingskontekstForOppgave): strin
   }
 }
 
-// TODO: skal fjernes når frontend ikke lenger bruker Oppgave-typen
-export function byggKelvinURLFraOppgave(oppgave: Oppgave): string {
-  if (oppgave.journalpostId) {
-    return buildPostmottakURL(oppgave.behandlingRef);
-  } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
-    if (!oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_URL) {
-      throw new Error('Mangler tilbakekrevingsURL for tilbakekreving-oppgave');
-    }
-    return oppgave.tilbakekrevingsVarsDto.tilbakekrevings_URL;
-  } else {
-    if (!oppgave.saksnummer) {
-      throw new Error('Mangler saksnummer for oppgave');
-    }
-    return buildSaksbehandlingsURL(oppgave.saksnummer, oppgave.behandlingRef);
-  }
-}

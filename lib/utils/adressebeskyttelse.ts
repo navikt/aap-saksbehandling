@@ -1,4 +1,4 @@
-import { Oppgave } from 'lib/types/oppgaveTypes';
+import { SkjermingInfo } from 'lib/types/oppgaveTypes';
 
 export enum Adressebeskyttelsesgrad {
   STRENGT_FORTROLIG = 'Strengt fortrolig',
@@ -6,21 +6,15 @@ export enum Adressebeskyttelsesgrad {
   EGEN_ANSATT = 'Egen ansatt',
 }
 
-export enum Enhet {
-  VIKAFOSSEN = '2103',
-  NAV_VÆRNES = '1783',
-}
-
-export function utledAdressebeskyttelse(oppgave?: Oppgave): Adressebeskyttelsesgrad[] {
+export function utledAdressebeskyttelse(skjermingInfo?: SkjermingInfo): Adressebeskyttelsesgrad[] {
   let adressebeskyttelser = [];
-  if (oppgave?.enhet == Enhet.VIKAFOSSEN) {
+  if (skjermingInfo?.harStrengtFortroligAdresse) {
     adressebeskyttelser.push(Adressebeskyttelsesgrad.STRENGT_FORTROLIG);
-  } else if (oppgave?.harFortroligAdresse) {
+  } else if (skjermingInfo?.harFortroligAdresse) {
     adressebeskyttelser.push(Adressebeskyttelsesgrad.FORTROLIG);
   }
 
-  // Det finnes én enhet som slutter på 83 som ikke er egen ansatt-enhet. TODO utled dette i backend isteden
-  if (oppgave?.enhet.endsWith('83') && oppgave?.enhet != Enhet.NAV_VÆRNES) {
+  if (skjermingInfo?.erSkjermet) {
     adressebeskyttelser.push(Adressebeskyttelsesgrad.EGEN_ANSATT);
   }
   return adressebeskyttelser;

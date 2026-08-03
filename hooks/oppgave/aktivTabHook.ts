@@ -1,10 +1,10 @@
 'use client';
 
-import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { dagerTilMillisekunder } from 'lib/utils/time';
 
-interface LagretAktivTab {
-  tab: string;
+interface LagretAktivTab<E> {
+  tab: E;
   timestamp: number;
   user: string;
 }
@@ -12,21 +12,21 @@ interface LagretAktivTab {
 const KEY = 'AKTIV_OPPGAVE_TAB_KEY';
 const MAKS_LEVETID = dagerTilMillisekunder(1);
 
-export function useLagreAktivTab(): {
-  lagreAktivTab: (tab: String) => void;
-  hentAktivTab: () => String | undefined;
+export function useLagreAktivTab<E>(): {
+  lagreAktivTab: (tab: E) => void;
+  hentAktivTab: () => E | undefined;
 } {
   const bruker = useInnloggetBruker();
-  const lagreAktivTab = (tab: String) => {
+  const lagreAktivTab = (tab: E) => {
     localStorage.setItem(
       KEY,
-      JSON.stringify({ tab, timestamp: new Date().getTime(), user: bruker.NAVident } as LagretAktivTab)
+      JSON.stringify({ tab, timestamp: new Date().getTime(), user: bruker.NAVident } satisfies LagretAktivTab<E>)
     );
   };
 
-  const hentLagretAktivTab = (): String | undefined => {
+  const hentLagretAktivTab = (): E | undefined => {
     try {
-      const obj = JSON.parse(localStorage[KEY]) as LagretAktivTab;
+      const obj = JSON.parse(localStorage[KEY]) as LagretAktivTab<E>;
 
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         return obj.tab;

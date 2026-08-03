@@ -1,3 +1,5 @@
+import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
+import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 import {
   SettPåVentÅrsaker,
   TilbakekrevingVenteÅrsaker,
@@ -5,9 +7,6 @@ import {
   VilkårUtfall,
   ÅrsakTilOpprettelse,
 } from 'lib/types/types';
-import { exhaustiveCheck } from 'lib/utils/typescript';
-import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
-import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 
 const behovskodeMap = {
   // Behandlingsflyt
@@ -53,6 +52,7 @@ const behovskodeMap = {
   '5036': 'Samordning barnepensjon',
   '5037': '§ 11-14 Student',
   '5038': 'Vurder krav',
+  '5039': 'Avklar stønadsperiode',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5041': 'Skriv vedtaksbrev',
   '5042': 'Avslag § 11-27',

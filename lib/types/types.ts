@@ -1,5 +1,3 @@
-import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
-
 import { components, paths } from './schema';
 
 // Grunnlag
@@ -487,6 +485,9 @@ export type VedtakslengdeVurderingDto =
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
+export type StansOpphør =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørDto'];
+
 export type ForeslåVedtakVedtakslengdeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
 
@@ -673,10 +674,6 @@ export type ÅrsakTilOpprettelse =
 export type VurderingsbehovOgÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOgÅrsak'];
 
-// oppgave
-export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
-
-export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];
 
@@ -784,6 +781,7 @@ export enum Roller {
 export interface UmamiKelvinEvent {
   name: string;
   hendelse?: string;
+  steg?: string;
   hendelser_serie: string | null;
   hendelser_serie_id: string | null;
   tidsstempel: number | null;
@@ -834,4 +832,11 @@ export type UmamiTag =
   | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE'
   | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN'
   | 'BESLUTTER_VARIGHET_HENDELSER'
-  | 'KVALITETSSIKRER_VARIGHET_HENDELSER';
+  | 'KVALITETSSIKRER_VARIGHET_HENDELSER'
+  | 'EKSTERN_LENKE_KLIKK'
+  | 'GÅ_TIL_BEHANDLING'
+  | 'GÅ_TIL_BEHANDLING_OG_RESERVER'
+  | 'GÅ_TIL_SAKSOVERSIKT'
+  | 'RESERVER_OPPGAVE'
+  | 'FRIGI_OPPGAVE'
+  | 'TILDEL_OPPGAVE';
