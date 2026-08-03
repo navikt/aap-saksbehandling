@@ -1,12 +1,14 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
-import { ManuellInntektGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
-import userEvent from '@testing-library/user-event';
-import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { within } from '@testing-library/react';
-import createFetchMock from 'vitest-fetch-mock';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from 'lib/test/CustomRender';
+import { ManuellInntektGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
+import { formaterTilNok } from 'lib/utils/string';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+
+import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
 
 const user = userEvent.setup();
 
@@ -112,16 +114,35 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
       const beregnetPGICells = screen.queryAllByTestId('beregnetPGI');
       const beregnetPGIValues = beregnetPGICells.map((cell) => {
         const input = cell.querySelector('input');
-        return input ? input.value : '';
+        return input ? input.value : cell.textContent;
       });
-      expect(beregnetPGIValues).toEqual(['', '200000', '']);
+      // 2023 har fått ferdig lignet PGI i etterkant, og vises som overstrøket tekst uten input
+      expect(beregnetPGIValues).toEqual(['', '200 000 kr', '']);
+    });
+
+    it('skal stryke over manuell inntekt som er overstyrt av ferdig lignet PGI', () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+      const celle = within(rader[1]).getByTestId('beregnetPGI');
+
+      expect(celle.textContent).toBe(formaterTilNok(200000));
+      expect(celle.querySelector('input')).toBeNull();
+    });
+
+    it('skal vise info-alert når ferdig lignet PGI overstyrer manuell inntekt', () => {
+      expect(
+        screen.getByText(
+          'Ferdig lignet PGI er oppdatert etter at beregnet PGI ble lagt inn. Ferdig lignet PGI blir benyttet i grunnlagsberegningen.'
+        )
+      ).toBeVisible();
     });
 
     it('skal summere inntekter per år og vise totalen', () => {
       const tabell = screen.getByTestId('inntektstabell');
       const rader = within(tabell).getAllByRole('row');
       const totalCells = rader.map((rad) => within(rad).getByTestId('totalt').textContent);
-      expect(totalCells).toEqual(['230 000 kr', '250 000 kr', '300 000 kr']);
+      // 2023: ferdig lignet PGI (100 000) brukes framfor manuell inntekt (200 000), pluss EØS (50 000)
+      expect(totalCells).toEqual(['230 000 kr', '150 000 kr', '300 000 kr']);
     });
 
     it('skal oppdatere total-kolonnen når bruker taster inn verdier', async () => {
@@ -142,6 +163,54 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
   });
 
   // TODO skriv tester for historiske vurderinger
+
+  describe('Totalt-kolonnen viser inntekten som faktisk brukes i grunnlagsberegningen', () => {
+    const grunnlagMedBådeRegisterOgManuell: ManuellInntektGrunnlag = {
+      sisteRelevanteÅr: 2024,
+      manglerInntektForÅr: [],
+      alleRelevanteÅr: [2022, 2023, 2024],
+      manglendeMånedsInntekter: [],
+      harTilgangTilÅSaksbehandle: true,
+      manuelleVurderinger: {
+        // 2022: både ferdig lignet PGI og manuell inntekt, 2023 og 2024: kun manuell inntekt
+        årsVurderinger: [
+          { år: 2022, beløp: 400000, eøsBeløp: 25000 },
+          { år: 2023, beløp: 350000, eøsBeløp: 50000 },
+          { år: 2024, beløp: 300000 },
+        ],
+        begrunnelse: 'Dette er en begrunnelse',
+        vurderingerMeta: { vurdertAv: { dato: '2025-11-27', ident: 'Saksbehandler' } },
+      },
+      registrerteInntekterSisteRelevanteAr: [{ år: 2022, beløp: 100000 }],
+    };
+
+    beforeEach(() => {
+      render(
+        <FastsettManuellInntekt
+          behandlingsversjon={1}
+          grunnlag={grunnlagMedBådeRegisterOgManuell}
+          readOnly={false}
+          behandlingErRevurdering={false}
+        />
+      );
+    });
+
+    it('skal bruke ferdig lignet PGI pluss EØS-inntekt når ferdig lignet PGI finnes', () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+
+      // 100 000 (ferdig lignet PGI) + 25 000 (EØS), ikke 400 000 (manuell) + 25 000
+      expect(within(rader[0]).getByTestId('totalt').textContent).toBe(formaterTilNok(125000));
+    });
+
+    it('skal bruke manuell inntekt pluss EØS-inntekt når ferdig lignet PGI mangler', () => {
+      const tabell = screen.getByTestId('inntektstabell');
+      const rader = within(tabell).getAllByRole('row');
+
+      expect(within(rader[1]).getByTestId('totalt').textContent).toBe(formaterTilNok(400000));
+      expect(within(rader[2]).getByTestId('totalt').textContent).toBe(formaterTilNok(300000));
+    });
+  });
 
   describe('Endring i uføregrad (delperioder)', () => {
     const grunnlagMedDelperioder: ManuellInntektGrunnlag = {
@@ -169,6 +238,14 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
           behandlingErRevurdering={false}
         />
       );
+    });
+
+    it('skal ikke vise info-alert om oppdatert ferdig lignet PGI når det ikke finnes manuell inntekt', () => {
+      expect(
+        screen.queryByText(
+          'Ferdig lignet PGI er oppdatert etter at beregnet PGI ble lagt inn. Ferdig lignet PGI blir benyttet i grunnlagsberegningen.'
+        )
+      ).not.toBeInTheDocument();
     });
 
     it('skal vise advarsel om endring i uføregrad med segmentene', () => {
