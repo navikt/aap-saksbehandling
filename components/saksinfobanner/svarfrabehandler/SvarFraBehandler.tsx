@@ -1,7 +1,7 @@
 'use client';
 
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
-import { BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
 import { useRef, useState } from 'react';
 
@@ -11,7 +11,7 @@ import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
   oppdaterVisHarUlesteDokumenter: (value: ((prevState: boolean) => boolean) | boolean) => void;
-  dokumenttype: 'Dialogmelding' | 'Legeerklæring' | 'Dokument';
+  dokumenttype: 'Melding eller tilleggsopplysninger' | 'Legeerklæring' | 'Dokument';
 }
 
 export const SvarFraBehandler = ({
@@ -32,7 +32,7 @@ export const SvarFraBehandler = ({
         ref={buttonRef}
         size="xsmall"
       >
-        {dokumenttype}
+        Svar fra behandler
       </Button>
       <Popover
         onClose={() => setVis(false)}
@@ -44,7 +44,7 @@ export const SvarFraBehandler = ({
         <Box maxWidth={'400px'} minWidth={'400px'}>
           <VStack gap={'space-0'}>
             <Tag
-              data-color="warning"
+              data-color="meta-purple"
               icon={<FirstAidKitIcon />}
               variant={'moderate'}
               size={'medium'}
@@ -55,6 +55,8 @@ export const SvarFraBehandler = ({
               </BodyShort>
             </Tag>
             <Box padding={'space-8'}>
+              <Detail textColor="subtle">Dokumenttype</Detail>
+              <BodyLong size={'small'}>{dokumenttype}</BodyLong>
               <BodyLong size={'small'}>
                 Du finner svaret fra behandler i saksdokumenter. Marker som lest når du har gått gjennom innholdet.
               </BodyLong>

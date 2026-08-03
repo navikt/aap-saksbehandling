@@ -44,7 +44,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
             begrunnelse={oppgave.oppgavelisteTags.forrigePåVentInfo.venteBegrunnelse}
           />
         )}
-      {mottattDialogmelding && <SvarFraBehandler dokumenttype={'Dialogmelding'} />}
+      {mottattDialogmelding && <SvarFraBehandler dokumenttype={'Melding eller tilleggsopplysninger'} />}
       {mottattLegeerklæring && <SvarFraBehandler dokumenttype={'Legeerklæring'} />}
       {mottattAnnenMelding && <SvarFraBehandler dokumenttype={'Dokument'} />}
       {oppgave.oppgavelisteTags.returInformasjon && (

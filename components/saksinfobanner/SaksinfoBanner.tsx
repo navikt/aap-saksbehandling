@@ -134,7 +134,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
                 <SvarFraBehandler
                   behandlingReferanse={behandling.referanse}
                   oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
-                  dokumenttype={'Dialogmelding'}
+                  dokumenttype={'Melding eller tilleggsopplysninger'}
                 />
               )}
               {mottattLegeerklæring && (
