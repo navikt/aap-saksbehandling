@@ -25,6 +25,7 @@ type Props = {
 
 export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
   const [arenasak, setArenasak] = useState<ArenaSakMedVedtakResponse | null>(null);
+  const [saksnummer, setSaksnummer] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +34,7 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
 
   const handleClose = () => {
     setArenasak(null);
+    setSaksnummer('');
     setIsLoading(false);
     setIsSubmitting(false);
     setError(null);
@@ -111,8 +113,9 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
               description="Oppgi saksnummer fra Arena"
               variant="primary"
               placeholder="xxxx-xxxxxx"
+              value={saksnummer}
               onSearchClick={handleSearch}
-              onChange={() => setError(null)}
+              onChange={(val) => { setSaksnummer(val); setError(null); setSubmitError(null); setArenasak(null); }}
               error={error}
             />
           </form>
