@@ -1,15 +1,15 @@
-import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
-import { Dispatch, SetStateAction, useTransition } from 'react';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { hentOppgaveClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
+import { ActionMenu, Button, HStack, Loader } from '@navikt/ds-react';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { hentTildeltStatusClient, plukkOppgaveClient, synkroniserOppgaveMedEnhetClient } from 'lib/oppgaveClientApi';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
 import { useRouter } from 'next/navigation';
-import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { Dispatch, SetStateAction, useTransition } from 'react';
 
 interface Props {
-  oppgave: Oppgave;
+  oppgave: OppgaveMedKontekst;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   setVisSynkroniserEnhetModal: Dispatch<SetStateAction<boolean>>;
@@ -32,49 +32,49 @@ export const LedigeOppgaverMeny = ({
   const [isPendingBehandle, startTransitionBehandle] = useTransition();
   const [isPendingMeny, startTransitionMeny] = useTransition();
 
-  async function plukkOgGåTilOppgave(oppgave: Oppgave) {
+  async function plukkOgGåTilOppgave(oppgave: OppgaveMedKontekst) {
     startTransitionBehandle(async () => {
-      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0 && oppgave.behandlingRef) {
-        const nyesteOppgave = await hentOppgaveClient(oppgave.behandlingRef);
-        if (isSuccess(nyesteOppgave)) {
-          if (nyesteOppgave.data.reservertAv != null) {
-            setSaksbehandlerNavn(nyesteOppgave.data.reservertAvNavn ?? nyesteOppgave.data.reservertAv ?? 'Ukjent');
-            setVisOppgaveIkkeLedigModal(true);
-            return;
-          }
-        } else {
-          setFeilmelding(`Feil ved henting av oppgave: ${nyesteOppgave.apiException?.message}`);
+      const tildeltStatusForOppgave = await hentTildeltStatusClient(oppgave.behandlingskontekst.behandlingsreferanse);
+      if (isSuccess(tildeltStatusForOppgave)) {
+        if (tildeltStatusForOppgave.data.tildeltSaksbehandlerIdent != null) {
+          setSaksbehandlerNavn(
+            tildeltStatusForOppgave.data.tildeltSaksbehandlerNavn ??
+              tildeltStatusForOppgave.data.tildeltSaksbehandlerIdent ??
+              'Ukjent'
+          );
+          setVisOppgaveIkkeLedigModal(true);
+          return;
         }
+      } else {
+        setFeilmelding(
+          `Feil ved henting av tildelt-status for oppgave: ${tildeltStatusForOppgave.apiException?.message}`
+        );
+      }
 
-        const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
-        if (isSuccess(plukketOppgave)) {
-          router.push(byggKelvinURL(plukketOppgave.data));
+      const plukketOppgave = await plukkOppgaveClient(oppgave.oppgaveMetadata.id, oppgave.oppgaveMetadata.versjon);
+      if (isSuccess(plukketOppgave)) {
+        router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
+      } else {
+        if (plukketOppgave.status == 403) {
+          setÅpenModal(true);
         } else {
-          if (plukketOppgave.status == 401) {
-            setÅpenModal(true);
-          } else {
-            setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
-          }
+          setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException?.message}`);
         }
       }
     });
   }
 
-  async function synkroniserEnhetPåOppgave(oppgave: Oppgave) {
+  async function synkroniserEnhetPåOppgave(oppgaveId: number) {
     startTransitionMeny(async () => {
-      if (oppgave.id) {
-        await synkroniserOppgaveMedEnhetClient(oppgave.id);
-        revaliderOppgaver();
-        setVisSynkroniserEnhetModal(true);
-      }
+      await synkroniserOppgaveMedEnhetClient(oppgaveId);
+      revaliderOppgaver();
+      setVisSynkroniserEnhetModal(true);
     });
   }
 
-  function åpneOppgave(oppgave: Oppgave) {
+  function åpneOppgave(oppgave: OppgaveMedKontekst) {
     startTransitionMeny(() => {
-      if (oppgave.id) {
-        router.push(byggKelvinURL(oppgave));
-      }
+      router.push(byggKelvinURL(oppgave.behandlingskontekst));
     });
   }
 
@@ -107,12 +107,12 @@ export const LedigeOppgaverMeny = ({
             >
               Åpne oppgave
             </ActionMenu.Item>
-            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave)}>
+            <ActionMenu.Item onSelect={() => synkroniserEnhetPåOppgave(oppgave.oppgaveMetadata.id)}>
               Sjekk kontortilhørighet
             </ActionMenu.Item>
             <ActionMenu.Item
               onSelect={() => {
-                oppgave.id && setOppgaveIder([oppgave.id]);
+                setOppgaveIder([oppgave.oppgaveMetadata.id]);
                 visModal();
               }}
             >

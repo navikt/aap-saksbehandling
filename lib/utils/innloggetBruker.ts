@@ -12,3 +12,7 @@ export function brukerKanSaksbehandle(bruker: BrukerInformasjon) {
 export function brukerErBeslutter(bruker: BrukerInformasjon) {
   return bruker.roller.includes(Roller.BESLUTTER);
 }
+
+export function brukerErKvalitetssikrer(bruker: BrukerInformasjon) {
+  return bruker.roller.includes(Roller.KVALITETSSIKRER);
+}

@@ -1,5 +1,7 @@
-import 'server-only';
-
+import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
+import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
+import { CACHE_1_TIME } from 'lib/services/cache';
+import { Enhet } from 'lib/types/oppgaveTypes';
 import {
   Aktivitetsplikt11_7Grunnlag,
   Aktivitetsplikt11_9Grunnlag,
@@ -19,13 +21,13 @@ import {
   BehandlingPersoninfo,
   BehandlingsHistorikk,
   BekreftVurderingerOppfølgingGrunnlag,
-  BeregningsGrunnlag,
   BeregningTidspunktGrunnlag,
+  BeregningsGrunnlag,
   BestillLegeerklæring,
   BistandsGrunnlag,
   Brev,
-  BrevdataDto,
   BrevGrunnlag,
+  BrevdataDto,
   DetaljertBehandling,
   EtableringEgenVirksomhetGrunnlagResponse,
   FastlegeResponse,
@@ -39,6 +41,7 @@ import {
   FormkravGrunnlag,
   FritakMeldepliktGrunnlag,
   FullmektigGrunnlag,
+  HarRegistrertTimerResponse,
   HelseinstitusjonGrunnlag,
   InntektsbortfallResponse,
   KabalKlageResultat,
@@ -86,6 +89,7 @@ import {
   Soningsgrunnlag,
   StegType,
   StudentGrunnlag,
+  StønadsperiodeGrunnlag,
   SvarFraAndreinstansGrunnlag,
   SykdomsGrunnlag,
   SykdomsvurderingBrevGrunnlag,
@@ -104,15 +108,13 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
 } from 'lib/types/types';
-import { apiFetch, apiFetchNoMemoization, apiFetchPdf } from 'lib/services/apiFetch';
-import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
-import { Enhet } from 'lib/types/oppgaveTypes';
-import { Behovstype } from 'lib/utils/form';
+import { formaterDatoForBackend } from 'lib/utils/date';
 import { isLocal } from 'lib/utils/environment';
-import { notFound } from 'next/navigation';
+import { Behovstype } from 'lib/utils/form';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
-import { CACHE_1_TIME } from 'lib/services/cache';
+import { notFound } from 'next/navigation';
+import 'server-only';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -208,6 +210,11 @@ export const hentSykestipendGrunnlag = async (behandlingsreferanse: string) => {
   return await apiFetch<SykestipendGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentStønadsperiodeGrunnlag = async (behandlingsreferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/stonadsperiode`;
+  return await apiFetch<StønadsperiodeGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentSykdomsGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/sykdom/sykdom`;
   return await apiFetch<SykdomsGrunnlag>(url, saksbehandlingApiScope, 'GET');
@@ -219,7 +226,7 @@ export const hentBarnetilleggGrunnlag = async (behandlingsreferanse: string) => 
 };
 
 export const hentKvalitetssikringGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/kvalitetssikring/v2`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/kvalitetssikring`;
   return await apiFetch<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
@@ -294,7 +301,7 @@ export const hentOvergangArbeidGrunnlag = async (behandlingsreferanse: string) =
 };
 
 export const hentFatteVedtakGrunnlang = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/fatte-vedtak/v2`;
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/fatte-vedtak`;
   return await apiFetch<FatteVedtakGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
@@ -766,6 +773,22 @@ export const hentMeldekort = async (saksnummer: string) => {
 export const hentMeldekortProsseseringStatus = async (saksnummer: string) => {
   return apiFetch<MeldekortProsesseringResponse>(
     `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/prosessering`,
+    saksbehandlingApiScope
+  );
+};
+
+export const hentHarRegistrerteTimerIMeldeperioden = async (
+  saksnummer: string,
+  meldepeeriodeFom: Date,
+  meldeperiodeTom: Date
+) => {
+  const params = new URLSearchParams({
+    meldeperiodeFom: formaterDatoForBackend(meldepeeriodeFom),
+    meldeperiodeTom: formaterDatoForBackend(meldeperiodeTom),
+  });
+
+  return apiFetch<HarRegistrertTimerResponse>(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/har-registrert-timer?${params}`,
     saksbehandlingApiScope
   );
 };

@@ -1,58 +1,63 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { ReactNode } from 'react';
-import { useFiltrerteOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaverHook';
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
+  NoNavAapOppgaveListeOppgaveMetadataResponseStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { act, renderHook } from '@testing-library/react';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { ReactNode } from 'react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const baseOppgave: Oppgave = {
-  id: 1,
-  personIdent: '12345678910',
-  personNavn: 'Test Testesen',
-  saksnummer: 'SAK001',
-  behandlingRef: 'ref-001',
-  journalpostId: null,
-  enhet: '0300',
-  oppfølgingsenhet: null,
-  behandlingOpprettet: '2025-01-15T10:00:00.000',
-  avklaringsbehovKode: '5003',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-  påVentTil: null,
-  påVentÅrsak: null,
-  venteBegrunnelse: null,
-  årsakerTilBehandling: [],
-  reservertAv: null,
-  reservertTidspunkt: null,
-  opprettetAv: 'Kelvin',
-  opprettetTidspunkt: '2025-01-15T10:00:00.000',
-  endretAv: 'Kelvin',
-  endretTidspunkt: '2025-01-15T10:00:00.000',
-  versjon: 1,
-  markeringer: [],
+import { useFiltrerteOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaverHook';
+
+const baseOppgave: OppgaveMedKontekst = {
+  årsakTilOpprettelse: undefined,
+  avklaringsbehovKode: '',
+  behandlingOpprettet: '2026-01-04',
+  behandlingskontekst: {
+    behandlingsreferanse: '',
+    behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.F_RSTEGANGSBEHANDLING,
+  },
+  oppgaveMetadata: {
+    id: 0,
+    opprettetTidspunkt: '',
+    status: NoNavAapOppgaveListeOppgaveMetadataResponseStatus.OPPRETTET,
+    versjon: 0,
+  },
+  personOgEnhet: {
+    enhet: '',
+    personIdent: '',
+  },
   vurderingsbehov: [],
-  enhetForKø: '0300',
-  erÅpen: true,
-  erPåVent: false,
+  oppgavelisteTags: {
+    markeringer: [],
+    skjermingInfo: {
+      erSkjermet: false,
+      harFortroligAdresse: false,
+      harStrengtFortroligAdresse: false,
+    },
+  },
 };
 
-const lagOppgaveMedBeløp = (id: number, beløp: number): Oppgave => ({
+const lagOppgaveMedBeløp = (id: number, beløp: number): OppgaveMedKontekst => ({
   ...baseOppgave,
-  id,
-  tilbakekrevingsVarsDto: {
+  oppgaveMetadata: {
+    ...baseOppgave.oppgaveMetadata,
+    id: id,
+  },
+  tilbakekrevingsVars: {
     tilbakekrevings_URL: 'http://example.com',
     tilbakekrevings_beløp: beløp,
   },
 });
 
-const lagOppgaveUtenBeløp = (id: number): Oppgave => ({
+const lagOppgaveUtenBeløp = (id: number): OppgaveMedKontekst => ({
   ...baseOppgave,
-  id,
+  oppgaveMetadata: {
+    ...baseOppgave.oppgaveMetadata,
+    id: id,
+  },
 });
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -99,7 +104,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       vi.advanceTimersByTime(300);
     });
 
-    const ids = result.current.map((o) => o.id);
+    const ids = result.current.map((o) => o.oppgaveMetadata.id);
     expect(ids).toContain(2);
     expect(ids).toContain(3);
     expect(ids).not.toContain(1);
@@ -115,7 +120,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       vi.advanceTimersByTime(300);
     });
 
-    const ids = result.current.map((o) => o.id);
+    const ids = result.current.map((o) => o.oppgaveMetadata.id);
     expect(ids).toContain(1);
     expect(ids).toContain(2);
     expect(ids).not.toContain(3);
@@ -132,7 +137,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       vi.advanceTimersByTime(300);
     });
 
-    const ids = result.current.map((o) => o.id);
+    const ids = result.current.map((o) => o.oppgaveMetadata.id);
     expect(ids).toEqual([2]);
   });
 
@@ -145,7 +150,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
       vi.advanceTimersByTime(300);
     });
 
-    const ids = result.current.map((o) => o.id);
+    const ids = result.current.map((o) => o.oppgaveMetadata.id);
     expect(ids).not.toContain(4);
   });
 

@@ -2,16 +2,17 @@
 
 import { InlineMessage, VStack } from '@navikt/ds-react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { MeldekortFormFields } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
-import { MeldePeriodeInputV2 } from 'components/postmottak/digitaliserdokument/meldekort/MeldePeriodeInputV2';
 import { useEffect } from 'react';
 import { addDays, addWeeks, eachDayOfInterval, getISOWeek, isAfter } from 'date-fns';
+import { MeldekortFormFields } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
+import { MeldePeriodeInput } from 'components/postmottak/digitaliserdokument/meldekort/MeldePeriodeInput';
 
 interface Props {
   form: UseFormReturn<MeldekortFormFields>;
   readOnly: boolean;
 }
-export const MeldeperioderV2 = ({ form, readOnly }: Props) => {
+
+export const Meldeperioder = ({ form, readOnly }: Props) => {
   const { fields, remove, insert } = useFieldArray({
     name: 'meldeperioder',
     control: form.control,
@@ -67,7 +68,7 @@ export const MeldeperioderV2 = ({ form, readOnly }: Props) => {
   return (
     <VStack gap={'space-12'}>
       {fields.map((meldeperioder, periodeIndex) => (
-        <MeldePeriodeInputV2 key={meldeperioder.id} form={form} dagIndex={periodeIndex} readOnly={readOnly} />
+        <MeldePeriodeInput key={meldeperioder.id} form={form} dagIndex={periodeIndex} readOnly={readOnly} />
       ))}
       {form.formState.errors.meldeperioder && (
         <InlineMessage status="error">{form.formState.errors.meldeperioder.root?.message}</InlineMessage>

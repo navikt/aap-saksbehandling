@@ -1,7 +1,10 @@
 import { components, paths } from './schema';
-import { components as oppgave } from '@navikt/aap-oppgave-typescript-types';
 
 // Grunnlag
+export type StønadsperiodeGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.stønadsperiode.StønadsperiodeGrunnlagResponse'];
+export type StønadsperiodeVurdering =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'];
 export type StudentGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
 export type SykestipendGrunnlag =
@@ -211,27 +214,22 @@ export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.beh
 
 export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
 
-export type NyttKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto'];
-
-export type Gjenopptak = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.GjenopptakDto'];
+export type RelevantKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto'];
 
 export type Tilleggsopplysning =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto'];
 
 export type Søknadsdato =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['søknadsdato'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto']['søknadsdato'];
 
 export type OverstyrMuligRettFra =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.NyttKravDto']['overstyrMuligRettFra'];
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto']['overstyrMuligRettFra'];
 
 export type KravVurderingLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KravVurderingLøsningDto'];
 
-export type NyttKravLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.NyttKravLøsningDto'];
-
-export type GjenopptakKravLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.GjenopptakKravLøsningDto'];
+export type RelevantKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.RelevantKravLøsningDto'];
 
 export type KlageKravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KlageKravLøsningDto'];
@@ -426,10 +424,6 @@ export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlings
 export type AvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
 
-export type MarkeringDto = components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
-
-export type Markeringstype = components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto']['markeringType'];
-
 export type BehandlingsFlytAvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
@@ -490,6 +484,9 @@ export type VedtakslengdeVurderingDto =
 
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
+
+export type StansOpphør =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørDto'];
 
 export type ForeslåVedtakVedtakslengdeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
@@ -590,6 +587,9 @@ export type MeldekortV0 =
     meldingType: typeof MeldekortV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export type HarRegistrertTimerResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.HarRegistrertTimerResponse'];
+
 export const KlageV0 = 'KlageV0';
 export type KlageV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KlageV0}`] & {
@@ -674,10 +674,6 @@ export type ÅrsakTilOpprettelse =
 export type VurderingsbehovOgÅrsak =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.VurderingsbehovOgÅrsak'];
 
-// oppgave
-export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
-
-export type ReturStatus = NonNullable<Oppgave['returInformasjon']>['status'];
 
 export type Behandlingsstatus = DetaljertBehandling['status'];
 
@@ -785,6 +781,7 @@ export enum Roller {
 export interface UmamiKelvinEvent {
   name: string;
   hendelse?: string;
+  steg?: string;
   hendelser_serie: string | null;
   hendelser_serie_id: string | null;
   tidsstempel: number | null;
@@ -835,4 +832,11 @@ export type UmamiTag =
   | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_BEGRUNNELSE'
   | 'LOVVALG_MEDLEMSKAP_INPUT_MEDLEMSKAP_I_FOLKETRYGDEN'
   | 'BESLUTTER_VARIGHET_HENDELSER'
-  | 'KVALITETSSIKRER_VARIGHET_HENDELSER';
+  | 'KVALITETSSIKRER_VARIGHET_HENDELSER'
+  | 'EKSTERN_LENKE_KLIKK'
+  | 'GÅ_TIL_BEHANDLING'
+  | 'GÅ_TIL_BEHANDLING_OG_RESERVER'
+  | 'GÅ_TIL_SAKSOVERSIKT'
+  | 'RESERVER_OPPGAVE'
+  | 'FRIGI_OPPGAVE'
+  | 'TILDEL_OPPGAVE';

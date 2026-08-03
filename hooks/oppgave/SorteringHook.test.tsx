@@ -1,9 +1,14 @@
-import { describe, test, expect, beforeEach, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useSortertListe } from 'hooks/oppgave/SorteringHook';
-import { Oppgave } from 'lib/types/types';
+import { act, renderHook } from '@testing-library/react';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
+import { useSortertListe } from 'hooks/oppgave/SorteringHook';
 import { ReactNode } from 'react';
+import { afterEach, beforeEach, describe, expect, test } from 'vitest';
+
+interface TestOppgave {
+  behandlingOpprettet: string;
+  id: number;
+  reservertAvNavn: string;
+}
 
 describe('SorteringHook', () => {
   const mockBruker = { navn: 'Test Bruker', NAVident: 'Z123456', roller: [] };
@@ -21,7 +26,7 @@ describe('SorteringHook', () => {
     <InnloggetBrukerContextProvider bruker={mockBruker}>{children}</InnloggetBrukerContextProvider>
   );
 
-  const oppgaver: Pick<Oppgave, 'behandlingOpprettet' | 'id' | 'reservertAvNavn'>[] = [
+  const oppgaver: Pick<TestOppgave, 'behandlingOpprettet' | 'id' | 'reservertAvNavn'>[] = [
     {
       behandlingOpprettet: '2025-10-27T09:44:54.793',
       id: 3,

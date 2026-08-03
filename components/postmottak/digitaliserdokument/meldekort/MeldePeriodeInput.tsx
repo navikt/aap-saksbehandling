@@ -1,19 +1,18 @@
 import { Table, VStack } from '@navikt/ds-react';
 import { format } from 'date-fns';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import styles from './MeldePeriodeInput.module.css';
-import {
-  Meldedag,
-  MeldekortFormFields,
-} from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
+import { UseFormReturn, useFieldArray } from 'react-hook-form';
+
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { MeldekortFormFields } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
+
+import styles from './MeldePeriodeInput.module.css';
 
 interface Props {
   form: UseFormReturn<MeldekortFormFields>;
   dagIndex: number;
   readOnly: boolean;
 }
-export const MeldePeriodeInputV2 = ({ form, dagIndex, readOnly }: Props) => {
+export const MeldePeriodeInput = ({ form, dagIndex, readOnly }: Props) => {
   const { fields } = useFieldArray({
     name: `meldeperioder.${dagIndex}.dager`,
     control: form.control,
@@ -25,8 +24,8 @@ export const MeldePeriodeInputV2 = ({ form, dagIndex, readOnly }: Props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
-            {fields?.map((meldedag: Meldedag, j) => (
-              <Table.HeaderCell key={j}>{format(meldedag.dato, 'dd.MM.')}</Table.HeaderCell>
+            {fields?.map((meldedag, index) => (
+              <Table.HeaderCell key={index}>{format(meldedag.dato, 'dd.MM.')}</Table.HeaderCell>
             ))}
           </Table.Row>
         </Table.Header>

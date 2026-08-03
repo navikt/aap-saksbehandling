@@ -1,30 +1,42 @@
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
+  NoNavAapOppgaveListeOppgaveMetadataResponseStatus,
 } from '@navikt/aap-oppgave-typescript-types';
-import { describe, expect, it, vi } from 'vitest';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
-import { screen } from '@testing-library/react';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { describe, expect, it, vi } from 'vitest';
+
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 
-const oppgave: Oppgave = {
-  behandlingRef: 'sdgasd',
-  vurderingsbehov: [],
+const oppgave: OppgaveMedKontekst = {
+  årsakTilOpprettelse: undefined,
   avklaringsbehovKode: '',
   behandlingOpprettet: '',
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-  enhet: '',
-  opprettetAv: '',
-  opprettetTidspunkt: '',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-  versjon: 0,
-  årsakerTilBehandling: [],
-  markeringer: [],
-  enhetForKø: '4491',
-  erPåVent: false,
-  erÅpen: true,
+  behandlingskontekst: {
+    behandlingsreferanse: '',
+    behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.F_RSTEGANGSBEHANDLING,
+  },
+  oppgaveMetadata: {
+    id: 0,
+    opprettetTidspunkt: '',
+    status: NoNavAapOppgaveListeOppgaveMetadataResponseStatus.OPPRETTET,
+    versjon: 0,
+  },
+  personOgEnhet: {
+    enhet: '',
+    personIdent: '',
+  },
+  vurderingsbehov: [],
+  oppgavelisteTags: {
+    markeringer: [],
+    skjermingInfo: {
+      erSkjermet: false,
+      harFortroligAdresse: false,
+      harStrengtFortroligAdresse: false,
+    },
+  },
 };
 
 const setSync = () => undefined;

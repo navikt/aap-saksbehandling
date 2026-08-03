@@ -1,38 +1,25 @@
 'use client';
 
-import { Oppgave, ReturStatus } from 'lib/types/types';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
-import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import styles from './Returboks.module.css';
-import { exhaustiveCheck } from 'lib/utils/typescript';
 import {
-  NoNavAapOppgaveReturInformasjonRsaker,
-  NoNavAapOppgaveReturInformasjonStatus,
+  NoNavAapOppgaveReturInformasjonDtoRsaker,
+  NoNavAapOppgaveReturInformasjonDtoStatus as ReturStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { OppgaveMedKontekst, ReturInformasjon } from 'lib/types/oppgaveTypes';
 import { mapGrunnTilString } from 'lib/utils/oversettelser';
 import { storForbokstav } from 'lib/utils/string';
+import { useRef, useState } from 'react';
+
+import styles from './Returboks.module.css';
+import {returStatusTilTekst} from "components/oppgaveliste/returboks/ReturInfoUtils";
 
 interface Props {
-  oppgave: Oppgave;
+  returInformasjon: ReturInformasjon;
+  forrigeKvalitetssikrerInfo: OppgaveMedKontekst['oppgavelisteTags']['forrigeKvalitetssikrerInfo'];
 }
 
-export function returStatusTilTekst(status: ReturStatus): string {
-  switch (status) {
-    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_BESLUTTER:
-      return 'Retur fra beslutter';
-    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_KVALITETSSIKRER:
-      return 'Retur fra kvalitetssikrer';
-    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_SAKSBEHANDLER:
-      return 'Retur fra saksbehandler';
-    case NoNavAapOppgaveReturInformasjonStatus.RETUR_FRA_VEILEDER:
-      return 'Retur fra veileder';
-    default:
-      exhaustiveCheck(status);
-  }
-}
-
-function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonRsaker[]): string {
+function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonDtoRsaker[]): string {
   if (årsaker.length === 0) {
     return 'Ingen årsaker.';
   }
@@ -51,20 +38,16 @@ function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonRsaker[]): s
   );
 }
 
-export const Returboks = ({
-  oppgave: { returInformasjon: maybeReturInformasjon, forrigeKvalitetssikrerInfo: maybeForrigeKvalitetssikrerInfo },
-}: Props) => {
-  const returInformasjon = maybeReturInformasjon!!;
+export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Props) => {
   const buttonRef = useRef(null);
   const [vis, setVis] = useState(false);
 
   const årsakTekst = returInformasjon.årsaker.length <= 1 ? 'Årsak' : 'Årsaker';
   const returFraToTrinn =
-    maybeReturInformasjon?.status == 'RETUR_FRA_KVALITETSSIKRER' ||
-    maybeReturInformasjon?.status == 'RETUR_FRA_BESLUTTER';
+    returInformasjon.status == ReturStatus.RETUR_FRA_KVALITETSSIKRER || returInformasjon.status == ReturStatus.RETUR_FRA_BESLUTTER;
   const skalViseForrigeKvalitetssikrer =
-    maybeReturInformasjon?.status == 'RETUR_FRA_VEILEDER' &&
-    maybeForrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
+    returInformasjon.status == ReturStatus.RETUR_FRA_VEILEDER &&
+    forrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
 
   function utledPopoverInnhold() {
     if (returFraToTrinn) {
@@ -89,7 +72,7 @@ export const Returboks = ({
           <VStack gap={'space-0'}>
             <Detail textColor="subtle">Begrunnelse</Detail>
 
-            <div>{returInformasjon?.begrunnelse}</div>
+            <div>{returInformasjon.begrunnelse}</div>
           </VStack>
         </VStack>
       );
@@ -111,8 +94,8 @@ export const Returboks = ({
             <Detail textColor="subtle">Sist kvalitetssikret av</Detail>
 
             <div>
-              {maybeForrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerNavn ??
-                maybeForrigeKvalitetssikrerInfo.forrigeKvalitetssikrerIdent}
+              {forrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerNavn ??
+                forrigeKvalitetssikrerInfo.forrigeKvalitetssikrerIdent}
             </div>
           </VStack>
         </VStack>

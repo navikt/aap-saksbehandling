@@ -1,27 +1,28 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { SubmitEvent, useEffect, useMemo } from 'react';
-import { Behovstype } from 'lib/utils/form';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { DelperiodeData, ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { Dato } from 'lib/types/Dato';
+import { DelperiodeData, ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
+import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { SubmitEvent, useEffect, useMemo } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
+
+import { Alert } from 'components/alert/Alert';
 import { FastsettManuellInntektTabell } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
-import { Dato } from 'lib/types/Dato';
-import { sorterEtterNyesteDato, formaterDatoForFrontend } from 'lib/utils/date';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   behandlingsversjon: number;
@@ -175,6 +176,16 @@ export const FastsettManuellInntekt = ({
   });
 
   const tabellårValues = useWatch({ control: form.control, name: 'tabellår' });
+  const overstyrteÅrFraRegister = (grunnlag.manuelleVurderinger?.årsVurderinger ?? [])
+    .filter(
+      (årsVurdering) =>
+        !årsVurdering.periode &&
+        årsVurdering.beløp !== null &&
+        årsVurdering.beløp !== undefined &&
+        grunnlag.registrerteInntekterSisteRelevanteAr.some((registrert) => registrert.år === årsVurdering.år)
+    )
+    .map((årsVurdering) => årsVurdering.år);
+
   const harAvvikMotFerdigLignet = splittÅr.some((år) => {
     const ferdigLignetPgiForÅr = tabellårValues?.find((rad) => rad.år === år && rad.erKunVisning)?.ferdigLignetPGI;
     if (ferdigLignetPgiForÅr === undefined || ferdigLignetPgiForÅr === null) {
@@ -250,6 +261,12 @@ export const FastsettManuellInntekt = ({
           Du må oppgi pensjonsgivende inntekt for år hvor inntekten ikke er ferdig lignet.
         </Alert>
       )}
+      {overstyrteÅrFraRegister.length > 0 && (
+        <Alert variant={'info'}>
+          Ferdig lignet PGI er oppdatert etter at beregnet PGI ble lagt inn. Ferdig lignet PGI blir benyttet i
+          grunnlagsberegningen.
+        </Alert>
+      )}
       {splittÅr.map((år) => (
         <Alert variant={'warning'} key={`ufore-${år}`}>
           <BodyShort spacing>
@@ -283,7 +300,12 @@ export const FastsettManuellInntekt = ({
             </Link>
           </BodyLong>
           <FormField form={form} formField={formFields.begrunnelse} />
-          <FastsettManuellInntektTabell form={form} tabellår={tabellår} readOnly={formReadOnly} />
+          <FastsettManuellInntektTabell
+            form={form}
+            tabellår={tabellår}
+            readOnly={formReadOnly}
+            overstyrteÅrFraRegister={overstyrteÅrFraRegister}
+          />
           {harAvvikMotFerdigLignet && (
             <Alert variant={'warning'}>
               Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at

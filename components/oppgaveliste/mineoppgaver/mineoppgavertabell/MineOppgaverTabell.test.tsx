@@ -1,44 +1,42 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { screen } from '@testing-library/react';
-
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
+  NoNavAapOppgaveListeOppgaveMetadataResponseStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { screen } from '@testing-library/react';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 
-const oppgaver: Oppgave[] = [
+const oppgaver: OppgaveMedKontekst[] = [
   {
-    id: 29821,
-    personIdent: '23448824012',
-    personNavn: 'RIKTIG  SERVITRISE',
-    saksnummer: '4N8oWCW',
-    behandlingRef: '452b8eaf-93b9-45a7-baad-1cda30c43127',
-    journalpostId: null,
-    enhet: '0417',
-    oppfølgingsenhet: null,
-    behandlingOpprettet: '2025-04-24T12:39:29.235',
-    avklaringsbehovKode: '5003',
-    status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-    behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-    påVentTil: '2025-05-22',
-    påVentÅrsak: 'VENTER_PÅ_OPPLYSNINGER',
-    venteBegrunnelse: 'Hello Pello ',
-    årsakerTilBehandling: ['MOTTATT_SØKNAD'],
-    reservertAv: 'Z990742',
-    reservertTidspunkt: '2025-05-20T13:56:50.224',
-    opprettetAv: 'Kelvin',
-    opprettetTidspunkt: '2025-04-24T12:39:32.737',
-    endretAv: 'Kelvin',
-    endretTidspunkt: '2025-05-21T09:28:56.725',
-    versjon: 8,
-    markeringer: [],
+    årsakTilOpprettelse: undefined,
+    avklaringsbehovKode: '',
+    behandlingOpprettet: '2026-01-04',
+    behandlingskontekst: {
+      behandlingsreferanse: '',
+      behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.F_RSTEGANGSBEHANDLING,
+    },
+    oppgaveMetadata: {
+      id: 0,
+      opprettetTidspunkt: '2026-01-04',
+      status: NoNavAapOppgaveListeOppgaveMetadataResponseStatus.OPPRETTET,
+      versjon: 0,
+    },
+    personOgEnhet: {
+      enhet: '',
+      personIdent: '',
+    },
     vurderingsbehov: [],
-    enhetForKø: '0300',
-    erÅpen: true,
-    erPåVent: false,
+    oppgavelisteTags: {
+      markeringer: [],
+      skjermingInfo: {
+        erSkjermet: false,
+        harFortroligAdresse: false,
+        harStrengtFortroligAdresse: false,
+      },
+    },
   },
 ];
 

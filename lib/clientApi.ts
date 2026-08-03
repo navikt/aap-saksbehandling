@@ -11,6 +11,7 @@ import {
   FastlegeResponse,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  HarRegistrertTimerResponse,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
   KvalitetssikringTilgang,
@@ -30,18 +31,17 @@ import {
   RettighetsinfoDto,
   SakPersoninfo,
   SaksInfo,
-  Markeringstype,
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
+import { formaterDatoForBackend } from 'lib/utils/date';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
-
 const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
@@ -256,7 +256,7 @@ export enum MarkeringHendelseType {
 
 // TODO: hent fra aap-oppgave
 export interface OpprettMarkeringHendelse {
-  markeringType: Markeringstype;
+  markeringType: MarkeringType;
   begrunnelse?: string;
   hendelseType: MarkeringHendelseType;
 }
@@ -290,6 +290,22 @@ export function clientHentAktivitetspliktMedTrekk(saksnummer: string) {
 
 export function clientHentAlleMeldekort(saksnummer: string) {
   return clientFetch<MeldePerioderMedMEldekortResponse>(`${BASE_URL}/api/meldekort/${saksnummer}`, 'GET');
+}
+
+export function clientHentHarRegistrertTimerIMeldeperioden(
+  saksnummer: string,
+  meldeperiodeFom: Date,
+  meldeperiodeTom: Date
+) {
+  const params = new URLSearchParams({
+    meldeperiodeFom: formaterDatoForBackend(meldeperiodeFom),
+    meldeperiodeTom: formaterDatoForBackend(meldeperiodeTom),
+  });
+
+  return clientFetch<HarRegistrertTimerResponse>(
+    `${BASE_URL}/api/meldekort/${saksnummer}/har-registrert-timer?${params}`,
+    'GET'
+  );
 }
 
 export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortRequest: OppdaterMeldekortRequest) {

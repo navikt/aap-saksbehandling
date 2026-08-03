@@ -1,5 +1,5 @@
-import 'server-only';
-
+import { apiFetch } from 'lib/services/apiFetch';
+import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
 import {
   AvreserverOppgaveDto,
   Enhet,
@@ -7,25 +7,25 @@ import {
   Kø,
   Markering,
   MineOppgaverQueryParams,
-  Oppgave,
+  OppgaveInfoTilSøk,
+  OppgaveVisningsinformasjon,
   OppgavelisteRequest,
   OppgavelisteResponse,
+  OppgaverPåSak,
+  PlukkOppgaveResponse,
+  SakOgAvklaringsbehov,
   SaksbehandlerSøkRequest,
   SaksbehandlerSøkRespons,
+  SaksnummerResponse,
   SøkResponse,
   TildelOppgaveRequest,
   TildelOppgaveResponse,
   TildeltStatus,
 } from 'lib/types/oppgaveTypes';
-import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
-import { apiFetch } from 'lib/services/apiFetch';
-import { isLocal } from 'lib/utils/environment';
 import { FetchResponse } from 'lib/utils/api';
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
-import { CACHE_1_TIME, genererTagMedNavIdent } from 'lib/services/cache';
+import { isLocal } from 'lib/utils/environment';
+import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
+import 'server-only';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
@@ -44,34 +44,44 @@ export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
 };
 
 const lokalFakeOppgave = isLocal();
-export async function hentOppgave(behandlingReferanse: string) {
+export async function hentSaksnummerGittBehandling(behandlingReferanse: string) {
   if (lokalFakeOppgave) {
-    const mockResponse: FetchResponse<Oppgave> = {
+    const mockResponse: FetchResponse<SaksnummerResponse> = {
       type: 'SUCCESS',
       data: {
-        behandlingRef: 'dsfad',
-        avklaringsbehovKode: '5008',
-        behandlingOpprettet: '2025-08-20',
-        behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.REVURDERING,
-        enhet: 'ASKER',
-        markeringer: [],
-        opprettetAv: 'Kelvin',
-        opprettetTidspunkt: '2025-08-20',
-        status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-        versjon: 0,
-        vurderingsbehov: [],
-        årsakerTilBehandling: [],
-        enhetForKø: '4491',
-        erPåVent: false,
-        erÅpen: true,
+        saksnummer: '123456',
       },
     };
 
     return mockResponse;
   }
 
-  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave`;
-  return await apiFetch<Oppgave>(url, oppgaveApiScope, 'GET');
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-saksnummer`;
+  return await apiFetch<SaksnummerResponse>(url, oppgaveApiScope, 'GET');
+}
+
+export async function hentOppgaveVisningsinfo(behandlingReferanse: string) {
+  if (lokalFakeOppgave) {
+    const mockResponse: FetchResponse<OppgaveVisningsinformasjon> = {
+      type: 'SUCCESS',
+      data: {
+        id: 123,
+        markeringer: [],
+        versjon: 0,
+        harUlesteDokumenter: false,
+        skjermingInfo: {
+          erSkjermet: false,
+          harFortroligAdresse: false,
+          harStrengtFortroligAdresse: false,
+        },
+      },
+    };
+
+    return mockResponse;
+  }
+
+  const url = `${oppgaveApiBaseURL}/${behandlingReferanse}/hent-oppgave-visningsinformasjon`;
+  return await apiFetch<OppgaveVisningsinformasjon>(url, oppgaveApiScope, 'GET');
 }
 
 export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => {
@@ -80,6 +90,11 @@ export const hentMineOppgaver = async (queryParams: MineOppgaverQueryParams) => 
     : '';
   const url = `${oppgaveApiBaseURL}/mine-oppgaver${query ? `?${query}` : ''}`;
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'GET');
+};
+
+export const hentMineSisteOppgaver = async () => {
+  const url = `${oppgaveApiBaseURL}/mine-siste-oppgaver`;
+  return await apiFetch<SakOgAvklaringsbehov[]>(url, oppgaveApiScope, 'GET');
 };
 
 export async function hentEnheter() {
@@ -121,7 +136,7 @@ export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
 }
 export async function plukkOppgave(oppgaveId: number, versjon: number) {
   const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
-  return await apiFetch<Oppgave>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
+  return await apiFetch<PlukkOppgaveResponse>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
 }
 
 export async function mottattDokumenterLest(behandlingRef: string) {
@@ -129,19 +144,21 @@ export async function mottattDokumenterLest(behandlingRef: string) {
   return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
 }
 
+export async function fjernHelseopplysningIkon(behandlingRef: string) {
+  const url = `${oppgaveApiBaseURL}/fjern-helseopplysning-ikon`;
+  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
+}
+
 const lokalFakeOppgaveSøk = isLocal();
 export async function oppgaveTekstSøk(søketekst: string) {
   if (lokalFakeOppgaveSøk) {
-    const oppgaver: Oppgave[] = [
+    const oppgaver: OppgaveInfoTilSøk[] = [
       {
-        avklaringsbehovKode: '',
-        behandlingOpprettet: '',
         // @ts-expect-error Fiks type i backend
         behandlingstype: 'DOKUMENT_H\u00C5NDTERING',
-        enhet: '',
+        enhetForKø: '',
         opprettetAv: '',
         opprettetTidspunkt: '',
-        // @ts-expect-error Fiks type i backend
         status: 'OPPRETTET',
         versjon: 0,
       },
@@ -161,6 +178,11 @@ export async function oppgaveTekstSøk(søketekst: string) {
   }
   const url = `${oppgaveApiBaseURL}/sok`;
   return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
+}
+
+export async function hentOppgaverPåSak(saksnummer: string) {
+  const url = `${oppgaveApiBaseURL}/${saksnummer}/hent-oppgaver-paa-sak`;
+  return await apiFetch<OppgaverPåSak>(url, oppgaveApiScope, 'GET');
 }
 
 export const hentGjeldendeMarkeringerForBehandling = async (referanse: string) => {

@@ -8,14 +8,14 @@ const krav: Avslag11_27Krav[] = [
   {
     referanse: 'ref-1',
     søknadsdokument: 'JP-001',
-    type: 'NYTT_KRAV_AAP',
+    type: 'RELEVANT_KRAV',
     søknadsdato: '2026-01-15',
     muligRettighetFra: '2026-02-01',
   },
   {
     referanse: 'ref-2',
     søknadsdokument: 'JP-002',
-    type: 'GJENOPPTAK',
+    type: 'RELEVANT_KRAV',
     søknadsdato: '2026-03-01',
     muligRettighetFra: '2026-03-15',
   },
@@ -54,8 +54,8 @@ describe('Avslag11_27KravTabell', () => {
       />
     );
 
-    expect(screen.getByText('Nytt krav om AAP')).toBeVisible();
-    expect(screen.getByText('Gjenopptak')).toBeVisible();
+    const kravTypeRader = screen.getAllByText('Nytt krav om AAP');
+    expect(kravTypeRader).toHaveLength(2);
   });
 
   it('checkbox er checked for selectedReferanser', () => {

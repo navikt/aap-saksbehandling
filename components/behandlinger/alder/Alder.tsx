@@ -104,3 +104,7 @@ function mapAvslagÅrsakTilTekst(årsak: AvslagÅrsak): string {
 export function kalkulerAlder(fødselsdato: Date): string {
   return `${differenceInYears(new Date(), fødselsdato)} år`;
 }
+
+export function kalkulerAlderFraTidspunkt(tidspunkt: Date, fødselsdato: Date): string {
+  return `${differenceInYears(tidspunkt, fødselsdato)} år`;
+}

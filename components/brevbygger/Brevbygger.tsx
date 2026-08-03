@@ -195,11 +195,14 @@ export const Brevbygger = ({
           </HGrid>
         </VStack>
 
-        <HStack gap="space-8" justify="space-between" marginBlock="space-24">
+        <Box marginBlock={'space-8 space-0'}>
           <LøsBehovOgGåTilNesteStegStatusAlert
             status={løsBehovStatus}
             løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
           />
+        </Box>
+
+        <HStack gap="space-8" justify="space-between" marginBlock="space-24">
           <Distribusjonssjekk
             readOnly={readOnly}
             referanse={referanse}
@@ -241,6 +244,8 @@ export const Brevbygger = ({
         onClose={() => settVisFerdigstillBrevDialog(false)}
         sendBrev={sendBrev}
         senderBrev={isLoading}
+        løsBehovStatus={løsBehovStatus}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       />
     </>
   );

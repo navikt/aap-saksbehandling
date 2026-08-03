@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--ax-border-neutral-subtle);
-  border-radius: var(--ax-radius-8);
+  border-radius: var(--ax-radius-12);
   background-color: var(--ax-bg-default);
 }
 
 .ingenreserverteoppgaver {
-  padding: var(--ax-space-8);
+  padding: var(--ax-space-12);
 }
