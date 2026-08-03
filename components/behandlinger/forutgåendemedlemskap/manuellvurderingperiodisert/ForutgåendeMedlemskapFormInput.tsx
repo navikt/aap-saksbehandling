@@ -1,15 +1,15 @@
 import { HStack, Radio, VStack } from '@navikt/ds-react';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { UseFormReturn } from 'react-hook-form';
-import React from 'react';
-import { validerDato } from 'lib/validation/dateValidation';
-import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
-import { JaEllerNei } from 'lib/utils/form';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { BeregningTidspunktGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
+import { validerDato } from 'lib/validation/dateValidation';
+import { UseFormReturn } from 'react-hook-form';
+
+import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 type Props = {

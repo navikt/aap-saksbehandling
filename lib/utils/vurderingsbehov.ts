@@ -114,6 +114,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-18 AAP under behandling av krav om uføretrygd';
     case 'OPPHOLDSKRAV':
       return '§ 11-3 Oppholdskrav';
+    case 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET':
+      return 'Avvist søknad om AAP under opphold i utlandet';
     case 'DØDSFALL_BARN':
       return 'Dødsfall barn';
     case 'DØDSFALL_BRUKER':
@@ -146,6 +148,12 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Bruker tilbake i arbeid';
     case 'FERIE_I_SYKEPENGEPERIODE':
       return 'Ferie i sykepengeperiode';
+    case 'OVERGANG_UFORE_AUTOMATISK_STANS':
+      return 'Automatisk stans overgang uføre';
+    case 'VURDER_KRAV':
+      return 'Vurder krav';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering fra Arena';
     default:
       return vurderingsbehov;
   }

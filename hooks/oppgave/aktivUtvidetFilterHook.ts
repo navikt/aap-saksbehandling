@@ -1,7 +1,8 @@
 'use client';
 
-import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { dagerTilMillisekunder } from 'lib/utils/time';
+
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 
 interface LagretAktivUtvidetFilterData {
@@ -25,7 +26,7 @@ export function useLagreAktivUtvidetFilter(): {
         feltData: filterData,
         timestamp: new Date().getTime(),
         user: bruker.NAVident,
-      } as LagretAktivUtvidetFilterData)
+      } satisfies LagretAktivUtvidetFilterData)
     );
   };
 

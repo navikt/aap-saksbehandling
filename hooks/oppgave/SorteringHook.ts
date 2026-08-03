@@ -1,6 +1,6 @@
 import { SortState } from '@navikt/ds-react';
-import { useEffect, useState } from 'react';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useEffect, useState } from 'react';
 
 export interface ScopedSortState<T> extends SortState {
   orderBy: Extract<keyof T, string>;
@@ -75,7 +75,7 @@ export function useSortertListe<T>(
 
   useEffect(() => {
     lagreSortering(bruker?.NAVident, sort, scope);
-  }, [sort, bruker?.NAVident]);
+  }, [sort, bruker?.NAVident, scope]);
 
   function settSorteringskriterier(sortKey: ScopedSortState<T>['orderBy']) {
     const sortering =
