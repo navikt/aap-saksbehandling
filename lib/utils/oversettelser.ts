@@ -7,6 +7,7 @@ import {
   VilkårUtfall,
   ÅrsakTilOpprettelse,
 } from 'lib/types/types';
+import { exhaustiveCheck } from 'lib/utils/typescript';
 
 const behovskodeMap = {
   // Behandlingsflyt
