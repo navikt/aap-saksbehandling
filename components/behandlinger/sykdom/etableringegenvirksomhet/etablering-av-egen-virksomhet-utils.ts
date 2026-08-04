@@ -1,16 +1,17 @@
+import { subDays } from 'date-fns';
+import { Dato } from 'lib/types/Dato';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
   EtableringEgenVirksomhetLøsningDto,
   EtableringEgenVirksomhetVurderingResponse,
 } from 'lib/types/types';
+import { JaEllerNei, getJaNeiEllerUndefined, getTrueFalseEllerUndefined } from 'lib/utils/form';
+import { hentPerioderSomTrengerVurdering } from 'lib/utils/periodisering';
+
 import {
   EtableringAvEgenVirksomhetForm,
   EtableringAvEgenVirksomhetVurderingForm,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
-import { hentPerioderSomTrengerVurdering } from 'lib/utils/periodisering';
-import { getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { Dato } from 'lib/types/Dato';
-import { subDays } from 'date-fns';
 
 export function getDefaultValuesFromGrunnlag(
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse
@@ -51,7 +52,7 @@ export function mapEtableringEgenVirksomhetVurderingTilDto(
   tilDato: string | undefined
 ): EtableringEgenVirksomhetLøsningDto {
   return {
-    fom: new Dato(vurdering.fraDato!).formaterForBackend(),
+    fom: new Dato(vurdering.fraDato).formaterForBackend(),
     tom: tilDato ? new Dato(subDays(new Dato(tilDato).dato, 1)).formaterForBackend() : null,
     begrunnelse: vurdering.begrunnelse,
     virksomhetErNy: vurdering.erVirksomhetenNy === JaEllerNei.Ja,

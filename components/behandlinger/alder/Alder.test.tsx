@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Alder, kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { AlderGrunnlag } from 'lib/types/types';
+import { describe, expect, it } from 'vitest';
+
+import { Alder, kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 const grunnlagOppfylt: AlderGrunnlag = {
   fødselsdato: '2000-01-02',
@@ -62,7 +63,7 @@ describe('alder', () => {
 
   it('Skal vise alder', () => {
     render(<Alder grunnlag={grunnlagOppfylt} />);
-    const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato!!));
+    const alderString = kalkulerAlder(new Date(grunnlagOppfylt.fødselsdato!));
     const alder = screen.getByText(`(Brukeren er ${alderString})`);
 
     expect(alder).toBeVisible();

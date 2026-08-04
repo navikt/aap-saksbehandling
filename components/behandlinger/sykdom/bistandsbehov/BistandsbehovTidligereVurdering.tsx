@@ -1,10 +1,11 @@
 'use client';
 
 import { VStack } from '@navikt/ds-react';
-import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { formaterDatoForFrontend } from 'lib/utils/date';
 import { BistandVurderingResponse } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { getJaNeiEllerUndefined } from 'lib/utils/form';
+
+import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 
 interface Props {
   vurdering: BistandVurderingResponse;
@@ -30,7 +31,7 @@ export const BistandsbehovTidligereVurdering = ({ vurdering }: Props) => {
         />
       )}
       {vurdering.overgangBegrunnelse && (
-        <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.overgangBegrunnelse!} />
+        <SpørsmålOgSvar spørsmål="Vilkårsvurdering" svar={vurdering.overgangBegrunnelse} />
       )}
       {vurdering.skalVurdereAapIOvergangTilArbeid === true ||
         (vurdering.skalVurdereAapIOvergangTilArbeid === false && (

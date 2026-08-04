@@ -194,7 +194,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       oppdaterKø(lagretKø);
     } else {
       const førsteKø = køer.data[0];
-      oppdaterKø({ id: førsteKø.id!, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
+      oppdaterKø({ id: førsteKø.id, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
     }
   }, [køer]);
 
