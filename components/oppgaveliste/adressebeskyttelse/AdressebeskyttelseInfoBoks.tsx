@@ -1,8 +1,8 @@
 import { ShieldLockIcon } from '@navikt/aksel-icons';
 import { BodyShort, Tag, VStack } from '@navikt/ds-react';
 
-import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 import styles from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks.module.css';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 interface Props {
   adressebeskyttelseGrad: string;

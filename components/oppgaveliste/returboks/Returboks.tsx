@@ -52,7 +52,13 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
     if (returFraToTrinn) {
       return (
         <VStack gap={'space-8'} className={styles.boks}>
-          <Tag data-color="meta-purple" icon={<ArrowsSquarepathIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+          <Tag
+            data-color="meta-purple"
+            icon={<ArrowsSquarepathIcon />}
+            variant={'moderate'}
+            size={'medium'}
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               {returStatusTilTekst(returInformasjon.status)}
             </BodyShort>
@@ -72,7 +78,13 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
     } else if (skalViseForrigeKvalitetssikrer) {
       return (
         <VStack gap={'space-8'} className={styles.boks}>
-          <Tag data-color="meta-purple" icon={<ArrowsSquarepathIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+          <Tag
+            data-color="meta-purple"
+            icon={<ArrowsSquarepathIcon />}
+            variant={'moderate'}
+            size={'medium'}
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               {returStatusTilTekst(returInformasjon.status)}
             </BodyShort>
@@ -90,7 +102,13 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
     } else {
       return (
         <VStack className={styles.litenBoks}>
-          <Tag data-color="meta-purple" icon={<ArrowsSquarepathIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+          <Tag
+            data-color="meta-purple"
+            icon={<ArrowsSquarepathIcon />}
+            variant={'moderate'}
+            size={'medium'}
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               {returStatusTilTekst(returInformasjon.status)}
             </BodyShort>

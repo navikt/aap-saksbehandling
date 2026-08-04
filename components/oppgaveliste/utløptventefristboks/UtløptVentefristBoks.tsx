@@ -1,10 +1,12 @@
-import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import styles from './UtløptVentefristBoks.module.css';
+import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { Dato } from 'lib/types/Dato';
-import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { SettPåVentÅrsaker } from 'lib/types/types';
+import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
+
 import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
+
+import styles from './UtløptVentefristBoks.module.css';
 
 interface Props {
   frist: string;
@@ -22,7 +24,13 @@ export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => 
       tagContent={fristDate}
       popoverContent={
         <VStack gap={'space-8'} className={styles.boks}>
-          <Tag data-color="warning" icon={<HourglassBottomFilledIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+          <Tag
+            data-color="warning"
+            icon={<HourglassBottomFilledIcon />}
+            variant={'moderate'}
+            size={'medium'}
+            className={styles.tag}
+          >
             <BodyShort size={'small'} weight={'semibold'}>
               {`Frist utløpt ${fristDate}`}
             </BodyShort>

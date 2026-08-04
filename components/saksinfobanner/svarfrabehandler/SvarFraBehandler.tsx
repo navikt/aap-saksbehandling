@@ -1,12 +1,12 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
+import { BodyLong, BodyShort, Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
 
-import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
-import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
@@ -25,7 +25,13 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
       popoverContent={
         <Box maxWidth={'400px'} minWidth={'400px'}>
           <VStack gap={'space-0'}>
-            <Tag data-color="meta-purple" icon={<FirstAidKitIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+            <Tag
+              data-color="meta-purple"
+              icon={<FirstAidKitIcon />}
+              variant={'moderate'}
+              size={'medium'}
+              className={styles.tag}
+            >
               <BodyShort size={'small'} weight={'semibold'}>
                 Svar fra behandler
               </BodyShort>

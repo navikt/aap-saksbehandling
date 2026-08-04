@@ -29,7 +29,13 @@ export const TagMedPopover = ({ ikon, dataColor, størrelse = 'xsmall', tagConte
           {tagContent}
         </Tag>
       </Button>
-      <Popover onClose={() => setVis(false)} open={vis} anchorEl={buttonRef.current} placement={'bottom-end'} offset={8}>
+      <Popover
+        onClose={() => setVis(false)}
+        open={vis}
+        anchorEl={buttonRef.current}
+        placement={'bottom-end'}
+        offset={8}
+      >
         {popoverContent}
       </Popover>
     </>
