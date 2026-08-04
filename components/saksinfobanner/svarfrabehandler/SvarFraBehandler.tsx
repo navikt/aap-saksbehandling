@@ -1,10 +1,10 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
+import { BodyLong, BodyShort, Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
 
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
 import { Alert } from 'components/alert/Alert';
 
@@ -14,39 +14,18 @@ interface SvarFraBehandlerProps {
 }
 
 export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDokumenter }: SvarFraBehandlerProps) => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
   const { mottattDokumenterLest, isLoading, error } = useMottattDokumenterLest();
 
   return (
-    <>
-      <Button ref={buttonRef} variant={'tertiary'} onClick={() => setVis(!vis)} className={styles.knapp}>
-        <Tag
-          icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
-          variant={'moderate'}
-          data-color={'meta-purple'}
-          size="small"
-          className={styles.triggerTag}
-        >
-          Svar fra behandler
-        </Tag>
-      </Button>
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
+    <TagMedPopover
+      ikon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
+      dataColor={'meta-purple'}
+      størrelse={'small'}
+      tagContent={'Svar fra behandler'}
+      popoverContent={
         <Box maxWidth={'400px'} minWidth={'400px'}>
           <VStack gap={'space-0'}>
-            <Tag
-              data-color="meta-purple"
-              icon={<FirstAidKitIcon />}
-              variant={'moderate'}
-              size={'medium'}
-              className={styles.tag}
-            >
+            <Tag data-color="meta-purple" icon={<FirstAidKitIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
               <BodyShort size={'small'} weight={'semibold'}>
                 Svar fra behandler
               </BodyShort>
@@ -80,7 +59,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
             </Button>
           </HStack>
         </Box>
-      </Popover>
-    </>
+      }
+    />
   );
 };

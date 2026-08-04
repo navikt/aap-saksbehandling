@@ -1,11 +1,11 @@
 'use client';
 
 import { SettPåVentÅrsaker, TilbakekrevingVenteÅrsaker } from 'lib/types/types';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
-import { useRef, useState } from 'react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { HourglassTopFilledIcon } from '@navikt/aksel-icons';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 import styles from './PåVentInfoboks.module.css';
 
 interface Props {
@@ -14,60 +14,35 @@ interface Props {
   begrunnelse?: string | null;
 }
 
-export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
-
-  return (
-    <>
-      <Button ref={buttonRef} onClick={() => setVis(!vis)} variant={'tertiary'} className={styles.knapp}>
-        <Tag
-          icon={<HourglassTopFilledIcon title={'Oppgave på vent'} />}
-          variant={'moderate'}
-          data-color={'warning'}
-          size="xsmall"
-          className={styles.triggerTag}
-        >
-          {formaterDatoForFrontend(frist)}
+export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => (
+  <TagMedPopover
+    ikon={<HourglassTopFilledIcon title={'Oppgave på vent'} />}
+    dataColor={'warning'}
+    tagContent={formaterDatoForFrontend(frist)}
+    popoverContent={
+      <VStack gap={'space-8'} className={styles.boks}>
+        <Tag data-color="warning" icon={<HourglassTopFilledIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+          <BodyShort size={'small'} weight={'semibold'}>
+            På vent
+          </BodyShort>
         </Tag>
-      </Button>
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
-        <VStack gap={'space-8'} className={styles.boks}>
-          <Tag
-            data-color="warning"
-            icon={<HourglassTopFilledIcon />}
-            variant={'moderate'}
-            size={'medium'}
-            className={styles.tag}
-          >
-            <BodyShort size={'small'} weight={'semibold'}>
-              På vent
-            </BodyShort>
-          </Tag>
-          <VStack>
-            <Detail textColor="subtle">Frist</Detail>
-            <div>{formaterDatoForFrontend(frist)}</div>
-          </VStack>
-          {årsak ? (
-            <VStack>
-              <Detail textColor="subtle">Årsak</Detail>
-              <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker | TilbakekrevingVenteÅrsaker)}</div>
-            </VStack>
-          ) : undefined}
-          {begrunnelse ? (
-            <VStack>
-              <Detail textColor="subtle">Begrunnelse</Detail>
-              <div>{begrunnelse}</div>
-            </VStack>
-          ) : undefined}
+        <VStack>
+          <Detail textColor="subtle">Frist</Detail>
+          <div>{formaterDatoForFrontend(frist)}</div>
         </VStack>
-      </Popover>
-    </>
-  );
-};
+        {årsak ? (
+          <VStack>
+            <Detail textColor="subtle">Årsak</Detail>
+            <div>{mapTilVenteÅrsakTekst(årsak as SettPåVentÅrsaker | TilbakekrevingVenteÅrsaker)}</div>
+          </VStack>
+        ) : undefined}
+        {begrunnelse ? (
+          <VStack>
+            <Detail textColor="subtle">Begrunnelse</Detail>
+            <div>{begrunnelse}</div>
+          </VStack>
+        ) : undefined}
+      </VStack>
+    }
+  />
+);

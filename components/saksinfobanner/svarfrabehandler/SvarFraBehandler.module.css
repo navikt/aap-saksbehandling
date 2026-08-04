@@ -1,14 +1,3 @@
-.knapp {
-  background: none;
-  border: none;
-  padding: 0;
-  display: inline-flex;
-}
-
-.knapp:hover .triggerTag {
-  background-color: var(--ax-bg-meta-purple-moderate-hover);
-}
-
 .tag {
   border-top-left-radius: var(--ax-radius-8);
   border-top-right-radius: var(--ax-radius-8);

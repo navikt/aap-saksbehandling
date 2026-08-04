@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import styles from './UtløptVentefristBoks.module.css';
 import { Dato } from 'lib/types/Dato';
 import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { SettPåVentÅrsaker } from 'lib/types/types';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 interface Props {
   frist: string;
@@ -13,39 +13,16 @@ interface Props {
 }
 
 export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
-
   const fristDate = new Dato(frist).formaterForFrontend();
 
   return (
-    <>
-      <Button ref={buttonRef} variant={'tertiary'} onClick={() => setVis(!vis)} className={styles.knapp}>
-        <Tag
-          icon={<HourglassBottomFilledIcon title={'Ventefrist utløpt'} />}
-          variant={'moderate'}
-          data-color={'danger'}
-          size="xsmall"
-          className={styles.triggerTag}
-        >
-          {fristDate}
-        </Tag>
-      </Button>
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
+    <TagMedPopover
+      ikon={<HourglassBottomFilledIcon title={'Ventefrist utløpt'} />}
+      dataColor={'danger'}
+      tagContent={fristDate}
+      popoverContent={
         <VStack gap={'space-8'} className={styles.boks}>
-          <Tag
-            data-color="warning"
-            icon={<HourglassBottomFilledIcon />}
-            variant={'moderate'}
-            size={'medium'}
-            className={styles.tag}
-          >
+          <Tag data-color="warning" icon={<HourglassBottomFilledIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
             <BodyShort size={'small'} weight={'semibold'}>
               {`Frist utløpt ${fristDate}`}
             </BodyShort>
@@ -63,7 +40,7 @@ export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => 
             </VStack>
           ) : undefined}
         </VStack>
-      </Popover>
-    </>
+      }
+    />
   );
 };

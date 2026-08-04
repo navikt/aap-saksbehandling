@@ -1,49 +1,23 @@
 'use client';
 
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
-import React, { useRef, useState } from 'react';
+import { BodyShort, Tag, VStack } from '@navikt/ds-react';
 
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 import styles from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler.module.css';
 
-export const SvarFraBehandler = () => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
-
-  return (
-    <>
-      <Button ref={buttonRef} variant={'tertiary'} onClick={() => setVis(!vis)} className={styles.knapp}>
-        <Tag
-          icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
-          variant={'moderate'}
-          data-color={'meta-purple'}
-          size="xsmall"
-          className={styles.triggerTag}
-        >
-          {''}
+export const SvarFraBehandler = () => (
+  <TagMedPopover
+    ikon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
+    dataColor={'meta-purple'}
+    popoverContent={
+      <VStack gap={'space-8'} className={styles.boks}>
+        <Tag data-color="meta-purple" icon={<FirstAidKitIcon />} variant={'moderate'} size={'medium'} className={styles.tag}>
+          <BodyShort size={'small'} weight={'semibold'}>
+            Svar fra behandler
+          </BodyShort>
         </Tag>
-      </Button>
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
-        <VStack gap={'space-8'} className={styles.boks}>
-          <Tag
-            data-color="meta-purple"
-            icon={<FirstAidKitIcon />}
-            variant={'moderate'}
-            size={'medium'}
-            className={styles.tag}
-          >
-            <BodyShort size={'small'} weight={'semibold'}>
-              Svar fra behandler
-            </BodyShort>
-          </Tag>
-        </VStack>
-      </Popover>
-    </>
-  );
-};
+      </VStack>
+    }
+  />
+);
