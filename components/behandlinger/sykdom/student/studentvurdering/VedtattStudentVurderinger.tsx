@@ -21,27 +21,6 @@ export const VedtattStudentVurderinger = ({ vurdering }: Props) => {
         svar={getJaNeiEllerIkkeBesvart(vurdering.harAvbruttStudie)}
       />
 
-      {vurdering.hoveddiagnose && (
-        <SpørsmålOgSvar
-          spørsmål={'Hoveddiagnose'}
-          svar={
-            vurdering.hoveddiagnose
-              ? diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, vurdering.hoveddiagnose)[0]?.label
-              : ''
-          }
-        />
-      )}
-
-      {vurdering.bidiagnoser && vurdering.bidiagnoser.length > 0 && (
-        <SpørsmålOgSvar
-          spørsmål={'Bidiagnose'}
-          svar={(vurdering.bidiagnoser ?? ['Ingen'])
-            .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
-            .filter(Boolean)
-            .join(', ')}
-        />
-      )}
-
       {vurdering.godkjentStudieAvLånekassen && (
         <SpørsmålOgSvar
           spørsmål={'Er studiet godkjent av Lånekassen?'}
@@ -70,6 +49,27 @@ export const VedtattStudentVurderinger = ({ vurdering }: Props) => {
         <SpørsmålOgSvar
           spørsmål={'Når ble studieevnen 100% nedsatt / når ble studiet avbrutt?'}
           svar={formaterDatoForFrontend(vurdering.avbruttStudieDato)}
+        />
+      )}
+
+      {vurdering.hoveddiagnose && (
+        <SpørsmålOgSvar
+          spørsmål={'Hoveddiagnose'}
+          svar={
+            vurdering.hoveddiagnose
+              ? diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, vurdering.hoveddiagnose)[0]?.label
+              : ''
+          }
+        />
+      )}
+
+      {vurdering.bidiagnoser && vurdering.bidiagnoser.length > 0 && (
+        <SpørsmålOgSvar
+          spørsmål={'Bidiagnose'}
+          svar={(vurdering.bidiagnoser ?? ['Ingen'])
+            .map((it) => diagnoseSøker(vurdering.kodeverk as DiagnoseSystem, it)[0]?.label)
+            .filter(Boolean)
+            .join(', ')}
         />
       )}
     </VStack>
