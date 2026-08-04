@@ -20,6 +20,8 @@ import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { FetchResponse, isError } from 'lib/utils/api';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { DialogMedBehandler } from 'components/dialogmedbehandler/DialogMedBehandler';
 
 enum Tab {
   KLAGEBEHANDLINGINFO = 'KLAGEBEHANDLINGINFO',
@@ -103,6 +105,8 @@ export const Saksbehandlingsoversikt = ({
     },
   ];
 
+  const featureDialogMedBehandler = useFeatureFlag('DialogMedBehandler');
+
   return (
     <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.minimert}`}>
       {expanded && (
@@ -138,7 +142,8 @@ export const Saksbehandlingsoversikt = ({
               <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
             )}
             {toggleGroupValue === Tab.SAKSDOKUMENTER && <Saksdokumenter />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <InnhentDokumentasjon />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && !featureDialogMedBehandler && <InnhentDokumentasjon />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && featureDialogMedBehandler && <DialogMedBehandler />}
             {toggleGroupValue === Tab.HISTORIKK && <SaksHistorikk />}
           </div>
         </>
