@@ -1,16 +1,16 @@
 'use client';
 
-import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import React, { useState } from 'react';
+import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
+import React, { useState } from 'react';
 
-import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
+import { TableStyled } from 'components/tablestyled/TableStyled';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 interface PropsMedDiff {
   grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
@@ -150,7 +150,9 @@ const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriod
           {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
         </Table.DataCell>
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-          {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
+          {typeof vurdertPeriode.felter.arbeidGradering === 'number'
+            ? formaterTilProsent(vurdertPeriode.felter.arbeidGradering)
+            : '-'}
         </Table.DataCell>
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
           {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
