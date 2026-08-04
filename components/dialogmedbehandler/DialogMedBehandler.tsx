@@ -1,12 +1,14 @@
-import { Button, Label, Link, VStack } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Melding } from 'components/dialogmedbehandler/Melding';
-import styles from './DialogMedBehandler.module.css';
+import { Button, Label, Link, VStack } from '@navikt/ds-react';
+
 import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMeldinger';
+import { DokumentasjonType, Melding } from 'components/dialogmedbehandler/Melding';
+
+import styles from './DialogMedBehandler.module.css';
 
 interface MeldingDto {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
-  dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
+  dokumentasjonType: DokumentasjonType;
   meldingFraNavn: string;
   opprettetTidspunkt: string;
   tekst: string;
@@ -16,7 +18,7 @@ interface MeldingDto {
 const innkommendeMeldingerMock: MeldingDto[] = [
   {
     visningType: 'INNKOMMENDE',
-    dokumentasjonType: 'L40',
+    dokumentasjonType: 'MOTTATT_L40',
     meldingFraNavn: 'Dr. Sonja Paracet',
     opprettetTidspunkt: '2026-07-12',
     tekst: 'foo',
@@ -35,7 +37,7 @@ const utgåendeMeldingerMock: MeldingDto[] = [
   },
   {
     visningType: 'UTGÅENDE',
-    dokumentasjonType: 'PURRING',
+    dokumentasjonType: 'PÅMINNELSE',
     meldingFraNavn: 'Nav, automatisk',
     opprettetTidspunkt: '2026-07-09',
     tekst: 'foo',

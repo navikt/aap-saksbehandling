@@ -1,4 +1,3 @@
-import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
 import {
   ArrowUndoIcon,
   CheckmarkHeavyIcon,
@@ -6,12 +5,26 @@ import {
   PaperclipIcon,
   PlusIcon,
 } from '@navikt/aksel-icons';
+import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
+
 import styles from './Melding.module.css';
+
+export type DokumentasjonType =
+  | 'FORESPØRSEL_L120'
+  | 'FORESPØRSEL_L40'
+  | 'FORESPØRSEL_L8'
+  | 'MOTTATT_L120'
+  | 'MOTTATT_L40'
+  | 'MOTTATT_L8'
+  | 'MELDING_FRA_NAV'
+  | 'MELDING_FRA_BEHANDLER'
+  | 'PÅMINNELSE'
+  | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
-  dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
+  dokumentasjonType: DokumentasjonType;
   meldingFraNavn: string;
   opprettetTidspunkt: string;
   status: 'SENDT' | 'LEVERT' | 'FEILET';
@@ -81,18 +94,26 @@ export const Melding = ({
   );
 };
 
-const mapDokumentasjonTypeTilTekst = (dokumentasjonType: Props['dokumentasjonType']) => {
+const mapDokumentasjonTypeTilTekst = (dokumentasjonType: DokumentasjonType) => {
   switch (dokumentasjonType) {
-    case 'L120':
-      return 'Legeerklæring L120';
-    case 'L40':
+    case 'FORESPØRSEL_L120':
+      return 'Forespørsel om legeerklæring L120';
+    case 'FORESPØRSEL_L40':
       return 'Forespørsel om legeerklæring L40';
-    case 'L8':
-      return 'Legeerklæring L8';
+    case 'FORESPØRSEL_L8':
+      return 'Forespørsel om tilleggsopplysninger L8';
+    case 'MOTTATT_L120':
+      return 'Mottatt legeerklæring L120';
+    case 'MOTTATT_L40':
+      return 'Mottatt legeerklæring L40';
+    case 'MOTTATT_L8':
+      return 'Mottatt tilleggsopplysninger L8';
     case 'MELDING_FRA_NAV':
       return 'Melding fra NAV';
-    case 'PURRING':
-      return 'Purring';
+    case 'MELDING_FRA_BEHANDLER':
+      return 'Melding fra behandler';
+    case 'PÅMINNELSE':
+      return 'Påminnelse til behandler';
     case 'RETUR_LEGEERKLÆRING':
       return 'Retur legeerklæring';
     default:
