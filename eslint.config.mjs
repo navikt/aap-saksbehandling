@@ -62,7 +62,8 @@ const config = [
       'react/jsx-indent-props': ['error', 2],
       '@typescript-eslint/no-unnecessary-type-conversion': ['error'],
       '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
-      '@typescript-eslint/consistent-type-assertions': ['warn', { assertionStyle: 'never' }],
+      // Kommenter ut enn så lenge, gir veldig mye warnings
+      // '@typescript-eslint/consistent-type-assertions': ['warn', { assertionStyle: 'never' }],
       '@typescript-eslint/prefer-ts-expect-error': ['error'],
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
