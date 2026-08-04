@@ -1,12 +1,10 @@
 .knapp {
-  background-color: var(--ax-bg-warning-moderate);
-  color: black;
+  cursor: pointer;
 }
 
 .tag {
   justify-content: left;
   height: var(--ax-space-40);
-  background-color: var(--ax-bg-warning-moderate);
   padding-top: 0.5rem;
 }
 

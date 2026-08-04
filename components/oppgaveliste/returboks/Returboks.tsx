@@ -9,10 +9,11 @@ import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-reac
 import { OppgaveMedKontekst, ReturInformasjon } from 'lib/types/oppgaveTypes';
 import { mapGrunnTilString } from 'lib/utils/oversettelser';
 import { storForbokstav } from 'lib/utils/string';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
+
+import { returStatusTilTekst } from 'components/oppgaveliste/returboks/ReturInfoUtils';
 
 import styles from './Returboks.module.css';
-import {returStatusTilTekst} from "components/oppgaveliste/returboks/ReturInfoUtils";
 
 interface Props {
   returInformasjon: ReturInformasjon;
@@ -44,7 +45,8 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
 
   const årsakTekst = returInformasjon.årsaker.length <= 1 ? 'Årsak' : 'Årsaker';
   const returFraToTrinn =
-    returInformasjon.status == ReturStatus.RETUR_FRA_KVALITETSSIKRER || returInformasjon.status == ReturStatus.RETUR_FRA_BESLUTTER;
+    returInformasjon.status == ReturStatus.RETUR_FRA_KVALITETSSIKRER ||
+    returInformasjon.status == ReturStatus.RETUR_FRA_BESLUTTER;
   const skalViseForrigeKvalitetssikrer =
     returInformasjon.status == ReturStatus.RETUR_FRA_VEILEDER &&
     forrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
@@ -54,7 +56,7 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
       return (
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
-            data-color="warning"
+            data-color="meta-purple"
             icon={<ArrowsSquarepathIcon />}
             variant={'moderate'}
             size={'medium'}
@@ -80,7 +82,7 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
       return (
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
-            data-color="warning"
+            data-color="meta-purple"
             icon={<ArrowsSquarepathIcon />}
             variant={'moderate'}
             size={'medium'}
@@ -104,7 +106,7 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
       return (
         <VStack className={styles.litenBoks}>
           <Tag
-            data-color="warning"
+            data-color="meta-purple"
             icon={<ArrowsSquarepathIcon />}
             variant={'moderate'}
             size={'medium'}
@@ -121,13 +123,16 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
 
   return (
     <>
-      <Button
+      <Tag
         icon={<ArrowsSquarepathIcon title={returStatusTilTekst(returInformasjon.status)} />}
-        className={styles.knapp}
-        onClick={() => setVis(!vis)}
+        variant={'alt1-moderate'}
+        size={'xsmall'}
         ref={buttonRef}
-        size="xsmall"
-      />
+        onClick={() => setVis(!vis)}
+        className={styles.returtag}
+      >
+        {''}
+      </Tag>
       <Popover
         onClose={() => setVis(false)}
         open={vis}

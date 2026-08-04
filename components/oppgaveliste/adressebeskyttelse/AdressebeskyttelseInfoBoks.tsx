@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
-import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
 import { ShieldLockIcon } from '@navikt/aksel-icons';
+import { BodyShort, Popover, Tag, VStack } from '@navikt/ds-react';
+import React, { useRef, useState } from 'react';
+
 import styles from 'components/oppgaveliste/adressebeskyttelse/AdressebeskyttelseInfoBoks.module.css';
 
 interface Props {
@@ -13,13 +14,17 @@ export const AdressebeskyttelseInfoBoks = ({ adressebeskyttelseGrad }: Props) =>
 
   return (
     <>
-      <Button
+      <Tag
         icon={<ShieldLockIcon title={'Adressebeskyttelse Ikon'} />}
         className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
         size="xsmall"
-      />
+        variant={'moderate'}
+        data-color={'warning'}
+      >
+        {''}
+      </Tag>
       <Popover
         onClose={() => setVis(false)}
         open={vis}

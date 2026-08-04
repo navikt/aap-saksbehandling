@@ -1,6 +1,5 @@
 .knapp {
-  background-color: var(--ax-bg-danger-moderate);
-  color: black;
+  cursor: pointer;
 }
 
 .tag {

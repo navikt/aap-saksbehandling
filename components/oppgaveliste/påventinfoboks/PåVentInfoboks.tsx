@@ -20,15 +20,17 @@ export const PåVentInfoboks = ({ frist, årsak, begrunnelse }: Props) => {
 
   return (
     <>
-      <Button
+      <Tag
         icon={<HourglassTopFilledIcon title={'Oppgave på vent'} />}
         className={styles.knapp}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
         size="xsmall"
+        variant={'moderate'}
+        data-color={'warning'}
       >
         {formaterDatoForFrontend(frist)}
-      </Button>
+      </Tag>
       <Popover
         onClose={() => setVis(false)}
         open={vis}

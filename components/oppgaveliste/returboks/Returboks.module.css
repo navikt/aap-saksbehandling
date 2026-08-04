@@ -1,12 +1,10 @@
-.knapp {
-  background-color: var(--ax-bg-meta-purple-moderate);
-  color: black;
+.returtag {
+  cursor: pointer;
 }
 
 .tag {
   justify-content: left;
   height: var(--ax-space-40);
-  background-color: var(--ax-bg-meta-purple-moderate);
   padding-top: 0.5rem;
 }
 
@@ -26,6 +24,6 @@
   padding-left: var(--ax-space-12);
   padding-right: var(--ax-space-12);
   padding-bottom: 0.5rem;
-  min-width: 200px;
-  max-width: 300px;
+  /*min-width: 200px;*/
+  /*max-width: 300px;*/
 }

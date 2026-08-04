@@ -1,15 +1,9 @@
 .knapp {
-  background-color: var(--ax-bg-meta-purple-soft);
-  color: black;
-}
-
-.knapp span {
-  font-weight: var(--ax-font-weight-regular);
+  cursor: pointer;
 }
 
 .knapp:hover {
-  background-color: var(--ax-bg-meta-purple-strong);
-  color: white;
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 
 .tag {
@@ -17,5 +11,4 @@
   border-top-right-radius: var(--ax-radius-8);
   justify-content: left;
   height: var(--ax-space-40);
-  background-color: var(--ax-bg-meta-purple-soft);
 }
