@@ -1,15 +1,17 @@
-.returtag {
+.knapp {
   cursor: pointer;
+  background-color: var(--ax-bg-meta-purple-moderate);
+  color: black;
+}
+
+.knapp.knapp:hover {
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 
 .tag {
   justify-content: left;
   height: var(--ax-space-40);
   padding-top: 0.5rem;
-}
-
-.knapp:hover {
-  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 
 .boks > * {
@@ -24,6 +26,6 @@
   padding-left: var(--ax-space-12);
   padding-right: var(--ax-space-12);
   padding-bottom: 0.5rem;
-  /*min-width: 200px;*/
-  /*max-width: 300px;*/
+  min-width: 200px;
+  max-width: 300px;
 }

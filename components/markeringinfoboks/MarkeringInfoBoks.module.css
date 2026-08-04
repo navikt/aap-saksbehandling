@@ -11,6 +11,20 @@
   max-width: 600px;
 }
 
-.tag {
-  cursor: pointer;
+.danger {
+  background-color: var(--ax-bg-danger-moderate);
+  color: black;
+}
+
+.danger.danger:hover {
+  background-color: var(--ax-bg-danger-moderate-hover);
+}
+
+.metaPurple {
+  background-color: var(--ax-bg-meta-purple-moderate);
+  color: black;
+}
+
+.metaPurple.metaPurple:hover {
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }

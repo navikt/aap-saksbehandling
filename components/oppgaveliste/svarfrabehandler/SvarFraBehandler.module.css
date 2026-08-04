@@ -1,5 +1,11 @@
 .knapp {
   cursor: pointer;
+  background-color: var(--ax-bg-meta-purple-moderate);
+  color: black;
+}
+
+.knapp.knapp:hover {
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 
 .tag {

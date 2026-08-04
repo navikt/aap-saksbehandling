@@ -1,8 +1,10 @@
 .knapp {
   cursor: pointer;
+  background-color: var(--ax-bg-meta-purple-moderate);
+  color: black;
 }
 
-.knapp:hover {
+.knapp.knapp:hover {
   background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 

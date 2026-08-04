@@ -20,17 +20,16 @@ export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => 
 
   return (
     <>
-      <Tag
+      <Button
         icon={<HourglassBottomFilledIcon title={'Ventefrist utløpt'} />}
         className={styles.knapp}
+        variant={'tertiary'}
         onClick={() => setVis(!vis)}
         ref={buttonRef}
         size="xsmall"
-        variant={'moderate'}
-        data-color={'danger'}
       >
         {fristDate}
-      </Tag>
+      </Button>
       <Popover
         onClose={() => setVis(false)}
         open={vis}

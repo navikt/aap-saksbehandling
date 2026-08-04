@@ -1,5 +1,7 @@
 .knapp {
   cursor: pointer;
+  background-color: var(--ax-bg-danger-moderate);
+  color: black;
 }
 
 .tag {
@@ -9,7 +11,7 @@
   padding-top: 0.5rem;
 }
 
-.knapp:hover {
+.knapp.knapp:hover {
   background-color: var(--ax-bg-danger-moderate-hover);
 }
 

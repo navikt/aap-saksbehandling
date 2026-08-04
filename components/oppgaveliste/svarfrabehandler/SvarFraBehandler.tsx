@@ -1,7 +1,7 @@
 'use client';
 
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
-import { BodyShort, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Popover, Tag, VStack } from '@navikt/ds-react';
 import React, { useRef, useState } from 'react';
 
 import styles from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler.module.css';
@@ -12,16 +12,14 @@ export const SvarFraBehandler = () => {
 
   return (
     <>
-      <Tag
+      <Button
         icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
-        variant={'alt1-moderate'}
-        size={'xsmall'}
         ref={buttonRef}
+        variant={'tertiary'}
         onClick={() => setVis(!vis)}
         className={styles.knapp}
-      >
-        {''}
-      </Tag>
+        size="xsmall"
+      />
       <Popover
         onClose={() => setVis(false)}
         open={vis}
