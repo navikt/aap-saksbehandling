@@ -123,14 +123,17 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
 
   return (
     <>
-      <Button
-        icon={<ArrowsSquarepathIcon title={returStatusTilTekst(returInformasjon.status)} />}
-        ref={buttonRef}
-        variant={'tertiary'}
-        onClick={() => setVis(!vis)}
-        className={styles.knapp}
-        size="xsmall"
-      />
+      <Button ref={buttonRef} variant={'tertiary'} onClick={() => setVis(!vis)} className={styles.knapp}>
+        <Tag
+          icon={<ArrowsSquarepathIcon title={returStatusTilTekst(returInformasjon.status)} />}
+          variant={'moderate'}
+          data-color={'meta-purple'}
+          size="xsmall"
+          className={styles.triggerTag}
+        >
+          {''}
+        </Tag>
+      </Button>
       <Popover
         onClose={() => setVis(false)}
         open={vis}

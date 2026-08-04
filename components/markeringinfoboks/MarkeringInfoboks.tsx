@@ -28,15 +28,14 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
   return (
     <>
       {visTag && (
-        <Button
-          icon={ikonForMarkeringType(markering.markeringType)}
-          variant={'tertiary'}
-          size={size}
-          ref={tagRef}
-          className={`${styles[fargeklasseFraType(markering.markeringType)]}`}
-          onClick={() => setVisInfo(!visInfo)}
-        >
-          {showLabel && markeringTypeTilTekst(markering.markeringType)}
+        <Button ref={tagRef} variant={'tertiary'} className={styles.knapp} onClick={() => setVisInfo(!visInfo)}>
+          <Tag
+            icon={ikonForMarkeringType(markering.markeringType)}
+            variant={variantFraType(markering.markeringType)}
+            size={size}
+          >
+            {showLabel && markeringTypeTilTekst(markering.markeringType)}
+          </Tag>
         </Button>
       )}
       <Popover
@@ -130,16 +129,5 @@ export function variantFraType(type: MarkeringType) {
 
     default:
       return 'error-moderate';
-  }
-}
-
-export function fargeklasseFraType(type: MarkeringType): 'danger' | 'metaPurple' {
-  switch (type) {
-    case 'HASTER':
-      return 'danger';
-    case 'AVSLAG_11_5':
-      return 'metaPurple';
-    default:
-      return 'danger';
   }
 }

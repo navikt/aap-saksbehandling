@@ -14,14 +14,17 @@ export const AdressebeskyttelseInfoBoks = ({ adressebeskyttelseGrad }: Props) =>
 
   return (
     <>
-      <Button
-        icon={<ShieldLockIcon title={'Adressebeskyttelse Ikon'} />}
-        className={styles.knapp}
-        variant={'tertiary'}
-        onClick={() => setVis(!vis)}
-        ref={buttonRef}
-        size="xsmall"
-      />
+      <Button ref={buttonRef} onClick={() => setVis(!vis)} variant={'tertiary'} className={styles.knapp}>
+        <Tag
+          icon={<ShieldLockIcon title={'Adressebeskyttelse Ikon'} />}
+          variant={'moderate'}
+          data-color={'warning'}
+          size="xsmall"
+          className={styles.triggerTag}
+        >
+          {''}
+        </Tag>
+      </Button>
       <Popover
         onClose={() => setVis(false)}
         open={vis}

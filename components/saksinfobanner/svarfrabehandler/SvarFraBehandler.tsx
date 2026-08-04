@@ -20,15 +20,16 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
 
   return (
     <>
-      <Button
-        icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
-        className={styles.knapp}
-        variant={'tertiary'}
-        onClick={() => setVis(!vis)}
-        ref={buttonRef}
-        size="small"
-      >
-        Svar fra behandler
+      <Button ref={buttonRef} variant={'tertiary'} onClick={() => setVis(!vis)} className={styles.knapp}>
+        <Tag
+          icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
+          variant={'moderate'}
+          data-color={'meta-purple'}
+          size="small"
+          className={styles.triggerTag}
+        >
+          Svar fra behandler
+        </Tag>
       </Button>
       <Popover
         onClose={() => setVis(false)}

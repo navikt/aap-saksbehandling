@@ -11,20 +11,17 @@
   max-width: 600px;
 }
 
-.danger {
-  background-color: var(--ax-bg-danger-moderate);
-  color: black;
+.knapp {
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
 }
 
-.danger.danger:hover {
+.knapp:hover [data-color='danger'] {
   background-color: var(--ax-bg-danger-moderate-hover);
 }
 
-.metaPurple {
-  background-color: var(--ax-bg-meta-purple-moderate);
-  color: black;
-}
-
-.metaPurple.metaPurple:hover {
+.knapp:hover [data-color='meta-purple'] {
   background-color: var(--ax-bg-meta-purple-moderate-hover);
 }

@@ -12,14 +12,17 @@ export const SvarFraBehandler = () => {
 
   return (
     <>
-      <Button
-        icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
-        ref={buttonRef}
-        variant={'tertiary'}
-        onClick={() => setVis(!vis)}
-        className={styles.knapp}
-        size="xsmall"
-      />
+      <Button ref={buttonRef} variant={'tertiary'} onClick={() => setVis(!vis)} className={styles.knapp}>
+        <Tag
+          icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
+          variant={'moderate'}
+          data-color={'meta-purple'}
+          size="xsmall"
+          className={styles.triggerTag}
+        >
+          {''}
+        </Tag>
+      </Button>
       <Popover
         onClose={() => setVis(false)}
         open={vis}
