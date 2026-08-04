@@ -186,14 +186,14 @@ export const SaksmenyDropdown = ({
         isOpen={visTrekkSøknadModal}
         onClose={() => settVisTrekkSøknadModal(false)}
         saksnummer={saksnummer}
-        behandlingReferanse={behandling?.referanse!}
+        behandlingReferanse={behandling?.referanse}
         navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
       />
       <TrekkKlageModal
         isOpen={visTrekkKlageModal}
         onClose={() => settVisTrekkKlageModal(false)}
         saksnummer={saksnummer}
-        behandlingReferanse={behandling?.referanse!}
+        behandlingReferanse={behandling?.referanse}
       />
       <AvbrytRevurderingModal
         isOpen={visAvbrytRevurderingModal}
@@ -211,14 +211,14 @@ export const SaksmenyDropdown = ({
       />
       <VurderRettighetsperiodeModal
         isOpen={visVurderRettighetsperiodeModal}
-        behandlingReferanse={behandling?.referanse!}
+        behandlingReferanse={behandling?.referanse}
         onClose={() => settVisVurderRettighetsperiodeModal(false)}
         saksnummer={saksnummer}
         behandling={behandling}
       />
       {aktivMarkeringType && (
         <SettMarkeringForBehandlingModal
-          referanse={behandling?.referanse!}
+          referanse={behandling?.referanse}
           type={aktivMarkeringType}
           isOpen={true}
           onClose={() => settAktivMarkeringType(null)}

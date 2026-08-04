@@ -1,10 +1,11 @@
-import { AvklarOppholdkravLøsning, OppholdskravGrunnlagResponse } from 'lib/types/types';
-import { OppholdskravForm, OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
-import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { alleLandUtenNorge } from 'lib/utils/countries';
 import { parse, sub } from 'date-fns';
-import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { AvklarOppholdkravLøsning, OppholdskravGrunnlagResponse } from 'lib/types/types';
+import { alleLandUtenNorge } from 'lib/utils/countries';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+
+import { OppholdskravForm, OppholdskravVurderingForm } from 'components/behandlinger/oppholdskrav/types';
 
 export function getDefaultValuesFromGrunnlag(grunnlag: OppholdskravGrunnlagResponse): OppholdskravForm {
   if (trengerVurderingsForslag(grunnlag)) {
@@ -39,7 +40,7 @@ export const mapFormTilDto = (
 ): AvklarOppholdkravLøsning => {
   return {
     begrunnelse: periodeForm.begrunnelse,
-    fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+    fom: formaterDatoForBackend(parse(periodeForm.fraDato, 'dd.MM.yyyy', new Date())),
     tom: tilDato,
     oppfylt: periodeForm.oppfyller === JaEllerNei.Ja,
     land: periodeForm.land === 'ANNET' ? periodeForm.landAnnet : periodeForm.land,

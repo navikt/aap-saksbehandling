@@ -1,13 +1,13 @@
-import globals from 'globals';
-import react from 'eslint-plugin-react';
 import eslintJs from '@eslint/js';
-import reactHooks from 'eslint-plugin-react-hooks';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import jest from 'eslint-plugin-jest';
 import tsParser from '@typescript-eslint/parser';
-import { fileURLToPath } from 'url';
+import jest from 'eslint-plugin-jest';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -61,6 +61,8 @@ const config = [
       ...reactHooks.configs.recommended.rules,
       'react/jsx-indent-props': ['error', 2],
       '@typescript-eslint/no-unnecessary-type-conversion': ['error'],
+      '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
+      '@typescript-eslint/consistent-type-assertions': ['warn', { assertionStyle: 'never' }],
       '@typescript-eslint/prefer-ts-expect-error': ['error'],
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',

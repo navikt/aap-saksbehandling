@@ -13,7 +13,7 @@ export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeG
   const rader = [
     ...grunnlag.vedtatteVurderinger.map((vedtatt) => ({ status: 'Vedtatt', ...vedtatt })),
     ...grunnlag.nyeVurderinger.map((ny) => ({ status: 'Ny', ...ny })),
-  ] as Rad[];
+  ];
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { parse, sub } from 'date-fns';
 import {
   AvklarPeriodisertForutgåendeMedlemskapLøsning,
   MellomlagretVurdering,
@@ -5,17 +6,17 @@ import {
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
-import { parse, sub } from 'date-fns';
-import {
-  ForutgåendeMedlemskapManuellVurderingForm,
-  ForutgåendeMedlemskapVurderingForm,
-  ForutgåendeMedlemskapVurderingFormIkkePeriodisert,
-} from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import {
   getFraDatoFraGrunnlagForFrontend,
   hentPerioderSomTrengerVurdering,
   trengerVurderingsForslag,
 } from 'lib/utils/periodisering';
+
+import {
+  ForutgåendeMedlemskapManuellVurderingForm,
+  ForutgåendeMedlemskapVurderingForm,
+  ForutgåendeMedlemskapVurderingFormIkkePeriodisert,
+} from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 
 export function erNyVurderingOppfylt(
   harForutgåendeMedlemskap: JaEllerNei | undefined,
@@ -64,7 +65,7 @@ export const mapFormTilDto = (
   tilDato: string | undefined
 ): AvklarPeriodisertForutgåendeMedlemskapLøsning => ({
   begrunnelse: periodeForm.begrunnelse,
-  fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+  fom: formaterDatoForBackend(parse(periodeForm.fraDato, 'dd.MM.yyyy', new Date())),
   tom: tilDato != null ? formaterDatoForBackend(sub(parse(tilDato, 'dd.MM.yyyy', new Date()), { days: 1 })) : null,
   harForutgåendeMedlemskap: periodeForm.harForutgåendeMedlemskap === JaEllerNei.Ja,
   ...(periodeForm.unntaksvilkår !== undefined &&
