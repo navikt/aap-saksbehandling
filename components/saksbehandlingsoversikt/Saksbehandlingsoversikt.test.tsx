@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { DetaljertBehandling, SaksInfo } from 'lib/types/types';
+import { customRender } from 'lib/test/CustomRender';
 
 const mockBehandling: DetaljertBehandling = {
   status: 'UTREDES',
@@ -34,7 +35,7 @@ const mockKabalKlageresultat = {
 
 describe('Saksbehandlingsoversikt', () => {
   beforeEach(() =>
-    render(
+    customRender(
       <Saksbehandlingsoversikt
         behandling={mockBehandling}
         sak={mockSak}

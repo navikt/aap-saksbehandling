@@ -1,15 +1,16 @@
 'use client';
 
 import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
-import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-
-import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
-import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
-import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
+import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { loggUmamiGåTilBehandling, loggUmamiGåTilSaksoversikt } from 'lib/utils/umami/navigering';
+
+import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
+import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
+import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 
 interface Props {
   søkeresultat: SøkeResultat;
@@ -52,6 +53,7 @@ export const Kelvinsøkeresultat = ({
                   key={`sak-resultat-${index}`}
                   href={søk.href}
                   skalViseLenke={kanSaksbehandle}
+                  onClick={() => loggUmamiGåTilSaksoversikt('SØK_PERSON')}
                 >
                   <BodyShort size={'small'}>{storForbokstavIHvertOrd(søk.label)}</BodyShort>
                 </LenkeHvisHarTilgang>
@@ -72,6 +74,7 @@ export const Kelvinsøkeresultat = ({
                   key={`sak-resultat-${index}`}
                   href={søk.href}
                   skalViseLenke={kanSaksbehandle}
+                  onClick={() => loggUmamiGåTilSaksoversikt('SØK_SAK')}
                 >
                   <BodyShort size={'small'}>{søk.label}</BodyShort>
                 </LenkeHvisHarTilgang>
@@ -96,6 +99,7 @@ export const Kelvinsøkeresultat = ({
                       key={`oppgave-resultat-${index}`}
                       href={søk.href}
                       skalViseLenke={kanSaksbehandle}
+                      onClick={() => loggUmamiGåTilBehandling('SØK_OPPGAVE')}
                     >
                       <BodyShort size={'small'}>{søk.label}</BodyShort>
                     </LenkeHvisHarTilgang>
@@ -150,15 +154,17 @@ const LenkeHvisHarTilgang = ({
   children,
   skalViseLenke,
   className,
+  onClick,
 }: {
   href: string | null;
   children: React.ReactNode;
   skalViseLenke: boolean;
   className?: string;
+  onClick?: () => void;
 }) => {
   if (skalViseLenke && href) {
     return (
-      <Link className={className} href={href}>
+      <Link className={className} href={href} onClick={onClick}>
         {children}
       </Link>
     );

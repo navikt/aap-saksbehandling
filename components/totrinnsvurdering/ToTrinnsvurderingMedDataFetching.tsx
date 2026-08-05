@@ -1,15 +1,16 @@
+import { hentGjeldendeMarkeringerForBehandling } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   hentFatteVedtakGrunnlang,
   hentFlyt,
   hentKvalitetssikringGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ToTrinnsvurdering } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { Behovstype } from 'lib/utils/form';
-import { hentGjeldendeMarkeringerForBehandling } from 'lib/services/oppgaveservice/oppgaveservice';
 import { MarkeringHaster } from 'lib/types/oppgaveTypes';
+import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { ToTrinnsvurdering } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 
 interface Props {
   behandlingsreferanse: string;
@@ -39,7 +40,9 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
     totalReadOnly
   );
 
-  const hastemarkering = markeringer.data.filter((markering) => markering.markeringType === MarkeringHaster)?.at(0);
+  const hastemarkering = markeringer.data
+    .filter((markering) => markering.markeringType === MarkeringHaster && markering.hendelseType != 'FJERNET')
+    ?.at(0);
 
   return (
     <>

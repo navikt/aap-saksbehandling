@@ -1,16 +1,19 @@
 'use client';
 
-import { SubmitEventHandler, useState } from 'react';
 import { Button, HStack, Label, Modal, Pagination, Radio, VStack } from '@navikt/ds-react';
-import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
-import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
-import { useForm } from 'react-hook-form';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { clientTildelTilSaksbehandler } from 'lib/clientApi';
-import styles from './TildelOppgaveModal.module.css';
-import { isError } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
+import { clientTildelTilSaksbehandler } from 'lib/clientApi';
+import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
+import { isError } from 'lib/utils/api';
+import { loggUmamiTildelOppgave } from 'lib/utils/umami/navigering';
+import { SubmitEventHandler, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
 import { Alert } from 'components/alert/Alert';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { SaksbehandlerSøk } from 'components/tildeloppgavemodal/SaksbehandlerSøk';
+
+import styles from './TildelOppgaveModal.module.css';
 
 interface FormFields {
   saksbehandlerIdent: string;
@@ -20,27 +23,33 @@ interface Props {
   revalidateFunction: () => void;
 }
 
+interface TildelState {
+  saksbehandlere: SaksbehandlerFraSøk[];
+  søketekst: string;
+  isLoading: boolean;
+  pageState: number;
+  error?: string;
+  success?: string;
+  infomelding?: string;
+  søkefeltError?: string;
+}
+
+const initialState: TildelState = {
+  saksbehandlere: [],
+  søketekst: '',
+  isLoading: false,
+  pageState: 1,
+};
+
 export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
   const { modalSkalVises, skjulModal, oppgaveIder, setOppgaveIder } = useTildelOppgaver();
-  const [saksbehandlere, setSaksbehandlere] = useState<SaksbehandlerFraSøk[]>([]);
-  const [søketekst, setSøketekst] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [pageState, setPageState] = useState(1);
-  const [error, setError] = useState<string>();
-  const [success, setSuccess] = useState<string>();
-  const [infomelding, setInfomelding] = useState<string>();
-  const [søkefeltError, setSøkefeltError] = useState<string>();
+  const [state, setState] = useState<TildelState>(initialState);
+  const { saksbehandlere, søketekst, isLoading, pageState, error, success, infomelding, søkefeltError } = state;
+  const patch = (partial: Partial<TildelState>) => setState((s) => ({ ...s, ...partial }));
 
   const lukkOgResetModal = () => {
     setOppgaveIder([]);
-    setInfomelding('');
-    setSøketekst('');
-    setSaksbehandlere([]);
-    setIsLoading(false);
-    setError(undefined);
-    setSuccess(undefined);
-    setPageState(1);
-    setSøkefeltError(undefined);
+    setState(initialState);
     form.reset();
     revalidateFunction();
     skjulModal();
@@ -57,16 +66,19 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
 
   const handleSubmit: SubmitEventHandler = async (event) => {
     await form.handleSubmit(async (data) => {
-      setIsLoading(true);
+      patch({ isLoading: true });
       const res = await clientTildelTilSaksbehandler(oppgaveIder, data.saksbehandlerIdent);
       if (isError(res)) {
-        setError(res.apiException.message);
+        patch({ error: res.apiException.message, isLoading: false });
       } else {
-        setError(undefined);
+        loggUmamiTildelOppgave('MINE_OPPGAVER');
         const selectedSaksbehandler = saksbehandlere.find((s) => s.navIdent === data.saksbehandlerIdent);
-        setSuccess(`Oppgave(r) ble tildelt ${selectedSaksbehandler?.navn ?? data.saksbehandlerIdent}`);
+        patch({
+          error: undefined,
+          success: `Oppgave(r) ble tildelt ${selectedSaksbehandler?.navn ?? data.saksbehandlerIdent}`,
+          isLoading: false,
+        });
       }
-      setIsLoading(false);
     })(event);
   };
 
@@ -94,13 +106,23 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
             <VStack gap={'space-16'}>
               <SaksbehandlerSøk
                 oppgaver={oppgaveIder}
-                setSaksbehandlere={setSaksbehandlere}
+                setSaksbehandlere={(action) =>
+                  patch({ saksbehandlere: typeof action === 'function' ? action(saksbehandlere) : action })
+                }
                 søketekst={søketekst}
-                setSøketekst={setSøketekst}
-                setInfomelding={setInfomelding}
-                setPageState={setPageState}
+                setSøketekst={(action) =>
+                  patch({ søketekst: typeof action === 'function' ? action(søketekst) : action })
+                }
+                setInfomelding={(action) =>
+                  patch({ infomelding: typeof action === 'function' ? action(infomelding) : action })
+                }
+                setPageState={(action) =>
+                  patch({ pageState: typeof action === 'function' ? action(pageState) : action })
+                }
                 søkefeltError={søkefeltError}
-                setSøkefeltError={setSøkefeltError}
+                setSøkefeltError={(action) =>
+                  patch({ søkefeltError: typeof action === 'function' ? action(søkefeltError) : action })
+                }
               />
               {infomelding && <Alert variant={'info'}>{infomelding}</Alert>}
               <form id={'tildelSaksbehandler'} onSubmit={handleSubmit}>
@@ -129,7 +151,7 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
                 <HStack justify="center">
                   <Pagination
                     page={pageState}
-                    onPageChange={setPageState}
+                    onPageChange={(page) => patch({ pageState: page })}
                     count={antallSider}
                     boundaryCount={1}
                     siblingCount={1}

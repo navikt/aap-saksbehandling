@@ -1,21 +1,33 @@
 import { ErrorMessage, Label, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { formaterTilNok } from 'lib/utils/string';
-import styles from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell.module.css';
 import { UseFormReturn } from 'react-hook-form';
+
+import styles from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntektTabell.module.css';
 import { FastsettManuellInntektForm, Tabellår } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/types';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<FastsettManuellInntektForm>;
   tabellår: Tabellår[];
   readOnly?: boolean;
   låstVisning?: boolean;
+  /** År hvor ferdig lignet PGI har kommet inn i etterkant og overstyrer manuelt fastsatt inntekt. */
+  overstyrteÅrFraRegister?: number[];
 }
 
-export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstVisning }: Props) => {
+export const FastsettManuellInntektTabell = ({
+  tabellår,
+  form,
+  readOnly,
+  låstVisning,
+  overstyrteÅrFraRegister = [],
+}: Props) => {
+  /**
+   * Ferdig lignet PGI fra registeret vinner over manuelt fastsatt inntekt i grunnlagsberegningen. EØS-inntekt legges til uansett.
+   */
   const regnUtTotalbeløpPerÅr = (ferdigLignetPGI: number, beregnetPGI: number, eøsInntekt: number): string => {
-    const total = beregnetPGI > 0 ? beregnetPGI + eøsInntekt : ferdigLignetPGI + eøsInntekt;
+    const total = ferdigLignetPGI > 0 ? ferdigLignetPGI + eøsInntekt : beregnetPGI + eøsInntekt;
     return formaterTilNok(total);
   };
 
@@ -48,16 +60,22 @@ export const FastsettManuellInntektTabell = ({ tabellår, form, readOnly, låstV
             const beregnetPGI = låstVisning ? tabellÅr.beregnetPGI : form.watch(`tabellår.${index}.beregnetPGI`);
             const eøsInntekt = låstVisning ? tabellÅr.eøsInntekt : form.watch(`tabellår.${index}.eøsInntekt`);
             const redigerbar = !tabellÅr.erKunVisning;
+            const erOverstyrtAvFerdigLignet =
+              !tabellÅr.erKunVisning && !tabellÅr.erDelperiode && overstyrteÅrFraRegister.includes(tabellÅr.år);
             return (
               <Table.Row key={tabellÅr.label ?? tabellÅr.år}>
                 <Table.DataCell textSize={'small'}>{tabellÅr.label ?? tabellÅr.år}</Table.DataCell>
                 <Table.DataCell textSize={'small'} data-testid={'ferdigLignetPGI'}>
                   {tabellÅr.ferdigLignetPGI ? formaterTilNok(tabellÅr.ferdigLignetPGI) : '-'}
                 </Table.DataCell>
-                <Table.DataCell textSize={'small'} data-testid={'beregnetPGI'}>
+                <Table.DataCell
+                  textSize={'small'}
+                  data-testid={'beregnetPGI'}
+                  className={erOverstyrtAvFerdigLignet ? styles.overskrevetCelle : ''}
+                >
                   {!redigerbar ? (
                     '-'
-                  ) : låstVisning ? (
+                  ) : erOverstyrtAvFerdigLignet || låstVisning ? (
                     beregnetPGI ? (
                       formaterTilNok(Number(beregnetPGI))
                     ) : (

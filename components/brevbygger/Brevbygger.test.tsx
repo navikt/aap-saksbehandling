@@ -1,5 +1,11 @@
+import userEvent from '@testing-library/user-event';
+import { render, screen, within } from 'lib/test/CustomRender';
+import { BrevdataDto } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import createFetchMock from 'vitest-fetch-mock';
+
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
-import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import {
   obligatoriskDelmal,
   obligatoriskDelmalMedAlternativer,
@@ -8,12 +14,7 @@ import {
   valgfriDelmalMedAlternativer,
   valgfriDelmalMedValgfrieAlternativer,
 } from 'components/brevbygger/brevbyggerTestdata';
-import { render, screen, within } from 'lib/test/CustomRender';
-import { BrevdataDto } from 'lib/types/types';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
-import userEvent from '@testing-library/user-event';
-import { Behovstype } from 'lib/utils/form';
-import createFetchMock from 'vitest-fetch-mock';
+import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 
 const brevdata: BrevdataDto = {
   betingetTekst: [],
@@ -331,6 +332,7 @@ describe('Delmaler med valg', () => {
     );
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
     expect((screen.getByRole('option', { name: 'Alternativ 1' }) as HTMLOptionElement).selected).toBe(true);
   });
 
@@ -365,6 +367,7 @@ describe('Delmaler med valg', () => {
     );
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
     expect((screen.getByRole('option', { name: 'Fritekst' }) as HTMLOptionElement).selected).toBe(true);
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
     expect(screen.getByText('Her kommer det litt fritekst')).toBeVisible();

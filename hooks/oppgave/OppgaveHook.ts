@@ -1,24 +1,24 @@
 import {
+  NoNavAapOppgaveListeOppgaveSorteringSortBy,
+  PathsMineOppgaverGetParametersQuerySortby,
+} from '@navikt/aap-oppgave-typescript-types';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
+import {
   MineOppgaverQueryParams,
-  Oppgave,
+  OppgaveMedKontekst,
   OppgavelisteRequest,
   OppgavelisteResponse,
   Paging,
 } from 'lib/types/oppgaveTypes';
-import useSWRInfinite from 'swr/infinite';
-import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
-import useSWR from 'swr';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import {
   mapSortStateDirectionTilQueryParamEnum,
   mapSortStateTilOppgaveSortering,
   mineOppgaverQueryParams,
 } from 'lib/utils/request';
-import {
-  NoNavAapOppgaveListeOppgaveSorteringSortBy,
-  PathsMineOppgaverGetParametersQuerySortby,
-} from '@navikt/aap-oppgave-typescript-types';
-import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 const PAGE_SIZE = 50;
 
@@ -100,7 +100,7 @@ export function useOppgaver({
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   size: number;
   setSize: (size: number | ((_size: number) => number)) => void;
   isLoading: boolean;
@@ -143,7 +143,7 @@ export function useOppgaver({
       const endeligsortering = sortering ? mapSortStateTilOppgaveSortering(sortering) : undefined;
 
       const payload: OppgavelisteRequest = {
-        filterId: aktivKøId!,
+        filterId: aktivKøId,
         enheter: aktiveEnheter,
         kunLedigeOppgaver: kunLedigeOppgaver,
         veileder: visKunOppgaverSomBrukerErVeilederPå,

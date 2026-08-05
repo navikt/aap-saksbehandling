@@ -1,20 +1,21 @@
 'use client';
 
 import { BodyShort, Chips, Table, VStack } from '@navikt/ds-react';
-import { Diff, UnderveisAvslagsÅrsak, UnderveisGrunnlag, UnderveisGrunnlagMedDiff } from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
-import { exhaustiveCheck } from 'lib/utils/typescript';
-import { Behovstype } from 'lib/utils/form';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Diff, UnderveisAvslagsÅrsak, UnderveisGrunnlag, UnderveisGrunnlagMedDiff } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
+import { exhaustiveCheck } from 'lib/utils/typescript';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import React, { useState } from 'react';
-import styles from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag.module.css';
+
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag.module.css';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 type Props = {
   grunnlagMedDiff: UnderveisGrunnlagMedDiff;

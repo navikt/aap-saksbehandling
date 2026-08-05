@@ -1,7 +1,13 @@
-import { SettPåVentÅrsaker, TilbakekrevingVenteÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
 import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
+import {
+  SettPåVentÅrsaker,
+  TilbakekrevingVenteÅrsaker,
+  TypeBehandling,
+  VilkårUtfall,
+  ÅrsakTilOpprettelse,
+} from 'lib/types/types';
+import { exhaustiveCheck } from 'lib/utils/typescript';
 
 const behovskodeMap = {
   // Behandlingsflyt
@@ -47,6 +53,7 @@ const behovskodeMap = {
   '5036': 'Samordning barnepensjon',
   '5037': '§ 11-14 Student',
   '5038': 'Vurder krav',
+  '5039': 'Avklar stønadsperiode',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5041': 'Skriv vedtaksbrev',
   '5042': 'Avslag § 11-27',
@@ -102,7 +109,7 @@ export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | st
 }
 
 export function mapTilVenteÅrsakTekst(
-  årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker | TilbakekrevingVenteÅrsaker,
+  årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker | TilbakekrevingVenteÅrsaker
 ): string {
   switch (årsak) {
     case 'VENTER_PÅ_OPPLYSNINGER':
@@ -288,6 +295,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering fra Arena';
   }
 }
 
@@ -350,6 +359,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-9';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
+    case 'MigreringFraArena':
+      return 'Migrering fra Arena';
     default:
       return typeBehandling;
   }

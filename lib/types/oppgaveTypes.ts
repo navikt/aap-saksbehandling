@@ -1,7 +1,7 @@
 import {
-  NoNavAapOppgaveFilterFilterDtoType,
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
+  NoNavAapOppgaveFilterFilterResponseType,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
   components as oppgave,
   paths,
 } from '@navikt/aap-oppgave-typescript-types';
@@ -13,17 +13,18 @@ export type PostmottakAvklaringsbehovKode =
   postmottak['schemas']['no.nav.aap.postmottak.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
 // oppgave
-export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterDto'];
-export type Oppgave = oppgave['schemas']['no.nav.aap.oppgave.OppgaveDto'];
-export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'] & {
-  /** Sorter hastemarkerte oppgaver først. Ikke del av OpenAPI-skjema ennå. */
-  hastemarkeringerFørst?: boolean;
-};
+export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterResponse'];
+export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest']
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
+export type OppgaveMedKontekst = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse'];
+export type ReturInformasjon = oppgave['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
+export type SkjermingInfo =
+  oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse']['oppgavelisteTags']['skjermingInfo'];
 export type OppgaverPåSak = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaverPåSakResponse'];
 export type OppgavePåBehandling = oppgave['schemas']['no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse'];
 export type OppgaveVisningsinformasjon =
   oppgave['schemas']['no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse'];
+export type SaksnummerResponse = oppgave['schemas']['no.nav.aap.oppgave.hent.SaksnummerResponse'];
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
 export type PlukkOppgaveRequest = oppgave['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveRequest'];
@@ -31,7 +32,7 @@ export type PlukkOppgaveResponse = oppgave['schemas']['no.nav.aap.oppgave.plukk.
 export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.søk.SøkResponse'];
 export type OppgaveInfoTilSøk = oppgave['schemas']['no.nav.aap.oppgave.søk.OppgaveISøkResponse'];
 export type BehandlingskontekstForOppgave = oppgave['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse'];
-export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.AvreserverOppgaveDto'];
+export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.AvreserverOppgaveDto'];
 export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
 export type EnhetSynkroniseringOppgave = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetSynkroniseringRequest'];
 export type SaksbehandlerSøkRespons = oppgave['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkResponse'];
@@ -43,7 +44,7 @@ export type TildeltStatus = oppgave['schemas']['no.nav.aap.oppgave.tildel.Tildel
 export type SakOgAvklaringsbehov = oppgave['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 
 // typer fra enums
-export type OppgaveBehandlingstype = `${NoNavAapOppgaveOppgaveDtoBehandlingstype}`;
+export type OppgaveBehandlingstype = `${NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype}`;
 export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
 export const MarkeringHaster = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
 
@@ -51,5 +52,5 @@ export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | Po
 
 export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters']['query'];
 
-export const Køtype = NoNavAapOppgaveFilterFilterDtoType;
-export type Køtype = NoNavAapOppgaveFilterFilterDtoType;
+export const Køtype = NoNavAapOppgaveFilterFilterResponseType;
+export type Køtype = NoNavAapOppgaveFilterFilterResponseType;

@@ -1,10 +1,11 @@
 'use client';
 
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { JaEllerNeiOptions } from 'lib/utils/form';
 import { Radio } from '@navikt/ds-react';
-import { Control, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
+import { JaEllerNeiOptions } from 'lib/utils/form';
 import React, { FocusEventHandler, ReactNode } from 'react';
+import { Control, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
+
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 interface Props<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -18,7 +19,6 @@ interface Props<FormFieldValues extends FieldValues> {
   horisontal?: boolean;
   readOnly?: boolean;
   className?: string;
-  dataUmamiEvent?: string;
   onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
 }
 
@@ -34,13 +34,11 @@ export const RadioGroupJaNei = <FormFieldValues extends FieldValues>({
   shouldUnregister = false,
   readOnly,
   className,
-  dataUmamiEvent,
   onBlur,
 }: Props<FormFieldValues>) => {
   return (
     <RadioGroupWrapper
       name={name}
-      dataUmamiEvent={dataUmamiEvent}
       control={control}
       label={label}
       hideLabel={hideLabel}

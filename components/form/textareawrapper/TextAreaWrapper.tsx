@@ -16,7 +16,6 @@ export interface TextAreaProps<FormFieldValues extends FieldValues> {
   autocomplete?: HTMLInputAutoCompleteAttribute;
   onChangeCustom?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   shouldUnregister?: boolean;
-  dataUmamiEvent?: string;
   onBlur?: FocusEventHandler<HTMLTextAreaElement> | undefined;
 }
 
@@ -34,7 +33,6 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
   autocomplete,
   onChangeCustom,
   shouldUnregister = false,
-  dataUmamiEvent,
   onBlur,
 }: TextAreaProps<FormFieldValues>) => (
   <Controller
@@ -53,7 +51,6 @@ export const TextAreaWrapper = <FormFieldValues extends FieldValues>({
       return (
         <Textarea
           id={name}
-          data-umami-event={dataUmamiEvent}
           label={label}
           size={size}
           description={description}

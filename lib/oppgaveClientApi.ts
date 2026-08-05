@@ -6,7 +6,6 @@ import {
   AvreserverOppgaveDto,
   Kø,
   MineOppgaverQueryParams,
-  Oppgave,
   OppgavelisteRequest,
   OppgavelisteResponse,
   OppgaverPåSak,
@@ -20,9 +19,6 @@ import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryP
 // oppgave
 export async function hentOppgaverClient(oppgavelisteRequest: OppgavelisteRequest) {
   return clientFetch<OppgavelisteResponse>('/oppgave/api/oppgave/oppgaveliste', 'POST', oppgavelisteRequest);
-}
-export async function hentOppgaveClient(behandlingsreferanse: string) {
-  return clientFetch<Oppgave>(`/oppgave/api/oppgave/${behandlingsreferanse}/hent`, 'GET');
 }
 
 export async function hentTildeltStatusClient(behandlingsreferanse: string) {

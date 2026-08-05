@@ -1,3 +1,4 @@
+import { parse, sub } from 'date-fns';
 import {
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   LovvalgEØSLand,
@@ -5,18 +6,18 @@ import {
   PeriodisertLovvalgMedlemskapGrunnlag,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import {
-  LovOgMedlemskapVurderingForm,
-  LovOgMedlemskapVurderingFormIkkePeriodisert,
-  LovvalgOgMedlemskapManuellVurderingForm,
-} from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
-import { parse, sub } from 'date-fns';
+import { JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import {
   getFraDatoFraGrunnlagForFrontend,
   hentPerioderSomTrengerVurdering,
   trengerVurderingsForslag,
 } from 'lib/utils/periodisering';
+
+import {
+  LovOgMedlemskapVurderingForm,
+  LovOgMedlemskapVurderingFormIkkePeriodisert,
+  LovvalgOgMedlemskapManuellVurderingForm,
+} from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
 
 function tomLovvalgMedlemskapVurdering(): LovvalgOgMedlemskapManuellVurderingForm {
   return {
@@ -66,7 +67,7 @@ export const mapFormTilDto = (
   tilDato: string | undefined
 ): AvklarPeriodisertLovvalgMedlemskapLøsning => ({
   begrunnelse: `${periodeForm.lovvalg.begrunnelse}\n\n${periodeForm.medlemskap ? periodeForm.medlemskap.begrunnelse : ''}`,
-  fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+  fom: formaterDatoForBackend(parse(periodeForm.fraDato, 'dd.MM.yyyy', new Date())),
   tom: tilDato != null ? formaterDatoForBackend(sub(parse(tilDato, 'dd.MM.yyyy', new Date()), { days: 1 })) : null,
   lovvalg: {
     begrunnelse: periodeForm.lovvalg.begrunnelse,

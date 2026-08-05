@@ -1,9 +1,10 @@
-import { BehandlingsHistorikk, Vurderingsbehov } from 'lib/types/types';
 import { BodyShort, Detail, Label, Process, VStack } from '@navikt/ds-react';
+import { BehandlingsHistorikk, Vurderingsbehov } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { HistorikkEvent, mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
 import { mapGrunnTilString, mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+
+import { mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
 
 interface Props {
   hendelse: BehandlingsHistorikk['hendelser'][number];
@@ -12,12 +13,12 @@ interface Props {
 export const BehandlingsHendelse = ({ hendelse }: Props) => {
   const finnesÅrsak = !!(hendelse.årsakTilSattPåVent || hendelse.årsakerTilRetur.length);
   const finnesVurderingsbehov = !!hendelse.årsakerTilOpprettelse.length;
-  const ikon = mapEventTilIkon(hendelse.hendelse as HistorikkEvent);
+  const ikon = mapEventTilIkon(hendelse.hendelse);
   const ikonProp = ikon ? { bullet: ikon } : {};
   return (
     <Process.Event {...ikonProp}>
       <div>
-        <Label size={'medium'}>{mapEventTilString(hendelse.hendelse as HistorikkEvent)}</Label>
+        <Label size={'medium'}>{mapEventTilString(hendelse.hendelse)}</Label>
         <BodyShort size={'small'} textColor={'subtle'}>
           {`${formaterDatoMedTidspunktForFrontend(hendelse.tidspunkt)} ${mapUtførtAvTilTekst(hendelse.utførtAv) && '· '}${mapUtførtAvTilTekst(hendelse.utførtAv)}`}
         </BodyShort>

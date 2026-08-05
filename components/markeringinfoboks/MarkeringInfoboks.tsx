@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import styles from './MarkeringInfoBoks.module.css';
-import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
-import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import React, { useRef, useState } from 'react';
+
+import styles from './MarkeringInfoBoks.module.css';
 
 interface Props {
   markering: Markering;
@@ -27,15 +28,15 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
   return (
     <>
       {visTag && (
-        <Tag
-          icon={ikonForMarkeringType(markering.markeringType)}
-          variant={variantFraType(markering.markeringType)}
-          size={size}
-          ref={tagRef}
-          onClick={() => setVisInfo(!visInfo)}
-        >
-          {showLabel && markeringTypeTilTekst(markering.markeringType)}
-        </Tag>
+        <Button ref={tagRef} variant={'tertiary'} className={styles.knapp} onClick={() => setVisInfo(!visInfo)}>
+          <Tag
+            icon={ikonForMarkeringType(markering.markeringType)}
+            variant={variantFraType(markering.markeringType)}
+            size={size}
+          >
+            {showLabel && markeringTypeTilTekst(markering.markeringType)}
+          </Tag>
+        </Button>
       )}
       <Popover
         onClose={() => setVisInfo(false)}

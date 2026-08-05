@@ -1,16 +1,19 @@
+import { ExternalLinkIcon, EyeIcon } from '@navikt/aksel-icons';
+import { Button, HStack } from '@navikt/ds-react';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
+import { OppgavePåBehandling } from 'lib/types/oppgaveTypes';
 import { SaksInfo } from 'lib/types/types';
+import { isSuccess } from 'lib/utils/api';
+import { isLocal } from 'lib/utils/environment';
+import { byggKelvinURL } from 'lib/utils/request';
+import { loggUmamiGåTilBehandling, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami/navigering';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
-import { Button, HStack } from '@navikt/ds-react';
-import { isLocal } from 'lib/utils/environment';
+
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
-import { ExternalLinkIcon, EyeIcon } from '@navikt/aksel-icons';
+
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
-import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
-import { isSuccess } from 'lib/utils/api';
-import { byggKelvinURL } from 'lib/utils/request';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { OppgavePåBehandling } from 'lib/types/oppgaveTypes';
 
 const lokalBrevBestillingKnapp = isLocal();
 export const BehandlingButtons = ({
@@ -33,6 +36,7 @@ export const BehandlingButtons = ({
   const oppgaveReservertAvInnloggetBruker = oppgavePåBehandling?.reservertAvIdent === innloggetBruker.NAVident;
 
   async function gåTilBehandling(behandlingsreferanse: string) {
+    loggUmamiGåTilBehandling('SAKSOVERSIKT');
     setFeilmelding('');
     startTransitionBehandling(async () => {
       const internUrl = `/saksbehandling/sak/${sak.saksnummer}/${behandlingsreferanse}`;
@@ -41,6 +45,7 @@ export const BehandlingButtons = ({
   }
 
   async function gåTilPostmottakBehandling(behandlingsreferanse: string) {
+    loggUmamiGåTilBehandling('SAKSOVERSIKT');
     setFeilmelding('');
     startTransitionBehandling(async () => {
       const internUrl = `/postmottak/${behandlingsreferanse}`;
@@ -49,6 +54,7 @@ export const BehandlingButtons = ({
   }
 
   async function plukkOgGåTilBehandling(oppgave: OppgavePåBehandling) {
+    loggUmamiGåTilBehandlingOgReserver('SAKSOVERSIKT');
     setFeilmelding('');
     startTransitionPlukk(async () => {
       const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
@@ -80,6 +86,7 @@ export const BehandlingButtons = ({
           variant={'secondary'}
           icon={<ExternalLinkIcon aria-hidden />}
           title={'Gå til behandling'}
+          onClick={() => loggUmamiGåTilBehandling('SAKSOVERSIKT_EKSTERN_LØSNING')}
         >
           {behandlingErÅpen ? 'Åpne' : 'Vis'}
         </Button>

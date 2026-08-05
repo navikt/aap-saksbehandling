@@ -1,8 +1,8 @@
-import { TableStyled } from 'components/tablestyled/TableStyled';
 import { BodyShort, Button, HStack, Table } from '@navikt/ds-react';
+import { Brudd } from 'lib/types/types';
 import { formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
+
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
-import styles from './vurder-11-9.module.css';
 import {
   BruddStatus,
   erNy,
@@ -11,7 +11,9 @@ import {
   formaterGrunn,
   formaterStatus,
 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/utils';
-import { Brudd } from 'lib/types/types';
+import { TableStyled } from 'components/tablestyled/TableStyled';
+
+import styles from './vurder-11-9.module.css';
 
 type Props = {
   readOnly?: boolean;
@@ -87,7 +89,7 @@ const Rad = ({
   return (
     <>
       <Table.DataCell className={klasse}>{formaterDatoForFrontend(rad.dato)}</Table.DataCell>
-      <Table.DataCell className={klasse}>{formaterBrudd(rad.brudd!!)}</Table.DataCell>
+      <Table.DataCell className={klasse}>{formaterBrudd(rad.brudd!)}</Table.DataCell>
       <Table.DataCell className={klasse}>{formaterGrunn(rad.grunn)}</Table.DataCell>
       <Table.DataCell className={klasse}>{formaterStatus(rad.status)}</Table.DataCell>
       <Table.DataCell>

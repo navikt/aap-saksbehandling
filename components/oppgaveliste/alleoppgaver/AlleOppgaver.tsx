@@ -1,39 +1,39 @@
 'use client';
 
-import { Enhet } from 'lib/types/oppgaveTypes';
-import { useEffect, useState } from 'react';
-import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
-import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
-import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
-import { isError, isSuccess } from 'lib/utils/api';
-import useSWR from 'swr';
-import { queryParamsArray } from 'lib/utils/request';
-import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import {
-  NoNavAapOppgaveFilterFilterDtoBehandlingstyper,
   NoNavAapOppgaveListeOppgaveSorteringSortBy,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
   NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
 } from '@navikt/aap-oppgave-typescript-types';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
-import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
+import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
+import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
-import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
-import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
-import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
-import { ValuePair } from 'components/form/FormField';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
+import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
+import { Enhet } from 'lib/types/oppgaveTypes';
+import { isError, isSuccess } from 'lib/utils/api';
+import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { OppgaveStatuser, oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { queryParamsArray } from 'lib/utils/request';
+import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+
 import { Alert } from 'components/alert/Alert';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
+import { EnheterSelect } from 'components/oppgaveliste/enheterselect/EnheterSelect';
+import { AlleOppgaverFiltrering } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/AlleOppgaverFiltrering';
+import { KøSelect } from 'components/oppgaveliste/køselect/KøSelect';
+import styles from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver.module.css';
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 
 interface Props {
   enheter: Enhet[];
@@ -194,7 +194,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
       oppdaterKø(lagretKø);
     } else {
       const førsteKø = køer.data[0];
-      oppdaterKø({ id: førsteKø.id!, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
+      oppdaterKø({ id: førsteKø.id, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
     }
   }, [køer]);
 
@@ -273,11 +273,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
             sort={sort}
             aktivKø={aktivKø}
             visBeløpKolonne={
-              oppgavelisteMedBeløp &&
-              (oppgaveKøer
-                ?.find((e) => e.id === aktivKø.id)
-                ?.behandlingstyper?.includes(NoNavAapOppgaveFilterFilterDtoBehandlingstyper.TILBAKEKREVING) ??
-                false)
+              oppgavelisteMedBeløp && (oppgaveKøer?.find((e) => e.id === aktivKø.id)?.inneholderTilbakekreving ?? false)
             }
           />
         ) : (

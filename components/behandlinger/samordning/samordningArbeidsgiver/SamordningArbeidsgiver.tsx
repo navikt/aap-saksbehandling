@@ -1,27 +1,26 @@
 'use client';
 
-import { FormField, ValuePair } from 'components/form/FormField';
-import { useConfigForm } from 'components/form/FormHook';
 import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
-import { SubmitEventHandler } from 'react';
-import { Behovstype } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { differenceInBusinessDays, parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
   MellomlagretVurdering,
   SamordningArbeidsgiverGrunnlag,
   SamordningArbeidsgiverVurdering,
 } from 'lib/types/types';
-
-import { differenceInBusinessDays, parse } from 'date-fns';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
 
 import { SamordningArbeidsGiverTabell } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiverTabell';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
