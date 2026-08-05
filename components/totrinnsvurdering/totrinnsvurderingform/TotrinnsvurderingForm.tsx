@@ -9,12 +9,6 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon, clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
-import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
-import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -34,9 +28,7 @@ import {
   BeslutterFeltTag,
   loggUmamiVarighetHendelser,
   useUmamiVarighetHendelser,
-} from 'lib/utils/umami';
-import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { useFieldArray } from 'react-hook-form';
+} from 'lib/utils/umami/hendelserVarighet';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useFieldArray } from 'react-hook-form';
