@@ -32,7 +32,7 @@ jobs:
           repo: navikt/aap-behandlingsflyt
 
       - name: Last ned openapi.json fra aap-behandlingsflyt
-        run: gh run download --repo navikt/aap-behandlingsflyt --run-id "${{ inputs.run-id }}" --name openapi --dir .
+        run: gh run download "${{ inputs.run-id }}" --repo navikt/aap-behandlingsflyt --name openapi --dir .
         env:
           GH_TOKEN: ${{ steps.get-behandlingsflyt-token.outputs.token }}
 
