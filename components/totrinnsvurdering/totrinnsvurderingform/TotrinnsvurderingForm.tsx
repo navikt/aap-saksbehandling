@@ -1,46 +1,46 @@
 'use client';
 
-import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  getTrueFalseEllerUndefined,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
 import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { clientFjernHelseopplysningIkon, clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
+import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
-import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useFieldArray } from 'react-hook-form';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useConfigForm } from 'components/form/FormHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
-import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+import { isLocal } from 'lib/utils/environment';
+import {
+  Behovstype,
+  JaEllerNei,
+  JaEllerNeiOptions,
+  getJaNeiEllerUndefined,
+  getTrueFalseEllerUndefined,
+} from 'lib/utils/form';
 import {
   loggUmamiVarighet,
   loggUmamiVarighetHendelser,
   useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
-import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
-import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+import { useFieldArray } from 'react-hook-form';
 
-import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
-import { isLocal } from 'lib/utils/environment';
+import { Alert } from 'components/alert/Alert';
+import { useConfigForm } from 'components/form/FormHook';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
-import { clientFjernHelseopplysningIkon, clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
+import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
+import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -162,94 +162,56 @@ export const TotrinnsvurderingForm = ({
         if (isError) {
           return;
         }
+
+        const behovParams = {
+          behandlingVersjon: behandlingsversjon,
+          behov: {
+            behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+            vurderinger: assessedFields.map((vurdering) => {
+              if (vurdering.godkjent === JaEllerNei.Ja) {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: true,
+                };
+              } else {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                  grunner: vurdering.grunner?.map((grunn) => {
+                    return {
+                      årsak: grunn,
+                      årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                    };
+                  }),
+                  begrunnelse: vurdering.begrunnelse,
+                };
+              }
+            }),
+          },
+          referanse: behandlingsreferanse,
+        };
+
+        const onSuccessLøsBehovCallback = () => {
+          loggUmamiVarighet(
+            erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+            umamiStartTidspunkt,
+            Date.now()
+          );
+          if (!erKvalitetssikring) {
+            loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+          } else if (nyHookForAvklaringsbehov) {
+            clientMottattDokumenterLest(behandlingsreferanse);
+          } else {
+            clientFjernHelseopplysningIkon(behandlingsreferanse);
+          }
+
+          nullstillMellomlagretVurdering();
+        };
+
         if (nyHookForAvklaringsbehov) {
-          løsAvklaringsbehov(
-            {
-              behandlingVersjon: behandlingsversjon,
-              behov: {
-                behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-                vurderinger: assessedFields.map((vurdering) => {
-                  if (vurdering.godkjent === JaEllerNei.Ja) {
-                    return {
-                      definisjon: vurdering.definisjon,
-                      godkjent: true,
-                    };
-                  } else {
-                    return {
-                      definisjon: vurdering.definisjon,
-                      godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                      grunner: vurdering.grunner?.map((grunn) => {
-                        return {
-                          årsak: grunn,
-                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                        };
-                      }),
-                      begrunnelse: vurdering.begrunnelse,
-                    };
-                  }
-                }),
-              },
-              referanse: behandlingsreferanse,
-            },
-            () => {
-              loggUmamiVarighet(
-                erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
-                umamiStartTidspunkt,
-                Date.now()
-              );
-              if (!erKvalitetssikring) {
-                loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-              } else {
-                clientMottattDokumenterLest(behandlingsreferanse);
-              }
-
-              nullstillMellomlagretVurdering();
-            }
-          );
+          løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
         } else {
-          løsBehovOgGåTilNesteSteg(
-            {
-              behandlingVersjon: behandlingsversjon,
-              behov: {
-                behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-                vurderinger: assessedFields.map((vurdering) => {
-                  if (vurdering.godkjent === JaEllerNei.Ja) {
-                    return {
-                      definisjon: vurdering.definisjon,
-                      godkjent: true,
-                    };
-                  } else {
-                    return {
-                      definisjon: vurdering.definisjon,
-                      godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                      grunner: vurdering.grunner?.map((grunn) => {
-                        return {
-                          årsak: grunn,
-                          årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                        };
-                      }),
-                      begrunnelse: vurdering.begrunnelse,
-                    };
-                  }
-                }),
-              },
-              referanse: behandlingsreferanse,
-            },
-            () => {
-              loggUmamiVarighet(
-                erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
-                umamiStartTidspunkt,
-                Date.now()
-              );
-              if (!erKvalitetssikring) {
-                loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-              } else {
-                clientFjernHelseopplysningIkon(behandlingsreferanse);
-              }
-
-              nullstillMellomlagretVurdering();
-            }
-          );
+          løsBehovOgGåTilNesteSteg(behovParams, onSuccessLøsBehovCallback);
         }
       })}
       className={'flex-column'}
