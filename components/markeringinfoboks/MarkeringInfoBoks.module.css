@@ -1,5 +1,4 @@
 .hasterTag {
-  background-color: var(--ax-bg-danger-moderate);
   justify-content: left;
   height: var(--ax-space-40);
 }
@@ -12,6 +11,17 @@
   max-width: 600px;
 }
 
-.tag:hover {
-  cursor: pointer;
+.knapp {
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+}
+
+.knapp:hover [data-color='danger'] {
+  background-color: var(--ax-bg-danger-moderate-hover);
+}
+
+.knapp:hover [data-color='meta-purple'] {
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
