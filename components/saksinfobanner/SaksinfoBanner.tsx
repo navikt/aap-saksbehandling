@@ -68,6 +68,14 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
   const oppgaveStatus = hentOppgaveStatus();
   const oppgaveTildelingStatus = hentOppgaveTildeling();
 
+  const mottattDialogmelding = behandling?.vurderingsbehovOgÅrsaker.some((x) =>
+    x.vurderingsbehov.some((behov) => behov.type == 'MOTTATT_DIALOGMELDING')
+  );
+  const mottattLegeerklæring = behandling?.vurderingsbehovOgÅrsaker.some((x) =>
+    x.vurderingsbehov.some((behov) => behov.type == 'MOTTATT_LEGEERKLÆRING')
+  );
+  const mottattAnnenMelding = visHarUlesteDokumenter && !mottattDialogmelding && !mottattLegeerklæring;
+
   return (
     <div className={styles.saksinfobanner}>
       <div className={styles.saksinfo}>
@@ -122,10 +130,27 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
           ))}
           {visHarUlesteDokumenter && (
             <div className={styles.oppgavestatus}>
-              <SvarFraBehandler
-                behandlingReferanse={behandling.referanse}
-                oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
-              />
+              {mottattDialogmelding && (
+                <SvarFraBehandler
+                  behandlingReferanse={behandling.referanse}
+                  oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
+                  dokumenttype={'Melding eller tilleggsopplysninger'}
+                />
+              )}
+              {mottattLegeerklæring && (
+                <SvarFraBehandler
+                  behandlingReferanse={behandling.referanse}
+                  oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
+                  dokumenttype={'Legeerklæring'}
+                />
+              )}
+              {mottattAnnenMelding && (
+                <SvarFraBehandler
+                  behandlingReferanse={behandling.referanse}
+                  oppdaterVisHarUlesteDokumenter={settVisHarUlesteDokumenter}
+                  dokumenttype={'Dokument'}
+                />
+              )}
             </div>
           )}
           {behandling.arenaStatus?.harArenaHistorikk && (

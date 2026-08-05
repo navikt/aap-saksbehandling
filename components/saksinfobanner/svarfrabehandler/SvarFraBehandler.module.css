@@ -8,8 +8,7 @@
 }
 
 .knapp:hover {
-  background-color: var(--ax-bg-meta-purple-strong);
-  color: white;
+  background-color: var(--ax-bg-meta-purple-moderate-hover);
 }
 
 .tag {
