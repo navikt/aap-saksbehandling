@@ -1,12 +1,13 @@
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { JaEllerNei } from 'lib/utils/form';
 import { parse } from 'date-fns';
 import { OvergangArbeidGrunnlag, OvergangArbeidLøsning } from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+
 import {
   OvergangArbeidForm,
   OvergangArbeidVurderingForm,
 } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid-types';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag: OvergangArbeidGrunnlag): OvergangArbeidForm {
   if (trengerVurderingsForslag(grunnlag)) {
@@ -39,7 +40,7 @@ export const mapFormTilDto = (
 ): OvergangArbeidLøsning => {
   return {
     begrunnelse: periodeForm.begrunnelse,
-    fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+    fom: formaterDatoForBackend(parse(periodeForm.fraDato, 'dd.MM.yyyy', new Date())),
     tom: tilDato,
     brukerRettPåAAP: periodeForm.brukerRettPåAAP === JaEllerNei.Ja,
   };

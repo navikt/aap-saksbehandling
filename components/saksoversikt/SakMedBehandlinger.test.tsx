@@ -1,28 +1,27 @@
-import { describe, expect, it } from 'vitest';
-import { SakMedBehandlinger } from './SakMedBehandlinger';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { BehandlingInfo, SaksInfo } from 'lib/types/types';
+import { describe, expect, it } from 'vitest';
+
+import { SakMedBehandlinger } from './SakMedBehandlinger';
 
 export const lagBehandling = (
   overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>
-): BehandlingInfo =>
-  ({
-    opprettet: '2026-01-01T12:00:00',
-    typeBehandling: 'Førstegangsbehandling',
-    vurderingsbehov: [],
-    årsakTilOpprettelse: 'SØKNAD',
-    ...overrides,
-  }) as BehandlingInfo;
+): BehandlingInfo => ({
+  opprettet: '2026-01-01T12:00:00',
+  typeBehandling: 'Førstegangsbehandling',
+  vurderingsbehov: [],
+  årsakTilOpprettelse: 'SØKNAD',
+  ...overrides,
+});
 
-export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo =>
-  ({
-    saksnummer: '12345',
-    ident: '12345678910',
-    opprettetTidspunkt: '2026-01-01T00:00:00',
-    periode: { fom: '2026-01-01', tom: '2026-12-31' },
-    status: 'UTREDES',
-    behandlinger,
-  }) as SaksInfo;
+export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo => ({
+  saksnummer: '12345',
+  ident: '12345678910',
+  opprettetTidspunkt: '2026-01-01T00:00:00',
+  periode: { fom: '2026-01-01', tom: '2026-12-31' },
+  status: 'UTREDES',
+  behandlinger,
+});
 
 describe('SakMedBehandlinger', () => {
   it('viser åpne behandlinger før avsluttede', () => {

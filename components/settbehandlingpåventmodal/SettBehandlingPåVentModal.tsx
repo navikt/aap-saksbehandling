@@ -1,23 +1,24 @@
 'use client';
 
-import { SubmitEventHandler, useState } from 'react';
-import { Box, Button, Modal, VStack } from '@navikt/ds-react';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { clientSettBehandlingPåVent } from 'lib/clientApi';
-import { revalidateBehandlingPath } from 'lib/actions/actions';
-
-import styles from './SettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import { SettPåVentÅrsaker } from 'lib/types/types';
+import { Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { parse } from 'date-fns';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
+import { clientSettBehandlingPåVent } from 'lib/clientApi';
+import { SettPåVentÅrsaker } from 'lib/types/types';
+import { isSuccess } from 'lib/utils/api';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
+import { SubmitEventHandler, useState } from 'react';
+
+import { Alert } from 'components/alert/Alert';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
-import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
-import { isSuccess } from 'lib/utils/api';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { Alert } from 'components/alert/Alert';
+
+import styles from './SettBehandlingPåVentModal.module.css';
 
 interface Props {
   reservert: boolean;
@@ -63,7 +64,7 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
       rules: {
         required: 'Du må sette en frist',
         validate: (value) => {
-          const valideringsresultat = validerDato(value as string);
+          const valideringsresultat = validerDato(value);
           if (valideringsresultat) {
             return valideringsresultat;
           }

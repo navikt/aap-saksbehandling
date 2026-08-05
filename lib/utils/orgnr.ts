@@ -23,5 +23,5 @@ export const erGyldigOrganisasjonsnummer = (value: string | undefined): boolean 
   if (!/^\d{9}$/.test(value ?? '') || /^0+$/.test(value ?? ''))
     // hvis orgnr ikke består av 9 siffer
     return false;
-  else return validerKontrollsiffer(value!!);
+  else return validerKontrollsiffer(value!);
 };

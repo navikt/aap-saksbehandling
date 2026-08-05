@@ -421,6 +421,7 @@ export interface paths {
             | 'Aktivitetsplikt11_9'
             | 'Førstegangsbehandling'
             | 'Klage'
+            | 'MigreringFraArena'
             | 'OppfølgingsBehandling'
             | 'Revurdering'
             | 'SvarFraAndreinstans'
@@ -14976,6 +14977,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -17968,7 +17970,6 @@ export interface components {
        */
       avbruttStudieDato?: string | null;
       begrunnelse: string;
-      bidiagnoser?: string[] | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -17977,8 +17978,6 @@ export interface components {
       'godkjentStudieAvL\u00E5nekassen'?: boolean | null;
       harAvbruttStudie: boolean;
       harBehovForBehandling?: boolean | null;
-      hoveddiagnose?: string | null;
-      kodeverk?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -18518,6 +18517,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -18833,6 +18833,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
@@ -20372,6 +20373,7 @@ export interface components {
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
         | 'Klage'
+        | 'MigreringFraArena'
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'

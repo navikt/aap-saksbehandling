@@ -105,8 +105,8 @@ export const FastsettBeregning = ({
         defaultValue: defaultValues.nedsattArbeidsevneDato,
         rules: {
           validate: (value) => {
-            const valideringsresultat = validerDato(value as string);
-            const datoErFremITid = erDatoIFremtiden(value as string);
+            const valideringsresultat = validerDato(value);
+            const datoErFremITid = erDatoIFremtiden(value);
 
             if (valideringsresultat) {
               return valideringsresultat;
@@ -135,12 +135,12 @@ export const FastsettBeregning = ({
         defaultValue: defaultValues.ytterligereNedsattArbeidsevneDato,
         rules: {
           validate: (value, formValues) => {
-            const valideringsresultat = validerDato(value as string);
+            const valideringsresultat = validerDato(value);
             if (valideringsresultat) {
               return valideringsresultat;
             }
 
-            if (value && isBefore(new Date(value as string), new Date(formValues.nedsattArbeidsevneDato))) {
+            if (value && isBefore(new Date(value), new Date(formValues.nedsattArbeidsevneDato))) {
               return 'Ytterligere nedsatt dato kan ikke være før datoen arbeidsevnen ble nedsatt';
             }
           },

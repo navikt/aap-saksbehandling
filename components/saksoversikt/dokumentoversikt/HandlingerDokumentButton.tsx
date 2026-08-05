@@ -1,13 +1,14 @@
 'use client';
 
-import { ActionMenu, Button } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { ActionMenu, Button } from '@navikt/ds-react';
+import { Journalpost } from 'lib/types/journalpost';
 import { SaksInfo } from 'lib/types/types';
-import { useState } from 'react';
 import { erFerdigstilt } from 'lib/utils/journalpost';
+import { useState } from 'react';
+
 import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumentoversikt/FeilregistrerJournalpost';
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
-import { Journalpost } from 'lib/types/journalpost';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
   const [knyttTilSakOpen, setKnyttTilSakOpen] = useState(false);
@@ -54,7 +55,7 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
       </ActionMenu>
       <KnyttTilSakModal
         journalpostId={journalpost.journalpostId}
-        tema={journalpost.tema!!}
+        tema={journalpost.tema!}
         saksnummer={sak.saksnummer}
         brukerIdent={sak.ident}
         isOpen={knyttTilSakOpen}
