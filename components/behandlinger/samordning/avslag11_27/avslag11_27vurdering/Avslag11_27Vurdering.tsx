@@ -49,7 +49,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
             name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelse`}
             control={form.control}
             label={'Hvilken ytelse har brukeren?'}
-            rules={visYtelseSpørsmål ? { required: 'Du må velge hvilken ytelse brukeren har' } : {}}
+            rules={{ required: 'Du må velge hvilken ytelse brukeren har' }}
             readOnly={readonly}
           >
             <option value="">Velg ytelse</option>
@@ -66,7 +66,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
           name={`avslag11_27vurderinger.${kravIndex}.vurdering.harSykepengegrunnlagOver2G`}
           control={form.control}
           label={'Har brukeren sykepengegrunnlag større enn 2G?'}
-          rules={visSykepengegrunnlagSpørsmål ? { required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2G.' } : {}}
+          rules={{ required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2G.' }}
           readOnly={readonly}
           horisontal
         >
@@ -78,8 +78,10 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
         <RadioGroupWrapper
           name={`avslag11_27vurderinger.${kravIndex}.vurdering.skalAvslås1127`}
           control={form.control}
-          label={'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'}
-          rules={visAvslagsSpørsmål ? { required: 'Du må svare om søknaden skal avslås etter § 11-27' } : {}}
+          label={
+            'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'
+          }
+          rules={{ required: 'Du må svare om søknaden skal avslås etter § 11-27' }}
           readOnly={readonly}
           horisontal
         >
