@@ -74,7 +74,7 @@ export const TotrinnnsvurderingFelter = ({
             href={link}
             onClick={() => felterOnBlur(`${eventPrefix}_LINK`, Date.now())}
           >
-            {mapBehovskodeTilBehovstype(field.definisjon)}
+            {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
           </AkselLink>
         </VStack>
       </div>

@@ -1,14 +1,15 @@
 'use client';
 
+import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
-import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
-import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
-import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -43,7 +44,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                       vurdering.avklaringsbehovKode as Behovstype
                     )}
                   >
-                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
+                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode as Behovstype)}
                   </ErrorSummary.Item>
                 ))}
               </ErrorSummary>

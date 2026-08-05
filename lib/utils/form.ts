@@ -5,7 +5,6 @@ import { ValuePair } from 'components/form/FormField';
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
   VURDER_BRUDD_11_7_KODE = '4101',
-  VENTE_PÅ_FRIST_FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT = '4102',
   VURDER_BRUDD_11_9_KODE = '4201',
   AVKLAR_STUDENT_KODE = '5001',
   AVKLAR_STUDENT_KODE_V2 = '5037',
@@ -72,20 +71,6 @@ export enum Behovstype {
   FORESLÅ_VEDTAK_VEDTAKSLENGDE = '5060',
   AVBRYT_AKTIVITETSPLIKTBEHANDLING = '4301',
   VURDER_AVSLAG_11_27 = '5042',
-  FORHÅNDSVARSEL_AKTIVITETSPLIKT_KODE = '5016',
-  VENTE_PÅ_FIRST_EFFEKTUER_11_7_KODE = '5018',
-  AVKLAR_UTENLANDSK_MEDLEMSKAP_KODE = '5019',
-  VENTE_PÅ_KLAGE_IMPLEMENTASJON_KODE = '5023',
-  SAMORDNING_VENT_VIRKNINGSTIDSPUNKT_KODE = '5025',
-  EFFEKTUER_AVVIST_FORMKRAV_KODE = '6004',
-  VENTER_PÅ_UTTALELSE_KLAGE_FORHÅNDSVARSEL_KODE = '6007',
-  VENTER_PÅ_OPPFØLGING_LOKALKONTOR_KODE = '8003',
-  VENTER_PÅ_OPPFØLGING_NAY_KODE = '8004',
-  BESTILL_BREV_KODE = '9002',
-  BESTILL_LEGEERKLÆRING_KODE = '9003',
-  OPPRETT_HENDELSE_PÅ_SAK_KODE = '9004',
-  VURDER_TILBAKEKREVING_KODE = '9082',
-  VURDER_TILBAKEKREVING_BESLUTTER_KODE = '9083',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -94,8 +79,6 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
   switch (kode) {
     case '4101':
       return '§ 11-7 Medlemmets aktivitetsplikt';
-    case '4102':
-      return 'Vente på frist for forhåndsvarsel brudd aktivitetsplikt';
     case '4201':
       return '§ 11-9 Aktivitetsplikt';
     case '4301':
@@ -230,31 +213,6 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return 'Fastsett vedtaksperiode';
     case '5060':
       return 'Foreslå vedtak vedtakslengde';
-    case '5016':
-    case '5018':
-    case '5019':
-    case '5023':
-      return kode;
-    case '5025':
-      return 'Samordning vent på virkningstidspunkt';
-    case '6004':
-      return 'Effektuer avvist på formkrav';
-    case '6007':
-      return 'Venter på uttalelse fra brukeren på klage forhåndsvarsel';
-    case '8003':
-      return 'Venter på oppfølging lokalkontor';
-    case '8004':
-      return 'Venter på oppfølging NAY';
-    case '9002':
-      return 'Bestill brev';
-    case '9003':
-      return 'Bestill legeerklæring';
-    case '9004':
-      return 'Opprett hendelse på sak';
-    case '9082':
-      return 'Vurder tilbakekreving';
-    case '9083':
-      return 'Vurder tilbakekreving beslutter';
   }
 }
 
