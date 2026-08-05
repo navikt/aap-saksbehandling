@@ -19,7 +19,7 @@ import {
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';<<<<<<< umami-refactor
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
@@ -29,7 +29,6 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
 import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
 import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ValuePair } from 'components/form/FormField';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import {
@@ -43,7 +42,6 @@ interface Props {
   behandlingVersjon: number;
   grunnlag: StudentGrunnlag;
   readOnly: boolean;
-  diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
@@ -67,13 +65,7 @@ export interface StudentVurdering extends VurderingFormMeta {
 
 type DraftFormFields = Partial<StudentFormFields>;
 
-export const StudentVurdering = ({
-  readOnly,
-  initialMellomlagretVurdering,
-  grunnlag,
-  behandlingVersjon,
-  diagnoseDefaultOptions,
-}: Props) => {
+export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunnlag, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
@@ -214,11 +206,7 @@ export const StudentVurdering = ({
                 initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 vurderingStatus={hentVurderingStatus(vurderingValues)}
               >
-                <StudentVurderingFelter
-                  index={index}
-                  readOnly={formReadOnly}
-                  diagnoseDefaultOptions={diagnoseDefaultOptions}
-                />
+                <StudentVurderingFelter index={index} readOnly={formReadOnly} />
               </NyVurderingExpandableCard>
             );
           })}
@@ -234,20 +222,6 @@ export const StudentVurdering = ({
 
     return {
       vurderinger: grunnlag.nyeVurderinger?.map((vurdering) => {
-        const kodeverk = vurdering?.kodeverk as keyof DiagnoserDefaultOptions;
-
-        const hoveddiagnose = kodeverk
-          ? diagnoseDefaultOptions?.[kodeverk]?.hoveddiagnoserOptions.find(
-              (value) => value.value === vurdering?.hoveddiagnose
-            )
-          : undefined;
-
-        const bidiagnose = kodeverk
-          ? diagnoseDefaultOptions?.[kodeverk].bidiagnoserOptions?.filter((option) =>
-              vurdering?.bidiagnoser?.includes(option.value)
-            )
-          : undefined;
-
         return {
           fraDato: vurdering?.fom ? new Dato(vurdering.fom).formaterForFrontend() : '',
           begrunnelse: vurdering?.begrunnelse || '',
@@ -260,9 +234,6 @@ export const StudentVurdering = ({
             ? new Dato(vurdering.avbruttStudieDato).formaterForFrontend()
             : undefined,
           vurderingerMeta: vurdering.vurderingerMeta,
-          kodeverk: kodeverk,
-          hoveddiagnose: hoveddiagnose,
-          bidiagnose: bidiagnose,
           erNyVurdering: false,
           behøverVurdering: false,
         };
