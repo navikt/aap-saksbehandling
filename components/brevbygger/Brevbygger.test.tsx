@@ -332,7 +332,7 @@ describe('Delmaler med valg', () => {
     );
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/consistent-type-assertions -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
     expect((screen.getByRole('option', { name: 'Alternativ 1' }) as HTMLOptionElement).selected).toBe(true);
   });
 
@@ -367,7 +367,7 @@ describe('Delmaler med valg', () => {
     );
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion, @typescript-eslint/consistent-type-assertions -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
     expect((screen.getByRole('option', { name: 'Fritekst' }) as HTMLOptionElement).selected).toBe(true);
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
     expect(screen.getByText('Her kommer det litt fritekst')).toBeVisible();

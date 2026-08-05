@@ -1,7 +1,7 @@
 import { HStack, RadioGroup } from '@navikt/ds-react';
+import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
 import React, { ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
-import { createSyntheticEvent } from 'lib/types/SyntheticEvent';
 
 interface RadioProps<FormFieldValues extends FieldValues> {
   name: FieldPath<FormFieldValues>;
@@ -17,7 +17,6 @@ interface RadioProps<FormFieldValues extends FieldValues> {
   readOnly?: boolean;
   className?: string;
   onChangeCustom?: (event: React.SyntheticEvent) => void;
-  dataUmamiEvent?: string;
 }
 
 const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
@@ -34,7 +33,6 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   className,
   onChangeCustom,
-  dataUmamiEvent,
 }: RadioProps<FormFieldValues>) => {
   return (
     <Controller
@@ -53,7 +51,6 @@ const RadioGroupWrapper = <FormFieldValues extends FieldValues>({
         return (
           <RadioGroup
             id={name}
-            data-umami-event={dataUmamiEvent}
             size={size}
             value={value || ''}
             hideLegend={hideLabel}

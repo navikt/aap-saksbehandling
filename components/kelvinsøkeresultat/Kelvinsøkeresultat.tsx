@@ -4,7 +4,7 @@ import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { loggUmamiGåTilBehandling, loggUmamiGåTilSaksoversikt } from 'lib/utils/umami';
+import { loggUmamiGåTilBehandling, loggUmamiGåTilSaksoversikt } from 'lib/utils/umami/navigering';
 
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { Alert } from 'components/alert/Alert';

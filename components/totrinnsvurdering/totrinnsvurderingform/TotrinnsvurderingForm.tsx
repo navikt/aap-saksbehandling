@@ -9,6 +9,12 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon, clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
+import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -25,11 +31,13 @@ import {
   getTrueFalseEllerUndefined,
 } from 'lib/utils/form';
 import {
-  loggUmamiVarighet,
+  BeslutterFeltTag,
   loggUmamiVarighetHendelser,
-  useUmamiStartTidspunkt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+import { useFieldArray } from 'react-hook-form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useFieldArray } from 'react-hook-form';
 
@@ -75,8 +83,8 @@ export const TotrinnsvurderingForm = ({
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
     useLøsAvklaringsbehov(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
 
-  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
-    erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
+  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser<BeslutterFeltTag>(
+    erKvalitetssikring ? 'KVALITETSSIKRER_HENDELSER_VARIGHET' : 'BESLUTTER_HENDELSER_VARIGHET'
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt('TOTRINN');
 

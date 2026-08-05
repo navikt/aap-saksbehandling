@@ -8,8 +8,8 @@ import {
   mapTilÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/oversettelser';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { loggUmamiGåTilSaksoversikt } from 'lib/utils/umami/navigering';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { loggUmamiGåTilSaksoversikt } from 'lib/utils/umami';
 import Link from 'next/link';
 import { memo } from 'react';
 
@@ -31,9 +31,9 @@ const OppgaveRad = ({
     <Table.Row key={oppgave.behandlingskontekst.saksnummer || oppgave.behandlingskontekst.journalpostId}>
       <Table.DataCell textSize={'small'}>
         {oppgave.behandlingskontekst.saksnummer ? (
-          <AkselLink 
-            as={Link} 
-            prefetch={false} 
+          <AkselLink
+            as={Link}
+            prefetch={false}
             href={`/saksbehandling/sak/${oppgave.behandlingskontekst.saksnummer}`}
             onClick={() => loggUmamiGåTilSaksoversikt('MINE_OPPGAVER')}
           >

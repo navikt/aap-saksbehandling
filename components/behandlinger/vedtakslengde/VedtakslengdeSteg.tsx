@@ -1,38 +1,39 @@
 'use client';
 
+import { Radio, VStack } from '@navikt/ds-react';
+import { addDays, parse, parseISO } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import {
   MellomlagretVurdering,
   VedtakslengdeGrunnlag,
   VedtakslengdeVurderingResponse,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Radio, VStack } from '@navikt/ds-react';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
+import React from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+
+import { Alert } from 'components/alert/Alert';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { addDays, parse, parseISO } from 'date-fns';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import React from 'react';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;

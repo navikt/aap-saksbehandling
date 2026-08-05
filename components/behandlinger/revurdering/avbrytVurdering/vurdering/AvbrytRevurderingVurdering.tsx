@@ -1,15 +1,16 @@
 'use client';
 
-import { FormField } from 'components/form/FormField';
-import { useConfigForm } from 'components/form/FormHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
-import { SubmitEventHandler } from 'react';
-import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;

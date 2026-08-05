@@ -1,19 +1,20 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
-import { MellomlagretVurdering, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import { useConfigForm } from 'components/form/FormHook';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { FormField } from 'components/form/FormField';
-import { formaterPeriode } from 'lib/utils/date';
-import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { MellomlagretVurdering, SamordningTjenestePensjonGrunnlag } from 'lib/types/types';
+import { formaterPeriode } from 'lib/utils/date';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningTjenestePensjonGrunnlag;
