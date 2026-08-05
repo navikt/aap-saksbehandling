@@ -359,8 +359,6 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-9';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
-    case 'MigreringFraArena':
-      return 'Migrering fra Arena';
     default:
       return typeBehandling;
   }
