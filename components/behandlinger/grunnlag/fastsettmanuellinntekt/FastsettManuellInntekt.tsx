@@ -11,7 +11,7 @@ import { Dato } from 'lib/types/Dato';
 import { DelperiodeData, ManuellInntektGrunnlag, ManuellInntektÅr, MellomlagretVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEvent, useEffect, useMemo } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 

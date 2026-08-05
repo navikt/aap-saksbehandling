@@ -1,16 +1,16 @@
 'use client';
 
-import { Behovstype } from 'lib/utils/form';
 import { Label, VStack } from '@navikt/ds-react';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-
-import { ForeslåVedtakGrunnlag } from 'lib/types/types';
-import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { ForeslåVedtakGrunnlag } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+
 import { StansOpphørTabell } from 'components/behandlinger/vedtak/foreslåvedtak/StansOpphørTabell';
+import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
+import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 
 interface Props {
   behandlingVersjon: number;
@@ -64,4 +64,3 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
     </VilkårskortMedForm>
   );
 };
-

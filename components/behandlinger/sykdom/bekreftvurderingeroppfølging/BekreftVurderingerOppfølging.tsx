@@ -43,7 +43,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                       vurdering.avklaringsbehovKode as Behovstype
                     )}
                   >
-                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode as Behovstype)}
+                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
                   </ErrorSummary.Item>
                 ))}
               </ErrorSummary>

@@ -1,6 +1,14 @@
 'use client';
 
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import { VStack } from '@navikt/ds-react';
+import { parse } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
+import { Dato } from 'lib/types/Dato';
 import {
   AvklarPeriodisertStudentLøsning,
   MellomlagretVurdering,
@@ -8,37 +16,28 @@ import {
   StudentVurderingResponse,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
-import { ValuePair } from 'components/form/FormField';
-
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { Dato } from 'lib/types/Dato';
-import { VStack } from '@navikt/ds-react';
+import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { SubmitEventHandler } from 'react';
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
+
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
+import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
+import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { ValuePair } from 'components/form/FormField';
+import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { SubmitEventHandler } from 'react';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
-import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { parse } from 'date-fns';
-import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-
-import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 interface Props {
   behandlingVersjon: number;
