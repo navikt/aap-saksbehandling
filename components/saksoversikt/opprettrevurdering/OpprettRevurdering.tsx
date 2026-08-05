@@ -17,7 +17,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { Kort } from 'components/kort/Kort';
 
 export interface ManuellRevurderingFormFields {
-  årsaker: string[];
+  årsaker: ManuellRevurderingV0['årsakerTilBehandling'];
   beskrivelse: string;
 }
 
@@ -52,7 +52,7 @@ export const OpprettRevurdering = ({
       mottattTidspunkt: new Date().toISOString(),
       melding: {
         meldingType: 'ManuellRevurderingV0',
-        årsakerTilBehandling: data.årsaker as ManuellRevurderingV0['årsakerTilBehandling'],
+        årsakerTilBehandling: data.årsaker,
         beskrivelse: data.beskrivelse,
         opprettetAv: innloggetBruker.NAVident,
       } satisfies ManuellRevurderingV0,
@@ -73,7 +73,6 @@ export const OpprettRevurdering = ({
   const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
   const erKravEnabled = useFeatureFlag('KravSteg');
   const avslag11_27Enable = useFeatureFlag('Avslag11_27');
-  const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
 
   const { form, formFields } = useConfigForm<ManuellRevurderingFormFields>({
     beskrivelse: {
@@ -89,7 +88,7 @@ export const OpprettRevurdering = ({
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
       description: 'Skriv i feltet for å filtrere listen.',
-      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable, erRevurdereFrivilligeEnabled),
+      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,

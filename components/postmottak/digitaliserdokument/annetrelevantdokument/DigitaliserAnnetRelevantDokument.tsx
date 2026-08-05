@@ -12,7 +12,7 @@ import type { Submittable } from 'components/postmottak/digitaliserdokument/Digi
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 
 export interface AnnetRelevantDokumentFormFields {
-  årsaker: string[];
+  årsaker: DokumentÅrsakTilBehandling[];
   begrunnelse: string;
   underkategori?: AnnetRelevantDokumentUnderkategori;
 }
@@ -22,7 +22,6 @@ interface Props extends Submittable {
   readOnly: boolean;
   isLoading: boolean;
   erKravEnabled: boolean;
-  erRevurdereFrivilligeEnabled: boolean;
 }
 
 const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkategori>>[] = [
@@ -52,26 +51,19 @@ const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkate
 function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
   const dokument = {
     meldingType: 'AnnetRelevantDokumentV1',
-    årsakerTilBehandling: data.årsaker.map((årsak) => årsak as DokumentÅrsakTilBehandling),
+    årsakerTilBehandling: data.årsaker,
     begrunnelse: data.begrunnelse,
     underkategori: data.underkategori || undefined,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
 }
 
-export const DigitaliserAnnetRelevantDokument = ({
-  grunnlag,
-  readOnly,
-  submit,
-  isLoading,
-  erKravEnabled,
-  erRevurdereFrivilligeEnabled,
-}: Props) => {
+export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, isLoading, erKravEnabled }: Props) => {
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
 
-  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled, undefined, erRevurdereFrivilligeEnabled);
+  const vurderingsbehov = vurderingsbehovOptions(erKravEnabled, undefined);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
     .map((årsakFraGrunnlag) => vurderingsbehov.find((årsak) => årsak.value === årsakFraGrunnlag))
     .filter((e) => e !== undefined)
