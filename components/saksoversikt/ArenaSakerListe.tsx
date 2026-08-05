@@ -2,7 +2,7 @@
 
 import { VStack } from '@navikt/ds-react';
 import { ArenaSakKort } from 'components/saksoversikt/ArenaSakKort';
-import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
+import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 
 export function ArenaSakerListe({ arenaSaker }: { arenaSaker: SakerResponse }) {
   return (

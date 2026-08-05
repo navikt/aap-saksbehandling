@@ -5,14 +5,15 @@ import {
   NoNavAapOppgaveReturInformasjonDtoStatus as ReturStatus,
 } from '@navikt/aap-oppgave-typescript-types';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { OppgaveMedKontekst, ReturInformasjon } from 'lib/types/oppgaveTypes';
 import { mapGrunnTilString } from 'lib/utils/oversettelser';
 import { storForbokstav } from 'lib/utils/string';
-import { useRef, useState } from 'react';
+
+import { returStatusTilTekst } from 'components/oppgaveliste/returboks/ReturInfoUtils';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 import styles from './Returboks.module.css';
-import {returStatusTilTekst} from "components/oppgaveliste/returboks/ReturInfoUtils";
 
 interface Props {
   returInformasjon: ReturInformasjon;
@@ -39,12 +40,10 @@ function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonDtoRsaker[])
 }
 
 export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Props) => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
-
   const årsakTekst = returInformasjon.årsaker.length <= 1 ? 'Årsak' : 'Årsaker';
   const returFraToTrinn =
-    returInformasjon.status == ReturStatus.RETUR_FRA_KVALITETSSIKRER || returInformasjon.status == ReturStatus.RETUR_FRA_BESLUTTER;
+    returInformasjon.status == ReturStatus.RETUR_FRA_KVALITETSSIKRER ||
+    returInformasjon.status == ReturStatus.RETUR_FRA_BESLUTTER;
   const skalViseForrigeKvalitetssikrer =
     returInformasjon.status == ReturStatus.RETUR_FRA_VEILEDER &&
     forrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
@@ -54,7 +53,7 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
       return (
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
-            data-color="warning"
+            data-color="meta-purple"
             icon={<ArrowsSquarepathIcon />}
             variant={'moderate'}
             size={'medium'}
@@ -80,7 +79,7 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
       return (
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
-            data-color="warning"
+            data-color="meta-purple"
             icon={<ArrowsSquarepathIcon />}
             variant={'moderate'}
             size={'medium'}
@@ -104,7 +103,7 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
       return (
         <VStack className={styles.litenBoks}>
           <Tag
-            data-color="warning"
+            data-color="meta-purple"
             icon={<ArrowsSquarepathIcon />}
             variant={'moderate'}
             size={'medium'}
@@ -120,23 +119,10 @@ export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Prop
   }
 
   return (
-    <>
-      <Button
-        icon={<ArrowsSquarepathIcon title={returStatusTilTekst(returInformasjon.status)} />}
-        className={styles.knapp}
-        onClick={() => setVis(!vis)}
-        ref={buttonRef}
-        size="xsmall"
-      />
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
-        {utledPopoverInnhold()}
-      </Popover>
-    </>
+    <TagMedPopover
+      ikon={<ArrowsSquarepathIcon title={returStatusTilTekst(returInformasjon.status)} />}
+      dataColor={'meta-purple'}
+      popoverContent={utledPopoverInnhold()}
+    />
   );
 };
