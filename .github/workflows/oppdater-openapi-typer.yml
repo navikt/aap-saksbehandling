@@ -53,27 +53,30 @@ jobs:
       - name: Rydd opp midlertidig fil
         run: rm -f openapi.json
 
-      - name: Opprett PR med oppdaterte typer
+      - name: Opprett eller oppdater PR med oppdaterte typer
         run: |
           if git diff --quiet -- lib/types/schema.d.ts; then
             echo "Ingen endringer i genererte typer, avslutter."
             exit 0
           fi
 
-          gh pr list --state open --search "Oppdater genererte typer in:title" --json number --jq '.[].number' \
-            | xargs -r -I{} gh pr close {} --comment "Lukker til fordel for ny oppdatering"
-
           git config --global user.email "aap-openapi-typer-updater@nav.no"
           git config --global user.name "AAP openapi-typer sync"
 
-          BRANCH_NAME="chore/oppdater-openapi-typer-$(date +"%Y%m%d%H%M%S")"
-          git checkout -b "$BRANCH_NAME"
+          BRANCH_NAME="chore/oppdater-openapi-typer"
+          git checkout -B "$BRANCH_NAME"
           git add lib/types/schema.d.ts
           git commit -m "chore: oppdater genererte typer fra aap-behandlingsflyt openapi.json"
-          git push origin HEAD
+          git push --force origin HEAD:"$BRANCH_NAME"
 
-          gh pr create --head "$BRANCH_NAME" \
-            --title "chore: Oppdater genererte typer fra aap-behandlingsflyt" \
-            --body "Automatisk generert PR. openapi.json har endret seg i navikt/aap-behandlingsflyt (run ${{ inputs.run-id }}), og \`lib/types/schema.d.ts\` er regenerert med \`yarn gentypes:ci\`."
+          EXISTING_PR=$(gh pr list --state open --head "$BRANCH_NAME" --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Oppdaterer eksisterende PR #$EXISTING_PR"
+            gh pr comment "$EXISTING_PR" --body "Oppdatert med nye typer fra run ${{ inputs.run-id }}."
+          else
+            gh pr create --head "$BRANCH_NAME" \
+              --title "chore: Oppdater genererte typer fra aap-behandlingsflyt" \
+              --body "Automatisk generert PR. openapi.json har endret seg i navikt/aap-behandlingsflyt (run ${{ inputs.run-id }}), og \`lib/types/schema.d.ts\` er regenerert med \`yarn gentypes:ci\`."
+          fi
         env:
           GH_TOKEN: ${{ secrets.github_token }}
