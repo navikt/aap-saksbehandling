@@ -143,7 +143,7 @@ export function useOppgaver({
       const endeligsortering = sortering ? mapSortStateTilOppgaveSortering(sortering) : undefined;
 
       const payload: OppgavelisteRequest = {
-        filterId: aktivKøId!,
+        filterId: aktivKøId,
         enheter: aktiveEnheter,
         kunLedigeOppgaver: kunLedigeOppgaver,
         veileder: visKunOppgaverSomBrukerErVeilederPå,

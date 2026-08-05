@@ -1,11 +1,13 @@
-import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
+import { Radio } from '@navikt/ds-react';
 import { DiagnoseSystem, diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
 import { JaEllerNei } from 'lib/utils/form';
 import { UseFormReturn } from 'react-hook-form';
+
 import { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { Radio } from '@navikt/ds-react';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+
 import styles from './SykdomsvurderingDiagnosesøk.module.css';
 
 interface Props {
@@ -18,7 +20,7 @@ interface Props {
 export const SykdomsvurderingDiagnosesøk = ({ index, form, readOnly, diagnoseDefaultOptions }: Props) => {
   const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as DiagnoseSystem;
 
-  const kodeverk = kodeverkValue as keyof DiagnoserDefaultOptions;
+  const kodeverk = kodeverkValue;
   const defaultOptionsHoveddiagnose = kodeverk && diagnoseDefaultOptions[kodeverk].hoveddiagnoserOptions;
   const defaultOptionsBidiagnose = kodeverk && diagnoseDefaultOptions[kodeverk].bidiagnoserOptions;
 

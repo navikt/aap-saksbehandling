@@ -17,6 +17,7 @@ export const FLAGS = [
   'Avslag11_27',
   'SkalViseAlleSykdomssteg',
   'RevurdereFrivillige',
+  'DialogMedBehandler',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -41,4 +42,5 @@ export const mockedFlags: Flags = {
   Avslag11_27: true,
   SkalViseAlleSykdomssteg: true,
   RevurdereFrivillige: true,
+  DialogMedBehandler: true,
 };

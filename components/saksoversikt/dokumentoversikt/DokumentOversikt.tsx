@@ -1,22 +1,24 @@
-import styles from './DokumentOversikt.module.css';
-import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
-import { Spinner } from 'components/felles/Spinner';
+import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
+import { Button, HStack, Heading, Table, VStack } from '@navikt/ds-react';
+import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
+import { clientHentAlleDokumenterPåBruker } from 'lib/dokumentClientApi';
+import { Journalpost, Journalposttype, Journalstatus, Tema } from 'lib/types/journalpost';
+import { SaksInfo } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { ÅpneDokumentButton } from 'components/saksoversikt/dokumentoversikt/ÅpneDokumentButton';
-import { HandlingerDokumentButton } from 'components/saksoversikt/dokumentoversikt/HandlingerDokumentButton';
-import { SaksInfo } from 'lib/types/types';
-import { clientHentAlleDokumenterPåBruker } from 'lib/dokumentClientApi';
 import { erFerdigstilt, formaterJournalpostType, formaterJournalstatus } from 'lib/utils/journalpost';
+import { useEffect, useState } from 'react';
+
+import { Alert } from 'components/alert/Alert';
+import { Spinner } from 'components/felles/Spinner';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { Journalpost, Journalposttype, Journalstatus, Tema } from 'lib/types/journalpost';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import { useEffect, useState } from 'react';
-import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
-import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
 import { Kort } from 'components/kort/Kort';
-import { Alert } from 'components/alert/Alert';
+import { HandlingerDokumentButton } from 'components/saksoversikt/dokumentoversikt/HandlingerDokumentButton';
+import { ÅpneDokumentButton } from 'components/saksoversikt/dokumentoversikt/ÅpneDokumentButton';
+import { TableStyled } from 'components/tablestyled/TableStyled';
+
+import styles from './DokumentOversikt.module.css';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -81,7 +83,7 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
       form.reset(lagretFilter);
     }
 
-    hent({ personIdent: sak.ident, ...(form.getValues() as DokumentFilterFormFields) });
+    hent({ personIdent: sak.ident, ...form.getValues() });
 
     const { unsubscribe } = form.watch((values) => {
       const filter = values as DokumentFilterFormFields;

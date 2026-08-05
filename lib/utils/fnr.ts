@@ -31,8 +31,8 @@ export const erGyldigFødselsnummer = (value: string | undefined): boolean => {
   if (!/^\d{11}$/.test(value ?? ''))
     // hvis fnr ikke består av 11 siffer
     return false;
-  else if (/^\d{6}0{5}$/.test(value!!))
+  else if (/^\d{6}0{5}$/.test(value!))
     // hvis siste 5 siffer i fnr er 00000
     return false;
-  else return validerKontrollsiffer(value!!);
+  else return validerKontrollsiffer(value!);
 };
