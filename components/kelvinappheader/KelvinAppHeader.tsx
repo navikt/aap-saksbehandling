@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
-import { ArrowRightLeftIcon, ExternalLinkIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { ArrowRightLeftIcon, ExternalLinkIcon, LeaveIcon, MigrationIcon, XMarkIcon } from '@navikt/aksel-icons';
 import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
 import styles from './KelvinAppHeader.module.css';
 import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
@@ -27,6 +27,8 @@ import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { Roller } from 'lib/types/types';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { SisteBehandledeSakerOgOppgaver } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { MigrerSakModal } from 'components/migrersakmodal/MigrerSakModal';
 
 const bytteBrukerForDevOgLokalt = !isProd();
 const lokalBrukerbytte = isLocal();
@@ -89,7 +91,9 @@ const lokalLenkeTilSaksoversikt = isLocal();
 export const KelvinAppHeader = () => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
+  const [migrerSakModalÅpen, setMigrerSakModalÅpen] = useState<boolean>(false);
   const brukerInformasjon = useInnloggetBruker();
+  const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
 
   return (
     <>
@@ -141,6 +145,16 @@ export const KelvinAppHeader = () => {
               stil={'lys'}
             />
           </InternalHeader.Button>
+        )}
+        {brukerInformasjon.roller.includes(Roller.SAKSBEHANDLER_NASJONAL) && visMigrereSakFraArena && (
+          <>
+            <InternalHeader.Button as="button" onClick={() => setMigrerSakModalÅpen(!migrerSakModalÅpen)}>
+              <MigrationIcon title="Migrer sak" />
+            </InternalHeader.Button>
+            <Theme theme={'light'}>
+              <MigrerSakModal isOpen={migrerSakModalÅpen} onClose={() => setMigrerSakModalÅpen(false)} />
+            </Theme>
+          </>
         )}
         <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={brukerInformasjon.roller} />

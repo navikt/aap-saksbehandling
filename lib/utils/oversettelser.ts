@@ -295,6 +295,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering fra Arena';
   }
 }
 
@@ -357,6 +359,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-9';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
+    case 'MigreringFraArena':
+      return 'Migrering fra Arena';
     default:
       return typeBehandling;
   }
