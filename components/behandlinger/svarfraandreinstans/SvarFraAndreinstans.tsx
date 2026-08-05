@@ -1,20 +1,21 @@
 'use client';
 
-import { Hjemmel, MellomlagretVurdering, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
 import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
-import { useConfigForm } from 'components/form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { SubmitEventHandler } from 'react';
-import { Behovstype } from 'lib/utils/form';
-import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
-import { FormField } from 'components/form/FormField';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Hjemmel, MellomlagretVurdering, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { getValgteHjemlerSomIkkeErImplementert, hjemmelMap, hjemmelalternativer } from 'lib/utils/hjemmel';
+import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+
 import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag?: SvarFraAndreinstansGrunnlag;

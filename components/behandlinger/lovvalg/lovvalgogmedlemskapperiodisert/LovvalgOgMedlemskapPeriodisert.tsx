@@ -1,40 +1,41 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { parseISO } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { MellomlagretVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { MellomlagretVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import {
+  LovvalgMedlemskapFelt,
+  loggUmamiVarighetHendelser,
+  useUmamiVarighetHendelser,
+} from 'lib/utils/umami/hendelserVarighet';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+
+import { LovvalgOgMedlemskapFormInput } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapFormInput';
+import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapTidligereVurdering';
 import {
   getDefaultValuesFromGrunnlag,
   hentPeriodiserteVerdierFraMellomlagretVurdering,
   mapFormTilDto,
 } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/lovvalg-utils';
-import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { LovvalgOgMedlemskapFormInput } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapFormInput';
-import { LovvalgOgMedlemskapTidligereVurdering } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapTidligereVurdering';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { LovOgMedlemskapVurderingForm } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/types';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import {
-  loggUmamiVarighet,
-  loggUmamiVarighetHendelser,
-  useUmamiStartTidspunkt,
-  useUmamiVarighetHendelser,
-} from 'lib/utils/umami';
 
 interface Props {
   behandlingVersjon: number;
@@ -70,8 +71,8 @@ export const LovvalgOgMedlemskapPeriodisert = ({
     ? hentPeriodiserteVerdierFraMellomlagretVurdering(initialMellomlagretVurdering, grunnlag)
     : getDefaultValuesFromGrunnlag(grunnlag);
 
-  const { hendelseSerieRef, varighetHendelseRef, addHendelse } = useUmamiVarighetHendelser(
-    'LOVVALG_MEDLEMSKAP_VARIGHET_HENDELSER'
+  const { hendelseSerieRef, varighetHendelseRef, addHendelse } = useUmamiVarighetHendelser<LovvalgMedlemskapFelt>(
+    'LOVVALG_MEDLEMSKAP_HENDELSER_VARIGHET'
   );
 
   const form = useForm<LovOgMedlemskapVurderingForm>({

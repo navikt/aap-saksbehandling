@@ -1,6 +1,7 @@
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import React, { FocusEventHandler, ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
+
 import { ValuePair } from '../FormField';
 
 interface ComboboxProps<FormFieldValues extends FieldValues> {
@@ -14,7 +15,6 @@ interface ComboboxProps<FormFieldValues extends FieldValues> {
   description?: ReactNode;
   readOnly?: boolean;
   className?: string;
-  dataUmamiEvent?: string;
   onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
 }
 
@@ -29,7 +29,6 @@ const ComboboxWrapper = <FormFieldValues extends FieldValues>({
   readOnly,
   options,
   className,
-  dataUmamiEvent,
   onBlur,
 }: ComboboxProps<FormFieldValues>) => {
   return (
@@ -42,7 +41,6 @@ const ComboboxWrapper = <FormFieldValues extends FieldValues>({
           shouldAutocomplete={false}
           size={size}
           id={name}
-          data-umami-event={dataUmamiEvent}
           name={name}
           label={label}
           hideLabel={hideLabel}

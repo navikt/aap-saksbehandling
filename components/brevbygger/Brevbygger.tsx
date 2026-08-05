@@ -1,33 +1,31 @@
 'use client';
 
 import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
-import { useForm } from 'react-hook-form';
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-
-import { BrevdataDto, BrevGrunnlagBrev, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
-import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
-import { Behovstype } from 'lib/utils/form';
-import { clientOppdaterBrevmal } from 'lib/clientApi';
-import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-
-import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
-import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
-import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
-
-import { BrevFormVerdier } from 'components/brevbygger/types';
-import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
-import { Delmal } from 'components/brevbygger/Delmal';
-import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
+import { clientOppdaterBrevmal } from 'lib/clientApi';
+import { BrevGrunnlagBrev, BrevMottaker, BrevdataDto, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
+import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
+import { Delmal } from 'components/brevbygger/Delmal';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
+import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
+import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
+import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
+import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
+import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
+import { BrevFormVerdier } from 'components/brevbygger/types';
+import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAvBrev';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 import styles from './Brevbygger.module.css';
-import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
 
 interface BrevbyggerProps {
   referanse: string;
