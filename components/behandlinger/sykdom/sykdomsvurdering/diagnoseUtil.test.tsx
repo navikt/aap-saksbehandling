@@ -1,5 +1,6 @@
 import { SykdomsGrunnlag, SykdomsvurderingResponse } from 'lib/types/types';
 import { describe, expect, it } from 'vitest';
+
 import {
   Diagnoser,
   finnDiagnoseGrunnlagForSykdom,
@@ -18,7 +19,6 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
     },
     fom: '2026-03-12',
     begrunnelse: 'hei',
-    vurderingenGjelderFra: '2026-03-12',
     harNedsattArbeidsevne: 'JA_FORBIGÅENDE_PROBLEMER',
     harSkadeSykdomEllerLyte: true,
     erSkadeSykdomEllerLyteVesentligdel: true,
@@ -39,7 +39,6 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
     fom: '2026-04-01',
     tom: '2026-04-30',
     begrunnelse: 'hei',
-    vurderingenGjelderFra: '2026-04-01',
     harNedsattArbeidsevne: 'JA',
     harSkadeSykdomEllerLyte: true,
     kodeverk: 'ICPC2',
@@ -57,7 +56,6 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
       },
     },
     begrunnelse: 'nei',
-    vurderingenGjelderFra: '2026-05-01',
     harNedsattArbeidsevne: 'JA',
     harSkadeSykdomEllerLyte: true,
     kodeverk: 'ICD10',
@@ -78,7 +76,6 @@ const nyeVurderinger: SykdomsvurderingResponse[] = [
     },
     fom: '2026-06-01',
     begrunnelse: 'hei',
-    vurderingenGjelderFra: '2026-06-01',
     harNedsattArbeidsevne: 'JA',
     harSkadeSykdomEllerLyte: true,
     kodeverk: 'ICPC2',
