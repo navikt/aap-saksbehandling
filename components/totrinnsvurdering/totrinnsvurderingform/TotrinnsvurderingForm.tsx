@@ -7,7 +7,7 @@ import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgG
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
-import { clientFjernHelseopplysningIkon, clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
+import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
 import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
@@ -199,8 +199,6 @@ export const TotrinnsvurderingForm = ({
           );
           if (!erKvalitetssikring) {
             loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-          } else if (nyHookForAvklaringsbehov) {
-            clientMottattDokumenterLest(behandlingsreferanse);
           } else {
             clientFjernHelseopplysningIkon(behandlingsreferanse);
           }
