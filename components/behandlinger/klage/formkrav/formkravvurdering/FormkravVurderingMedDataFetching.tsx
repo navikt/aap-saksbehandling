@@ -1,14 +1,17 @@
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { FormkravVurdering } from './FormkravVurdering';
-import { TypeBehandling } from 'lib/types/types';
 import { hentFormkravGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+import { FormkravVurdering } from './FormkravVurdering';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
   typeBehandling: TypeBehandling;
 }
 
@@ -16,6 +19,7 @@ export const FormkravVurderingMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,
+  visVentekort,
   typeBehandling,
 }: Props) => {
   const grunnlag = await hentFormkravGrunnlag(behandlingsreferanse);
@@ -28,7 +32,8 @@ export const FormkravVurderingMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_FORMKRAV,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (

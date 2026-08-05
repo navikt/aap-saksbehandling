@@ -1,9 +1,10 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+
 import { KlagebehandlingVurderingNayMedDataFetching } from 'components/behandlinger/klage/klagebehandlingnay/KlagebehandlingVurderingNayMedDataFetching';
 import { KlagebehandlingOppsummeringMedDataFetching } from 'components/behandlinger/klage/klagebehandlingoppsummering/KlagebehandlingOppsummeringMedDataFetching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsreferanse: string;
@@ -29,6 +30,7 @@ export const KlagebehandlingNay = async ({ behandlingsreferanse, flyt }: Props) 
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

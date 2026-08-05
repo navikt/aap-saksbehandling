@@ -4,15 +4,16 @@ import {
   hentStudentGrunnlag,
   hentSykdomsGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import {
   finnDiagnoseGrunnlagForSykdom,
   getDefaultOptionsForDiagnosesystem,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
-import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 interface Props {
   behandlingsreferanse: string;
@@ -41,7 +42,8 @@ export const SykdomsvurderingMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SYKDOM_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlagForSykdom(grunnlag.data));

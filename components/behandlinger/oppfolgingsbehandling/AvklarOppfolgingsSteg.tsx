@@ -1,6 +1,8 @@
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { AvklarOppfolgingVurderingMedDataFetching } from './AvklarOppfolgingVurderingMedDataFetching';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
+
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+
+import { AvklarOppfolgingVurderingMedDataFetching } from './AvklarOppfolgingVurderingMedDataFetching';
 
 type Props = {
   behandlingsreferanse: string;
@@ -20,6 +22,7 @@ export const AvklarOppfolgingsSteg = async ({ behandlingsreferanse, flyt }: Prop
         behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={flyt.behandlingVersjon}
         readOnly={flyt.visning.saksbehandlerReadOnly}
+        visVentekort={flyt.visning.visVentekort}
       />
     </GruppeSteg>
   );

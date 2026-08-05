@@ -1,23 +1,27 @@
-import { BehandlendeEnhet } from './BehandlendeEnhet';
-import { TypeBehandling } from 'lib/types/types';
 import {
   hentBehandlendeEnhetGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+import { BehandlendeEnhet } from './BehandlendeEnhet';
 
 export const BehandlendeEnhetMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   typeBehandling,
   readOnly,
+  visVentekort,
 }: {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
+  visVentekort: boolean;
 }) => {
   const grunnlag = await hentBehandlendeEnhetGrunnlag(behandlingsreferanse);
 
@@ -29,7 +33,8 @@ export const BehandlendeEnhetMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_BEHANDLENDE_ENHET,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (

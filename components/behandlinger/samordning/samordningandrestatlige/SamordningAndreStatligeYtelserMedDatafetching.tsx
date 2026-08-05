@@ -2,11 +2,12 @@ import {
   hentMellomlagring,
   hentSamordningAndreStatligeYtelseGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { SamordningAndreStatligeYtelser } from 'components/behandlinger/samordning/samordningandrestatlige/SamordningAndreStatligeYtelser';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -23,7 +24,8 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({ behandling
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

@@ -3,11 +3,12 @@ import {
   hentBistandsbehovGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -35,7 +36,8 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   const vurderingsbehov =

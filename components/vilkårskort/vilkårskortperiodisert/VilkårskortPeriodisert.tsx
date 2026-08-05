@@ -1,18 +1,22 @@
-import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
-import styles from './VilkårskortPeriodisert.module.css';
-import vilkårskortStyles from 'components/vilkårskort/Vilkårskort.module.css';
-import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+'use client';
+
 import { PlusIcon } from '@navikt/aksel-icons';
-import { ErrorList } from 'lib/utils/formerrors';
-import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { Dispatch, ReactNode, SetStateAction, SubmitEventHandler } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { ApiException } from 'lib/utils/api';
-import { VisningActions, VisningModus } from 'lib/types/visningTypes';
-import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+import { Button, Detail, HGrid, HStack, Heading, VStack } from '@navikt/ds-react';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
+import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { ApiException } from 'lib/utils/api';
+import { ErrorList } from 'lib/utils/formerrors';
+import { Dispatch, ReactNode, SetStateAction, SubmitEventHandler } from 'react';
+
+import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import vilkårskortStyles from 'components/vilkårskort/Vilkårskort.module.css';
 import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
+import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+
+import styles from './VilkårskortPeriodisert.module.css';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;

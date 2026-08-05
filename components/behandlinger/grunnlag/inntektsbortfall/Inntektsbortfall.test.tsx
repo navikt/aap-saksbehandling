@@ -1,7 +1,8 @@
+import * as saksbehandlingService from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+
 import { InntektsbortfallMedDataFetching } from './InntektsbortfallMedDataFetching';
-import * as saksbehandlingService from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'MANGLENDE_LIGNING' });
@@ -37,6 +38,7 @@ describe('InntektsbortfallMedDataFetching', () => {
         typeBehandling: 'Førstegangsbehandling',
         avklaringsbehov: [],
         skalViseSteg: true,
+        visVentekort: false,
       },
     });
 
@@ -68,6 +70,7 @@ describe('InntektsbortfallMedDataFetching', () => {
         typeBehandling: 'Førstegangsbehandling',
         avklaringsbehov: [],
         skalViseSteg: true,
+        visVentekort: false,
       },
     });
 

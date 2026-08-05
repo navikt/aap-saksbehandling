@@ -3,11 +3,12 @@ import {
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
 import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 type Props = {
   behandlingsreferanse: string;
@@ -34,7 +35,8 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_HELSEINSTITUSJON,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

@@ -1,12 +1,13 @@
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
 import {
   hentMellomlagring,
   hentSamordningArbeidsgiverGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { SamordningArbeidsgiver } from 'components/behandlinger/samordning/samordningArbeidsgiver/SamordningArbeidsgiver';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -23,7 +24,8 @@ export const SamordningArbeidsgiverMedDatafetching = async ({ behandlingsreferan
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_ARBEIDSGIVER,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

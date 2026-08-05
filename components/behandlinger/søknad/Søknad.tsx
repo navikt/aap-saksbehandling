@@ -1,7 +1,8 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
+
 import { TrekkSøknadMedDatafetching } from 'components/behandlinger/søknad/trekksøknad/TrekkSøknadMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
@@ -22,6 +23,7 @@ export const Søknad = async ({ behandlingsreferanse, flyt }: Props) => {
           behandlingsreferanse={behandlingsreferanse}
           readOnly={flyt.visning.saksbehandlerReadOnly}
           behandlingVersjon={flyt.behandlingVersjon}
+          visVentekort={flyt.visning.visVentekort}
         />
       </StegSuspense>
     </GruppeSteg>

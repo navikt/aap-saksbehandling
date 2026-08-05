@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Detail, HStack } from '@navikt/ds-react';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { MellomlagretVurdering } from 'lib/types/types';

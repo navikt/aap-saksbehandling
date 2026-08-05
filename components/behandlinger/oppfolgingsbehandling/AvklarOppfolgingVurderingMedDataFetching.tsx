@@ -1,22 +1,25 @@
-import { AvklaroppfolgingVurdering } from './AvklarOppfolgingVurdering';
 import {
   hentMellomlagring,
   hentOppfølgingsoppgaveGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from '../../saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+
+import { ApiException } from '../../saksbehandling/apiexception/ApiException';
+import { AvklaroppfolgingVurdering } from './AvklarOppfolgingVurdering';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
 }
 
 export const AvklarOppfolgingVurderingMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,
+  visVentekort,
 }: Props) => {
   const grunnlag = await hentOppfølgingsoppgaveGrunnlag(behandlingsreferanse);
 
@@ -29,7 +32,12 @@ export const AvklarOppfolgingVurderingMedDataFetching = async ({
       ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
       : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
 
-  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovsType, readOnly);
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    behovsType,
+    readOnly,
+    visVentekort
+  );
 
   return (
     <AvklaroppfolgingVurdering

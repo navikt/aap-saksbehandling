@@ -1,8 +1,9 @@
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
+
 import { VedtakslengdeMedDataFetching } from 'components/behandlinger/vedtakslengde/VedtakslengdeMedDataFetching';
 import { ForeslåVedtakVedtakslengdeMedDataFetching } from 'components/behandlinger/vedtakslengde/foreslåvedtakvedtakslengde/ForeslåVedtakVedtakslengdeMedDataFetching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   behandlingsreferanse: string;
@@ -23,6 +24,7 @@ export const Vedtakslengde = async ({ behandlingsreferanse, flyt }: Props) => {
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.behandlingVersjon}
           readOnly={flyt.visning.saksbehandlerReadOnly}
+          visVentekort={flyt.visning.visVentekort}
         />
       </StegSuspense>
       <StegSuspense>

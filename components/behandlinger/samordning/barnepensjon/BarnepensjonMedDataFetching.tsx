@@ -1,8 +1,9 @@
-import { Barnepensjon } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
-import { StegData } from 'lib/utils/steg';
 import { hentBarnepensjonGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { StegData } from 'lib/utils/steg';
+
+import { Barnepensjon } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
@@ -21,7 +22,8 @@ export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegDa
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (
