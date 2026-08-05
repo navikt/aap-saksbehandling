@@ -1,7 +1,7 @@
 import { Button, Detail, HStack } from '@navikt/ds-react';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface UtkastInfoProps {
   mellomlagretVurdering: MellomlagretVurdering | undefined;
@@ -14,6 +14,7 @@ export const UtkastInfo = ({ mellomlagretVurdering, readOnly, onDeleteMellomlagr
 
   const visNårMellomlagringBleLagret =
     (!!mellomlagretVurdering && !readOnly) || (!!mellomlagretVurdering && readOnly && flyt?.visning.visVentekort);
+
   const visSlettMellomlagringKnapp = !readOnly && mellomlagretVurdering && onDeleteMellomlagringClick;
 
   if (!visNårMellomlagringBleLagret) return null;
@@ -22,8 +23,8 @@ export const UtkastInfo = ({ mellomlagretVurdering, readOnly, onDeleteMellomlagr
     <HStack align="baseline">
       <Detail>
         {`Utkast lagret ${formaterDatoMedTidspunktForFrontend(
-          mellomlagretVurdering!.vurdertDato
-        )} (${mellomlagretVurdering!.vurdertAv})`}
+          mellomlagretVurdering.vurdertDato
+        )} (${mellomlagretVurdering.vurdertAv})`}
       </Detail>
       {visSlettMellomlagringKnapp && (
         <Button type="button" size="small" variant="tertiary" onClick={onDeleteMellomlagringClick}>
