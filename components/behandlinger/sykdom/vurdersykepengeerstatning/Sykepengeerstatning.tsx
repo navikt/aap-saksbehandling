@@ -1,35 +1,36 @@
 'use client';
 
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { MellomlagretVurdering, SykepengeerstatningGrunnlag } from 'lib/types/types';
+import { parseISO } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { MellomlagretVurdering, SykepengeerstatningGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { parseISO } from 'date-fns';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import { SykepengeerstatningFormInput } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningFormInput';
+import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
 import { SykepengeerstatningForm } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
 import {
   getDefaultValuesFromGrunnlag,
   mapFormTilDto,
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { SykepengeerstatningFormInput } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningFormInput';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { OppholdskravSykepengererstatninbgTidligereVurdering } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengererstatningTidligereVurdering';
-import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 interface Props {
   behandlingVersjon: number;

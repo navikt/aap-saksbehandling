@@ -9,7 +9,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 

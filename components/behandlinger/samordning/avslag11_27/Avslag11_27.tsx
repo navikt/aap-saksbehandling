@@ -14,7 +14,7 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEvent, SubmitEventHandler, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 

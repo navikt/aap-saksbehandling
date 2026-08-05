@@ -20,7 +20,7 @@ import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 
 import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';

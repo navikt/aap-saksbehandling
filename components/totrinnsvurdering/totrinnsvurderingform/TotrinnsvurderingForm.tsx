@@ -1,44 +1,44 @@
 'use client';
 
-import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  getTrueFalseEllerUndefined,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
 import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
+import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
-import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useFieldArray } from 'react-hook-form';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useConfigForm } from 'components/form/FormHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
-import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import {
-  loggUmamiVarighet,
-  loggUmamiVarighetHendelser,
-  useUmamiStartTidspunkt,
-  useUmamiVarighetHendelser,
-} from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
-import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
-import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-
-import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
+import {
+  Behovstype,
+  JaEllerNei,
+  JaEllerNeiOptions,
+  getJaNeiEllerUndefined,
+  getTrueFalseEllerUndefined,
+} from 'lib/utils/form';
+import {
+  BeslutterFeltTag,
+  loggUmamiVarighetHendelser,
+  useUmamiVarighetHendelser,
+} from 'lib/utils/umami/hendelserVarighet';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+import { useFieldArray } from 'react-hook-form';
+
+import { Alert } from 'components/alert/Alert';
+import { useConfigForm } from 'components/form/FormHook';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
-import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
+import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
+import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
+import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -70,8 +70,8 @@ export const TotrinnsvurderingForm = ({
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
-  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
-    erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
+  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser<BeslutterFeltTag>(
+    erKvalitetssikring ? 'KVALITETSSIKRER_HENDELSER_VARIGHET' : 'BESLUTTER_HENDELSER_VARIGHET'
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt('TOTRINN');
 
@@ -205,8 +205,7 @@ export const TotrinnsvurderingForm = ({
       {fields.map((field, index) => {
         const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
         const endretSidenForrigeGang =
-          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)
-            ?.endretSidenSist ?? null;
+          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter

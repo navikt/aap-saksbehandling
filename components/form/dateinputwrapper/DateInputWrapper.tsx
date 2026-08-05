@@ -1,9 +1,9 @@
 import { TextField } from '@navikt/ds-react';
 import React, { FocusEventHandler, HTMLInputAutoCompleteAttribute, ReactNode } from 'react';
 import { Control, Controller, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
-import { mapShortDateToDateString } from './dateMapper';
 
 import styles from './DateInputWrapper.module.css';
+import { mapShortDateToDateString } from './dateMapper';
 
 export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   name: FieldPath<FormFieldValues>;
@@ -18,7 +18,6 @@ export type DateInputWrapperProps<FormFieldValues extends FieldValues> = {
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
   onChangeCustom?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  dataUmamiEvent?: string;
   onBlur?: FocusEventHandler<HTMLInputElement> | undefined;
 };
 
@@ -35,7 +34,6 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
   hideLabel,
   autocomplete,
   onChangeCustom,
-  dataUmamiEvent,
   onBlur,
 }: DateInputWrapperProps<FormFieldValues>) => {
   const classNames = `${styles.aap_date_input} ${className}`;
@@ -58,7 +56,6 @@ export const DateInputWrapper = <FormFieldValues extends FieldValues>({
         return (
           <TextField
             id={name}
-            data-umami-event={dataUmamiEvent}
             name={name}
             size={size}
             label={label}

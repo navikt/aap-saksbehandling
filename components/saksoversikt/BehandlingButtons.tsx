@@ -7,7 +7,7 @@ import { SaksInfo } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
 import { byggKelvinURL } from 'lib/utils/request';
-import { loggUmamiGåTilBehandling, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami';
+import { loggUmamiGåTilBehandling, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami/navigering';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 
