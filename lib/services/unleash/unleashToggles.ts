@@ -15,8 +15,8 @@ export const FLAGS = [
   'VisMigrereSakFraArenaKnapp',
   'KvalitetssikringDiff',
   'Avslag11_27',
+  'NyHookForAvklaringsbehov',
   'SkalViseAlleSykdomssteg',
-  'RevurdereFrivillige',
   'DialogMedBehandler',
 ] as const;
 
@@ -40,7 +40,7 @@ export const mockedFlags: Flags = {
   VisMigrereSakFraArenaKnapp: true,
   KvalitetssikringDiff: true,
   Avslag11_27: true,
+  NyHookForAvklaringsbehov: true,
   SkalViseAlleSykdomssteg: true,
-  RevurdereFrivillige: true,
   DialogMedBehandler: true,
 };
