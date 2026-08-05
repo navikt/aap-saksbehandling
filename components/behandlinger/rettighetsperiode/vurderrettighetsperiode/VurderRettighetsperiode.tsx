@@ -63,7 +63,7 @@ export const VurderRettighetsperiode = ({
 
   const commonHarRettOptions = [
     {
-      label: 'Ja, bruker ha åpenbart ikke vært i stand til å sette fram krav tidligere',
+      label: 'Ja, bruker har åpenbart ikke vært i stand til å sette fram krav tidligere',
       value: 'HarRettIkkeIStandTilÅSøkeTidligere',
     },
     {
