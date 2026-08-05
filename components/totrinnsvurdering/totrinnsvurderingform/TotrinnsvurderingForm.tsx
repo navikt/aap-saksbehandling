@@ -1,44 +1,46 @@
 'use client';
 
-import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
-import {
-  Behovstype,
-  getJaNeiEllerUndefined,
-  getTrueFalseEllerUndefined,
-  JaEllerNei,
-  JaEllerNeiOptions,
-} from 'lib/utils/form';
 import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
+import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
-import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useFieldArray } from 'react-hook-form';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useConfigForm } from 'components/form/FormHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
-import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
-import {
-  loggUmamiVarighet,
-  loggUmamiVarighetHendelser,
-  useUmamiStartTidspunkt,
-  useUmamiVarighetHendelser,
-} from 'lib/utils/umami';
-import { Alert } from 'components/alert/Alert';
-import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
-import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
-
-import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { isLocal } from 'lib/utils/environment';
+import {
+  Behovstype,
+  JaEllerNei,
+  JaEllerNeiOptions,
+  getJaNeiEllerUndefined,
+  getTrueFalseEllerUndefined,
+} from 'lib/utils/form';
+import {
+  BeslutterFeltTag,
+  loggUmamiVarighetHendelser,
+  useUmamiVarighetHendelser,
+} from 'lib/utils/umami/hendelserVarighet';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
+import { useFieldArray } from 'react-hook-form';
+
+import { Alert } from 'components/alert/Alert';
+import { useConfigForm } from 'components/form/FormHook';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { ToTrinnsVurderingFormFields } from 'components/totrinnsvurdering/ToTrinnsvurdering';
 import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingDevtools';
-import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
+import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
+import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
+import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -70,8 +72,11 @@ export const TotrinnsvurderingForm = ({
     erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
   );
 
-  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser(
-    erKvalitetssikring ? 'KVALITETSSIKRER_VARIGHET_HENDELSER' : 'BESLUTTER_VARIGHET_HENDELSER'
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
+
+  const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser<BeslutterFeltTag>(
+    erKvalitetssikring ? 'KVALITETSSIKRER_HENDELSER_VARIGHET' : 'BESLUTTER_HENDELSER_VARIGHET'
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt('TOTRINN');
 
@@ -115,6 +120,8 @@ export const TotrinnsvurderingForm = ({
     },
   });
 
+  const nyHookForAvklaringsbehov = useFeatureFlag('NyHookForAvklaringsbehov');
+
   return (
     <form
       onSubmit={form.handleSubmit(async (data) => {
@@ -155,49 +162,55 @@ export const TotrinnsvurderingForm = ({
         if (isError) {
           return;
         }
-        løsBehovOgGåTilNesteSteg(
-          {
-            behandlingVersjon: behandlingsversjon,
-            behov: {
-              behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: assessedFields.map((vurdering) => {
-                if (vurdering.godkjent === JaEllerNei.Ja) {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: true,
-                  };
-                } else {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                    grunner: vurdering.grunner?.map((grunn) => {
-                      return {
-                        årsak: grunn,
-                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                      };
-                    }),
-                    begrunnelse: vurdering.begrunnelse,
-                  };
-                }
-              }),
-            },
-            referanse: behandlingsreferanse,
-          },
-          () => {
-            loggUmamiVarighet(
-              erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
-              umamiStartTidspunkt,
-              Date.now()
-            );
-            if (!erKvalitetssikring) {
-              loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-            } else {
-              clientFjernHelseopplysningIkon(behandlingsreferanse);
-            }
 
-            nullstillMellomlagretVurdering();
+        const behovParams = {
+          behandlingVersjon: behandlingsversjon,
+          behov: {
+            behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+            vurderinger: assessedFields.map((vurdering) => {
+              if (vurdering.godkjent === JaEllerNei.Ja) {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: true,
+                };
+              } else {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                  grunner: vurdering.grunner?.map((grunn) => {
+                    return {
+                      årsak: grunn,
+                      årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                    };
+                  }),
+                  begrunnelse: vurdering.begrunnelse,
+                };
+              }
+            }),
+          },
+          referanse: behandlingsreferanse,
+        };
+
+        const onSuccessLøsBehovCallback = () => {
+          loggUmamiVarighet(
+            erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+            umamiStartTidspunkt,
+            Date.now()
+          );
+          if (!erKvalitetssikring) {
+            loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+          } else {
+            clientFjernHelseopplysningIkon(behandlingsreferanse);
           }
-        );
+
+          nullstillMellomlagretVurdering();
+        };
+
+        if (nyHookForAvklaringsbehov) {
+          løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
+        } else {
+          løsBehovOgGåTilNesteSteg(behovParams, onSuccessLøsBehovCallback);
+        }
       })}
       className={'flex-column'}
       autoComplete={'off'}
@@ -205,8 +218,7 @@ export const TotrinnsvurderingForm = ({
       {fields.map((field, index) => {
         const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
         const endretSidenForrigeGang =
-          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)
-            ?.endretSidenSist ?? null;
+          grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
           return (
             <TotrinnsvurderingVedtaksbrevFelter
@@ -248,12 +260,18 @@ export const TotrinnsvurderingForm = ({
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        status={nyHookForAvklaringsbehov ? løsAvklaringsbehovStatus : status}
+        løsBehovOgGåTilNesteStegError={
+          nyHookForAvklaringsbehov ? løsAvklaringsbehovError : løsBehovOgGåTilNesteStegError
+        }
       />
       {!readOnly && (
         <VStack gap="space-8">
-          <Button size={'medium'} className={'fit-content'} loading={isLoading}>
+          <Button
+            size={'medium'}
+            className={'fit-content'}
+            loading={nyHookForAvklaringsbehov ? løsAvklaringsbehovIsLoading : isLoading}
+          >
             Bekreft og send videre
           </Button>
 

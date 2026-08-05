@@ -1,15 +1,12 @@
 import { hentMellomlagring, hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { StudentVurdering } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
-import {
-  finnDiagnoseGrunnlagForStudent,
-  getDefaultOptionsForDiagnosesystem,
-} from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import { unleashService } from 'lib/services/unleash/unleashService';
+import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
+import { StudentVurdering } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
 import { StudentVurderingV2 } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingV2';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -23,9 +20,6 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
-
-  const diagnoseGrunnlag = finnDiagnoseGrunnlagForStudent(grunnlag.data);
-  const diagnoserDefaultOptions = await getDefaultOptionsForDiagnosesystem(diagnoseGrunnlag);
 
   if (!skalViseSteg(stegData, grunnlag.data.sisteVedtatteVurderinger != null)) {
     return null;
@@ -42,7 +36,6 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
         readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
         behandlingVersjon={stegData.behandlingVersjon}
         initialMellomlagretVurdering={initialMellomlagretVurdering}
-        diagnoseDefaultOptions={diagnoserDefaultOptions}
       />
     );
   }
@@ -52,7 +45,6 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
       readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      diagnoseDefaultOptions={diagnoserDefaultOptions}
     />
   );
 };

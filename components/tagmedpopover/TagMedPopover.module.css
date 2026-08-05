@@ -1,0 +1,10 @@
+.knapp {
+  background: none;
+  border: none;
+  padding: 0;
+  display: inline-flex;
+}
+
+.knapp:hover .triggerTag {
+  background-color: var(--ax-bg-moderate-hover);
+}

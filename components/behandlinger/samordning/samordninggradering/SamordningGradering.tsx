@@ -1,37 +1,37 @@
 'use client';
 
+import { BodyLong, BodyShort, Box, Button, HStack, Heading, Modal, VStack } from '@navikt/ds-react';
+import { addDays, format, isValid, parse } from 'date-fns';
+import { useSak } from 'hooks/SakHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
   MellomlagretVurdering,
   OppfølgningOppgaveOpprinnelseResponse,
   Periode,
   SamordningGraderingGrunnlag,
-  SamordningYtelsestype,
   SamordningYtelseVurdering,
+  SamordningYtelsestype,
 } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
-import { SubmitEventHandler, useRef, useState } from 'react';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField, ValuePair } from 'components/form/FormField';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { Behovstype } from 'lib/utils/form';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { addDays, format, isValid, parse } from 'date-fns';
-import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
-
-import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
-import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
-import { isNullOrUndefined } from 'lib/utils/validering';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
-import { useSak } from 'hooks/SakHook';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { Veiledning } from 'components/veiledning/Veiledning';
+import { Behovstype } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { isNullOrUndefined } from 'lib/utils/validering';
+import { SubmitEventHandler, useRef, useState } from 'react';
+
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
+import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
+import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettoppfølgingsbehandling/OpprettOppfølgingsbehandling';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { Veiledning } from 'components/veiledning/Veiledning';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;

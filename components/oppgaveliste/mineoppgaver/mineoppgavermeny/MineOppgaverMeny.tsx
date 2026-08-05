@@ -5,7 +5,7 @@ import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientAp
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
-import { loggUmamiFrigiOppgave, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami';
+import { loggUmamiFrigiOppgave, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami/navigering';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 

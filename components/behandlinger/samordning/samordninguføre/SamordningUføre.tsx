@@ -1,21 +1,22 @@
 'use client';
 
-import { MellomlagretVurdering, SamordningUføreGrunnlag } from 'lib/types/types';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SubmitEventHandler } from 'react';
-import { Behovstype } from 'lib/utils/form';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { SamordningUføreTabell } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreTabell';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { format, parse } from 'date-fns';
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
+import { format, parse } from 'date-fns';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { MellomlagretVurdering, SamordningUføreGrunnlag } from 'lib/types/types';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+
+import { SamordningUføreTabell } from 'components/behandlinger/samordning/samordninguføre/SamordningUføreTabell';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;

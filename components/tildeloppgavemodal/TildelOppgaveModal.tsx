@@ -5,7 +5,7 @@ import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { clientTildelTilSaksbehandler } from 'lib/clientApi';
 import { SaksbehandlerFraSøk } from 'lib/types/oppgaveTypes';
 import { isError } from 'lib/utils/api';
-import { loggUmamiTildelOppgave } from 'lib/utils/umami';
+import { loggUmamiTildelOppgave } from 'lib/utils/umami/navigering';
 import { SubmitEventHandler, useState } from 'react';
 import { useForm } from 'react-hook-form';
 

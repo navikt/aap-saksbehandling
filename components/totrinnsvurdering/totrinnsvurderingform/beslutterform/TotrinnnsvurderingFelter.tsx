@@ -1,17 +1,18 @@
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
-
-import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
-import { Checkbox, Detail, HStack, Link as AkselLink, Radio, VStack } from '@navikt/ds-react';
-import Link from 'next/link';
-import { ToTrinnsVurderingGrunn, UmamiTag } from 'lib/types/types';
-import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
-import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { ValuePair } from 'components/form/FormField';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { PencilWritingIcon } from '@navikt/aksel-icons';
+import { Link as AkselLink, Checkbox, Detail, HStack, Radio, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { ToTrinnsVurderingGrunn } from 'lib/types/types';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { BeslutterFeltTag } from 'lib/utils/umami/hendelserVarighet';
+import Link from 'next/link';
+import { FieldArrayWithId, UseFormReturn } from 'react-hook-form';
+
+import { ValuePair } from 'components/form/FormField';
+import { CheckboxWrapper } from 'components/form/checkboxwrapper/CheckboxWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { FormFieldsToTrinnsVurdering } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
+import styles from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingFelter.module.css';
 
 interface Props {
   link: string;
@@ -20,7 +21,7 @@ interface Props {
   index: number;
   form: UseFormReturn<FormFieldsToTrinnsVurdering>;
   field: FieldArrayWithId<FormFieldsToTrinnsVurdering, 'totrinnsvurderinger'>;
-  felterOnBlur?: (hendelse: UmamiTag, tidsstempel: number) => void;
+  felterOnBlur?: (hendelse: BeslutterFeltTag, tidsstempel: number) => void;
   endretSidenForrigeGang: boolean | null;
 }
 
@@ -44,7 +45,7 @@ export const TotrinnnsvurderingFelter = ({
   const vurderingErIkkeGodkjent = form.watch(`totrinnsvurderinger.${index}.godkjent`) === JaEllerNei.Nei;
   const behovstypeEllerKode =
     Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
-  const eventPrefix = `${erKvalitetssikring ? 'KVALITETSSIKRER' : 'BESLUTTER'}_${behovstypeEllerKode}`;
+  const eventPrefix = behovstypeEllerKode;
   const kvalitetssikringDiffFeatureToggle = useFeatureFlag('KvalitetssikringDiff');
   const skalViseEndretSidenSistInfo =
     endretSidenForrigeGang != null && erKvalitetssikring && kvalitetssikringDiffFeatureToggle;
@@ -71,7 +72,7 @@ export const TotrinnnsvurderingFelter = ({
             as={Link}
             prefetch={false}
             href={link}
-            onClick={() => felterOnBlur(`${eventPrefix}_LINK` as UmamiTag, Date.now())}
+            onClick={() => felterOnBlur(`${eventPrefix}_LINK`, Date.now())}
           >
             {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
           </AkselLink>
@@ -86,7 +87,7 @@ export const TotrinnnsvurderingFelter = ({
         >
           {JaEllerNeiOptions.map((option) => (
             <Radio
-              onBlur={() => felterOnBlur(`${eventPrefix}_GODKJENT` as UmamiTag, Date.now())}
+              onBlur={() => felterOnBlur(`${eventPrefix}_GODKJENT`, Date.now())}
               value={option.value}
               key={option.value}
             >
@@ -111,7 +112,7 @@ export const TotrinnnsvurderingFelter = ({
                       : true,
                 },
               }}
-              onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_BEGRUNNELSE` as UmamiTag, Date.now())}
+              onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_BEGRUNNELSE`, Date.now())}
             />
             <CheckboxWrapper
               label={'Returårsak'}
@@ -124,7 +125,7 @@ export const TotrinnnsvurderingFelter = ({
                 <Checkbox
                   value={option.value}
                   key={option.value}
-                  onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_GRUNNER` as UmamiTag, Date.now())}
+                  onBlur={() => felterOnBlur(`${eventPrefix}_RETUR_GRUNNER`, Date.now())}
                 >
                   {option.label}
                 </Checkbox>

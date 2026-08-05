@@ -114,6 +114,7 @@ export const SaksmenyDropdown = ({
     behandlingErIkkeIverksatt &&
     innloggetBrukerKanSaksbehandle &&
     behandlingErIkkeAvsluttet &&
+    (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     !harAlleredeValgtAvslag1127;
 
   return (
