@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, Heading, HStack, Link, Tag } from '@navikt/ds-react';
-import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternService';
+import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
