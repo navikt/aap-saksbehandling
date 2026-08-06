@@ -5,7 +5,7 @@ import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import {
   MarkeringType,
-  OpprettMarkeringDto,
+  OpprettMarkering,
   OpprettMarkeringHendelseType,
   OpprettMarkeringType,
 } from 'lib/types/oppgaveTypes';
@@ -114,7 +114,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   );
 };
 
-function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkeringDto['markeringType'] {
+function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkering['markeringType'] {
   switch (type) {
     case 'HASTER':
       return OpprettMarkeringType.HASTER;

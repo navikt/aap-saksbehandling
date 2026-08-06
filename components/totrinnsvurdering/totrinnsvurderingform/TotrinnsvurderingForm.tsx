@@ -11,7 +11,7 @@ import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
 import {
   Markering,
   MarkeringType,
-  OpprettMarkeringDto,
+  OpprettMarkering,
   OpprettMarkeringHendelseType,
   OpprettMarkeringType,
 } from 'lib/types/oppgaveTypes';
@@ -348,7 +348,7 @@ function getDefaultBegrunnelse(begrunnelse: string | undefined | null, årsakFri
   return begrunnelse || '';
 }
 
-function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkeringDto['markeringType'] {
+function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkering['markeringType'] {
   switch (type) {
     case 'HASTER':
       return OpprettMarkeringType.HASTER;

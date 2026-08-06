@@ -2,7 +2,7 @@ import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { ClientConfig } from 'lib/types/clientTypes';
-import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { OpprettMarkering, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { isLocal } from 'lib/utils/environment';
@@ -251,7 +251,7 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   });
 }
 
-export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringDto) {
+export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkering) {
   return clientFetch(
     `${BASE_URL}/api/behandling/${referanse}/opprett-markering-hendelse`,
     'POST',

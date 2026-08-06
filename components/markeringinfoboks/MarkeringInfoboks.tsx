@@ -4,7 +4,7 @@ import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import {
   Markering,
   MarkeringType,
-  OpprettMarkeringDto,
+  OpprettMarkering,
   OpprettMarkeringHendelseType,
   OpprettMarkeringType,
 } from 'lib/types/oppgaveTypes';
@@ -106,7 +106,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
   );
 };
 
-function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkeringDto['markeringType'] {
+function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkering['markeringType'] {
   switch (type) {
     case 'HASTER':
       return OpprettMarkeringType.HASTER;
