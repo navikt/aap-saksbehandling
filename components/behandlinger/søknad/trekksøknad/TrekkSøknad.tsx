@@ -12,7 +12,7 @@ import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-
+import { Alert } from '../../../alert/Alert';
 interface Props {
   grunnlag: TrukketSøknadGrunnlag;
   readOnly: boolean;
@@ -20,9 +20,12 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
+type TrukketSøknadÅrsak = 'FOR_TIDLIG' | 'FEIL_YTELSE' | 'BRUKER_ONSKER_IKKE' | 'ANNET';
+
 interface FormFields {
   begrunnelse: string;
   skalTrekkes?: string;
+  aarsak?: TrukketSøknadÅrsak
 }
 
 type DraftFormFields = Partial<FormFields>;
@@ -60,9 +63,23 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         rules: { required: 'Du må velge om søknaden skal trekkes' },
         defaultValue: defaultValues.skalTrekkes,
       },
+      aarsak: {
+        type: 'radio',
+        label: 'Hva er årsaken?',
+        options: [
+          { label: 'Brukeren søkte for tidlig', value: 'FOR_TIDLIG' },
+          { label: 'Brukeren søkte på feil ytelse', value: 'FEIL_YTELSE' },
+          { label: 'Brukeren ønsker ikke å søke om AAP lenger', value: 'BRUKER_ONSKER_IKKE' },
+          { label: 'Annet', value: 'ANNET' },
+        ],
+        rules: { required: 'Du må velge en årsak for å trekke søknaden' },
+        defaultValue: defaultValues.aarsak,
+      },
     },
     { readOnly: formReadOnly }
   );
+
+  const harValgtAtSoknadTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
@@ -79,6 +96,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
             behovstype: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
             begrunnelse: data.begrunnelse,
             skalTrekkes: data.skalTrekkes === JaEllerNei.Ja,
+            aarsak: data.aarsak
           },
           referanse: behandlingsreferanse,
         });
@@ -112,6 +130,14 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.skalTrekkes} horizontalRadio />
+      {harValgtAtSoknadTrekkes && (
+        <>
+          <FormField form={form} formField={formFields.aarsak} />
+          <Alert variant={'info'}>
+            Husk at trekk av søknad skal være brukers eget ønske, og at du må informere bruker om konsekvensene. Når søknaden trekkes, avsluttes saken og alle vurderinger slettes. Bruker må sende ny søknad dersom man ombestemmer seg.
+          </Alert>
+        </>
+      )}
     </VilkårskortMedFormOgMellomlagring>
   );
 };
@@ -130,6 +156,7 @@ function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVurdering): Dra
   return {
     begrunnelse: vurdering?.begrunnelse,
     skalTrekkes: getJaNeiEllerUndefined(vurdering?.skalTrekkes),
+    aarsak: vurdering?.aarsak ?? undefined,
   };
 }
 
