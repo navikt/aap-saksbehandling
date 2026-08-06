@@ -34,7 +34,7 @@ export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeG
               <Table.DataCell>{rad.status}</Table.DataCell>
               <Table.DataCell>{rad.referanse}</Table.DataCell>
               <Table.DataCell>
-                <KravTag type={rad.relevantKravType} />
+                <KravTag type={rad.relevantKravType.type} />
               </Table.DataCell>
               <Table.DataCell>{formaterDatoForFrontend(rad.startDato)}</Table.DataCell>
               <Table.DataCell>{`${rad.vurdertAv} (${formaterDatoForFrontend(rad.opprettet)})`}</Table.DataCell>
@@ -69,7 +69,7 @@ function innhold(rad: Rad) {
 function Startdato({ rad }: { rad: Rad }) {
   return (
     <>
-      {rad.relevantKravType === 'NY_STØNADSPERIODE' && (
+      {rad.relevantKravType.type === 'NY_STØNADSPERIODE' && (
         <div>
           <Label>Dato for ny rettighet</Label>
           <BodyShort textColor={'subtle'}>
@@ -78,7 +78,7 @@ function Startdato({ rad }: { rad: Rad }) {
           <BodyShort>{formaterDatoForFrontend(rad.startDato)}</BodyShort>
         </div>
       )}
-      {['GJENINNTREDEN_ETTER_OPPHØR', 'GJENOPPTAK_ETTER_STANS'].includes(rad.relevantKravType) && (
+      {['GJENINNTREDEN_ETTER_OPPHØR', 'GJENOPPTAK_ETTER_STANS'].includes(rad.relevantKravType.type) && (
         <div>
           <Label>Vurderes fra</Label>
           <BodyShort>{formaterDatoForFrontend(rad.startDato)}</BodyShort>
@@ -88,7 +88,7 @@ function Startdato({ rad }: { rad: Rad }) {
   );
 }
 
-function KravTag({ type }: { type: StønadsperiodeVurdering['relevantKravType'] }) {
+function KravTag({ type }: { type: StønadsperiodeVurdering['relevantKravType']['type'] }) {
   const [farge, tekst] = ((): [AkselColorRole, string] => {
     switch (type) {
       case 'AVSLAG':
