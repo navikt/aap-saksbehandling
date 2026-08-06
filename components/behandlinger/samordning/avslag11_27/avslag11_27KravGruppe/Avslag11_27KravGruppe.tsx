@@ -1,22 +1,24 @@
 'use client';
 
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { TasklistIcon } from '@navikt/aksel-icons';
-import { UseFormReturn } from 'react-hook-form';
-import { useState } from 'react';
+import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
-import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
-import { Avslag11_27Vurdering as Avslag11_27VurderingSkjema } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
 import { Avslag11_27Grunnlag, Avslag11_27Vurdering } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
+import { useState } from 'react';
+import { UseFormReturn } from 'react-hook-form';
+
+import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
 import { Avslag11_27TidligereVurdering } from 'components/behandlinger/samordning/avslag11_27/avslag11_27tidligerevurdering/Avslag11_27TidligereVurdering';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { Avslag11_27Vurdering as Avslag11_27VurderingSkjema } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { JaEllerNei } from 'lib/utils/form';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+
 import styles from './Avslag11_27KravGruppe.module.css';
 
 interface Props {

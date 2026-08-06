@@ -1,13 +1,14 @@
 'use client';
 
 import { Radio, VStack } from '@navikt/ds-react';
-import { UseFormReturn } from 'react-hook-form';
 import { JaEllerNei } from 'lib/utils/form';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+import { UseFormReturn } from 'react-hook-form';
+
+import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;

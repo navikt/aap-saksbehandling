@@ -18,6 +18,7 @@ export const FLAGS = [
   'NyHookForAvklaringsbehov',
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
+  'VedtakslengdeAarsak',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -43,4 +44,5 @@ export const mockedFlags: Flags = {
   NyHookForAvklaringsbehov: true,
   SkalViseAlleSykdomssteg: true,
   DialogMedBehandler: true,
+  VedtakslengdeAarsak: true,
 };
