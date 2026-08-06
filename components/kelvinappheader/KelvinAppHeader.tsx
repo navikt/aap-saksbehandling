@@ -1,32 +1,36 @@
 'use client';
 
-import { useState } from 'react';
+import { ArrowRightLeftIcon, ExternalLinkIcon, LeaveIcon, MigrationIcon, XMarkIcon } from '@navikt/aksel-icons';
 import {
   ActionMenu,
   BodyShort,
   Box,
   Button,
-  Heading,
   HStack,
+  Heading,
   InternalHeader,
   Link,
   Spacer,
   Theme,
   VStack,
 } from '@navikt/ds-react';
-import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
-import { ArrowRightLeftIcon, ExternalLinkIcon, LeaveIcon, XMarkIcon } from '@navikt/aksel-icons';
-import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
-import styles from './KelvinAppHeader.module.css';
-import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
-import { isLocal, isProd } from 'lib/utils/environment';
-import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
-import { SøkeResultat } from 'app/api/kelvinsok/route';
 import Endringslogg from '@navikt/endringslogg';
+import { SøkeResultat } from 'app/api/kelvinsok/route';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { Roller } from 'lib/types/types';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { isLocal, isProd } from 'lib/utils/environment';
+import { useState } from 'react';
+
+import { AppSwitcher } from 'components/kelvinappheader/AppSwitcher';
 import { SisteBehandledeSakerOgOppgaver } from 'components/kelvinappheader/SisteBehandledeSakerOgOppgaver';
+import { Kelvinsøk } from 'components/kelvinsøkeresultat/Kelvinsøk';
+import { Kelvinsøkeresultat } from 'components/kelvinsøkeresultat/Kelvinsøkeresultat';
+import { LokalBrukerBytte } from 'components/lokalbrukerbytte/LokalBrukerBytte';
+import { MigrerSakModal } from 'components/migrersakmodal/MigrerSakModal';
+
+import styles from './KelvinAppHeader.module.css';
 
 const bytteBrukerForDevOgLokalt = !isProd();
 const lokalBrukerbytte = isLocal();
@@ -89,7 +93,9 @@ const lokalLenkeTilSaksoversikt = isLocal();
 export const KelvinAppHeader = () => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
+  const [migrerSakModalÅpen, setMigrerSakModalÅpen] = useState<boolean>(false);
   const brukerInformasjon = useInnloggetBruker();
+  const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
 
   return (
     <>
@@ -141,6 +147,16 @@ export const KelvinAppHeader = () => {
               stil={'lys'}
             />
           </InternalHeader.Button>
+        )}
+        {brukerInformasjon.roller.includes(Roller.SAKSBEHANDLER_NASJONAL) && visMigrereSakFraArena && (
+          <>
+            <InternalHeader.Button as="button" onClick={() => setMigrerSakModalÅpen(!migrerSakModalÅpen)}>
+              <MigrationIcon title="Migrer sak" />
+            </InternalHeader.Button>
+            <Theme theme={'light'}>
+              <MigrerSakModal isOpen={migrerSakModalÅpen} onClose={() => setMigrerSakModalÅpen(false)} />
+            </Theme>
+          </>
         )}
         <AppSwitcher />
         <Brukermeny brukerInformasjon={brukerInformasjon} roller={brukerInformasjon.roller} />

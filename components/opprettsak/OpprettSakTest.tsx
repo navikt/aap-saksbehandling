@@ -1,21 +1,22 @@
 'use client';
 
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
 import { Button } from '@navikt/ds-react';
 import { useOpprettDummySak } from 'hooks/FetchHook';
 import { OpprettDummySakDto } from 'lib/types/types';
-import { mutate } from 'swr';
+import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useState } from 'react';
+import { mutate } from 'swr';
+
 import { Alert } from 'components/alert/Alert';
 import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 
 interface OpprettSakFormFields {
-  ident?: string;
-  yrkesskade?: JaEllerNei;
-  student?: JaEllerNei;
-  medlemskap?: JaEllerNei;
+  ident: string;
+  yrkesskade: JaEllerNei;
+  student: JaEllerNei;
+  medlemskap: JaEllerNei;
 }
 
 interface OpprettSakAlert {
@@ -78,7 +79,7 @@ const OpprettTestSakSkjema = () => {
       }
       if (ok) {
         setOpprettSakAlert({
-          fnr: data.ident!!,
+          fnr: data.ident,
           id: window.setTimeout(() => {
             setOpprettSakAlert(null);
           }, 10000),
@@ -132,7 +133,7 @@ function mapFormTilDto(data: OpprettSakFormFields): OpprettDummySakDto {
   return {
     harYrkesskade: data.yrkesskade === JaEllerNei.Ja,
     harMedlemskap: data.medlemskap === JaEllerNei.Ja,
-    ident: data.ident!!,
+    ident: data.ident,
     erStudent: data.student === JaEllerNei.Ja,
   };
 }

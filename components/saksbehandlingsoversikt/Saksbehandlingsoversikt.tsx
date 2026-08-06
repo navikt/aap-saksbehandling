@@ -1,6 +1,5 @@
 'use client';
 
-import { Box, Button, HGrid, Label, Tabs, Tooltip, VStack } from '@navikt/ds-react';
 import {
   ChevronLeftDoubleIcon,
   ChevronRightDoubleIcon,
@@ -9,17 +8,21 @@ import {
   PaperplaneIcon,
   PersonGavelIcon,
 } from '@navikt/aksel-icons';
+import { Box, Button, HGrid, Label, Tabs, Tooltip, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from 'lib/types/types';
+import { FetchResponse, isError } from 'lib/utils/api';
+import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useState } from 'react';
-import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
+
+import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
+import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
+import { DialogMedBehandler } from 'components/dialogmedbehandler/DialogMedBehandler';
 import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
+import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
+import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
 
 import styles from './Saksbehandlingsoversikt.module.css';
-import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
-import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from 'lib/types/types';
-import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
-import { FetchResponse, isError } from 'lib/utils/api';
-import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
-import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 
 enum Tab {
   KLAGEBEHANDLINGINFO = 'KLAGEBEHANDLINGINFO',
@@ -103,6 +106,8 @@ export const Saksbehandlingsoversikt = ({
     },
   ];
 
+  const featureDialogMedBehandler = useFeatureFlag('DialogMedBehandler');
+
   return (
     <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.minimert}`}>
       {expanded && (
@@ -138,7 +143,8 @@ export const Saksbehandlingsoversikt = ({
               <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
             )}
             {toggleGroupValue === Tab.SAKSDOKUMENTER && <Saksdokumenter />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <InnhentDokumentasjon />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && !featureDialogMedBehandler && <InnhentDokumentasjon />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && featureDialogMedBehandler && <DialogMedBehandler />}
             {toggleGroupValue === Tab.HISTORIKK && <SaksHistorikk />}
           </div>
         </>

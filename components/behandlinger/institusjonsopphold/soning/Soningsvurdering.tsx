@@ -1,27 +1,28 @@
 'use client';
 
 import { TrashIcon } from '@navikt/aksel-icons';
-import { MellomlagretVurdering, Soningsgrunnlag } from 'lib/types/types';
-import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { SubmitEvent } from 'react';
-import { useFieldArray } from 'react-hook-form';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
-import { validerDato } from 'lib/validation/dateValidation';
 import { parse } from 'date-fns';
-
-import styles from './Soningsvurdering.module.css';
-import { useConfigForm } from 'components/form/FormHook';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { MellomlagretVurdering, Soningsgrunnlag } from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { validerDato } from 'lib/validation/dateValidation';
+import { SubmitEvent } from 'react';
+import { useFieldArray } from 'react-hook-form';
+
+import { useConfigForm } from 'components/form/FormHook';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+
+import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
+import styles from './Soningsvurdering.module.css';
 
 interface Props {
   grunnlag: Soningsgrunnlag;

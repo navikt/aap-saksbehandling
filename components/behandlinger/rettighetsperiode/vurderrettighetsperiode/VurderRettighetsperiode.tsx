@@ -1,21 +1,22 @@
 'use client';
 
+import { BodyShort, HStack, VStack } from '@navikt/ds-react';
+import { addYears, isBefore, parse, startOfDay } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { SubmitEventHandler } from 'react';
-import { Behovstype } from 'lib/utils/form';
-import { validerDato } from 'lib/validation/dateValidation';
-import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
-import { addYears, isBefore, parse, startOfDay } from 'date-fns';
-import { BodyShort, HStack, VStack } from '@navikt/ds-react';
-import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { MellomlagretVurdering, RettighetsperiodeGrunnlag } from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { validerDato } from 'lib/validation/dateValidation';
+import { SubmitEventHandler } from 'react';
+
 import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   readOnly: boolean;
@@ -62,7 +63,7 @@ export const VurderRettighetsperiode = ({
 
   const commonHarRettOptions = [
     {
-      label: 'Ja, bruker ha åpenbart ikke vært i stand til å sette fram krav tidligere',
+      label: 'Ja, bruker har åpenbart ikke vært i stand til å sette fram krav tidligere',
       value: 'HarRettIkkeIStandTilÅSøkeTidligere',
     },
     {
@@ -100,12 +101,12 @@ export const VurderRettighetsperiode = ({
         rules: {
           required: 'Du må sette en dato for behandlingen',
           validate: {
-            gyldigDato: (v) => validerDato(v as string),
+            gyldigDato: (v) => validerDato(v),
             maksTreAarFoerSoeknadstidspunkt: (v) => {
               let søknadsdato = grunnlag?.søknadsdato;
               if (søknadsdato) {
                 const treÅrFørSøknadstidspunkt = addYears(startOfDay(new Date(søknadsdato)), -3);
-                const nyStartDato = stringToDate(v as string, 'dd.MM.yyyy');
+                const nyStartDato = stringToDate(v, 'dd.MM.yyyy');
                 if (nyStartDato && isBefore(startOfDay(nyStartDato), treÅrFørSøknadstidspunkt)) {
                   return 'Kan ikke flytte startdato til mer enn 3 år før søknadstidspunktet';
                 }

@@ -1,20 +1,21 @@
 'use client';
 
+import { BodyLong, VStack } from '@navikt/ds-react';
+import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { Behovstype } from 'lib/utils/form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
-import { useConfigForm } from 'components/form/FormHook';
-import { SubmitEventHandler } from 'react';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { BodyLong, VStack } from '@navikt/ds-react';
-import { FormField } from 'components/form/FormField';
-import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/sykestipend/SykestipendPeriodeTabell';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { parse } from 'date-fns';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+
+import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/sykestipend/SykestipendPeriodeTabell';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: SykestipendGrunnlag;
@@ -82,8 +83,8 @@ export const SykestipendVurdering = ({
             sykestipendVurdering: {
               begrunnelse: data.begrunnelse,
               perioder: data.perioder.map((periode) => ({
-                fom: formaterDatoForBackend(parse(periode.fom!, 'dd.MM.yyyy', new Date())),
-                tom: formaterDatoForBackend(parse(periode.tom!, 'dd.MM.yyyy', new Date())),
+                fom: formaterDatoForBackend(parse(periode.fom, 'dd.MM.yyyy', new Date())),
+                tom: formaterDatoForBackend(parse(periode.tom, 'dd.MM.yyyy', new Date())),
               })),
             },
           },

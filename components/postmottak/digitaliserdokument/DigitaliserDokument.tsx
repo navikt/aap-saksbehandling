@@ -4,14 +4,12 @@ import { VStack } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/postmottakForm';
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { useState } from 'react';
 
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
 import { DigitaliserMeldekort } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
-import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
 
 import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { Kategoriser } from './kategoriser/Kategoriser';
@@ -22,7 +20,7 @@ interface Props {
   behandlingsreferanse: string;
   registrertDato?: string | null;
   grunnlag: DigitaliseringsGrunnlag;
-  oppgave: Oppgave;
+  saksnummer: string | undefined;
   readOnly: boolean;
 }
 
@@ -35,7 +33,7 @@ export const DigitaliserDokument = ({
   behandlingsreferanse,
   grunnlag,
   readOnly,
-  oppgave,
+  saksnummer,
   registrertDato,
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
@@ -56,7 +54,6 @@ export const DigitaliserDokument = ({
 
   const erKravEnabled = useFeatureFlag('KravSteg');
   const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
-  const erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled = useFeatureFlag('VarselNaarDetFinnesTimerPaaMeldeperiode');
 
   return (
     <VStack gap={'space-16'}>
@@ -76,11 +73,8 @@ export const DigitaliserDokument = ({
           isLoading={isLoading}
         />
       )}
-      {kategori === 'MELDEKORT' && !erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled && (
-        <DigitaliserMeldekortV2 submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
-      )}
-      {kategori === 'MELDEKORT' && erVarselNaarDetFinnesTimerPaaMeldeperiodeEnabled && (
-        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} oppgave={oppgave} />
+      {kategori === 'MELDEKORT' && (
+        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} saksnummer={saksnummer} />
       )}
 
       {kategori === 'KLAGE' && (

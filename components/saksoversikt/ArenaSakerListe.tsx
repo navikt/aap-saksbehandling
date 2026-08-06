@@ -1,8 +1,9 @@
 'use client';
 
 import { VStack } from '@navikt/ds-react';
+import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
+
 import { ArenaSakKort } from 'components/saksoversikt/ArenaSakKort';
-import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
 
 export function ArenaSakerListe({ arenaSaker }: { arenaSaker: SakerResponse }) {
   return (

@@ -1,9 +1,10 @@
 'use client';
 
-import { BodyShort, Heading, HStack, Link, Tag } from '@navikt/ds-react';
-import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternService';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack, Heading, Link, Tag } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternServiceDTOs';
+
 import { Kort } from 'components/kort/Kort';
 
 const arenaVisningsklientBaseUrl = process.env.NEXT_PUBLIC_ARENA_VISNINGSKLIENT_BASE_URL ?? '';

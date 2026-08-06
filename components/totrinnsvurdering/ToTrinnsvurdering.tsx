@@ -52,10 +52,11 @@ export const ToTrinnsvurdering = ({
 
   const skalViseOppsummering = readOnly && vurderteTotrinnsvurderinger.length > 0;
   const innloggetBruker = useInnloggetBruker();
+  const aktivBorder = erKvalitetssikring ? styles.aktivBorderNAV : styles.aktivBorderNAY;
 
   return (
     <>
-      <div className={styles.toTrinnsKontroll}>
+      <div className={`${styles.toTrinnsKontroll} ${!readOnly && aktivBorder}`}>
         {grunnlag.harGjortVilkårsvurderingerPåBehandling &&
           ((erKvalitetssikring && brukerErKvalitetssikrer(innloggetBruker)) ||
             (!erKvalitetssikring && brukerErBeslutter(innloggetBruker))) &&

@@ -18,7 +18,7 @@ import {
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';

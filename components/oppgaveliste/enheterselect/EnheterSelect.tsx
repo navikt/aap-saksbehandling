@@ -3,6 +3,7 @@
 import { UNSAFE_Combobox } from '@navikt/ds-react';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useMemo, useState } from 'react';
+
 import { ValuePair } from 'components/form/FormField';
 
 interface Props {
@@ -45,7 +46,7 @@ export const EnheterSelect = ({ enheter, aktiveEnheter, setAktiveEnheter, classN
       filteredOptions={filteredOptions}
       isMultiSelect
       onToggleSelected={onToggleSelected}
-      selectedOptions={aktiveEnheter as unknown as string[]}
+      selectedOptions={aktiveEnheter}
       options={enheterOptions}
       onChange={setValue}
       className={className}

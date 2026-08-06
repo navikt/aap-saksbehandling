@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
-import { Button, Modal, Select, Textarea, TextField, VStack } from '@navikt/ds-react';
-import { useForm, useWatch } from 'react-hook-form';
+import { Button, Modal, Select, TextField, Textarea, VStack } from '@navikt/ds-react';
 import {
   KlageKravLøsning,
   KravVurderingLøsning,
@@ -11,13 +9,16 @@ import {
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
 } from 'lib/types/types';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { formaterDatoForFrontend, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { useEffect } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+
 import {
   finnOverstyrMuligRettFraFraLøsning,
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
 } from 'components/behandlinger/krav/kravutils';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 
 type LeggTilKravFormFields = {
@@ -56,7 +57,7 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
   } = useForm<LeggTilKravFormFields>({
     shouldUnregister: true,
     defaultValues: {
-      kravtype: (initialLøsning?.kravType as KravType) ?? 'RELEVANT_KRAV',
+      kravtype: initialLøsning?.kravType ?? 'RELEVANT_KRAV',
       journalpostId: initialLøsning?.journalpostId.identifikator ?? '',
       begrunnelse: initialLøsning?.begrunnelse ?? '',
       søknadsdatoDato: eksisterendeSøknadsdato ? formaterDatoForFrontend(eksisterendeSøknadsdato.dato) : '',
@@ -68,7 +69,7 @@ export const LeggTilKravModal = ({ søknaderUtenKravvurdering, initialLøsning, 
 
   const journalpostOptions = søknaderUtenKravvurdering.map((s) => s.journalpostId.identifikator);
 
-  const valgtType = useWatch({ control, name: 'kravtype' }) as KravType;
+  const valgtType = useWatch({ control, name: 'kravtype' });
   const valgtJournalpostId = useWatch({ control, name: 'journalpostId' });
   const erKompleksType = KOMPLEKSE_TYPER.includes(valgtType);
 

@@ -1,3 +1,7 @@
 .inntektfelt {
   max-width: 20ch;
 }
+
+.overskrevetCelle {
+  text-decoration: line-through;
+}

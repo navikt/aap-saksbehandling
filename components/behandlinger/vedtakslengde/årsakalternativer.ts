@@ -2,27 +2,28 @@ import { VedtakslengdeÅrsak } from 'lib/types/types';
 
 import { ValuePair } from 'components/form/FormField';
 
-export const årsakAlternativer: ValuePair<VedtakslengdeÅrsak | undefined>[] = [
-  {
-    value: 'MAKS_ETT_ÅR',
-    label: '§ 6 i AAP-forskriften, vedtak maks 1 år',
-  },
-  {
-    value: 'BRUKER_OVER_67',
-    label: '§ 11-4 Bruker blir 67 år',
-  },
-  {
-    value: 'IKKE_MEDLEM',
-    label: 'Oppfyller ikke krav til medlemskap',
-  },
-  {
-    value: 'ORDINÆRKVOTE_BRUKT_OPP',
-    label: '§ 11-12 Ordinær kvote brukt opp',
-  },
-  {
-    value: 'BRUDD_PÅ_OPPHOLDSKRAV_STANS',
-    label: '§ 11-3 Utenlandsopphold',
-  },
-  { value: 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING', label: '§ 11-26 Soning' },
-  { value: 'ANNEN_FULL_YTELSE', label: '§ 11-27: Annen full ytelse' },
+export const årsakOversettelse: Record<VedtakslengdeÅrsak, string> = {
+  AUTOMATISK: 'Automatisk',
+  MAKS_ETT_ÅR: '§ 6 i AAP-forskriften, vedtak maks 1 år',
+  BRUKER_OVER_67: '§ 11-4 Bruker blir 67 år',
+  IKKE_MEDLEM: 'Oppfyller ikke krav til medlemskap',
+  ORDINÆRKVOTE_BRUKT_OPP: '§ 11-12 Ordinær kvote brukt opp',
+  BRUDD_PÅ_OPPHOLDSKRAV_STANS: '§ 11-3 Utenlandsopphold',
+  IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING: '§ 11-26 Soning',
+  ANNEN_FULL_YTELSE: '§ 11-27: Annen full ytelse',
+};
+
+const godkjenteAlternativer: VedtakslengdeÅrsak[] = [
+  'MAKS_ETT_ÅR',
+  'BRUKER_OVER_67',
+  'IKKE_MEDLEM',
+  'ORDINÆRKVOTE_BRUKT_OPP',
+  'BRUDD_PÅ_OPPHOLDSKRAV_STANS',
+  'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING',
+  'ANNEN_FULL_YTELSE',
 ];
+
+export const årsakAlternativer: ValuePair<VedtakslengdeÅrsak | undefined>[] = godkjenteAlternativer.map((årsak) => ({
+  value: årsak,
+  label: årsakOversettelse[årsak],
+}));

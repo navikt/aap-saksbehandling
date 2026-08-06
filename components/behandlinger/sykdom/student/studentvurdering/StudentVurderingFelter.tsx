@@ -1,30 +1,22 @@
 import { Radio, VStack } from '@navikt/ds-react';
-import { useFormContext } from 'react-hook-form';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { validerDato } from 'lib/validation/dateValidation';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { validerDato } from 'lib/validation/dateValidation';
+import { useFormContext } from 'react-hook-form';
+
 import { StudentFormFields } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurdering';
-import { diagnoseSøker, ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
-import { AsyncComboSearch } from 'components/form/asynccombosearch/AsyncComboSearch';
-import styles from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk.module.css';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   index: number;
   readOnly: boolean;
-  diagnoseDefaultOptions: DiagnoserDefaultOptions;
 }
 
-export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions }: Props) => {
+export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
   const form = useFormContext<StudentFormFields>();
-
-  const kodeverkValue = form.watch(`vurderinger.${index}.kodeverk`) as keyof DiagnoserDefaultOptions;
-  const defaultOptionsHoveddiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].hoveddiagnoserOptions;
-  const defaultOptionsBidiagnose = kodeverkValue && diagnoseDefaultOptions[kodeverkValue].bidiagnoserOptions;
 
   return (
     <VStack gap={'space-16'}>
@@ -138,52 +130,6 @@ export const StudentVurderingFelter = ({ index, readOnly, diagnoseDefaultOptions
           }}
           readOnly={readOnly}
         />
-      )}
-      {form.watch(`vurderinger.${index}.avbruddMerEnn6Måneder`) === JaEllerNei.Ja && (
-        <>
-          <RadioGroupWrapper
-            name={`vurderinger.${index}.kodeverk`}
-            control={form.control}
-            label={'Velg system for diagnoser'}
-            rules={{ required: 'Du må velge et system for diagnoser.' }}
-            readOnly={readOnly}
-            size={'small'}
-            horisontal={true}
-            onChangeCustom={() => {
-              form.setValue(`vurderinger.${index}.hoveddiagnose`, null);
-              form.setValue(`vurderinger.${index}.bidiagnose`, null);
-            }}
-          >
-            <Radio value={'ICPC2'}>{'Primærhelsetjenesten (ICPC2)'}</Radio>
-            <Radio value={'ICD10'}>{'Spesialisthelsetjenesten (ICD10)'}</Radio>
-          </RadioGroupWrapper>
-          {kodeverkValue != null && (
-            <>
-              <AsyncComboSearch
-                label={'Hoveddiagnose'}
-                className={styles.diagnosesokContainer}
-                form={form}
-                name={`vurderinger.${index}.hoveddiagnose`}
-                fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
-                defaultOptions={defaultOptionsHoveddiagnose}
-                rules={{ required: 'Du må velge en hoveddiagnose.' }}
-                readOnly={readOnly}
-              />
-              {form.watch(`vurderinger.${index}.hoveddiagnose`)?.value !== ingenDiagnoseCode && (
-                <AsyncComboSearch
-                  label={'Bidiagnoser'}
-                  className={styles.diagnosesokContainer}
-                  form={form}
-                  isMulti={true}
-                  name={`vurderinger.${index}.bidiagnose`}
-                  fetcher={async (value) => (kodeverkValue ? diagnoseSøker(kodeverkValue, value) : [])}
-                  defaultOptions={defaultOptionsBidiagnose}
-                  readOnly={readOnly}
-                />
-              )}
-            </>
-          )}
-        </>
       )}
     </VStack>
   );

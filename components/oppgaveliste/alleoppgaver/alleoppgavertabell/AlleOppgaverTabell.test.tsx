@@ -1,37 +1,53 @@
-import { describe, expect, it, vi } from 'vitest';
-import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
-import { screen } from '@testing-library/react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
-import { Oppgave } from 'lib/types/oppgaveTypes';
 import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
+  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
+  NoNavAapOppgaveListeOppgaveMetadataResponseStatus,
 } from '@navikt/aap-oppgave-typescript-types';
+import { screen } from '@testing-library/react';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { describe, expect, it, vi } from 'vitest';
 
-const baseOppgave: Oppgave = {
-  id: 123,
-  personIdent: '12345678910',
-  behandlingRef: 'dgklasdf',
-  vurderingsbehov: [],
+import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
+
+const baseOppgave: OppgaveMedKontekst = {
+  årsakTilOpprettelse: undefined,
   avklaringsbehovKode: '',
-  behandlingOpprettet: '2025-02-09',
-  behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-  enhet: '',
-  opprettetAv: '',
-  opprettetTidspunkt: '2025-02-09',
-  status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-  versjon: 0,
-  årsakerTilBehandling: [],
-  markeringer: [],
-  reservertAv: 'ident',
+  behandlingOpprettet: '2026-01-04',
+  behandlingskontekst: {
+    behandlingsreferanse: '',
+    behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.F_RSTEGANGSBEHANDLING,
+  },
+  oppgaveMetadata: {
+    id: 0,
+    opprettetTidspunkt: '2026-01-04',
+    status: NoNavAapOppgaveListeOppgaveMetadataResponseStatus.OPPRETTET,
+    versjon: 0,
+  },
+  personOgEnhet: {
+    enhet: '',
+    personIdent: '',
+  },
+  vurderingsbehov: [],
+  oppgavelisteTags: {
+    markeringer: [],
+    skjermingInfo: {
+      erSkjermet: false,
+      harFortroligAdresse: false,
+      harStrengtFortroligAdresse: false,
+    },
+  },
+  reservertAv: 'z123',
   reservertAvNavn: 'Test Testesen',
 };
 
-const oppgaver: Oppgave[] = [
+const oppgaver: OppgaveMedKontekst[] = [
   baseOppgave,
   {
     ...baseOppgave,
-    behandlingRef: 'sdfgaf',
+    behandlingskontekst: {
+      ...baseOppgave.behandlingskontekst,
+      behandlingsreferanse: 'sdfgaf',
+    },
     reservertAv: 'ident2',
     reservertAvNavn: undefined,
   },
@@ -81,12 +97,20 @@ describe('AlleOppgaverTabell', () => {
   });
 
   it('skal vise PÅ_VENT-indikator for tilbakekrevingsbehandling som er på vent', async () => {
-    const tilbakekrevingPåVent: Oppgave = {
+    const tilbakekrevingPåVent: OppgaveMedKontekst = {
       ...baseOppgave,
-      behandlingRef: 'tilbakekreving-behandling',
-      behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.TILBAKEKREVING,
-      påVentTil: '2025-12-31',
-      påVentÅrsak: 'AVVENTER_BRUKERUTTALELSE',
+      behandlingskontekst: {
+        ...baseOppgave.behandlingskontekst,
+        behandlingsreferanse: 'tilbakekreving-behandling',
+        behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.TILBAKEKREVING,
+      },
+      oppgavelisteTags: {
+        ...baseOppgave.oppgavelisteTags,
+        påVentInfo: {
+          påVentTil: '2025-12-31',
+          påVentÅrsak: 'AVVENTER_BRUKERUTTALELSE',
+        },
+      },
     };
 
     customRenderWithTildelOppgaveContext(
@@ -107,4 +131,3 @@ describe('AlleOppgaverTabell', () => {
     expect(påVentKnapp).toBeInTheDocument();
   });
 });
-

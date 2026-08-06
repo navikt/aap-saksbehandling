@@ -1,5 +1,6 @@
-import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { dagerTilMillisekunder } from 'lib/utils/time';
+
 import { ValuePair } from 'components/form/FormField';
 
 const KEY = 'AKTIVE_ENHETER_KEY';
@@ -20,7 +21,7 @@ export function useLagreAktiveEnheter(): {
   const lagreAktiveEnheter = (value: ValuePair[]) => {
     localStorage.setItem(
       KEY,
-      JSON.stringify({ value, timestamp: new Date().getTime(), user: bruker.NAVident } as LagredeValgteEnheter)
+      JSON.stringify({ value, timestamp: new Date().getTime(), user: bruker.NAVident } satisfies LagredeValgteEnheter)
     );
   };
 

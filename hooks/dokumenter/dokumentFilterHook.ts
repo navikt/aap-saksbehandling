@@ -1,6 +1,7 @@
-import { useCallback } from 'react';
-import { dagerTilMillisekunder } from 'lib/utils/time';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { dagerTilMillisekunder } from 'lib/utils/time';
+import { useCallback } from 'react';
+
 import { DokumentFilterFormFields } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
 
 const KEY = 'DOKUMENT_FILTER_KEY';
@@ -20,14 +21,12 @@ export function useLagretDokumentFilter(): {
 
   const lagreFilter = useCallback(
     (data: DokumentFilterFormFields) => {
-      localStorage.setItem(
-        KEY,
-        JSON.stringify({
-          data,
-          timestamp: new Date().getTime(),
-          user: bruker.NAVident,
-        } as LagretDokumentFilterData)
-      );
+      const lagretData: LagretDokumentFilterData = {
+        data,
+        timestamp: new Date().getTime(),
+        user: bruker.NAVident,
+      };
+      localStorage.setItem(KEY, JSON.stringify(lagretData));
     },
     [bruker.NAVident]
   );
@@ -36,7 +35,7 @@ export function useLagretDokumentFilter(): {
     try {
       const obj = JSON.parse(localStorage[KEY]) as LagretDokumentFilterData;
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
-        return obj.data as DokumentFilterFormFields;
+        return obj.data;
       } else {
         localStorage.removeItem(KEY);
         return undefined;

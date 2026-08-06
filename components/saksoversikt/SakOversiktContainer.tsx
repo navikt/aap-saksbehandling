@@ -1,17 +1,18 @@
 'use client';
 
-import { Box, Page, Tabs, VStack } from '@navikt/ds-react';
-import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
-import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { FileTextIcon, PersonIcon, TasklistIcon } from '@navikt/aksel-icons';
-import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
-import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
+import { Box, Page, Tabs, VStack } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { SakerResponse } from 'lib/services/apiinternservice/apiInternService';
+import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
+import { RettighetsinfoDto, SaksInfo } from 'lib/types/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+
 import { ArenaSakerListe } from 'components/saksoversikt/ArenaSakerListe';
+import { SakMedBehandlinger } from 'components/saksoversikt/SakMedBehandlinger';
+import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
+import { DokumentOversikt } from 'components/saksoversikt/dokumentoversikt/DokumentOversikt';
+import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',

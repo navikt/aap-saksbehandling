@@ -1,24 +1,25 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
-import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingFormMeta } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { SubmitEvent } from 'react';
+import { VStack } from '@navikt/ds-react';
+import { format, parse, subDays } from 'date-fns';
+import { nb } from 'date-fns/locale';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useConfigForm } from 'components/form/FormHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { format, parse, subDays } from 'date-fns';
-import { useFieldArray } from 'react-hook-form';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Dato } from 'lib/types/Dato';
-import { VStack } from '@navikt/ds-react';
+import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingFormMeta } from 'lib/types/types';
+import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEvent } from 'react';
+import { useFieldArray } from 'react-hook-form';
+
+import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonsopphold/InstitusjonsoppholdTabell';
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
-import { nb } from 'date-fns/locale';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { useConfigForm } from 'components/form/FormHook';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;

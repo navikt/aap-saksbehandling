@@ -1,28 +1,29 @@
-import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
+import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
+import { Link as AkselLink, BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { AktivKø } from 'hooks/oppgave/aktivkøHook';
+import { Køtype, OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
   mapTilÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/oversettelser';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import Link from 'next/link';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
 import { formaterTilNok } from 'lib/utils/string';
+import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import Link from 'next/link';
+import { Dispatch, SetStateAction, useState } from 'react';
+
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
-import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
-import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
-import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
-import { AktivKø } from 'hooks/oppgave/aktivkøHook';
-import { Køtype } from 'lib/types/oppgaveTypes';
 
 interface Props {
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   revalidateFunction: () => Promise<unknown>;
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   valgteRader: number[];
@@ -124,39 +125,39 @@ export const AlleOppgaverTabell = ({
         </Table.Header>
         <Table.Body>
           {oppgaver.map((oppgave, i) => (
-            <Table.Row key={`oppgave-${i}`} selected={oppgave.id ? valgteRader.includes(oppgave.id) : false}>
+            <Table.Row key={`oppgave-${i}`} selected={valgteRader.includes(oppgave.oppgaveMetadata.id)}>
               <Table.DataCell>
                 <Checkbox
                   hideLabel
-                  checked={oppgave.id ? valgteRader.includes(oppgave.id) : false}
-                  onChange={() => oppgave.id && toggleValgtRad(oppgave.id)}
+                  checked={valgteRader.includes(oppgave.oppgaveMetadata.id)}
+                  onChange={() => toggleValgtRad(oppgave.oppgaveMetadata.id)}
                 >
                   {' '}
                 </Checkbox>
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {oppgave.saksnummer ? (
-                  <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
-                    {oppgave.saksnummer}
+                {oppgave.behandlingskontekst.saksnummer ? (
+                  <AkselLink
+                    as={Link}
+                    prefetch={false}
+                    href={`/saksbehandling/sak/${oppgave.behandlingskontekst.saksnummer}`}
+                  >
+                    {oppgave.behandlingskontekst.saksnummer}
                   </AkselLink>
                 ) : (
-                  <span>{oppgave.journalpostId}</span>
+                  <span>{oppgave.behandlingskontekst.journalpostId}</span>
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {oppgave.personIdent ? (
-                  <CopyButton
-                    copyText={oppgave?.personIdent}
-                    size="xsmall"
-                    text={oppgave?.personIdent}
-                    iconPosition="right"
-                  />
-                ) : (
-                  'Ukjent'
-                )}
+                <CopyButton
+                  copyText={oppgave?.personOgEnhet.personIdent}
+                  size="xsmall"
+                  text={oppgave?.personOgEnhet.personIdent}
+                  iconPosition="right"
+                />
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
+                {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingskontekst.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>
@@ -165,17 +166,21 @@ export const AlleOppgaverTabell = ({
                   : '-'}
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
+                <Tooltip
+                  content={oppgave.vurderingsbehov
+                    .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
+                    .join(', ')}
+                >
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling
-                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+                    {oppgave.vurderingsbehov
+                      .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
                       .join(', ')}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 {aktivKø?.type === Køtype.KVALITETSSIKRING ? (
-                  (oppgave.enhetForrigeOppgave?.navn ?? '-')
+                  (oppgave.personOgEnhet.enhetForrigeOppgave?.navn ?? '-')
                 ) : (
                   <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
                     <BodyShort truncate size={'small'}>
@@ -184,7 +189,9 @@ export const AlleOppgaverTabell = ({
                   </Tooltip>
                 )}
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
+              </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>
                   <BodyShort truncate size={'small'}>
@@ -194,8 +201,8 @@ export const AlleOppgaverTabell = ({
               </Table.DataCell>
               {visBeløpKolonne && (
                 <Table.DataCell textSize={'small'}>
-                  {oppgave.behandlingstype === 'TILBAKEKREVING'
-                    ? formaterTilNok(oppgave.tilbakekrevingsVarsDto?.['tilbakekrevings_beløp'])
+                  {oppgave.behandlingskontekst.behandlingstype === 'TILBAKEKREVING'
+                    ? formaterTilNok(oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp)
                     : ''}
                 </Table.DataCell>
               )}

@@ -1,26 +1,27 @@
 'use client';
 
-import { FormField, ValuePair } from 'components/form/FormField';
-import { useConfigForm } from 'components/form/FormHook';
 import { ReadMore, VStack } from '@navikt/ds-react';
-import { SubmitEventHandler } from 'react';
-import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
-import { Behovstype } from 'lib/utils/form';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
   MellomlagretVurdering,
   SamordningAndreStatligeYtelserGrunnlag,
   SamordningAndreStatligeYtelserYtelse,
 } from 'lib/types/types';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+
+import { AndreStatligeYtelserTabell } from 'components/behandlinger/samordning/samordningandrestatlige/AndreStatligeYtelserTabell';
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 import { OppslagAndreYtelser } from 'components/oppslagandreytelser/OppslagAndreYtelser';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -98,8 +99,8 @@ export const SamordningAndreStatligeYtelser = ({
               vurderingPerioder: data.vurderteSamordninger.map((vurdertSamordning) => ({
                 ytelse: vurdertSamordning.ytelse!,
                 periode: {
-                  fom: formaterDatoForBackend(parse(vurdertSamordning.fom!, 'dd.MM.yyyy', new Date())),
-                  tom: formaterDatoForBackend(parse(vurdertSamordning.tom!, 'dd.MM.yyyy', new Date())),
+                  fom: formaterDatoForBackend(parse(vurdertSamordning.fom, 'dd.MM.yyyy', new Date())),
+                  tom: formaterDatoForBackend(parse(vurdertSamordning.tom, 'dd.MM.yyyy', new Date())),
                 },
               })),
             },

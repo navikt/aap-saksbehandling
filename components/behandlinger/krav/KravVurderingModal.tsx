@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, Modal, Select, Textarea, VStack } from '@navikt/ds-react';
-import { useForm, useWatch } from 'react-hook-form';
 import {
   KlageKravLøsning,
   KravVurdering,
@@ -11,13 +10,15 @@ import {
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
 } from 'lib/types/types';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { formaterDatoForFrontend, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { useForm, useWatch } from 'react-hook-form';
+
 import {
   finnOverstyrMuligRettFraFraLøsning,
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
 } from 'components/behandlinger/krav/kravutils';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 
 const ALLE_KRAVTYPER: KravType[] = ['RELEVANT_KRAV', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
@@ -53,7 +54,7 @@ export const KravVurderingModal = ({
   onTilbakestill,
   onAvbryt,
 }: Props) => {
-  const initialKravtype = (initialLøsning?.kravType as KravType | undefined) ?? krav.type;
+  const initialKravtype = initialLøsning?.kravType ?? krav.type;
   const eksisterendeSøknadsdato = initialLøsning ? finnSøknadsdatoFraLøsning(initialLøsning) : null;
   const eksisterendeOverstyr = initialLøsning ? finnOverstyrMuligRettFraFraLøsning(initialLøsning) : null;
 
@@ -86,7 +87,7 @@ export const KravVurderingModal = ({
     },
   });
 
-  const valgtType = useWatch({ control, name: 'kravtype' }) as KravType;
+  const valgtType = useWatch({ control, name: 'kravtype' });
   const erKravtypeMedDato = KRAV_MED_DATO.includes(valgtType);
 
   const onSubmit = handleSubmit((data) => {

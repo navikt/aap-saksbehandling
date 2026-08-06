@@ -1,20 +1,22 @@
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import {
   mapBehovskodeTilBehovstype,
   mapStatusTilTekst,
   mapTilOppgaveBehandlingstypeTekst,
 } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 
 export function aktiveFiltreringer(form: FormFieldsFilter) {
   const aktiveFilter: { key: keyof FormFieldsFilter; value: string; label: string }[] = [];
-  Object.entries(form).forEach(([key, value]) => {
+  Object.entries(form).forEach(([keyRaw, value]) => {
+    const key = keyRaw as keyof FormFieldsFilter;
     if (key === 'behandlingstyper' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {
           return {
-            key: key as keyof FormFieldsFilter,
+            key: key,
             label: mapTilOppgaveBehandlingstypeTekst(value),
             value: value,
           };
@@ -25,7 +27,7 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
     if (key === 'årsaker' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: formaterVurderingsbehov(value) };
+          return { key: key, value: value, label: formaterVurderingsbehov(value) };
         })
       );
     }
@@ -33,7 +35,7 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
     if (key === 'avklaringsbehov' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: mapBehovskodeTilBehovstype(value) };
+          return { key: key, value: value, label: mapBehovskodeTilBehovstype(value) };
         })
       );
     }
@@ -41,7 +43,7 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
     if (key === 'saksbehandlere' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value.value, label: `Reservert av: ${value.label}` };
+          return { key: key, value: value.value, label: `Reservert av: ${value.label}` };
         })
       );
     }
@@ -49,14 +51,14 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
     if (key === 'statuser' && Array.isArray(value)) {
       aktiveFilter.push(
         ...value.map((value) => {
-          return { key: key as keyof FormFieldsFilter, value: value, label: mapStatusTilTekst(value) };
+          return { key: key, value: value, label: mapStatusTilTekst(value) };
         })
       );
     }
 
     if (key === 'behandlingOpprettetFom' && value) {
       aktiveFilter.push({
-        key: key as keyof FormFieldsFilter,
+        key: key,
         value: value,
         label: `Behandling opprettet fra: ${formaterDatoForFrontend(value)}`,
       });
@@ -64,7 +66,7 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
 
     if (key === 'behandlingOpprettetTom' && value) {
       aktiveFilter.push({
-        key: key as keyof FormFieldsFilter,
+        key: key,
         value: value,
         label: `Behandling opprettet til: ${formaterDatoForFrontend(value)}`,
       });
@@ -72,7 +74,7 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
 
     if (key === 'tilbakekrevingBeløpFom' && value) {
       aktiveFilter.push({
-        key: key as keyof FormFieldsFilter,
+        key: key,
         value: value,
         label: `Beløp fra: ${value}`,
       });
@@ -80,7 +82,7 @@ export function aktiveFiltreringer(form: FormFieldsFilter) {
 
     if (key === 'tilbakekrevingBeløpTom' && value) {
       aktiveFilter.push({
-        key: key as keyof FormFieldsFilter,
+        key: key,
         value: value,
         label: `Beløp til: ${value}`,
       });

@@ -1,17 +1,8 @@
-.knapp {
-  background-color: var(--ax-bg-danger-moderate);
-  color: black;
-}
-
 .tag {
   justify-content: left;
   height: var(--ax-space-40);
   background-color: var(--ax-bg-danger-soft);
   padding-top: 0.5rem;
-}
-
-.knapp:hover {
-  background-color: var(--ax-bg-danger-moderate-hover);
 }
 
 .boks > * {

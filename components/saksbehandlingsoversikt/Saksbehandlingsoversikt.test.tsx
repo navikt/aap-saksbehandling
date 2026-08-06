@@ -1,7 +1,9 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
+import { screen } from '@testing-library/react';
+import { customRender } from 'lib/test/CustomRender';
 import { DetaljertBehandling, SaksInfo } from 'lib/types/types';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 
 const mockBehandling: DetaljertBehandling = {
   status: 'UTREDES',
@@ -34,7 +36,7 @@ const mockKabalKlageresultat = {
 
 describe('Saksbehandlingsoversikt', () => {
   beforeEach(() =>
-    render(
+    customRender(
       <Saksbehandlingsoversikt
         behandling={mockBehandling}
         sak={mockSak}

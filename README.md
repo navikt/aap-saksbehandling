@@ -139,6 +139,23 @@ oppdatere avhengigheter:
   yarn install --no-immutable
 ```
 
+## Umami-sporing: navnekonvensjon
+
+Umami-hendelser navngis etter mønsteret `<KONTEKST>_<HANDLING>[_<DETALJ>]` i `SCREAMING_SNAKE_CASE`, typet med
+template literal types der mulig i stedet for flate string-unions. Umami-typene ligger i `lib/utils/umami/`, én fil
+per måletype (`varighet.ts`, `hendelserVarighet.ts`, `lenkeKlikk.ts`, `navigering.ts`), uten en samlende barrel-fil —
+importer direkte fra riktig undermodul, f.eks. `import { loggUmamiVarighet } from 'lib/utils/umami/varighet'`.
+
+Eksempler på faktiske eventer sendt til Umami:
+
+```json
+// loggUmamiVarighet("STEG_YRKESSKADE_VARIGHET", start, stop)
+{ "type": "VARIGHET", "name": "STEG_YRKESSKADE_VARIGHET", "varighet_sekunder": 42 }
+
+// loggUmamiEksternLenkeKlikk("BESLUTTER", "Se vedtak i Gosys", "https://gosys...")
+{ "type": "LENKE_KLIKK", "name": "EKSTERN_LENKE_KLIKK", "lenketekst": "Se vedtak i Gosys", "destinasjon": "https://gosys...", "steg": "BESLUTTER" }
+```
+
 ## Kode generert av GitHub Copilot
 
 Dette repoet bruker GitHub Copilot til å generere kode.

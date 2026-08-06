@@ -1,5 +1,6 @@
 arbeidOgInntektApp: arbeid-og-inntekt
 fssCluster: prod-fss
+umamiHost: reops-event-proxy.nav.no
 
 ingresses:
   - 'https://kelvin.intern.nav.no'
