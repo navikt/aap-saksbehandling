@@ -88,7 +88,7 @@ export const AvklaroppfolgingVurdering = ({
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: vurderingsbehovOptions(erKravEnabled, undefined),
+        options: vurderingsbehovOptions(erKravEnabled, undefined, true),
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },

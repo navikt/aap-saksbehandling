@@ -6,7 +6,8 @@ import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 
 export const vurderingsbehovOptions = (
   erKravEnabled: boolean,
-  erAvslag11_27Enabled: boolean | undefined
+  erAvslag11_27Enabled: boolean | undefined,
+  skalInkludereRefusjonkrav: boolean | undefined
 ): ValuePair<Vurderingsbehov>[] => {
   // Disse skal vises i samme rekkefølge som definert i flyten
   // Se https://nav.atlassian.net/browse/AAP-2335
@@ -54,7 +55,9 @@ export const vurderingsbehovOptions = (
     ] satisfies Vurderingsbehov[]
   ).filter(
     (option) =>
-      (erKravEnabled || option !== 'VURDER_KRAV') && (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27')
+      (erKravEnabled || option !== 'VURDER_KRAV') &&
+      (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27') &&
+      (skalInkludereRefusjonkrav || option !== 'REFUSJONSKRAV')
   );
 
   return behov.map((behov) => ({

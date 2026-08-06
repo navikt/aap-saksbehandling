@@ -88,7 +88,7 @@ export const OpprettRevurdering = ({
       type: 'combobox_multiple',
       label: `Hvilke opplysninger skal ${erFørstegangsbehandling ? 'vurderes' : 'revurderes'}?`,
       description: 'Skriv i feltet for å filtrere listen.',
-      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable),
+      options: vurderingsbehovOptions(erKravEnabled, avslag11_27Enable, erFørstegangsbehandling),
       defaultValue: defaultÅrsaker,
       rules: {
         required: `Velg opplysning som er grunnlaget for ${variant}en`,
