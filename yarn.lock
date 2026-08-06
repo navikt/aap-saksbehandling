@@ -3110,7 +3110,7 @@ __metadata:
     husky: "npm:9.1.7"
     i18n-iso-countries: "npm:7.14.0"
     is-european: "npm:1.0.10"
-    jose: "npm:6.2.4"
+    jose: "npm:6.2.5"
     lint-staged: "npm:16.4.0"
     lodash: "npm:4.18.1"
     next: "npm:16.2.12"
@@ -6012,10 +6012,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.4":
-  version: 6.2.4
-  resolution: "jose@npm:6.2.4"
-  checksum: 10c0/aaba866d71a8cd5bfd7c2c228367318df99f36318d7c6f1e7bca835c3bdd74ea3fe38783277f7bf7c9703ae24338bb3642a6ccdef6aa54c006d29a9711e6f782
+"jose@npm:6.2.5":
+  version: 6.2.5
+  resolution: "jose@npm:6.2.5"
+  checksum: 10c0/9bbb70f5d23052473e3629d3d11e07472f54c2f06318be5b6e9b016b1071589bdea18fd6e7559eea010081379a0f2d990599e1e5acaf7f37639833dfdd1d31ae
   languageName: node
   linkType: hard
 
