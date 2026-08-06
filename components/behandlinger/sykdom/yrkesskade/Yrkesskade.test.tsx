@@ -1,12 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, within } from 'lib/test/CustomRender';
-import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
-import { MellomlagretVurderingResponse, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
-import { Behovstype } from 'lib/utils/form';
+import { render, screen, within } from 'lib/test/CustomRender';
+import { MellomlagretVurderingResponse, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+
+import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -31,7 +32,6 @@ const grunnelagMedTidligereVurdering: YrkesskadeVurderingGrunnlag = {
   yrkesskadeVurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     erÅrsakssammenheng: true,
-    relevanteSaker: [],
     relevanteYrkesskadeSaker: [],
     vurderingerMeta: {
       vurdertAv: {
@@ -204,7 +204,6 @@ describe('Yrkesskade', () => {
             dato: '2025-10-08',
           },
         },
-        relevanteSaker: [],
         relevanteYrkesskadeSaker: [],
       },
       opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: false },

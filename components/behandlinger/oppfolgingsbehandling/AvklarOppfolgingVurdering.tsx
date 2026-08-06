@@ -66,7 +66,6 @@ export const AvklaroppfolgingVurdering = ({
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
 
   const erKravEnabled = useFeatureFlag('KravSteg');
-  const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -89,7 +88,7 @@ export const AvklaroppfolgingVurdering = ({
       hvaSkalRevurderes: {
         type: 'combobox_multiple',
         label: 'Hvilke opplysninger skal revurderes?',
-        options: vurderingsbehovOptions(erKravEnabled, undefined, erRevurdereFrivilligeEnabled),
+        options: vurderingsbehovOptions(erKravEnabled, undefined),
         defaultValue: defaultValue.hvaSkalRevurderes,
       },
     },

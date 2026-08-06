@@ -12,7 +12,8 @@
     "lint": "eslint app components context hooks lib",
     "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
     "gentypes:ci": "openapi-typescript ./openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
-    "run-prettier": "prettier --write ."
+    "run-prettier": "prettier --write .",
+    "gen-umami-docs": "node scripts/generate-umami-docs.mjs"
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {

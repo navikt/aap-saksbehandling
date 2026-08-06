@@ -27,7 +27,6 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
-        erRevurdereFrivilligeEnabled={true}
       />
     );
 
@@ -68,7 +67,6 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
-        erRevurdereFrivilligeEnabled={true}
       />
     );
 
@@ -98,7 +96,6 @@ describe('DigitaliserAnnetDokument', () => {
         readOnly={false}
         isLoading={false}
         erKravEnabled={true}
-        erRevurdereFrivilligeEnabled={true}
       />
     );
 

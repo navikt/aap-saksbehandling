@@ -153,7 +153,6 @@ export const Yrkesskade = ({
               begrunnelse: data.begrunnelse,
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
               andelAvNedsettelsen: data?.andelAvNedsettelsen,
-              relevanteSaker: [], // TODO Fjern fra backend
               relevanteYrkesskadeSaker:
                 data.relevanteYrkesskadeSaker
                   ?.filter((sak) => sak.erTilknyttet)
