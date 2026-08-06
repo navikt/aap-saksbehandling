@@ -63,10 +63,12 @@ export const Avslag11_27KravGruppe = ({
     setVisNyVurdering(false);
   };
 
-  const vurderingStatusForNyVurdering =
-    vurderingFormField?.skalAvslås1127 === undefined
-      ? undefined
-      : getErOppfyltEllerIkkeStatus(vurderingFormField.skalAvslås1127 === JaEllerNei.Nei);
+  const vurderingStatusForNyVurdering = (() => {
+    if (vurderingFormField?.harAnnenFullYtelse === undefined) return undefined;
+    if (vurderingFormField.harAnnenFullYtelse === JaEllerNei.Nei) return getErOppfyltEllerIkkeStatus(true);
+    if (vurderingFormField.skalAvslås1127 === undefined) return undefined;
+    return getErOppfyltEllerIkkeStatus(vurderingFormField.skalAvslås1127 === JaEllerNei.Nei);
+  })();
 
   return (
     <Box
