@@ -13459,6 +13459,11 @@ export interface components {
       andelAvNedsettelsen?: number | null;
       begrunnelse: string;
       'er\u00C5rsakssammenheng': boolean;
+      /**
+       * @deprecated
+       * @description Bruk relevanteYrkesskadeSaker
+       */
+      relevanteSaker: string[];
       relevanteYrkesskadeSaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.YrkesskadeSakDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.\u00C5rsakTilRetur': {
@@ -13918,6 +13923,11 @@ export interface components {
       andelAvNedsettelsen?: number | null;
       begrunnelse: string;
       'er\u00C5rsakssammenheng': boolean;
+      /**
+       * @deprecated
+       * @description Bruk relevanteYrkesskadeSaker
+       */
+      relevanteSaker: string[];
       relevanteYrkesskadeSaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.YrkesskadeSakResponse'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -16268,6 +16278,16 @@ export interface components {
       /** @enum {string} */
       utvidetMed: 'ANDRE_ÅR' | 'ANNET' | 'FØRSTE_ÅR' | 'TREDJE_ÅR';
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+      '\u00E5rsaker': (
+        | 'ANNEN_FULL_YTELSE'
+        | 'AUTOMATISK'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
+        | 'BRUKER_OVER_67'
+        | 'IKKE_MEDLEM'
+        | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
+        | 'MAKS_ETT_ÅR'
+        | 'ORDINÆRKVOTE_BRUKT_OPP'
+      )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.ArbeidInntektINorgeGrunnlag': {
       /** Format: double */
@@ -18116,6 +18136,16 @@ export interface components {
        * @example 2025-04-01
        */
       tom?: string | null;
+      '\u00E5rsaker': (
+        | 'ANNEN_FULL_YTELSE'
+        | 'AUTOMATISK'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
+        | 'BRUKER_OVER_67'
+        | 'IKKE_MEDLEM'
+        | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
+        | 'MAKS_ETT_ÅR'
+        | 'ORDINÆRKVOTE_BRUKT_OPP'
+      )[];
     };
     'no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO': {
       harArenaHistorikk: boolean;

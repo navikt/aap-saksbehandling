@@ -11,6 +11,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import {
   MellomlagretVurdering,
   VedtakslengdeGrunnlag,
+  VedtakslengdeVurderingDto,
   VedtakslengdeVurderingResponse,
   VurderingFormMeta,
 } from 'lib/types/types';
@@ -23,8 +24,10 @@ import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
+import { årsakAlternativer, årsakOversettelse } from 'components/behandlinger/vedtakslengde/årsakalternativer';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import {
@@ -42,6 +45,7 @@ interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   fraDato: string;
   sluttdato: string;
   begrunnelse: string;
+  årsak: string;
   endring: 'FORLENGELSE';
 }
 
@@ -63,6 +67,7 @@ function getDefaultValuesFromGrunnlag(grunnlag: VedtakslengdeGrunnlag): Vedtaksl
     .map((v) => ({
       fraDato: v.fom ? formaterDatoForFrontend(v.fom) : '',
       begrunnelse: v.begrunnelse,
+      årsak: v.årsaker[0], // Antar kun én årsak for manuelle vurderinger
       sluttdato: formaterDatoForFrontend(v.sluttdato),
       erNyVurdering: false,
       behøverVurdering: false,
@@ -134,6 +139,7 @@ export const VedtakslengdeSteg = ({
     append({
       fraDato: formaterDatoForFrontend(fraDatoManuellVurdering),
       begrunnelse: '',
+      årsak: '',
       sluttdato: '',
       erNyVurdering: true,
       behøverVurdering: false,
@@ -145,7 +151,7 @@ export const VedtakslengdeSteg = ({
   function onSubmit(data: VedtakslengdeForm) {
     const manuelleVurderinger = data.vurderinger.filter((v) => v.manuellVurdering);
 
-    const losning: LøsningerForPerioder = {
+    const løsning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
@@ -157,13 +163,14 @@ export const VedtakslengdeSteg = ({
             fom: fraDato,
             tom: sluttdato,
             begrunnelse: vurdering.begrunnelse,
+            årsaker: [vurdering.årsak],
             sluttdato: sluttdato,
-          };
+          } as VedtakslengdeVurderingDto;
         }),
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertBehovOgGåTilNesteSteg(løsning, () => {
       loggUmamiVarighet('STEG_VEDTAKSLENGDE_VARIGHET', umamiStartTidspunkt, Date.now());
       closeAllAccordions();
       visningActions.onBekreftClick();
@@ -284,6 +291,20 @@ export const VedtakslengdeSteg = ({
               }}
               readOnly={formReadOnly}
             />
+            <SelectWrapper
+              name={`vurderinger.${index}.årsak`}
+              control={form.control}
+              label={'Årsak til vedtaksperiode'}
+              rules={{ required: 'Du må velge en årsak' }}
+              readOnly={formReadOnly}
+            >
+              <option value="">Velg årsak</option>
+              {årsakAlternativer.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </SelectWrapper>
           </VStack>
         </NyVurderingExpandableCard>
       ))}
@@ -295,5 +316,6 @@ const VedtakslengdeVurderingInnhold = ({ vurdering }: { vurdering: Vedtakslengde
   <VStack gap={'space-8'}>
     <SpørsmålOgSvar spørsmål={'Sluttdato'} svar={formaterDatoForFrontend(vurdering.sluttdato)} />
     <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
+    <SpørsmålOgSvar spørsmål={'Årsaker'} svar={vurdering.årsaker.map((årsak) => årsakOversettelse[årsak]).join(', ')} />
   </VStack>
 );

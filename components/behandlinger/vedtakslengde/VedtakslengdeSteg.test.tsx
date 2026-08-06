@@ -1,12 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { MellomlagretVurderingResponse, VedtakslengdeGrunnlag } from 'lib/types/types';
-import createFetchMock from 'vitest-fetch-mock';
 import { FetchResponse } from 'lib/utils/api';
-import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { VedtakslengdeSteg } from 'components/behandlinger/vedtakslengde/VedtakslengdeSteg';
 import { Behovstype } from 'lib/utils/form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import createFetchMock from 'vitest-fetch-mock';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+
+import { VedtakslengdeSteg } from 'components/behandlinger/vedtakslengde/VedtakslengdeSteg';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -46,6 +47,7 @@ const grunnlagMedAutomatiskVurdering: VedtakslengdeGrunnlag = {
       manuellVurdering: false,
       utvidetMed: 'FØRSTE_ÅR',
       vurderingerMeta: {},
+      årsaker: ['MAKS_ETT_ÅR'],
     },
   ],
   kanVurderes: [
@@ -70,6 +72,7 @@ const grunnlagMedManuellVurdering: VedtakslengdeGrunnlag = {
       manuellVurdering: false,
       utvidetMed: 'FØRSTE_ÅR',
       vurderingerMeta: {},
+      årsaker: ['AUTOMATISK'],
     },
     {
       fom: '2026-10-11',
@@ -84,6 +87,7 @@ const grunnlagMedManuellVurdering: VedtakslengdeGrunnlag = {
           dato: '2026-03-10',
         },
       },
+      årsaker: ['IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'],
     },
   ],
   kanVurderes: [
@@ -108,6 +112,7 @@ const grunnlagMedVedtatteOgNyeVurderinger: VedtakslengdeGrunnlag = {
       manuellVurdering: false,
       utvidetMed: 'ANDRE_ÅR',
       vurderingerMeta: {},
+      årsaker: ['MAKS_ETT_ÅR'],
     },
   ],
   kanVurderes: [
@@ -130,6 +135,7 @@ const grunnlagMedVedtatteOgNyeVurderinger: VedtakslengdeGrunnlag = {
           dato: '2025-10-10',
         },
       },
+      årsaker: ['MAKS_ETT_ÅR'],
     },
   ],
   behøverVurderinger: [],
@@ -159,6 +165,7 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
           dato: '2025-10-10',
         },
       },
+      årsaker: ['AUTOMATISK'],
     },
     {
       fom: '2026-10-11',
@@ -173,6 +180,7 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
           dato: '2026-03-10',
         },
       },
+      årsaker: ['IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'],
     },
   ],
   behøverVurderinger: [],
