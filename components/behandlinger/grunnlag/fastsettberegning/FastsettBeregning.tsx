@@ -118,7 +118,7 @@ export const FastsettBeregning = ({
       },
       årsak: {
         type: 'select',
-        label: 'Årsak til beregningstidspunkt.',
+        label: 'Årsak til beregningstidspunkt',
         options: ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS,
         defaultValue: defaultValues.årsak,
         rules: visAarsakDropdowns ? { required: 'Du må velge årsak til beregningstidspunkt.' } : {},
@@ -254,7 +254,11 @@ export const FastsettBeregning = ({
           Du har satt beregningsdato etter søknadsdato. Hvis det er korrekt kan du bekrefte vilkåret.
         </Alert>
       )}
-      {visAarsakDropdowns && <FormField form={form} formField={formFields.årsak} />}
+      {visAarsakDropdowns && (
+        <div style={{ maxWidth: '90ch' }}>
+          <FormField form={form} formField={formFields.årsak} />
+        </div>
+      )}
       {grunnlag?.skalVurdereYtterligere && (
         <div className={styles.ytterligerenedsattfelter}>
           <Heading size={'small'}>Tidspunktet da arbeidsevnen ble ytterligere nedsatt § 11-28</Heading>
