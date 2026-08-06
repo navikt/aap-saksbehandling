@@ -1,4 +1,15 @@
+import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
+import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
+import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
+import { ClientConfig } from 'lib/types/clientTypes';
+import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { FetchResponse } from 'lib/utils/api';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { isLocal } from 'lib/utils/environment';
+import { getErrorMessage } from 'lib/utils/errorUtil';
+
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
+
 import {
   AktivitetspliktMedTrekkRespons,
   BehandlingFlytOgTilstand,
@@ -21,8 +32,8 @@ import {
   MeldePerioderMedMEldekortResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
-  NavEnheterResponse,
   NavEnhetRequest,
+  NavEnheterResponse,
   OppdaterMeldekortRequest,
   OppdaterMeldekortResponse,
   OpprettAktivitetspliktBehandlingDto,
@@ -33,15 +44,7 @@ import {
   SaksInfo,
   SettPåVent,
 } from './types/types';
-import { getErrorMessage } from 'lib/utils/errorUtil';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { ClientConfig } from 'lib/types/clientTypes';
-import { FetchResponse } from 'lib/utils/api';
-import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
-import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
-import { isLocal } from 'lib/utils/environment';
-import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
+
 const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
@@ -248,20 +251,7 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   });
 }
 
-// TODO: hent fra aap-oppgave
-export enum MarkeringHendelseType {
-  OPPRETTET = 'OPPRETTET',
-  FJERNET = 'FJERNET',
-}
-
-// TODO: hent fra aap-oppgave
-export interface OpprettMarkeringHendelse {
-  markeringType: MarkeringType;
-  begrunnelse?: string;
-  hendelseType: MarkeringHendelseType;
-}
-
-export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringHendelse) {
+export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringDto) {
   return clientFetch(
     `${BASE_URL}/api/behandling/${referanse}/opprett-markering-hendelse`,
     'POST',

@@ -1,7 +1,13 @@
 import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
-import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
+import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import {
+  Markering,
+  MarkeringType,
+  OpprettMarkeringDto,
+  OpprettMarkeringHendelseType,
+  OpprettMarkeringType,
+} from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import React, { useRef, useState } from 'react';
@@ -78,8 +84,8 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
                     onClick={async () => {
                       setIsLoading(true);
                       const res = await clientOpprettMarkeringHendelse(referanse, {
-                        markeringType: markering.markeringType,
-                        hendelseType: MarkeringHendelseType.FJERNET,
+                        markeringType: mapTilOpprettMarkeringType(markering.markeringType),
+                        hendelseType: OpprettMarkeringHendelseType.FJERNET,
                       });
                       if (isSuccess(res)) {
                         setVisInfo(false);
@@ -99,6 +105,17 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
     </>
   );
 };
+
+function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkeringDto['markeringType'] {
+  switch (type) {
+    case 'HASTER':
+      return OpprettMarkeringType.HASTER;
+    case 'AVSLAG_11_5':
+      return OpprettMarkeringType.AVSLAG_11_5;
+    default:
+      return OpprettMarkeringType.HASTER;
+  }
+}
 
 function markeringTypeTilTekst(type: MarkeringType): string {
   switch (type) {
