@@ -94,4 +94,3 @@ export function byggKelvinURL(oppgaveInfo: BehandlingskontekstForOppgave): strin
     return buildSaksbehandlingsURL(oppgaveInfo.saksnummer, oppgaveInfo.behandlingsreferanse);
   }
 }
-

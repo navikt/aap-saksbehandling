@@ -347,15 +347,15 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
 
   const grunnlagMedEndringSidenSist: KvalitetssikringGrunnlag = {
     harGjortVilkårsvurderingerPåBehandling: false,
-      harTilgangTilÅSaksbehandle: true,
-      vurderinger: [
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [
       {
         definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
-        endretSidenSist: true
+        endretSidenSist: true,
       },
     ],
-      historikk: [],
-  }
+    historikk: [],
+  };
 
   const grunnlagUtenEndringSidenSist: KvalitetssikringGrunnlag = {
     harGjortVilkårsvurderingerPåBehandling: false,
@@ -390,7 +390,12 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
 
   it('skal vise at vurdering er endret siden forrige retur', () => {
     render(
-      <TotrinnsvurderingForm behandlingsversjon={1} grunnlag={grunnlagMedEndringSidenSist} erKvalitetssikring={true} readOnly={false} />
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagMedEndringSidenSist}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
     );
     expect(screen.getByText('Vurderingen er endret siden forrige retur')).toBeVisible();
   });

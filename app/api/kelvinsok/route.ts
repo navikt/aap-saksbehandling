@@ -119,7 +119,7 @@ async function utledSøkeresultat(søketekst: string, brukerinformasjon?: Bruker
     kanSaksbehandle: harTilgang,
     harAdressebeskyttelse: harAdressebeskyttelse,
     kontor: kontorData,
-    person: personData
+    person: personData,
   };
 }
 

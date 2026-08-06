@@ -57,9 +57,7 @@ export const InnhentDokumentasjon = () => {
         </VStack>
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}
-      <div className={styles.marginTop}>
-        {!visSkjema && <RelevanteDokumenter />}
-      </div>
+      <div className={styles.marginTop}>{!visSkjema && <RelevanteDokumenter />}</div>
     </section>
   );
 };

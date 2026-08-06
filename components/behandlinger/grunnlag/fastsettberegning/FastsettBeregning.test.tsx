@@ -553,7 +553,9 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    expect(screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })
+    ).not.toBeInTheDocument();
   });
 
   it('skal ikke vise dropdown for årsak til ytterligere nedsatt tidspunkt når det ikke skal vurderes ytterligere', () => {
@@ -565,7 +567,9 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
       />
     );
-    expect(screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })
+    ).not.toBeInTheDocument();
   });
 
   it('skal vise feilmelding hvis årsak ikke er valgt og toggle er på', async () => {

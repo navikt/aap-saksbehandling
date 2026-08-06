@@ -130,12 +130,7 @@ describe('BehandlingButtons', () => {
     };
 
     render(
-      <BehandlingButtons
-        sak={sak}
-        behandling={behandling}
-        setFeilmelding={vi.fn()}
-        oppgavePåBehandling={undefined}
-      />
+      <BehandlingButtons sak={sak} behandling={behandling} setFeilmelding={vi.fn()} oppgavePåBehandling={undefined} />
     );
     const behandleknapp = screen.queryByText('Behandle');
     expect(behandleknapp).not.toBeInTheDocument();
