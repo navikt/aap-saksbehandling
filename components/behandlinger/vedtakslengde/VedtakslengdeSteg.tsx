@@ -24,7 +24,7 @@ import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
-import { årsakAlternativer } from 'components/behandlinger/vedtakslengde/årsakalternativer';
+import { årsakAlternativer, årsakOversettelse } from 'components/behandlinger/vedtakslengde/årsakalternativer';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -316,9 +316,6 @@ const VedtakslengdeVurderingInnhold = ({ vurdering }: { vurdering: Vedtakslengde
   <VStack gap={'space-8'}>
     <SpørsmålOgSvar spørsmål={'Sluttdato'} svar={formaterDatoForFrontend(vurdering.sluttdato)} />
     <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
-    <SpørsmålOgSvar
-      spørsmål={'Årsaker'}
-      svar={vurdering.årsaker.map((årsak) => årsakAlternativer.find((alt) => alt.value === årsak)?.label).join(', ')}
-    />
+    <SpørsmålOgSvar spørsmål={'Årsaker'} svar={vurdering.årsaker.map((årsak) => årsakOversettelse[årsak]).join(', ')} />
   </VStack>
 );
