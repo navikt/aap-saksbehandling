@@ -18843,8 +18843,7 @@ export interface components {
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
-        | 'Tilbakekreving'
-        | 'MigreringFraArena';
+        | 'Tilbakekreving';
       visBeslutterKort: boolean;
       visBrevkort: boolean;
       visKvalitetssikringKort: boolean;
