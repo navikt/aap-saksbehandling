@@ -8,13 +8,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
-import {
-  Markering,
-  MarkeringType,
-  OpprettMarkering,
-  OpprettMarkeringHendelseType,
-  OpprettMarkeringType,
-} from 'lib/types/oppgaveTypes';
+import { HendelseType, Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -161,8 +155,8 @@ export const TotrinnsvurderingForm = ({
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           clientOpprettMarkeringHendelse(behandlingsreferanse, {
-            markeringType: mapTilOpprettMarkeringType(MarkeringType.HASTER),
-            hendelseType: OpprettMarkeringHendelseType.FJERNET,
+            markeringType: MarkeringType.HASTER,
+            hendelseType: HendelseType.FJERNET,
           });
         }
         if (isError) {
@@ -346,15 +340,4 @@ function getDefaultBegrunnelse(begrunnelse: string | undefined | null, årsakFri
   }
 
   return begrunnelse || '';
-}
-
-function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkering['markeringType'] {
-  switch (type) {
-    case 'HASTER':
-      return OpprettMarkeringType.HASTER;
-    case 'AVSLAG_11_5':
-      return OpprettMarkeringType.AVSLAG_11_5;
-    default:
-      return OpprettMarkeringType.HASTER;
-  }
 }

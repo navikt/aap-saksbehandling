@@ -1,6 +1,6 @@
 import { userEvent } from '@testing-library/user-event';
 import { render, screen } from 'lib/test/CustomRender';
-import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { MarkeringDtoType } from 'lib/types/oppgaveTypes';
 import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
@@ -280,7 +280,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
       readOnly={false}
       hastemarkering={{
         begrunnelse: 'Avtalt med leder',
-        markeringType: MarkeringType.HASTER,
+        markeringType: MarkeringDtoType.HASTER,
         opprettetAv: null,
         opprettetAvNavn: null,
         opprettetTidspunkt: Date.now().toString(),
@@ -312,7 +312,7 @@ it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert
       readOnly={false}
       hastemarkering={{
         begrunnelse: 'Avtalt med leder',
-        markeringType: MarkeringType.HASTER,
+        markeringType: MarkeringDtoType.HASTER,
         opprettetAv: null,
         opprettetAvNavn: null,
         opprettetTidspunkt: Date.now().toString(),

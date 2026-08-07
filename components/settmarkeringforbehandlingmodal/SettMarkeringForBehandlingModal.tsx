@@ -3,12 +3,7 @@ import { Button, Modal, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
-import {
-  MarkeringType,
-  OpprettMarkering,
-  OpprettMarkeringHendelseType,
-  OpprettMarkeringType,
-} from 'lib/types/oppgaveTypes';
+import { HendelseType, MarkeringType } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { useState } from 'react';
 
@@ -76,8 +71,8 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
 
                 const res = await clientOpprettMarkeringHendelse(referanse, {
                   begrunnelse: type === MarkeringType.HASTER ? data.hasteBegrunnelse : data.begrunnelse,
-                  markeringType: mapTilOpprettMarkeringType(type),
-                  hendelseType: OpprettMarkeringHendelseType.OPPRETTET,
+                  markeringType: type,
+                  hendelseType: HendelseType.OPPRETTET,
                 });
 
                 if (isSuccess(res)) {
@@ -113,17 +108,6 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
     </Modal>
   );
 };
-
-function mapTilOpprettMarkeringType(type: MarkeringType): OpprettMarkering['markeringType'] {
-  switch (type) {
-    case 'HASTER':
-      return OpprettMarkeringType.HASTER;
-    case 'AVSLAG_11_5':
-      return OpprettMarkeringType.AVSLAG_11_5;
-    default:
-      return OpprettMarkeringType.HASTER;
-  }
-}
 
 const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {

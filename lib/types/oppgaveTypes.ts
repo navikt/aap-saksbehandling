@@ -3,13 +3,12 @@ import {
   NoNavAapOppgaveFilterFilterResponseType,
   NoNavAapOppgaveMarkeringMarkeringDtoHendelseType,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
-  NoNavAapOppgaveMarkeringOpprettMarkeringDtoHendelseType,
-  NoNavAapOppgaveMarkeringOpprettMarkeringDtoMarkeringType,
   components as oppgave,
   paths,
 } from '@navikt/aap-oppgave-typescript-types';
 import { components as postmottak } from '@navikt/aap-postmottak-backend-typescript-types';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
+import { EnumToUnion, Structuralize } from 'lib/types/utils';
 
 // postmottak
 export type PostmottakAvklaringsbehovKode =
@@ -49,13 +48,7 @@ export type SakOgAvklaringsbehov = oppgave['schemas']['no.nav.aap.oppgave.SakOgA
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype}`;
 
 export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
-export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
-export const MarkeringType = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType;
-export const HendelseType = NoNavAapOppgaveMarkeringMarkeringDtoHendelseType;
-export type OpprettMarkering = oppgave['schemas']['no.nav.aap.oppgave.markering.OpprettMarkeringDto'];
-export type OpprettMarkeringType = `${NoNavAapOppgaveMarkeringOpprettMarkeringDtoMarkeringType}`;
-export const OpprettMarkeringType = NoNavAapOppgaveMarkeringOpprettMarkeringDtoMarkeringType;
-export const OpprettMarkeringHendelseType = NoNavAapOppgaveMarkeringOpprettMarkeringDtoHendelseType;
+export const MarkeringDtoType = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 
@@ -63,3 +56,11 @@ export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters
 
 export const Køtype = NoNavAapOppgaveFilterFilterResponseType;
 export type Køtype = NoNavAapOppgaveFilterFilterResponseType;
+
+export type MarkeringType = EnumToUnion<NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType>;
+export const MarkeringType = { ...NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } as const;
+
+export type HendelseType = EnumToUnion<NoNavAapOppgaveMarkeringMarkeringDtoHendelseType>;
+export const HendelseType = { ...NoNavAapOppgaveMarkeringMarkeringDtoHendelseType } as const;
+
+export type OpprettMarkering = Structuralize<oppgave['schemas']['no.nav.aap.oppgave.markering.OpprettMarkeringDto']>;
