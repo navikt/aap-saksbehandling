@@ -7,7 +7,6 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { DiagnoseSystem } from 'lib/diagnosesøker/DiagnoseSøker';
 import { Dato } from 'lib/types/Dato';
 import {
   AvklarPeriodisertStudentLøsning,
@@ -20,7 +19,6 @@ import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 
 import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
@@ -29,7 +27,6 @@ import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/op
 import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
 import { StudentVurderingFelter } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingFelter';
 import { VedtattStudentVurderinger } from 'components/behandlinger/sykdom/student/studentvurdering/VedtattStudentVurderinger';
-import { ValuePair } from 'components/form/FormField';
 import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
@@ -58,9 +55,6 @@ export interface StudentVurdering extends VurderingFormMeta {
   harBehovForBehandling?: string;
   avbruttDato?: string;
   avbruddMerEnn6Måneder?: string;
-  kodeverk?: DiagnoseSystem;
-  hoveddiagnose?: ValuePair | null;
-  bidiagnose?: ValuePair[] | null;
 }
 
 type DraftFormFields = Partial<StudentFormFields>;
@@ -71,7 +65,7 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError, status } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT');
+    useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT_V2');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagring(initialMellomlagretVurdering.data)
@@ -83,13 +77,12 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
-    'AVKLAR_STUDENT',
+    'AVKLAR_STUDENT_V2',
     initialMellomlagretVurdering
   );
-  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
-    Behovstype.AVKLAR_STUDENT_KODE,
+    Behovstype.AVKLAR_STUDENT_KODE_V2,
     initialMellomlagretVurdering,
     form
   );
@@ -119,9 +112,6 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
           godkjentStudieAvLånekassen: vurdering.godkjentStudieAvLånekassen
             ? vurdering.godkjentStudieAvLånekassen === JaEllerNei.Ja
             : undefined,
-          kodeverk: vurdering.kodeverk,
-          hoveddiagnose: vurdering.hoveddiagnose?.value,
-          bidiagnoser: vurdering.bidiagnose?.map((d) => d.value),
         };
       });
 
@@ -129,13 +119,12 @@ export const StudentVurdering = ({ readOnly, initialMellomlagretVurdering, grunn
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
-            behovstype: Behovstype.AVKLAR_STUDENT_KODE,
+            behovstype: Behovstype.AVKLAR_STUDENT_KODE_V2,
             løsningerForPerioder: løsning,
           },
           referanse: behandlingsreferanse,
         },
         () => {
-          loggUmamiVarighet('STEG_YRKESSKADE_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
           closeAllAccordions();
@@ -253,9 +242,6 @@ function emptyStudentVurdering(): StudentVurdering {
     harAvbruttStudie: '',
     harBehovForBehandling: '',
     erNyVurdering: true,
-    kodeverk: undefined,
-    hoveddiagnose: undefined,
-    bidiagnose: undefined,
     behøverVurdering: false,
   };
 }

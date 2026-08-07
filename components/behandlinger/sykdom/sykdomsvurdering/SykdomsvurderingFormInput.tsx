@@ -1,27 +1,27 @@
 'use client';
 
 import { Radio, VStack } from '@navikt/ds-react';
-import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
-import { parse } from 'date-fns';
-import { stringToDate } from 'lib/utils/date';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { UseFormReturn } from 'react-hook-form';
-import { Periode, StudentGrunnlag } from 'lib/types/types';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { JaEllerNei, JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
 import { Sak } from 'context/saksbehandling/SakContext';
-import { SykdomsvurderingNedsattArbeidsevneDetaljer } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingNedsattArbeidsevneDetaljer';
-import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { parse } from 'date-fns';
+import { Periode, StudentGrunnlag } from 'lib/types/types';
+import { stringToDate } from 'lib/utils/date';
+import { JaEllerNei, JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
+import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import React from 'react';
-import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { UseFormReturn } from 'react-hook-form';
+
 import { Alert } from 'components/alert/Alert';
 import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
+import { SykdomsvurderingNedsattArbeidsevneDetaljer } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingNedsattArbeidsevneDetaljer';
+import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 interface Props {
   index: number;
@@ -60,9 +60,7 @@ export const SykdomsvurderingFormInput = ({
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
-  const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
   const skalViseStudentSoknad =
-    skalViseNeiMenStudent &&
     studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
     (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'JA' ||
       studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'VET_IKKE');
@@ -138,9 +136,7 @@ export const SykdomsvurderingFormInput = ({
               >
                 <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
                 <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
-                {skalViseNeiMenStudent && (
-                  <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
-                )}
+                <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
                 <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
               </RadioGroupWrapper>
 
@@ -176,9 +172,7 @@ export const SykdomsvurderingFormInput = ({
           >
             <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
             <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
-            {skalViseNeiMenStudent && (
-              <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
-            )}
+            <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
             <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
           </RadioGroupWrapper>
           {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
