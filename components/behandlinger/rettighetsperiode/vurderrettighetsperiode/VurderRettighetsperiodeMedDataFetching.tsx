@@ -1,12 +1,13 @@
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { VurderRettighetsperiode } from 'components/behandlinger/rettighetsperiode/vurderrettighetsperiode/VurderRettighetsperiode';
 import {
   hentMellomlagring,
   hentRettighetsperiodeGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
+import { VurderRettighetsperiode } from 'components/behandlinger/rettighetsperiode/vurderrettighetsperiode/VurderRettighetsperiode';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,7 +29,8 @@ export const VurderRettighetsperiodeMedDataFetching = async ({ behandlingsrefera
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_RETTIGHETSPERIODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

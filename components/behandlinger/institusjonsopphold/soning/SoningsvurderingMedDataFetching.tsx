@@ -1,9 +1,11 @@
-import { Soningsvurdering } from './Soningsvurdering';
 import { hentMellomlagring, hentSoningsvurdering } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+import { Soningsvurdering } from './Soningsvurdering';
 
 interface Props {
   behandlingsreferanse: string;
@@ -24,7 +26,8 @@ export const SoningsvurderingMedDataFetching = async ({ behandlingsreferanse, st
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SONINGSFORRHOLD,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

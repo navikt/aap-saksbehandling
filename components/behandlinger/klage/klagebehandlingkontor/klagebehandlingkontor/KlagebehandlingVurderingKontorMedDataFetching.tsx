@@ -1,17 +1,20 @@
-import { TypeBehandling } from 'lib/types/types';
-import { KlagebehandlingVurderingKontor } from './KlagebehandlingVurderingKontor';
 import {
   hentKlagebehandlingKontorGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+import { KlagebehandlingVurderingKontor } from './KlagebehandlingVurderingKontor';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
   typeBehandling: TypeBehandling;
 }
 
@@ -19,6 +22,7 @@ export const KlagebehandlingVurderingKontorMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,
+  visVentekort,
   typeBehandling,
 }: Props) => {
   const grunnlag = await hentKlagebehandlingKontorGrunnlag(behandlingsreferanse);
@@ -31,7 +35,8 @@ export const KlagebehandlingVurderingKontorMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_KLAGE_KONTOR,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (

@@ -3,10 +3,11 @@ import {
   hentSamordningTjenestePensjonGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { SamordningTjenestePensjon } from 'components/behandlinger/samordning/samordningtjenestepensjon/SamordningTjenestePensjon';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingreferanse: string;
@@ -24,7 +25,8 @@ export const SamordningTjenestePensjonMedDataFetching = async ({ behandlingrefer
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingreferanse,
     Behovstype.SAMORDNING_REFUSJONS_KRAV,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

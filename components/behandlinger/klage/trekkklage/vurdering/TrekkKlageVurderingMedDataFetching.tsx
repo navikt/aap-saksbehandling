@@ -1,20 +1,23 @@
-import { TypeBehandling } from 'lib/types/types';
-import { TrekkKlageVurdering } from 'components/behandlinger/klage/trekkklage/vurdering/TrekkKlageVurdering';
 import { hentMellomlagring, hentTrekkKlageGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+
+import { TrekkKlageVurdering } from 'components/behandlinger/klage/trekkklage/vurdering/TrekkKlageVurdering';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
   typeBehandling: TypeBehandling;
 }
 
 export const TrekkKlageVurderingMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
+  visVentekort,
   typeBehandling,
   behandlingsreferanse,
 }: Props) => {
@@ -27,7 +30,8 @@ export const TrekkKlageVurderingMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.TREKK_KLAGE_KODE,
-    readOnly
+    readOnly,
+    visVentekort
   );
 
   return (

@@ -1,8 +1,9 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+
+import { SvarFraAndreinstansMedDatafetching } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { SvarFraAndreinstansMedDatafetching } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansMedDatafetching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
@@ -26,6 +27,7 @@ export const SvarFraAndreinstansGruppe = async ({ behandlingsreferanse, flyt }: 
             behandlingsreferanse={behandlingsreferanse}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             behandlingVersjon={flyt.behandlingVersjon}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

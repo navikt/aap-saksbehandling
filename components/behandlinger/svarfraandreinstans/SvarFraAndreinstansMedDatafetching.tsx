@@ -3,20 +3,23 @@ import {
   hentSvarFraAndreinstansGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { SvarFraAndreinstans } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstans';
 import { Behovstype } from 'lib/utils/form';
+
+import { SvarFraAndreinstans } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstans';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
 }
 
 export const SvarFraAndreinstansMedDatafetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,
+  visVentekort,
 }: Props) => {
   const grunnlag = await hentSvarFraAndreinstansGrunnlag(behandlingsreferanse);
 
@@ -28,7 +31,8 @@ export const SvarFraAndreinstansMedDatafetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (

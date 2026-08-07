@@ -3,11 +3,12 @@ import {
   hentOppfølgningsOppgaverOpprinselsePåBehandlingsReferanse,
   hentSamordningGraderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -31,7 +32,8 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_GRADERING,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

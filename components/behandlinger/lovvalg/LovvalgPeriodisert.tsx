@@ -1,17 +1,18 @@
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentLovvalgMedlemskapGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegData, skalViseSteg } from 'lib/utils/steg';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
-import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
+import { getStegData, skalViseSteg } from 'lib/utils/steg';
+
 import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { LovvalgOgMedlemskapPeriodisert } from 'components/behandlinger/lovvalg/lovvalgogmedlemskapperiodisert/LovvalgOgMedlemskapPeriodisert';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -33,7 +34,8 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
-    readOnly
+    readOnly,
+    flyt.visning.visVentekort
   );
 
   const behandlingsVersjon = flyt.behandlingVersjon;

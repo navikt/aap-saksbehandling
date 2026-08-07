@@ -114,6 +114,7 @@ import { isLocal } from 'lib/utils/environment';
 import { Behovstype } from 'lib/utils/form';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import 'server-only';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
@@ -498,10 +499,10 @@ export const hentEtableringEgenVirksomhetGrunnlag = async (behandlingsreferanse:
   return await apiFetch<EtableringEgenVirksomhetGrunnlagResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentFlyt = async (behandlingsreferanse: string) => {
+export const hentFlyt = cache(async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
   return await apiFetch<BehandlingFlytOgTilstand>(url, saksbehandlingApiScope, 'GET', undefined);
-};
+});
 
 // Requestene skal ikke caches ved polling
 export const hentFlytUtenRequestMemoization = async (behandlingsreferanse: string) => {
@@ -707,8 +708,18 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
     saksbehandlingApiScope
   );
 };
-export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
-  if (readOnly) {
+
+/**
+ * Vi ønsker å hente mellomlagring når behandling er på vent slik at saksbehandler ser siste mellomlagrede vurdering ved gjenopptak av behandlingen.
+ * Etter innsending til beslutter/KS skal kun bekreftede vurderinger vises.
+ */
+export const hentMellomlagring = async (
+  behandlingsreferanse: string,
+  kode: string,
+  readOnly: boolean,
+  erBehandlingPåVent: boolean
+) => {
+  if (readOnly && !erBehandlingPåVent) {
     return undefined;
   }
 

@@ -1,8 +1,10 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+
 import { KlagebehandlingVurderingKontorMedDataFetching } from './klagebehandlingkontor/KlagebehandlingVurderingKontorMedDataFetching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,6 +30,7 @@ export const KlagebehandlingKontor = async ({ behandlingsreferanse, flyt }: Prop
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

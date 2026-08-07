@@ -2,11 +2,12 @@ import {
   hentMellomlagring,
   hentOvergangArbeidGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -24,7 +25,8 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_ARBEID,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

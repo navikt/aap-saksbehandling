@@ -1,8 +1,9 @@
 import { hentMellomlagring, hentSykestipendGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { SykestipendVurdering } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
+import { SykestipendVurdering } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
@@ -25,7 +26,8 @@ export const SykestipendMedDataFetching = async ({ behandlingsreferanse, stegDat
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

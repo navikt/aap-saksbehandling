@@ -1,9 +1,11 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
+
+import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+
 import { Vurder11_7MedDataFetching } from './Vurder11_7/Vurder11_7MedDataFetching';
-import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
@@ -29,6 +31,7 @@ export const Aktivitetsplikt11_7 = async ({ behandlingsreferanse, flyt }: Props)
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

@@ -1,7 +1,8 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
+
+import { OppholdskravStegMedDataFatching } from 'components/behandlinger/oppholdskrav/OppholdskravStegMedDataFatching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { OppholdskravStegMedDataFatching } from 'components/behandlinger/oppholdskrav/OppholdskravStegMedDataFatching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
@@ -22,6 +23,7 @@ export const OppholdskravStegGruppe = async ({ behandlingsreferanse, flyt }: Pro
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.behandlingVersjon}
           readOnly={flyt.visning.saksbehandlerReadOnly}
+          visVentekort={flyt.visning.visVentekort}
         />
       </StegSuspense>
     </GruppeSteg>
