@@ -1,16 +1,16 @@
 'use client';
 
-import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import React, { useState } from 'react';
+import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
+import React, { useState } from 'react';
 
-import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { Alert } from 'components/alert/Alert';
+import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
+import { TableStyled } from 'components/tablestyled/TableStyled';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
 interface PropsMedDiff {
   grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
@@ -54,7 +54,8 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
               <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
               <Table.HeaderCell>Dagsats</Table.HeaderCell>
               <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
-              <Table.HeaderCell>Arbeid</Table.HeaderCell>
+              <Table.HeaderCell>Faktisk arbeid</Table.HeaderCell>
+              <Table.HeaderCell>Grenseverdi</Table.HeaderCell>
               <Table.HeaderCell>Samordning</Table.HeaderCell>
               <Table.HeaderCell>Institusjon</Table.HeaderCell>
               <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
@@ -150,7 +151,10 @@ const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriod
           {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
         </Table.DataCell>
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-          {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
+          {formaterTilProsent(vurdertPeriode.felter.andelArbeid)}
+        </Table.DataCell>
+        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+          {formaterTilProsent(vurdertPeriode.felter.grenseverdi)}
         </Table.DataCell>
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
           {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
