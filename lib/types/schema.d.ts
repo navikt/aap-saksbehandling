@@ -43,6 +43,84 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/person/sykepengeperioder': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.YtelseoppslagRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.SykepengeperiodeDTO'][];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/person/foreldrepengeperioder': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.YtelseoppslagRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.ForeldrepengeperiodeDTO'][];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sak/ekstern/finn': {
     parameters: {
       query?: never;
@@ -20701,6 +20779,55 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.utils.diff.Uendret<no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto>': {
       uendret: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
+    };
+    'no.nav.aap.behandlingsflyt.ytelseoppslag.ForeldrepengeperiodeDTO': {
+      'bel\u00F8p'?: number | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      kildesystem: string;
+      saksnummer?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+      utbetalingsgrad: number;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtattTidspunkt: string;
+      ytelseStatus: string;
+    };
+    'no.nav.aap.behandlingsflyt.ytelseoppslag.SykepengeperiodeDTO': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      grad: number;
+      organisasjonsnummer?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
+    'no.nav.aap.behandlingsflyt.ytelseoppslag.YtelseoppslagRequest': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      personident: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
     };
     'no.nav.aap.brev.kontrakt.Adresse': {
       adresselinje1: string;

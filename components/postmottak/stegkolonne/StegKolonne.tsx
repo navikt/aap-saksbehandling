@@ -1,12 +1,14 @@
-import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
 import { StegGruppe } from 'lib/types/postmottakTypes';
-import { AvklarTemaMedDataFetching } from 'components/postmottak/avklartema/AvklarTemaMedDataFetching';
+import { isSuccess } from 'lib/utils/api';
+
 import { AvklarSakMedDataFetching } from 'components/postmottak/avklarsak/AvklarSakMedDataFetching';
-import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
+import { AvklarTemaMedDataFetching } from 'components/postmottak/avklartema/AvklarTemaMedDataFetching';
 import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
 import { FullførtOppgaveModal } from 'components/postmottak/fullførtoppgavemodal/FullførtOppgaveModal';
-import { hentFlyt } from 'lib/services/postmottakservice/postmottakservice';
-import { isSuccess } from 'lib/utils/api';
+import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
+import { VurderOpprettelseAvSakMedDataFetching } from 'components/postmottak/vurderopprettelseavsak/VurderOpprettelseAvSakMedDataFetching';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
   aktivGruppe: StegGruppe;
@@ -33,6 +35,11 @@ export const StegKolonne = async ({ aktivGruppe, behandlingsreferanse }: Props) 
       {aktivGruppe === 'AVKLAR_SAK' && (
         <StegSuspense>
           <AvklarSakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        </StegSuspense>
+      )}
+      {aktivGruppe === 'AVKLAR_FORDELING' && (
+        <StegSuspense>
+          <VurderOpprettelseAvSakMedDataFetching behandlingsreferanse={behandlingsreferanse} />
         </StegSuspense>
       )}
       {aktivGruppe === 'DIGITALISER' && (

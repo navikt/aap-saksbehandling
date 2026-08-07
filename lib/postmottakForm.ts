@@ -98,6 +98,16 @@ export enum Behovstype {
   AVKLAR_TEMA = '1339',
   FINN_SAK = '1340',
   AVKLAR_OVERLEVERING = '1341',
+  AVKLAR_FORDELING = '1343',
+}
+
+/**
+ * Hvor søknaden skal behandles i steget «Vurder opprettelse av sak» (behov 1343).
+ */
+export enum HvorSkalSøknadenBehandles {
+  ARENA = 'ARENA',
+  KELVIN = 'KELVIN',
+  ARENA_OG_KELVIN = 'ARENA_OG_KELVIN',
 }
 export const getJaNeiEllerUndefined = (value?: boolean | null): JaEllerNei | undefined => {
   if (value === null || value === undefined) {
