@@ -1,7 +1,9 @@
 import { VStack } from '@navikt/ds-react';
-import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { getJaEllerNei } from 'lib/utils/form';
 import { Avslag11_27Vurdering } from 'lib/types/types';
+import { getJaEllerNei } from 'lib/utils/form';
+import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+
+import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 
 interface Props {
   vurdering: Avslag11_27Vurdering;
@@ -19,7 +21,10 @@ export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
         vurdering.harAnnenFullYtelse !== undefined &&
         vurdering.brukersYtelse !== null &&
         vurdering.brukersYtelse !== undefined && (
-          <SpørsmålOgSvar spørsmål={'Hvilken ytelse har brukeren?'} svar={vurdering.brukersYtelse} />
+          <SpørsmålOgSvar
+            spørsmål={'Hvilken ytelse har brukeren?'}
+            svar={storForbokstavOgMellomromForUnderstrek(vurdering.brukersYtelse)}
+          />
         )}
       {vurdering.harSykepengegrunnlagOver2G !== null && vurdering.harSykepengegrunnlagOver2G !== undefined && (
         <SpørsmålOgSvar

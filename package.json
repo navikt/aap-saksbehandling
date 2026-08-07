@@ -11,7 +11,9 @@
     "start": "next start",
     "lint": "eslint app components context hooks lib",
     "gentypes": "openapi-typescript http://localhost:8080/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
-    "run-prettier": "prettier --write ."
+    "gentypes:ci": "openapi-typescript ./openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
+    "run-prettier": "prettier --write .",
+    "gen-umami-docs": "node scripts/generate-umami-docs.mjs"
   },
   "prettier": "@navikt/aap-felles-prettier",
   "dependencies": {
@@ -35,7 +37,7 @@
     "fuse.js": "7.5.0",
     "i18n-iso-countries": "7.14.0",
     "is-european": "1.0.10",
-    "jose": "6.2.4",
+    "jose": "6.2.5",
     "lodash": "4.18.1",
     "next": "16.2.12",
     "node-loader": "2.1.0",
@@ -51,11 +53,11 @@
   "devDependencies": {
     "@eslint/eslintrc": "3.3.6",
     "@eslint/js": "9.39.5",
-    "@navikt/aap-felles-prettier": "5.10.0",
+    "@navikt/aap-felles-prettier": "6.2.0",
     "@navikt/aap-oppgave-typescript-types": "0.0.893",
     "@navikt/aap-postmottak-backend-typescript-types": "0.0.811",
     "@navikt/aksel": "8.16.1",
-    "@navikt/eslint-config-aap": "5.6.3",
+    "@navikt/eslint-config-aap": "6.1.3",
     "@testing-library/dom": "10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/react": "16.3.2",
@@ -65,7 +67,7 @@
     "@types/react-dom": "19.2.3",
     "@typescript-eslint/eslint-plugin": "8.61.1",
     "@typescript-eslint/parser": "8.61.1",
-    "@vitejs/plugin-react": "6.0.4",
+    "@vitejs/plugin-react": "6.0.5",
     "@vitest/coverage-v8": "4.1.10",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.9",

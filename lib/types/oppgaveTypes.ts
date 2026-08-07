@@ -14,7 +14,7 @@ export type PostmottakAvklaringsbehovKode =
 
 // oppgave
 export type Kø = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterResponse'];
-export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest']
+export type OppgavelisteRequest = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'];
 export type OppgavelisteResponse = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
 export type OppgaveMedKontekst = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse'];
 export type ReturInformasjon = oppgave['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];

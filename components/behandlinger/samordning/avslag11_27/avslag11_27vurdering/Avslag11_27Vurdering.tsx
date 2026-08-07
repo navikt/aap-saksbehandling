@@ -1,13 +1,14 @@
 'use client';
 
 import { Radio, VStack } from '@navikt/ds-react';
-import { UseFormReturn } from 'react-hook-form';
 import { JaEllerNei } from 'lib/utils/form';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+import { UseFormReturn } from 'react-hook-form';
+
+import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
@@ -18,8 +19,10 @@ interface Props {
 
 export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseAlternativer }: Props) => {
   const vurdering = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
-  const visYtelseSpørsmål = vurdering?.harAnnenFullYtelse === JaEllerNei.Ja;
+  const harAnnenFullYtelse = vurdering?.harAnnenFullYtelse;
+  const visYtelseSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
   const visSykepengegrunnlagSpørsmål = visYtelseSpørsmål && vurdering?.brukersYtelse === 'SYKEPENGER';
+  const visAvslagsSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
 
   return (
     <VStack gap={'space-16'}>
@@ -72,19 +75,21 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
           <Radio value={JaEllerNei.Nei}>Nei</Radio>
         </RadioGroupWrapper>
       )}
-      <RadioGroupWrapper
-        name={`avslag11_27vurderinger.${kravIndex}.vurdering.skalAvslås1127`}
-        control={form.control}
-        label={
-          'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'
-        }
-        rules={{ required: 'Du må svare om søknaden skal avslås etter § 11-27' }}
-        readOnly={readonly}
-        horisontal
-      >
-        <Radio value={JaEllerNei.Ja}>Ja</Radio>
-        <Radio value={JaEllerNei.Nei}>Nei</Radio>
-      </RadioGroupWrapper>
+      {visAvslagsSpørsmål && (
+        <RadioGroupWrapper
+          name={`avslag11_27vurderinger.${kravIndex}.vurdering.skalAvslås1127`}
+          control={form.control}
+          label={
+            'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'
+          }
+          rules={{ required: 'Du må svare om søknaden skal avslås etter § 11-27' }}
+          readOnly={readonly}
+          horisontal
+        >
+          <Radio value={JaEllerNei.Ja}>Ja</Radio>
+          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+        </RadioGroupWrapper>
+      )}
     </VStack>
   );
 };

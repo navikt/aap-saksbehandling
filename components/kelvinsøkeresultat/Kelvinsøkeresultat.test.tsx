@@ -87,7 +87,9 @@ describe('Kelvinsøkeresultat', () => {
   });
 
   it('skal vise infoboks når saksbehandler ikke har lesetilgang uten adressebeskyttelse', () => {
-    render(<Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, kanSaksbehandle: false, harAdressebeskyttelse: false }} />);
+    render(
+      <Kelvinsøkeresultat søkeresultat={{ ...søkeresultat, kanSaksbehandle: false, harAdressebeskyttelse: false }} />
+    );
 
     const infotekst = screen.getByText('Du har ikke tilgang til saken.');
     expect(infotekst).toBeInTheDocument();

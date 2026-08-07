@@ -274,9 +274,18 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
         grunnlag?.vurdering?.fullmektigIdentMedType?.type,
         grunnlag?.vurdering?.fullmektigNavnOgAdresse != null
       ),
-      fnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
-      orgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
-      utlOrgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      fnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'FNR_DNR'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
+      orgnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'ORGNR'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
+      utlOrgnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'UTL_ORG'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
       navn: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.navn ?? undefined,
       adresselinje1: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje1 ?? undefined,
       adresselinje2: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,

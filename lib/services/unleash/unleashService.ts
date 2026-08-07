@@ -26,8 +26,7 @@ function createMockUnleash(): IUnleash {
 
 // Bruk mock-unleash hvis UNLEASH_SERVER_API_URL ikke er satt (f.eks. lokalt eller under build),
 // ellers (DEV/PROD med env-variabel satt) bruker den ekte unleash
-export const unleashService =
-  process.env.UNLEASH_SERVER_API_URL == null ? createMockUnleash() : createRealUnleash();
+export const unleashService = process.env.UNLEASH_SERVER_API_URL == null ? createMockUnleash() : createRealUnleash();
 
 export function getAllFlags(userId: string | undefined): Flags {
   return Object.fromEntries(FLAGS.map((name) => [name, unleashService.isEnabled(name, { userId })])) as Flags;
