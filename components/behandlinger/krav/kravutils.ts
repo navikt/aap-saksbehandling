@@ -1,5 +1,6 @@
 import {
   KlageKravLøsning,
+  KravGrunnlag,
   KravVurdering,
   KravVurderingLøsning,
   RelevantKrav,
@@ -103,4 +104,17 @@ export function kravVurderingTilLøsning(vurdering: KravVurdering): KravVurderin
 export function vedtattKravTilEndring(vurdering: KravVurdering): KravVurderingLøsning {
   const løsning = kravVurderingTilLøsning(vurdering);
   return { ...løsning, referanse: vurdering.referanse };
+}
+
+/**
+ * Finner en KravVurdering i grunnlaget (blant nye eller vedtatte vurderinger) basert på referanse.
+ */
+export function finnKravVurderingByReferanse(
+  grunnlag: KravGrunnlag | undefined,
+  referanse: string
+): KravVurdering | undefined {
+  return (
+    grunnlag?.nyeVurderinger.find((v) => v.referanse === referanse) ??
+    grunnlag?.vedtatteVurderinger.find((v) => v.referanse === referanse)
+  );
 }
