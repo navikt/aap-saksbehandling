@@ -1,7 +1,7 @@
 import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
-import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
+import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { HendelseType, Markering, MarkeringType } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import React, { useRef, useState } from 'react';
@@ -79,7 +79,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
                       setIsLoading(true);
                       const res = await clientOpprettMarkeringHendelse(referanse, {
                         markeringType: markering.markeringType,
-                        hendelseType: MarkeringHendelseType.FJERNET,
+                        hendelseType: HendelseType.FJERNET,
                       });
                       if (isSuccess(res)) {
                         setVisInfo(false);

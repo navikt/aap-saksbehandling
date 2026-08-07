@@ -1,12 +1,13 @@
-import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
-import { Behovstype } from 'lib/utils/form';
-import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
+import { render, screen } from 'lib/test/CustomRender';
+import { MarkeringDtoType } from 'lib/types/oppgaveTypes';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+import { describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
-import { MarkeringHaster } from 'lib/types/oppgaveTypes';
+
+import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -279,7 +280,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
       readOnly={false}
       hastemarkering={{
         begrunnelse: 'Avtalt med leder',
-        markeringType: MarkeringHaster,
+        markeringType: MarkeringDtoType.HASTER,
         opprettetAv: null,
         opprettetAvNavn: null,
         opprettetTidspunkt: Date.now().toString(),
@@ -311,7 +312,7 @@ it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert
       readOnly={false}
       hastemarkering={{
         begrunnelse: 'Avtalt med leder',
-        markeringType: MarkeringHaster,
+        markeringType: MarkeringDtoType.HASTER,
         opprettetAv: null,
         opprettetAvNavn: null,
         opprettetTidspunkt: Date.now().toString(),

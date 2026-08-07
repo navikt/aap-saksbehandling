@@ -1,12 +1,14 @@
 import {
   NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
   NoNavAapOppgaveFilterFilterResponseType,
+  NoNavAapOppgaveMarkeringMarkeringDtoHendelseType,
   NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
   components as oppgave,
   paths,
 } from '@navikt/aap-oppgave-typescript-types';
 import { components as postmottak } from '@navikt/aap-postmottak-backend-typescript-types';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
+import { EnumToUnion, Structuralize } from 'lib/types/utils';
 
 // postmottak
 export type PostmottakAvklaringsbehovKode =
@@ -33,7 +35,6 @@ export type SøkResponse = oppgave['schemas']['no.nav.aap.oppgave.søk.SøkRespo
 export type OppgaveInfoTilSøk = oppgave['schemas']['no.nav.aap.oppgave.søk.OppgaveISøkResponse'];
 export type BehandlingskontekstForOppgave = oppgave['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse'];
 export type AvreserverOppgaveDto = oppgave['schemas']['no.nav.aap.oppgave.plukk.AvreserverOppgaveDto'];
-export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
 export type EnhetSynkroniseringOppgave = oppgave['schemas']['no.nav.aap.oppgave.enhet.EnhetSynkroniseringRequest'];
 export type SaksbehandlerSøkRespons = oppgave['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkResponse'];
 export type SaksbehandlerSøkRequest = oppgave['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkRequest'];
@@ -45,8 +46,9 @@ export type SakOgAvklaringsbehov = oppgave['schemas']['no.nav.aap.oppgave.SakOgA
 
 // typer fra enums
 export type OppgaveBehandlingstype = `${NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype}`;
-export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
-export const MarkeringHaster = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+
+export type Markering = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
+export const MarkeringDtoType = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 
@@ -54,3 +56,11 @@ export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters
 
 export const Køtype = NoNavAapOppgaveFilterFilterResponseType;
 export type Køtype = NoNavAapOppgaveFilterFilterResponseType;
+
+export type MarkeringType = EnumToUnion<NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType>;
+export const MarkeringType = { ...NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } as const;
+
+export type HendelseType = EnumToUnion<NoNavAapOppgaveMarkeringMarkeringDtoHendelseType>;
+export const HendelseType = { ...NoNavAapOppgaveMarkeringMarkeringDtoHendelseType } as const;
+
+export type OpprettMarkering = Structuralize<oppgave['schemas']['no.nav.aap.oppgave.markering.OpprettMarkeringDto']>;
