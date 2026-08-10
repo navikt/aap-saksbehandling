@@ -5,7 +5,6 @@ import {
   hentKvalitetssikringGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { MarkeringHaster } from 'lib/types/oppgaveTypes';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 
@@ -41,7 +40,7 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
   );
 
   const hastemarkering = markeringer.data
-    .filter((markering) => markering.markeringType === MarkeringHaster && markering.hendelseType != 'FJERNET')
+    .filter((markering) => markering.markeringType === 'HASTER' && markering.hendelseType != 'FJERNET')
     ?.at(0);
 
   return (

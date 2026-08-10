@@ -1,23 +1,24 @@
 'use client';
 
 import { BodyShort } from '@navikt/ds-react';
-import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
-import { useConfigForm } from 'components/form/FormHook';
-import { oppgaveBehandlingstyper, OppgaveStatuser } from 'lib/utils/behandlingstyper';
-import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
-
-import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
-import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { useFiltrerteOppgaver } from './MineOppgaverHook';
-import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
-import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
-import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
-import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
-import { useEffect } from 'react';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
-import { ValuePair } from 'components/form/FormField';
+import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
+import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
+import { MineOppgaverSortBy } from 'lib/types/oppgaveTypes';
+import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
+import { OppgaveStatuser, oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
+import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
+import { useEffect } from 'react';
+
 import { Alert } from 'components/alert/Alert';
+import { ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
+import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
+import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
+import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
+
+import { useFiltrerteOppgaver } from './MineOppgaverHook';
 
 export interface FormFieldsFilter {
   behandlingstyper?: string[];
@@ -32,7 +33,7 @@ export interface FormFieldsFilter {
 }
 
 export const MineOppgaver = () => {
-  const { sort, setSort } = useBackendSortering<PathsMineOppgaverGetParametersQuerySortby>('mine-oppgaver-backendsort');
+  const { sort, setSort } = useBackendSortering<MineOppgaverSortBy>('mine-oppgaver-backendsort');
 
   const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();

@@ -1,15 +1,15 @@
-import { NoNavAapOppgaveReturInformasjonDtoStatus as ReturStatus } from '@navikt/aap-oppgave-typescript-types';
+import { ReturStatus } from 'lib/types/oppgaveTypes';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 
 export function returStatusTilTekst(status: ReturStatus): string {
   switch (status) {
-    case ReturStatus.RETUR_FRA_BESLUTTER:
+    case 'RETUR_FRA_BESLUTTER':
       return 'Retur fra beslutter';
-    case ReturStatus.RETUR_FRA_KVALITETSSIKRER:
+    case 'RETUR_FRA_KVALITETSSIKRER':
       return 'Retur fra kvalitetssikrer';
-    case ReturStatus.RETUR_FRA_SAKSBEHANDLER:
+    case 'RETUR_FRA_SAKSBEHANDLER':
       return 'Retur fra saksbehandler';
-    case ReturStatus.RETUR_FRA_VEILEDER:
+    case 'RETUR_FRA_VEILEDER':
       return 'Retur fra veileder';
     default:
       exhaustiveCheck(status);
