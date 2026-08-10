@@ -28,9 +28,12 @@ const ANTALL_UKER_TILBAKE_FORELDREPENGER = 52;
 const ANTALL_MÅNEDER_TILBAKE_SYKEPENGER = 2;
 
 const AKTFASEKODE_TIL_TEKST: Record<string, string> = {
+  UA: 'Under arbeidsavklaring',
+  SPE: 'Sykepengerstatning',
+  IKKE: 'Ikke spesif. aktivitetsfase',
   UVUP: '§ 11-18 Under vurdering for uføretrygd',
-  FA: '§ 11-17',
-  SPE: '§ 11-13',
+  AU: 'Arbeidsutprøving',
+  FA: 'Ferdig avklart',
 };
 
 interface Props {
