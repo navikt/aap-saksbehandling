@@ -1,30 +1,37 @@
 'use client';
 
-import { SubmitEventHandler } from 'react';
+import { ExclamationmarkTriangleIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { BodyShort, HStack, Label, Link, List, ReadMore, Tag, VStack } from '@navikt/ds-react';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Behovstype, HvorSkalSøknadenBehandles } from 'lib/postmottakForm';
-import { LøsAvklaringsbehovPåBehandling } from 'lib/types/postmottakTypes';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
-import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
-import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
-import { Alert } from 'components/alert/Alert';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { Behovstype, HvorSkalSøknadenBehandles } from 'lib/postmottakForm';
 import { ManuellFordelingsgrunnlagResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
+import { LøsAvklaringsbehovPåBehandling } from 'lib/types/postmottakTypes';
 import { ForeldrepengeperiodeDTO, SykepengeperiodeDTO } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { SubmitEventHandler } from 'react';
+
+import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
+import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 
 const arenaVisningsklientBaseUrl = process.env.NEXT_PUBLIC_ARENA_VISNINGSKLIENT_BASE_URL ?? '';
 
 /**
  * Hvor langt tilbake i tid vi slår opp ytelsesperioder for søker.
- * Foreldrepenger følger 52-ukersvurderingen, sykepenger ser kun på de siste par månedene.
+ * Brukes kun til visningstekst her – selve oppslaget gjøres i VurderOpprettelseAvSakMedDataFetching.
  */
-export const ANTALL_UKER_TILBAKE_FORELDREPENGER = 52;
-export const ANTALL_MÅNEDER_TILBAKE_SYKEPENGER = 2;
+const ANTALL_UKER_TILBAKE_FORELDREPENGER = 52;
+const ANTALL_MÅNEDER_TILBAKE_SYKEPENGER = 2;
+
+const AKTFASEKODE_TIL_TEKST: Record<string, string> = {
+  UVUP: '§ 11-18 Under vurdering for uføretrygd',
+  FA: '§ 11-17',
+  SPE: '§ 11-13',
+};
 
 interface Props {
   behandlingsVersjon: number;
@@ -52,11 +59,23 @@ const hvorBehandlesOptions = [
     value: HvorSkalSøknadenBehandles.KELVIN,
     label: 'Kelvin, søknaden skal vurderes som ny sak',
   },
-  {
-    value: HvorSkalSøknadenBehandles.ARENA_OG_KELVIN,
-    label: 'Bruker skal både gjenoppta/ gjeninntre i Arenasak, og man skal starte ny sak i Kelvin',
-  },
 ];
+
+const getOppgaveTekst = (oppgave: ManuellFordelingsgrunnlagResponse['oppgaver'][number]) =>
+  oppgave.beskrivelse ?? 'beskrivelse ikke funnet';
+
+const getSisteVedtakTekst = (sisteVedtak: ManuellFordelingsgrunnlagResponse['sisteVedtak']) => {
+  if (!sisteVedtak) {
+    return '-';
+  }
+
+  const aktfaseTekst = AKTFASEKODE_TIL_TEKST[sisteVedtak.aktfaseKode] ?? sisteVedtak.aktfaseKode;
+  const datointervall = `${sisteVedtak.fra ? formaterDatoForFrontend(sisteVedtak.fra) : '-'}${
+    sisteVedtak.til ? ` - ${formaterDatoForFrontend(sisteVedtak.til)}` : ''
+  }`;
+
+  return `${aktfaseTekst}  ${datointervall}`;
+};
 
 export const VurderOpprettelseAvSak = ({
   behandlingsVersjon,
@@ -104,7 +123,7 @@ export const VurderOpprettelseAvSak = ({
         // TODO: Fjern casten når backend-typene eksponerer løsning-DTO for behov 1343.
         behov: {
           behovstype: Behovstype.AVKLAR_FORDELING,
-          hvorBehandles: data.hvorBehandles,
+          valgtSystem: data.hvorBehandles,
           kommentar: data.kommentar || null,
         } as unknown as LøsAvklaringsbehovPåBehandling['behov'],
         referanse: behandlingsreferanse,
@@ -125,14 +144,14 @@ export const VurderOpprettelseAvSak = ({
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={'space-24'}>
+      <VStack gap={'space-16'}>
         <ServerSentEventStatusAlert status={status} />
 
         {arenaSak.saksnummer && (
           <VStack gap="space-16">
-            <VStack gap="space-4">
+            <VStack gap="space-16">
               <Label size="small">Søkers siste arenasak med AAP-vedtak</Label>
-              <HStack gap="space-8" align="center">
+              <HStack gap="space-16" align="center">
                 {visArenaLenke ? (
                   <Link href={`${arenaVisningsklientBaseUrl}sak/${arenaSak.saksnummer}`} target="_blank">
                     Saksnr. {arenaSak.saksnummer}
@@ -162,20 +181,16 @@ export const VurderOpprettelseAvSak = ({
               <VStack gap="space-4">
                 <Label size="small">Gjenstående unntaksperiode §11-12 andre og tredje ledd</Label>
                 <BodyShort size="small">
-                  {arenaSak.gjenstaendeUnntaksDager != null ? `${arenaSak.gjenstaendeUnntaksDager} dager` : '-'}
+                  {arenaSak.gjenstaendeUnntaksDager && arenaSak.gjenstaendeUnntaksDager > 0
+                    ? `${arenaSak.gjenstaendeUnntaksDager} dager`
+                    : '-'}
                 </BodyShort>
               </VStack>
             </HStack>
 
             <VStack gap="space-4">
               <Label size="small">Siste AAP-vedtak</Label>
-              <BodyShort size="small">
-                {arenaSak.sisteVedtak
-                  ? `${arenaSak.sisteVedtak.fra ? formaterDatoForFrontend(arenaSak.sisteVedtak.fra) : '-'}${
-                      arenaSak.sisteVedtak.til ? ` - ${formaterDatoForFrontend(arenaSak.sisteVedtak.til)}` : ''
-                    }`
-                  : '-'}
-              </BodyShort>
+              <BodyShort size="small">{getSisteVedtakTekst(arenaSak.sisteVedtak)}</BodyShort>
             </VStack>
 
             <VStack gap="space-4">
@@ -187,37 +202,45 @@ export const VurderOpprettelseAvSak = ({
           </VStack>
         )}
 
-        <HStack gap="space-32" wrap>
-          <VStack gap="space-4">
-            <Label size="small">Foreldrepenger siste {ANTALL_UKER_TILBAKE_FORELDREPENGER} uker</Label>
-            {foreldrepengeperioder.length === 0 ? (
-              <BodyShort size="small">Ingen registrerte perioder</BodyShort>
-            ) : (
-              <List size="small">
-                {foreldrepengeperioder.map((periode, index) => (
-                  <List.Item key={`foreldrepenger-${index}`}>
-                    {`${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)} (${periode.utbetalingsgrad} %, ${periode.ytelseStatus})`}
-                  </List.Item>
-                ))}
-              </List>
-            )}
-          </VStack>
+        <Link href={`${arenaVisningsklientBaseUrl}sak/${arenaSak.saksnummer}`} target="_blank">
+          Nav-kontorets innstilling for §11-12
+          <ExternalLinkIcon aria-hidden />
+        </Link>
+        <VStack gap="space-16">
+          {foreldrepengeperioder.length > 0 && (
+            <VStack gap="space-4">
+              <Label size="small">Foreldrepenger</Label>
+              <HStack gap="space-4" align="center">
+                <ExclamationmarkTriangleIcon aria-hidden color="var(--a-orange-500)" fontSize="1rem" />
+                <BodyShort size="small">
+                  Det er utbetalt foreldrepenger i løpet av de siste {ANTALL_UKER_TILBAKE_FORELDREPENGER} ukene
+                </BodyShort>
+              </HStack>
+            </VStack>
+          )}
+          {sykepengeperioder.length > 0 && (
+            <VStack gap="space-4">
+              <Label size="small">Sykepenger</Label>
+              <HStack gap="space-4" align="center">
+                <ExclamationmarkTriangleIcon aria-hidden color="var(--a-orange-500)" fontSize="1rem" />
+                <BodyShort size="small">
+                  Det er utbetalt sykepenger de siste {ANTALL_MÅNEDER_TILBAKE_SYKEPENGER} månedene
+                </BodyShort>
+              </HStack>
+            </VStack>
+          )}
+        </VStack>
 
+        {arenaSak.oppgaver.length > 0 && (
           <VStack gap="space-4">
-            <Label size="small">Sykepenger siste {ANTALL_MÅNEDER_TILBAKE_SYKEPENGER} måneder</Label>
-            {sykepengeperioder.length === 0 ? (
-              <BodyShort size="small">Ingen registrerte perioder</BodyShort>
-            ) : (
-              <List size="small">
-                {sykepengeperioder.map((periode, index) => (
-                  <List.Item key={`sykepenger-${index}`}>
-                    {`${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)} (${periode.grad} %)`}
-                  </List.Item>
-                ))}
-              </List>
-            )}
+            <Label size="small">Oppgaver i Arena tilknyttet AAP eller person</Label>
+            <List size="small">
+              {arenaSak.oppgaver.map((oppgave) => (
+                <List.Item key={oppgave.oppgaveId}>{getOppgaveTekst(oppgave)}</List.Item>
+              ))}
+            </List>
           </VStack>
-        </HStack>
+        )}
 
         <ReadMore size="small" header="Dette må du vurdere" defaultOpen>
           <VStack gap="space-8">

@@ -1,20 +1,24 @@
 import { subMonths, subWeeks } from 'date-fns';
-import { hentFlyt, hentJournalpostInfo } from 'lib/services/postmottakservice/postmottakservice';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import {
-  ANTALL_MÅNEDER_TILBAKE_SYKEPENGER,
-  ANTALL_UKER_TILBAKE_FORELDREPENGER,
-  VurderOpprettelseAvSak,
-} from 'components/postmottak/vurderopprettelseavsak/VurderOpprettelseAvSak';
 import { hentManuellFordelingsgrunnlag } from 'lib/services/apiinternservice/apiInternService';
+import { hentFlyt, hentJournalpostInfo } from 'lib/services/postmottakservice/postmottakservice';
 import {
   hentForeldrepengeperioder,
   hentSykepengeperioder,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { YtelseoppslagRequest } from 'lib/types/types';
+import { isError } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
+
 import { Alert } from 'components/alert/Alert';
+import { VurderOpprettelseAvSak } from 'components/postmottak/vurderopprettelseavsak/VurderOpprettelseAvSak';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+/**
+ * Hvor langt tilbake i tid vi slår opp ytelsesperioder for søker.
+ * Foreldrepenger følger 52-ukersvurderingen, sykepenger ser kun på de siste par månedene.
+ */
+const ANTALL_UKER_TILBAKE_FORELDREPENGER = 52;
+const ANTALL_MÅNEDER_TILBAKE_SYKEPENGER = 2;
 
 interface Props {
   behandlingsreferanse: string;
@@ -67,6 +71,7 @@ export const VurderOpprettelseAvSakMedDataFetching = async ({ behandlingsreferan
     hentSykepengeperioder(sykepengerRequest),
   ]);
 
+  console.log(arenaFordelingsGrunnlag);
   if (isError(arenaFordelingsGrunnlag) || isError(foreldrepengeperioder) || isError(sykepengeperioder)) {
     return <ApiException apiResponses={[arenaFordelingsGrunnlag, foreldrepengeperioder, sykepengeperioder]} />;
   }
