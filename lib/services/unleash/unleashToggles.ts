@@ -19,6 +19,7 @@ export const FLAGS = [
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
   'VedtakslengdeAarsak',
+  'FaktiskArbeidTilkjentYtelse',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -45,4 +46,5 @@ export const mockedFlags: Flags = {
   SkalViseAlleSykdomssteg: true,
   DialogMedBehandler: true,
   VedtakslengdeAarsak: true,
+  FaktiskArbeidTilkjentYtelse: true,
 };

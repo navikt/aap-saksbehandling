@@ -2,6 +2,7 @@
 
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
@@ -17,6 +18,7 @@ interface PropsMedDiff {
 }
 
 export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
+  const visFaktiskArbeidOgGrenseverdi = useFeatureFlag('FaktiskArbeidTilkjentYtelse');
   const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
 
@@ -54,8 +56,14 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
               <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
               <Table.HeaderCell>Dagsats</Table.HeaderCell>
               <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
-              <Table.HeaderCell>Faktisk arbeid</Table.HeaderCell>
-              <Table.HeaderCell>Grenseverdi</Table.HeaderCell>
+              {visFaktiskArbeidOgGrenseverdi ? (
+                <>
+                  <Table.HeaderCell>Faktisk arbeid</Table.HeaderCell>
+                  <Table.HeaderCell>Grenseverdi</Table.HeaderCell>
+                </>
+              ) : (
+                <Table.HeaderCell>Arbeid</Table.HeaderCell>
+              )}
               <Table.HeaderCell>Samordning</Table.HeaderCell>
               <Table.HeaderCell>Institusjon</Table.HeaderCell>
               <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
@@ -75,13 +83,19 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
               return (
                 <React.Fragment key={periodeIndex}>
                   {nyPeriode && (
-                    <TilkjentPeriodeRad key={`ny-${periodeIndex}`} periode={nyPeriode} bakgrunnClassName={''} />
+                    <TilkjentPeriodeRad
+                      key={`ny-${periodeIndex}`}
+                      periode={nyPeriode}
+                      bakgrunnClassName={''}
+                      visFaktiskArbeidOgGrenseverdi={visFaktiskArbeidOgGrenseverdi}
+                    />
                   )}
                   {historiskPeriode && (
                     <TilkjentPeriodeRad
                       key={`historisk-${periodeIndex}`}
                       periode={historiskPeriode}
                       bakgrunnClassName={styles.tablerowhistoriskinnhold}
+                      visFaktiskArbeidOgGrenseverdi={visFaktiskArbeidOgGrenseverdi}
                     />
                   )}
                   {uendretPeriode && (
@@ -89,6 +103,7 @@ export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
                       key={`uendret-${periodeIndex}`}
                       periode={uendretPeriode}
                       bakgrunnClassName={''}
+                      visFaktiskArbeidOgGrenseverdi={visFaktiskArbeidOgGrenseverdi}
                     />
                   )}
                 </React.Fragment>
@@ -128,8 +143,13 @@ const utledHistoriskPeriode = (periode: Diff<TilkjentYtelsePeriode>) => {
 interface TilkjentYtelsePeriodeProps {
   periode: TilkjentYtelsePeriode;
   bakgrunnClassName: string;
+  visFaktiskArbeidOgGrenseverdi: boolean;
 }
-const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriodeProps) => {
+const TilkjentPeriodeRad = ({
+  periode,
+  bakgrunnClassName,
+  visFaktiskArbeidOgGrenseverdi,
+}: TilkjentYtelsePeriodeProps) => {
   return periode.vurdertePerioder.map((vurdertPeriode, vurdertPeriodeIndex) => {
     const skilleLinjeClassName =
       periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 || periode.vurdertePerioder.length === 1
@@ -150,12 +170,20 @@ const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriod
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
           {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
         </Table.DataCell>
-        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-          {formaterTilProsent(vurdertPeriode.felter.andelArbeid)}
-        </Table.DataCell>
-        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-          {formaterTilProsent(vurdertPeriode.felter.grenseverdi)}
-        </Table.DataCell>
+        {visFaktiskArbeidOgGrenseverdi ? (
+          <>
+            <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+              {formaterTilProsent(vurdertPeriode.felter.andelArbeid)}
+            </Table.DataCell>
+            <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+              {formaterTilProsent(vurdertPeriode.felter.grenseverdi)}
+            </Table.DataCell>
+          </>
+        ) : (
+          <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+            {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
+          </Table.DataCell>
+        )}
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
           {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
         </Table.DataCell>
