@@ -21,7 +21,6 @@ interface Props {
   rettighetsperiodeStartdato: Date;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
-  harSkadeSykdomEllerLyte: boolean;
   skalViseAlleSykdomSteg: boolean;
 }
 
@@ -30,7 +29,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   rettighetsperiodeStartdato,
   skalVurdereYrkesskade,
   erÅrsakssammenhengYrkesskade,
-  harSkadeSykdomEllerLyte,
   skalViseAlleSykdomSteg,
   index,
   readonly,
@@ -45,6 +43,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja ||
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja;
 
+  const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
   return (
     <>
       {!erÅrsakssammenhengYrkesskade && (
@@ -60,7 +59,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
           readOnly={readonly}
         />
       )}
-
       <SykdomsvurderingYrkesskade
         form={form}
         index={index}
@@ -68,7 +66,8 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-      {(erTilstrekkeligNedsatt || (skalViseAlleSykdomSteg && harSkadeSykdomEllerLyte)) && (
+
+      {((!skalViseAlleSykdomSteg && erTilstrekkeligNedsatt) || (skalViseAlleSykdomSteg && harSkadeSykdomEllerLyte)) && (
         <>
           <RadioGroupJaNei
             name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
