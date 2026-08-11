@@ -7,7 +7,7 @@ import { useFormContext } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
@@ -52,15 +52,15 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
               Lukk
             </Button>
           </HStack>
-          <LabelValueMedKnapp
+          <Bolk
             label={'Type krav'}
             value={formaterKravtype(krav.type)}
             buttonTekst={
               visVurderOmKravErRelevantFelt ? 'Avbryt vurder om krav er relevant' : 'Vurder om krav er relevant'
             }
             onClick={() => setVisVurderOmKravErRelevantFelt(!visVurderOmKravErRelevantFelt)}
-          />
-          {visVurderOmKravErRelevantFelt && (
+            isOpen={visVurderOmKravErRelevantFelt}
+          >
             <SelectWrapper
               control={form.control}
               name={`vurderinger.${krav.referanse}.kravtype`}
@@ -73,7 +73,7 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
                 </option>
               ))}
             </SelectWrapper>
-          )}
+          </Bolk>
           {/*{!erVedtatt && journalpostOptions.length > 0 && (*/}
           {/*  <Select label="Journalpost" size="small" {...register(`vurderinger.${krav.referanse}.journalpostId`)}>*/}
           {/*    {journalpostOptions.map((j) => (*/}
@@ -83,13 +83,13 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
           {/*    ))}*/}
           {/*  </Select>*/}
           {/*)}*/}
-          <LabelValueMedKnapp
+          <Bolk
             label={'Søknadsdato'}
             value={søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}
             buttonTekst={visEndreSøknadsdatoFelt ? 'Avbryt Vurder §22-13 5.ledd' : 'Vurder §22-13 5.ledd'}
             onClick={() => setVisEndreSøknadsdatoFelt(!visEndreSøknadsdatoFelt)}
-          />
-          {visEndreSøknadsdatoFelt && (
+            isOpen={visEndreSøknadsdatoFelt}
+          >
             <VStack gap={'space-16'}>
               <DateInputWrapper
                 name={`vurderinger.${krav.referanse}.søknadsdatoDato`}
@@ -121,21 +121,21 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
                 <option value="MisvisendeOpplysninger">Misvisende opplysninger</option>
               </SelectWrapper>
             </VStack>
-          )}
+          </Bolk>
 
-          <LabelValueMedKnapp
+          <Bolk
             label={'Mulig rett fra'}
             value={'Hvor henter vi den?'}
             buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
             onClick={() => setVisMuligRettFraFelt(!visMuligRettFraFelt)}
-          />
-          {visMuligRettFraFelt && (
+            isOpen={visMuligRettFraFelt}
+          >
             <DateInputWrapper
               name={`vurderinger.${krav.referanse}.overstyrDato`}
               control={form.control}
               label="Overstyr mulig rett fra (valgfri)"
             />
-          )}
+          </Bolk>
 
           <TextAreaWrapper
             control={form.control}
@@ -150,26 +150,48 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
   );
 };
 
-function LabelValueMedKnapp({
+function Bolk({
   label,
   value,
   onClick,
   buttonTekst,
+  isOpen,
+  children,
 }: {
   label: string;
   value: string;
   buttonTekst: string;
   onClick: () => void;
+  isOpen: boolean;
+  children: ReactNode;
 }) {
   return (
-    <VStack>
-      <Label size={'small'}>{label}</Label>
-      <HStack align={'center'} gap={'space-4'}>
-        <BodyShort size={'small'}>{value}</BodyShort>
-        <Button size={'small'} variant={'tertiary'} onClick={onClick}>
-          {buttonTekst}
-        </Button>
-      </HStack>
-    </VStack>
+    <Box
+      background={isOpen ? 'accent-soft' : 'neutral-soft'}
+      borderRadius="8"
+      borderWidth="1"
+      borderColor={isOpen ? 'accent-subtle' : 'neutral-subtle'}
+      padding="space-16"
+    >
+      <VStack gap="space-4">
+        <Label size={'small'}>{label}</Label>
+        <HStack align={'center'} justify={'space-between'} gap={'space-4'}>
+          <BodyShort size={'small'}>{value}</BodyShort>
+          <Button size={'small'} variant={'tertiary'} onClick={onClick}>
+            {buttonTekst}
+          </Button>
+        </HStack>
+      </VStack>
+      {isOpen && (
+        <Box
+          paddingBlock="space-16 space-0"
+          marginBlock="space-16 space-0"
+          borderWidth="1 0 0 0"
+          borderColor="neutral-subtle"
+        >
+          <Box paddingBlock="space-16 space-0">{children}</Box>
+        </Box>
+      )}
+    </Box>
   );
 }
