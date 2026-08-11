@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { VurderingsbehovOgÅrsak } from 'lib/types/types';
 import { filtrerÅrsakerForBehandlingType } from './ÅrsakTilBehandling';
 
-describe('ÅrsakTilBehandling filtering logic', () => {
+// Bekrefter oppførsel fra her: https://app.mural.co/t/navdesign3580/m/navdesign3580/1691741508416/fd5f7a66bff6d60858a803726f0485840d12fdac?wid=0-1770286073815
+describe('filtrer årsaker for type behandling', () => {
   const årsakMedBeskrivelse: VurderingsbehovOgÅrsak = {
     årsak: 'SØKNAD',
     opprettet: '2026-01-01',
@@ -24,24 +25,9 @@ describe('ÅrsakTilBehandling filtering logic', () => {
     expect(filtrert).toEqual(årsaker);
   });
 
-  it('filtrerer bort årsaker uten beskrivelse for Førstegangsbehandling', () => {
-    const årsaker = [årsakMedBeskrivelse, årsakUtenBeskrivelse];
-    const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');
-    expect(filtrert).toHaveLength(1);
-    expect(filtrert[0]).toEqual(årsakMedBeskrivelse);
-  });
-
-  it('returnerer tom liste når Førstegangsbehandling og ingen årsaker har beskrivelse', () => {
-    const årsaker = [årsakUtenBeskrivelse];
-    const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');
+  it('returnerer tom liste for Revurdering når vurderingsbehovOgÅrsaker er tom', () => {
+    const filtrert = filtrerÅrsakerForBehandlingType([], 'Revurdering');
     expect(filtrert).toHaveLength(0);
-  });
-
-  it('returnerer alle årsaker for Førstegangsbehandling når alle har beskrivelse', () => {
-    const årsaker = [årsakMedBeskrivelse];
-    const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');
-    expect(filtrert).toHaveLength(1);
-    expect(filtrert[0]).toEqual(årsakMedBeskrivelse);
   });
 
   it('returnerer alle årsaker for Aktivitetsplikt uavhengig av beskrivelse', () => {
@@ -49,5 +35,30 @@ describe('ÅrsakTilBehandling filtering logic', () => {
     const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Aktivitetsplikt');
     expect(filtrert).toHaveLength(2);
     expect(filtrert).toEqual(årsaker);
+  });
+
+  it('returnerer tom liste for Førstegangsbehandling når vurderingsbehovOgÅrsaker er tom', () => {
+    const filtrert = filtrerÅrsakerForBehandlingType([], 'Førstegangsbehandling');
+    expect(filtrert).toHaveLength(0);
+  });
+
+  it('returnerer tom liste for Førstegangsbehandling når ingen årsaker har beskrivelse', () => {
+    const årsaker = [årsakUtenBeskrivelse];
+    const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');
+    expect(filtrert).toHaveLength(0);
+  });
+
+  it('filtrerer bort årsaker uten beskrivelse for Førstegangsbehandling', () => {
+    const årsaker = [årsakMedBeskrivelse, årsakUtenBeskrivelse];
+    const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');
+    expect(filtrert).toHaveLength(1);
+    expect(filtrert[0]).toEqual(årsakMedBeskrivelse);
+  });
+
+  it('returnerer alle årsaker for Førstegangsbehandling når alle har beskrivelse', () => {
+    const årsaker = [årsakMedBeskrivelse];
+    const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');
+    expect(filtrert).toHaveLength(1);
+    expect(filtrert[0]).toEqual(årsakMedBeskrivelse);
   });
 });

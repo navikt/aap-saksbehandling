@@ -6,8 +6,6 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { TasklistStartIcon } from '@navikt/aksel-icons';
-import { visÅrsakTilVurdering } from 'components/behandling/visÅrsakTilVurdering';
-
 interface Props {
   behandling: DetaljertBehandling;
 }
@@ -22,11 +20,10 @@ export function filtrerÅrsakerForBehandlingType(
 }
 
 export const ÅrsakTilBehandling = ({ behandling }: Props) => {
-  const visÅrsakTilBehandling = visÅrsakTilVurdering(behandling);
-  if (!visÅrsakTilBehandling) {
-    return false;
-  }
   const filtrerteÅrsaker = filtrerÅrsakerForBehandlingType(behandling.vurderingsbehovOgÅrsaker, behandling.type);
+  if (filtrerteÅrsaker.length === 0) {
+    return null;
+  }
 
   const tittel =
     behandling.type === 'Revurdering'
