@@ -1,22 +1,23 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Heading, HStack, VStack } from '@navikt/ds-react';
+import { Button, HStack, Heading, VStack } from '@navikt/ds-react';
+import { parse, subMonths } from 'date-fns';
+import { useFetch } from 'hooks/FetchHook';
+import { clientLeggTilKravVurdering } from 'lib/clientApi';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+
+import { Alert } from 'components/alert/Alert';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { clientLeggTilKravVurdering } from 'lib/clientApi';
-import { useFetch } from 'hooks/FetchHook';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { Alert } from 'components/alert/Alert';
-import { subMonths } from 'date-fns';
 
 type KravType = 'RELEVANT_KRAV' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
 
 interface KravVurderingEntry {
   kravType: KravType;
-  søknadsdato?: string;
-  muligRettFra?: string;
+  søknadsdato: string;
+  muligRettFra: string;
 }
 
 interface FormFields {
@@ -28,8 +29,8 @@ const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['RELEVANT_KRAV'])
 
 const defaultKrav = (): KravVurderingEntry => ({
   kravType: 'RELEVANT_KRAV',
-  søknadsdato: defaultDato,
-  muligRettFra: undefined,
+  søknadsdato: '',
+  muligRettFra: '',
 });
 
 const KravRadFelter = ({ form, index }: { form: ReturnType<typeof useForm<FormFields>>; index: number }) => {
@@ -62,8 +63,8 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
     await leggTilKravVurdering(saksnummer, {
       kravVurderinger: kravVurderinger.map((k) => ({
         kravType: k.kravType,
-        søknadsdato: k.søknadsdato,
-        muligRettFra: k.muligRettFra,
+        søknadsdato: formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date())),
+        muligRettFra: formaterDatoForBackend(parse(k.muligRettFra, 'dd.MM.yyyy', new Date())),
       })),
     });
   };
@@ -79,14 +80,8 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
             control={form.control}
             name={`kravVurderinger.${index}.kravType`}
             rules={{
-              onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
-                const type = e.target.value as KravType;
-                if (kravTyperMedDatofelter.has(type)) {
-                  form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
-                } else {
-                  form.setValue(`kravVurderinger.${index}.søknadsdato`, undefined);
-                  form.setValue(`kravVurderinger.${index}.muligRettFra`, undefined);
-                }
+              onChange: () => {
+                form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
               },
             }}
           >
