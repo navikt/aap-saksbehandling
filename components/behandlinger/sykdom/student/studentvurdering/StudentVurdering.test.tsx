@@ -50,7 +50,7 @@ const grunnlagMedVurdering: StudentGrunnlag = {
 };
 
 beforeEach(() => {
-  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_STUDENT' });
+  setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'AVKLAR_STUDENT_V2' });
 });
 
 describe('Student', () => {
