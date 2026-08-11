@@ -1,8 +1,6 @@
-import { BehandlingFlytOgTilstand, StegType } from 'lib/types/types';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { getStegData } from 'lib/utils/steg';
 
-import { VurderKravMedDataFetching } from 'components/behandlinger/krav/VurderKravMedDataFetching';
-import { StønadsperiodeMedDataFetching } from 'components/behandlinger/krav/stønadsperiode/StønadsperiodeMedDataFetching';
 import { MigreringstidspunktMedDataFetching } from 'components/behandlinger/migrering/MigreringstidspunktMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
