@@ -54,20 +54,20 @@ export const KravTabellV2 = ({ grunnlag }: Props) => {
 
             return (
               <Table.ExpandableRow content={vurdering.begrunnelse} key={vurdering.referanse}>
-                <Table.DataCell>{vurdering.journalpostId.identifikator}</Table.DataCell>
-                <Table.DataCell>
+                <Table.DataCell textSize={'small'}>{vurdering.journalpostId.identifikator}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
                   {journalpost ? formaterDatoForFrontend(journalpost.mottattTidspunkt) : '-'}
                 </Table.DataCell>
-                <Table.DataCell>{formaterKravtype(vurdering.type)}</Table.DataCell>
-                <Table.DataCell>{formaterSøknadsdatoRad(vurdering)}</Table.DataCell>
-                <Table.DataCell>{formaterOverstyrMuligRettFraRad(vurdering)}</Table.DataCell>
-                <Table.DataCell>{vurdering.vurdertAv}</Table.DataCell>
-                <Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterKravtype(vurdering.type)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterSøknadsdatoRad(vurdering)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterOverstyrMuligRettFraRad(vurdering)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
                   <Tag variant="alt1" size="small">
                     Ny
                   </Tag>
                 </Table.DataCell>
-                <Table.DataCell>
+                <Table.DataCell textSize={'small'}>
                   <Button
                     type="button"
                     size="small"
