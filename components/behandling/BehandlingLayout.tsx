@@ -26,8 +26,6 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 
-import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
-
 interface Props {
   saksnummer: string;
   behandlingsreferanse: string;
@@ -70,8 +68,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
-
-  const visÅrsakTilBehandling = visÅrsakTilVurdering(behandling.data);
 
   return (
     <SWRConfig
@@ -123,12 +119,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
                 kabalKlageresultat={kabalKlageResultat}
                 hovedkolonneInnhold={
                   <VStack gap={'space-20'}>
-                    {visÅrsakTilBehandling && (
-                      <ÅrsakTilBehandling
-                        behandlingType={behandling.data.type}
-                        vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker}
-                      />
-                    )}
+                    <ÅrsakTilBehandling behandling={behandling.data} />
                     {/*Vi må ha children inne i en div for å unngå layoutshift*/}
                     <div style={{ width: '100%' }}>{children}</div>
                   </VStack>
