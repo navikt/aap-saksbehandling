@@ -2,7 +2,7 @@
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Button, HStack, Heading, VStack } from '@navikt/ds-react';
-import { parse, subMonths } from 'date-fns';
+import { parse } from 'date-fns';
 import { useFetch } from 'hooks/FetchHook';
 import { clientLeggTilKravVurdering } from 'lib/clientApi';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -24,7 +24,6 @@ interface FormFields {
   kravVurderinger: KravVurderingEntry[];
 }
 
-const defaultDato = formaterDatoForBackend(subMonths(new Date(), 3));
 const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['RELEVANT_KRAV']);
 
 const defaultKrav = (): KravVurderingEntry => ({
@@ -79,11 +78,6 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
             size="small"
             control={form.control}
             name={`kravVurderinger.${index}.kravType`}
-            rules={{
-              onChange: () => {
-                form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
-              },
-            }}
           >
             <option value="RELEVANT_KRAV">Nytt krav AAP</option>
             <option value="TRUKKET_SØKNAD">Trukket søknad</option>
