@@ -48,6 +48,18 @@ describe('filtrer årsaker for type behandling', () => {
     expect(filtrert).toHaveLength(0);
   });
 
+  it('inkluderer årsak med type HELSEOPPLYSNINGER for Førstegangsbehandling selv uten beskrivelse', () => {
+    const helseopplysninger: VurderingsbehovOgÅrsak = {
+      årsak: 'HELSEOPPLYSNINGER',
+      opprettet: '2026-01-03',
+      vurderingsbehov: [{ type: 'MOTTATT_LEGEERKLÆRING', oppdatertTid: '2026-01-01' }],
+      beskrivelse: undefined,
+    };
+    const filtrert = filtrerÅrsakerForBehandlingType([helseopplysninger, årsakUtenBeskrivelse], 'Førstegangsbehandling');
+    expect(filtrert).toHaveLength(1);
+    expect(filtrert[0]).toEqual(helseopplysninger);
+  });
+
   it('filtrerer bort årsaker uten beskrivelse for Førstegangsbehandling', () => {
     const årsaker = [årsakMedBeskrivelse, årsakUtenBeskrivelse];
     const filtrert = filtrerÅrsakerForBehandlingType(årsaker, 'Førstegangsbehandling');

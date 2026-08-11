@@ -15,7 +15,7 @@ export function filtrerÅrsakerForBehandlingType(
   behandlingType: TypeBehandling
 ): VurderingsbehovOgÅrsak[] {
   return behandlingType === 'Førstegangsbehandling'
-    ? vurderingsbehovOgÅrsaker.filter((årsak) => !!årsak.beskrivelse)
+    ? vurderingsbehovOgÅrsaker.filter((årsak) => !!årsak.beskrivelse || årsak.årsak === 'HELSEOPPLYSNINGER')
     : vurderingsbehovOgÅrsaker;
 }
 
