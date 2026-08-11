@@ -125,7 +125,7 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
 
           <Bolk
             label={'Mulig rett fra'}
-            value={'Hvor henter vi den?'}
+            value={'muligRettFra' in krav ? formaterDatoForFrontend(krav.muligRettFra) : '-'}
             buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
             onClick={() => setVisMuligRettFraFelt(!visMuligRettFraFelt)}
             isOpen={visMuligRettFraFelt}
@@ -133,7 +133,7 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
             <DateInputWrapper
               name={`vurderinger.${krav.referanse}.overstyrDato`}
               control={form.control}
-              label="Overstyr mulig rett fra (valgfri)"
+              label="Overstyr mulig rett fra"
             />
           </Bolk>
 
