@@ -71,16 +71,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
 
-  const visÅrsakTilAktivitetspliktBehandling =
-    ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
-    behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
-  const visÅrsakTilRevurdering = visÅrsakTilVurdering(behandling.data);
-  const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
-    ?.flatMap((v) => v.vurderingsbehov)
-    ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');
-
-  const visÅrsakTilBehandling =
-    visÅrsakTilAktivitetspliktBehandling || visÅrsakTilRevurdering || visÅrsakTilEndreStartstidspunkt;
+  const visÅrsakTilBehandling = visÅrsakTilVurdering(behandling.data);
 
   return (
     <SWRConfig
