@@ -16321,6 +16321,8 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.Felter': {
       /** Format: int32 */
+      andelArbeid?: number | null;
+      /** Format: int32 */
       arbeidGradering?: number | null;
       /** Format: int32 */
       arbeidsgiverGradering?: number | null;
@@ -16334,6 +16336,8 @@ export interface components {
       dagsats: number;
       /** Format: double */
       effektivDagsats: number;
+      /** Format: int32 */
+      grenseverdi?: number | null;
       /** Format: int32 */
       institusjonGradering?: number | null;
       /** Format: int32 */
