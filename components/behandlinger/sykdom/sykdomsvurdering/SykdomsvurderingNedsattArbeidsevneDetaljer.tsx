@@ -1,16 +1,17 @@
-import { JaEllerNei } from 'lib/utils/form';
-import { UseFormReturn } from 'react-hook-form';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Periode } from 'lib/types/types';
-import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { JaEllerNei } from 'lib/utils/form';
+import React from 'react';
+import { UseFormReturn } from 'react-hook-form';
+
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
   yrkesskadeBegrunnelse,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
-import React from 'react';
+import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   index: number;
@@ -20,6 +21,7 @@ interface Props {
   rettighetsperiodeStartdato: Date;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
+  harSkadeSykdomEllerLyte: boolean;
   skalViseAlleSykdomSteg: boolean;
 }
 
@@ -28,6 +30,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   rettighetsperiodeStartdato,
   skalVurdereYrkesskade,
   erÅrsakssammenhengYrkesskade,
+  harSkadeSykdomEllerLyte,
   skalViseAlleSykdomSteg,
   index,
   readonly,
@@ -65,7 +68,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-      {(erTilstrekkeligNedsatt || skalViseAlleSykdomSteg) && (
+      {(erTilstrekkeligNedsatt || (skalViseAlleSykdomSteg && harSkadeSykdomEllerLyte)) && (
         <>
           <RadioGroupJaNei
             name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
