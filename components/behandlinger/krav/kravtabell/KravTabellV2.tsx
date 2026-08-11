@@ -15,9 +15,10 @@ import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKr
 
 interface Props {
   grunnlag?: KravGrunnlag;
+  readOnly: boolean;
 }
 
-export const KravTabellV2 = ({ grunnlag }: Props) => {
+export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
   const form = useFormContext<KravFormFields>();
   const { control, getValues, setValue } = form;
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
@@ -73,6 +74,7 @@ export const KravTabellV2 = ({ grunnlag }: Props) => {
                     size="small"
                     variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
                     onClick={() => toggleValgtKrav(vurdering.referanse)}
+                    disabled={readOnly}
                   >
                     {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
                   </Button>
@@ -81,6 +83,7 @@ export const KravTabellV2 = ({ grunnlag }: Props) => {
                     size="small"
                     variant="tertiary"
                     onClick={() => console.log('Ikke implementert enda')}
+                    disabled={readOnly}
                   >
                     Slett
                   </Button>
@@ -147,15 +150,5 @@ function formaterSøknadsdatoRad(vurdering: KravVurdering, løsning?: KravVurder
 
 function formaterOverstyrMuligRettFraRad(vurdering: KravVurdering, løsning?: KravVurderingLøsning) {
   const dato = løsning ? finnOverstyrMuligRettFraFraLøsning(løsning)?.dato : finnOverstyrMuligRettFra(vurdering)?.dato;
-  return dato ? formaterDatoForFrontend(dato) : '-';
-}
-
-function formaterSøknadsdatoFraLøsningRad(løsning: KravVurderingLøsning) {
-  const dato = finnSøknadsdatoFraLøsning(løsning)?.dato;
-  return dato ? formaterDatoForFrontend(dato) : '-';
-}
-
-function formaterOverstyrFraLøsningRad(løsning: KravVurderingLøsning) {
-  const dato = finnOverstyrMuligRettFraFraLøsning(løsning)?.dato;
   return dato ? formaterDatoForFrontend(dato) : '-';
 }
