@@ -61,7 +61,6 @@ export const SykdomsvurderingFormInput = ({
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
   const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
-  const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === 'JA';
   const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
   const skalViseStudentSoknad =
     skalViseNeiMenStudent &&
@@ -159,7 +158,6 @@ export const SykdomsvurderingFormInput = ({
                   rettighetsperiodeStartdato={rettighetsperiodeStartdato}
                   skalVurdereYrkesskade={skalVurdereYrkesskade}
                   erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-                  harSkadeSykdomEllerLyte={harSkadeSykdomEllerLyte}
                   skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
                 />
               )}
@@ -197,7 +195,6 @@ export const SykdomsvurderingFormInput = ({
               rettighetsperiodeStartdato={rettighetsperiodeStartdato}
               skalVurdereYrkesskade={skalVurdereYrkesskade}
               erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
-              harSkadeSykdomEllerLyte={harSkadeSykdomEllerLyte}
               skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
             />
           )}
