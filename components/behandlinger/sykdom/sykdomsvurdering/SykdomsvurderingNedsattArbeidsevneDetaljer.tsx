@@ -44,7 +44,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja;
 
   const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
-  console.log('Hei' + harSkadeSykdomEllerLyte);
   return (
     <>
       {!erÅrsakssammenhengYrkesskade && (
