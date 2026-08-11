@@ -8,6 +8,7 @@ import {
   finnSøknadsdato,
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
+  kravVurderingTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -23,11 +24,19 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
   const { control, getValues, setValue } = form;
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
 
-  const toggleValgtKrav = (referanse: string) => {
+  const toggleValgtKrav = (vurdering: KravVurdering) => {
     const gjeldende = getValues('valgteKrav') ?? [];
-    const nyeValgteKrav = gjeldende.includes(referanse)
-      ? gjeldende.filter((r) => r !== referanse)
-      : [...gjeldende, referanse];
+    const erÅpen = gjeldende.includes(vurdering.referanse);
+
+    if (erÅpen) {
+      // Lukker boksen - nullstill feltene til opprinnelig verdi fra grunnlaget,
+      // slik at ulagrede endringer forkastes.
+      setValue(`vurderinger.${vurdering.referanse}`, kravVurderingTilFormFields(vurdering));
+    }
+
+    const nyeValgteKrav = erÅpen
+      ? gjeldende.filter((r) => r !== vurdering.referanse)
+      : [...gjeldende, vurdering.referanse];
     setValue('valgteKrav', nyeValgteKrav);
   };
 
@@ -73,19 +82,10 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
                     type="button"
                     size="small"
                     variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(vurdering.referanse)}
+                    onClick={() => toggleValgtKrav(vurdering)}
                     disabled={readOnly}
                   >
                     {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
-                  </Button>
-                  <Button
-                    type="button"
-                    size="small"
-                    variant="tertiary"
-                    onClick={() => console.log('Ikke implementert enda')}
-                    disabled={readOnly}
-                  >
-                    Slett
                   </Button>
                 </Table.DataCell>
               </Table.ExpandableRow>
@@ -129,7 +129,7 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
                     type="button"
                     size="small"
                     variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(vurdering.referanse)}
+                    onClick={() => toggleValgtKrav(vurdering)}
                   >
                     {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
                   </Button>

@@ -1,13 +1,16 @@
 'use client';
 
 import { KravGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { KravTabellV2 } from 'components/behandlinger/krav/kravtabell/KravTabellV2';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { BodyShort, Box, VStack } from '@navikt/ds-react';
 import {
   byggInitielleVurderinger,
+  byggKravVurderingerFraSkjema,
   finnKravVurderingByReferanse,
+  kravVurderingTilFormFields,
   KravVurderingFormFields,
 } from 'components/behandlinger/krav/kravutils';
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
@@ -31,6 +34,8 @@ export interface KravFormFields {
 }
 
 export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon, readOnly }: Props) => {
+  const { behandlingsreferanse } = useParamsMedType();
+
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
     'KRAV',
@@ -50,12 +55,19 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
     form
   );
 
-  const { status, løsBehovOgGåTilNesteStegError, isLoading } =
+  const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
     useLøsBehovOgGåTilNesteSteg('KRAV');
 
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
 
   const lukkKrav = (referanse: string) => {
+    // Nullstill feltene til opprinnelig verdi fra grunnlaget, slik at ulagrede
+    // endringer forkastes når boksen lukkes.
+    const krav = finnKravVurderingByReferanse(grunnlag, referanse);
+    if (krav) {
+      setValue(`vurderinger.${referanse}`, kravVurderingTilFormFields(krav));
+    }
+
     setValue(
       'valgteKrav',
       (getValues('valgteKrav') ?? []).filter((r) => r !== referanse)
@@ -64,7 +76,20 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      console.log(data, behandlingVersjon, formReadOnly);
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.VURDER_KRAV_KODE,
+            kravVurderinger: byggKravVurderingerFraSkjema(grunnlag, data.vurderinger),
+          },
+        },
+        () => {
+          visningActions.onBekreftClick();
+          slettMellomlagring();
+        }
+      );
     })(event);
   };
 

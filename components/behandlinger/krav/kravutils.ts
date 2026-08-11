@@ -218,40 +218,67 @@ export function byggInitialeRader(grunnlag?: KravGrunnlag): KravRadFormFields[] 
 }
 
 function radTilLøsning(rad: KravRadFormFields): KravVurderingLøsning {
-  const journalpostId = { identifikator: rad.journalpostId };
   // Kun vedtatte krav skal overstyres via referanse – nye/lokale krav sendes uten referanse.
   const referanse = rad.kilde === 'VEDTATT' ? rad.referanse : undefined;
 
-  if (rad.kravType === 'RELEVANT_KRAV') {
-    const søknadsdatoParsed = parseDatoFraDatePicker(rad.søknadsdatoDato);
-    const overstyrParsed = rad.overstyrDato ? parseDatoFraDatePicker(rad.overstyrDato) : undefined;
+  return byggLøsningFraFelter({
+    kravType: rad.kravType,
+    journalpostId: rad.journalpostId,
+    begrunnelse: rad.begrunnelse,
+    søknadsdatoDato: rad.søknadsdatoDato,
+    søknadsdatoÅrsak: rad.søknadsdatoÅrsak,
+    overstyrDato: rad.overstyrDato,
+    overstyrÅrsak: rad.overstyrÅrsak,
+    referanse,
+  });
+}
+
+/**
+ * Bygger en KravVurderingLøsning fra et sett flate skjemafelter, felles for både
+ * KravRadFormFields (V1) og KravVurderingFormFields (V2/KravBoks).
+ */
+function byggLøsningFraFelter(felter: {
+  kravType: KravType;
+  journalpostId: string;
+  begrunnelse: string;
+  søknadsdatoDato: string;
+  søknadsdatoÅrsak: string;
+  overstyrDato: string;
+  overstyrÅrsak: string;
+  referanse: string | undefined;
+}): KravVurderingLøsning {
+  const journalpostId = { identifikator: felter.journalpostId };
+
+  if (felter.kravType === 'RELEVANT_KRAV') {
+    const søknadsdatoParsed = parseDatoFraDatePicker(felter.søknadsdatoDato);
+    const overstyrParsed = felter.overstyrDato ? parseDatoFraDatePicker(felter.overstyrDato) : undefined;
 
     // Skjemaet krever søknadsdato for RELEVANT_KRAV (se KravBoks), så denne skal alltid finnes ved submit.
     if (!søknadsdatoParsed) {
-      throw new Error(`Mangler gyldig søknadsdato for krav med journalpost ${rad.journalpostId}`);
+      throw new Error(`Mangler gyldig søknadsdato for krav med journalpost ${felter.journalpostId}`);
     }
 
     return {
       kravType: 'RELEVANT_KRAV',
       journalpostId,
-      begrunnelse: rad.begrunnelse,
+      begrunnelse: felter.begrunnelse,
       søknadsdato: {
         dato: formaterDatoForBackend(søknadsdatoParsed),
-        årsak: rad.søknadsdatoÅrsak as 'BrukerHarSøktTidligere' | 'FeilregistrertSøknadsdato' | 'SøknadMottatt',
+        årsak: felter.søknadsdatoÅrsak as 'BrukerHarSøktTidligere' | 'FeilregistrertSøknadsdato' | 'SøknadMottatt',
       },
       overstyrMuligRettFra:
-        overstyrParsed && rad.overstyrÅrsak
+        overstyrParsed && felter.overstyrÅrsak
           ? {
               dato: formaterDatoForBackend(overstyrParsed),
-              årsak: rad.overstyrÅrsak as 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger',
+              årsak: felter.overstyrÅrsak as 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger',
             }
           : undefined,
-      referanse,
+      referanse: felter.referanse,
     } satisfies RelevantKravLøsning;
   }
 
-  const felles = { journalpostId, begrunnelse: rad.begrunnelse, referanse };
-  switch (rad.kravType) {
+  const felles = { journalpostId, begrunnelse: felter.begrunnelse, referanse: felter.referanse };
+  switch (felter.kravType) {
     case 'KLAGE':
       return { kravType: 'KLAGE', ...felles } satisfies KlageKravLøsning;
     case 'TRUKKET_SØKNAD':
@@ -265,4 +292,29 @@ function radTilLøsning(rad: KravRadFormFields): KravVurderingLøsning {
 /** Bygger payloaden som sendes til løs-behov: filtrerer bort soft-slettede rader og mapper resten til KravVurderingLøsning. */
 export function byggKravVurderinger(rader: KravRadFormFields[]): KravVurderingLøsning[] {
   return rader.filter((r) => !r.slettet).map(radTilLøsning);
+}
+
+/**
+ * Bygger payloaden til løs-behov ut fra KravBoks (VurderKravV2) sitt skjema, som holder
+ * feltene nøstet per krav-referanse i stedet for som flate rader. Kun vedtatte krav skal
+ * overstyres via referanse – nye vurderinger sendes uten referanse (se radTilLøsning).
+ */
+export function byggKravVurderingerFraSkjema(
+  grunnlag: KravGrunnlag | undefined,
+  vurderinger: Record<string, KravVurderingFormFields>
+): KravVurderingLøsning[] {
+  const vedtatteReferanser = new Set((grunnlag?.vedtatteVurderinger ?? []).map((v) => v.referanse));
+
+  return Object.entries(vurderinger).map(([referanse, felt]) =>
+    byggLøsningFraFelter({
+      kravType: felt.kravtype,
+      journalpostId: felt.journalpostId,
+      begrunnelse: felt.begrunnelse,
+      søknadsdatoDato: felt.søknadsdatoDato,
+      søknadsdatoÅrsak: felt.søknadsdatoÅrsak,
+      overstyrDato: felt.overstyrDato,
+      overstyrÅrsak: felt.overstyrÅrsak,
+      referanse: vedtatteReferanser.has(referanse) ? referanse : undefined,
+    })
+  );
 }

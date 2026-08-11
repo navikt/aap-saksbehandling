@@ -1,5 +1,9 @@
 import { KravVurdering, SøknadUtenKrav } from 'lib/types/types';
-import { finnSøknadsdato, formaterKravtype } from 'components/behandlinger/krav/kravutils';
+import {
+  finnSøknadsdato,
+  formaterKravtype,
+  kravVurderingTilFormFields,
+} from 'components/behandlinger/krav/kravutils';
 import { BodyShort, Box, Button, Detail, HStack, Label, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TasklistIcon } from '@navikt/aksel-icons';
@@ -7,7 +11,7 @@ import { useFormContext } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
@@ -20,7 +24,7 @@ interface Props {
   onLukk: () => void;
 }
 
-export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }: Props) => {
+export const KravBoks = ({ krav, onLukk }: Props) => {
   const [visVurderOmKravErRelevantFelt, setVisVurderOmKravErRelevantFelt] = useState<boolean>(false);
   const [visEndreSøknadsdatoFelt, setVisEndreSøknadsdatoFelt] = useState<boolean>(false);
   const [visMuligRettFraFelt, setVisMuligRettFraFelt] = useState<boolean>(false);
@@ -28,6 +32,32 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
   const form = useFormContext<KravFormFields>();
 
   const søknadsdato = finnSøknadsdato(krav);
+
+  // Opprinnelige verdier fra grunnlaget, brukt til å nullstille feltene i en bolk når den lukkes.
+  const originaleVerdier = useMemo(() => kravVurderingTilFormFields(krav), [krav]);
+
+  const toggleVurderOmKravErRelevantFelt = () => {
+    if (visVurderOmKravErRelevantFelt) {
+      form.setValue(`vurderinger.${krav.referanse}.kravtype`, originaleVerdier.kravtype);
+    }
+    setVisVurderOmKravErRelevantFelt(!visVurderOmKravErRelevantFelt);
+  };
+
+  const toggleEndreSøknadsdatoFelt = () => {
+    if (visEndreSøknadsdatoFelt) {
+      form.setValue(`vurderinger.${krav.referanse}.søknadsdatoDato`, originaleVerdier.søknadsdatoDato);
+      form.setValue(`vurderinger.${krav.referanse}.søknadsdatoÅrsak`, originaleVerdier.søknadsdatoÅrsak);
+      form.setValue(`vurderinger.${krav.referanse}.overstyrÅrsak`, originaleVerdier.overstyrÅrsak);
+    }
+    setVisEndreSøknadsdatoFelt(!visEndreSøknadsdatoFelt);
+  };
+
+  const toggleMuligRettFraFelt = () => {
+    if (visMuligRettFraFelt) {
+      form.setValue(`vurderinger.${krav.referanse}.overstyrDato`, originaleVerdier.overstyrDato);
+    }
+    setVisMuligRettFraFelt(!visMuligRettFraFelt);
+  };
 
   // const kravtype = useWatch({ control: form.control, name: `vurderinger.${krav.referanse}.kravtype` });
 
@@ -58,7 +88,7 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
             buttonTekst={
               visVurderOmKravErRelevantFelt ? 'Avbryt vurder om krav er relevant' : 'Vurder om krav er relevant'
             }
-            onClick={() => setVisVurderOmKravErRelevantFelt(!visVurderOmKravErRelevantFelt)}
+            onClick={toggleVurderOmKravErRelevantFelt}
             isOpen={visVurderOmKravErRelevantFelt}
           >
             <SelectWrapper
@@ -87,7 +117,7 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
             label={'Søknadsdato'}
             value={søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}
             buttonTekst={visEndreSøknadsdatoFelt ? 'Avbryt Vurder §22-13 5.ledd' : 'Vurder §22-13 5.ledd'}
-            onClick={() => setVisEndreSøknadsdatoFelt(!visEndreSøknadsdatoFelt)}
+            onClick={toggleEndreSøknadsdatoFelt}
             isOpen={visEndreSøknadsdatoFelt}
           >
             <VStack gap={'space-16'}>
@@ -127,7 +157,7 @@ export const KravBoks = ({ krav, erVedtatt, søknaderUtenKravvurdering, onLukk }
             label={'Mulig rett fra'}
             value={'muligRettFra' in krav ? formaterDatoForFrontend(krav.muligRettFra) : '-'}
             buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
-            onClick={() => setVisMuligRettFraFelt(!visMuligRettFraFelt)}
+            onClick={toggleMuligRettFraFelt}
             isOpen={visMuligRettFraFelt}
           >
             <DateInputWrapper
@@ -177,7 +207,7 @@ function Bolk({
         <Label size={'small'}>{label}</Label>
         <HStack align={'center'} justify={'space-between'} gap={'space-4'}>
           <BodyShort size={'small'}>{value}</BodyShort>
-          <Button size={'small'} variant={'tertiary'} onClick={onClick}>
+          <Button type="button" size={'small'} variant={'tertiary'} onClick={onClick}>
             {buttonTekst}
           </Button>
         </HStack>
