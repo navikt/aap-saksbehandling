@@ -84,7 +84,7 @@ export function mineOppgaverQueryParams(params: MineOppgaverQueryParams) {
 }
 
 function buildSaksbehandlingsURL(saksnummer: string, behandlingsreferanse: string): string {
-  return `/saksbehandlings/sak/${saksnummer}/${behandlingsreferanse}`;
+  return `/saksbehandling/sak/${saksnummer}/${behandlingsreferanse}`;
 }
 function buildPostmottakURL(behandlingsreferanse: string): string {
   return `/postmottak/${behandlingsreferanse}`;
