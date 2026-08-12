@@ -1,18 +1,18 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { customRenderWithSøknadstidspunkt, render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
-import { MellomlagretVurderingResponse, StudentGrunnlag, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
 import { addDays, format, subDays } from 'date-fns';
+import { ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { customRenderWithSøknadstidspunkt, render, screen, within } from 'lib/test/CustomRender';
+import { Dato } from 'lib/types/Dato';
+import { MellomlagretVurderingResponse, StudentGrunnlag, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { Dato } from 'lib/types/Dato';
-import { formaterDatoForBackend } from 'lib/utils/date';
 
-import { ingenDiagnoseCode } from 'lib/diagnosesøker/DiagnoseSøker';
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -915,14 +915,6 @@ describe('vurderinger uten viss varighet', () => {
     await user.click(nedsattArbeidsevneTilstrekkeligJaValg);
 
     await user.click(skadeSykdomLyteNeiValg);
-
-    const vesentligMedvirkende = within(
-      screen.getByRole('radiogroup', {
-        name: /er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt\?/i,
-      })
-    ).getByRole('radio', { name: 'Ja' });
-
-    await user.click(vesentligMedvirkende);
 
     await velgBekreft();
 

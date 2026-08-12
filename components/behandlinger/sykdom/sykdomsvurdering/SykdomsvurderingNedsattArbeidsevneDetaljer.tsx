@@ -1,16 +1,17 @@
-import { JaEllerNei } from 'lib/utils/form';
-import { UseFormReturn } from 'react-hook-form';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Periode } from 'lib/types/types';
-import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { JaEllerNei } from 'lib/utils/form';
+import React from 'react';
+import { UseFormReturn } from 'react-hook-form';
+
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
   yrkesskadeBegrunnelse,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
-import React from 'react';
+import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   index: number;
@@ -42,6 +43,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja ||
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja;
 
+  const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
   return (
     <>
       {!erÅrsakssammenhengYrkesskade && (
@@ -57,7 +59,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
           readOnly={readonly}
         />
       )}
-
       <SykdomsvurderingYrkesskade
         form={form}
         index={index}
@@ -65,7 +66,8 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-      {(erTilstrekkeligNedsatt || skalViseAlleSykdomSteg) && (
+
+      {((!skalViseAlleSykdomSteg && erTilstrekkeligNedsatt) || (skalViseAlleSykdomSteg && harSkadeSykdomEllerLyte)) && (
         <>
           <RadioGroupJaNei
             name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
