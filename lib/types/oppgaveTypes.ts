@@ -1,12 +1,9 @@
-import {
-  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
-  NoNavAapOppgaveFilterFilterResponseType,
-  NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
-  components as oppgave,
-  paths,
-} from '@navikt/aap-oppgave-typescript-types';
+import { components as oppgave, paths as oppgavePaths } from '@navikt/aap-oppgave-typescript-types';
 import { components as postmottak } from '@navikt/aap-postmottak-backend-typescript-types';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
+
+// Re-eksporter skjemaet så andre filer kan referere direkte
+export type { oppgave, oppgavePaths };
 
 // postmottak
 export type PostmottakAvklaringsbehovKode =
@@ -43,14 +40,21 @@ export type TildelOppgaveResponse = oppgave['schemas']['no.nav.aap.oppgave.tilde
 export type TildeltStatus = oppgave['schemas']['no.nav.aap.oppgave.tildel.TildeltStatusDto'];
 export type SakOgAvklaringsbehov = oppgave['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 
-// typer fra enums
-export type OppgaveBehandlingstype = `${NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype}`;
-export type MarkeringType = `${NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType}`;
-export const MarkeringHaster = NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+// Typer utledet direkte fra skjemaet (string unions)
+export type Behandlingstype = oppgave['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse']['behandlingstype'];
+export type OppgaveBehandlingstype = Behandlingstype;
+export type MarkeringType = oppgave['schemas']['no.nav.aap.oppgave.markering.MarkeringDto']['markeringType'];
+export type Køtype = oppgave['schemas']['no.nav.aap.oppgave.filter.FilterResponse']['type'];
+export type SortBy = NonNullable<oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveSortering']['sortBy']>;
+export type SortOrder = NonNullable<oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveSortering']['sortOrder']>;
+export type Status = oppgave['schemas']['no.nav.aap.oppgave.liste.OppgaveMetadataResponse']['status'];
+export type Behandlingstyper =
+  oppgave['schemas']['no.nav.aap.oppgave.liste.UtvidetOppgavelisteFilter']['behandlingstyper'];
+export type ReturStatuser = oppgave['schemas']['no.nav.aap.oppgave.liste.UtvidetOppgavelisteFilter']['returStatuser'];
+export type ReturStatus = oppgave['schemas']['no.nav.aap.oppgave.ReturInformasjonDto']['status'];
+export type ReturÅrsaker = oppgave['schemas']['no.nav.aap.oppgave.ReturInformasjonDto']['årsaker'][number];
+export type MineOppgaverQueryParams = oppgavePaths['/mine-oppgaver']['get']['parameters']['query'];
+export type MineOppgaverSortBy = NonNullable<NonNullable<MineOppgaverQueryParams>['sortby']>;
+export type MineOppgaverSortOrder = NonNullable<NonNullable<MineOppgaverQueryParams>['sortorder']>;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
-
-export type MineOppgaverQueryParams = paths['/mine-oppgaver']['get']['parameters']['query'];
-
-export const Køtype = NoNavAapOppgaveFilterFilterResponseType;
-export type Køtype = NoNavAapOppgaveFilterFilterResponseType;

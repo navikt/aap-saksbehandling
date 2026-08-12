@@ -1,4 +1,3 @@
-import { NoNavAapOppgaveReturInformasjonDtoStatus } from '@navikt/aap-oppgave-typescript-types';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
@@ -293,7 +292,7 @@ describe('Sak status', () => {
           returInformasjon: {
             begrunnelse: 'Underkjent',
             endretAv: 'Kvalitetssikrer',
-            status: NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_KVALITETSSIKRER,
+            status: 'RETUR_FRA_KVALITETSSIKRER',
             årsaker: [],
           },
         }}
@@ -313,7 +312,7 @@ describe('Sak status', () => {
           returInformasjon: {
             begrunnelse: 'Underkjent',
             endretAv: 'Kvalitetssikrer',
-            status: NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_VEILEDER,
+            status: 'RETUR_FRA_VEILEDER',
             årsaker: [],
           },
         }}
