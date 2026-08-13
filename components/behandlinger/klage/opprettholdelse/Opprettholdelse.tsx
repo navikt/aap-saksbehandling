@@ -6,6 +6,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { BehandlingFlytOgTilstand, Klageresultat } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { BodyShort } from '@navikt/ds-react';
 
 interface Props {
   behandlingsreferanse: string;
@@ -19,6 +20,12 @@ export const Opprettholdelse = async ({ behandlingsreferanse, flyt }: Props) => 
     return <ApiException apiResponses={[klageresultat]} />;
   }
 
+  const skalViseOpprettholdelsesInfo =
+    klageresultat.data.type === 'DELVIS_OMGJØRES' || klageresultat.data.type === 'OPPRETTHOLDES';
+  /**
+   * Alle klagesaker har OPPRETTHOLDELSE som siste steg, men det er kun de som har opprettholdelse eller
+   * delvis omgjøring hvor dette er relevant og således aktuelt å vise frem
+   */
   return (
     <GruppeSteg
       prosessering={flyt.prosessering}
@@ -28,11 +35,15 @@ export const Opprettholdelse = async ({ behandlingsreferanse, flyt }: Props) => 
       aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
-        <VilkårsKort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
-          <p>{utledTekst(flyt)}</p>
-          <p>Følgende vilkår skal opprettholdes:</p>
-          <p>{vilkårSomSkalOpprettholdes(klageresultat.data)}</p>
-        </VilkårsKort>
+        {skalViseOpprettholdelsesInfo ? (
+          <VilkårsKort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
+            <BodyShort>{utledTekst(flyt)}</BodyShort>
+            <BodyShort>Følgende vilkår skal opprettholdes:</BodyShort>
+            <BodyShort>{vilkårSomSkalOpprettholdes(klageresultat.data)}</BodyShort>
+          </VilkårsKort>
+        ) : (
+          <BodyShort>Velg fane for å se innhold i klagesaken</BodyShort>
+        )}
       </StegSuspense>
     </GruppeSteg>
   );
