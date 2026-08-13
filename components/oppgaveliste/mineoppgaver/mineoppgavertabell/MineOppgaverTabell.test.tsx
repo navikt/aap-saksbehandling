@@ -1,7 +1,3 @@
-import {
-  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
-  NoNavAapOppgaveListeOppgaveMetadataResponseStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { screen } from '@testing-library/react';
 import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
@@ -16,12 +12,12 @@ const oppgaver: OppgaveMedKontekst[] = [
     behandlingOpprettet: '2026-01-04',
     behandlingskontekst: {
       behandlingsreferanse: '',
-      behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.F_RSTEGANGSBEHANDLING,
+      behandlingstype: 'FØRSTEGANGSBEHANDLING',
     },
     oppgaveMetadata: {
       id: 0,
       opprettetTidspunkt: '2026-01-04',
-      status: NoNavAapOppgaveListeOppgaveMetadataResponseStatus.OPPRETTET,
+      status: 'OPPRETTET',
       versjon: 0,
     },
     personOgEnhet: {

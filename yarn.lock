@@ -1520,10 +1520,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-oppgave-typescript-types@npm:0.0.893":
-  version: 0.0.893
-  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.893::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.893%2Ffee94a4e6584b6d73a95bd1161f5cc0c4f17e819"
-  checksum: 10c0/0bb03ff763ee9dd8672c8da528491174bc3d3ce2f8e847c2fee9e4becbb02d631fa9945248c0678e7c9f7aff736a719d894ae280c436922a0f0031768482e051
+"@navikt/aap-oppgave-typescript-types@npm:0.0.894":
+  version: 0.0.894
+  resolution: "@navikt/aap-oppgave-typescript-types@npm:0.0.894::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-oppgave-typescript-types%2F0.0.894%2F9c4291447ce56d760037854db2169c003e60df1e"
+  checksum: 10c0/95da23a5321645a66ca39ab55480d5d104b03877063ed97310cc1cf738d2f9601ff4045aa061a48776063e96a10e76b89f44401e0af7f7f366ea5b466e75e453
   languageName: node
   linkType: hard
 
@@ -2352,12 +2352,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:14.6.1":
-  version: 14.6.1
-  resolution: "@testing-library/user-event@npm:14.6.1"
+"@testing-library/user-event@npm:14.6.3":
+  version: 14.6.3
+  resolution: "@testing-library/user-event@npm:14.6.3"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 10c0/75fea130a52bf320d35d46ed54f3eec77e71a56911b8b69a3fe29497b0b9947b2dc80d30f04054ad4ce7f577856ae3e5397ea7dff0ef14944d3909784c7a93fe
+  checksum: 10c0/60c401edcc1b39f98aefd0e236af69c1a0454e3a7b91b92d62e2d654b044c51d39abc4a7ee0f5675566e7246dc5fc5e91af872a49da7e30a5f0e9e52f5a83a82
   languageName: node
   linkType: hard
 
@@ -3061,7 +3061,7 @@ __metadata:
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
     "@navikt/aap-felles-prettier": "npm:6.2.0"
-    "@navikt/aap-oppgave-typescript-types": "npm:0.0.893"
+    "@navikt/aap-oppgave-typescript-types": "npm:0.0.894"
     "@navikt/aap-postmottak-backend-typescript-types": "npm:0.0.812"
     "@navikt/aksel": "npm:8.16.1"
     "@navikt/aksel-icons": "npm:8.16.1"
@@ -3077,7 +3077,7 @@ __metadata:
     "@testing-library/dom": "npm:10.4.1"
     "@testing-library/jest-dom": "npm:6.9.1"
     "@testing-library/react": "npm:16.3.2"
-    "@testing-library/user-event": "npm:14.6.1"
+    "@testing-library/user-event": "npm:14.6.3"
     "@types/lodash": "npm:4.17.24"
     "@types/node": "npm:25.9.4"
     "@types/react": "npm:19.2.17"
@@ -3102,8 +3102,8 @@ __metadata:
     happy-dom: "npm:20.11.1"
     husky: "npm:9.1.7"
     i18n-iso-countries: "npm:7.14.0"
-    is-european: "npm:1.0.10"
-    jose: "npm:6.2.7"
+    is-european: "npm:1.0.12"
+    jose: "npm:6.2.8"
     lint-staged: "npm:16.4.0"
     lodash: "npm:4.18.1"
     next: "npm:16.2.12"
@@ -5652,12 +5652,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-european@npm:1.0.10":
-  version: 1.0.10
-  resolution: "is-european@npm:1.0.10"
+"is-european@npm:1.0.12":
+  version: 1.0.12
+  resolution: "is-european@npm:1.0.12"
   dependencies:
     iso-3166: "npm:~3.1.0"
-  checksum: 10c0/f7ba92d1ef73516ff67e34aa64c9c21ea97f34235c90ab3fda3606c4986776e835b2b78768a9a2dacc7a8c9bdebc26699b641a8aa9c6d4d6a65ec2a18b4be44a
+  checksum: 10c0/b7e1a3eefd740a3378e9aaafd290d8a1ac32e5a9fe8ff6262a792f6a69d73f435b01324347677235d43e2bb31285c680fa06cf3561a3e959efc869e48faae545
   languageName: node
   linkType: hard
 
@@ -6005,10 +6005,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:6.2.7":
-  version: 6.2.7
-  resolution: "jose@npm:6.2.7"
-  checksum: 10c0/276edc76b4b1c6056e4c4181f3039d659d5ca7e15b971d61b3b65f78b3585ac422c62452a04d6838dbb2e085083a916841b8a75dd29f28e7c281a875a2587e67
+"jose@npm:6.2.8":
+  version: 6.2.8
+  resolution: "jose@npm:6.2.8"
+  checksum: 10c0/fe4c6a7197a1adab2251b000c1eaaa8b40b6cb7cfbef43dbc9e959dacd43bf2532827b2d5e0f4069731da79d26e4d9e4368ccb26559a42a884b3fe036927e6e1
   languageName: node
   linkType: hard
 

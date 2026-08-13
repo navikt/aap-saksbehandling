@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import { useConfigForm } from 'components/form/FormHook';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
 import { Button, Modal, VStack } from '@navikt/ds-react';
-
-import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
-import { MarkeringType } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
-import { FormField } from 'components/form/FormField';
-import { isSuccess } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { isSuccess } from 'lib/utils/api';
+import React, { useState } from 'react';
+
 import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
 
 interface Props {
   referanse: string;
@@ -72,10 +71,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 setIsLoading(true);
 
                 const res = await clientOpprettMarkeringHendelse(referanse, {
-                  begrunnelse:
-                    markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
-                      ? data.hasteBegrunnelse
-                      : data.begrunnelse,
+                  begrunnelse: markeringsType === 'HASTER' ? data.hasteBegrunnelse : data.begrunnelse,
                   markeringType: markeringsType,
                   hendelseType: MarkeringHendelseType.OPPRETTET,
                 });
@@ -92,7 +88,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               className={'flex-column'}
               autoComplete={'off'}
             >
-              {markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER ? (
+              {markeringsType === 'HASTER' ? (
                 <FormField form={form} formField={formFields.hasteBegrunnelse} />
               ) : (
                 <FormField form={form} formField={formFields.begrunnelse} />
@@ -117,11 +113,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
 const markeringTypeTilEnum = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+      return 'HASTER' satisfies MarkeringType;
     case 'AVSLAG_11_5':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.AVSLAG_11_5;
+      return 'AVSLAG_11_5' satisfies MarkeringType;
     default:
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+      return 'HASTER' satisfies MarkeringType;
   }
 };
 
