@@ -6,6 +6,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { BehandlingFlytOgTilstand, Klageresultat } from 'lib/types/types';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { BodyShort } from '@navikt/ds-react';
 
 interface Props {
   behandlingsreferanse: string;
@@ -36,12 +37,12 @@ export const Opprettholdelse = async ({ behandlingsreferanse, flyt }: Props) => 
       <StegSuspense>
         {skalViseOpprettholdelsesInfo ? (
           <VilkårsKort steg={'OPPRETTHOLDELSE'} heading={'Opprettholdelse'}>
-            <p>{utledTekst(flyt)}</p>
-            <p>Følgende vilkår skal opprettholdes:</p>
-            <p>{vilkårSomSkalOpprettholdes(klageresultat.data)}</p>
+            <BodyShort>{utledTekst(flyt)}</BodyShort>
+            <BodyShort>Følgende vilkår skal opprettholdes:</BodyShort>
+            <BodyShort>{vilkårSomSkalOpprettholdes(klageresultat.data)}</BodyShort>
           </VilkårsKort>
         ) : (
-          <p>Velg fane for å se innhold i klagesaken</p>
+          <BodyShort>Velg fane for å se innhold i klagesaken</BodyShort>
         )}
       </StegSuspense>
     </GruppeSteg>
