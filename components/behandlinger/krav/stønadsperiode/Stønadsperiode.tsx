@@ -16,7 +16,7 @@ export const Stønadsperiode = ({ grunnlag }: Props) => {
     <VilkårsKort heading={'Forskrift om AAP § 12. Ny stønadsperiode'} steg={'AVKLAR_STØNADSPERIODE'}>
       <List size={'small'}>
         <List.Item>
-          For hvert relevante kravvurderes det om det er et krav om gjenopptak av en tidligere stønadsperiode eller ny
+          For hvert relevante krav vurderes det om det er et krav om gjenopptak av en tidligere stønadsperiode eller ny
           periode basert på gjenværende ordinær kvote og over / under 52 uker siden bruker har hatt ytelse.
         </List.Item>
         <List.Item>
