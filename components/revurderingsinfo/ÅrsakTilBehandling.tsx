@@ -28,7 +28,7 @@ export const ÅrsakTilBehandling = ({ behandling }: Props) => {
   const tittel =
     behandling.type === 'Revurdering'
       ? 'Årsak til revurdering'
-      : filtrerteÅrsaker.length > 1
+      : behandling.vurderingsbehovOgÅrsaker.length > 1
         ? 'Årsak til vurdering'
         : 'Årsak til opprettelse';
 
