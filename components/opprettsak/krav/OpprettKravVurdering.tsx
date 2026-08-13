@@ -37,7 +37,7 @@ export const OpprettKravVurdering = ({ form }: Props) => {
 
   return (
     <VStack gap="space-8">
-      <Label>Krav vurdering</Label>
+      <Label>Kravvurdering</Label>
       {fields.map((field, index) => (
         <HStack key={field.id} gap="space-8" align="end" wrap={false}>
           <SelectWrapper
@@ -85,7 +85,7 @@ export const OpprettKravVurdering = ({ form }: Props) => {
           })
         }
       >
-        Legg til krav vurdering
+        Legg til kravvurdering
       </Button>
     </VStack>
   );

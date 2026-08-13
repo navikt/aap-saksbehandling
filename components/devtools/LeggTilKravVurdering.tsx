@@ -70,8 +70,8 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
 
   return (
     <VStack gap="space-8">
-      <Heading size="small">Krav vurdering</Heading>
-      <ReadMore header="Hvordan legge til krav vurdering?" size="small">
+      <Heading size="small">Kravvurdering</Heading>
+      <ReadMore header="Hvordan legge til kravvurdering?" size="small">
         Det må først opprettes en ny revurdering før en ny kravvurdering kan legges til og lagres. Hvis dette ikke
         gjøres i riktig rekkefølge, kan den nye kravvurderingen bli lagret på den gamle behandlingen, noe som fører til
         feil kobling og registrering av data.
