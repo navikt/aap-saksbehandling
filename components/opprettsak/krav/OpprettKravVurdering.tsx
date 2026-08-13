@@ -7,14 +7,13 @@ import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { KravType, OpprettSakFormFields } from 'components/opprettsak/OpprettSakLocal';
 import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { subDays, subMonths } from 'date-fns';
+import { startOfMonth, subMonths } from 'date-fns';
 
 interface Props {
   form: UseFormReturn<OpprettSakFormFields>;
 }
 
-const defaultDato = formaterDatoForFrontend(subMonths(new Date(), 3));
-const defaultMuligRettFra = formaterDatoForFrontend(subDays(subMonths(new Date(), 1), 5));
+const defaultDato = formaterDatoForFrontend(startOfMonth(subMonths(new Date(), 3)));
 const kravTyperMedDatofelter: ReadonlySet<KravType> = new Set(['RELEVANT_KRAV']);
 
 const KravRadFelter = ({ form, index }: { form: UseFormReturn<OpprettSakFormFields>; index: number }) => {
@@ -38,7 +37,7 @@ export const OpprettKravVurdering = ({ form }: Props) => {
 
   return (
     <VStack gap="space-8">
-      <Label>Krav vurdering</Label>
+      <Label>Kravvurdering</Label>
       {fields.map((field, index) => (
         <HStack key={field.id} gap="space-8" align="end" wrap={false}>
           <SelectWrapper
@@ -49,7 +48,7 @@ export const OpprettKravVurdering = ({ form }: Props) => {
             rules={{
               onChange: () => {
                 form.setValue(`kravVurderinger.${index}.søknadsdato`, defaultDato);
-                form.setValue(`kravVurderinger.${index}.muligRettFra`, defaultMuligRettFra);
+                form.setValue(`kravVurderinger.${index}.muligRettFra`, defaultDato);
               },
             }}
           >
@@ -82,11 +81,11 @@ export const OpprettKravVurdering = ({ form }: Props) => {
           append({
             kravType: 'RELEVANT_KRAV',
             søknadsdato: defaultDato,
-            muligRettFra: defaultMuligRettFra,
+            muligRettFra: defaultDato,
           })
         }
       >
-        Legg til krav vurdering
+        Legg til kravvurdering
       </Button>
     </VStack>
   );

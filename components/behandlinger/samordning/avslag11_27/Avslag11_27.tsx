@@ -246,6 +246,12 @@ export const Avslag11_27 = ({
           const nåværendeVurdering = (grunnlag.vurderinger ?? []).find((v) => v.referanse === faktiskKrav.referanse);
           const visLeggTilVurderingKnapp = erRevurdering && !!vedtattVurdering;
 
+          const sorterteKrav = [...grunnlag.krav].sort(
+            (a, b) => new Date(a.søknadsdato).getTime() - new Date(b.søknadsdato).getTime()
+          );
+          const kravSortIndex = sorterteKrav.findIndex((k) => k.referanse === faktiskKrav.referanse);
+          const nesteKravSøknadsdato = sorterteKrav[kravSortIndex + 1]?.søknadsdato;
+
           return (
             <Avslag11_27KravGruppe
               key={kravField.id}
@@ -258,6 +264,7 @@ export const Avslag11_27 = ({
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
               visLeggTilVurderingKnapp={visLeggTilVurderingKnapp}
+              nesteKravSøknadsdato={nesteKravSøknadsdato}
               brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer.filter(
                 (ytelse) => ytelse !== 'FERIE_I_SYKEPENGEPERIODE'
               )}

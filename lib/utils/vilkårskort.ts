@@ -78,6 +78,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'GRUNNLAG/#INNTEKTSBORTFALL';
     case Behovstype.FASTSETT_VEDTAKSLENGDE:
       return 'VEDTAKSLENGDE/#VEDTAKSLENGDE';
+    case Behovstype.VURDER_AVSLAG_11_27:
+      return 'AVSLAG_11_27';
     default:
       return 'SYKDOM';
   }
