@@ -12,7 +12,7 @@ import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { Alert } from '../../../alert/Alert';
+import { Alert } from 'components/alert/Alert';
 interface Props {
   grunnlag: TrukketSøknadGrunnlag;
   readOnly: boolean;
@@ -20,7 +20,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-type TrukketSøknadÅrsak = 'FOR_TIDLIG' | 'FEIL_YTELSE' | 'BRUKER_ONSKER_IKKE' | 'ANNET';
+type TrukketSøknadÅrsak = 'BRUKER_SOKTE_FOR_TIDLIG' | 'BRUKER_SOKTE_FEIL_YTELSE' | 'BRUKER_ONSKER_IKKE_SOKE_LENGER' | 'ANNET';
 
 interface FormFields {
   begrunnelse: string;
@@ -67,9 +67,9 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         type: 'radio',
         label: 'Hva er årsaken?',
         options: [
-          { label: 'Brukeren søkte for tidlig', value: 'FOR_TIDLIG' },
-          { label: 'Brukeren søkte på feil ytelse', value: 'FEIL_YTELSE' },
-          { label: 'Brukeren ønsker ikke å søke om AAP lenger', value: 'BRUKER_ONSKER_IKKE' },
+          { label: 'Brukeren søkte for tidlig', value: 'BRUKER_SOKTE_FOR_TIDLIG' },
+          { label: 'Brukeren søkte på feil ytelse', value: 'BRUKER_SOKTE_FEIL_YTELSE' },
+          { label: 'Brukeren ønsker ikke å søke om AAP lenger', value: 'BRUKER_ONSKER_IKKE_SOKE_LENGER' },
           { label: 'Annet', value: 'ANNET' },
         ],
         rules: { required: 'Du må velge en årsak for å trekke søknaden' },
