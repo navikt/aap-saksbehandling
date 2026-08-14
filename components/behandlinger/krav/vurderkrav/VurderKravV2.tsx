@@ -83,7 +83,7 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
           referanse: behandlingsreferanse,
           behov: {
             behovstype: Behovstype.VURDER_KRAV_KODE,
-            kravVurderinger: byggKravVurderingerFraSkjema(grunnlag, data.vurderinger, data.valgteKrav ?? []),
+            kravVurderinger: byggKravVurderingerFraSkjema(grunnlag, data.vurderinger),
           },
         },
         () => {
