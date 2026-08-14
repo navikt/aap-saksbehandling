@@ -77,7 +77,6 @@ import {
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
   RettighetsinfoDto,
-  MigreringsdatoGrunnlag,
   RettighetsperiodeGrunnlag,
   SakPersoninfo,
   SaksInfo,
@@ -414,11 +413,6 @@ export const hentAvbruttAktivitetspliktbehandling = async (behandlingsreferanse:
 export const hentRettighetsperiodeGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/rettighetsperiode`;
   return await apiFetch<RettighetsperiodeGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
-export const hentMigreringsdatoGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/migreringsdato`;
-  return await apiFetch<MigreringsdatoGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFormkravGrunnlag = async (behandlingsreferanse: string) => {
