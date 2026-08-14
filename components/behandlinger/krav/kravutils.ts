@@ -5,6 +5,7 @@ import {
   KravVurderingLøsning,
   RelevantKrav,
   OverstyrMuligRettFra,
+  SøknadUtenKrav,
   Søknadsdato,
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
@@ -51,8 +52,6 @@ export function formaterKravtype(type: KravType) {
       return 'Tilleggsopplysning';
     case 'TRUKKET_SØKNAD':
       return 'Trukket søknad';
-    default:
-      return 'Ukjent';
   }
 }
 
@@ -139,11 +138,39 @@ export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurder
   };
 }
 
-export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string, KravVurderingFormFields> {
-  const alleVurderinger = [...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])];
-  return Object.fromEntries(alleVurderinger.map((v) => [v.referanse, kravVurderingTilFormFields(v)]));
+/**
+ * Bygger default-verdiene for en søknad som ennå ikke har noen kravvurdering.
+ * Brukes til å opprette et nytt RELEVANT_KRAV via KravBoks – søknadsdato/årsak
+ * forhåndsutfylles ut fra når søknaden ble mottatt, men kan endres av saksbehandler.
+ */
+export function søknadUtenKravTilFormFields(søknad: SøknadUtenKrav): KravVurderingFormFields {
+  return {
+    kravtype: 'RELEVANT_KRAV',
+    journalpostId: søknad.journalpostId.identifikator,
+    begrunnelse: '',
+    søknadsdatoDato: formaterDatoForFrontend(søknad.mottattTidspunkt),
+    søknadsdatoÅrsak: 'SøknadMottatt',
+    overstyrDato: '',
+    overstyrÅrsak: '',
+  };
 }
 
+export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string, KravVurderingFormFields> {
+  const alleVurderinger = [...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])];
+  const fraVurderinger = Object.fromEntries(alleVurderinger.map((v) => [v.referanse, kravVurderingTilFormFields(v)]));
+  const fraSøknaderUtenKrav = Object.fromEntries(
+    (grunnlag?.søknaderUtenKravvurdering ?? []).map((s) => [
+      s.journalpostId.identifikator,
+      søknadUtenKravTilFormFields(s),
+    ])
+  );
+  return { ...fraVurderinger, ...fraSøknaderUtenKrav };
+}
+
+/**
+ * Referansen som brukes i skjemaet (valgteKrav/vurderinger) for en søknad uten krav er
+ * journalpostens id, siden søknaden ennå ikke har en kravvurdering med egen referanse.
+ */
 export function finnKravVurderingByReferanse(
   grunnlag: KravGrunnlag | undefined,
   referanse: string
@@ -152,6 +179,30 @@ export function finnKravVurderingByReferanse(
     grunnlag?.nyeVurderinger.find((v) => v.referanse === referanse) ??
     grunnlag?.vedtatteVurderinger.find((v) => v.referanse === referanse)
   );
+}
+
+export function finnSøknadUtenKravByReferanse(
+  grunnlag: KravGrunnlag | undefined,
+  referanse: string
+): SøknadUtenKrav | undefined {
+  return grunnlag?.søknaderUtenKravvurdering.find((s) => s.journalpostId.identifikator === referanse);
+}
+
+/**
+ * Henter originalverdiene et felt i skjemaet skal nullstilles til når det lukkes, uavhengig
+ * av om referansen peker på et eksisterende krav eller en søknad som ennå ikke er vurdert.
+ */
+export function hentOriginaleFormFelter(
+  grunnlag: KravGrunnlag | undefined,
+  referanse: string
+): KravVurderingFormFields | undefined {
+  const krav = finnKravVurderingByReferanse(grunnlag, referanse);
+  if (krav) return kravVurderingTilFormFields(krav);
+
+  const søknad = finnSøknadUtenKravByReferanse(grunnlag, referanse);
+  if (søknad) return søknadUtenKravTilFormFields(søknad);
+
+  return undefined;
 }
 
 export type KravKilde = 'VEDTATT' | 'NY' | 'LOKAL_NY';
@@ -298,23 +349,36 @@ export function byggKravVurderinger(rader: KravRadFormFields[]): KravVurderingL�
  * Bygger payloaden til løs-behov ut fra KravBoks (VurderKravV2) sitt skjema, som holder
  * feltene nøstet per krav-referanse i stedet for som flate rader. Kun vedtatte krav skal
  * overstyres via referanse – nye vurderinger sendes uten referanse (se radTilLøsning).
+ *
+ * `vurderinger` inneholder også utkast for søknader uten krav (se søknadUtenKravTilFormFields),
+ * slik at feltene har verdier klare når boksen åpnes. Disse skal kun sendes inn som et nytt krav
+ * dersom boksen fortsatt er åpen (referansen finnes i `valgteKrav`) – lukker saksbehandler boksen
+ * uten å opprette et krav, skal ikke søknaden bli til en tom/ubehandlet kravvurdering.
  */
 export function byggKravVurderingerFraSkjema(
   grunnlag: KravGrunnlag | undefined,
-  vurderinger: Record<string, KravVurderingFormFields>
+  vurderinger: Record<string, KravVurderingFormFields>,
+  valgteKrav: string[]
 ): KravVurderingLøsning[] {
   const vedtatteReferanser = new Set((grunnlag?.vedtatteVurderinger ?? []).map((v) => v.referanse));
+  const eksisterendeReferanser = new Set([
+    ...(grunnlag?.nyeVurderinger ?? []).map((v) => v.referanse),
+    ...vedtatteReferanser,
+  ]);
+  const åpneReferanser = new Set(valgteKrav);
 
-  return Object.entries(vurderinger).map(([referanse, felt]) =>
-    byggLøsningFraFelter({
-      kravType: felt.kravtype,
-      journalpostId: felt.journalpostId,
-      begrunnelse: felt.begrunnelse,
-      søknadsdatoDato: felt.søknadsdatoDato,
-      søknadsdatoÅrsak: felt.søknadsdatoÅrsak,
-      overstyrDato: felt.overstyrDato,
-      overstyrÅrsak: felt.overstyrÅrsak,
-      referanse: vedtatteReferanser.has(referanse) ? referanse : undefined,
-    })
-  );
+  return Object.entries(vurderinger)
+    .filter(([referanse]) => eksisterendeReferanser.has(referanse) || åpneReferanser.has(referanse))
+    .map(([referanse, felt]) =>
+      byggLøsningFraFelter({
+        kravType: felt.kravtype,
+        journalpostId: felt.journalpostId,
+        begrunnelse: felt.begrunnelse,
+        søknadsdatoDato: felt.søknadsdatoDato,
+        søknadsdatoÅrsak: felt.søknadsdatoÅrsak,
+        overstyrDato: felt.overstyrDato,
+        overstyrÅrsak: felt.overstyrÅrsak,
+        referanse: vedtatteReferanser.has(referanse) ? referanse : undefined,
+      })
+    );
 }

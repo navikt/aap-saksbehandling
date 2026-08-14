@@ -3,8 +3,9 @@ import {
   finnSøknadsdato,
   formaterKravtype,
   kravVurderingTilFormFields,
+  søknadUtenKravTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
-import { BodyShort, Box, Button, Detail, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Detail, HStack, Label, Tag, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { useFormContext } from 'react-hook-form';
@@ -17,74 +18,100 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 
 const ALLE_KRAVTYPER: KravType[] = ['RELEVANT_KRAV', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
 
+export type KravBoksInnhold =
+  | { kilde: 'EKSISTERENDE'; krav: KravVurdering }
+  | { kilde: 'NY_SØKNAD'; søknad: SøknadUtenKrav };
+
 interface Props {
-  krav: KravVurdering;
+  innhold: KravBoksInnhold;
   erVedtatt: boolean;
-  søknaderUtenKravvurdering: SøknadUtenKrav[];
   onLukk: () => void;
 }
 
-export const KravBoks = ({ krav, onLukk }: Props) => {
+export const KravBoks = ({ innhold, onLukk }: Props) => {
+  const erNySøknad = innhold.kilde === 'NY_SØKNAD';
+  const referanse =
+    innhold.kilde === 'EKSISTERENDE' ? innhold.krav.referanse : innhold.søknad.journalpostId.identifikator;
+
   const [visVurderOmKravErRelevantFelt, setVisVurderOmKravErRelevantFelt] = useState<boolean>(false);
   const [visEndreSøknadsdatoFelt, setVisEndreSøknadsdatoFelt] = useState<boolean>(false);
   const [visMuligRettFraFelt, setVisMuligRettFraFelt] = useState<boolean>(false);
 
   const form = useFormContext<KravFormFields>();
 
-  const søknadsdato = finnSøknadsdato(krav);
+  // Visningsverdier for toppfeltene i hver bolk. For en ny søknad finnes det ennå ingen
+  // kravvurdering å hente disse fra, så vi viser i stedet forhåndsutfylte/tomme standardverdier.
+  const kravtypeVisning: KravType = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.type : 'RELEVANT_KRAV';
+  const søknadsdato =
+    innhold.kilde === 'EKSISTERENDE' ? finnSøknadsdato(innhold.krav) : { dato: innhold.søknad.mottattTidspunkt };
+  const muligRettFra =
+    innhold.kilde === 'EKSISTERENDE' && 'muligRettFra' in innhold.krav ? innhold.krav.muligRettFra : null;
 
-  // Opprinnelige verdier fra grunnlaget, brukt til å nullstille feltene i en bolk når den lukkes.
-  const originaleVerdier = useMemo(() => kravVurderingTilFormFields(krav), [krav]);
+  // Opprinnelige verdier, brukt til å nullstille feltene i en bolk når den lukkes.
+  const originaleVerdier = useMemo(
+    () =>
+      innhold.kilde === 'EKSISTERENDE'
+        ? kravVurderingTilFormFields(innhold.krav)
+        : søknadUtenKravTilFormFields(innhold.søknad),
+    [innhold]
+  );
 
   const toggleVurderOmKravErRelevantFelt = () => {
     if (visVurderOmKravErRelevantFelt) {
-      form.setValue(`vurderinger.${krav.referanse}.kravtype`, originaleVerdier.kravtype);
+      form.setValue(`vurderinger.${referanse}.kravtype`, originaleVerdier.kravtype);
     }
     setVisVurderOmKravErRelevantFelt(!visVurderOmKravErRelevantFelt);
   };
 
   const toggleEndreSøknadsdatoFelt = () => {
     if (visEndreSøknadsdatoFelt) {
-      form.setValue(`vurderinger.${krav.referanse}.søknadsdatoDato`, originaleVerdier.søknadsdatoDato);
-      form.setValue(`vurderinger.${krav.referanse}.søknadsdatoÅrsak`, originaleVerdier.søknadsdatoÅrsak);
-      form.setValue(`vurderinger.${krav.referanse}.overstyrÅrsak`, originaleVerdier.overstyrÅrsak);
+      form.setValue(`vurderinger.${referanse}.søknadsdatoDato`, originaleVerdier.søknadsdatoDato);
+      form.setValue(`vurderinger.${referanse}.søknadsdatoÅrsak`, originaleVerdier.søknadsdatoÅrsak);
+      form.setValue(`vurderinger.${referanse}.overstyrÅrsak`, originaleVerdier.overstyrÅrsak);
     }
     setVisEndreSøknadsdatoFelt(!visEndreSøknadsdatoFelt);
   };
 
   const toggleMuligRettFraFelt = () => {
     if (visMuligRettFraFelt) {
-      form.setValue(`vurderinger.${krav.referanse}.overstyrDato`, originaleVerdier.overstyrDato);
+      form.setValue(`vurderinger.${referanse}.overstyrDato`, originaleVerdier.overstyrDato);
     }
     setVisMuligRettFraFelt(!visMuligRettFraFelt);
   };
 
-  // const kravtype = useWatch({ control: form.control, name: `vurderinger.${krav.referanse}.kravtype` });
-
   return (
-    <Box borderWidth="1" borderRadius="12" borderColor="neutral-subtle">
-      <Box padding="space-8" background="neutral-moderate" borderRadius="12 12 0 0">
-        <HStack align={'center'} gap={'space-12'} padding={'space-8'}>
-          <TasklistIcon title="a11y-title" fontSize="2rem" />
-          <VStack>
-            <Detail>Søknadsdato: {søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}</Detail>
-            <BodyShort weight={'semibold'} size={'small'}>
-              Vurder krav {krav.referanse}
-            </BodyShort>
-          </VStack>
+    <Box borderWidth="1" borderRadius="12" borderColor={erNySøknad ? 'accent-subtle' : 'neutral-subtle'}>
+      <Box padding="space-8" background={erNySøknad ? 'accent-moderate' : 'neutral-moderate'} borderRadius="12 12 0 0">
+        <HStack align={'center'} justify={'space-between'} gap={'space-12'} padding={'space-8'}>
+          <HStack align={'center'} gap={'space-12'}>
+            <TasklistIcon title="a11y-title" fontSize="2rem" />
+            <VStack>
+              <Detail>Søknadsdato: {søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}</Detail>
+              <BodyShort weight={'semibold'} size={'small'}>
+                {erNySøknad ? `Ny søknad ${referanse}` : `Vurder krav ${referanse}`}
+              </BodyShort>
+            </VStack>
+          </HStack>
+          {erNySøknad && (
+            <Tag variant="warning" size="small">
+              Trenger vurdering
+            </Tag>
+          )}
         </HStack>
       </Box>
+
       <Box padding="space-16">
         <VStack gap="space-16">
           <HStack justify="space-between">
-            <BodyShort weight={'semibold'}>{formaterKravtype(krav.type)}</BodyShort>
+            <BodyShort weight={'semibold'}>{formaterKravtype(kravtypeVisning)}</BodyShort>
             <Button type="button" size="small" variant="tertiary" onClick={onLukk}>
               Lukk
             </Button>
           </HStack>
+
           <Bolk
             label={'Type krav'}
-            value={formaterKravtype(krav.type)}
+            value={formaterKravtype(kravtypeVisning)}
             buttonTekst={
               visVurderOmKravErRelevantFelt ? 'Avbryt vurder om krav er relevant' : 'Vurder om krav er relevant'
             }
@@ -93,7 +120,7 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
           >
             <SelectWrapper
               control={form.control}
-              name={`vurderinger.${krav.referanse}.kravtype`}
+              name={`vurderinger.${referanse}.kravtype`}
               label="Kravtype"
               size="small"
             >
@@ -104,15 +131,7 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
               ))}
             </SelectWrapper>
           </Bolk>
-          {/*{!erVedtatt && journalpostOptions.length > 0 && (*/}
-          {/*  <Select label="Journalpost" size="small" {...register(`vurderinger.${krav.referanse}.journalpostId`)}>*/}
-          {/*    {journalpostOptions.map((j) => (*/}
-          {/*      <option key={j.id} value={j.id}>*/}
-          {/*        {j.id}*/}
-          {/*      </option>*/}
-          {/*    ))}*/}
-          {/*  </Select>*/}
-          {/*)}*/}
+
           <Bolk
             label={'Søknadsdato'}
             value={søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}
@@ -122,7 +141,7 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
           >
             <VStack gap={'space-16'}>
               <DateInputWrapper
-                name={`vurderinger.${krav.referanse}.søknadsdatoDato`}
+                name={`vurderinger.${referanse}.søknadsdatoDato`}
                 control={form.control}
                 label="Søknadsdato"
                 size={'small'}
@@ -130,7 +149,7 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
               />
               <SelectWrapper
                 control={form.control}
-                name={`vurderinger.${krav.referanse}.søknadsdatoÅrsak`}
+                name={`vurderinger.${referanse}.søknadsdatoÅrsak`}
                 label="Årsak for søknadsdato"
                 size="small"
                 rules={{ required: 'Du må velge årsak for søknadsdato.' }}
@@ -142,7 +161,7 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
               </SelectWrapper>
               <SelectWrapper
                 control={form.control}
-                name={`vurderinger.${krav.referanse}.overstyrÅrsak`}
+                name={`vurderinger.${referanse}.overstyrÅrsak`}
                 label="Årsak for overstyring (valgfri)"
                 size="small"
               >
@@ -155,13 +174,13 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
 
           <Bolk
             label={'Mulig rett fra'}
-            value={'muligRettFra' in krav ? formaterDatoForFrontend(krav.muligRettFra) : '-'}
+            value={muligRettFra ? formaterDatoForFrontend(muligRettFra) : '-'}
             buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
             onClick={toggleMuligRettFraFelt}
             isOpen={visMuligRettFraFelt}
           >
             <DateInputWrapper
-              name={`vurderinger.${krav.referanse}.overstyrDato`}
+              name={`vurderinger.${referanse}.overstyrDato`}
               control={form.control}
               label="Overstyr mulig rett fra"
             />
@@ -169,7 +188,7 @@ export const KravBoks = ({ krav, onLukk }: Props) => {
 
           <TextAreaWrapper
             control={form.control}
-            name={`vurderinger.${krav.referanse}.begrunnelse`}
+            name={`vurderinger.${referanse}.begrunnelse`}
             label="Begrunnelse"
             size="small"
             rules={{ required: 'Du må skrive inn en begrunnelse.' }}

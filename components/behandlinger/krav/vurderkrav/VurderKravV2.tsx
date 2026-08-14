@@ -5,19 +5,19 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { KravTabellV2 } from 'components/behandlinger/krav/kravtabell/KravTabellV2';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
-import { BodyShort, Box, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import {
   byggInitielleVurderinger,
   byggKravVurderingerFraSkjema,
   finnKravVurderingByReferanse,
-  kravVurderingTilFormFields,
+  finnSøknadUtenKravByReferanse,
+  hentOriginaleFormFelter,
   KravVurderingFormFields,
 } from 'components/behandlinger/krav/kravutils';
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { formaterDatoForFrontend } from 'lib/utils/date';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { SubmitEventHandler } from 'react';
 
@@ -43,8 +43,11 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
   );
 
   const defaultValues: KravFormFields = initialMellomlagretVurdering
-    ? (JSON.parse(initialMellomlagretVurdering.data) as KravFormFields)
-    : { valgteKrav: [], vurderinger: byggInitielleVurderinger(grunnlag) };
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : {
+        valgteKrav: (grunnlag?.søknaderUtenKravvurdering ?? []).map((s) => s.journalpostId.identifikator),
+        vurderinger: byggInitielleVurderinger(grunnlag),
+      };
 
   const form = useForm<KravFormFields>({ defaultValues });
   const { control, setValue, getValues } = form;
@@ -61,11 +64,9 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
 
   const lukkKrav = (referanse: string) => {
-    // Nullstill feltene til opprinnelig verdi fra grunnlaget, slik at ulagrede
-    // endringer forkastes når boksen lukkes.
-    const krav = finnKravVurderingByReferanse(grunnlag, referanse);
-    if (krav) {
-      setValue(`vurderinger.${referanse}`, kravVurderingTilFormFields(krav));
+    const originaleFelter = hentOriginaleFormFelter(grunnlag, referanse);
+    if (originaleFelter) {
+      setValue(`vurderinger.${referanse}`, originaleFelter);
     }
 
     setValue(
@@ -82,7 +83,7 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
           referanse: behandlingsreferanse,
           behov: {
             behovstype: Behovstype.VURDER_KRAV_KODE,
-            kravVurderinger: byggKravVurderingerFraSkjema(grunnlag, data.vurderinger),
+            kravVurderinger: byggKravVurderingerFraSkjema(grunnlag, data.vurderinger, data.valgteKrav ?? []),
           },
         },
         () => {
@@ -113,32 +114,23 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
       formReset={() => form.reset()}
     >
       <VStack gap={'space-16'}>
-        {grunnlag?.søknaderUtenKravvurdering && grunnlag.søknaderUtenKravvurdering.length > 0 && (
-          <Box>
-            <BodyShort>Søknader som mangler vurdering: </BodyShort>
-            {grunnlag?.søknaderUtenKravvurdering.map((søknad) => (
-              <BodyShort key={søknad.journalpostId.identifikator}>
-                {søknad.journalpostId.identifikator}: {formaterDatoForFrontend(søknad.mottattTidspunkt)}{' '}
-              </BodyShort>
-            ))}
-          </Box>
-        )}
-
         <FormProvider {...form}>
           <KravTabellV2 grunnlag={grunnlag} readOnly={formReadOnly} />
           <VStack gap="space-16">
             {valgteKrav.map((referanse) => {
               const krav = finnKravVurderingByReferanse(grunnlag, referanse);
-              if (!krav) return null;
+              const søknad = !krav ? finnSøknadUtenKravByReferanse(grunnlag, referanse) : undefined;
+              if (!krav && !søknad) return null;
 
-              const erVedtatt = grunnlag?.vedtatteVurderinger.some((v) => v.referanse === referanse) ?? false;
+              const erVedtatt = krav
+                ? (grunnlag?.vedtatteVurderinger.some((v) => v.referanse === referanse) ?? false)
+                : false;
 
               return (
                 <KravBoks
                   key={referanse}
-                  krav={krav}
+                  innhold={krav ? { kilde: 'EKSISTERENDE', krav } : { kilde: 'NY_SØKNAD', søknad: søknad! }}
                   erVedtatt={erVedtatt}
-                  søknaderUtenKravvurdering={grunnlag?.søknaderUtenKravvurdering ?? []}
                   onLukk={() => lukkKrav(referanse)}
                 />
               );

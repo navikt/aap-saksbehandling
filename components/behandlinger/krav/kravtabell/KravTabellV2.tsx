@@ -8,7 +8,7 @@ import {
   finnSøknadsdato,
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
-  kravVurderingTilFormFields,
+  hentOriginaleFormFelter,
 } from 'components/behandlinger/krav/kravutils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -24,19 +24,18 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
   const { control, getValues, setValue } = form;
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
 
-  const toggleValgtKrav = (vurdering: KravVurdering) => {
+  const toggleValgtKrav = (referanse: string) => {
     const gjeldende = getValues('valgteKrav') ?? [];
-    const erÅpen = gjeldende.includes(vurdering.referanse);
+    const erÅpen = gjeldende.includes(referanse);
 
     if (erÅpen) {
-      // Lukker boksen - nullstill feltene til opprinnelig verdi fra grunnlaget,
-      // slik at ulagrede endringer forkastes.
-      setValue(`vurderinger.${vurdering.referanse}`, kravVurderingTilFormFields(vurdering));
+      const originaleFelter = hentOriginaleFormFelter(grunnlag, referanse);
+      if (originaleFelter) {
+        setValue(`vurderinger.${referanse}`, originaleFelter);
+      }
     }
 
-    const nyeValgteKrav = erÅpen
-      ? gjeldende.filter((r) => r !== vurdering.referanse)
-      : [...gjeldende, vurdering.referanse];
+    const nyeValgteKrav = erÅpen ? gjeldende.filter((r) => r !== referanse) : [...gjeldende, referanse];
     setValue('valgteKrav', nyeValgteKrav);
   };
 
@@ -82,7 +81,7 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
                     type="button"
                     size="small"
                     variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(vurdering)}
+                    onClick={() => toggleValgtKrav(vurdering.referanse)}
                     disabled={readOnly}
                   >
                     {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
@@ -91,29 +90,6 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
               </Table.ExpandableRow>
             );
           })}
-
-          {/*{Object.entries(lokaleNyeKrav).map(([key, løsning]) => (*/}
-          {/*  <Table.ExpandableRow content={løsning.begrunnelse} key={key}>*/}
-          {/*    <Table.DataCell>{løsning.journalpostId.identifikator}</Table.DataCell>*/}
-          {/*    <Table.DataCell>{formaterKravtype(løsning.kravType)}</Table.DataCell>*/}
-          {/*    <Table.DataCell>{formaterSøknadsdatoFraLøsningRad(løsning)}</Table.DataCell>*/}
-          {/*    <Table.DataCell>{formaterOverstyrFraLøsningRad(løsning)}</Table.DataCell>*/}
-          {/*    <Table.DataCell>—</Table.DataCell>*/}
-          {/*    <Table.DataCell>*/}
-          {/*      <Tag variant="alt3" size="small">*/}
-          {/*        Lagt til*/}
-          {/*      </Tag>*/}
-          {/*    </Table.DataCell>*/}
-          {/*    <Table.DataCell>*/}
-          {/*      <Button type="button" size="small" variant="secondary" onClick={() => console.log('Ikke implementert')}>*/}
-          {/*        Endre*/}
-          {/*      </Button>*/}
-          {/*      <Button type="button" size="small" variant="tertiary" onClick={() => console.log('Ikke implementert')}>*/}
-          {/*        Slett*/}
-          {/*      </Button>*/}
-          {/*    </Table.DataCell>*/}
-          {/*  </Table.ExpandableRow>*/}
-          {/*))}*/}
 
           {grunnlag?.vedtatteVurderinger.map((vurdering) => {
             return (
@@ -125,8 +101,8 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
                 <Table.DataCell textSize={'small'}>{formaterOverstyrMuligRettFraRad(vurdering)}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
-                  <Tag variant="alt1" size="small">
-                    Ny
+                  <Tag variant="success" size="small">
+                    Vedtatt
                   </Tag>
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
@@ -134,10 +110,41 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
                     type="button"
                     size="small"
                     variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(vurdering)}
+                    onClick={() => toggleValgtKrav(vurdering.referanse)}
                     disabled={readOnly}
                   >
                     {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
+                  </Button>
+                </Table.DataCell>
+              </Table.ExpandableRow>
+            );
+          })}
+
+          {grunnlag?.søknaderUtenKravvurdering.map((søknad) => {
+            const referanse = søknad.journalpostId.identifikator;
+
+            return (
+              <Table.ExpandableRow content="Søknaden har ikke en kravvurdering ennå." key={referanse}>
+                <Table.DataCell textSize={'small'}>{søknad.journalpostId.identifikator}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(søknad.mottattTidspunkt)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>-</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(søknad.mottattTidspunkt)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>-</Table.DataCell>
+                <Table.DataCell textSize={'small'}>-</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  <Tag variant="warning" size="small">
+                    Trenger vurdering
+                  </Tag>
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  <Button
+                    type="button"
+                    size="small"
+                    variant={valgteKrav.includes(referanse) ? 'primary' : 'secondary'}
+                    onClick={() => toggleValgtKrav(referanse)}
+                    disabled={readOnly}
+                  >
+                    {valgteKrav.includes(referanse) ? 'Lukk' : 'Vurder'}
                   </Button>
                 </Table.DataCell>
               </Table.ExpandableRow>
