@@ -7,7 +7,7 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 import { Behovstype, HvorSkalSøknadenBehandles } from 'lib/postmottakForm';
 import { ManuellFordelingsgrunnlagResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
-import { LøsAvklaringsbehovPåBehandling } from 'lib/types/postmottakTypes';
+import { StegType } from 'lib/types/postmottakTypes';
 import { ForeldrepengeperiodeDTO, SykepengeperiodeDTO } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { SubmitEventHandler } from 'react';
@@ -17,15 +17,12 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
+import {
+  ANTALL_MANEDER_TILBAKE_SYKEPENGER,
+  ANTALL_UKER_TILBAKE_FORELDREPENGER,
+} from 'components/postmottak/vurderopprettelseavsak/konstanter';
 
 const arenaVisningsklientBaseUrl = process.env.NEXT_PUBLIC_ARENA_VISNINGSKLIENT_BASE_URL ?? '';
-
-/**
- * Hvor langt tilbake i tid vi slår opp ytelsesperioder for søker.
- * Brukes kun til visningstekst her – selve oppslaget gjøres i VurderOpprettelseAvSakMedDataFetching.
- */
-const ANTALL_UKER_TILBAKE_FORELDREPENGER = 52;
-const ANTALL_MÅNEDER_TILBAKE_SYKEPENGER = 2;
 
 const AKTFASEKODE_TIL_TEKST: Record<string, string> = {
   UA: 'Under arbeidsavklaring',
@@ -50,8 +47,8 @@ interface FormFields {
   kommentar: string;
 }
 
-// Behovet løses i steget AVKLAR_FORDELING.
-const STEG = 'AVKLAR_FORDELING';
+// Behovet 1343 løses i steget AVKLAR_FORDELING.
+const STEG = 'AVKLAR_FORDELING' satisfies StegType;
 
 const hvorBehandlesOptions = [
   {
@@ -123,12 +120,11 @@ export const VurderOpprettelseAvSak = ({
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
         behandlingVersjon: behandlingsVersjon,
-        // TODO: Fjern casten når backend-typene eksponerer løsning-DTO for behov 1343.
         behov: {
           behovstype: Behovstype.AVKLAR_FORDELING,
           valgtSystem: data.hvorBehandles,
           kommentar: data.kommentar || null,
-        } as unknown as LøsAvklaringsbehovPåBehandling['behov'],
+        },
         referanse: behandlingsreferanse,
       });
     })(event);
@@ -227,7 +223,7 @@ export const VurderOpprettelseAvSak = ({
               <HStack gap="space-4" align="center">
                 <ExclamationmarkTriangleIcon aria-hidden color="var(--a-orange-500)" fontSize="1rem" />
                 <BodyShort size="small">
-                  Det er utbetalt sykepenger de siste {ANTALL_MÅNEDER_TILBAKE_SYKEPENGER} månedene
+                  Det er utbetalt sykepenger de siste {ANTALL_MANEDER_TILBAKE_SYKEPENGER} månedene
                 </BodyShort>
               </HStack>
             </VStack>

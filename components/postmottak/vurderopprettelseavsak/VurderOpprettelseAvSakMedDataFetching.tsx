@@ -11,14 +11,11 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 
 import { Alert } from 'components/alert/Alert';
 import { VurderOpprettelseAvSak } from 'components/postmottak/vurderopprettelseavsak/VurderOpprettelseAvSak';
+import {
+  ANTALL_MANEDER_TILBAKE_SYKEPENGER,
+  ANTALL_UKER_TILBAKE_FORELDREPENGER,
+} from 'components/postmottak/vurderopprettelseavsak/konstanter';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-
-/**
- * Hvor langt tilbake i tid vi slår opp ytelsesperioder for søker.
- * Foreldrepenger følger 52-ukersvurderingen, sykepenger ser kun på de siste par månedene.
- */
-const ANTALL_UKER_TILBAKE_FORELDREPENGER = 52;
-const ANTALL_MÅNEDER_TILBAKE_SYKEPENGER = 2;
 
 interface Props {
   behandlingsreferanse: string;
@@ -56,7 +53,7 @@ export const VurderOpprettelseAvSakMedDataFetching = async ({ behandlingsreferan
   };
   const sykepengerRequest: YtelseoppslagRequest = {
     personident,
-    fom: formaterDatoForBackend(subMonths(iDag, ANTALL_MÅNEDER_TILBAKE_SYKEPENGER)),
+    fom: formaterDatoForBackend(subMonths(iDag, ANTALL_MANEDER_TILBAKE_SYKEPENGER)),
     tom: formaterDatoForBackend(iDag),
   };
 
@@ -71,7 +68,6 @@ export const VurderOpprettelseAvSakMedDataFetching = async ({ behandlingsreferan
     hentSykepengeperioder(sykepengerRequest),
   ]);
 
-  console.log(arenaFordelingsGrunnlag);
   if (isError(arenaFordelingsGrunnlag) || isError(foreldrepengeperioder) || isError(sykepengeperioder)) {
     return <ApiException apiResponses={[arenaFordelingsGrunnlag, foreldrepengeperioder, sykepengeperioder]} />;
   }
