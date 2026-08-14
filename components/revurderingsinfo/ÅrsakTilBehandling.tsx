@@ -1,15 +1,13 @@
 'use client';
 
 import { BodyLong, Box, Detail, ExpansionCard, HStack, Label, VStack } from '@navikt/ds-react';
-import { TypeBehandling, VurderingsbehovOgÅrsak } from 'lib/types/types';
+import { DetaljertBehandling, TypeBehandling, VurderingsbehovOgÅrsak } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapTilÅrsakTilOpprettelseTilTekst } from 'lib/utils/oversettelser';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { TasklistStartIcon } from '@navikt/aksel-icons';
-
 interface Props {
-  vurderingsbehovOgÅrsaker: VurderingsbehovOgÅrsak[];
-  behandlingType: TypeBehandling;
+  behandling: DetaljertBehandling;
 }
 
 export function filtrerÅrsakerForBehandlingType(
@@ -17,17 +15,20 @@ export function filtrerÅrsakerForBehandlingType(
   behandlingType: TypeBehandling
 ): VurderingsbehovOgÅrsak[] {
   return behandlingType === 'Førstegangsbehandling'
-    ? vurderingsbehovOgÅrsaker.filter((årsak) => !!årsak.beskrivelse)
+    ? vurderingsbehovOgÅrsaker.filter((årsak) => !!årsak.beskrivelse || årsak.årsak === 'HELSEOPPLYSNINGER')
     : vurderingsbehovOgÅrsaker;
 }
 
-export const ÅrsakTilBehandling = ({ vurderingsbehovOgÅrsaker, behandlingType }: Props) => {
-  const filtrerteÅrsaker = filtrerÅrsakerForBehandlingType(vurderingsbehovOgÅrsaker, behandlingType);
+export const ÅrsakTilBehandling = ({ behandling }: Props) => {
+  const filtrerteÅrsaker = filtrerÅrsakerForBehandlingType(behandling.vurderingsbehovOgÅrsaker, behandling.type);
+  if (filtrerteÅrsaker.length === 0) {
+    return null;
+  }
 
   const tittel =
-    behandlingType === 'Revurdering'
+    behandling.type === 'Revurdering'
       ? 'Årsak til revurdering'
-      : filtrerteÅrsaker.length > 1
+      : behandling.vurderingsbehovOgÅrsaker.length > 1
         ? 'Årsak til vurdering'
         : 'Årsak til opprettelse';
 
