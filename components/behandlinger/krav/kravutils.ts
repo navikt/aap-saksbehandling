@@ -345,30 +345,33 @@ export function byggKravVurderinger(rader: KravRadFormFields[]): KravVurderingL�
   return rader.filter((r) => !r.slettet).map(radTilLøsning);
 }
 
-/**
- * Bygger payloaden til løs-behov ut fra KravBoks (VurderKravV2) sitt skjema, som holder
- * feltene nøstet per krav-referanse i stedet for som flate rader. Kun vedtatte krav skal
- * overstyres via referanse – nye vurderinger sendes uten referanse (se radTilLøsning).
- *
- * `vurderinger` inneholder også utkast for søknader uten krav (se søknadUtenKravTilFormFields),
- * slik at feltene har verdier klare når boksen åpnes. Disse skal kun sendes inn som et nytt krav
- * dersom boksen fortsatt er åpen (referansen finnes i `valgteKrav`) – lukker saksbehandler boksen
- * uten å opprette et krav, skal ikke søknaden bli til en tom/ubehandlet kravvurdering.
- */
+function erFelterEndret(original: KravVurderingFormFields, gjeldende: KravVurderingFormFields): boolean {
+  return (
+    original.kravtype !== gjeldende.kravtype ||
+    original.begrunnelse !== gjeldende.begrunnelse ||
+    original.søknadsdatoDato !== gjeldende.søknadsdatoDato ||
+    original.søknadsdatoÅrsak !== gjeldende.søknadsdatoÅrsak ||
+    original.overstyrDato !== gjeldende.overstyrDato ||
+    original.overstyrÅrsak !== gjeldende.overstyrÅrsak
+  );
+}
+
 export function byggKravVurderingerFraSkjema(
   grunnlag: KravGrunnlag | undefined,
-  vurderinger: Record<string, KravVurderingFormFields>,
-  valgteKrav: string[]
+  vurderinger: Record<string, KravVurderingFormFields>
 ): KravVurderingLøsning[] {
-  const vedtatteReferanser = new Set((grunnlag?.vedtatteVurderinger ?? []).map((v) => v.referanse));
   const eksisterendeReferanser = new Set([
     ...(grunnlag?.nyeVurderinger ?? []).map((v) => v.referanse),
-    ...vedtatteReferanser,
+    ...(grunnlag?.vedtatteVurderinger ?? []).map((v) => v.referanse),
   ]);
-  const åpneReferanser = new Set(valgteKrav);
 
   return Object.entries(vurderinger)
-    .filter(([referanse]) => eksisterendeReferanser.has(referanse) || åpneReferanser.has(referanse))
+    .filter(([referanse, felt]) => {
+      const original = hentOriginaleFormFelter(grunnlag, referanse);
+      // Ukjent referanse (verken eksisterende krav eller søknad i grunnlaget) - ta ikke med.
+      if (!original) return false;
+      return erFelterEndret(original, felt);
+    })
     .map(([referanse, felt]) =>
       byggLøsningFraFelter({
         kravType: felt.kravtype,
@@ -378,7 +381,7 @@ export function byggKravVurderingerFraSkjema(
         søknadsdatoÅrsak: felt.søknadsdatoÅrsak,
         overstyrDato: felt.overstyrDato,
         overstyrÅrsak: felt.overstyrÅrsak,
-        referanse: vedtatteReferanser.has(referanse) ? referanse : undefined,
+        referanse: eksisterendeReferanser.has(referanse) ? referanse : undefined,
       })
     );
 }
