@@ -1,7 +1,7 @@
 'use client';
 
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, VStack } from '@navikt/ds-react';
+import { Button, HStack, Heading, ReadMore, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { useFetch } from 'hooks/FetchHook';
 import { clientLeggTilKravVurdering } from 'lib/clientApi';
@@ -70,7 +70,12 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
 
   return (
     <VStack gap="space-8">
-      <Heading size="small">Krav vurdering</Heading>
+      <Heading size="small">Kravvurdering</Heading>
+      <ReadMore header="Hvordan legge til kravvurdering?" size="small">
+        Det må først opprettes en ny revurdering før en ny kravvurdering kan legges til og lagres. Hvis dette ikke
+        gjøres i riktig rekkefølge, kan den nye kravvurderingen bli lagret på den gamle behandlingen, noe som fører til
+        feil kobling og registrering av data.
+      </ReadMore>
       {fields.map((field, index) => (
         <HStack key={field.id} gap="space-8" align="end" wrap={false}>
           <SelectWrapper

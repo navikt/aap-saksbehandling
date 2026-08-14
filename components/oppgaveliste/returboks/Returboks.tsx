@@ -1,12 +1,8 @@
 'use client';
 
-import {
-  NoNavAapOppgaveReturInformasjonDtoRsaker,
-  NoNavAapOppgaveReturInformasjonDtoStatus as ReturStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
-import { OppgaveMedKontekst, ReturInformasjon } from 'lib/types/oppgaveTypes';
+import { OppgaveMedKontekst, ReturInformasjon, ReturÅrsaker } from 'lib/types/oppgaveTypes';
 import { mapGrunnTilString } from 'lib/utils/oversettelser';
 import { storForbokstav } from 'lib/utils/string';
 
@@ -20,7 +16,7 @@ interface Props {
   forrigeKvalitetssikrerInfo: OppgaveMedKontekst['oppgavelisteTags']['forrigeKvalitetssikrerInfo'];
 }
 
-function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonDtoRsaker[]): string {
+function årsakerTilString(årsaker: ReturÅrsaker[]): string {
   if (årsaker.length === 0) {
     return 'Ingen årsaker.';
   }
@@ -42,11 +38,9 @@ function årsakerTilString(årsaker: NoNavAapOppgaveReturInformasjonDtoRsaker[])
 export const Returboks = ({ returInformasjon, forrigeKvalitetssikrerInfo }: Props) => {
   const årsakTekst = returInformasjon.årsaker.length <= 1 ? 'Årsak' : 'Årsaker';
   const returFraToTrinn =
-    returInformasjon.status == ReturStatus.RETUR_FRA_KVALITETSSIKRER ||
-    returInformasjon.status == ReturStatus.RETUR_FRA_BESLUTTER;
+    returInformasjon.status == 'RETUR_FRA_KVALITETSSIKRER' || returInformasjon.status == 'RETUR_FRA_BESLUTTER';
   const skalViseForrigeKvalitetssikrer =
-    returInformasjon.status == ReturStatus.RETUR_FRA_VEILEDER &&
-    forrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
+    returInformasjon.status == 'RETUR_FRA_VEILEDER' && forrigeKvalitetssikrerInfo?.forrigeKvalitetssikrerIdent != null;
 
   function utledPopoverInnhold() {
     if (returFraToTrinn) {

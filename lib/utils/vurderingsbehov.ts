@@ -152,8 +152,6 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Automatisk stans overgang uføre';
     case 'VURDER_KRAV':
       return 'Vurder krav';
-    case 'MIGRERING_FRA_ARENA':
-      return 'Migrering fra Arena';
     default:
       return vurderingsbehov;
   }

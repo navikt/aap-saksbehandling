@@ -1,11 +1,11 @@
-import { NoNavAapOppgaveReturInformasjonDtoStatus } from '@navikt/aap-oppgave-typescript-types';
 import { ArrowsSquarepathIcon } from '@navikt/aksel-icons';
 import { Tag } from '@navikt/ds-react';
+import { ReturStatus as ReturStatusType } from 'lib/types/oppgaveTypes';
 
 import { returStatusTilTekst } from 'components/oppgaveliste/returboks/ReturInfoUtils';
 
 interface Props {
-  returStatus: NoNavAapOppgaveReturInformasjonDtoStatus;
+  returStatus: ReturStatusType;
 }
 
 export const ReturStatus = ({ returStatus }: Props) => {

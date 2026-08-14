@@ -1,6 +1,5 @@
 'use client';
 
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
 import { Button, Dropdown } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
@@ -163,9 +162,7 @@ export const SaksmenyDropdown = ({
               </Dropdown.Menu.GroupedList.Item>
             )}
             {visValgForÅSetteMarkering && (
-              <Dropdown.Menu.GroupedList.Item
-                onClick={() => settAktivMarkeringType(NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER)}
-              >
+              <Dropdown.Menu.GroupedList.Item onClick={() => settAktivMarkeringType('HASTER')}>
                 Marker som haster
               </Dropdown.Menu.GroupedList.Item>
             )}

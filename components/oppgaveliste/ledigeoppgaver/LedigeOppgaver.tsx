@@ -1,10 +1,5 @@
 'use client';
 
-import {
-  NoNavAapOppgaveListeOppgaveSorteringSortBy,
-  NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper,
-  NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser,
-} from '@navikt/aap-oppgave-typescript-types';
 import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
@@ -14,7 +9,7 @@ import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { AktivKø, useLagreAktivKø } from 'hooks/oppgave/aktivkøHook';
 import { hentKøerForEnheterClient } from 'lib/oppgaveClientApi';
-import { Enhet } from 'lib/types/oppgaveTypes';
+import { Behandlingstyper, Enhet, ReturStatuser, SortBy } from 'lib/types/oppgaveTypes';
 import { isError, isSuccess } from 'lib/utils/api';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
 import { OppgaveStatuser, oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
@@ -40,8 +35,7 @@ interface Props {
 }
 
 export const LedigeOppgaver = ({ enheter }: Props) => {
-  const { sort, setSort } =
-    useBackendSortering<NoNavAapOppgaveListeOppgaveSorteringSortBy>('ledige-oppgaver-backendsort');
+  const { sort, setSort } = useBackendSortering<SortBy>('ledige-oppgaver-backendsort');
   const { hentLagretAktivKø, lagreAktivKø } = useLagreAktivKø();
   const { hentAktivUtvidetFilter, lagreAktivUtvidetFilter } = useLagreAktivUtvidetFilter();
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
@@ -133,13 +127,12 @@ export const LedigeOppgaver = ({ enheter }: Props) => {
   const andreStatusTyper = ['VENT', 'ER_HASTESAK', 'VENTEFRIST_UTLØPT'];
 
   const utvidetFilter = {
-    behandlingstyper: (form.watch('behandlingstyper') ||
-      []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterBehandlingstyper[],
+    behandlingstyper: (form.watch('behandlingstyper') || []) as Behandlingstyper,
     tom: behandlingOpprettetTom ? formaterDatoForBackend(behandlingOpprettetTom) : undefined,
     fom: behandlingOpprettetFom ? formaterDatoForBackend(behandlingOpprettetFom) : undefined,
-    returStatuser: (
-      (form.watch('statuser') || []) as NoNavAapOppgaveListeUtvidetOppgavelisteFilterReturStatuser[]
-    ).filter((status) => !andreStatusTyper.includes(status.valueOf())),
+    returStatuser: ((form.watch('statuser') || []) as ReturStatuser).filter(
+      (status) => !andreStatusTyper.includes(status.valueOf())
+    ),
     påVent: form.watch('statuser')?.includes('VENT'),
     årsaker: form.watch('årsaker') || [],
     avklaringsbehovKoder: form.watch('avklaringsbehov') || [],

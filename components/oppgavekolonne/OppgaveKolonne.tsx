@@ -16,7 +16,6 @@ import { Opprettholdelse } from 'components/behandlinger/klage/opprettholdelse/O
 import { TrekkKlage } from 'components/behandlinger/klage/trekkklage/TrekkKlage';
 import { Krav } from 'components/behandlinger/krav/Krav';
 import { LovvalgPeriodisert } from 'components/behandlinger/lovvalg/LovvalgPeriodisert';
-import { Migrering } from 'components/behandlinger/migrering/Migrering';
 import { AvklarOppfolgingsSteg } from 'components/behandlinger/oppfolgingsbehandling/AvklarOppfolgingsSteg';
 import { OppholdskravStegGruppe } from 'components/behandlinger/oppholdskrav/OppholdskravGruppe';
 import { AvbrytRevurdering } from 'components/behandlinger/revurdering/avbrytVurdering/AvbrytRevurdering';
@@ -49,7 +48,6 @@ interface Props {
 export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, className, flyt }: Props) => (
   <section className={className}>
     {aktivGruppe === 'START_BEHANDLING' && <StartBehandling behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
-    {aktivGruppe === 'MIGRERING' && <Migrering behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'KRAV' && <Krav behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'SØKNAD' && <Søknad behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'AVBRYT_REVURDERING' && (
