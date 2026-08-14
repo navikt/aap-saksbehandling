@@ -1,8 +1,9 @@
-import { getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { SykdomsvurderingLøsningDto } from 'lib/types/types';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Dato } from 'lib/types/Dato';
+import { SykdomsvurderingLøsningDto } from 'lib/types/types';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { JaEllerNei, getTrueFalseEllerUndefined } from 'lib/utils/form';
+
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 
 function mapArbeidsevneOgYrkesskade(
@@ -95,13 +96,17 @@ function mapTilPeriodisertVurdering(
       harNedsattArbeidsevne: harSkadeSykdomEllerLyte ? data.harNedsattArbeidsevne : undefined,
     };
   } else {
-    const nedsattArbeidsevneOgYrkesskade = mapArbeidsevneOgYrkesskade(
-      data,
-      skalVurdereYrkesskade,
-      erÅrsakssammenhengYrkesskade,
-      data.fraDato,
-      førsteDatoSomKanVurderes
-    );
+    const erArbeidsevnenNedsatt = data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI';
+
+    const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
+      ? mapArbeidsevneOgYrkesskade(
+          data,
+          skalVurdereYrkesskade,
+          erÅrsakssammenhengYrkesskade,
+          data.fraDato,
+          førsteDatoSomKanVurderes
+        )
+      : undefined;
 
     return {
       ...nedsattArbeidsevneOgYrkesskade,
@@ -114,7 +119,6 @@ function mapTilPeriodisertVurdering(
       bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
       dokumenterBruktIVurdering: [],
       harNedsattArbeidsevne: data.harNedsattArbeidsevne,
-      erSkadeSykdomEllerLyteVesentligdel: getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel),
     };
   }
 }
