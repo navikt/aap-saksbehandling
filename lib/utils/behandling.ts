@@ -63,8 +63,6 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
       return 'Utvid vedtaksperiode';
     case 'G_REGULERING':
       return 'G-regulering';
-    case 'MIGRERING_FRA_ARENA':
-      return 'Migrering fra Arena';
     default:
       return 'Ukjent årsak';
   }

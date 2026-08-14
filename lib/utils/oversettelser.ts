@@ -67,8 +67,6 @@ const behovskodeMap = {
   '5058': '§ 11-15 Etablering av egen virksomhet',
   '5059': 'Avklar vedtaksperiode',
   '5060': 'Oppsummert rettighet i vedtaket',
-  '5061': 'Avklar migreringsdato',
-  '5062': 'Avklar migrering',
   '5096': 'Forslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
@@ -230,8 +228,6 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return 'Vedtaksperiode';
     case 'AVBRYT_AKTIVITETSPLIKTBEHANDLING':
       return 'Avbryt behandling';
-    case 'MIGRERING':
-      return 'Migrering';
     default:
       return `${steggruppe}`;
   }
@@ -299,8 +295,6 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
-    case 'MIGRERING_FRA_ARENA':
-      return 'Migrering fra Arena';
   }
 }
 
