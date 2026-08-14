@@ -2,7 +2,6 @@ import { hentKravGrunnlag, hentMellomlagringMedStatus } from 'lib/services/saksb
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { VurderKrav } from 'components/behandlinger/krav/VurderKrav';
 import { VurderKravV2 } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
 
 interface Props {
