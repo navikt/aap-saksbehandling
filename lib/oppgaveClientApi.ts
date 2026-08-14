@@ -1,4 +1,3 @@
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { clientFetch } from 'lib/clientApi';
 
@@ -6,6 +5,7 @@ import {
   AvreserverOppgaveDto,
   Kø,
   MineOppgaverQueryParams,
+  MineOppgaverSortBy,
   OppgavelisteRequest,
   OppgavelisteResponse,
   OppgaverPåSak,
@@ -29,9 +29,7 @@ export async function hentOppgaverPåSakClient(saksnummer: string) {
   return clientFetch<OppgaverPåSak>(`/oppgave/api/oppgave/sak/${saksnummer}/hent-oppgaver-paa-sak`, 'GET');
 }
 
-export async function hentMineOppgaverClient(
-  sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>
-) {
+export async function hentMineOppgaverClient(sortering?: ScopedBackendSortState<MineOppgaverSortBy>) {
   const sortParams: MineOppgaverQueryParams = {
     sortby: sortering?.orderBy,
     sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,

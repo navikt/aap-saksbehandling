@@ -271,6 +271,8 @@ export type RettighetsinfoDto =
 
 export type RettighetsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];
+export type MigreringsdatoGrunnlag =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.migrering.MigreringsdatoGrunnlagResponse'];
 export type FullmektigGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto'];
 export type FullmektigVurdering =
@@ -481,6 +483,8 @@ export type VedtakslengdeVurderingResponse =
 
 export type VedtakslengdeVurderingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.vedtakslengde.VedtakslengdeVurderingDto'];
+
+export type VedtakslengdeÅrsak = VedtakslengdeVurderingDto['årsaker'][number];
 
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];

@@ -27,7 +27,9 @@ export const TidligereMeldekortVersjoner = ({ meldekort }: Props) => {
 
   return (
     <VStack gap={'space-8'}>
-      <BodyShort weight={'semibold'} size={"small"}>Tidligere versjoner av meldekortet:</BodyShort>
+      <BodyShort weight={'semibold'} size={'small'}>
+        Tidligere versjoner av meldekortet:
+      </BodyShort>
       <VStack gap={'space-2'}>
         {tidligereVersjoner.map((tidligereMeldekort, index) => (
           <HStack key={index} gap={'space-4'} align={'baseline'}>
@@ -36,7 +38,7 @@ export const TidligereMeldekortVersjoner = ({ meldekort }: Props) => {
                 href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.journalpostId}/${tidligereMeldekort.dokumentId}`}
                 target="_blank"
               >
-                <BodyShort size={"small"}>Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}</BodyShort>
+                <BodyShort size={'small'}>Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}</BodyShort>
                 <ExternalLinkIcon />
               </Link>
             )}

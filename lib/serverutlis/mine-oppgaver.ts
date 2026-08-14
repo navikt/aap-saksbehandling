@@ -1,12 +1,7 @@
-import 'server-only';
-
-import { NextRequest } from 'next/server';
-import { MineOppgaverQueryParams } from 'lib/types/oppgaveTypes';
-import {
-  PathsMineOppgaverGetParametersQuerySortby,
-  PathsMineOppgaverGetParametersQuerySortorder,
-} from '@navikt/aap-oppgave-typescript-types';
 import { logError } from 'lib/serverutlis/logger';
+import { MineOppgaverQueryParams, MineOppgaverSortBy, MineOppgaverSortOrder } from 'lib/types/oppgaveTypes';
+import { NextRequest } from 'next/server';
+import 'server-only';
 
 export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQueryParams {
   const params = req.nextUrl.searchParams;
@@ -22,33 +17,33 @@ export function hentMineOppgaverQueryParams(req: NextRequest): MineOppgaverQuery
   };
 }
 
-function validerSortByQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortby | null {
+function validerSortByQueryParamEnum(str: string): MineOppgaverSortBy | null {
   switch (str) {
     case 'BEHANDLINGSTYPE':
-      return PathsMineOppgaverGetParametersQuerySortby.BEHANDLINGSTYPE;
+      return 'BEHANDLINGSTYPE';
     case 'BEHANDLING_OPPRETTET':
-      return PathsMineOppgaverGetParametersQuerySortby.BEHANDLING_OPPRETTET;
+      return 'BEHANDLING_OPPRETTET';
     case 'ÅRSAK_TIL_OPPRETTELSE':
-      return PathsMineOppgaverGetParametersQuerySortby._RSAK_TIL_OPPRETTELSE;
+      return 'ÅRSAK_TIL_OPPRETTELSE';
     case 'AVKLARINGSBEHOV_KODE':
-      return PathsMineOppgaverGetParametersQuerySortby.AVKLARINGSBEHOV_KODE;
+      return 'AVKLARINGSBEHOV_KODE';
     case 'PERSONIDENT':
-      return PathsMineOppgaverGetParametersQuerySortby.PERSONIDENT;
+      return 'PERSONIDENT';
     case 'OPPRETTET_TIDSPUNKT':
-      return PathsMineOppgaverGetParametersQuerySortby.OPPRETTET_TIDSPUNKT;
+      return 'OPPRETTET_TIDSPUNKT';
     case 'SAKSNUMMER':
-      return PathsMineOppgaverGetParametersQuerySortby.SAKSNUMMER;
+      return 'SAKSNUMMER';
   }
   logError(`Mapping feilet for sortby queryparam ${str}`);
   return null;
 }
 
-function validerSortOrderQueryParamEnum(str: string): PathsMineOppgaverGetParametersQuerySortorder | null {
+function validerSortOrderQueryParamEnum(str: string): MineOppgaverSortOrder | null {
   switch (str) {
     case 'DESC':
-      return PathsMineOppgaverGetParametersQuerySortorder.DESC;
+      return 'DESC';
     case 'ASC':
-      return PathsMineOppgaverGetParametersQuerySortorder.ASC;
+      return 'ASC';
   }
   logError(`Mapping feilet for sortorder queryparam ${str}`);
   return null;

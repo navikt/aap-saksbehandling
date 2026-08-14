@@ -10,7 +10,6 @@ import { FormField } from 'components/form/FormField';
 import { FieldPath, UseFormReturn } from 'react-hook-form';
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 import { aktiveFiltreringer } from 'components/oppgaveliste/filtrering/filtreringUtils';
-import { Køtype } from 'lib/types/oppgaveTypes';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 import { useFeatureFlag } from 'context/UnleashContext';
 
@@ -58,7 +57,7 @@ export const LedigeOppgaverFiltrering = ({
               <BodyShort>Filtre: </BodyShort>
               <Chips size={'small'}>
                 {aktiveFilter.map((filter) => {
-                  return aktivKø.type !== Køtype.ALLE_OPPGAVER && filter.key === 'behandlingstyper' ? (
+                  return aktivKø.type !== 'ALLE_OPPGAVER' && filter.key === 'behandlingstyper' ? (
                     <Chips.Toggle key={`${filter.key}-${filter.value}`} checkmark={false} selected={true}>
                       {filter.label}
                     </Chips.Toggle>
@@ -94,7 +93,7 @@ export const LedigeOppgaverFiltrering = ({
                 <FormField
                   form={form}
                   formField={formFields.behandlingstyper}
-                  readOnly={Køtype.ALLE_OPPGAVER !== aktivKø.type}
+                  readOnly={'ALLE_OPPGAVER' !== aktivKø.type}
                 />
               </BoxWrapper>
               <BoxWrapper>
