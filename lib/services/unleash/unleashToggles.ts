@@ -17,7 +17,6 @@ export const FLAGS = [
   'NyHookForAvklaringsbehov',
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
-  'VedtakslengdeAarsak',
   'FaktiskArbeidTilkjentYtelse',
 ] as const;
 
@@ -43,6 +42,5 @@ export const mockedFlags: Flags = {
   NyHookForAvklaringsbehov: true,
   SkalViseAlleSykdomssteg: true,
   DialogMedBehandler: true,
-  VedtakslengdeAarsak: true,
   FaktiskArbeidTilkjentYtelse: true,
 };
