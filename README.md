@@ -120,15 +120,10 @@ For å kjøre tester lokalt, bruk følgende kommando:
 ### Generering av typer
 
 Prosjektet bruker openapi-typescript for å generere TypeScript-typer basert på typer fra backend.
-For å generere typer for behandlingsflyt, kjør følgende kommando:
+For å generere typer for behandlingsflyt, postmottak og oppgave lokalt, kjør følgende kommando for hver applikasjon:
 
 ```bash
   yarn gentypes:behandlingsflyt
-```
-
-For å generere typer for postmottak og oppgave lokalt, kjør:
-
-```bash
   yarn gentypes:postmottak
   yarn gentypes:oppgave
 ```
