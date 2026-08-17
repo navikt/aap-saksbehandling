@@ -15,6 +15,7 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  feriePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderinger: [
@@ -36,6 +37,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
 
 const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  feriePerioder: [],
   ytelser: [
     {
       gradering: 100,
@@ -108,6 +110,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
     };
