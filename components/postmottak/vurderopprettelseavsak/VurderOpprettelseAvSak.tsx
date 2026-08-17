@@ -241,7 +241,7 @@ export const VurderOpprettelseAvSak = ({
 
         <ReadMore size="small" header="Dette må du vurdere" defaultOpen>
           <VStack gap="space-8">
-            <BodyShort size="small">Alle ny saker skal behandles i Kelvin.</BodyShort>
+            <BodyShort size="small">Alle nye saker skal behandles i Kelvin.</BodyShort>
             <BodyShort size="small">Du må vurdere om saken skal fortsette i Arena. Dette kan være:</BodyShort>
             <List size="small">
               <List.Item>
