@@ -102,6 +102,7 @@ const behovskodeMap = {
   '1340': 'Avklar saksnummer',
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
+  '1343': 'Avklar fordeling',
 } as const;
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
