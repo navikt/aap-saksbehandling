@@ -3027,6 +3027,7 @@ export interface paths {
             | 'ARBEIDSOPPTRAPPING'
             | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
             | 'AVBRYT_REVURDERING'
+            | 'AVKLAR_MIGRERINGSDATO'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
@@ -3106,6 +3107,7 @@ export interface paths {
             | 'ARBEIDSOPPTRAPPING'
             | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
             | 'AVBRYT_REVURDERING'
+            | 'AVKLAR_MIGRERINGSDATO'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
@@ -4664,6 +4666,119 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/dokumentinnhenting/paaminnelse/send': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/dokumentinnhenting/paaminnelse/avbryt-automatisk-paaminnelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/dokumentinnhenting/paaminnelse/gjenoppta-automatisk-paaminnelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/dokumentinnhenting/paaminnelse': {
     parameters: {
       query?: never;
@@ -5567,6 +5682,7 @@ export interface paths {
             | 'ARBEIDSOPPTRAPPING'
             | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
             | 'AVBRYT_REVURDERING'
+            | 'AVKLAR_MIGRERINGSDATO'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
@@ -5646,6 +5762,7 @@ export interface paths {
             | 'ARBEIDSOPPTRAPPING'
             | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
             | 'AVBRYT_REVURDERING'
+            | 'AVKLAR_MIGRERINGSDATO'
             | 'AVKLAR_OPPFØLGING'
             | 'AVKLAR_STUDENT'
             | 'AVKLAR_STUDENT_V2'
@@ -6331,6 +6448,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
@@ -14498,8 +14616,12 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingGrunnlagDTO': {
+      /** Format: int32 */
+      ferieDager?: number | null;
+      feriePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO'][];
+      mottarSykepenger?: boolean | null;
       tpYtelser?:
         | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.tjenestepensjon.TjenestePensjonForhold'][]
         | null;
@@ -16719,6 +16841,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
@@ -18140,6 +18263,7 @@ export interface components {
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
+        | 'MIGRERING'
         | 'OMGJØRING'
         | 'OPPHOLDSKRAV'
         | 'OPPRETTHOLDELSE'
@@ -18164,6 +18288,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
@@ -18267,6 +18392,7 @@ export interface components {
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
+        | 'MIGRERING'
         | 'OMGJØRING'
         | 'OPPHOLDSKRAV'
         | 'OPPRETTHOLDELSE'
@@ -18292,6 +18418,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
@@ -18383,6 +18510,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
@@ -18546,6 +18674,7 @@ export interface components {
         | 'KVALITETSSIKRING'
         | 'LOVVALG'
         | 'MEDLEMSKAP'
+        | 'MIGRERING'
         | 'OMGJØRING'
         | 'OPPHOLDSKRAV'
         | 'OPPRETTHOLDELSE'
@@ -18573,6 +18702,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'
@@ -18908,6 +19038,7 @@ export interface components {
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
         | 'AVKLAR_OPPFØLGING'
         | 'AVKLAR_STUDENT'
         | 'AVKLAR_STUDENT_V2'

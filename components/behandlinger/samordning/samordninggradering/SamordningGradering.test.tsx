@@ -15,6 +15,7 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  feriePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderinger: [
@@ -36,6 +37,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
 
 const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  feriePerioder: [],
   ytelser: [
     {
       gradering: 100,
@@ -56,6 +58,27 @@ beforeEach(() => {
 });
 
 describe('Samordning gradering', () => {
+  test('viser relevant informasjon fra søknaden når sykepenger og ferie er oppgitt', () => {
+    const grunnlagMedSykepengerOgFerie: SamordningGraderingGrunnlag = {
+      ...grunnlagUtenVurdering,
+      mottarSykepenger: true,
+      feriePerioder: [{ fom: '2025-06-01', tom: '2025-06-14' }],
+    };
+
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerOgFerie} behandlingVersjon={1} readOnly={false} />);
+
+    expect(screen.getByText('Mottar bruker sykepenger: Ja')).toBeVisible();
+    expect(
+      screen.getByText('Har bruker planer om ferie før de er ferdige med sykepenger: Ja, 01.06.2025 - 14.06.2025')
+    ).toBeVisible();
+  });
+
+  test('viser ikke relevant informasjon fra søknaden når verdiene mangler', () => {
+    render(<SamordningGradering grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
+
+    expect(screen.queryByText('Relevant informasjon fra søknaden')).not.toBeInTheDocument();
+  });
+
   test('skal kunne redigere ytelse, periode og gradering for en manuell rad', () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
     expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeVisible();
@@ -108,6 +131,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
     };
