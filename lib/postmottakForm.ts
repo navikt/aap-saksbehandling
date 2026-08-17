@@ -107,7 +107,7 @@ export enum Behovstype {
 export enum HvorSkalSøknadenBehandles {
   ARENA = 'ARENA',
   KELVIN = 'KELVIN',
-  ARENA_OG_KELVIN = 'ARENA_OG_KELVIN',
+  BEGGE = 'BEGGE',
 }
 export const getJaNeiEllerUndefined = (value?: boolean | null): JaEllerNei | undefined => {
   if (value === null || value === undefined) {

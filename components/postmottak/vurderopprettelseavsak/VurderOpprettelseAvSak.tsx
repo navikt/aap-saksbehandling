@@ -112,9 +112,7 @@ export const VurderOpprettelseAvSak = ({
   const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, STEG);
 
   const valgtHvorBehandles = form.watch('hvorBehandles');
-  const opprettesOppgaveIArena =
-    valgtHvorBehandles === HvorSkalSøknadenBehandles.ARENA ||
-    valgtHvorBehandles === HvorSkalSøknadenBehandles.ARENA_OG_KELVIN;
+  const opprettesOppgaveIArena = valgtHvorBehandles === HvorSkalSøknadenBehandles.ARENA;
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
