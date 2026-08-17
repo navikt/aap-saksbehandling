@@ -2,10 +2,12 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Button, Label, Link, VStack } from '@navikt/ds-react';
 
 import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMeldinger';
-import { DokumentasjonType, Melding } from 'components/dialogmedbehandler/Melding';
+import { Melding } from 'components/dialogmedbehandler/Melding';
 
 import styles from './DialogMedBehandler.module.css';
+import { useDialogmeldinger } from 'hooks/saksbehandling/SakDialogmeldingerHook';
 
+/*
 interface MeldingDto {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
   dokumentasjonType: DokumentasjonType;
@@ -13,8 +15,12 @@ interface MeldingDto {
   opprettetTidspunkt: string;
   tekst: string;
   status: 'SENDT' | 'LEVERT' | 'FEILET';
+  journalpostId: string;
+  dokumentIdListe: string[];
 }
+*/
 
+/*
 const innkommendeMeldingerMock: MeldingDto[] = [
   {
     visningType: 'INNKOMMENDE',
@@ -54,8 +60,11 @@ const utgåendeMeldingerMock: MeldingDto[] = [
 ];
 
 const meldingerMock = [...utgåendeMeldingerMock, ...innkommendeMeldingerMock];
+*/
 
 export const DialogMedBehandler = () => {
+  const { dialogmeldinger } = useDialogmeldinger();
+
   return (
     <section>
       <VStack>
@@ -70,16 +79,21 @@ export const DialogMedBehandler = () => {
       </VStack>
 
       <VStack gap={'space-20'} className={styles.meldingervindu}>
-        {meldingerMock.map((melding, index) => (
+        {dialogmeldinger?.map((dialogmelding, index) => (
           <Melding
             key={index}
-            visningType={melding.visningType}
-            dokumentasjonType={melding.dokumentasjonType}
-            meldingFraNavn={melding.meldingFraNavn}
-            opprettetTidspunkt={melding.opprettetTidspunkt}
-            status={melding.status}
+            visningType={dialogmelding.innkommendeUtgaaende}
+            // TODO: Rydd opp bruken av dokumentasjonsType!
+            dokumentasjonType={
+              dialogmelding.innkommendeUtgaaende === 'INNKOMMENDE'
+                ? 'MELDING_FRA_BEHANDLER'
+                : dialogmelding.dokumentasjonsType
+            }
+            meldingFraNavn={dialogmelding.meldingFraNavn}
+            opprettetTidspunkt={dialogmelding.opprettetTidspunkt?.toString()}
+            status={dialogmelding.meldingStatus}
           >
-            {melding.tekst}
+            {dialogmelding.tekst}
           </Melding>
         ))}
       </VStack>

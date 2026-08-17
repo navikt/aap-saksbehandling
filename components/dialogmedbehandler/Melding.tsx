@@ -10,24 +10,22 @@ import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 import styles from './Melding.module.css';
 
+// TODO: Fjerne?
 export type DokumentasjonType =
-  | 'FORESPØRSEL_L120'
-  | 'FORESPØRSEL_L40'
-  | 'FORESPØRSEL_L8'
-  | 'MOTTATT_L120'
-  | 'MOTTATT_L40'
-  | 'MOTTATT_L8'
+  | 'L120'
+  | 'L40'
+  | 'L8'
   | 'MELDING_FRA_NAV'
   | 'MELDING_FRA_BEHANDLER'
-  | 'PÅMINNELSE'
+  | 'PURRING'
   | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
-  dokumentasjonType: DokumentasjonType;
+  dokumentasjonType?: DokumentasjonType;
   meldingFraNavn: string;
   opprettetTidspunkt: string;
-  status: 'SENDT' | 'LEVERT' | 'FEILET';
+  status?: 'SENDT' | 'LEVERT' | 'FEILET';
   children: React.ReactNode;
 }
 
@@ -39,6 +37,12 @@ export const Melding = ({
   status,
   children,
 }: Props) => {
+  console.log('visningType: ', visningType);
+  console.log('dokumentasjonType: ', dokumentasjonType);
+  console.log('meldingFraNavn: ', meldingFraNavn);
+  console.log('opprettetTidspunkt: ', opprettetTidspunkt);
+  console.log('status: ', status);
+
   return (
     <VStack gap={'space-4'} align={visningType === 'INNKOMMENDE' ? 'start' : 'end'}>
       <Detail>
@@ -94,25 +98,25 @@ export const Melding = ({
   );
 };
 
-const mapDokumentasjonTypeTilTekst = (dokumentasjonType: DokumentasjonType) => {
+const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => {
+  if (!dokumentasjonType) {
+    // TODO: Hva skal defaultverdien være? Bør aldri inntreffe fordi feltet ikke er nullable i dokumentinnhenting hvor
+    //  det settes for utgående meldinger, mens innkommende meldinger
+    return '';
+  }
+
   switch (dokumentasjonType) {
-    case 'FORESPØRSEL_L120':
+    case 'L120':
       return 'Forespørsel om legeerklæring L120';
-    case 'FORESPØRSEL_L40':
+    case 'L40':
       return 'Forespørsel om legeerklæring L40';
-    case 'FORESPØRSEL_L8':
+    case 'L8':
       return 'Forespørsel om tilleggsopplysninger L8';
-    case 'MOTTATT_L120':
-      return 'Mottatt legeerklæring L120';
-    case 'MOTTATT_L40':
-      return 'Mottatt legeerklæring L40';
-    case 'MOTTATT_L8':
-      return 'Mottatt tilleggsopplysninger L8';
     case 'MELDING_FRA_NAV':
       return 'Melding fra NAV';
     case 'MELDING_FRA_BEHANDLER':
       return 'Melding fra behandler';
-    case 'PÅMINNELSE':
+    case 'PURRING':
       return 'Påminnelse til behandler';
     case 'RETUR_LEGEERKLÆRING':
       return 'Retur legeerklæring';
