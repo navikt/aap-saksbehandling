@@ -1,7 +1,6 @@
 'use client';
 
 import { Radio, VStack } from '@navikt/ds-react';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { addDays, parse, parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -89,8 +88,6 @@ export const VedtakslengdeSteg = ({
   initialMellomlagretVurdering,
   erVedtakslengdeManuelt,
 }: Props) => {
-  const skalVelgeÅrsak = useFeatureFlag('VedtakslengdeAarsak');
-
   const { behandlingsreferanse } = useParamsMedType();
 
   const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
@@ -294,22 +291,20 @@ export const VedtakslengdeSteg = ({
               }}
               readOnly={formReadOnly}
             />
-            {skalVelgeÅrsak && (
-              <SelectWrapper
-                name={`vurderinger.${index}.årsak`}
-                control={form.control}
-                label={'Årsak til vedtaksperiode'}
-                rules={{ required: 'Du må velge en årsak' }}
-                readOnly={formReadOnly}
-              >
-                <option value="">Velg årsak</option>
-                {årsakAlternativer.map(({ value, label }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </SelectWrapper>
-            )}
+            <SelectWrapper
+              name={`vurderinger.${index}.årsak`}
+              control={form.control}
+              label={'Årsak til vedtaksperiode'}
+              rules={{ required: 'Du må velge en årsak' }}
+              readOnly={formReadOnly}
+            >
+              <option value="">Velg årsak</option>
+              {årsakAlternativer.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </SelectWrapper>
           </VStack>
         </NyVurderingExpandableCard>
       ))}
