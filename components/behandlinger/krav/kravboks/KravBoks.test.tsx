@@ -6,7 +6,7 @@ import { RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 import { byggInitielleVurderinger } from 'components/behandlinger/krav/kravutils';
 import { KravBoks, KravBoksInnhold } from 'components/behandlinger/krav/kravboks/KravBoks';
-import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
+import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 
 const user = userEvent.setup();
 

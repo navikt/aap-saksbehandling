@@ -3,7 +3,7 @@
 import { KravGrunnlag, MellomlagretVurdering } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { KravTabellV2 } from 'components/behandlinger/krav/kravtabell/KravTabellV2';
+import { KravTabell } from 'components/behandlinger/krav/kravtabell/KravTabell';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { VStack } from '@navikt/ds-react';
 import {
@@ -33,7 +33,7 @@ export interface KravFormFields {
   vurderinger: Record<string, KravVurderingFormFields>;
 }
 
-export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon, readOnly }: Props) => {
+export const VurderKrav = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon, readOnly }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
@@ -115,7 +115,7 @@ export const VurderKravV2 = ({ grunnlag, initialMellomlagretVurdering, behandlin
     >
       <VStack gap={'space-16'}>
         <FormProvider {...form}>
-          <KravTabellV2 grunnlag={grunnlag} readOnly={formReadOnly} />
+          <KravTabell grunnlag={grunnlag} readOnly={formReadOnly} />
           <VStack gap="space-16">
             {valgteKrav.map((referanse) => {
               const krav = finnKravVurderingByReferanse(grunnlag, referanse);

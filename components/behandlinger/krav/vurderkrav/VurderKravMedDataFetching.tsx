@@ -2,7 +2,7 @@ import { hentKravGrunnlag, hentMellomlagring } from 'lib/services/saksbehandling
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { VurderKravV2 } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
+import { VurderKrav } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 
 interface Props {
   behandlingsreferanse: string;
@@ -10,7 +10,7 @@ interface Props {
   readOnly: boolean;
 }
 
-export const VurderKravMedDataFetchingV2 = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+export const VurderKravMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
   const grunnlag = await hentKravGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
@@ -25,7 +25,7 @@ export const VurderKravMedDataFetchingV2 = async ({ behandlingsreferanse, behand
   );
 
   return (
-    <VurderKravV2
+    <VurderKrav
       grunnlag={grunnlag.data}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       behandlingVersjon={behandlingVersjon}

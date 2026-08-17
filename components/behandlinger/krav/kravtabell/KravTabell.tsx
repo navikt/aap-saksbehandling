@@ -12,14 +12,14 @@ import {
 } from 'components/behandlinger/krav/kravutils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
+import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 
 interface Props {
   grunnlag?: KravGrunnlag;
   readOnly: boolean;
 }
 
-export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
+export const KravTabell = ({ grunnlag, readOnly }: Props) => {
   const form = useFormContext<KravFormFields>();
   const { control, getValues, setValue } = form;
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];

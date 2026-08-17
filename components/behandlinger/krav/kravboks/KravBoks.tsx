@@ -9,7 +9,7 @@ import { BodyShort, Box, Button, Detail, HStack, Label, Tag, VStack } from '@nav
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { useFormContext } from 'react-hook-form';
-import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
+import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 import { ReactNode, useMemo, useState } from 'react';

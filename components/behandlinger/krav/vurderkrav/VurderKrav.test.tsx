@@ -5,7 +5,7 @@ import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { KravGrunnlag, MellomlagretVurderingResponse, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { VurderKravV2 } from 'components/behandlinger/krav/vurderkrav/VurderKravV2';
+import { VurderKrav } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -49,11 +49,11 @@ function grunnlag(overrides: Partial<KravGrunnlag> = {}): KravGrunnlag {
   };
 }
 
-describe('VurderKravV2 - visning av søknader uten kravvurdering', () => {
+describe('VurderKrav - visning av søknader uten kravvurdering', () => {
   it('viser en søknad uten kravvurdering automatisk som en åpen KravBoks med "Må vurderes"-tag', () => {
     const grunnlagMedSøknad = grunnlag({ søknaderUtenKravvurdering: [søknadUtenKrav()] });
 
-    render(<VurderKravV2 grunnlag={grunnlagMedSøknad} behandlingVersjon={0} readOnly={false} />);
+    render(<VurderKrav grunnlag={grunnlagMedSøknad} behandlingVersjon={0} readOnly={false} />);
 
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
     expect(screen.getAllByText('Må vurderes').length).toBeGreaterThan(0);
@@ -62,16 +62,16 @@ describe('VurderKravV2 - visning av søknader uten kravvurdering', () => {
   });
 
   it('viser ikke noen KravBoks når det ikke finnes søknader uten kravvurdering eller valgte krav', () => {
-    render(<VurderKravV2 grunnlag={grunnlag()} behandlingVersjon={0} readOnly={false} />);
+    render(<VurderKrav grunnlag={grunnlag()} behandlingVersjon={0} readOnly={false} />);
 
     expect(screen.queryByRole('textbox', { name: 'Begrunnelse' })).not.toBeInTheDocument();
   });
 });
 
-describe('VurderKravV2 - åpne og lukke krav fra tabellen', () => {
+describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
   it('åpner en KravBoks for et eksisterende krav når "Endre" klikkes i tabellen', async () => {
     const krav = relevantKrav();
-    render(<VurderKravV2 grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
+    render(<VurderKrav grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
 
     expect(screen.queryByText('Vurder krav krav-1')).not.toBeInTheDocument();
 
@@ -82,7 +82,7 @@ describe('VurderKravV2 - åpne og lukke krav fra tabellen', () => {
 
   it('lukker og nullstiller en KravBoks når "Lukk" klikkes i tabellen etter redigering', async () => {
     const krav = relevantKrav();
-    render(<VurderKravV2 grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
+    render(<VurderKrav grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
     await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' med endring');
@@ -100,7 +100,7 @@ describe('VurderKravV2 - åpne og lukke krav fra tabellen', () => {
 
   it('lukker og fjerner en søknad-KravBoks når "Lukk" klikkes i tabellen', async () => {
     render(
-      <VurderKravV2
+      <VurderKrav
         grunnlag={grunnlag({ søknaderUtenKravvurdering: [søknadUtenKrav()] })}
         behandlingVersjon={0}
         readOnly={false}
@@ -116,7 +116,7 @@ describe('VurderKravV2 - åpne og lukke krav fra tabellen', () => {
   });
 });
 
-describe('VurderKravV2 - handleSubmit', () => {
+describe('VurderKrav - handleSubmit', () => {
   let capturedRequest: { behov: { kravVurderinger: Array<{ referanse?: string; journalpostId: { identifikator: string }; begrunnelse: string }> } } | null = null;
 
   beforeEach(() => {
@@ -165,7 +165,7 @@ describe('VurderKravV2 - handleSubmit', () => {
     const søknad = søknadUtenKrav({ journalpostId: { identifikator: 'jp-ny' } });
 
     render(
-      <VurderKravV2
+      <VurderKrav
         grunnlag={grunnlag({
           nyeVurderinger: [kravUendret, kravEndret],
           vedtatteVurderinger: [vedtattKravEndret],
@@ -213,7 +213,7 @@ describe('VurderKravV2 - handleSubmit', () => {
   });
 });
 
-describe('VurderKravV2 - mellomlagring', () => {
+describe('VurderKrav - mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
       avklaringsbehovkode: Behovstype.VURDER_KRAV_KODE,
@@ -231,7 +231,7 @@ describe('VurderKravV2 - mellomlagring', () => {
     const krav = relevantKrav();
 
     render(
-      <VurderKravV2
+      <VurderKrav
         grunnlag={grunnlag({ nyeVurderinger: [krav] })}
         behandlingVersjon={0}
         readOnly={false}

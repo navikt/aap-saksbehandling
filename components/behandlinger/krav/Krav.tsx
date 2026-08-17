@@ -3,7 +3,7 @@ import { getStegData } from 'lib/utils/steg';
 import { StønadsperiodeMedDataFetching } from 'components/behandlinger/krav/stønadsperiode/StønadsperiodeMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { VurderKravMedDataFetchingV2 } from 'components/behandlinger/krav/vurderkrav/VurderKravMedDataFetchingV2';
+import { VurderKravMedDataFetching } from 'components/behandlinger/krav/vurderkrav/VurderKravMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -27,7 +27,7 @@ export const Krav = async ({ behandlingsreferanse, flyt }: Props) => {
     >
       {stegSomSkalVises.includes('KRAV') && (
         <StegSuspense>
-          <VurderKravMedDataFetchingV2
+          <VurderKravMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
