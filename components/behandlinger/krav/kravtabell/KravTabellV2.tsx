@@ -133,7 +133,7 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
                 <Table.DataCell textSize={'small'}>-</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   <Tag variant="warning" size="small">
-                    Trenger vurdering
+                    Må vurderes
                   </Tag>
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>

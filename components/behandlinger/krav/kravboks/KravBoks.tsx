@@ -33,7 +33,9 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
   const referanse =
     innhold.kilde === 'EKSISTERENDE' ? innhold.krav.referanse : innhold.søknad.journalpostId.identifikator;
 
-  const [visVurderOmKravErRelevantFelt, setVisVurderOmKravErRelevantFelt] = useState<boolean>(false);
+  const [visVurderOmKravErRelevantFelt, setVisVurderOmKravErRelevantFelt] = useState<boolean>(
+    erNySøknad
+  );
   const [visEndreSøknadsdatoFelt, setVisEndreSøknadsdatoFelt] = useState<boolean>(false);
   const [visMuligRettFraFelt, setVisMuligRettFraFelt] = useState<boolean>(false);
 
@@ -94,7 +96,7 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
           </HStack>
           {erNySøknad && (
             <Tag variant="warning" size="small">
-              Trenger vurdering
+              Må vurderes
             </Tag>
           )}
         </HStack>

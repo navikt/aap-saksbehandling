@@ -67,15 +67,15 @@ describe('KravBoks - visning av innhold', () => {
     expect(screen.getByText('Vurder krav krav-1')).toBeVisible();
     expect(screen.getByText('Søknadsdato: 01.04.2025')).toBeVisible();
     expect(screen.getAllByText('Relevant krav').length).toBeGreaterThan(0);
-    expect(screen.queryByText('Trenger vurdering')).not.toBeInTheDocument();
+    expect(screen.queryByText('Må vurderes')).not.toBeInTheDocument();
   });
 
-  it('viser "Trenger vurdering"-tag og "Ny søknad"-tittel for en søknad uten kravvurdering', () => {
+  it('viser "Må vurderes"-tag og "Ny søknad"-tittel for en søknad uten kravvurdering', () => {
     const søknad = søknadUtenKrav();
     customRender(<KravBoksHarness innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
-    expect(screen.getByText('Trenger vurdering')).toBeVisible();
+    expect(screen.getByText('Må vurderes')).toBeVisible();
     expect(screen.getByText('Søknadsdato: 10.05.2025')).toBeVisible();
   });
 
@@ -97,6 +97,22 @@ describe('KravBoks - åpne/lukke bolker', () => {
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
 
     expect(screen.getByRole('combobox', { name: 'Kravtype' })).toBeVisible();
+  });
+
+  it('viser Kravtype-bolken forhåndsåpnet for en ny søknad, slik at saksbehandler må ta stilling til kravtype', () => {
+    const søknad = søknadUtenKrav();
+    customRender(<KravBoksHarness innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+
+    expect(screen.getByRole('combobox', { name: 'Kravtype' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Avbryt vurder om krav er relevant' })).toBeVisible();
+  });
+
+  it('viser Kravtype-bolken lukket for et eksisterende krav (skal ikke forhåndsåpnes)', () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    expect(screen.queryByRole('combobox', { name: 'Kravtype' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Vurder om krav er relevant' })).toBeVisible();
   });
 
   it('nullstiller kravtype til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {

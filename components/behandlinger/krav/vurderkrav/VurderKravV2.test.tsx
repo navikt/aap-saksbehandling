@@ -50,13 +50,13 @@ function grunnlag(overrides: Partial<KravGrunnlag> = {}): KravGrunnlag {
 }
 
 describe('VurderKravV2 - visning av søknader uten kravvurdering', () => {
-  it('viser en søknad uten kravvurdering automatisk som en åpen KravBoks med "Trenger vurdering"-tag', () => {
+  it('viser en søknad uten kravvurdering automatisk som en åpen KravBoks med "Må vurderes"-tag', () => {
     const grunnlagMedSøknad = grunnlag({ søknaderUtenKravvurdering: [søknadUtenKrav()] });
 
     render(<VurderKravV2 grunnlag={grunnlagMedSøknad} behandlingVersjon={0} readOnly={false} />);
 
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
-    expect(screen.getAllByText('Trenger vurdering').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Må vurderes').length).toBeGreaterThan(0);
     // Begrunnelsesfeltet er alltid synlig når boksen er åpen, ikke bak en "Vurder"-knapp.
     expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
   });
