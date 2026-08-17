@@ -24,6 +24,7 @@ import { SubmitEventHandler, useRef, useState } from 'react';
 
 import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
+import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
 import { Ytelsesvurderinger } from 'components/behandlinger/samordning/samordninggradering/Ytelsesvurderinger';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -220,6 +221,8 @@ export const SamordningGradering = ({
         visningActions={visningActions}
         formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       >
+        <RelevantInformasjonSamordningGradering grunnlag={grunnlag} />
+
         {!!historiskeVurderinger && !!historiskeVurderinger.length && (
           /* TODO: <TidligereVurderinger/> er ikke ideelt for visning av denne typen data (samordning, inst, m.m.).
               Burde på sikt utformes litt annerledes, men dette får fungere som en slags "MVP" */
