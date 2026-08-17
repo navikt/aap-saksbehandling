@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest';
-import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
-import { JaEllerNei } from 'lib/utils/form';
-import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { addMonths } from 'date-fns';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
+import { describe, expect, it } from 'vitest';
+
+import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
 
 const rettighetsperiodeStart = new Date('2024-01-01');
 // Samme dato som rettighetsperiodeStart → vurderingDatoSammeSomRettighetsperiodeStart = true
@@ -230,6 +231,21 @@ describe('mapTilPeriodisertVurdering', () => {
           };
           const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart);
           expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
+        });
+      });
+
+      describe('skalViseAlleSykdomssteg = true', () => {
+        it('skal nullstille erNedsettelseIArbeidsevneMerEnnHalvparten når harNedsattArbeidsevne = NEI', () => {
+          const data: Sykdomsvurdering = {
+            ...baseSykdomsvurdering,
+            harNedsattArbeidsevne: 'NEI',
+            erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Ja,
+            erSkadeSykdomEllerLyteVesentligdel: JaEllerNei.Ja,
+          };
+
+          const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart, undefined, true);
+          expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
         });
       });
     });
