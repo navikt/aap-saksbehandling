@@ -3,13 +3,13 @@ import {
   KravGrunnlag,
   KravVurdering,
   KravVurderingLøsning,
-  RelevantKrav,
   OverstyrMuligRettFra,
-  SøknadUtenKrav,
+  RelevantKrav,
+  RelevantKravLøsning,
   Søknadsdato,
+  SøknadUtenKrav,
   TilleggsopplysningKravLøsning,
   TrukketSøknadKravLøsning,
-  RelevantKravLøsning,
 } from 'lib/types/types';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -55,11 +55,6 @@ export function formaterKravtype(type: KravType) {
   }
 }
 
-/**
- * Konverterer en KravVurdering (grunnlag-DTO) til KravVurderingLøsning (løsnings-DTO).
- * Brukes for nyeVurderinger som alltid skal sendes ved løs-behov.
- * referanse settes til undefined – vurderingen overstyrer ikke et vedtatt krav.
- */
 export function kravVurderingTilLøsning(vurdering: KravVurdering): KravVurderingLøsning {
   switch (vurdering.type) {
     case 'RELEVANT_KRAV': {
@@ -96,22 +91,6 @@ export function kravVurderingTilLøsning(vurdering: KravVurdering): KravVurderin
       } satisfies TrukketSøknadKravLøsning;
   }
 }
-
-/**
- * Konverterer et vedtatt krav til en løsning som overstyrer det.
- * referanse settes til vurderingens referanse, slik at backend vet hva som endres.
- */
-export function vedtattKravTilEndring(vurdering: KravVurdering): KravVurderingLøsning {
-  const løsning = kravVurderingTilLøsning(vurdering);
-  return { ...løsning, referanse: vurdering.referanse };
-}
-
-// ---------------------------------------------------------------------------
-// Skjemafelter for KravBoks (VurderKravV2) – samme felter som lå i
-// KravVurderingModal/LeggTilKravModal, men nøstet under krav-referansen i det
-// delte KravFormFields-skjemaet (se VurderKravV2) slik at mellomlagring får
-// dem med seg automatisk uten egen lagre/avbryt-håndtering per krav.
-// ---------------------------------------------------------------------------
 
 export interface KravVurderingFormFields {
   kravtype: KravType;
@@ -205,89 +184,6 @@ export function hentOriginaleFormFelter(
   return undefined;
 }
 
-export type KravKilde = 'VEDTATT' | 'NY' | 'LOKAL_NY';
-
-export interface KravRadFormFields {
-  /** Stabil id brukt for å spore hvilke rader som har åpen KravBoks, uavhengig av RHF sin interne field-id. */
-  clientId: string;
-  referanse?: string;
-  kilde: KravKilde;
-  /** Soft delete – kun aktuelt for NY/LOKAL_NY. Filtreres bort først når payload til løs-behov bygges. */
-  slettet: boolean;
-  kravType: KravType;
-  journalpostId: string;
-  begrunnelse: string;
-  søknadsdatoDato: string;
-  søknadsdatoÅrsak: string;
-  overstyrDato: string;
-  overstyrÅrsak: string;
-}
-
-export interface KravSkjemaFields {
-  rader: KravRadFormFields[];
-}
-
-export function kravVurderingTilRad(vurdering: KravVurdering, kilde: 'NY' | 'VEDTATT'): KravRadFormFields {
-  const søknadsdato = finnSøknadsdato(vurdering);
-  const overstyr = finnOverstyrMuligRettFra(vurdering);
-
-  return {
-    clientId: vurdering.referanse,
-    referanse: vurdering.referanse,
-    kilde,
-    slettet: false,
-    kravType: vurdering.type,
-    journalpostId: vurdering.journalpostId.identifikator,
-    begrunnelse: vurdering.begrunnelse,
-    søknadsdatoDato: søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '',
-    søknadsdatoÅrsak: søknadsdato?.årsak ?? '',
-    overstyrDato: overstyr ? formaterDatoForFrontend(overstyr.dato) : '',
-    overstyrÅrsak: overstyr?.årsak ?? '',
-  };
-}
-
-export function tomKravRad(): KravRadFormFields {
-  return {
-    clientId: crypto.randomUUID(),
-    referanse: undefined,
-    kilde: 'LOKAL_NY',
-    slettet: false,
-    kravType: 'RELEVANT_KRAV',
-    journalpostId: '',
-    begrunnelse: '',
-    søknadsdatoDato: '',
-    søknadsdatoÅrsak: '',
-    overstyrDato: '',
-    overstyrÅrsak: '',
-  };
-}
-
-export function byggInitialeRader(grunnlag?: KravGrunnlag): KravRadFormFields[] {
-  const nye = (grunnlag?.nyeVurderinger ?? []).map((v) => kravVurderingTilRad(v, 'NY'));
-  const vedtatte = (grunnlag?.vedtatteVurderinger ?? []).map((v) => kravVurderingTilRad(v, 'VEDTATT'));
-  return [...nye, ...vedtatte];
-}
-
-function radTilLøsning(rad: KravRadFormFields): KravVurderingLøsning {
-  // Kun vedtatte krav skal overstyres via referanse – nye/lokale krav sendes uten referanse.
-  const referanse = rad.kilde === 'VEDTATT' ? rad.referanse : undefined;
-
-  return byggLøsningFraFelter({
-    kravType: rad.kravType,
-    journalpostId: rad.journalpostId,
-    begrunnelse: rad.begrunnelse,
-    søknadsdatoDato: rad.søknadsdatoDato,
-    søknadsdatoÅrsak: rad.søknadsdatoÅrsak,
-    overstyrDato: rad.overstyrDato,
-    overstyrÅrsak: rad.overstyrÅrsak,
-    referanse,
-  });
-}
-
-/**
- * Bygger en KravVurderingLøsning fra et sett flate skjemafelter, felles for både
- * KravRadFormFields (V1) og KravVurderingFormFields (V2/KravBoks).
- */
 function byggLøsningFraFelter(felter: {
   kravType: KravType;
   journalpostId: string;
@@ -338,11 +234,6 @@ function byggLøsningFraFelter(felter: {
     default:
       return { kravType: 'TILLEGGSOPPLYSNING', ...felles } satisfies TilleggsopplysningKravLøsning;
   }
-}
-
-/** Bygger payloaden som sendes til løs-behov: filtrerer bort soft-slettede rader og mapper resten til KravVurderingLøsning. */
-export function byggKravVurderinger(rader: KravRadFormFields[]): KravVurderingLøsning[] {
-  return rader.filter((r) => !r.slettet).map(radTilLøsning);
 }
 
 function erFelterEndret(original: KravVurderingFormFields, gjeldende: KravVurderingFormFields): boolean {
