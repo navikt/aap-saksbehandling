@@ -58,7 +58,7 @@ export const KravTabellV2 = ({ grunnlag, readOnly }: Props) => {
         <Table.Body>
           {grunnlag?.nyeVurderinger.map((vurdering) => {
             const journalpost = grunnlag.søknader.find(
-              (s) => s.journalpostId.identifikator === vurdering.journalpostId.identifikator
+              (søknad) => søknad.journalpostId.identifikator === vurdering.journalpostId.identifikator
             );
 
             return (

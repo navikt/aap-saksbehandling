@@ -33,9 +33,9 @@ function søknadUtenKrav(overrides: Partial<SøknadUtenKrav> = {}): SøknadUtenK
   };
 }
 
-/** Testharness som setter opp samme skjemakontekst som VurderKravV2 gir KravBoks i praksis. */
-function KravBoksHarness({ innhold, onLukk = vi.fn() }: { innhold: KravBoksInnhold; onLukk?: () => void }) {
-  const referanse = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.referanse : innhold.søknad.journalpostId.identifikator;
+function KravBoksWrapper({ innhold, onLukk = vi.fn() }: { innhold: KravBoksInnhold; onLukk?: () => void }) {
+  const referanse =
+    innhold.kilde === 'EKSISTERENDE' ? innhold.krav.referanse : innhold.søknad.journalpostId.identifikator;
   const vurdering = innhold.kilde === 'EKSISTERENDE' ? innhold.krav : undefined;
   const søknad = innhold.kilde === 'NY_SØKNAD' ? innhold.søknad : undefined;
 
@@ -59,10 +59,10 @@ function KravBoksHarness({ innhold, onLukk = vi.fn() }: { innhold: KravBoksInnho
   );
 }
 
-describe('KravBoks - visning av innhold', () => {
+describe('KravBoks', () => {
   it('viser krav-referanse, søknadsdato og kravtype for et eksisterende krav', () => {
     const krav = relevantKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     expect(screen.getByText('Vurder krav krav-1')).toBeVisible();
     expect(screen.getByText('Søknadsdato: 01.04.2025')).toBeVisible();
@@ -72,7 +72,7 @@ describe('KravBoks - visning av innhold', () => {
 
   it('viser "Må vurderes"-tag og "Ny søknad"-tittel for en søknad uten kravvurdering', () => {
     const søknad = søknadUtenKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
     expect(screen.getByText('Må vurderes')).toBeVisible();
@@ -81,7 +81,7 @@ describe('KravBoks - visning av innhold', () => {
 
   it('viser "-" for mulig rett fra når kravet ikke har et slikt felt (f.eks. en ny søknad)', () => {
     const søknad = søknadUtenKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
     expect(screen.getByText('-')).toBeVisible();
   });
@@ -90,7 +90,7 @@ describe('KravBoks - visning av innhold', () => {
 describe('KravBoks - åpne/lukke bolker', () => {
   it('åpner Kravtype-bolken ved klikk, og viser select-feltet', async () => {
     const krav = relevantKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     expect(screen.queryByRole('combobox', { name: 'Kravtype' })).not.toBeInTheDocument();
 
@@ -101,7 +101,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
   it('viser Kravtype-bolken forhåndsåpnet for en ny søknad, slik at saksbehandler må ta stilling til kravtype', () => {
     const søknad = søknadUtenKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
     expect(screen.getByRole('combobox', { name: 'Kravtype' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Avbryt vurder om krav er relevant' })).toBeVisible();
@@ -109,7 +109,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
   it('viser Kravtype-bolken lukket for et eksisterende krav (skal ikke forhåndsåpnes)', () => {
     const krav = relevantKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     expect(screen.queryByRole('combobox', { name: 'Kravtype' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Vurder om krav er relevant' })).toBeVisible();
@@ -117,7 +117,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
   it('nullstiller kravtype til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
     const krav = relevantKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
     await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'KLAGE');
@@ -132,7 +132,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
   it('nullstiller søknadsdato-feltene til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
     const krav = relevantKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' }));
     const søknadsdatoFelt = screen.getByRole('textbox', { name: 'Søknadsdato' });
@@ -150,7 +150,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
     const krav = relevantKrav({
       overstyrMuligRettFra: { dato: '2025-07-01', årsak: 'MisvisendeOpplysninger' },
     });
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' }));
     const overstyrFelt = screen.getByRole('textbox', { name: 'Overstyr mulig rett fra' });
@@ -171,7 +171,7 @@ describe('KravBoks - Lukk-knapp og begrunnelse', () => {
   it('kaller onLukk når toppnivå Lukk-knappen klikkes', async () => {
     const onLukk = vi.fn();
     const krav = relevantKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} onLukk={onLukk} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} onLukk={onLukk} />);
 
     await user.click(screen.getByRole('button', { name: 'Lukk' }));
 
@@ -180,14 +180,14 @@ describe('KravBoks - Lukk-knapp og begrunnelse', () => {
 
   it('viser begrunnelsesfeltet forhåndsutfylt med eksisterende begrunnelse for et allerede vurdert krav', () => {
     const krav = relevantKrav({ begrunnelse: 'En begrunnelse fra før' });
-    customRender(<KravBoksHarness innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('En begrunnelse fra før');
   });
 
   it('viser tomt begrunnelsesfelt for en ny søknad uten kravvurdering', () => {
     const søknad = søknadUtenKrav();
-    customRender(<KravBoksHarness innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+    customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
     expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('');
   });

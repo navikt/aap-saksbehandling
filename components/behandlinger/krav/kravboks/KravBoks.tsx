@@ -33,17 +33,13 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
   const referanse =
     innhold.kilde === 'EKSISTERENDE' ? innhold.krav.referanse : innhold.søknad.journalpostId.identifikator;
 
-  const [visVurderOmKravErRelevantFelt, setVisVurderOmKravErRelevantFelt] = useState<boolean>(
-    erNySøknad
-  );
+  const [visVurderOmKravErRelevantFelt, setVisVurderOmKravErRelevantFelt] = useState<boolean>(erNySøknad);
   const [visEndreSøknadsdatoFelt, setVisEndreSøknadsdatoFelt] = useState<boolean>(false);
   const [visMuligRettFraFelt, setVisMuligRettFraFelt] = useState<boolean>(false);
 
   const form = useFormContext<KravFormFields>();
 
-  // Visningsverdier for toppfeltene i hver bolk. For en ny søknad finnes det ennå ingen
-  // kravvurdering å hente disse fra, så vi viser i stedet forhåndsutfylte/tomme standardverdier.
-  const kravtypeVisning: KravType = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.type : 'RELEVANT_KRAV';
+  const kravtypeVisning = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.type : 'RELEVANT_KRAV';
   const søknadsdato =
     innhold.kilde === 'EKSISTERENDE' ? finnSøknadsdato(innhold.krav) : { dato: innhold.søknad.mottattTidspunkt };
   const muligRettFra =
