@@ -27,8 +27,6 @@ updates:
       default-days: 7
       exclude:
         - '@navikt/aap-behandlingsflyt-typescript-types'
-        - '@navikt/aap-postmottak-backend-typescript-types'
-        - '@navikt/aap-oppgave-typescript-types'
         - '@navikt/aap-statistikk-typescript-types'
         - '@navikt/aksel*'
         - '@navikt/ds*'
@@ -47,8 +45,6 @@ updates:
       aap-backend-typescript-types:
         patterns:
           - '@navikt/aap-behandlingsflyt-typescript-types'
-          - '@navikt/aap-postmottak-backend-typescript-types'
-          - '@navikt/aap-oppgave-typescript-types'
           - '@navikt/aap-statistikk-typescript-types'
       aksel-dependencies:
         patterns:
