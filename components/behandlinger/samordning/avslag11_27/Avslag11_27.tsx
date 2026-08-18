@@ -14,7 +14,7 @@ import {
   TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEvent, SubmitEventHandler, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -324,15 +324,6 @@ function mapVurderingToDraftFormFields(
         };
       }
 
-      let harArbeidsgiverSykepengerUtbetaling: JaEllerNei | undefined;
-      if (nåværende.harArbeidsgiverSykepengerUtbetaling !== undefined && nåværende.harArbeidsgiverSykepengerUtbetaling !== null) {
-        harArbeidsgiverSykepengerUtbetaling = nåværende.harArbeidsgiverSykepengerUtbetaling ? JaEllerNei.Ja : JaEllerNei.Nei;
-      }
-      let skalAvslås1127: JaEllerNei | undefined;
-      if (nåværende.skalAvslås1127 !== undefined && nåværende.skalAvslås1127 !== null) {
-        skalAvslås1127 = nåværende.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei;
-      }
-
       return {
         vurdering: {
           referanse: kravItem.referanse,
@@ -341,10 +332,12 @@ function mapVurderingToDraftFormFields(
           begrunnelse: nåværende.begrunnelse ?? '',
           harAnnenFullYtelse: nåværende.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
           brukersYtelse: nåværende.brukersYtelse ?? undefined,
-          brukersYtelseTom: nåværende.brukersYtelseTom ? formaterDatoForFrontend(nåværende.brukersYtelseTom) : undefined,
+          brukersYtelseTom: nåværende.brukersYtelseTom
+            ? formaterDatoForFrontend(nåværende.brukersYtelseTom)
+            : undefined,
           sykepengegrunnlag: nåværende.sykepengegrunnlag?.verdi ?? undefined,
-          harArbeidsgiverSykepengerUtbetaling,
-          skalAvslås1127,
+          harArbeidsgiverSykepengerUtbetaling: getJaNeiEllerUndefined(nåværende.harArbeidsgiverSykepengerUtbetaling),
+          skalAvslås1127: getJaNeiEllerUndefined(nåværende.skalAvslås1127),
         },
       };
     }),
