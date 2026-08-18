@@ -1520,7 +1520,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-
 "@navikt/aksel-icons@npm:8.16.1, @navikt/aksel-icons@npm:^8.16.1":
   version: 8.16.1
   resolution: "@navikt/aksel-icons@npm:8.16.1::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faksel-icons%2F8.16.1%2F14a6bd35401f4ab289af18de58f94399d621ebf7"
