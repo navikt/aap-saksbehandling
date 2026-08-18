@@ -1,6 +1,6 @@
 'use client';
 
-import { Radio, VStack } from '@navikt/ds-react';
+import { BodyShort, HStack, Radio, VStack } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { UseFormReturn } from 'react-hook-form';
@@ -9,6 +9,8 @@ import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
@@ -23,6 +25,8 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
   const visYtelseSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
   const visSykepengegrunnlagSpørsmål = visYtelseSpørsmål && vurdering?.brukersYtelse === 'SYKEPENGER';
   const visAvslagsSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
+  const sykepengegrunnlagINumber = Number(vurdering?.sykepengegrunnlag);
+  const visningsverdiSykepengegrunnlag = Number.isFinite(sykepengegrunnlagINumber) ? sykepengegrunnlagINumber : 0;
 
   return (
     <VStack gap={'space-16'}>
@@ -45,7 +49,7 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
       </RadioGroupWrapper>
       {visYtelseSpørsmål && (
-        <VStack key={kravIndex} gap="space-8" align="start">
+        <VStack gap="space-8" align="start">
           <SelectWrapper
             name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelse`}
             control={form.control}
@@ -62,18 +66,48 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
           </SelectWrapper>
         </VStack>
       )}
+      {visYtelseSpørsmål && (
+        <VStack gap="space-8" align="start">
+          <DateInputWrapper
+            name={`avslag11_27vurderinger.${kravIndex}.vurdering.brukersYtelseTom`}
+            control={form.control}
+            label={'Bruker har annen full ytelse til og med dato'}
+            rules={{ required: 'Du må oppgi til og med dato for bruker annen full ytelse' }}
+            readOnly={readonly}
+          />
+        </VStack>
+      )}
       {visSykepengegrunnlagSpørsmål && (
-        <RadioGroupWrapper
-          name={`avslag11_27vurderinger.${kravIndex}.vurdering.harSykepengegrunnlagOver2G`}
-          control={form.control}
-          label={'Har brukeren sykepengegrunnlag større enn 2G?'}
-          rules={{ required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2G.' }}
-          readOnly={readonly}
-          horisontal
-        >
-          <Radio value={JaEllerNei.Ja}>Ja</Radio>
-          <Radio value={JaEllerNei.Nei}>Nei</Radio>
-        </RadioGroupWrapper>
+        <HStack gap="space-8" align="end">
+          <TextFieldWrapper
+            label={'Brukerens sykepengegrunnlag (årssats)'}
+            description={'Ved sykepengegrunnlag under 2 G kan det lønne seg for bruker å velge AAP'}
+            name={`avslag11_27vurderinger.${kravIndex}.vurdering.sykepengegrunnlag`}
+            control={form.control}
+            rules={{ required: 'Du må svare om brukerens sykepengegrunnlag.' }}
+            readOnly={readonly}
+            type={'number'}
+          />
+          <BodyShort>{visningsverdiSykepengegrunnlag} G</BodyShort>
+        </HStack>
+      )}
+      {visSykepengegrunnlagSpørsmål && (
+        <VStack key={kravIndex} gap="space-8" align="start">
+          <RadioGroupWrapper
+            name={`avslag11_27vurderinger.${kravIndex}.vurdering.harArbeidsgiverSykepengerUtbetaling`}
+            control={form.control}
+            label={'Utbetaler arbeidsgiver sykepenger til bruker?'}
+            description={
+              'Hvis arbeidsgiver utbetaler sykepenger, må brukeren sende dokumentasjon på at de ikke lenger mottar sykepenger fra arbeidsgiver før de kan innvilges AAP'
+            }
+            rules={{ required: 'Du må svare om bruker får sykepenger fra arbeidsgiver' }}
+            readOnly={readonly}
+            horisontal
+          >
+            <Radio value={JaEllerNei.Ja}>Ja</Radio>
+            <Radio value={JaEllerNei.Nei}>Nei</Radio>
+          </RadioGroupWrapper>
+        </VStack>
       )}
       {visAvslagsSpørsmål && (
         <RadioGroupWrapper
