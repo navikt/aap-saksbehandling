@@ -1494,6 +1494,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -1707,6 +1708,12 @@ export interface components {
       status: string;
       steg: string;
     };
+    'no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarFordelingL\u00F8sning': {
+      behovstype: string;
+      kommentar?: string | null;
+      /** @enum {string} */
+      valgtSystem: 'ARENA' | 'BEGGE' | 'KELVIN';
+    };
     'no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning': {
       behovstype: string;
       skalOverleveres: boolean;
@@ -1727,6 +1734,7 @@ export interface components {
       skalTilAap: boolean;
     };
     'no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklaringsbehovL\u00F8sning':
+      | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarFordelingL\u00F8sning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarSaksnummerL\u00F8sning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarTemaL\u00F8sning']
@@ -1748,6 +1756,7 @@ export interface components {
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
         | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
         | 'NY_ÅRSAK_TIL_BEHANDLING'
         | 'OMGJØRING_KLAGE_REVURDERING'
         | 'OPPFØLGINGSOPPGAVE'
@@ -1833,7 +1842,7 @@ export interface components {
     };
     'no.nav.aap.postmottak.kontrakt.avklaringsbehov.Definisjon': {
       /** @enum {string} */
-      kode: '1337' | '1338' | '1339' | '1340' | '1341' | '1342' | '9001';
+      kode: '1337' | '1338' | '1339' | '1340' | '1341' | '1342' | '1343' | '9001';
       kreverToTrinn: boolean;
       'l\u00F8sesAv': (
         | 'BESLUTTER'
