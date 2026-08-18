@@ -39,6 +39,8 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
 
   const form = useFormContext<KravFormFields>();
 
+  const kravTypeErRelevantKrav = form.watch(`vurderinger.${referanse}.kravtype`) === 'RELEVANT_KRAV';
+
   const kravtypeVisning = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.type : 'RELEVANT_KRAV';
   const søknadsdato =
     innhold.kilde === 'EKSISTERENDE' ? finnSøknadsdato(innhold.krav) : { dato: innhold.søknad.mottattTidspunkt };
@@ -130,60 +132,63 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
             </SelectWrapper>
           </Bolk>
 
-          <Bolk
-            label={'Søknadsdato'}
-            value={søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}
-            buttonTekst={visEndreSøknadsdatoFelt ? 'Avbryt Vurder §22-13 5.ledd' : 'Vurder §22-13 5.ledd'}
-            onClick={toggleEndreSøknadsdatoFelt}
-            isOpen={visEndreSøknadsdatoFelt}
-          >
-            <VStack gap={'space-16'}>
+          {kravTypeErRelevantKrav && (
+            <Bolk
+              label={'Søknadsdato'}
+              value={søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}
+              buttonTekst={visEndreSøknadsdatoFelt ? 'Avbryt Vurder §22-13 5.ledd' : 'Vurder §22-13 5.ledd'}
+              onClick={toggleEndreSøknadsdatoFelt}
+              isOpen={visEndreSøknadsdatoFelt}
+            >
+              <VStack gap={'space-16'}>
+                <DateInputWrapper
+                  name={`vurderinger.${referanse}.søknadsdatoDato`}
+                  control={form.control}
+                  label="Søknadsdato"
+                  size={'small'}
+                  rules={{ required: 'Du må fylle inn søknadsdato.' }}
+                />
+                <SelectWrapper
+                  control={form.control}
+                  name={`vurderinger.${referanse}.søknadsdatoÅrsak`}
+                  label="Årsak for søknadsdato"
+                  size="small"
+                  rules={{ required: 'Du må velge årsak for søknadsdato.' }}
+                >
+                  <option value="">Velg årsak</option>
+                  <option value="SøknadMottatt">Søknad mottatt</option>
+                  <option value="BrukerHarSøktTidligere">Bruker har søkt tidligere</option>
+                  <option value="FeilregistrertSøknadsdato">Feilregistrert søknadsdato</option>
+                </SelectWrapper>
+                <SelectWrapper
+                  control={form.control}
+                  name={`vurderinger.${referanse}.overstyrÅrsak`}
+                  label="Årsak for overstyring (valgfri)"
+                  size="small"
+                >
+                  <option value="">Ingen overstyring</option>
+                  <option value="IkkeIStandTilÅSøkeTidligere">Ikke i stand til å søke tidligere</option>
+                  <option value="MisvisendeOpplysninger">Misvisende opplysninger</option>
+                </SelectWrapper>
+              </VStack>
+            </Bolk>
+          )}
+
+          {kravTypeErRelevantKrav && (
+            <Bolk
+              label={'Mulig rett fra'}
+              value={muligRettFra ? formaterDatoForFrontend(muligRettFra) : '-'}
+              buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
+              onClick={toggleMuligRettFraFelt}
+              isOpen={visMuligRettFraFelt}
+            >
               <DateInputWrapper
-                name={`vurderinger.${referanse}.søknadsdatoDato`}
+                name={`vurderinger.${referanse}.overstyrDato`}
                 control={form.control}
-                label="Søknadsdato"
-                size={'small'}
-                rules={{ required: 'Du må fylle inn søknadsdato.' }}
+                label="Overstyr mulig rett fra"
               />
-              <SelectWrapper
-                control={form.control}
-                name={`vurderinger.${referanse}.søknadsdatoÅrsak`}
-                label="Årsak for søknadsdato"
-                size="small"
-                rules={{ required: 'Du må velge årsak for søknadsdato.' }}
-              >
-                <option value="">Velg årsak</option>
-                <option value="SøknadMottatt">Søknad mottatt</option>
-                <option value="BrukerHarSøktTidligere">Bruker har søkt tidligere</option>
-                <option value="FeilregistrertSøknadsdato">Feilregistrert søknadsdato</option>
-              </SelectWrapper>
-              <SelectWrapper
-                control={form.control}
-                name={`vurderinger.${referanse}.overstyrÅrsak`}
-                label="Årsak for overstyring (valgfri)"
-                size="small"
-              >
-                <option value="">Ingen overstyring</option>
-                <option value="IkkeIStandTilÅSøkeTidligere">Ikke i stand til å søke tidligere</option>
-                <option value="MisvisendeOpplysninger">Misvisende opplysninger</option>
-              </SelectWrapper>
-            </VStack>
-          </Bolk>
-
-          <Bolk
-            label={'Mulig rett fra'}
-            value={muligRettFra ? formaterDatoForFrontend(muligRettFra) : '-'}
-            buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
-            onClick={toggleMuligRettFraFelt}
-            isOpen={visMuligRettFraFelt}
-          >
-            <DateInputWrapper
-              name={`vurderinger.${referanse}.overstyrDato`}
-              control={form.control}
-              label="Overstyr mulig rett fra"
-            />
-          </Bolk>
-
+            </Bolk>
+          )}
           <TextAreaWrapper
             control={form.control}
             name={`vurderinger.${referanse}.begrunnelse`}

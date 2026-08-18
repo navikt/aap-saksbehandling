@@ -55,43 +55,6 @@ export function formaterKravtype(type: KravType) {
   }
 }
 
-export function kravVurderingTilLøsning(vurdering: KravVurdering): KravVurderingLøsning {
-  switch (vurdering.type) {
-    case 'RELEVANT_KRAV': {
-      const v = vurdering as RelevantKrav;
-      return {
-        kravType: 'RELEVANT_KRAV',
-        journalpostId: v.journalpostId,
-        begrunnelse: v.begrunnelse,
-        søknadsdato: v.søknadsdato,
-        overstyrMuligRettFra: v.overstyrMuligRettFra,
-        referanse: undefined,
-      } satisfies RelevantKravLøsning;
-    }
-    case 'KLAGE':
-      return {
-        kravType: 'KLAGE',
-        journalpostId: vurdering.journalpostId,
-        begrunnelse: vurdering.begrunnelse,
-        referanse: undefined,
-      } satisfies KlageKravLøsning;
-    case 'TILLEGGSOPPLYSNING':
-      return {
-        kravType: 'TILLEGGSOPPLYSNING',
-        journalpostId: vurdering.journalpostId,
-        begrunnelse: vurdering.begrunnelse,
-        referanse: undefined,
-      } satisfies TilleggsopplysningKravLøsning;
-    case 'TRUKKET_SØKNAD':
-      return {
-        kravType: 'TRUKKET_SØKNAD',
-        journalpostId: vurdering.journalpostId,
-        begrunnelse: vurdering.begrunnelse,
-        referanse: undefined,
-      } satisfies TrukketSøknadKravLøsning;
-  }
-}
-
 export interface KravVurderingFormFields {
   kravtype: KravType;
   journalpostId: string;

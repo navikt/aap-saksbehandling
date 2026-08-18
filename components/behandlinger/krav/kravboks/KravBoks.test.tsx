@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
+import { KravVurdering, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 import { byggInitielleVurderinger } from 'components/behandlinger/krav/kravutils';
 import { KravBoks, KravBoksInnhold } from 'components/behandlinger/krav/kravboks/KravBoks';
@@ -19,6 +19,22 @@ function relevantKrav(overrides: Partial<RelevantKrav> = {}): RelevantKrav {
     opprettet: '2025-04-01T10:30:00Z',
     muligRettFra: '2025-04-15',
     søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt' },
+    vurdertAv: 'Z000000',
+    vurdertIBehandling: { id: 1 },
+    ...overrides,
+  };
+}
+
+function annenKravtypeKrav(
+  type: 'KLAGE' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD',
+  overrides: Partial<KravVurdering> = {}
+): KravVurdering {
+  return {
+    type,
+    referanse: 'krav-2',
+    journalpostId: { identifikator: 'jp-2' },
+    begrunnelse: 'Opprinnelig begrunnelse',
+    opprettet: '2025-04-01T10:30:00Z',
     vurdertAv: 'Z000000',
     vurdertIBehandling: { id: 1 },
     ...overrides,
@@ -190,5 +206,74 @@ describe('KravBoks - Lukk-knapp og begrunnelse', () => {
     customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
     expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('');
+  });
+});
+
+describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
+  it('viser knappene for §22-13 5.ledd og 7.ledd for et eksisterende krav av typen relevant krav', () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
+  });
+
+  it('viser knappene for §22-13 5.ledd og 7.ledd forhåndsåpnet for en ny søknad (default kravtype er relevant krav)', () => {
+    const søknad = søknadUtenKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
+  });
+
+  it.each([['KLAGE'], ['TILLEGGSOPPLYSNING'], ['TRUKKET_SØKNAD']] as const)(
+    'skjuler §22-13 5.ledd og 7.ledd-bolkene for et eksisterende krav av typen %s',
+    (type) => {
+      const krav = annenKravtypeKrav(type);
+      customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+      expect(screen.queryByRole('button', { name: 'Vurder §22-13 5.ledd' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Vurder §22-13 7.ledd' })).not.toBeInTheDocument();
+    }
+  );
+
+  it('skjuler §22-13-bolkene med det samme kravtypen endres bort fra relevant krav i kravtype-selecten', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'KLAGE');
+
+    expect(screen.queryByRole('button', { name: 'Vurder §22-13 5.ledd' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vurder §22-13 7.ledd' })).not.toBeInTheDocument();
+  });
+
+  it('viser §22-13-bolkene igjen når kravtypen endres tilbake til relevant krav', async () => {
+    const krav = annenKravtypeKrav('KLAGE');
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    expect(screen.queryByRole('button', { name: 'Vurder §22-13 5.ledd' })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'RELEVANT_KRAV');
+
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
+  });
+
+  it('skjuler feltene inni en allerede åpen §22-13 5.ledd-bolk når kravtypen endres bort fra relevant krav', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' }));
+    expect(screen.getByRole('textbox', { name: 'Søknadsdato' })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
+    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'TRUKKET_SØKNAD');
+
+    expect(screen.queryByRole('textbox', { name: 'Søknadsdato' })).not.toBeInTheDocument();
   });
 });
