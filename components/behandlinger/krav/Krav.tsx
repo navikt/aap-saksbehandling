@@ -1,10 +1,9 @@
 import { BehandlingFlytOgTilstand, StegType } from 'lib/types/types';
 import { getStegData } from 'lib/utils/steg';
-
-import { VurderKravMedDataFetching } from 'components/behandlinger/krav/VurderKravMedDataFetching';
 import { StønadsperiodeMedDataFetching } from 'components/behandlinger/krav/stønadsperiode/StønadsperiodeMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+import { VurderKravMedDataFetching } from 'components/behandlinger/krav/vurderkrav/VurderKravMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
