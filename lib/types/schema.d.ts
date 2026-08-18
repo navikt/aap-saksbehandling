@@ -14085,7 +14085,11 @@ export interface components {
       /** @enum {string|null} */
       'ytterligereNedsatt\u00C5rsak'?:
         | 'ANNET'
+        | 'DATO_PAA_LEGEERKLÆRING'
+        | 'HENVIST_TIL_BEHANDLING'
         | 'IKKE_BETYDNING_IKKE_RELEVANT'
+        | 'KRAVDATO'
+        | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | 'YTTERLIGERE_NEDSATT'
         | 'ØKT_UFØREGRAD'
@@ -17710,7 +17714,11 @@ export interface components {
       /** @enum {string|null} */
       'ytterligereNedsatt\u00C5rsak'?:
         | 'ANNET'
+        | 'DATO_PAA_LEGEERKLÆRING'
+        | 'HENVIST_TIL_BEHANDLING'
         | 'IKKE_BETYDNING_IKKE_RELEVANT'
+        | 'KRAVDATO'
+        | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | 'YTTERLIGERE_NEDSATT'
         | 'ØKT_UFØREGRAD'
