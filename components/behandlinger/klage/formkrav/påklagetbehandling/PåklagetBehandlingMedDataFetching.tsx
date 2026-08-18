@@ -1,23 +1,27 @@
-import { TypeBehandling } from 'lib/types/types';
-import { PåklagetBehandling } from './PåklagetBehandling';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import {
   hentMellomlagring,
   hentPåklagetBehandlingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { TypeBehandling } from 'lib/types/types';
+import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
+import { PåklagetBehandling } from './PåklagetBehandling';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
   typeBehandling: TypeBehandling;
 }
 
 export const PåklagetBehandlingMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
+  visVentekort,
   typeBehandling,
   behandlingsreferanse,
 }: Props) => {
@@ -31,7 +35,8 @@ export const PåklagetBehandlingMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (

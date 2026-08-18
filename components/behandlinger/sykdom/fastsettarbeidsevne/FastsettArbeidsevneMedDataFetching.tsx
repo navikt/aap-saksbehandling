@@ -2,11 +2,12 @@ import {
   hentFastsettArbeidsevneGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { FastsettArbeidsevnePeriodisertFrontend } from 'components/behandlinger/sykdom/fastsettarbeidsevne/FastsettArbeidsevnePeriodisertFrontend';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -24,7 +25,8 @@ export const FastsettArbeidsevneMedDataFetching = async ({ behandlingsreferanse,
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_ARBEIDSEVNE_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

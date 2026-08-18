@@ -2,11 +2,12 @@ import {
   hentMellomlagring,
   hentSamordningUføreGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { SamordningUføre } from 'components/behandlinger/samordning/samordninguføre/SamordningUføre';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -23,7 +24,8 @@ export const SamordningUføreMedDatafetching = async ({ behandlingsreferanse, st
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_UFORE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

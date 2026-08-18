@@ -3,11 +3,12 @@ import {
   hentMellomlagring,
   hentSykdomsvurderingBrevGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
 import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrev';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -28,7 +29,8 @@ export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsreferanse
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.SYKDOMSVURDERING_BREV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

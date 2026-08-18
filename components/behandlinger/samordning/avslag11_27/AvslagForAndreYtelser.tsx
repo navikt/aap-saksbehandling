@@ -1,9 +1,10 @@
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
 import { getStegData } from 'lib/utils/steg';
+
+import { AvslagAndreYtelserMedDataFetching } from 'components/behandlinger/samordning/avslag11_27/AvslagAndreYtelserMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { AvslagAndreYtelserMedDataFetching } from 'components/behandlinger/samordning/avslag11_27/AvslagAndreYtelserMedDataFetching';
-import { Behovstype } from 'lib/utils/form';
 
 interface props {
   behandlingsreferanse: string;
@@ -29,6 +30,7 @@ export const AvslagForAndreYtelser = async ({ behandlingsreferanse, flyt }: prop
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={stegData.visVentekort}
           />
         </StegSuspense>
       )}

@@ -1,4 +1,3 @@
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
   hentBeregningstidspunktVurdering,
   hentForutgåendeMedlemskapGrunnlag,
@@ -6,14 +5,16 @@ import {
   hentMellomlagring,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegData, skalViseSteg } from 'lib/utils/steg';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { kanViseOverstyrKnapp } from 'lib/utils/overstyring';
+import { getStegData, skalViseSteg } from 'lib/utils/steg';
+
 import { PeriodisertForutgåendemedlemskapOverstyringswrapper } from 'components/behandlinger/forutgåendemedlemskap/PeriodisertForutgåendemedlemskapOverstyringswrapper';
 import { ForutgåendeMedlemskapPeriodisert } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapPeriodisert';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -44,7 +45,8 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse, 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
-    readOnly
+    readOnly,
+    flyt.visning.visVentekort
   );
 
   const erOverstyrtTilbakeførtVurdering =

@@ -36,7 +36,8 @@ export const ToTrinnsvurderingMedDataFetching = async ({ behandlingsreferanse }:
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-    totalReadOnly
+    totalReadOnly,
+    flyt.data.visning.visVentekort
   );
 
   const hastemarkering = markeringer.data

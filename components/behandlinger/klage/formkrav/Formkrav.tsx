@@ -1,12 +1,14 @@
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { FormkravVurderingMedDataFetching } from './formkravvurdering/FormkravVurderingMedDataFetching';
-import { PåklagetBehandlingMedDataFetching } from './påklagetbehandling/PåklagetBehandlingMedDataFetching';
-import { BehandlendeEnhetMedDataFetching } from './behandlendeenhet/BehandlendeEnhetMedDataFetching';
+
 import { FullmektigVurderingMedDataFetching } from 'components/behandlinger/klage/formkrav/fullmektig/FullmektigVurderingMedDataFetching';
 import { BrevKortMedDataFetching } from 'components/brev/BrevKortMedDataFetching';
-import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
+import { StegSuspense } from 'components/stegsuspense/StegSuspense';
+
+import { BehandlendeEnhetMedDataFetching } from './behandlendeenhet/BehandlendeEnhetMedDataFetching';
+import { FormkravVurderingMedDataFetching } from './formkravvurdering/FormkravVurderingMedDataFetching';
+import { PåklagetBehandlingMedDataFetching } from './påklagetbehandling/PåklagetBehandlingMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -33,6 +35,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
@@ -43,6 +46,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
@@ -53,6 +57,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
@@ -71,6 +76,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            visVentekort={flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

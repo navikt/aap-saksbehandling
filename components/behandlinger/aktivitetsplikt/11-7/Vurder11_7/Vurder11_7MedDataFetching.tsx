@@ -1,19 +1,26 @@
-import { Vurder11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Vurder11_7/Vurder11_7';
 import {
   hentAktivitetsplikt11_7Grunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
+
+import { Vurder11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Vurder11_7/Vurder11_7';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
 }
 
-export const Vurder11_7MedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+export const Vurder11_7MedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingVersjon,
+  readOnly,
+  visVentekort,
+}: Props) => {
   const grunnlag = await hentAktivitetsplikt11_7Grunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
@@ -25,7 +32,8 @@ export const Vurder11_7MedDataFetching = async ({ behandlingsreferanse, behandli
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_BRUDD_11_7_KODE,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (

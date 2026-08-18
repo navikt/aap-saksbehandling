@@ -1,13 +1,14 @@
-import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
 import {
   hentBeregningstidspunktVurdering,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { unleashService } from 'lib/services/unleash/unleashService';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
-import { unleashService } from 'lib/services/unleash/unleashService';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
+import { FastsettBeregning } from 'components/behandlinger/grunnlag/fastsettberegning/FastsettBeregning';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -30,7 +31,8 @@ export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, s
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

@@ -2,10 +2,12 @@ import {
   hentInntektsBortfallGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+
 import { Inntektsbortfall } from './Inntektsbortfall';
 
 interface Props {
@@ -28,7 +30,8 @@ export const InntektsbortfallMedDataFetching = async ({ behandlingsreferanse, st
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

@@ -2,11 +2,12 @@ import {
   hentMellomlagring,
   hentSykepengerErstatningGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { StegData, skalViseSteg } from 'lib/utils/steg';
+
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -34,7 +35,8 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse,
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_SYKEPENGEERSTATNING_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

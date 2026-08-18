@@ -4,10 +4,11 @@ import {
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { StegData } from 'lib/utils/steg';
-import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
 import { Behovstype } from 'lib/utils/form';
+import { StegData } from 'lib/utils/steg';
+
+import { FastsettManuellInntekt } from 'components/behandlinger/grunnlag/fastsettmanuellinntekt/FastsettManuellInntekt';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
@@ -35,7 +36,8 @@ export const FastsettManuellInntektMedDataFetching = async ({ behandlingsreferan
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_MANUELL_INNTEKT,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

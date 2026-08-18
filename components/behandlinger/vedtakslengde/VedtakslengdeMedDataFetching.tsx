@@ -4,17 +4,24 @@ import {
   hentVedtakslengdeGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { VedtakslengdeSteg } from 'components/behandlinger/vedtakslengde/VedtakslengdeSteg';
 import { Behovstype } from 'lib/utils/form';
+
+import { VedtakslengdeSteg } from 'components/behandlinger/vedtakslengde/VedtakslengdeSteg';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
 }
 
-export const VedtakslengdeMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+export const VedtakslengdeMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingVersjon,
+  readOnly,
+  visVentekort,
+}: Props) => {
   const [grunnlag, behandling] = await Promise.all([
     hentVedtakslengdeGrunnlag(behandlingsreferanse),
     hentBehandling(behandlingsreferanse),
@@ -28,7 +35,8 @@ export const VedtakslengdeMedDataFetching = async ({ behandlingsreferanse, behan
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_VEDTAKSLENGDE,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   const erVedtakslengdeManuelt =

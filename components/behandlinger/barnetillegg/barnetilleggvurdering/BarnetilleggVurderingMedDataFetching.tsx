@@ -1,13 +1,14 @@
-import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import {
   hentBarnetilleggGrunnlag,
   hentBehandlingPersoninfo,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
+
+import { BarnetilleggVurdering } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 type Props = {
   behandlingsreferanse: string;
@@ -27,7 +28,8 @@ export const BarnetilleggVurderingMedDataFetching = async ({ behandlingsreferans
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_BARNETILLEGG_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.visVentekort
   );
 
   return (

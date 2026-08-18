@@ -1,20 +1,23 @@
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
 import { hentAvslag11_27Grunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { Behovstype } from 'lib/utils/form';
-import { Avslag11_27 } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
 import { TypeBehandling } from 'lib/types/types';
+import { isError } from 'lib/utils/api';
+import { Behovstype } from 'lib/utils/form';
+
+import { Avslag11_27 } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  visVentekort: boolean;
   typeBehandling: TypeBehandling;
 }
 
 export const AvslagAndreYtelserMedDataFetching = async ({
   behandlingsreferanse,
   readOnly,
+  visVentekort,
   behandlingVersjon,
   typeBehandling,
 }: Props) => {
@@ -28,7 +31,8 @@ export const AvslagAndreYtelserMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_AVSLAG_11_27,
-    totalReadOnly
+    totalReadOnly,
+    visVentekort
   );
 
   return (
