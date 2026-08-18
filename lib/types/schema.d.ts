@@ -14653,6 +14653,9 @@ export interface components {
         | 'OVERGANGSTILLEGG'
         | 'PAASLAGSPENSJON'
         | 'SAERALDER'
+        | 'SAERALDERSPAASLAG'
+        | 'TIDLIGPENSJON'
+        | 'TIDLIGPEN_OVERGANG'
         | 'UFORE'
         | 'UKJENT';
       /**
@@ -17050,6 +17053,9 @@ export interface components {
         | 'OVERGANGSTILLEGG'
         | 'PAASLAGSPENSJON'
         | 'SAERALDER'
+        | 'SAERALDERSPAASLAG'
+        | 'TIDLIGPENSJON'
+        | 'TIDLIGPEN_OVERGANG'
         | 'UFORE'
         | 'UKJENT';
     };
