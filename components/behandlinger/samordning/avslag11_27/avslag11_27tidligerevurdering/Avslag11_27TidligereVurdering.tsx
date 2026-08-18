@@ -18,38 +18,31 @@ export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
         spørsmål={'Har brukeren en annen ytelse som regnes som full ytelse fra folketrygden?'}
         svar={getJaEllerNei(vurdering.harAnnenFullYtelse)}
       />
-      {vurdering.harAnnenFullYtelse !== null &&
-        vurdering.harAnnenFullYtelse !== undefined &&
-        vurdering.brukersYtelse !== null &&
-        vurdering.brukersYtelse !== undefined && (
+      {vurdering.harAnnenFullYtelse && vurdering.brukersYtelse && (
           <SpørsmålOgSvar
             spørsmål={'Hvilken ytelse har brukeren?'}
             svar={storForbokstavOgMellomromForUnderstrek(vurdering.brukersYtelse)}
           />
         )}
-      {vurdering.harAnnenFullYtelse !== null &&
-        vurdering.harAnnenFullYtelse !== undefined &&
-        vurdering.brukersYtelseTom !== null &&
-        vurdering.brukersYtelseTom !== undefined && (
+      {vurdering.harAnnenFullYtelse && vurdering.brukersYtelseTom && (
           <SpørsmålOgSvar
             spørsmål={'Bruker har annen full ytelse til og med dato'}
             svar={formaterDatoForFrontend(vurdering.brukersYtelseTom)}
           />
         )}
-      {vurdering.sykepengegrunnlag !== null && vurdering.sykepengegrunnlag !== undefined && (
+      {vurdering.sykepengegrunnlag && (
         <SpørsmålOgSvar
           spørsmål={'Brukerens sykepengegrunnlag (årssats)'}
           svar={formaterTilNok(vurdering.sykepengegrunnlag.verdi)}
         />
       )}
-      {vurdering.harArbeidsgiverSykepengerUtbetaling !== null &&
-        vurdering.harArbeidsgiverSykepengerUtbetaling !== undefined && (
+      {vurdering.harArbeidsgiverSykepengerUtbetaling && (
           <SpørsmålOgSvar
             spørsmål={'Utbetaler arbeidsgiver sykepenger til bruker?'}
             svar={getJaEllerNei(vurdering.harArbeidsgiverSykepengerUtbetaling)}
           />
         )}
-      {vurdering.skalAvslås1127 !== null && vurdering.skalAvslås1127 !== undefined && (
+      {vurdering.skalAvslås1127 && (
         <SpørsmålOgSvar
           spørsmål={
             'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'
