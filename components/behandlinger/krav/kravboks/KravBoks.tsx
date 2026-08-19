@@ -5,18 +5,17 @@ import {
   kravVurderingTilFormFields,
   søknadUtenKravTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
-import { BodyShort, Box, Button, Detail, HStack, Label, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Detail, HStack, Label, Radio, Tag, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { useFormContext } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { KravType } from 'components/opprettsak/OpprettSakLocal';
 import { ReactNode, useMemo, useState } from 'react';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-
-const ALLE_KRAVTYPER: KravType[] = ['RELEVANT_KRAV', 'TILLEGGSOPPLYSNING', 'KLAGE', 'TRUKKET_SØKNAD'];
+import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 
 export type KravBoksInnhold =
   | { kilde: 'EKSISTERENDE'; krav: KravVurdering }
@@ -39,7 +38,8 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
 
   const form = useFormContext<KravFormFields>();
 
-  const kravTypeErRelevantKrav = form.watch(`vurderinger.${referanse}.kravtype`) === 'RELEVANT_KRAV';
+  const kravTypeErRelevantKrav =
+    form.watch(`vurderinger.${referanse}.skalVurderesForNyEllerGjenopptattAAPRettighet`) === JaEllerNei.Ja;
 
   const kravtypeVisning = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.type : 'RELEVANT_KRAV';
   const søknadsdato =
@@ -58,7 +58,10 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
 
   const toggleVurderOmKravErRelevantFelt = () => {
     if (visVurderOmKravErRelevantFelt) {
-      form.setValue(`vurderinger.${referanse}.kravtype`, originaleVerdier.kravtype);
+      form.setValue(
+        `vurderinger.${referanse}.skalVurderesForNyEllerGjenopptattAAPRettighet`,
+        originaleVerdier.skalVurderesForNyEllerGjenopptattAAPRettighet
+      );
     }
     setVisVurderOmKravErRelevantFelt(!visVurderOmKravErRelevantFelt);
   };
@@ -118,18 +121,32 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
             onClick={toggleVurderOmKravErRelevantFelt}
             isOpen={visVurderOmKravErRelevantFelt}
           >
-            <SelectWrapper
-              control={form.control}
-              name={`vurderinger.${referanse}.kravtype`}
-              label="Kravtype"
-              size="small"
-            >
-              {ALLE_KRAVTYPER.map((type) => (
-                <option key={type} value={type}>
-                  {formaterKravtype(type)}
-                </option>
-              ))}
-            </SelectWrapper>
+            <VStack gap={'space-16'}>
+              <TextAreaWrapper
+                control={form.control}
+                name={`vurderinger.${referanse}.begrunnelse`}
+                label="Vurdering"
+                size="small"
+                rules={{ required: 'Du må skrive inn en vurdering.' }}
+              />
+
+              <RadioGroupWrapper
+                control={form.control}
+                name={`vurderinger.${referanse}.skalVurderesForNyEllerGjenopptattAAPRettighet`}
+                size="small"
+                label="Brukeren skal vurderes for ny eller gjenopptatt AAP rettighet på bakgrunn av denne søknaden?"
+                description={
+                  'Svar nei hvis søknaden er tilleggsopplysninger, eller det ikke er relevant å vurdere ny eller gjenopptatt rettighet '
+                }
+                horisontal
+              >
+                {JaEllerNeiOptions.map((option) => (
+                  <Radio value={option.value} key={option.value}>
+                    {option.label}
+                  </Radio>
+                ))}
+              </RadioGroupWrapper>
+            </VStack>
           </Bolk>
 
           {kravTypeErRelevantKrav && (
@@ -189,13 +206,6 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
               />
             </Bolk>
           )}
-          <TextAreaWrapper
-            control={form.control}
-            name={`vurderinger.${referanse}.begrunnelse`}
-            label="Begrunnelse"
-            size="small"
-            rules={{ required: 'Du må skrive inn en begrunnelse.' }}
-          />
         </VStack>
       </Box>
     </Box>
