@@ -6,7 +6,6 @@ import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, MellomlagretVurderingRes
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
-import { MarkeringHaster } from 'lib/types/oppgaveTypes';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -279,7 +278,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
       readOnly={false}
       hastemarkering={{
         begrunnelse: 'Avtalt med leder',
-        markeringType: MarkeringHaster,
+        markeringType: 'HASTER',
         opprettetAv: null,
         opprettetAvNavn: null,
         opprettetTidspunkt: Date.now().toString(),
@@ -311,7 +310,7 @@ it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert
       readOnly={false}
       hastemarkering={{
         begrunnelse: 'Avtalt med leder',
-        markeringType: MarkeringHaster,
+        markeringType: 'HASTER',
         opprettetAv: null,
         opprettetAvNavn: null,
         opprettetTidspunkt: Date.now().toString(),

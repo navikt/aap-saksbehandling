@@ -1,9 +1,3 @@
-import {
-  NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype,
-  NoNavAapOppgaveListeOppgaveMetadataResponseStatus,
-  NoNavAapOppgaveReturInformasjonDtoRsaker,
-  NoNavAapOppgaveReturInformasjonDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FeatureFlagProvider } from 'context/UnleashContext';
@@ -23,12 +17,12 @@ const oppgave: OppgaveMedKontekst = {
   behandlingOpprettet: '',
   behandlingskontekst: {
     behandlingsreferanse: '',
-    behandlingstype: NoNavAapOppgaveBehandlingskontekstResponseBehandlingstype.F_RSTEGANGSBEHANDLING,
+    behandlingstype: 'FØRSTEGANGSBEHANDLING',
   },
   oppgaveMetadata: {
     id: 0,
     opprettetTidspunkt: '',
-    status: NoNavAapOppgaveListeOppgaveMetadataResponseStatus.OPPRETTET,
+    status: 'OPPRETTET',
     versjon: 0,
   },
   personOgEnhet: {
@@ -98,9 +92,9 @@ describe('OppgaveInformasjon', () => {
           oppgavelisteTags: {
             ...oppgave.oppgavelisteTags,
             returInformasjon: {
-              status: NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_BESLUTTER,
+              status: 'RETUR_FRA_BESLUTTER',
               begrunnelse: 'Hei',
-              årsaker: [NoNavAapOppgaveReturInformasjonDtoRsaker.FEIL_LOVANVENDELSE],
+              årsaker: ['FEIL_LOVANVENDELSE'],
               endretAv: 'Foffern',
             },
           },
@@ -125,7 +119,7 @@ describe('OppgaveInformasjon', () => {
           oppgavelisteTags: {
             ...oppgave.oppgavelisteTags,
             returInformasjon: {
-              status: NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_VEILEDER,
+              status: 'RETUR_FRA_VEILEDER',
               begrunnelse: 'Hei',
               årsaker: [],
               endretAv: 'Veileder',

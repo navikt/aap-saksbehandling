@@ -13,12 +13,11 @@ export const FLAGS = [
   'BeregningstidspunktAarsak',
   'VentStatusForTilbakekreving',
   'VisMigrereSakFraArenaKnapp',
-  'KvalitetssikringDiff',
   'Avslag11_27',
   'NyHookForAvklaringsbehov',
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
-  'VedtakslengdeAarsak',
+  'FaktiskArbeidTilkjentYtelse',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -39,10 +38,9 @@ export const mockedFlags: Flags = {
   BeregningstidspunktAarsak: true,
   VentStatusForTilbakekreving: true,
   VisMigrereSakFraArenaKnapp: true,
-  KvalitetssikringDiff: true,
   Avslag11_27: true,
   NyHookForAvklaringsbehov: true,
   SkalViseAlleSykdomssteg: true,
   DialogMedBehandler: true,
-  VedtakslengdeAarsak: true,
+  FaktiskArbeidTilkjentYtelse: true,
 };

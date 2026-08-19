@@ -134,7 +134,9 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         <>
           <FormField form={form} formField={formFields.aarsak} />
           <Alert variant={'info'}>
-            Husk at trekk av søknad skal være brukers eget ønske, og at du må informere bruker om konsekvensene. Når søknaden trekkes, avsluttes saken og alle vurderinger slettes. Bruker må sende ny søknad dersom man ombestemmer seg.
+            Husk at trekk av søknad skal være brukers eget ønske, og at dette må journalføres. Informer bruker om at
+            saken avsluttes, og at ny søknad må sendes dersom bruker ombestemmer seg. Alle vurderinger som er gjort på
+            saken vil bli slettet når søknaden trekkes.
           </Alert>
         </>
       )}

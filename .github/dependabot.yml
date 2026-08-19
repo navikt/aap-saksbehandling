@@ -6,9 +6,11 @@ registries:
     token: ${{ secrets.READER_TOKEN }}
 updates:
   - package-ecosystem: 'docker'
-    directory: '/'
+    directory: "/"
     schedule:
-      interval: weekly
+      interval: "cron"
+      cronjob: "0 6 1-7,15-21 * 1" # første og tredje mandag i måneden kl 06:00
+      timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
     ignore:
@@ -16,13 +18,17 @@ updates:
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
-      interval: weekly
+      interval: "cron"
+      cronjob: "0 6 1-7,15-21 * 1" # første og tredje mandag i måneden kl 06:00
+      timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
   - package-ecosystem: npm
-    directory: '/'
+    directory: "/"
     schedule:
-      interval: daily
+      interval: "cron"
+      cronjob: "0 6 1-7,15-21 * 1" # første og tredje mandag i måneden kl 06:00
+      timezone: "Europe/Oslo"
     cooldown:
       default-days: 7
       exclude:
@@ -36,13 +42,13 @@ updates:
     registries: '*'
     ignore:
       - dependency-name: '*'
-        update-types: ['version-update:semver-major']
+        update-types: [ 'version-update:semver-major' ]
       - dependency-name: '@navikt/eslint-config-aap'
       - dependency-name: 'prettier'
       - dependency-name: '@typescript-eslint*'
       - dependency-name: 'eslint-*'
       - dependency-name: 'eslint'
-        versions: ['9.x']
+        versions: [ '9.x' ]
     groups:
       aap-backend-typescript-types:
         patterns:
@@ -74,6 +80,9 @@ updates:
           - '@testing-library/dom'
           - '@testing-library/jest-dom'
           - 'jsdom'
+      grafana:
+        patterns:
+          - '@grafana/*'
       otel:
         patterns:
           - '@opentelemetry/api'

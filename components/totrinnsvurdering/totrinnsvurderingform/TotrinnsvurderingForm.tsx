@@ -8,7 +8,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
-import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
+import { Markering } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -155,7 +155,7 @@ export const TotrinnsvurderingForm = ({
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           clientOpprettMarkeringHendelse(behandlingsreferanse, {
-            markeringType: MarkeringHaster,
+            markeringType: 'HASTER',
             hendelseType: MarkeringHendelseType.FJERNET,
           });
         }

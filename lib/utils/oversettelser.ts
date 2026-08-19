@@ -67,8 +67,6 @@ const behovskodeMap = {
   '5058': '§ 11-15 Etablering av egen virksomhet',
   '5059': 'Avklar vedtaksperiode',
   '5060': 'Oppsummert rettighet i vedtaket',
-  '5061': 'Avklar migreringsdato',
-  '5062': 'Avklar migrering',
   '5096': 'Forslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
@@ -104,6 +102,7 @@ const behovskodeMap = {
   '1340': 'Avklar saksnummer',
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
+  '1343': 'Avklar fordeling',
 } as const;
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
@@ -297,8 +296,6 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
-    case 'MIGRERING_FRA_ARENA':
-      return 'Migrering fra Arena';
   }
 }
 
