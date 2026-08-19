@@ -12,8 +12,8 @@ export type ManuellFordelingsgrunnlagResponse = {
   saksnummer: string;
   erAktiv: boolean;
   under52Uker?: boolean | null;
-  gjenstaendeOrdinaereDager?: number | null;
-  gjenstaendeUnntaksDager?: number | null;
+  gjenståendeOrdinæreDager?: number | null;
+  gjenståendeUnntaksDager?: number | null;
   sisteVedtak?: VedtakMedMaksdato | null;
   sisteUtbetaling?: LocalDateString | null;
   oppgaver: Oppgave[];
