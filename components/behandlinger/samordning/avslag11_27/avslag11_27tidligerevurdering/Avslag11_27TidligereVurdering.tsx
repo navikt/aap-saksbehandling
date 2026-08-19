@@ -5,14 +5,13 @@ import { formaterTilNok, storForbokstavOgMellomromForUnderstrek } from 'lib/util
 
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { isNullOrUndefined } from 'lib/utils/validering';
 
 interface Props {
   vurdering: Avslag11_27Vurdering;
 }
 
 export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
-  const isNullOrUndefined = (value: boolean | null | undefined) => value === null || value === undefined;
-
   return (
     <VStack gap={'space-16'}>
       <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
