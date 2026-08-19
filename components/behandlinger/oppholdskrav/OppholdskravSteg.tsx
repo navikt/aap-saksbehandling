@@ -4,7 +4,6 @@ import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
@@ -32,6 +31,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse;
@@ -43,8 +43,12 @@ type Props = {
 export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVersjon, readOnly }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_OPPHOLDSKRAV');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+    løsAvklaringsbehovIsLoading,
+  } = useLøsAvklaringsbehov('VURDER_OPPHOLDSKRAV');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -117,7 +121,7 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       loggUmamiVarighet('STEG_OPPHOLDSKRAV_VARIGHET', umamiStartTidspunkt, Date.now());
       nullstillMellomlagretVurdering();
       visningActions.onBekreftClick();
@@ -134,10 +138,10 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
       heading={'Oppholdskrav § 11-3'}
       steg={'VURDER_OPPHOLDSKRAV'}
       onSubmit={form.handleSubmit(onSubmit)}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
-      isLoading={isLoading}
-      status={status}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

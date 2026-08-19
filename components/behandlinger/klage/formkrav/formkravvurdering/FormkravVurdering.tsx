@@ -2,7 +2,6 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
 import { FormkravGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
@@ -11,6 +10,7 @@ import { FormkravAvvisningVarsel } from 'components/behandlinger/klage/formkrav/
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag?: FormkravGrunnlag;
@@ -34,8 +34,8 @@ type DraftFormFields = Partial<FormFields>;
 export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FORMKRAV');
+  const { løsAvklaringsbehov, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus } =
+    useLøsAvklaringsbehov('FORMKRAV');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -115,7 +115,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -145,9 +145,9 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
       steg={'FORMKRAV'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

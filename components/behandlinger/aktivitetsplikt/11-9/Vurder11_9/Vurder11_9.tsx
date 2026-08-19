@@ -7,12 +7,12 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Mellomlagre11_9Modal } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Modal';
 import { Aktivitetsplikt11_9Grunnlag, Aktivitetsplikt11_9Løsning, MellomlagretVurdering } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { defaultRad, useMellomlagre11_9 } from './Mellomlagre11_9Hook';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
 import { omit } from 'lodash';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 type Props = {
   grunnlag?: Aktivitetsplikt11_9Grunnlag;
@@ -44,7 +44,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
       ...omit(vurdering, 'id'),
     }));
 
-    løsBehovOgGåTilNesteSteg({
+    løsAvklaringsbehov({
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
@@ -54,8 +54,8 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
     });
   };
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_9');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('VURDER_AKTIVITETSPLIKT_11_9');
 
   return (
     <VilkårsKort
@@ -88,8 +88,8 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
           Legg til brudd
         </Button>
         <LøsBehovOgGåTilNesteStegStatusAlert
-          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-          status={status}
+          løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+          status={løsAvklaringsbehovStatus}
         />
         <Button
           type="button"
@@ -97,7 +97,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
           onClick={handleSubmit}
           disabled={readOnly}
           className={'fit-content'}
-          loading={isLoading}
+          loading={løsAvklaringsbehovIsLoading}
         >
           Bekreft
         </Button>

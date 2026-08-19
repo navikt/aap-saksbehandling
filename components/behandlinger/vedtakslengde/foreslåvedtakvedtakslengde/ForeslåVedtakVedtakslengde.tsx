@@ -2,7 +2,6 @@
 
 import { Label, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { ForeslåVedtakVedtakslengdeGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -10,8 +9,8 @@ import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varig
 
 import { StansOpphørTabell } from 'components/behandlinger/vedtak/foreslåvedtak/StansOpphørTabell';
 import { ForeslåVedtakVedtakslengdeTabell } from 'components/behandlinger/vedtakslengde/foreslåvedtakvedtakslengde/ForeslåVedtakVedtakslengdeTabell';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -21,8 +20,8 @@ interface Props {
 
 export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunnlag }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FORESLÅ_VEDTAK_VEDTAKSLENGDE');
+  const { løsAvklaringsbehovStatus, løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FORESLÅ_VEDTAK_VEDTAKSLENGDE');
 
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK_VEDTAKSLENGDE', undefined);
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
@@ -32,12 +31,12 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
       heading="Oppsummert rettighet i vedtaket"
       steg={'FORESLÅ_VEDTAK_VEDTAKSLENGDE'}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       onSubmit={(event) => {
         event.preventDefault();
-        løsBehovOgGåTilNesteSteg(
+        løsAvklaringsbehov(
           {
             behandlingVersjon: behandlingVersjon,
             behov: {
@@ -61,10 +60,6 @@ export const ForeslåVedtakVedtakslengde = ({ behandlingVersjon, readOnly, grunn
         </Label>
         <ForeslåVedtakVedtakslengdeTabell grunnlag={grunnlag} />
         <StansOpphørTabell stansOpphør={grunnlag.stansOpphør} />
-        <LøsBehovOgGåTilNesteStegStatusAlert
-          status={status}
-          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        />
       </VStack>
     </VilkårskortMedForm>
   );

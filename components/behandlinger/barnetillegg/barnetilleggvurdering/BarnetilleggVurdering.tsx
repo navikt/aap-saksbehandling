@@ -4,7 +4,6 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { Button, Heading, ReadMore } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurdering, Periode } from 'lib/types/types';
@@ -22,6 +21,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 
 import styles from './BarnetilleggVurdering.module.css';
 import { LeggTilBarnModal } from './LeggTilBarnModal';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingsversjon: number;
@@ -68,8 +68,8 @@ export const BarnetilleggVurdering = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('BARNETILLEGG');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('BARNETILLEGG');
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -159,7 +159,7 @@ export const BarnetilleggVurdering = ({
         ...data.saksbehandlerOppgitteBarnVurderinger,
       ];
 
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingsversjon,
           behov: {
@@ -202,9 +202,9 @@ export const BarnetilleggVurdering = ({
       heading={'§ 11-20 tredje og fjerde ledd barnetillegg '}
       steg={'BARNETILLEGG'}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={{ vurdertAv: grunnlag.vurderingerMeta?.vurdertAv, vurdertAutomatisk: erFolkeregistrerteBarn }}
       mellomlagretVurdering={mellomlagretVurdering}

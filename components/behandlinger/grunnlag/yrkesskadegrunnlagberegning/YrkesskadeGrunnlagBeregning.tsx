@@ -2,7 +2,6 @@
 
 import { BodyShort, Label } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
@@ -22,6 +21,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 import styles from './YrkesskadeGrunnlagBeregning.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -51,8 +51,8 @@ export const YrkesskadeGrunnlagBeregning = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_GRUNNLAG');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FASTSETT_GRUNNLAG');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -95,7 +95,7 @@ export const YrkesskadeGrunnlagBeregning = ({
       heading={'Yrkesskade grunnlagsberegning §§ 11-19 / 11-22'}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={form.handleSubmit((data) => {
-        løsBehovOgGåTilNesteSteg(
+        løsAvklaringsbehov(
           {
             behov: {
               behovstype: Behovstype.FASTSETT_YRKESSKADEINNTEKT,
@@ -119,9 +119,9 @@ export const YrkesskadeGrunnlagBeregning = ({
           }
         );
       })}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={{ vurdertAv: vurdertAvAnsatt }}
       mellomlagretVurdering={mellomlagretVurdering}

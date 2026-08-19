@@ -2,10 +2,9 @@
 
 import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
-import { BrevGrunnlagBrev, BrevMottaker, BrevdataDto, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
+import { BrevdataDto, BrevGrunnlagBrev, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useRouter } from 'next/navigation';
@@ -26,6 +25,7 @@ import { useMellomlagringAvBrev } from 'components/brevbygger/useMellomlagringAv
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 import styles from './Brevbygger.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface BrevbyggerProps {
   referanse: string;
@@ -88,12 +88,8 @@ export const Brevbygger = ({
 
   const router = useRouter();
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
-  const {
-    løsBehovOgGåTilNesteSteg,
-    status: løsBehovStatus,
-    isLoading,
-    løsBehovOgGåTilNesteStegError,
-  } = useLøsBehovOgGåTilNesteSteg('BREV');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('BREV');
 
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string | undefined>();
@@ -123,7 +119,7 @@ export const Brevbygger = ({
   };
 
   const sendBrev = async () => {
-    løsBehovOgGåTilNesteSteg(
+    løsAvklaringsbehov(
       {
         behandlingVersjon,
         behov: {
@@ -139,7 +135,7 @@ export const Brevbygger = ({
   };
 
   const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
-    løsBehovOgGåTilNesteSteg({
+    løsAvklaringsbehov({
       behandlingVersjon,
       behov: {
         behovstype,
@@ -195,8 +191,8 @@ export const Brevbygger = ({
 
         <Box marginBlock={'space-8 space-0'}>
           <LøsBehovOgGåTilNesteStegStatusAlert
-            status={løsBehovStatus}
-            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+            status={løsAvklaringsbehovStatus}
+            løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
           />
         </Box>
 
@@ -216,12 +212,12 @@ export const Brevbygger = ({
                 type="button"
                 onClick={() => settIkkeSendBrevModalOpen(true)}
                 variant="primary"
-                disabled={isLoading}
+                disabled={løsAvklaringsbehovIsLoading}
               >
                 Ikke send brev
               </Button>
             )}
-            <Button type="button" variant="secondary" onClick={oppdaterBrevmal} disabled={isLoading}>
+            <Button type="button" variant="secondary" onClick={oppdaterBrevmal} disabled={løsAvklaringsbehovIsLoading}>
               Oppdater brevmal
             </Button>
           </HStack>
@@ -241,9 +237,9 @@ export const Brevbygger = ({
         isOpen={visFerdigstillBrevDialog}
         onClose={() => settVisFerdigstillBrevDialog(false)}
         sendBrev={sendBrev}
-        senderBrev={isLoading}
-        løsBehovStatus={løsBehovStatus}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        senderBrev={løsAvklaringsbehovIsLoading}
+        løsBehovStatus={løsAvklaringsbehovStatus}
+        løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       />
     </>
   );

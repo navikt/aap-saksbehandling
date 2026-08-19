@@ -4,12 +4,11 @@ import { Heading } from '@navikt/ds-react';
 import { isBefore, parse } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
-  BeregningTidspunktGrunnlag,
   BeregningstidspunktVurderingResponse,
+  BeregningTidspunktGrunnlag,
   MellomlagretVurdering,
   ÅrsakBeregningstidspunkt,
   ÅrsakYtterligereNedsatt,
@@ -28,6 +27,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 import styles from './FastsettBeregning.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -99,8 +99,8 @@ export const FastsettBeregning = ({
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -191,7 +191,7 @@ export const FastsettBeregning = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -246,10 +246,10 @@ export const FastsettBeregning = ({
       heading={heading}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
+      isLoading={løsAvklaringsbehovIsLoading}
       vilkårTilhørerNavKontor={false}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      status={status}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      status={løsAvklaringsbehovStatus}
       vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {

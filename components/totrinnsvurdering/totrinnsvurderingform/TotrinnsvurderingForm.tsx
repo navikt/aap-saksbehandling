@@ -1,12 +1,10 @@
 'use client';
 
 import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
-import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
 import { Markering } from 'lib/types/oppgaveTypes';
 import {
@@ -19,10 +17,10 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { isLocal } from 'lib/utils/environment';
 import {
   Behovstype,
-  JaEllerNei,
-  JaEllerNeiOptions,
   getJaNeiEllerUndefined,
   getTrueFalseEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
 } from 'lib/utils/form';
 import {
   BeslutterFeltTag,
@@ -67,10 +65,6 @@ export const TotrinnsvurderingForm = ({
   hastemarkering,
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
-
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
-  );
 
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
     useLøsAvklaringsbehov(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
@@ -119,8 +113,6 @@ export const TotrinnsvurderingForm = ({
       },
     },
   });
-
-  const nyHookForAvklaringsbehov = useFeatureFlag('NyHookForAvklaringsbehov');
 
   return (
     <form
@@ -206,11 +198,7 @@ export const TotrinnsvurderingForm = ({
           nullstillMellomlagretVurdering();
         };
 
-        if (nyHookForAvklaringsbehov) {
-          løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
-        } else {
-          løsBehovOgGåTilNesteSteg(behovParams, onSuccessLøsBehovCallback);
-        }
+        løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
       })}
       className={'flex-column'}
       autoComplete={'off'}
@@ -260,18 +248,12 @@ export const TotrinnsvurderingForm = ({
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
-        status={nyHookForAvklaringsbehov ? løsAvklaringsbehovStatus : status}
-        løsBehovOgGåTilNesteStegError={
-          nyHookForAvklaringsbehov ? løsAvklaringsbehovError : løsBehovOgGåTilNesteStegError
-        }
+        status={løsAvklaringsbehovStatus}
+        løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       />
       {!readOnly && (
         <VStack gap="space-8">
-          <Button
-            size={'medium'}
-            className={'fit-content'}
-            loading={nyHookForAvklaringsbehov ? løsAvklaringsbehovIsLoading : isLoading}
-          >
+          <Button size={'medium'} className={'fit-content'} loading={løsAvklaringsbehovIsLoading}>
             Bekreft og send videre
           </Button>
 

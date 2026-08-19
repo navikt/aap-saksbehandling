@@ -17,9 +17,9 @@ import {
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { SubmitEventHandler } from 'react';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag?: KravGrunnlag;
@@ -58,8 +58,8 @@ export const VurderKrav = ({ grunnlag, initialMellomlagretVurdering, behandlingV
     form
   );
 
-  const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('KRAV');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+    useLøsAvklaringsbehov('KRAV');
 
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
 
@@ -77,7 +77,7 @@ export const VurderKrav = ({ grunnlag, initialMellomlagretVurdering, behandlingV
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon,
           referanse: behandlingsreferanse,
@@ -99,9 +99,9 @@ export const VurderKrav = ({ grunnlag, initialMellomlagretVurdering, behandlingV
       heading="Vurder krav"
       steg="KRAV"
       vilkårTilhørerNavKontor={false}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       visningModus={visningModus}
       visningActions={visningActions}
       onDeleteMellomlagringClick={() =>

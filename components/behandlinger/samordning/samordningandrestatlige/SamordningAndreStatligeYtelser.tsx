@@ -3,7 +3,6 @@
 import { ReadMore, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
@@ -22,6 +21,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { OppslagAndreYtelser } from 'components/oppslagandreytelser/OppslagAndreYtelser';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: SamordningAndreStatligeYtelserGrunnlag;
@@ -50,9 +50,8 @@ export const SamordningAndreStatligeYtelser = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    'SAMORDNING_ANDRE_STATLIGE_YTELSER'
-  );
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SAMORDNING_ANDRE_STATLIGE_YTELSER');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -89,7 +88,7 @@ export const SamordningAndreStatligeYtelser = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -123,9 +122,9 @@ export const SamordningAndreStatligeYtelser = ({
       heading="Fradrag ved andre statlige ytelser"
       steg="SAMORDNING_ANDRE_STATLIGE_YTELSER"
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
