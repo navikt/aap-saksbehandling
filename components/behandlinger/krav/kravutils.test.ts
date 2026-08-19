@@ -10,6 +10,7 @@ import {
   KravVurderingFormFields,
   søknadUtenKravTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
+import { JaEllerNei } from 'lib/utils/form';
 
 const bruker = 'Z000000';
 const behandlingId = { id: 1 };
@@ -53,7 +54,7 @@ describe('kravVurderingTilFormFields og søknadUtenKravTilFormFields', () => {
     const felter = kravVurderingTilFormFields(relevantKrav());
 
     expect(felter).toEqual<KravVurderingFormFields>({
-      kravtype: 'RELEVANT_KRAV',
+      skalVurderesForNyEllerGjenopptattAAPRettighet: JaEllerNei.Ja,
       journalpostId: 'jp-1',
       begrunnelse: 'Opprinnelig begrunnelse',
       søknadsdatoDato: '01.04.2025',
@@ -99,7 +100,7 @@ describe('kravVurderingTilFormFields og søknadUtenKravTilFormFields', () => {
     const felter = søknadUtenKravTilFormFields(søknad);
 
     expect(felter).toEqual<KravVurderingFormFields>({
-      kravtype: 'RELEVANT_KRAV',
+      skalVurderesForNyEllerGjenopptattAAPRettighet: '',
       journalpostId: 'jp-ny',
       begrunnelse: '',
       søknadsdatoDato: '10.05.2025',
@@ -240,6 +241,7 @@ describe('byggKravVurderingerFraSkjema', () => {
       ...søknadUtenKravTilFormFields(søknad),
       begrunnelse: 'Har begrunnelse, men søknadsdato er tømt',
       søknadsdatoDato: '',
+      skalVurderesForNyEllerGjenopptattAAPRettighet: 'ja'
     };
 
     expect(() => byggKravVurderingerFraSkjema(grunnlagMedSøknad, { 'jp-uten-dato': ugyldigUtkast })).toThrow();
