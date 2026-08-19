@@ -22,6 +22,7 @@ import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/Sva
 
 import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 import styles from './SaksinfoBanner.module.css';
+import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
   sak: SaksInfoType;
@@ -77,6 +78,10 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               {storForbokstavIHvertOrd(personInformasjon.navn)}
             </Link>
           </Label>
+
+          <BodyShort textColor="subtle" size="small">
+            ({personInformasjon.fødselsdato ? kalkulerAlder(new Date(personInformasjon.fødselsdato)) : 'Alder ukjent'})
+          </BodyShort>
 
           <CopyButton
             copyText={sak?.ident}
