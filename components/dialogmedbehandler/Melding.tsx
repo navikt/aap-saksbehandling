@@ -9,6 +9,7 @@ import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 import styles from './Melding.module.css';
+import { DokumentInfo } from 'lib/types/journalpost';
 
 // TODO: Fjerne?
 export type DokumentasjonType =
@@ -26,6 +27,8 @@ interface Props {
   meldingFraNavn: string;
   opprettetTidspunkt: string;
   status?: 'SENDT' | 'LEVERT' | 'FEILET';
+  journalpostId: string | undefined;
+  dokumentInfoIdListe: DokumentInfo[];
   children: React.ReactNode;
 }
 
@@ -35,14 +38,10 @@ export const Melding = ({
   meldingFraNavn,
   opprettetTidspunkt,
   status,
+  journalpostId,
+  dokumentInfoIdListe,
   children,
 }: Props) => {
-  console.log('visningType: ', visningType);
-  console.log('dokumentasjonType: ', dokumentasjonType);
-  console.log('meldingFraNavn: ', meldingFraNavn);
-  console.log('opprettetTidspunkt: ', opprettetTidspunkt);
-  console.log('status: ', status);
-
   return (
     <VStack gap={'space-4'} align={visningType === 'INNKOMMENDE' ? 'start' : 'end'}>
       <Detail>
@@ -60,14 +59,24 @@ export const Melding = ({
             <Label size={'small'}>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</Label>
             <BodyShort size={'small'}>{children}</BodyShort>
           </VStack>
-          <Box className={styles.vedleggboks}>
-            <Link inlineText={true} target="_blank" rel="noopener noreferrer">
-              <HStack align={'center'} gap={'space-8'}>
-                <PaperclipIcon title="Vedlagt fil" fontSize="2rem" className={styles.vedleggikon} />
-                <BodyShort>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</BodyShort>
-              </HStack>
-            </Link>
-          </Box>
+          {dokumentInfoIdListe.length > 0 && (
+            <Box className={styles.vedleggboks}>
+              {dokumentInfoIdListe?.map((dokumentInfoObjekt, index) => (
+                <Link
+                  key={index}
+                  inlineText={true}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`/saksbehandling/api/dokumenter/${journalpostId}/${dokumentInfoObjekt.dokumentInfoId}`}
+                >
+                  <HStack align={'center'} gap={'space-8'}>
+                    <PaperclipIcon title="Vedlagt fil" fontSize="2rem" className={styles.vedleggikon} />
+                    <BodyShort>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</BodyShort>
+                  </HStack>
+                </Link>
+              ))}
+            </Box>
+          )}
           {visningType === 'INNKOMMENDE' && (
             <HStack gap={'space-20'}>
               <Link>
