@@ -11,6 +11,8 @@ interface Props {
 }
 
 export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
+  const isNullOrUndefined = (value: boolean | null | undefined) => value === null || value === undefined;
+
   return (
     <VStack gap={'space-16'}>
       <SpørsmålOgSvar spørsmål={'Begrunnelse'} svar={vurdering.begrunnelse} />
@@ -19,30 +21,30 @@ export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
         svar={getJaEllerNei(vurdering.harAnnenFullYtelse)}
       />
       {vurdering.harAnnenFullYtelse && vurdering.brukersYtelse && (
-          <SpørsmålOgSvar
-            spørsmål={'Hvilken ytelse har brukeren?'}
-            svar={storForbokstavOgMellomromForUnderstrek(vurdering.brukersYtelse)}
-          />
-        )}
+        <SpørsmålOgSvar
+          spørsmål={'Hvilken ytelse har brukeren?'}
+          svar={storForbokstavOgMellomromForUnderstrek(vurdering.brukersYtelse)}
+        />
+      )}
       {vurdering.harAnnenFullYtelse && vurdering.brukersYtelseTom && (
-          <SpørsmålOgSvar
-            spørsmål={'Bruker har annen full ytelse til og med dato'}
-            svar={formaterDatoForFrontend(vurdering.brukersYtelseTom)}
-          />
-        )}
+        <SpørsmålOgSvar
+          spørsmål={'Bruker har annen full ytelse til og med dato'}
+          svar={formaterDatoForFrontend(vurdering.brukersYtelseTom)}
+        />
+      )}
       {vurdering.sykepengegrunnlag && (
         <SpørsmålOgSvar
           spørsmål={'Brukerens sykepengegrunnlag (årssats)'}
           svar={formaterTilNok(vurdering.sykepengegrunnlag.verdi)}
         />
       )}
-      {vurdering.harArbeidsgiverSykepengerUtbetaling && (
-          <SpørsmålOgSvar
-            spørsmål={'Utbetaler arbeidsgiver sykepenger til bruker?'}
-            svar={getJaEllerNei(vurdering.harArbeidsgiverSykepengerUtbetaling)}
-          />
-        )}
-      {vurdering.skalAvslås1127 && (
+      {!isNullOrUndefined(vurdering.harArbeidsgiverSykepengerUtbetaling) && (
+        <SpørsmålOgSvar
+          spørsmål={'Utbetaler arbeidsgiver sykepenger til bruker?'}
+          svar={getJaEllerNei(vurdering.harArbeidsgiverSykepengerUtbetaling)}
+        />
+      )}
+      {!isNullOrUndefined(vurdering.skalAvslås1127) && (
         <SpørsmålOgSvar
           spørsmål={
             'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'

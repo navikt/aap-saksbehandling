@@ -14,7 +14,7 @@ import {
   TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEvent, SubmitEventHandler, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -146,12 +146,7 @@ export const Avslag11_27 = ({
     const vurdering = krav.vurdering;
     const harAnnenFullYtelse = vurdering.harAnnenFullYtelse === JaEllerNei.Ja;
 
-    const harArbeidsgiverSykepengerUtbetaling =
-      vurdering.harArbeidsgiverSykepengerUtbetaling === JaEllerNei.Ja
-        ? true
-        : vurdering.harArbeidsgiverSykepengerUtbetaling === JaEllerNei.Nei
-          ? false
-          : undefined;
+    const harArbeidsgiverSykepengerUtbetaling = getTrueFalseEllerUndefined(vurdering.harArbeidsgiverSykepengerUtbetaling)
 
     return {
       referanse: vurdering.referanse,
