@@ -82,6 +82,7 @@ export type EditorTypes = BetingetTekstType | TextEditorType | ValgRef | Friteks
 
 export interface DelmalType extends SanityAttributes {
   beskrivelse: string;
+  brevbyggerTittel?: string; // kan settes til påkrevd når alle delmaler er oppdatert :s
   overskrift?: string | null;
   paragraf?: string;
   teksteditor: EditorTypes[];
