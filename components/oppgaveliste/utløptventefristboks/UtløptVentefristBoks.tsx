@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react';
-import { BodyShort, Button, Detail, Popover, Tag, VStack } from '@navikt/ds-react';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import styles from './UtløptVentefristBoks.module.css';
+import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { Dato } from 'lib/types/Dato';
-import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
 import { SettPåVentÅrsaker } from 'lib/types/types';
+import { mapTilVenteÅrsakTekst } from 'lib/utils/oversettelser';
+
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
+
+import styles from './UtløptVentefristBoks.module.css';
 
 interface Props {
   frist: string;
@@ -13,29 +15,14 @@ interface Props {
 }
 
 export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
-
   const fristDate = new Dato(frist).formaterForFrontend();
 
   return (
-    <>
-      <Button
-        icon={<HourglassBottomFilledIcon title={'Ventefrist utløpt'} />}
-        className={styles.knapp}
-        onClick={() => setVis(!vis)}
-        ref={buttonRef}
-        size="xsmall"
-      >
-        {fristDate}
-      </Button>
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
+    <TagMedPopover
+      ikon={<HourglassBottomFilledIcon title={'Ventefrist utløpt'} />}
+      dataColor={'danger'}
+      tagContent={fristDate}
+      popoverContent={
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
             data-color="warning"
@@ -61,7 +48,7 @@ export const UtløptVentefristBoks = ({ frist, årsak, begrunnelse }: Props) => 
             </VStack>
           ) : undefined}
         </VStack>
-      </Popover>
-    </>
+      }
+    />
   );
 };

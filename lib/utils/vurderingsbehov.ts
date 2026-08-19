@@ -70,10 +70,14 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-20 Barnetillegg';
     case 'INSTITUSJONSOPPHOLD':
       return 'Institusjonsopphold';
+    case 'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON':
+      return '§ 11-25 Opphold på helseinstititusjon';
+    case 'INSTITUSJONSOPPHOLD_SONING':
+      return '§ 11-26 Soning';
     case 'SAMORDNING_OG_AVREGNING':
       return 'Samordning og avregning';
     case 'REFUSJONSKRAV':
-      return 'Refusjonskrav';
+      return 'Refusjonskrav sosialstønad';
     case 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT':
       return 'Utenlandsopphold for soknadstidspunkt';
     case 'SØKNAD_TRUKKET':
@@ -87,7 +91,9 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
     case 'MOTTATT_KABAL_HENDELSE':
       return 'Mottatt svar fra Nav Klageinstans';
     case 'FRITAK_MELDEPLIKT':
-      return 'Fritak meldeplikt';
+      return '§ 11-10 Fritak meldeplikt';
+    case 'VURDER_FRITAK_MELDEPLIKT':
+      return '§ 11-10 Vurder fritak meldeplikt';
     case 'REVURDER_MANUELL_INNTEKT':
       return 'Manuell inntekt';
     case 'OPPFØLGINGSOPPGAVE':
@@ -108,6 +114,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-18 AAP under behandling av krav om uføretrygd';
     case 'OPPHOLDSKRAV':
       return '§ 11-3 Oppholdskrav';
+    case 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET':
+      return 'Avslag søknad om AAP under opphold i utlandet';
     case 'DØDSFALL_BARN':
       return 'Dødsfall barn';
     case 'DØDSFALL_BRUKER':
@@ -124,94 +132,26 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return 'Korrigering av teknisk periode (automatisk behandling)';
     case 'ETABLERING_EGEN_VIRKSOMHET':
       return '§ 11-15 Etablering av egen virksomhet';
+    case 'FASTSETT_ARBEIDSEVNE':
+      return '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet';
     case 'REVURDER_SYKESTIPEND':
-      return 'Revurder sykestipend';
+      return '§ 11-29 Sykestipend fra lånekassen';
     case 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT':
       return 'Behandling avbrutt';
-    default:
-      return vurderingsbehov;
-  }
-};
-
-/*
- * Kombinerer behandlingsflyt og statistikks vurderingsbehov
- * */
-export const formaterFrittVurderingsbehov = (vurderingsbehov: String) => {
-  switch (vurderingsbehov) {
-    case 'MOTTATT_SØKNAD':
-    case 'SØKNAD':
-      return 'Søknad';
-    case 'MOTTATT_AKTIVITETSMELDING':
-    case 'AKTIVITETSMELDING':
-      return 'Aktivitetsmelding';
-    case 'FASTSATT_PERIODE_PASSERT':
-      return 'Fastsatt periode passert';
-    case 'MOTTATT_MELDEKORT':
-    case 'MELDEKORT':
-      return 'Meldekort';
-    case 'MOTTATT_LEGEERKLÆRING':
-    case 'LEGEERKLÆRING':
-      return 'Legeerklæring';
-    case 'MOTTATT_AVVIST_LEGEERKLÆRING':
-    case 'AVVIST_LEGEERKLÆRING':
-      return 'Avvist legeerklæring';
-    case 'MOTTATT_DIALOGMELDING':
-    case 'DIALOGMELDING':
-      return 'Dialogmelding';
-    case 'G_REGULERING':
-      return 'G-regulering';
-    case 'REVURDER_MEDLEMSKAP':
-    case 'REVURDER_MEDLEMSSKAP':
-      return 'Revurder medlemskap';
-    case 'REVURDER_YRKESSKADE':
-      return 'Revurder yrkesskade';
-    case 'REVURDER_BEREGNING':
-      return '§ 11-19 Beregningstidspunkt';
-    case 'REVURDER_LOVVALG':
-      return 'Revurder lovvalg';
-    case 'REVURDER_SAMORDNING':
-      return 'Revurder samordning';
-    case 'MOTATT_KLAGE':
-    case 'KLAGE':
-      return 'Klage';
-    case 'LOVVALG_OG_MEDLEMSKAP':
-      return 'Lovvalg og medlemskap';
-    case 'FORUTGAENDE_MEDLEMSKAP':
-      return 'Forutgående medlemskap';
-    case 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND':
-      return 'Arbeidsevne og behov for bistand';
-    case 'BARNETILLEGG':
-      return 'Barnetillegg';
-    case 'INSTITUSJONSOPPHOLD':
-      return '§ 11-25 Institusjonsopphold';
-    case 'SAMORDNING_OG_AVREGNING':
-      return 'Samordning og avregning';
-    case 'REFUSJONSKRAV':
-      return 'Refusjonskrav';
-    case 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT':
-      return 'Utenlandsopphold for soknadstidspunkt';
-    case 'SØKNAD_TRUKKET':
-      return 'Trukket søknad';
-    case 'VURDER_RETTIGHETSPERIODE':
-      return '§ 22-13 syvende ledd';
-    case 'KLAGE_TRUKKET':
-      return 'Klage trukket';
-    case 'MOTTATT_KABAL_HENDELSE':
-      return 'Mottatt svar fra Nav Klageinstans';
-    case 'REVURDER_MANUELL_INNTEKT':
-      return 'Revurder manuell inntekt';
-    case 'REVURDER_MELDEPLIKT_RIMELIG_GRUNN':
-      return 'Rimelig grunn til ikke overholdt meldeplikt';
-    case 'AKTIVITETSPLIKT_11_7':
-      return 'Aktivitetsplikt § 11-7';
-    case 'OVERGANG_ARBEID':
-      return 'Overgang til arbeid';
-    case 'OVERGANG_UFORE':
-      return 'Overgang til uføre';
-    case 'BARNETILLEGG_SATS_REGULERING':
-      return 'Satsregulering barnetillegg';
-    case 'MIGRER_RETTIGHETSPERIODE':
-      return 'Korrigering av teknisk periode (automatisk behandling)';
+    case 'REVURDER_INNTEKTSBORTFALL':
+      return 'Revurder inntektsbortfall';
+    case 'VURDER_AVSLAG_11_27':
+      return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
+    case 'VURDER_ARBEIDSOPPTRAPPING':
+      return '§ 11-23 sjette ledd. Arbeidsopptrapping';
+    case 'BRUKER_TILBAKE_I_ARBEID':
+      return 'Bruker tilbake i arbeid';
+    case 'FERIE_I_SYKEPENGEPERIODE':
+      return 'Ferie i sykepengeperiode';
+    case 'OVERGANG_UFORE_AUTOMATISK_STANS':
+      return 'Automatisk stans overgang uføre';
+    case 'VURDER_KRAV':
+      return 'Vurder krav';
     default:
       return vurderingsbehov;
   }

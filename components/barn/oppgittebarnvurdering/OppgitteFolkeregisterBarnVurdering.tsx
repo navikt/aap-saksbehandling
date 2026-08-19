@@ -2,7 +2,7 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { BarnetilleggFormFields } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurdering';
 import { ChildEyesIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail, Tag } from '@navikt/ds-react';
-import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
+import { kalkulerAlder, kalkulerAlderFraTidspunkt } from 'components/behandlinger/alder/Alder';
 import { JaEllerNei } from 'lib/utils/form';
 
 import styles from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering.module.css';
@@ -21,6 +21,7 @@ interface Props {
   dødsdato: string | null | undefined;
   harOppgittFosterforelderRelasjon: boolean;
   forsørgerPeriode?: Periode;
+  søknadstidspunkt: string;
   readOnly: boolean;
 }
 
@@ -34,6 +35,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
   fødselsdato,
   dødsdato,
   harOppgittFosterforelderRelasjon,
+  søknadstidspunkt,
 }: Props) => {
   const {
     fields: vurderinger,
@@ -49,7 +51,10 @@ export const OppgitteFolkeregisterBarnVurdering = ({
       .watch(`folkeregistrerteBarnVurderinger.${barnetilleggIndex}`)
       ?.vurderinger?.every((vurdering) => vurdering.harForeldreAnsvar !== JaEllerNei.Nei) && !readOnly;
 
-  const erUnderMyndighetsalder = fødselsdato ? Number.parseInt(kalkulerAlder(new Date(fødselsdato))) < 18 : false;
+  const erUnderMyndigAlderVedSøknadstidspunktet = fødselsdato
+    ? Number.parseInt(kalkulerAlderFraTidspunkt(new Date(søknadstidspunkt), new Date(fødselsdato))) < 18
+    : false;
+
   const fyller18år = forsørgerPeriode?.tom
     ? formaterDatoForFrontend(addDays(new Date(forsørgerPeriode.tom), 1))
     : 'Ukjent dato';
@@ -104,7 +109,7 @@ export const OppgitteFolkeregisterBarnVurdering = ({
             </div>
           );
         })}
-        {kanLeggeTilNyVurdering && erUnderMyndighetsalder && (
+        {kanLeggeTilNyVurdering && erUnderMyndigAlderVedSøknadstidspunktet && (
           <Button
             onClick={() => append({ begrunnelse: '', harForeldreAnsvar: '', fraDato: '' })}
             className={'fit-content'}

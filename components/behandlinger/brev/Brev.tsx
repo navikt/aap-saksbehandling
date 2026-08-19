@@ -1,45 +1,39 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { SkriveBrevMedDataFetching } from 'components/behandlinger/brev/skriveBrev/SkriveBrevMedDataFetching';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SkriveKlageBrevMedDataFetching } from 'components/behandlinger/brev/skriveBrev/SkriveKlageBrevMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Brev = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
-  const typeBehandling = flyt.data.visning.typeBehandling;
+export const Brev = async ({ behandlingsreferanse, flyt }: Props) => {
+  const typeBehandling = flyt.visning.typeBehandling;
 
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         {typeBehandling === 'Klage' ? (
           <SkriveKlageBrevMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
-            aktivtSteg={flyt.data.aktivtSteg}
+            behandlingVersjon={flyt.behandlingVersjon}
+            aktivtSteg={flyt.aktivtSteg}
             behandlingstype={typeBehandling}
           />
         ) : (
           <SkriveBrevMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={flyt.data.behandlingVersjon}
+            behandlingVersjon={flyt.behandlingVersjon}
             behandlingstype={typeBehandling}
-            aktivtSteg={flyt.data.aktivtSteg}
+            aktivtSteg={flyt.aktivtSteg}
           />
         )}
       </StegSuspense>

@@ -1,11 +1,13 @@
-import { MineOppgaverQueryParams, Oppgave, OppgavelisteRequest } from 'lib/types/oppgaveTypes';
 import { SortState } from '@navikt/ds-react';
-import {
-  NoNavAapOppgaveListeOppgaveSorteringSortBy,
-  NoNavAapOppgaveListeOppgaveSorteringSortOrder,
-  PathsMineOppgaverGetParametersQuerySortorder,
-} from '@navikt/aap-oppgave-typescript-types';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import {
+  BehandlingskontekstForOppgave,
+  MineOppgaverQueryParams,
+  MineOppgaverSortOrder,
+  OppgavelisteRequest,
+  SortBy,
+  SortOrder,
+} from 'lib/types/oppgaveTypes';
 
 export function queryParamsArray(key: string, values: (string | number)[]) {
   const filtered = values.filter((value) => value !== undefined && value !== null && value !== '');
@@ -15,22 +17,30 @@ export function queryParamsArray(key: string, values: (string | number)[]) {
   return values.map((e) => `${key}=${e}`).join('&');
 }
 
-const validSortKeys = new Set<string>(Object.values(NoNavAapOppgaveListeOppgaveSorteringSortBy));
+const validSortKeys: Set<SortBy> = new Set([
+  'AVKLARINGSBEHOV_KODE',
+  'BEHANDLINGSTYPE',
+  'BEHANDLING_OPPRETTET',
+  'OPPRETTET_TIDSPUNKT',
+  'PERSONIDENT',
+  'RESERVERT_AV',
+  'SAKSNUMMER',
+  'TILBAKEKREVINGS_BELOP',
+  'ÅRSAK_TIL_OPPRETTELSE',
+]);
 
 /**
- * Type guard for enum NoNavAapOppgaveListeOppgaveSorteringSortBy
+ * Type guard for SortBy
  *
- * @param value Verdi som skal sjekkes mot enum.
+ * @param value Verdi som skal sjekkes mot SortBy.
  * @returns boolean
  */
-export function isOppgavelisteOppgaveSorteringSortBy(
-  value: string | undefined
-): value is NoNavAapOppgaveListeOppgaveSorteringSortBy {
-  return !!value && validSortKeys.has(value);
+export function isOppgavelisteOppgaveSorteringSortBy(value: string | undefined): value is SortBy {
+  return !!value && validSortKeys.has(value as SortBy);
 }
 
 export function mapSortStateTilOppgaveSortering(
-  sortState: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
+  sortState: ScopedBackendSortState<SortBy>
 ): OppgavelisteRequest['sortering'] {
   const sortBy = sortState.orderBy;
   return sortBy
@@ -41,25 +51,25 @@ export function mapSortStateTilOppgaveSortering(
     : undefined;
 }
 
-export function mapSortStateDirectionTilBackendEnum(
-  direction: SortState['direction']
-): NoNavAapOppgaveListeOppgaveSorteringSortOrder {
+export function mapSortStateDirectionTilBackendEnum(direction: SortState['direction']): SortOrder {
   switch (direction) {
     case 'ascending':
-      return NoNavAapOppgaveListeOppgaveSorteringSortOrder.ASC;
+      return 'ASC';
     case 'descending':
-      return NoNavAapOppgaveListeOppgaveSorteringSortOrder.DESC;
+      return 'DESC';
   }
   console.error(`Finner ikke mapping til backend enum for sortstatedirection: ${direction}, bruker descending`);
-  return NoNavAapOppgaveListeOppgaveSorteringSortOrder.DESC;
+  return 'DESC';
 }
 
-export function mapSortStateDirectionTilQueryParamEnum(direction: SortState['direction']) {
+export function mapSortStateDirectionTilQueryParamEnum(
+  direction: SortState['direction']
+): MineOppgaverSortOrder | undefined {
   switch (direction) {
     case 'ascending':
-      return PathsMineOppgaverGetParametersQuerySortorder.ASC;
+      return 'ASC';
     case 'descending':
-      return PathsMineOppgaverGetParametersQuerySortorder.DESC;
+      return 'DESC';
     default:
       return undefined;
   }
@@ -73,18 +83,24 @@ export function mineOppgaverQueryParams(params: MineOppgaverQueryParams) {
   return encodeURI(string);
 }
 
-function buildSaksbehandlingsURL(oppgave: Oppgave): string {
-  return `/saksbehandling/sak/${oppgave.saksnummer}/${oppgave?.behandlingRef}`;
+function buildSaksbehandlingsURL(saksnummer: string, behandlingsreferanse: string): string {
+  return `/saksbehandling/sak/${saksnummer}/${behandlingsreferanse}`;
 }
-function buildPostmottakURL(oppgave: Oppgave): string {
-  return `/postmottak/${oppgave?.behandlingRef}`;
+function buildPostmottakURL(behandlingsreferanse: string): string {
+  return `/postmottak/${behandlingsreferanse}`;
 }
-export function byggKelvinURL(oppgave: Oppgave): string {
-  if (oppgave.journalpostId) {
-    return buildPostmottakURL(oppgave);
-  } else if (oppgave.behandlingstype === 'TILBAKEKREVING') {
-    return oppgave.tilbakekrevingsVarsDto!!.tilbakekrevings_URL;
+export function byggKelvinURL(oppgaveInfo: BehandlingskontekstForOppgave): string {
+  if (oppgaveInfo.journalpostId) {
+    return buildPostmottakURL(oppgaveInfo.behandlingsreferanse);
+  } else if (oppgaveInfo.behandlingstype === 'TILBAKEKREVING') {
+    if (!oppgaveInfo.tilbakekrevingUrl) {
+      throw new Error('Mangler tilbakekrevingsURL for plukket tilbakekreving-oppgave');
+    }
+    return oppgaveInfo.tilbakekrevingUrl;
   } else {
-    return buildSaksbehandlingsURL(oppgave);
+    if (!oppgaveInfo.saksnummer) {
+      throw new Error('Mangler saksnummer for plukket oppgave');
+    }
+    return buildSaksbehandlingsURL(oppgaveInfo.saksnummer, oppgaveInfo.behandlingsreferanse);
   }
 }

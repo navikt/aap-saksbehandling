@@ -1,24 +1,22 @@
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
 import {
   MineOppgaverQueryParams,
-  Oppgave,
+  MineOppgaverSortBy,
+  OppgaveMedKontekst,
   OppgavelisteRequest,
   OppgavelisteResponse,
   Paging,
+  SortBy,
 } from 'lib/types/oppgaveTypes';
-import useSWRInfinite from 'swr/infinite';
-import { hentMineOppgaverClient, hentOppgaverClient } from 'lib/oppgaveClientApi';
-import useSWR from 'swr';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import {
   mapSortStateDirectionTilQueryParamEnum,
   mapSortStateTilOppgaveSortering,
   mineOppgaverQueryParams,
 } from 'lib/utils/request';
-import {
-  NoNavAapOppgaveListeOppgaveSorteringSortBy,
-  PathsMineOppgaverGetParametersQuerySortby,
-} from '@navikt/aap-oppgave-typescript-types';
-import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 const PAGE_SIZE = 50;
 
@@ -29,7 +27,7 @@ type UseOppgaverOptions = {
   aktivKøId: number;
   kunLedigeOppgaver?: boolean;
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'];
-  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>;
+  sortering?: ScopedBackendSortState<SortBy>;
   hastemarkeringerFørst: boolean;
 };
 
@@ -100,7 +98,7 @@ export function useOppgaver({
 }: UseOppgaverOptions): {
   kanLasteInnFlereOppgaver: boolean;
   antallOppgaver: number;
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   size: number;
   setSize: (size: number | ((_size: number) => number)) => void;
   isLoading: boolean;
@@ -143,7 +141,7 @@ export function useOppgaver({
       const endeligsortering = sortering ? mapSortStateTilOppgaveSortering(sortering) : undefined;
 
       const payload: OppgavelisteRequest = {
-        filterId: aktivKøId!,
+        filterId: aktivKøId,
         enheter: aktiveEnheter,
         kunLedigeOppgaver: kunLedigeOppgaver,
         veileder: visKunOppgaverSomBrukerErVeilederPå,
@@ -192,7 +190,7 @@ export function useLedigeOppgaver(
   aktivKøId: number,
   hastemarkeringerFørst: boolean,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
-  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
+  sortering?: ScopedBackendSortState<SortBy>
 ) {
   return useOppgaver({
     aktiveEnheter,
@@ -210,7 +208,7 @@ export function useAlleOppgaverForEnhet(
   aktivKøId: number,
   hastemarkeringerFørst: boolean,
   utvidetFilter?: OppgavelisteRequest['utvidetFilter'],
-  sortering?: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy>
+  sortering?: ScopedBackendSortState<SortBy>
 ) {
   return useOppgaver({
     aktiveEnheter,
@@ -224,7 +222,7 @@ export function useAlleOppgaverForEnhet(
   });
 }
 
-export const useMineOppgaver = (sortering?: ScopedBackendSortState<PathsMineOppgaverGetParametersQuerySortby>) => {
+export const useMineOppgaver = (sortering?: ScopedBackendSortState<MineOppgaverSortBy>) => {
   const sortParams: MineOppgaverQueryParams = {
     sortby: sortering?.orderBy,
     sortorder: sortering?.direction ? mapSortStateDirectionTilQueryParamEnum(sortering.direction) : undefined,

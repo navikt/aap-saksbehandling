@@ -1,37 +1,32 @@
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegSomSkalVises } from 'lib/utils/steg';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { AvbrytRevurderingMedDatafetching } from 'components/behandlinger/revurdering/avbrytVurdering/vurdering/AvbrytRevurderingMedDatafetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const AvbrytRevurdering = async ({ behandlingsreferanse }: props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-  const stegSomSkalVises = getStegSomSkalVises('AVBRYT_REVURDERING', flyt.data);
-  const behandlingVersjon = flyt.data.behandlingVersjon;
+export const AvbrytRevurdering = async ({ behandlingsreferanse, flyt }: props) => {
+  const stegSomSkalVises = getStegSomSkalVises('AVBRYT_REVURDERING', flyt);
+  const behandlingVersjon = flyt.behandlingVersjon;
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
       behandlingVersjon={behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('AVBRYT_REVURDERING') && (
         <StegSuspense>
           <AvbrytRevurderingMedDatafetching
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
           />
         </StegSuspense>
       )}

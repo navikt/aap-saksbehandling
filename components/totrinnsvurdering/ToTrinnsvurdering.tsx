@@ -1,7 +1,8 @@
 'use client';
 
-import { JaEllerNei } from 'lib/utils/form';
-import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
+import { Label, VStack } from '@navikt/ds-react';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { Markering } from 'lib/types/oppgaveTypes';
 import {
   AvklaringsbehovKode,
   FatteVedtakGrunnlag,
@@ -9,9 +10,13 @@ import {
   MellomlagretVurdering,
   ToTrinnsVurderingGrunn,
 } from 'lib/types/types';
-import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
+import { JaEllerNei } from 'lib/utils/form';
+import { brukerErBeslutter, brukerErKvalitetssikrer } from 'lib/utils/innloggetBruker';
+
+import { Alert } from 'components/alert/Alert';
 import styles from 'components/totrinnsvurdering/ToTrinnsvurdering.module.css';
-import { Alert, Label, VStack } from '@navikt/ds-react';
+import { Oppsummering } from 'components/totrinnsvurdering/oppsummering/Oppsummering';
+import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -21,6 +26,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
   harTilgangTilÅSaksbehandle: boolean;
   behandlingsversjon: number;
+  hastemarkering?: Markering;
 }
 
 export interface ToTrinnsVurderingFormFields {
@@ -38,20 +44,27 @@ export const ToTrinnsvurdering = ({
   initialMellomlagretVurdering,
   harTilgangTilÅSaksbehandle,
   behandlingsversjon,
+  hastemarkering,
 }: Props) => {
   const vurderteTotrinnsvurderinger = grunnlag.vurderinger.filter(
     (vurdering) => typeof vurdering.godkjent === 'boolean'
   );
 
   const skalViseOppsummering = readOnly && vurderteTotrinnsvurderinger.length > 0;
+  const innloggetBruker = useInnloggetBruker();
+  const aktivBorder = erKvalitetssikring ? styles.aktivBorderNAV : styles.aktivBorderNAY;
+
   return (
     <>
-      <div className={styles.toTrinnsKontroll}>
-        {grunnlag.harGjortVilkårsvurderingerPåBehandling && !readOnly && (
-          <Alert
-            variant={'info'}
-          >{`Du har jobbet på denne behandlingen tidligere og kan ikke være ${erKvalitetssikring ? 'kvalitetssikrer' : 'beslutter'}.`}</Alert>
-        )}
+      <div className={`${styles.toTrinnsKontroll} ${!readOnly && aktivBorder}`}>
+        {grunnlag.harGjortVilkårsvurderingerPåBehandling &&
+          ((erKvalitetssikring && brukerErKvalitetssikrer(innloggetBruker)) ||
+            (!erKvalitetssikring && brukerErBeslutter(innloggetBruker))) &&
+          !readOnly && (
+            <Alert
+              variant={'info'}
+            >{`Du har jobbet på denne behandlingen tidligere og kan ikke være ${erKvalitetssikring ? 'kvalitetssikrer' : 'beslutter'}.`}</Alert>
+          )}
         {skalViseOppsummering && (
           <Oppsummering vurderinger={vurderteTotrinnsvurderinger} erKvalitetssikrer={erKvalitetssikring} />
         )}
@@ -64,6 +77,7 @@ export const ToTrinnsvurdering = ({
               readOnly={readOnly}
               initialMellomlagretVurdering={initialMellomlagretVurdering}
               behandlingsversjon={behandlingsversjon}
+              hastemarkering={hastemarkering}
             />
           </VStack>
         )}

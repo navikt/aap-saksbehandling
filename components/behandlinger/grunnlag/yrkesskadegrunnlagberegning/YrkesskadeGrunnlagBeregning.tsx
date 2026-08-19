@@ -1,26 +1,27 @@
 'use client';
 
-import { useFieldArray } from 'react-hook-form';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/yrkesskadetabell/YrkesskadeTabell';
 import { BodyShort, Label } from '@navikt/ds-react';
-
-import styles from './YrkesskadeGrunnlagBeregning.module.css';
-import { MellomlagretVurdering, YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { MellomlagretVurdering, YrkeskadeBeregningGrunnlag, YrkesskadeBeløpVurderingResponse } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { formaterTilNok } from 'lib/utils/string';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { useFieldArray } from 'react-hook-form';
+
+import { YrkesskadeTabell } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/yrkesskadetabell/YrkesskadeTabell';
+import { ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
-import { ValuePair } from 'components/form/FormField';
-import { formaterTilNok } from 'lib/utils/string';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+
+import styles from './YrkesskadeGrunnlagBeregning.module.css';
 
 interface Props {
   behandlingVersjon: number;

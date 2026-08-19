@@ -1,32 +1,25 @@
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { isError } from 'lib/utils/api';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { AvklarOppfolgingVurderingMedDataFetching } from './AvklarOppfolgingVurderingMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 type Props = {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 };
 
-export const AvklarOppfolgingsSteg = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
+export const AvklarOppfolgingsSteg = async ({ behandlingsreferanse, flyt }: Props) => {
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <AvklarOppfolgingVurderingMedDataFetching
         behandlingsreferanse={behandlingsreferanse}
-        behandlingVersjon={flyt.data.behandlingVersjon}
-        readOnly={flyt.data.visning.saksbehandlerReadOnly}
+        behandlingVersjon={flyt.behandlingVersjon}
+        readOnly={flyt.visning.saksbehandlerReadOnly}
       />
     </GruppeSteg>
   );

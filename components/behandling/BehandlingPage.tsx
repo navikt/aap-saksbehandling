@@ -35,6 +35,7 @@ export const BehandlingPage = async ({ behandlingsreferanse, aktivGruppe }: Prop
       className={styles.oppgavekolonne}
       behandlingsreferanse={behandlingsreferanse}
       aktivGruppe={decodeURIComponent(aktivGruppe) as StegGruppe}
+      flyt={flytResponse.data}
     />
   );
 };

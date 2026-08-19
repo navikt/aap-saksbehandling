@@ -1,21 +1,24 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import styles from './Inntektsbortfall.module.css';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { Alert, Table } from '@navikt/ds-react';
-import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
-import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { formaterTilG } from 'lib/utils/string';
+import { Table } from '@navikt/ds-react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { VisningModus } from 'lib/types/visningTypes';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { formaterTilG } from 'lib/utils/string';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+
+import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { TableStyled } from 'components/tablestyled/TableStyled';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+
+import styles from './Inntektsbortfall.module.css';
 
 interface Props {
   behandlingVersjon: number;

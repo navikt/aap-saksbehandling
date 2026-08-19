@@ -1,30 +1,24 @@
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { BarnetilleggVurderingMedDataFetching } from 'components/behandlinger/barnetillegg/barnetilleggvurdering/BarnetilleggVurderingMedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegData } from 'lib/utils/steg';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Barnetillegg = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
-  const barnetilleggSteg = getStegData('BARNETILLEGG', 'BARNETILLEGG', flyt.data);
+export const Barnetillegg = async ({ behandlingsreferanse, flyt }: Props) => {
+  const barnetilleggSteg = getStegData('BARNETILLEGG', 'BARNETILLEGG', flyt);
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         <BarnetilleggVurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={barnetilleggSteg} />

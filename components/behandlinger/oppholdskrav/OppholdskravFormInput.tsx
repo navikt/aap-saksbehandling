@@ -1,4 +1,4 @@
-import { Alert, HStack, VStack } from '@navikt/ds-react';
+import { HStack, VStack } from '@navikt/ds-react';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { JaEllerNei } from 'lib/utils/form';
@@ -12,6 +12,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import React from 'react';
+import { Alert } from 'components/alert/Alert';
 
 type Props = {
   form: UseFormReturn<OppholdskravForm>;
@@ -60,7 +61,7 @@ export const OppholdskravFormInput = ({ readOnly, index, form }: Props) => {
       {watch(`vurderinger.${index}.oppfyller`) === JaEllerNei.Nei && (
         <>
           <HStack>
-            <Alert variant="warning" size="small">
+            <Alert variant="warning">
               Pass på at kun den delen av utenlandsoppholdet som bryter vilkårene i § 11-3 legges inn
             </Alert>
           </HStack>

@@ -1,14 +1,9 @@
-import { SWRConfig } from 'swr';
-import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
+import { VStack } from '@navikt/ds-react';
 import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/layout.module.css';
-import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
-import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
-import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
-import { HGrid, VStack } from '@navikt/ds-react';
-import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
-import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
-import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
-import { ReactNode } from 'react';
+import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
+import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { SakContextProvider } from 'context/saksbehandling/SakContext';
+import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   auditlog,
   hentBehandling,
@@ -16,18 +11,20 @@ import {
   hentKabalKlageresultat,
   hentKlageresultat,
   hentSak,
-  hentSakPersoninfo,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { StegGruppe } from 'lib/types/types';
-import { SakContextProvider } from 'context/saksbehandling/SakContext';
-import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
-import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
-import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
-import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
+import { isError } from 'lib/utils/api';
+import { ReactNode } from 'react';
+import { SWRConfig } from 'swr';
+
+import { Kolonnelayout } from 'components/behandling/Kolonnelayout';
+import { IngenFlereOppgaverModal } from 'components/ingenflereoppgavermodal/IngenFlereOppgaverModal';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
+import { ÅrsakTilBehandling } from 'components/revurderingsinfo/ÅrsakTilBehandling';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
+import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 
 interface Props {
   saksnummer: string;
@@ -49,19 +46,18 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgave, personInfo, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
-    hentOppgave(behandlingsreferanse),
-    hentSakPersoninfo(saksnummer),
+  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
+    hentOppgaveVisningsinfo(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
     hentSak(saksnummer),
     hentKabalKlageresultat(behandlingsreferanse),
     hentKlageresultat(behandlingsreferanse),
   ]);
 
-  if (isError(flytResponse) || isError(klageresultat) || isError(oppgave)) {
+  if (isError(flytResponse) || isError(klageresultat) || isError(oppgaveVisningsinfo)) {
     return (
       <VStack padding={'space-16'}>
-        <ApiException apiResponses={[flytResponse, klageresultat, oppgave]} />
+        <ApiException apiResponses={[flytResponse, klageresultat, oppgaveVisningsinfo]} />
       </VStack>
     );
   }
@@ -72,17 +68,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
-
-  const visÅrsakTilAktivitetspliktBehandling =
-    ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
-    behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
-  const visÅrsakTilRevurdering = visÅrsakTilVurdering(behandling.data);
-  const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
-    ?.flatMap((v) => v.vurderingsbehov)
-    ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');
-
-  const visÅrsakTilBehandling =
-    visÅrsakTilAktivitetspliktBehandling || visÅrsakTilRevurdering || visÅrsakTilEndreStartstidspunkt;
 
   return (
     <SWRConfig
@@ -100,10 +85,9 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
             <OverstyrTildelingModal />
 
             <SaksinfoBanner
-              personInformasjon={personInfo}
               behandling={behandling.data}
               sak={sak}
-              oppgave={oppgave.data}
+              oppgaveVisningsinfo={oppgaveVisningsinfo.data}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
             />
@@ -113,43 +97,35 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               stegGrupperSomSkalVises={stegGrupperSomSkalVises}
             />
 
-            <HGrid
-              columns="4fr 2fr"
-              padding={'space-16'}
-              gap={'space-16'}
-              maxWidth={'1680px'}
-              marginInline={'auto'}
-              marginBlock={'space-0'}
+            <SakContextProvider
+              sak={{
+                ident: sak.ident,
+                opprettetTidspunkt: sak.opprettetTidspunkt,
+                periode: sak.periode,
+                saksnummer: sak.saksnummer,
+                virkningsTidspunkt: behandling.data.virkningstidspunkt,
+              }}
             >
-              <SakContextProvider
-                sak={{
-                  ident: sak.ident,
-                  opprettetTidspunkt: sak.opprettetTidspunkt,
-                  periode: sak.periode,
-                  saksnummer: sak.saksnummer,
-                  virkningsTidspunkt: behandling.data.virkningstidspunkt,
-                }}
-              >
-                <VStack gap={'space-20'}>
-                  {visÅrsakTilBehandling && (
-                    <ÅrsakTilBehandling
-                      behandlingType={behandling.data.type}
-                      vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker}
-                    />
-                  )}
-                  {/*Vi må ha children inne i en div for å unngå layoutshift*/}
-                  <div style={{ width: '100%' }}>{children}</div>
-                </VStack>
-                <aside className={`flex-column`}>
-                  <Behandlingsinfo behandling={behandling.data} sak={sak} klageresultat={klageresultat.data} />
-                  <KlageBehandlingInfo kabalKlageResultat={kabalKlageResultat} klageresultat={klageresultat.data} />
-                  {visTotrinnsvurdering && (
+              <Kolonnelayout
+                visTotrinnsvurdering={visTotrinnsvurdering}
+                toTrinnsvurdering={
+                  visTotrinnsvurdering ? (
                     <ToTrinnsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} />
-                  )}
-                  <Saksbehandlingsoversikt />
-                </aside>
-              </SakContextProvider>
-            </HGrid>
+                  ) : undefined
+                }
+                behandling={behandling.data}
+                sak={sak}
+                klageresultat={klageresultat.data}
+                kabalKlageresultat={kabalKlageResultat}
+                hovedkolonneInnhold={
+                  <VStack gap={'space-20'}>
+                    <ÅrsakTilBehandling behandling={behandling.data} />
+                    {/*Vi må ha children inne i en div for å unngå layoutshift*/}
+                    <div style={{ width: '100%' }}>{children}</div>
+                  </VStack>
+                }
+              />
+            </SakContextProvider>
           </div>
         </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>

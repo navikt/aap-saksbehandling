@@ -1,123 +1,117 @@
 'use client';
 
-import { Diff, TilkjentYtelseGrunnlag, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { ActionMenu, BodyShort, Button, Chips, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
-import React, { useState } from 'react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { Diff, TilkjentYtelseGrunnlagMedDiff, TilkjentYtelsePeriode } from 'lib/types/types';
 import { formaterDatoForFrontend, formaterPeriode } from 'lib/utils/date';
 import { formaterTilNok, formaterTilProsent } from 'lib/utils/string';
+import React, { useState } from 'react';
 
+import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
-import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { TableStyled } from 'components/tablestyled/TableStyled';
+import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 
-interface Props {
-  grunnlag: TilkjentYtelseGrunnlag;
-}
 interface PropsMedDiff {
   grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
 }
 
-export const Tilkjent = ({ grunnlag }: Props) => {
-  return (
-    <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
-      <TableStyled size="medium">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-            <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-            <Table.HeaderCell>Dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
-            <Table.HeaderCell>Arbeid</Table.HeaderCell>
-            <Table.HeaderCell>Samordning</Table.HeaderCell>
-            <Table.HeaderCell>Institusjon</Table.HeaderCell>
-            <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
-            <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
-            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
-            <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {grunnlag.perioder.map((periode, periodeIndex) => {
-            const bakgrunnClassName = periodeIndex % 2 ? styles.tablerowwithzebra : '';
-            return <TilkjentPeriodeRad key={periodeIndex} periode={periode} bakgrunnClassName={bakgrunnClassName} />;
-          })}
-        </Table.Body>
-      </TableStyled>
-    </VilkårsKort>
-  );
-};
-
 export const TilkjentMedDiff = ({ grunnlagMedDiff }: PropsMedDiff) => {
+  const visFaktiskArbeidOgGrenseverdi = useFeatureFlag('FaktiskArbeidTilkjentYtelse');
   const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
 
+  const skalViseMeldingOmIngenEndringIPerioder =
+    grunnlagMedDiff.perioder.length > 0 && grunnlagMedDiff.perioder.every((periode) => periode.diff === 'Uendret');
+
   return (
     <VilkårsKort heading="Tilkjent ytelse" steg="BEREGN_TILKJENT_YTELSE">
-      <Chips size={'small'}>
-        <Chips.Toggle
-          onClick={() => {
-            setVisHistorikkPåEndredePerioder(!visHistorikkPåEndredePerioder);
-          }}
-          selected={visHistorikkPåEndredePerioder}
-        >
-          Vis historikk på endrede perioder
-        </Chips.Toggle>
-        <Chips.Toggle
-          onClick={() => {
-            setVisPerioderUtenEndringFraTidligere(!visPerioderUtenEndringFraTidligere);
-          }}
-          selected={visPerioderUtenEndringFraTidligere}
-        >
-          Vis perioder uten endring fra tidligere behandling
-        </Chips.Toggle>
-      </Chips>
-      <TableStyled size="medium">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
-            <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
-            <Table.HeaderCell>Dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
-            <Table.HeaderCell>Arbeid</Table.HeaderCell>
-            <Table.HeaderCell>Samordning</Table.HeaderCell>
-            <Table.HeaderCell>Institusjon</Table.HeaderCell>
-            <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
-            <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
-            <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
-            <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
-            <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {grunnlagMedDiff.perioder.map((periode, periodeIndex) => {
-            const nyPeriode = utledNyPeriode(periode);
-            const uendretPeriode =
-              visPerioderUtenEndringFraTidligere && periode.diff === 'Uendret' ? periode.uendret : null;
-            const historiskPeriode = visHistorikkPåEndredePerioder ? utledHistoriskPeriode(periode) : null;
-            return (
-              <React.Fragment key={periodeIndex}>
-                {nyPeriode && (
-                  <TilkjentPeriodeRad key={`ny-${periodeIndex}`} periode={nyPeriode} bakgrunnClassName={''} />
-                )}
-                {historiskPeriode && (
-                  <TilkjentPeriodeRad
-                    key={`historisk-${periodeIndex}`}
-                    periode={historiskPeriode}
-                    bakgrunnClassName={styles.tablerowwithzebra}
-                  />
-                )}
-                {uendretPeriode && (
-                  <TilkjentPeriodeRad key={`uendret-${periodeIndex}`} periode={uendretPeriode} bakgrunnClassName={''} />
-                )}
-              </React.Fragment>
-            );
-          })}
-        </Table.Body>
-      </TableStyled>
+      <VStack gap="space-16">
+        <Chips size={'small'}>
+          <Chips.Toggle
+            onClick={() => {
+              setVisHistorikkPåEndredePerioder(!visHistorikkPåEndredePerioder);
+            }}
+            selected={visHistorikkPåEndredePerioder}
+          >
+            Vis historikk på endrede perioder
+          </Chips.Toggle>
+          <Chips.Toggle
+            onClick={() => {
+              setVisPerioderUtenEndringFraTidligere(!visPerioderUtenEndringFraTidligere);
+            }}
+            selected={visPerioderUtenEndringFraTidligere}
+          >
+            Vis perioder uten endring fra tidligere behandling
+          </Chips.Toggle>
+        </Chips>
+        {skalViseMeldingOmIngenEndringIPerioder && (
+          <Alert variant={'info'}>Ingen nye eller endrede perioder siden forrige behandling</Alert>
+        )}
+        <TableStyled size="medium">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Meldeperiode</Table.HeaderCell>
+              <Table.HeaderCell>Vurdert periode</Table.HeaderCell>
+              <Table.HeaderCell>Dagsats</Table.HeaderCell>
+              <Table.HeaderCell>Barnetillegg</Table.HeaderCell>
+              {visFaktiskArbeidOgGrenseverdi ? (
+                <>
+                  <Table.HeaderCell>Faktisk arbeid</Table.HeaderCell>
+                  <Table.HeaderCell>Grenseverdi</Table.HeaderCell>
+                </>
+              ) : (
+                <Table.HeaderCell>Arbeid</Table.HeaderCell>
+              )}
+              <Table.HeaderCell>Samordning</Table.HeaderCell>
+              <Table.HeaderCell>Institusjon</Table.HeaderCell>
+              <Table.HeaderCell>Arbeidsgiver</Table.HeaderCell>
+              <Table.HeaderCell>Total reduksjon</Table.HeaderCell>
+              <Table.HeaderCell>Barnepensjon</Table.HeaderCell>
+              <Table.HeaderCell>Effektiv dagsats</Table.HeaderCell>
+              <Table.HeaderCell>Meldekort levert</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {grunnlagMedDiff.perioder.map((periode, periodeIndex) => {
+              const nyPeriode = utledNyPeriode(periode);
+              const uendretPeriode =
+                visPerioderUtenEndringFraTidligere && periode.diff === 'Uendret' ? periode.uendret : null;
+              const historiskPeriode = visHistorikkPåEndredePerioder ? utledHistoriskPeriode(periode) : null;
+              return (
+                <React.Fragment key={periodeIndex}>
+                  {nyPeriode && (
+                    <TilkjentPeriodeRad
+                      key={`ny-${periodeIndex}`}
+                      periode={nyPeriode}
+                      bakgrunnClassName={''}
+                      visFaktiskArbeidOgGrenseverdi={visFaktiskArbeidOgGrenseverdi}
+                    />
+                  )}
+                  {historiskPeriode && (
+                    <TilkjentPeriodeRad
+                      key={`historisk-${periodeIndex}`}
+                      periode={historiskPeriode}
+                      bakgrunnClassName={styles.tablerowhistoriskinnhold}
+                      visFaktiskArbeidOgGrenseverdi={visFaktiskArbeidOgGrenseverdi}
+                    />
+                  )}
+                  {uendretPeriode && (
+                    <TilkjentPeriodeRad
+                      key={`uendret-${periodeIndex}`}
+                      periode={uendretPeriode}
+                      bakgrunnClassName={''}
+                      visFaktiskArbeidOgGrenseverdi={visFaktiskArbeidOgGrenseverdi}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </Table.Body>
+        </TableStyled>
+      </VStack>
     </VilkårsKort>
   );
 };
@@ -149,8 +143,13 @@ const utledHistoriskPeriode = (periode: Diff<TilkjentYtelsePeriode>) => {
 interface TilkjentYtelsePeriodeProps {
   periode: TilkjentYtelsePeriode;
   bakgrunnClassName: string;
+  visFaktiskArbeidOgGrenseverdi: boolean;
 }
-const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriodeProps) => {
+const TilkjentPeriodeRad = ({
+  periode,
+  bakgrunnClassName,
+  visFaktiskArbeidOgGrenseverdi,
+}: TilkjentYtelsePeriodeProps) => {
   return periode.vurdertePerioder.map((vurdertPeriode, vurdertPeriodeIndex) => {
     const skilleLinjeClassName =
       periode.vurdertePerioder.length === vurdertPeriodeIndex + 1 || periode.vurdertePerioder.length === 1
@@ -171,9 +170,20 @@ const TilkjentPeriodeRad = ({ periode, bakgrunnClassName }: TilkjentYtelsePeriod
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
           {formaterTilNok(vurdertPeriode.felter.barnetillegg)}
         </Table.DataCell>
-        <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
-          {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
-        </Table.DataCell>
+        {visFaktiskArbeidOgGrenseverdi ? (
+          <>
+            <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+              {formaterTilProsent(vurdertPeriode.felter.andelArbeid)}
+            </Table.DataCell>
+            <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+              {formaterTilProsent(vurdertPeriode.felter.grenseverdi)}
+            </Table.DataCell>
+          </>
+        ) : (
+          <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
+            {formaterTilProsent(vurdertPeriode.felter.arbeidGradering)}
+          </Table.DataCell>
+        )}
         <Table.DataCell textSize={'small'} className={skilleLinjeClassName}>
           {formaterTilProsent(vurdertPeriode.felter.samordningGradering)}
         </Table.DataCell>

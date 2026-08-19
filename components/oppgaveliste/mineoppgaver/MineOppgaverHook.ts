@@ -1,28 +1,29 @@
-import { useMemo } from 'react';
-import { erDatoFoerDato } from 'lib/validation/dateValidation';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import {
-  NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
-  NoNavAapOppgaveOppgaveDtoReturStatus,
-} from '@navikt/aap-oppgave-typescript-types';
-import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { erDatoFoerDato } from 'lib/validation/dateValidation';
+import { useMemo } from 'react';
+
+import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
 
 const oppgaveStatus = {
-  VENT: (oppgave: Oppgave) => !!oppgave.påVentTil,
-  RETUR_FRA_KVALITETSSIKRER: (oppgave: Oppgave) =>
-    oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_KVALITETSSIKRER,
-  RETUR_FRA_BESLUTTER: (oppgave: Oppgave) =>
-    oppgave.returStatus === NoNavAapOppgaveOppgaveDtoReturStatus.RETUR_FRA_BESLUTTER,
-  ER_HASTESAK: (oppgave: Oppgave) =>
-    oppgave.markeringer.some((it) => it.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER),
-  VENTEFRIST_UTLØPT: (oppgave: Oppgave) => oppgave.utløptVentefrist != null,
+  VENT: (oppgave: OppgaveMedKontekst) => !!oppgave.oppgavelisteTags?.påVentInfo?.påVentTil,
+  RETUR_FRA_KVALITETSSIKRER: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_KVALITETSSIKRER',
+  RETUR_FRA_BESLUTTER: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_BESLUTTER',
+  RETUR_FRA_VEILEDER: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_VEILEDER',
+  RETUR_FRA_SAKSBEHANDLER: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_SAKSBEHANDLER',
+  ER_HASTESAK: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.markeringer?.some((it) => it.markeringType === 'HASTER') ?? false,
+  VENTEFRIST_UTLØPT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.forrigePåVentInfo != null,
 } as const;
 
 interface Props {
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   filter: FormFieldsFilter;
 }
 
@@ -30,7 +31,7 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
   const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
   const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
-    const filtrerOppgave = (oppgave: Oppgave) => {
+    const filtrerOppgave = (oppgave: OppgaveMedKontekst) => {
       const dato = formaterDatoForFrontend(oppgave.behandlingOpprettet);
 
       const {
@@ -60,20 +61,20 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
         return false;
       }
 
-      if (behandlingstyper?.length && !behandlingstyper.includes(oppgave.behandlingstype)) {
+      if (behandlingstyper?.length && !behandlingstyper.includes(oppgave.behandlingskontekst.behandlingstype)) {
         return false;
       }
 
       if (tilbakekrevingBelopFilter) {
         if (tilbakekrevingBeløpFom) {
-          const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
+          const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
           if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
             return false;
           }
         }
 
         if (tilbakekrevingBeløpTom) {
-          const beløp = oppgave.tilbakekrevingsVarsDto?.tilbakekrevings_beløp;
+          const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
           if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
             return false;
           }

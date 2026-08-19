@@ -1,36 +1,37 @@
 'use client';
 
+import { BodyLong, Link, VStack } from '@navikt/ds-react';
+import { parseISO } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
-import { MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
-import { useFieldArray, useForm } from 'react-hook-form';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
+import { MellomlagretVurdering, OppholdskravGrunnlagResponse } from 'lib/types/types';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { useFieldArray, useForm } from 'react-hook-form';
+
+import { OppholdskravFormInput } from 'components/behandlinger/oppholdskrav/OppholdskravFormInput';
+import { OppholdskravTidligereVurdering } from 'components/behandlinger/oppholdskrav/OppholdskravTidligereVurdering';
 import {
   getDefaultValuesFromGrunnlag,
   mapFormTilDto,
   parseDatoFraDatePickerOgTrekkFra1Dag,
 } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import { OppholdskravFormInput } from 'components/behandlinger/oppholdskrav/OppholdskravFormInput';
-import { OppholdskravTidligereVurdering } from 'components/behandlinger/oppholdskrav/OppholdskravTidligereVurdering';
-import { parseISO } from 'date-fns';
-import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { OppholdskravForm } from 'components/behandlinger/oppholdskrav/types';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { BodyLong, Link, VStack } from '@navikt/ds-react';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
   grunnlag: OppholdskravGrunnlagResponse;
@@ -60,8 +61,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
 
   const form = useForm<OppholdskravForm>({
     defaultValues,
-    reValidateMode: 'onChange',
-    shouldUnregister: true,
   });
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
@@ -79,7 +78,6 @@ export const OppholdskravSteg = ({ grunnlag, initialMellomlagring, behandlingVer
   } = useFieldArray({
     control: form.control,
     name: 'vurderinger',
-    rules: {},
   });
 
   function onAddPeriode() {

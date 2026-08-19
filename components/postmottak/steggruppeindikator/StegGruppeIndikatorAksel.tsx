@@ -7,6 +7,8 @@ import { exhaustiveCheck } from 'lib/utils/typescript';
 
 function stegGruppeNavnTilLabel(stegGruppeNavn: FlytGruppe['stegGruppe']) {
   switch (stegGruppeNavn) {
+    case 'AVKLAR_FORDELING':
+      return 'Avklar fordeling';
     case 'AVKLAR_TEMA':
       return 'Avklar tema';
     case 'AVKLAR_SAK':

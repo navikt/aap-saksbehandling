@@ -1,26 +1,26 @@
-import { Alert, BodyShort, Button, Detail, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
+import { Button, Dialog, VStack } from '@navikt/ds-react';
 import { useEffect, useState } from 'react';
-import { FormProvider } from 'react-hook-form';
-
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { FormProvider, useForm } from 'react-hook-form';
 import { UtfyllingKalender } from 'components/saksoversikt/meldekortoversikt/utfyllingkalender/UtfyllingKalender';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentUkeNummerForPeriode } from 'components/saksoversikt/meldekortoversikt/meldekorttabell/MeldekortTabell';
 import { Dato } from 'lib/types/Dato';
-import { MeldeperiodeMedMeldekortDto } from 'lib/types/types';
+import { MeldeperiodeMedMeldekortDto, OppdaterMeldekortRequest } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
-import { useAlleDokumenterPåSak } from 'hooks/saksbehandling/DokumenterHook';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
-import { addDays } from 'date-fns';
+import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
-import { Journalpost } from 'lib/types/journalpost';
 import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
+import { Alert } from 'components/alert/Alert';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
+import { Option } from 'react-day-picker';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { TidligereMeldekortVersjoner } from 'components/saksoversikt/meldekortoversikt/tidligeremeldekortversjoner/TidligereMeldekortVersjoner';
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void;
@@ -30,7 +30,7 @@ interface Props {
 
 export interface RedigerMeldekortFormFields {
   begrunnelse: string;
-  årsak: string;
+  årsak: Årsaker;
   meldedato: string;
   dager: Dag[];
 }
@@ -40,17 +40,17 @@ interface Dag {
   timerArbeidet: string;
 }
 
-enum Årsaker {
-  REGISTRERE_MELDEDATO = 'Registrere meldedato',
+export enum Årsaker {
+  REGISTRERE_MELDEDATO = 'Registrere at bruker har meldt seg',
   LEVERE_MELDEKORT_FOR_BRUKER = 'Lever/endre meldekort for bruker',
   OVERSTYRE_BRUKER = 'Overstyre bruker',
 }
 
-const årsakOptions = ['', ...Object.values(Årsaker)];
+// TODO AAP-2320
+const årsakOptions = ['', Årsaker.LEVERE_MELDEKORT_FOR_BRUKER, Årsaker.OVERSTYRE_BRUKER];
 
 export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) => {
   const { saksnummer } = useParamsMedType();
-  const { dokumenter } = useAlleDokumenterPåSak();
   const { refetchMeldekort } = useMeldekort();
 
   const [error, setError] = useState<string>();
@@ -83,56 +83,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
     };
   };
 
-  const defaultValues = getDefaultValuesForForm(meldekort);
-
-  const { form, formFields } = useConfigForm<RedigerMeldekortFormFields>({
-    begrunnelse: {
-      type: 'textarea',
-      label: 'Begrunnelse',
-      description: 'Hvorfor gjør du endring, og hva er kilden til informasjonen.',
-      defaultValue: defaultValues?.begrunnelse,
-      rules: { required: 'Du må skrive en begrunnelse for hvorfor du gjør endring.' },
-    },
-    årsak: {
-      type: 'select',
-      options: årsakOptions,
-      label: 'Årsak',
-      defaultValue: defaultValues?.årsak,
-      rules: {
-        validate: (value) => {
-          if (value === 'Overstyre bruker') {
-            return 'Overstyring av bruker støttes ikke ennå.';
-          }
-        },
-      },
-    },
-    meldedato: {
-      type: 'date_input',
-      label: 'Meldedato',
-      description: 'Meldekortet regnes som levert på denne datoen.',
-      defaultValue: defaultValues?.meldedato,
-      rules: {
-        required: 'Du må legge til en meldedato for meldekortet.',
-        validate: {
-          validerIkkeFørDato: (value) => {
-            if (erDatoIFremtiden(value as string)) {
-              return 'Meldedato kan ikke være i fremtiden.';
-            }
-          },
-          validerIkkeFørMeldeperiodeTom: (value) => {
-            const tom = meldekort?.meldeperiode.tom;
-            if (tom && erDatoFoerDato(value as string, formaterDatoForFrontend(tom))) {
-              return 'Meldedato kan ikke være før meldeperiodens slutt.';
-            }
-          },
-        },
-      },
-    },
-    dager: {
-      type: 'fieldArray',
-      defaultValue: defaultValues?.dager,
-    },
-  });
+  const form = useForm({ defaultValues: getDefaultValuesForForm(meldekort) });
 
   useEffect(() => {
     if (isOpen && meldekort) {
@@ -148,6 +99,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const tom = new Dato(meldekort.meldeperiode.tom);
 
   const årsak = form.watch('årsak');
+  const meldedato = form.watch('meldedato');
 
   const erÅrsakLevereMeldekort = årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER;
   const erÅrsakRegistrereMeldedato = årsak === Årsaker.REGISTRERE_MELDEDATO;
@@ -156,10 +108,17 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
   const brukerHarLevertTimer = meldekort.meldekort?.dager.some((dag) => dag.timerArbeidet > 0) ?? false;
 
   const skalViseMeldedato = erÅrsakLevereMeldekort || erÅrsakRegistrereMeldedato;
-  const skalViseTimer = erÅrsakLevereMeldekort || (erÅrsakRegistrereMeldedato && brukerHarLevertTimer);
+  const skalViseTimer = erÅrsakLevereMeldekort;
   const skalViseAlertForIngenTimer = erÅrsakRegistrereMeldedato && !brukerHarLevertTimer;
+  const meldeDatoLabel =
+    årsak === Årsaker.REGISTRERE_MELDEDATO ? 'Dato brukeren meldte seg for Nav' : 'Dato brukeren meldte opplysningene';
 
-  const tidligereInnsendteMeldekort = kobleDokumentInfoTilTidligereMeldekort(meldekort, dokumenter);
+  const skalViseMeldedatoErEtterMeldefristAlert =
+    årsak === Årsaker.REGISTRERE_MELDEDATO && erDatoFoerDato(formaterDatoForFrontend(meldekort.meldefrist), meldedato);
+
+  const skalViseAlertFaktiskMeldedato =
+    erÅrsakLevereMeldekort && erDatoFoerDato(meldedato, formaterDatoForFrontend(new Date()));
+
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
 
   return (
@@ -176,20 +135,13 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 id={'endre-meldekort'}
                 onSubmit={form.handleSubmit(async (data) => {
                   setIsLoading(true);
-                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(saksnummer, {
-                    dager: data.dager.map((dag) => {
-                      return {
-                        dato: dag.dato,
-                        timerArbeidet: Number(dag.timerArbeidet),
-                      };
-                    }),
-                    meldeDato: new Dato(data.meldedato).formaterForBackend(),
-                    begrunnelse: data.begrunnelse,
-                    meldeperiode: meldekort.meldeperiode,
-                  });
+                  const oppdaterMeldekortResponse = await clientKorrigerMeldekort(
+                    saksnummer,
+                    mapFormDataTilOppdaterMeldekortRequest(data, meldekort.meldeperiode)
+                  );
 
                   if (isError(oppdaterMeldekortResponse)) {
-                    setError('Noe gikk galt ved oppdatering av meldekort.');
+                    setError('Noe gikk galt ved innsending: ' + oppdaterMeldekortResponse.apiException.message);
                     setIsLoading(false);
                   } else {
                     ventPåMeldekortProsessering();
@@ -197,19 +149,97 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                 })}
               >
                 <VStack gap={'space-16'}>
-                  <FormField form={form} formField={formFields.begrunnelse} />
-                  <FormField form={form} formField={formFields.årsak} />
-                  {skalViseMeldedato && <FormField form={form} formField={formFields.meldedato} />}
+                  <TextAreaWrapper
+                    name={'begrunnelse'}
+                    control={form.control}
+                    label={'Begrunnelse'}
+                    description={'Hvorfor gjør du endring, og hva er kilden til informasjonen.'}
+                    rules={{ required: 'Du må skrive en begrunnelse for hvorfor du gjør endring.' }}
+                    autocomplete={'off'}
+                  />
+                  <SelectWrapper
+                    control={form.control}
+                    name={'årsak'}
+                    label={'Årsak'}
+                    rules={{
+                      validate: (value) => {
+                        if (value === 'Overstyre bruker') {
+                          return 'Overstyring av bruker støttes ikke ennå.';
+                        }
+                      },
+                    }}
+                  >
+                    {årsakOptions.map((årsak, index) => (
+                      <Option key={index}>{årsak}</Option>
+                    ))}
+                  </SelectWrapper>
+                  {skalViseMeldedato && (
+                    <DateInputWrapper
+                      control={form.control}
+                      name={'meldedato'}
+                      label={meldeDatoLabel}
+                      autocomplete={'off'}
+                      rules={{
+                        required: 'Du må legge til en meldedato for meldekortet.',
+                        validate: {
+                          validerIkkeIFremtiden: (value) => {
+                            if (erDatoIFremtiden(value as string)) {
+                              return 'Meldedato kan ikke være i fremtiden.';
+                            }
+                          },
+
+                          validerIkkeTilbakeITidEnnTidligsteMeldedato: (value) => {
+                            const eksisterendeMottattDato = meldekort?.meldekort?.mottattTidspunkt
+                              ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
+                              : undefined;
+                            if (eksisterendeMottattDato && erDatoFoerDato(value as string, eksisterendeMottattDato)) {
+                              return 'Du har satt en meldedato som er før et eksisterende meldekort for perioden';
+                            }
+                          },
+                          validerIkkeFørMeldeperiodeTom: (value) => {
+                            const tom = meldekort?.meldeperiode.tom;
+                            if (tom) {
+                              const dagenEtterTom = formaterDatoForFrontend(addDays(new Date(tom), 1));
+                              if (erDatoFoerDato(value as string, dagenEtterTom)) {
+                                return `Meldedato må være dagen etter meldeperiodens slutt eller senere.`;
+                              }
+                            }
+                          },
+                        },
+                      }}
+                    />
+                  )}
+                  {skalViseAlertFaktiskMeldedato && (
+                    <Alert variant={'info'}>
+                      Pass på at du legger inn faktisk dato brukeren har meldt opplysningene. Hvis det skal vurderes om
+                      det er rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10
+                      Overstyr perioder uten oppfylt meldeplikt.
+                    </Alert>
+                  )}
                   {skalViseTimer && <UtfyllingKalender readOnly={erÅrsakRegistrereMeldedato} />}
+                  {årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER && (
+                    <Alert variant={'info'}>
+                      Når du leverer meldekortet vil det startes en automatisk meldekortbehandling i Kelvin. Brukeren
+                      får justert utbetaling som om de har levert meldekortet selv.
+                    </Alert>
+                  )}
+                  {skalViseMeldedatoErEtterMeldefristAlert && (
+                    <Alert variant={'warning'}>
+                      Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er
+                      rimelig grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10
+                      Overstyr perioder uten oppfylt meldeplikt.
+                    </Alert>
+                  )}
                   {skalViseAlertForIngenTimer && (
-                    <Alert variant={'info'} size={'small'}>
-                      Bruker har ikke levert noen timer.
+                    <Alert variant={'info'}>
+                      Bruker har ikke levert noen timer. Det vil ikke gå noen utbetaling før bruker registrerer timer i
+                      meldekortet.
                     </Alert>
                   )}
                   <FormErrorSummary errorList={errorList} />
                   {error && <Alert variant={'error'}>{error}</Alert>}
                   {erÅrsakOverstyring && (
-                    <Alert variant={'warning'} size={'small'}>
+                    <Alert variant={'warning'}>
                       Overstyring av bruker er ikke støttet enda. Hvis behovet vedvarer etter dialog med bruker, send
                       sak i porten til team AAP.
                     </Alert>
@@ -218,31 +248,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
               </form>
             </FormProvider>
 
-            {tidligereInnsendteMeldekort && tidligereInnsendteMeldekort.length > 0 && (
-              <VStack gap={'space-8'}>
-                <BodyShort weight={'semibold'}>Tidligere versjoner av meldekortet:</BodyShort>
-                <VStack gap={'space-2'}>
-                  {tidligereInnsendteMeldekort.map((tidligereMeldekort, index) => {
-                    return (
-                      <HStack key={index} gap={'space-4'} align={'baseline'}>
-                        {tidligereMeldekort.dokumentId && (
-                          <Link
-                            href={`/saksbehandling/api/dokumenter/${tidligereMeldekort.journalpostId}/${tidligereMeldekort.dokumentId}`}
-                            target="_blank"
-                          >
-                            Meldekort for uke {hentUkeNummerForPeriode(fom.dato, tom.dato)}
-                            <ExternalLinkIcon />
-                          </Link>
-                        )}
-                        <Detail>
-                          {formaterDatoForFrontend(tidligereMeldekort.meldeDato)} {tidligereMeldekort.oppdatertAv}
-                        </Detail>
-                      </HStack>
-                    );
-                  })}
-                </VStack>
-              </VStack>
-            )}
+            <TidligereMeldekortVersjoner meldekort={meldekort} />
           </VStack>
         </Dialog.Body>
         <Dialog.Footer>
@@ -263,10 +269,16 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
     return undefined;
   }
 
-  const eksisterendeDager = meldekort.meldekort?.dager ?? [];
-  const startDato = new Dato(meldekort.meldeperiode.fom);
+  if (!meldekort.periode) {
+    return undefined;
+  }
 
-  const alleDager: Dag[] = Array.from({ length: 14 }).map((_, index) => {
+  const eksisterendeDager = meldekort.meldekort?.dager ?? [];
+  const startDato = new Dato(meldekort.periode.fom);
+  const sluttDato = new Dato(meldekort.periode.tom);
+  const antallDager = differenceInDays(sluttDato.dato, startDato.dato) + 1; // +1 for å inkludere tom dato
+
+  const alleDager: Dag[] = Array.from({ length: antallDager }).map((_, index) => {
     const dato = formaterDatoForBackend(addDays(startDato.dato, index));
     const eksisterendeDag = eksisterendeDager.find((dag) => dag.dato === dato);
 
@@ -281,28 +293,34 @@ function getDefaultValuesForForm(meldekort?: MeldeperiodeMedMeldekortDto): Redig
 
   return {
     begrunnelse: '',
-    årsak: '',
-    meldedato: meldekort.meldekort?.meldeDato ? formaterDatoForFrontend(meldekort.meldekort.meldeDato) : '',
+    årsak: '' as Årsaker,
+    meldedato: '',
     dager: alleDager,
   };
 }
 
-function kobleDokumentInfoTilTidligereMeldekort(
-  meldeperiodeMedMeldekort: MeldeperiodeMedMeldekortDto,
-  dokumenter?: Journalpost[]
-) {
-  return meldeperiodeMedMeldekort.tidligereMeldekort.map((tidligereMeldekort) => {
-    const dokument = dokumenter?.find((doku) => doku.journalpostId === tidligereMeldekort.journalpostId);
-    const journalpostId = tidligereMeldekort.journalpostId;
-    const dokumentId = dokument?.dokumenter[0]?.dokumentInfoId;
-    const meldeDato = tidligereMeldekort.meldeDato;
-    const oppdatertAv = tidligereMeldekort.oppdatertAv;
+export function mapFormDataTilOppdaterMeldekortRequest(
+  data: RedigerMeldekortFormFields,
+  meldeperiode: MeldeperiodeMedMeldekortDto['meldeperiode']
+): OppdaterMeldekortRequest {
+  return {
+    dager:
+      data.årsak === Årsaker.LEVERE_MELDEKORT_FOR_BRUKER
+        ? data.dager.map((dag) => ({
+            dato: dag.dato,
+            timerArbeidet: Number(replaceCommasWithDots(dag.timerArbeidet)),
+          }))
+        : [],
+    meldeDato: new Dato(data.meldedato).formaterForBackend(),
+    begrunnelse: data.begrunnelse,
+    meldeperiode,
+  };
+}
 
-    return {
-      journalpostId,
-      dokumentId,
-      meldeDato,
-      oppdatertAv,
-    };
-  });
+export function replaceCommasWithDots(input: string): string {
+  return input.replace(/,/g, '.');
+}
+
+export function replaceDotsWithCommas(input: string): string {
+  return input.replace(/\./g, ',');
 }

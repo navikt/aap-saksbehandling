@@ -1,6 +1,5 @@
 import 'server-only';
 import { Unleash } from 'unleash-client';
-import { isLocal } from 'lib/utils/environment';
 import { FlagNames, FLAGS, Flags, mockedFlags } from 'lib/services/unleash/unleashToggles';
 import type { Context } from 'unleash-client/lib/context';
 
@@ -25,9 +24,9 @@ function createMockUnleash(): IUnleash {
   };
 }
 
-// Bruk mock-unleash hvis LOKALT og env-variabel ikke er satt, for DEV og PROD bruker den alltid ekte unleash
-export const unleashService =
-  process.env.UNLEASH_SERVER_API_URL == null && isLocal() ? createMockUnleash() : createRealUnleash();
+// Bruk mock-unleash hvis UNLEASH_SERVER_API_URL ikke er satt (f.eks. lokalt eller under build),
+// ellers (DEV/PROD med env-variabel satt) bruker den ekte unleash
+export const unleashService = process.env.UNLEASH_SERVER_API_URL == null ? createMockUnleash() : createRealUnleash();
 
 export function getAllFlags(userId: string | undefined): Flags {
   return Object.fromEntries(FLAGS.map((name) => [name, unleashService.isEnabled(name, { userId })])) as Flags;

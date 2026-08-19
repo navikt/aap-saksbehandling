@@ -1,23 +1,28 @@
 'use client';
 
-import { Alert, Radio, VStack } from '@navikt/ds-react';
-import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
-import { parse } from 'date-fns';
-import { stringToDate } from 'lib/utils/date';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { UseFormReturn } from 'react-hook-form';
-import { Periode } from 'lib/types/types';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
-import { JaEllerNei, JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
+import { Radio, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { Sak } from 'context/saksbehandling/SakContext';
-import { SykdomsvurderingNedsattArbeidsevneDetaljer } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingNedsattArbeidsevneDetaljer';
-import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { parse } from 'date-fns';
+import { Periode, StudentGrunnlag } from 'lib/types/types';
+import { stringToDate } from 'lib/utils/date';
+import { JaEllerNei, JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
+import { erDatoIPeriode, validerDato } from 'lib/validation/dateValidation';
 import React from 'react';
+import { UseFormReturn } from 'react-hook-form';
+
+import { Alert } from 'components/alert/Alert';
+import { RelevantInformasjonStudent } from 'components/behandlinger/sykdom/student/studentvurdering/RelevantInformasjonStudent';
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
+import { SykdomsvurderingDiagnosesøk } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingDiagnosesøk';
+import { SykdomsvurderingNedsattArbeidsevneDetaljer } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingNedsattArbeidsevneDetaljer';
 import { DiagnoserDefaultOptions } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import { defaultBegrunnelse } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
+import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 
 interface Props {
   index: number;
@@ -29,7 +34,8 @@ interface Props {
   erÅrsakssammenhengYrkesskade: boolean;
   rettighetsperiodeStartdato: Date;
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
-  sykdomUtenVissVarighetToggle: boolean;
+  studentgrunnlag: StudentGrunnlag;
+  skalViseAlleSykdomsSteg: boolean;
 }
 
 export const vilkårsvurderingLabel = 'Vilkårsvurdering';
@@ -40,7 +46,6 @@ export const yrkesskadeBegrunnelse = '§ 11-22 AAP ved yrkesskade';
 export const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense = 'Er arbeidsevnen nedsatt med minst 30 prosent?';
 export const erSkadeSykdomEllerLyteVesentligdelLabel =
   'Er sykdom, skade eller lyte vesentlig medvirkende til at arbeidsevnen er nedsatt?';
-export const erNedsettelseIArbeidsevneAvEnVissVarighetLabel = 'Er den nedsatte arbeidsevnen av en viss varighet?';
 
 export const SykdomsvurderingFormInput = ({
   erÅrsakssammenhengYrkesskade,
@@ -51,13 +56,17 @@ export const SykdomsvurderingFormInput = ({
   ikkeRelevantePerioder,
   rettighetsperiodeStartdato,
   diagnoseDefaultOptions,
-  sykdomUtenVissVarighetToggle,
+  studentgrunnlag,
+  skalViseAlleSykdomsSteg,
 }: Props) => {
   const harNedsattArbeidsevne = form.watch(`vurderinger.${index}.harNedsattArbeidsevne`);
-  const skalViseNedsettelse =
-    form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Ja ||
-    harNedsattArbeidsevne === 'JA' ||
-    harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
+  const skalViseNedsettelse = harNedsattArbeidsevne === 'JA' || harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER';
+  const skalViseNeiMenStudent = useFeatureFlag('StudentV2');
+  const skalViseStudentSoknad =
+    skalViseNeiMenStudent &&
+    studentgrunnlag.oppgittStudent?.erStudentStatus === 'AVBRUTT' &&
+    (studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'JA' ||
+      studentgrunnlag.oppgittStudent?.skalGjenopptaStudieStatus === 'VET_IKKE');
 
   return (
     <VStack gap={'space-20'}>
@@ -91,8 +100,13 @@ export const SykdomsvurderingFormInput = ({
         name={`vurderinger.${index}.begrunnelse`}
         control={form.control}
         label={vilkårsvurderingLabel}
+        description={`Skriv en vurdering som svarer på de fire vilkårene i § 11-5`}
         rules={{
           required: 'Du må gjøre en vilkårsvurdering',
+          validate: {
+            kanIkkeVæreDefaultBegrunnelse: (value) =>
+              (value as string).trim() !== defaultBegrunnelse.trim() || 'Du må skrive en egen vilkårsvurdering',
+          },
         }}
         readOnly={readonly}
       />
@@ -112,37 +126,67 @@ export const SykdomsvurderingFormInput = ({
             readOnly={readonly}
             diagnoseDefaultOptions={diagnoseDefaultOptions}
           />
-          {sykdomUtenVissVarighetToggle ? (
-            <RadioGroupWrapper
-              name={`vurderinger.${index}.harNedsattArbeidsevne`}
-              control={form.control}
-              label={harNedsattArbeidsevneLabel}
-              rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
-              readOnly={readonly}
-              size={'small'}
-            >
-              <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
-              <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
-              <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
-            </RadioGroupWrapper>
-          ) : (
-            <RadioGroupJaNei
-              name={`vurderinger.${index}.erArbeidsevnenNedsatt`}
-              control={form.control}
-              label={harNedsattArbeidsevneLabel}
-              horisontal={true}
-              rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
-              readOnly={readonly}
-            />
-          )}
+          {skalViseStudentSoknad && <RelevantInformasjonStudent opplysninger={studentgrunnlag.oppgittStudent} />}
+          {!skalViseAlleSykdomsSteg && (
+            <>
+              <RadioGroupWrapper
+                name={`vurderinger.${index}.harNedsattArbeidsevne`}
+                control={form.control}
+                label={harNedsattArbeidsevneLabel}
+                rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
+                readOnly={readonly}
+                size={'small'}
+              >
+                <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+                <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+                {skalViseNeiMenStudent && (
+                  <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
+                )}
+                <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+              </RadioGroupWrapper>
 
-          {(form.watch(`vurderinger.${index}.erArbeidsevnenNedsatt`) === JaEllerNei.Nei ||
-            form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI') && (
-            <Alert variant={'info'} size={'small'} className={'fit-content'}>
+              {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
+                <Alert variant={'info'} className={'fit-content'}>
+                  Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
+                </Alert>
+              )}
+              {skalViseNedsettelse && (
+                <SykdomsvurderingNedsattArbeidsevneDetaljer
+                  index={index}
+                  form={form}
+                  readonly={readonly}
+                  rettighetsperiodeStartdato={rettighetsperiodeStartdato}
+                  skalVurdereYrkesskade={skalVurdereYrkesskade}
+                  erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+                  skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
+                />
+              )}
+            </>
+          )}
+        </>
+      )}
+      {skalViseAlleSykdomsSteg && (
+        <>
+          <RadioGroupWrapper
+            name={`vurderinger.${index}.harNedsattArbeidsevne`}
+            control={form.control}
+            label={harNedsattArbeidsevneLabel}
+            rules={{ required: 'Du må svare på om brukeren har nedsatt arbeidsevne' }}
+            readOnly={readonly}
+            size={'small'}
+          >
+            <Radio value={'JA'}>{JaNeiEllerForbigåendeTekst.Ja}</Radio>
+            <Radio value={'JA_FORBIGÅENDE_PROBLEMER'}>{JaNeiEllerForbigåendeTekst.Forbigående}</Radio>
+            {skalViseNeiMenStudent && (
+              <Radio value={'NEI_MEN_STUDENT'}>{JaNeiEllerForbigåendeTekst.NeiMenStudent}</Radio>
+            )}
+            <Radio value={'NEI'}>{JaNeiEllerForbigåendeTekst.Nei}</Radio>
+          </RadioGroupWrapper>
+          {form.watch(`vurderinger.${index}.harNedsattArbeidsevne`) === 'NEI' && (
+            <Alert variant={'info'} className={'fit-content'}>
               Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.
             </Alert>
           )}
-
           {skalViseNedsettelse && (
             <SykdomsvurderingNedsattArbeidsevneDetaljer
               index={index}
@@ -151,6 +195,7 @@ export const SykdomsvurderingFormInput = ({
               rettighetsperiodeStartdato={rettighetsperiodeStartdato}
               skalVurdereYrkesskade={skalVurdereYrkesskade}
               erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
+              skalViseAlleSykdomSteg={skalViseAlleSykdomsSteg}
             />
           )}
         </>

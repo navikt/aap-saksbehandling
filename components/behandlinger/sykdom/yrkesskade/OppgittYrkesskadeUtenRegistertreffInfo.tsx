@@ -1,6 +1,7 @@
-import { Alert, BodyShort, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { Alert } from 'components/alert/Alert';
 
 interface YrkesskadeInfoProps {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -17,8 +18,9 @@ export const OppgittYrkesskadeUtenRegistertreffInfo = ({ grunnlag }: YrkesskadeI
             {grunnlag.opplysninger.oppgittYrkesskadeISøknad ? 'Ja' : 'Nei'}
           </BodyShort>
         </div>
-        <Alert variant="info" size="small" style={{ maxWidth: 600 }}>
-          Det er ingen registrerte yrkesskader på brukeren.
+        <Alert variant="info" style={{ maxWidth: 600 }}>
+          Vi finner ingen godkjente yrkesskader eller yrkessykdommer i yrkesskaderegisteret. Beslutter vil legge inn en
+          forklaring til brukeren i vedtaksbrevet.
         </Alert>
       </VStack>
     </VilkårsKort>

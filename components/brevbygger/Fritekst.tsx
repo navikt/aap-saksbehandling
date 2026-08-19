@@ -8,10 +8,12 @@ import { PlusIcon } from '@navikt/aksel-icons';
 interface DelmalFritekstProps {
   node: FritekstType;
   control: Control<BrevFormVerdier>;
+  delmalId: string;
 }
 
-export const DelmalFritekst = ({ node, control }: DelmalFritekstProps) => {
-  const name = `fritekster.${node._key}` as FieldPath<BrevFormVerdier>;
+export const DelmalFritekst = ({ node, control, delmalId }: DelmalFritekstProps) => {
+  const sammensattNøkkel = `${delmalId}###${node._key}`;
+  const name = `fritekster.${sammensattNøkkel}` as FieldPath<BrevFormVerdier>;
   const { field } = useController({ name, control });
   const [isActive, setIsActive] = useState(() => !!field.value);
 

@@ -5,7 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
 
 interface Props {
@@ -20,14 +20,7 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const harTidligereVurderinger =
-    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
-
-  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
-    return null;
-  }
-
-  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !stegData.skalViseSteg;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_ARBEID,
@@ -40,6 +33,7 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      skalStegVurderes={stegData.skalViseSteg}
     />
   );
 };

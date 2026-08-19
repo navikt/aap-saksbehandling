@@ -3,11 +3,19 @@
   flex-direction: column;
   gap: var(--ax-space-16);
   border: 1px solid var(--ax-border-neutral-subtle);
-  border-radius: var(--ax-radius-8);
+  border-radius: var(--ax-radius-12);
   padding: 1rem;
   background-color: var(--ax-bg-default);
 }
 .stretch {
   display: flex;
   justify-content: space-between;
+}
+
+.aktivBorderNAV {
+  border-left: 0.5rem solid var(--ax-bg-meta-purple-strong);
+}
+
+.aktivBorderNAY {
+  border-left: 0.5rem solid var(--ax-bg-brand-blue-strong);
 }

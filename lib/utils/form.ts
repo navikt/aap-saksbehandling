@@ -1,11 +1,13 @@
-import { ValuePair } from 'components/form/FormField';
 import { ArbeidsevneNedsattValg } from 'lib/types/types';
+
+import { ValuePair } from 'components/form/FormField';
 
 export enum Behovstype {
   MANUELT_SATT_PÅ_VENT_KODE = '9001',
   VURDER_BRUDD_11_7_KODE = '4101',
   VURDER_BRUDD_11_9_KODE = '4201',
   AVKLAR_STUDENT_KODE = '5001',
+  AVKLAR_STUDENT_KODE_V2 = '5037',
   OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE = '5002',
   AVKLAR_SYKDOM_KODE = '5003',
   FASTSETT_ARBEIDSEVNE_KODE = '5004',
@@ -32,6 +34,8 @@ export enum Behovstype {
   AVBRYT_REVURDERING_KODE = '5033',
   AVKLAR_SAMORDNING_SYKESTIPEND_KODE = '5034',
   AVKLAR_SAMORDNING_BARNEPENSJON_KODE = '5036',
+  VURDER_KRAV_KODE = '5038',
+  AVKLAR_STØNADSPERIODE_KODE = '5039',
   OVERGANG_UFORE = '5031',
   SKRIV_VEDTAKSBREV_SAKSBEHANDLER_KODE = '5041',
   SKRIV_BREV_KODE = '5050',
@@ -66,6 +70,7 @@ export enum Behovstype {
   FASTSETT_VEDTAKSLENGDE = '5059',
   FORESLÅ_VEDTAK_VEDTAKSLENGDE = '5060',
   AVBRYT_AKTIVITETSPLIKTBEHANDLING = '4301',
+  VURDER_AVSLAG_11_27 = '5042',
 }
 
 type BehovsKode = `${Behovstype}`;
@@ -96,6 +101,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5';
     case '5009':
       return '§ 11-20 tredje og fjerde ledd barnetillegg';
+    case '5037':
+      return '§ 11-14 Student';
     case '5098':
       return 'Foreslå vedtak';
     case '5099':
@@ -148,10 +155,16 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-3 Oppholdskrav';
     case '5036':
       return '§ 11-27 Samordning barnepensjon';
+    case '5038':
+      return 'Vurder krav';
+    case '5039':
+      return 'Avklar stønadsperiode';
     case '5040':
       return '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år';
     case '5041':
       return 'Skriv brev';
+    case '5042':
+      return '§ 11-27 Mulig avslag pga. annen full folketrygdytelse';
     case '5050':
       return 'Skriv brev';
     case '5051':
@@ -249,6 +262,7 @@ export enum JaNeiEllerForbigåendeTekst {
   Ja = 'Ja',
   Nei = 'Nei',
   Forbigående = 'Ja, men brukeren har kun forbigående problemer med å komme i arbeid og skal vurderes for AAP som sykepengeerstatning etter § 11-13',
+  NeiMenStudent = 'Nei, men brukeren har avbrutt et studie på grunn av sykdom eller skade og skal vurderes for AAP til studenter etter § 11-14',
 }
 
 export function getJaNeiJaForbigåendeEllerIkkeBesvart(value?: ArbeidsevneNedsattValg | null) {
@@ -262,5 +276,7 @@ export function getJaNeiJaForbigåendeEllerIkkeBesvart(value?: ArbeidsevneNedsat
       return JaNeiEllerForbigåendeTekst.Ja;
     case 'NEI':
       return JaNeiEllerForbigåendeTekst.Nei;
+    case 'NEI_MEN_STUDENT':
+      return JaNeiEllerForbigåendeTekst.NeiMenStudent;
   }
 }

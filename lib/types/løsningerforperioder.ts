@@ -33,6 +33,11 @@ interface StudentBehov {
   løsningerForPerioder: AvklarPeriodisertStudentLøsning[];
 }
 
+interface StudentBehovV2 {
+  behovstype: Behovstype.AVKLAR_STUDENT_KODE_V2;
+  løsningerForPerioder: AvklarPeriodisertStudentLøsning[];
+}
+
 interface SykdomsvurderingBehov {
   behovstype: Behovstype.AVKLAR_SYKDOM_KODE;
   løsningerForPerioder: SykdomsvurderingLøsningDto[];
@@ -96,6 +101,7 @@ interface VedtakslengdeBehov {
 type Behov =
   | LovvalgOgMedlemskapBehov
   | StudentBehov
+  | StudentBehovV2
   | SykdomsvurderingBehov
   | Bistandsbehov
   | FastsettArbeidsevne

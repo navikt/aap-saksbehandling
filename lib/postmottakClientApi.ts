@@ -37,13 +37,6 @@ export async function postmottakHentDokumentClient(journalpostId: number, dokume
   );
 }
 
-export function redigitaliserDokument(journalpostId: number, saksnummer: string) {
-  return clientFetch<{ message?: string }>(`/postmottak/api/post/redigitaliser`, 'POST', {
-    journalpostId: journalpostId,
-    saksnummer: saksnummer,
-  });
-}
-
 export function postmottakHentFlyt(behandlingsreferanse: string) {
   return clientFetch<BehandlingFlytOgTilstand>(`/postmottak/api/post/${behandlingsreferanse}/flyt`, 'GET');
 }

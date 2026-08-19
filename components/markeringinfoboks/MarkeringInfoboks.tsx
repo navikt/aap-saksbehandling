@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react';
+import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Detail, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import styles from './MarkeringInfoBoks.module.css';
-import { clientFjernMarkeringForBehandling } from 'lib/clientApi';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import { Markering, MarkeringType } from 'lib/types/oppgaveTypes';
-import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import React, { useRef, useState } from 'react';
+
+import styles from './MarkeringInfoBoks.module.css';
 
 interface Props {
   markering: Markering;
@@ -21,18 +21,22 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
   const [isLoading, setIsLoading] = useState(false);
   const [visTag, setVisTag] = useState(true);
 
+  if (markering.hendelseType === 'FJERNET') {
+    return null;
+  }
+
   return (
     <>
       {visTag && (
-        <Tag
-          icon={ikonForMarkeringType(markering.markeringType)}
-          variant={variantFraType(markering.markeringType)}
-          size={size}
-          ref={tagRef}
-          onClick={() => setVisInfo(!visInfo)}
-        >
-          {showLabel && markeringTypeTilTekst(markering.markeringType)}
-        </Tag>
+        <Button ref={tagRef} variant={'tertiary'} className={styles.knapp} onClick={() => setVisInfo(!visInfo)}>
+          <Tag
+            icon={ikonForMarkeringType(markering.markeringType)}
+            variant={variantFraType(markering.markeringType)}
+            size={size}
+          >
+            {showLabel && markeringTypeTilTekst(markering.markeringType)}
+          </Tag>
+        </Button>
       )}
       <Popover
         onClose={() => setVisInfo(false)}
@@ -46,11 +50,7 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
             icon={ikonForMarkeringType(markering.markeringType)}
             variant={variantFraType(markering.markeringType)}
             size={'medium'}
-            className={
-              markering.markeringType == NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
-                ? styles.hasterTag
-                : styles.spesialkompetanseTag
-            }
+            className={styles.hasterTag}
           >
             <BodyShort size={'small'} weight={'semibold'}>
               {markeringTypeTilTekst(markering.markeringType)}
@@ -77,7 +77,10 @@ export const MarkeringInfoboks = ({ markering, referanse, showLabel = false, siz
                     loading={isLoading}
                     onClick={async () => {
                       setIsLoading(true);
-                      const res = await clientFjernMarkeringForBehandling(referanse, markering);
+                      const res = await clientOpprettMarkeringHendelse(referanse, {
+                        markeringType: markering.markeringType,
+                        hendelseType: MarkeringHendelseType.FJERNET,
+                      });
                       if (isSuccess(res)) {
                         setVisInfo(false);
                         setVisTag(false);
@@ -101,8 +104,8 @@ function markeringTypeTilTekst(type: MarkeringType): string {
   switch (type) {
     case 'HASTER':
       return 'Haster';
-    case 'KREVER_SPESIALKOMPETANSE':
-      return 'Krever spesialkompetanse';
+    case 'AVSLAG_11_5':
+      return 'Avslag § 11-5';
     default:
       return 'Haster';
   }
@@ -112,8 +115,8 @@ export function ikonForMarkeringType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return <ExclamationmarkTriangleIcon />;
-    case 'KREVER_SPESIALKOMPETANSE':
-      return <BookIcon />;
+    case 'AVSLAG_11_5':
+      return <XMarkOctagonIcon />;
   }
 }
 
@@ -121,7 +124,7 @@ export function variantFraType(type: MarkeringType) {
   switch (type) {
     case 'HASTER':
       return 'error-moderate';
-    case 'KREVER_SPESIALKOMPETANSE':
+    case 'AVSLAG_11_5':
       return 'alt1-moderate';
 
     default:

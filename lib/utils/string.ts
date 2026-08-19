@@ -50,3 +50,7 @@ export function formaterTilProsent(sum?: number | null): string {
   }
   return `${sum} %`;
 }
+
+export function slåSammenDefinerte(separator: string, ...deler: (string | null | undefined)[]): string {
+  return deler.filter(Boolean).join(separator);
+}

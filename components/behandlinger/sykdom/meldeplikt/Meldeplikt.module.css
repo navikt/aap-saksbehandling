@@ -12,7 +12,7 @@
   background-color: var(--ax-bg-default);
   border: 1px solid var(--ax-border-neutral-subtle);
   padding: var(--ax-space-16);
-  border-radius: var(--ax-radius-8);
+  border-radius: var(--ax-radius-12);
 }
 
 .vurdering {

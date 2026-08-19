@@ -12,9 +12,7 @@ export function proxy(request: NextRequest) {
         { status: 401 }
       );
     }
-    return NextResponse.redirect(
-      new URL(`/oauth2/login?redirect=${request.nextUrl.pathname}`, request.url)
-    );
+    return NextResponse.redirect(new URL(`/oauth2/login?redirect=${request.nextUrl.pathname}`, request.url));
   }
 }
 

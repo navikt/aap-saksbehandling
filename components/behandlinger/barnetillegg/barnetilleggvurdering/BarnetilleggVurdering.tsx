@@ -1,25 +1,27 @@
 'use client';
 
-import { Button, Heading, ReadMore } from '@navikt/ds-react';
-import { LeggTilBarnModal } from './LeggTilBarnModal';
-import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurdering, Periode } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useFieldArray } from 'react-hook-form';
-import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { parse } from 'date-fns';
-import { SubmitEvent, useState } from 'react';
-import styles from './BarnetilleggVurdering.module.css';
-import { useConfigForm } from 'components/form/FormHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { PlusIcon } from '@navikt/aksel-icons';
+import { Button, Heading, ReadMore } from '@navikt/ds-react';
+import { parse } from 'date-fns';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { BarnetilleggGrunnlag, BehandlingPersoninfo, MellomlagretVurdering, Periode } from 'lib/types/types';
+import { DATO_FORMATER, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEvent, useState } from 'react';
+import { useFieldArray } from 'react-hook-form';
+
+import { OppgitteBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteBarnVurdering';
+import { OppgitteFolkeregisterBarnVurdering } from 'components/barn/oppgittebarnvurdering/OppgitteFolkeregisterBarnVurdering';
 import { SaksbehandlerOppgittBarnVurdering } from 'components/barn/oppgittebarnvurdering/SaksbehandlerOppgittBarnVurdering';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { useConfigForm } from 'components/form/FormHook';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+
+import styles from './BarnetilleggVurdering.module.css';
+import { LeggTilBarnModal } from './LeggTilBarnModal';
 
 interface Props {
   behandlingsversjon: number;
@@ -278,6 +280,7 @@ export const BarnetilleggVurdering = ({
                     )}
                     harOppgittFosterforelderRelasjon={vurdering.oppgittForelderRelasjon === 'FOSTERFORELDER'}
                     forsørgerPeriode={vurdering.forsørgerPeriode}
+                    søknadstidspunkt={grunnlag.søknadstidspunkt}
                     readOnly={formReadOnly}
                   />
                 );
@@ -336,11 +339,18 @@ export const BarnetilleggVurdering = ({
                 ...(grunnlag.vurderteBarn ?? []),
                 ...(grunnlag.barnSomTrengerVurdering ?? []),
                 ...(grunnlag.saksbehandlerOppgitteBarn ?? []),
-              ].map((barn: any) => ({
-                ident: barn.ident?.identifikator ?? barn.ident ?? '',
-                navn: barn.navn ?? '',
-                fødselsdato: barn.fodselsDato ?? barn.fødselsdato ?? '',
-              })),
+              ].map(
+                (barn: {
+                  ident?: string | { identifikator?: string | null } | null;
+                  navn?: string | null;
+                  fodselsDato?: string | null;
+                  fødselsdato?: string | null;
+                }) => ({
+                  ident: typeof barn.ident === 'string' ? barn.ident : (barn.ident?.identifikator ?? ''),
+                  navn: barn.navn ?? '',
+                  fødselsdato: barn.fodselsDato ?? barn.fødselsdato ?? '',
+                })
+              ),
               ...(saksbehandlerOppgitteBarnVurderinger?.map((barn) => ({
                 ident: barn.ident ?? '',
                 navn: barn.navn ?? '',
@@ -441,7 +451,7 @@ function mapVurderingToDraftFormFields(
         );
       });
 
-      const mapVurdering = (value: any) => ({
+      const mapVurdering = (value: BarnetilleggGrunnlag['vurderteBarn'][number]['vurderinger'][number]) => ({
         begrunnelse: value.begrunnelse,
         harForeldreAnsvar: value.harForeldreAnsvar ? JaEllerNei.Ja : JaEllerNei.Nei,
         fraDato: formaterDatoForFrontend(value.fraDato),

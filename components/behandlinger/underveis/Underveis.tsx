@@ -1,40 +1,34 @@
 import { UnderveisgrunnlagMedDataFetching } from 'components/behandlinger/underveis/underveisgrunnlag/UnderveisgrunnlagMedDatafetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { IkkeOppfyltMeldepliktMedDataFetching } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeOppfyltMeldepliktMedDataFetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const Underveis = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-
+export const Underveis = async ({ behandlingsreferanse, flyt }: Props) => {
   return (
     <GruppeSteg
-      behandlingVersjon={flyt.data.behandlingVersjon}
+      behandlingVersjon={flyt.behandlingVersjon}
       behandlingReferanse={behandlingsreferanse}
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
-      aktivtSteg={flyt.data.aktivtSteg}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
+      aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
         <IkkeOppfyltMeldepliktMedDataFetching
           behandlingsreferanse={behandlingsreferanse}
-          behandlingVersjon={flyt.data.behandlingVersjon}
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.behandlingVersjon}
+          readOnly={flyt.visning.saksbehandlerReadOnly}
         />
       </StegSuspense>
       <StegSuspense>
         <UnderveisgrunnlagMedDataFetching
-          readOnly={flyt.data.visning.saksbehandlerReadOnly}
-          behandlingVersjon={flyt.data.behandlingVersjon}
+          readOnly={flyt.visning.saksbehandlerReadOnly}
+          behandlingVersjon={flyt.behandlingVersjon}
           behandlingsreferanse={behandlingsreferanse}
         />
       </StegSuspense>

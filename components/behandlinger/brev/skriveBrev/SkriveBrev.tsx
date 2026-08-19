@@ -1,27 +1,28 @@
 'use client';
 
 import { BrevbyggerBeta } from '@navikt/aap-breveditor/';
-import { ActionMenu, Alert, Button, HStack, Label, Loader, VStack } from '@navikt/ds-react';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
+import { ActionMenu, BodyShort, Button, HStack, Label, List, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { useDebounce } from 'hooks/DebounceHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevMottaker, BrevStatus, Mottaker, Signatur, TypeBehandling } from 'lib/types/types';
+import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
+import { isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
-
+import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
-import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
+
+import { Alert } from 'components/alert/Alert';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
-import { isError, isSuccess } from 'lib/utils/api';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
-import { loggUmamiEvent, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
 export const SkriveBrev = ({
   referanse,
@@ -35,7 +36,7 @@ export const SkriveBrev = ({
   visAvbryt = true,
   status,
   readOnly,
-  behandlingstype,
+  brevtype,
 }: {
   referanse: string;
   behovstype: Behovstype;
@@ -48,7 +49,7 @@ export const SkriveBrev = ({
   visAvbryt?: boolean;
   status: BrevStatus;
   readOnly: boolean;
-  behandlingstype: TypeBehandling;
+  brevtype: BrevGrunnlagBrev['brevtype'];
 }) => {
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
@@ -124,11 +125,7 @@ export const SkriveBrev = ({
           <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
             {isSaving && <Loader />}
-            {error && (
-              <Alert variant="error" size="small">
-                {error}
-              </Alert>
-            )}
+            {error && <Alert variant="error">{error}</Alert>}
           </HStack>
           {!readOnly && (
             <ActionMenu>
@@ -168,6 +165,24 @@ export const SkriveBrev = ({
         </HStack>
 
         <VStack gap={'space-16'}>
+          <LocalAlert status={'warning'} size={'small'} style={{ maxWidth: '210mm' }}>
+            <LocalAlert.Header>
+              <LocalAlert.Title>G-regulering for AAP i Kelvin 2026</LocalAlert.Title>
+            </LocalAlert.Header>
+            <LocalAlert.Content>
+              <BodyShort size={'small'}>
+                Se over om bruker har fått innvilget AAP i en periode før 1. mai. Hvis virkningstidspunktet er før 1.
+                mai 2026, må beslutter i dagens løsning
+              </BodyShort>
+              <List as={'ul'} size={'small'}>
+                <List.Item>Manuelt skrive inn den nye dagsatsen som gjelder fra 1. mai 2026.</List.Item>
+                <List.Item>Dagsatsen på virkningstidspunktet kommer automatisk i brevet.</List.Item>
+              </List>
+              <BodyShort size={'small'} style={{ marginTop: 'var(--ax-space-8)' }}>
+                Begge satsene finnes i steget «Tilkjent ytelse».
+              </BodyShort>
+            </LocalAlert.Content>
+          </LocalAlert>
           <BrevbyggerBeta
             brevmal={brev}
             mottaker={mottaker}
@@ -208,11 +223,7 @@ export const SkriveBrev = ({
                       },
                       referanse: behandlingsreferanse,
                     },
-                    () =>
-                      loggUmamiEvent('skrivebrev-varighet', {
-                        varighet_sekunder: Math.floor((Date.now() - umamiStartTidspunkt) / 1000),
-                        typeBehandling: behandlingstype,
-                      })
+                    () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
                   );
                 }
               }}

@@ -1,19 +1,21 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { useConfigForm } from 'components/form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SubmitEventHandler } from 'react';
-import { FormField, ValuePair } from 'components/form/FormField';
-import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import styles from './fullmektig.module.css';
-import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
-import { erGyldigFødselsnummer } from 'lib/utils/fnr';
-import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
+import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
+import { erGyldigFødselsnummer } from 'lib/utils/fnr';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
+import { SubmitEventHandler } from 'react';
+
+import { FormField, ValuePair } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+
+import styles from './fullmektig.module.css';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -247,7 +249,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       {harFullmektig === JaEllerNei.Ja && idType === 'utl_orgnr' && (
         <FormField form={form} className={styles.orgNrOgFnr} formField={formFields.utlOrgnr} />
       )}
-      {harFullmektig && idType && skalFylleInnNavnOgAdresse(idType) && (
+      {harFullmektig === JaEllerNei.Ja && idType && skalFylleInnNavnOgAdresse(idType) && (
         <>
           <FormField form={form} formField={formFields.land} />
           <FormField form={form} formField={formFields.navn} />
@@ -272,9 +274,18 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
         grunnlag?.vurdering?.fullmektigIdentMedType?.type,
         grunnlag?.vurdering?.fullmektigNavnOgAdresse != null
       ),
-      fnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
-      orgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
-      utlOrgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      fnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'FNR_DNR'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
+      orgnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'ORGNR'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
+      utlOrgnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'UTL_ORG'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
       navn: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.navn ?? undefined,
       adresselinje1: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje1 ?? undefined,
       adresselinje2: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,
@@ -305,11 +316,11 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       case 'navnOgAdresse':
         return undefined;
       case 'orgnr':
-        return { ident: fields.orgnr!!, type: 'ORGNR' };
+        return { ident: fields.orgnr!, type: 'ORGNR' };
       case 'utl_orgnr':
-        return { ident: fields.utlOrgnr!!, type: 'UTL_ORG' };
+        return { ident: fields.utlOrgnr!, type: 'UTL_ORG' };
       case 'fnr':
-        return { ident: fields.fnr!!, type: 'FNR_DNR' };
+        return { ident: fields.fnr!, type: 'FNR_DNR' };
     }
   }
 

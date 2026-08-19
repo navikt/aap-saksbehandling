@@ -1,56 +1,66 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SubmitEventHandler } from 'react';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { LightBulbIcon } from '@navikt/aksel-icons';
+import { InfoCard, VStack } from '@navikt/ds-react';
 import { parseISO } from 'date-fns';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { useSak } from 'hooks/SakHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
+import { Dato } from 'lib/types/Dato';
 import {
   ArbeidsevneNedsattValg,
   MellomlagretVurdering,
+  StudentGrunnlag,
   SykdomsGrunnlag,
   TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
+import { isSuccess } from 'lib/utils/api';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { Behovstype, JaEllerNei, getJaNeiEllerUndefined, getStringEllerUndefined } from 'lib/utils/form';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { SubmitEventHandler } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import useSWR from 'swr';
+
+import { Alert } from 'components/alert/Alert';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import styles from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering.module.css';
+import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
+import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import {
   DiagnoserDefaultOptions,
   hentSisteLagredeVurdering,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
+import {
+  emptySykdomsvurderingMedDefaultBegrunnelse,
+  erNyVurderingOppfylt,
+  erTidligereVurderingOppfylt,
+} from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
 import { ValuePair } from 'components/form/FormField';
-import { useSak } from 'hooks/SakHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { Dato } from 'lib/types/Dato';
-import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
-import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
-import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
-import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { Alert, BodyLong, Link, VStack } from '@navikt/ds-react';
-import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import {
-  emptySykdomsvurdering,
-  erNyVurderingOppfylt,
-  erTidligereVurderingOppfylt,
-} from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
 }
+
+const SYKMELDING_39UKER_BREVKODE = 'NAV 08-07.04 R';
 
 export interface Sykdomsvurdering extends VurderingFormMeta {
   fraDato: string;
@@ -60,9 +70,7 @@ export interface Sykdomsvurdering extends VurderingFormMeta {
   kodeverk?: string;
   hoveddiagnose?: ValuePair | null;
   bidiagnose?: ValuePair[] | null;
-  erArbeidsevnenNedsatt?: JaEllerNei;
   erSkadeSykdomEllerLyteVesentligdel?: JaEllerNei;
-  erNedsettelseIArbeidsevneAvEnVissVarighet?: JaEllerNei;
   erNedsettelseIArbeidsevneMerEnnHalvparten?: JaEllerNei;
   harNedsattArbeidsevne?: ArbeidsevneNedsattValg;
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense?: JaEllerNei;
@@ -77,6 +85,9 @@ interface SykdomProps {
   diagnoseDefaultOptions: DiagnoserDefaultOptions;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   erOvergangArbeid: boolean;
+  erRevurderingStudent: boolean;
+  studentgrunnlag: StudentGrunnlag;
+  skalViseAlleSykdomSteg?: boolean;
 }
 
 export const Sykdomsvurdering = ({
@@ -87,10 +98,23 @@ export const Sykdomsvurdering = ({
   typeBehandling,
   initialMellomlagretVurdering,
   erOvergangArbeid,
+  erRevurderingStudent,
+  studentgrunnlag,
+  skalViseAlleSykdomSteg = false,
 }: SykdomProps) => {
-  const sykdomUtenVissVarighetToggle = useFeatureFlag('SykdomUtenVissVarighetFrontend');
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
+
+  const { data: relevanteDokumenter } = useSWR(
+    `/api/dokumenter/bruker/helsedokumenter`,
+    () => clientHentRelevanteDokumenter(sak.saksnummer, sak.ident),
+    { revalidateOnFocus: false, revalidateIfStale: false }
+  );
+
+  const har39UkersSykmelding =
+    isSuccess(relevanteDokumenter) &&
+    relevanteDokumenter.data.filter((dokument) => dokument.brevkode?.toUpperCase() == SYKMELDING_39UKER_BREVKODE)
+      .length > 0;
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -149,8 +173,8 @@ export const Sykdomsvurdering = ({
                 grunnlag.skalVurdereYrkesskade,
                 grunnlag.erÅrsakssammenhengYrkesskade,
                 førsteDatoSomKanVurderes,
-                sykdomUtenVissVarighetToggle,
-                tilDato ? formaterDatoForBackend(tilDato) : undefined
+                tilDato ? formaterDatoForBackend(tilDato) : undefined,
+                skalViseAlleSykdomSteg
               );
             }),
           },
@@ -185,21 +209,34 @@ export const Sykdomsvurdering = ({
       visningActions={visningActions}
       visningModus={visningModus}
       formReset={() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag))}
-      onLeggTilVurdering={() => append(emptySykdomsvurdering(utledDiagnoserForNyVurdering()))}
+      onLeggTilVurdering={() => append(emptySykdomsvurderingMedDefaultBegrunnelse(utledDiagnoserForNyVurdering()))}
       errorList={errorList}
     >
       <VStack gap={'space-16'}>
-        <BodyLong size={'small'}>
-          <Link href="https://lovdata.no/nav/rundskriv/r11-00#KAPITTEL_7-1" target="_blank">
-            Du kan lese hvordan vilkåret skal vurderes i rundskrivet til § 11-5 (lovdata.no)
-          </Link>
-        </BodyLong>
+        <EksterneLenkerIVilkårskort steg={'AVKLAR_SYKDOM'} />
+
+        {har39UkersSykmelding && (
+          <InfoCard data-color="meta-purple" size={'small'} className={styles.sykmeldingInfo}>
+            <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
+              {
+                'Det er nylig mottatt en 39-ukers sykemelding på saken. Du finner den under "Be om opplysninger" i høyre kolonne.'
+              }
+            </InfoCard.Message>
+          </InfoCard>
+        )}
 
         {erOvergangArbeid && (
-          <Alert variant={'info'} size={'small'}>
+          <Alert variant={'info'}>
             Hvis brukeren skal ha AAP i perioden som arbeidssøker etter § 11-17, må du først vurdere at arbeidsevnen
             ikke lenger er nedsatt etter § 11-5 og at brukeren er satt i stand til å skaffe seg arbeid som han eller hun
             kan utføre.
+          </Alert>
+        )}
+
+        {erRevurderingStudent && (
+          <Alert variant={'info'} size={'small'}>
+            Hvis brukeren skal ha AAP som student etter § 11-14, må du først vurdere at arbeidsevnen ikke er nedsatt,
+            men at bruker isteden skal vurderes for student i vurderingen av § 11-5.
           </Alert>
         )}
 
@@ -213,10 +250,7 @@ export const Sykdomsvurdering = ({
             defaultCollapsed={nyeVurderingerFields.length > 0}
             vurderingerMeta={vurdering.vurderingerMeta}
           >
-            <TidligereSykdomsvurdering
-              vurdering={vurdering}
-              sykdomUtenVissVarighetToggle={sykdomUtenVissVarighetToggle}
-            />
+            <TidligereSykdomsvurdering vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
 
@@ -226,11 +260,7 @@ export const Sykdomsvurdering = ({
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
             vurderingStatus={getErOppfyltEllerIkkeStatus(
-              erNyVurderingOppfylt(
-                form.watch(`vurderinger.${index}`),
-                grunnlag.skalVurdereYrkesskade,
-                sykdomUtenVissVarighetToggle
-              )
+              erNyVurderingOppfylt(form.watch(`vurderinger.${index}`), grunnlag.skalVurdereYrkesskade)
             )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
@@ -251,7 +281,8 @@ export const Sykdomsvurdering = ({
               skalVurdereYrkesskade={grunnlag.skalVurdereYrkesskade}
               rettighetsperiodeStartdato={førsteDatoSomKanVurderes}
               diagnoseDefaultOptions={diagnoseDefaultOptions}
-              sykdomUtenVissVarighetToggle={sykdomUtenVissVarighetToggle}
+              studentgrunnlag={studentgrunnlag}
+              skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
             />
           </NyVurderingExpandableCard>
         ))}
@@ -264,7 +295,7 @@ export const Sykdomsvurdering = ({
 
     if (trengerVurderingsForslag(grunnlag)) {
       return hentPerioderSomTrengerVurdering<Sykdomsvurdering>(grunnlag, () =>
-        emptySykdomsvurdering(diagnoserForNyVurdering)
+        emptySykdomsvurderingMedDefaultBegrunnelse(diagnoserForNyVurdering)
       );
     }
 
@@ -286,10 +317,9 @@ export const Sykdomsvurdering = ({
           : undefined;
 
         return {
-          fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
+          fraDato: new Dato(vurdering.fom).formaterForFrontend(),
           begrunnelse: vurdering?.begrunnelse,
           harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
-          erArbeidsevnenNedsatt: getJaNeiEllerUndefined(vurdering?.erArbeidsevnenNedsatt),
           harNedsattArbeidsevne: vurdering?.harNedsattArbeidsevne,
           erNedsettelseIArbeidsevneMerEnnHalvparten: getJaNeiEllerUndefined(
             vurdering?.erNedsettelseIArbeidsevneMerEnnHalvparten
@@ -298,14 +328,9 @@ export const Sykdomsvurdering = ({
           kodeverk: getStringEllerUndefined(vurdering.kodeverk),
           hoveddiagnose: hoveddiagnose,
           bidiagnose: bidiagnose,
-          erNedsettelseIArbeidsevneAvEnVissVarighet: getJaNeiEllerUndefined(
-            vurdering?.erNedsettelseIArbeidsevneAvEnVissVarighet
-          ),
           erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: getJaNeiEllerUndefined(
             vurdering?.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
           ),
-          erNedsettelseMinstHalvparten: vurdering?.erNedsettelseMinstHalvparten,
-          erNedsettelseMerEnnYrkesskadegrense: vurdering?.erNedsettelseMerEnnYrkesskadegrense,
           yrkesskadeBegrunnelse: getStringEllerUndefined(vurdering?.yrkesskadeBegrunnelse),
           vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,

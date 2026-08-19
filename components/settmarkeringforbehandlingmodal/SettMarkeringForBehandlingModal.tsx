@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useConfigForm } from 'components/form/FormHook';
-import { BookIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
-import { Alert, Button, Modal, VStack } from '@navikt/ds-react';
-
-import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { clientSettMarkeringForBehandling } from 'lib/clientApi';
-import { MarkeringType } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
-import { FormField } from 'components/form/FormField';
-import { isSuccess } from 'lib/utils/api';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { Button, Modal, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
+import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { isSuccess } from 'lib/utils/api';
+import React, { useState } from 'react';
+
+import { Alert } from 'components/alert/Alert';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal.module.css';
 
 interface Props {
   referanse: string;
@@ -70,12 +70,10 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               onSubmit={form.handleSubmit(async (data) => {
                 setIsLoading(true);
 
-                const res = await clientSettMarkeringForBehandling(referanse, {
-                  begrunnelse:
-                    markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
-                      ? data.hasteBegrunnelse
-                      : data.begrunnelse,
+                const res = await clientOpprettMarkeringHendelse(referanse, {
+                  begrunnelse: markeringsType === 'HASTER' ? data.hasteBegrunnelse : data.begrunnelse,
                   markeringType: markeringsType,
+                  hendelseType: MarkeringHendelseType.OPPRETTET,
                 });
 
                 if (isSuccess(res)) {
@@ -90,18 +88,14 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               className={'flex-column'}
               autoComplete={'off'}
             >
-              {markeringsType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER ? (
+              {markeringsType === 'HASTER' ? (
                 <FormField form={form} formField={formFields.hasteBegrunnelse} />
               ) : (
                 <FormField form={form} formField={formFields.begrunnelse} />
               )}
             </form>
           )}
-          {error && (
-            <Alert variant={'error'} size={'small'}>
-              {error}
-            </Alert>
-          )}
+          {error && <Alert variant={'error'}>{error}</Alert>}
         </VStack>
       </Modal.Body>
       <Modal.Footer>
@@ -119,11 +113,11 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
 const markeringTypeTilEnum = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
-    case 'KREVER_SPESIALKOMPETANSE':
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.KREVER_SPESIALKOMPETANSE;
+      return 'HASTER' satisfies MarkeringType;
+    case 'AVSLAG_11_5':
+      return 'AVSLAG_11_5' satisfies MarkeringType;
     default:
-      return NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER;
+      return 'HASTER' satisfies MarkeringType;
   }
 };
 
@@ -131,7 +125,5 @@ const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
       return { heading: 'Marker behandling som haster', icon: <ExclamationmarkTriangleIcon /> };
-    case 'KREVER_SPESIALKOMPETANSE':
-      return { heading: 'Marker behandlingen med krever spesialkompetanse', icon: <BookIcon /> };
   }
 };

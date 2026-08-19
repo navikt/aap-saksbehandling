@@ -1,7 +1,8 @@
-import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
+import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
+import { describe, expect, it, vi } from 'vitest';
+
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
 
 const grunnlag: DigitaliseringsGrunnlag = {
@@ -19,11 +20,20 @@ describe('DigitaliserAnnetDokument', () => {
   it('at det går an å velge flere alternativer', async () => {
     const submit = vi.fn(() => {});
 
-    render(<DigitaliserAnnetRelevantDokument submit={submit} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        erKravEnabled={true}
+      />
+    );
 
-    await user.click(screen.getByRole('combobox'));
-    await user.click(screen.getByText(/Yrkesskade/));
-    await user.click(screen.getByText(/11-28 Folketrygdytelser/));
+    const årsaker = screen.getByRole('combobox', { name: /Hvilke opplysninger/ });
+    await user.click(årsaker);
+    await user.click(within(screen.getByRole('listbox')).getByText(/Yrkesskade/));
+    await user.click(within(screen.getByRole('listbox')).getByText(/11-28 Folketrygdytelser/));
 
     const list = screen.getByRole('list');
     expect(within(list).getByText(/Yrkesskade/i)).toBeVisible();
@@ -43,6 +53,66 @@ describe('DigitaliserAnnetDokument', () => {
     expect(submit).toHaveBeenCalledExactlyOnceWith(
       'ANNET_RELEVANT_DOKUMENT',
       '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE","REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER"],"begrunnelse":"begrunnelse"}',
+      null
+    );
+  });
+
+  it('at underkategori inkluderes i submit når den er valgt', async () => {
+    const submit = vi.fn(() => {});
+
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        erKravEnabled={true}
+      />
+    );
+
+    await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
+
+    await user.click(screen.getByRole('combobox', { name: /Hvilke opplysninger/ }));
+    await user.click(within(screen.getByRole('listbox')).getByText(/Yrkesskade/));
+
+    await user.type(screen.getByLabelText('Begrunnelse'), 'begrunnelse med underkategori');
+
+    await user.click(screen.getByRole('button', { name: /Neste/ }));
+
+    expect(submit).toHaveBeenCalledExactlyOnceWith(
+      'ANNET_RELEVANT_DOKUMENT',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse med underkategori","underkategori":"YRKESSKADE"}',
+      null
+    );
+  });
+
+  it('at underkategori er fraværende når den ikke er valgt', async () => {
+    const submit = vi.fn(() => {});
+
+    render(
+      <DigitaliserAnnetRelevantDokument
+        submit={submit}
+        grunnlag={grunnlag}
+        readOnly={false}
+        isLoading={false}
+        erKravEnabled={true}
+      />
+    );
+
+    // Select a category, then deselect it to get empty string
+    await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
+    await user.selectOptions(screen.getByLabelText('Underkategori'), '');
+
+    await user.click(screen.getByRole('combobox', { name: /Hvilke opplysninger/ }));
+    await user.click(within(screen.getByRole('listbox')).getByText(/Yrkesskade/));
+
+    await user.type(screen.getByLabelText('Begrunnelse'), 'begrunnelse uten underkategori');
+
+    await user.click(screen.getByRole('button', { name: /Neste/ }));
+
+    expect(submit).toHaveBeenCalledExactlyOnceWith(
+      'ANNET_RELEVANT_DOKUMENT',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse uten underkategori"}',
       null
     );
   });

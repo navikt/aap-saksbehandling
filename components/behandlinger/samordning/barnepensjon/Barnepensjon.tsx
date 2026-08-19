@@ -1,21 +1,22 @@
 'use client';
 
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { BarnepensjonGrunnlag, MellomlagretVurdering } from 'lib/types/types';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { Behovstype } from 'lib/utils/form';
 import { VStack } from '@navikt/ds-react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { BarnepensjonGrunnlag, MellomlagretVurdering } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { replaceCommasWithDots } from 'lib/utils/string';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+
 import { BarnepensjonTabell } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTabell';
 import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordning/barnepensjon/BarnepensjonTidligereVurdering';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { replaceCommasWithDots } from 'lib/utils/string';
-import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 interface Props {
   grunnlag: BarnepensjonGrunnlag;

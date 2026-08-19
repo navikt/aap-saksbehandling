@@ -1,21 +1,22 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { BodyShort, Label, VStack } from '@navikt/ds-react';
-import { erProsent } from 'lib/utils/validering';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { SubmitEventHandler } from 'react';
-import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { parse } from 'date-fns';
-import { useFieldArray } from 'react-hook-form';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { erProsent } from 'lib/utils/validering';
+import { SubmitEventHandler } from 'react';
+import { useFieldArray } from 'react-hook-form';
+
+import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeVurderingTabell';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -136,11 +137,7 @@ export const Yrkesskade = ({
         }
         const ingenYrkesskadeErTilknyttet = fields.every((yrkesskade) => !yrkesskade.erTilknyttet);
         if (ingenYrkesskadeErTilknyttet) {
-          form.setError('relevanteYrkesskadeSaker', {
-            type: 'custom',
-            message: 'Du må velge minst én yrkesskade',
-          });
-          return false;
+          return 'Du må velge minst én yrkesskade';
         }
       },
     },
@@ -156,7 +153,6 @@ export const Yrkesskade = ({
               begrunnelse: data.begrunnelse,
               erÅrsakssammenheng: data.erÅrsakssammenheng === JaEllerNei.Ja,
               andelAvNedsettelsen: data?.andelAvNedsettelsen,
-              relevanteSaker: [], // TODO Fjern fra backend
               relevanteYrkesskadeSaker:
                 data.relevanteYrkesskadeSaker
                   ?.filter((sak) => sak.erTilknyttet)

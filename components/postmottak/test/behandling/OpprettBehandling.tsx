@@ -1,17 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Alert, Button, HStack, Page, TextField } from '@navikt/ds-react';
+import { Button, HStack, Page, TextField } from '@navikt/ds-react';
 import { postmottakOpprettBehandlingClient } from 'lib/postmottakClientApi';
 import styles from './OpprettBehandling.module.css';
 import { isSuccess } from 'lib/utils/api';
+import { Alert } from 'components/alert/Alert';
+import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 
 export const OpprettBehandling = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [journalpostId, setJournalpostId] = useState<number>(0);
 
-  async function onClick() {
+  async function opprettBehandling() {
     setIsLoading(true);
     try {
       const res = await postmottakOpprettBehandlingClient(journalpostId);
@@ -30,20 +32,22 @@ export const OpprettBehandling = () => {
   return (
     <Page.Block width="xl" className={styles.stickyFooterWrapper}>
       <div className={styles.stickyFooter}>
-        <HStack gap="space-16" align="end" marginBlock="space-16">
-          <TextField
-            inputMode="numeric"
-            label={'Journalpost-id'}
-            onChange={(event) => {
-              setJournalpostId(parseInt(event.target.value));
-            }}
-          />
-          <Button onClick={() => onClick()} loading={isLoading}>
-            Opprett behandling
-          </Button>
+        <DevtoolWrapper hideTitle>
+          <HStack gap="space-16" align="end">
+            <TextField
+              hideLabel
+              inputMode="numeric"
+              label="JournalpostID"
+              placeholder="JournalpostID"
+              onChange={(event) => setJournalpostId(parseInt(event.target.value))}
+            />
+            <Button onClick={opprettBehandling} loading={isLoading}>
+              Opprett behandling
+            </Button>
 
-          {message && <Alert variant="info">{message}</Alert>}
-        </HStack>
+            {message && <Alert variant="info">{message}</Alert>}
+          </HStack>
+        </DevtoolWrapper>
       </div>
     </Page.Block>
   );

@@ -1,13 +1,19 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { FeatureFlagProvider } from 'context/UnleashContext';
 
 const user = userEvent.setup();
 
 describe('InnhentDokumentasjon', () => {
   beforeEach(() => {
-    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />
+      </FeatureFlagProvider>
+    );
   });
 
   test('har en overskrift på nivå 3 når man viser skjema', async () => {
@@ -19,11 +25,11 @@ describe('InnhentDokumentasjon', () => {
   });
 
   test('har et felt for å velge dokumentasjonstype', async () => {
-    expect(screen.getByRole('combobox', { name: 'Type dokumentasjon' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Velg dokumenttype' })).toBeVisible();
   });
 
   test('har et felt for melding til behandler', async () => {
-    expect(screen.getByRole('textbox', { name: 'Melding' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Skriv melding' })).toBeVisible();
   });
 
   test('har en knapp for å sende melding', async () => {
@@ -41,7 +47,11 @@ describe('InnhentDokumentasjon', () => {
 
 describe('validering', () => {
   beforeEach(async () => {
-    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />
+      </FeatureFlagProvider>
+    );
   });
 
   test('gir feilmelding dersom behandler ikke er valgt', async () => {

@@ -1,13 +1,13 @@
-import globals from 'globals';
-import react from 'eslint-plugin-react';
 import eslintJs from '@eslint/js';
-import reactHooks from 'eslint-plugin-react-hooks';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import jest from 'eslint-plugin-jest';
 import tsParser from '@typescript-eslint/parser';
-import { fileURLToPath } from 'url';
+import jest from 'eslint-plugin-jest';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -61,17 +61,33 @@ const config = [
       ...reactHooks.configs.recommended.rules,
       'react/jsx-indent-props': ['error', 2],
       '@typescript-eslint/no-unnecessary-type-conversion': ['error'],
+      '@typescript-eslint/no-unnecessary-type-assertion': ['error'],
+      // Kommenter ut enn så lenge, gir veldig mye warnings
+      // '@typescript-eslint/consistent-type-assertions': ['warn', { assertionStyle: 'never' }],
       '@typescript-eslint/prefer-ts-expect-error': ['error'],
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': ['error'],
+      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': ['warn'],
       'jest/no-disabled-tests': 'warn',
       'jest/no-focused-tests': 'error',
       'jest/no-identical-title': 'error',
       'jest/prefer-to-have-length': 'warn',
       'jest/valid-expect': 'error',
+
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@navikt/ds-react',
+              importNames: ['Alert'],
+              message: 'Bruk Alert fra components/alert/Alert i stedet for Alert fra @navikt/ds-react.',
+            },
+          ],
+        },
+      ],
 
       // Regler vi burde skru på, men midleritig av fordi vi hadde mange feil
       'no-redeclare': 'off',

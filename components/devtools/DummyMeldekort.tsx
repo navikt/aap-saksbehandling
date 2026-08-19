@@ -8,6 +8,7 @@ const pad = (input: number): string => input.toString().padStart(2, '0');
 const formaterDato = (dato: Date): string => `${dato.getFullYear()}-${pad(dato.getMonth() + 1)}-${pad(dato.getDate())}`;
 
 interface DummyMeldekortForm {
+  sendtDato: Date;
   timerArbeidet: number;
   mndStart: Date;
   mndSlutt: Date;
@@ -22,10 +23,10 @@ async function postMeldekort(saksid: string, data: DummyMeldekortForm) {
     },
     type: 'MELDEKORT',
     kanal: 'DIGITAL',
-    mottattTidspunkt: new Date().toISOString(),
+    mottattTidspunkt: data.sendtDato.toISOString(),
     melding: {
       meldingType: 'MeldekortV0',
-      harDuArbeidet: true,
+      harDuArbeidet: data.timerArbeidet > 0,
       timerArbeidPerPeriode: [
         {
           fraOgMedDato: formaterDato(data.mndStart),
@@ -56,6 +57,10 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
       type: 'date',
       defaultValue: mndStart,
     },
+    sendtDato: {
+      type: 'date',
+      defaultValue: new Date(),
+    },
   });
 
   return (
@@ -67,6 +72,7 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
       >
         <Button>Send inn et meldekort</Button>
         <details>
+          <FormField form={form} formField={formFields.sendtDato} />
           <FormField form={form} formField={formFields.timerArbeidet} />
           <FormField form={form} formField={formFields.mndStart} />
           <FormField form={form} formField={formFields.mndSlutt} />

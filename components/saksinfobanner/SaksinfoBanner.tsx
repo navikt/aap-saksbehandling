@@ -1,41 +1,44 @@
 'use client';
 
-import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-react';
-import { DetaljertBehandling, FlytGruppe, FlytVisning, SakPersoninfo, SaksInfo as SaksInfoType } from 'lib/types/types';
-import { useState } from 'react';
 import { ChevronRightIcon } from '@navikt/aksel-icons';
-
-import styles from './SaksinfoBanner.module.css';
-import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
-import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
-import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
-import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
+import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-react';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
+import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
+import { DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
+import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { useState } from 'react';
+
+import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
+import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
+import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
+import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
+import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
 import { SaksmenyDropdown } from 'components/saksinfobanner/SaksmenyDropdown';
+import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler';
+
 import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
+import styles from './SaksinfoBanner.module.css';
+import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 
 interface Props {
-  personInformasjon: SakPersoninfo;
   sak: SaksInfoType;
   behandling?: DetaljertBehandling;
-  oppgave?: Oppgave;
+  oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
 }
 
-export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, flyt, visning }: Props) => {
+export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
-  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgave?.harUlesteDokumenter);
-  const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgave?.reservertAv;
+  const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
+  const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
+  const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
 
-  const adressebeskyttelser = oppgave ? utledAdressebeskyttelse(oppgave) : [];
+  const adressebeskyttelser = oppgaveVisningsinfo ? utledAdressebeskyttelse(oppgaveVisningsinfo) : [];
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
     if (visning?.visVentekort) {
@@ -48,15 +51,18 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
   };
 
   const hentOppgaveTildeling = (): OppgaveStatusType | undefined => {
-    if (!oppgave?.reservertAv) {
+    if (!oppgaveVisningsinfo?.reservertAvIdent) {
       return { status: 'LEDIG', label: `Ledig` };
     } else if (erReservertAvInnloggetBruker) {
       return {
         status: 'TILDELT_INNLOGGET_BRUKER',
-        label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}`,
+        label: `Tildelt: ${oppgaveVisningsinfo.reservertAvNavn ?? oppgaveVisningsinfo.reservertAvIdent}`,
       };
-    } else if (oppgave?.reservertAv && !erReservertAvInnloggetBruker) {
-      return { status: 'TILDELT', label: `Tildelt: ${oppgave.reservertAvNavn ?? oppgave.reservertAv}` };
+    } else if (oppgaveVisningsinfo?.reservertAvIdent && !erReservertAvInnloggetBruker) {
+      return {
+        status: 'TILDELT',
+        label: `Tildelt: ${oppgaveVisningsinfo.reservertAvNavn ?? oppgaveVisningsinfo.reservertAvIdent}`,
+      };
     }
   };
 
@@ -72,6 +78,10 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
               {storForbokstavIHvertOrd(personInformasjon.navn)}
             </Link>
           </Label>
+
+          <BodyShort textColor="subtle" size="small">
+            ({personInformasjon.fødselsdato ? kalkulerAlder(new Date(personInformasjon.fødselsdato)) : 'Alder ukjent'})
+          </BodyShort>
 
           <CopyButton
             copyText={sak?.ident}
@@ -90,7 +100,16 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
           {behandling && (
             <>
               <ChevronRightIcon className={styles.chevron} />
-              <BodyShort size={'small'}>Sak {sak.saksnummer}</BodyShort>
+              <BodyShort size={'small'}>
+                Sak
+                <CopyButton
+                  copyText={sak.saksnummer}
+                  size={'xsmall'}
+                  text={sak.saksnummer}
+                  iconPosition="right"
+                  className={styles.copybutton}
+                />
+              </BodyShort>
               <ChevronRightIcon className={styles.chevron} />
 
               <BodyShort size={'small'}>{behandling.type}</BodyShort>
@@ -124,12 +143,12 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
               <OppgaveStatus oppgaveStatus={oppgaveTildelingStatus} />
             </div>
           )}
-          {oppgave?.utløptVentefrist && (
+          {oppgaveVisningsinfo?.utløptVenteInfo && (
             <div className={styles.oppgavestatus}>
               <UtløptVentefristBoks
-                frist={oppgave.utløptVentefrist}
-                årsak={oppgave.forrigePåVentÅrsak}
-                begrunnelse={oppgave.forrigeVenteBegrunnelse}
+                frist={oppgaveVisningsinfo.utløptVenteInfo.påVentTil}
+                årsak={oppgaveVisningsinfo.utløptVenteInfo.påVentÅrsak}
+                begrunnelse={oppgaveVisningsinfo.utløptVenteInfo.venteBegrunnelse}
               />
             </div>
           )}
@@ -138,22 +157,21 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
               <OppgaveStatus oppgaveStatus={oppgaveStatus} />
             </div>
           )}
-          {oppgave?.returInformasjon?.status && (
+          {oppgaveVisningsinfo?.returInformasjon?.status && (
             <div className={styles.oppgavestatus}>
-              <ReturStatus returStatus={oppgave.returInformasjon.status} />
+              <ReturStatus returStatus={oppgaveVisningsinfo.returInformasjon.status} />
             </div>
           )}
-          {oppgave?.markeringer?.map((markering) => (
+          {oppgaveVisningsinfo?.markeringer?.map((markering) => (
             <div className={styles.oppgavestatus} key={markering.markeringType}>
               <MarkeringInfoboks markering={markering} referanse={behandling.referanse} showLabel={true} />
             </div>
           ))}
-
           <SaksmenyDropdown
             flyt={flyt}
             visning={visning}
             behandling={behandling}
-            oppgave={oppgave}
+            reservertAvIdent={oppgaveVisningsinfo?.reservertAvIdent}
             brukerInformasjon={brukerInformasjon}
           />
         </HStack>
@@ -161,3 +179,17 @@ export const SaksinfoBanner = ({ personInformasjon, sak, behandling, oppgave, fl
     </div>
   );
 };
+
+function utledAdressebeskyttelse(visningInfo?: OppgaveVisningsinformasjon): Adressebeskyttelsesgrad[] {
+  let adressebeskyttelser: Adressebeskyttelsesgrad[] = [];
+  if (visningInfo?.skjermingInfo.harStrengtFortroligAdresse) {
+    adressebeskyttelser.push(Adressebeskyttelsesgrad.STRENGT_FORTROLIG);
+  } else if (visningInfo?.skjermingInfo.harFortroligAdresse) {
+    adressebeskyttelser.push(Adressebeskyttelsesgrad.FORTROLIG);
+  }
+
+  if (visningInfo?.skjermingInfo.erSkjermet) {
+    adressebeskyttelser.push(Adressebeskyttelsesgrad.EGEN_ANSATT);
+  }
+  return adressebeskyttelser;
+}

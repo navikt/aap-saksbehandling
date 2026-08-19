@@ -6,9 +6,7 @@ import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { getAllFlags } from 'lib/services/unleash/unleashService';
 import { Metadata } from 'next';
-import { isDev } from 'lib/utils/environment';
 import Faro from 'components/frontendobservability/faro';
-import { UmamiScript } from 'components/umami/Umami';
 
 export const metadata: Metadata = {
   title: 'Kelvin',
@@ -20,7 +18,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="nb">
-      <head>{isDev() && <UmamiScript />}</head>
       <body>
         <Faro collectorUrl={process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL} />
         <FeatureFlagProvider flags={getAllFlags(brukerInformasjon.NAVident)}>

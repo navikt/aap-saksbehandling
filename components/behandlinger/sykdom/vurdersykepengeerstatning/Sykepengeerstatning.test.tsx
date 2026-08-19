@@ -110,7 +110,6 @@ describe('mellomlagring', () => {
     nyeVurderinger: [
       {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
-        dokumenterBruktIVurdering: [],
         harRettPå: true,
         gjelderFra: '2025-01.01',
         fom: '2025-01.01',
@@ -128,7 +127,6 @@ describe('mellomlagring', () => {
     sisteVedtatteVurderinger: [
       {
         begrunnelse: 'Dette er min vurdering som er bekreftet',
-        dokumenterBruktIVurdering: [],
         harRettPå: true,
         gjelderFra: '2025-01-01',
         fom: '2025-01-01',

@@ -1,15 +1,17 @@
-import { Button, HStack, Radio, TextField, VStack } from '@navikt/ds-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
-import { SøknadFormFields } from 'components/postmottak/digitaliserdokument/søknad/DigitaliserSøknad';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
-import { validerDato } from 'lib/validation/dateValidation';
-import { JaEllerNeiOptions } from 'lib/postmottakForm';
-import { alleLandUtenNorge } from 'lib/utils/countries';
+import { Button, HStack, Radio, TextField, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import countries from 'i18n-iso-countries';
+import { JaEllerNeiOptions } from 'lib/postmottakForm';
+import { alleLandUtenNorge } from 'lib/utils/countries';
+import { validerDato } from 'lib/validation/dateValidation';
+import { UseFieldArrayRemove, UseFormReturn } from 'react-hook-form';
+
+import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { SøknadFormFields } from 'components/postmottak/digitaliserdokument/søknad/DigitaliserSøknad';
+
 import styles from './Barnetillegg.module.css';
 
 const { eeaMember } = require('is-european');
@@ -70,7 +72,7 @@ export const LeggTilUtenlandsOpphold = ({ index, form, readOnly, remove }: Props
                 validerDato: (value) => validerDato(value as string),
                 etterFraDato: (value) => {
                   if (!fraDato || !value) return true;
-                  const fra = parse(fraDato as string, 'dd.MM.yyyy', new Date());
+                  const fra = parse(fraDato, 'dd.MM.yyyy', new Date());
                   const til = parse(value as string, 'dd.MM.yyyy', new Date());
                   return til >= fra || 'Til dato må være etter fra dato';
                 },

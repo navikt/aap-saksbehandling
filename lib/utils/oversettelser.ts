@@ -1,6 +1,14 @@
-import { SettPåVentÅrsaker, TypeBehandling, VilkårUtfall, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { exhaustiveCheck } from 'lib/utils/typescript';
 import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
+import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
+import {
+  SettPåVentÅrsaker,
+  TilbakekrevingVenteÅrsaker,
+  TypeBehandling,
+  VilkårUtfall,
+  ÅrsakTilOpprettelse,
+} from 'lib/types/types';
+import { exhaustiveCheck } from 'lib/utils/typescript';
+
 const behovskodeMap = {
   // Behandlingsflyt
   '4101': '§ 11-7 Aktivitetsplikt',
@@ -43,8 +51,12 @@ const behovskodeMap = {
   '5034': 'Avklar samordning sykestipend',
   '5035': 'Avklar oppholdskrav',
   '5036': 'Samordning barnepensjon',
+  '5037': '§ 11-14 Student',
+  '5038': 'Vurder krav',
+  '5039': 'Avklar stønadsperiode',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
   '5041': 'Skriv vedtaksbrev',
+  '5042': 'Avslag § 11-27',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
   '5052': 'Skriv forhåndsvarsel brudd aktivitetsplikt',
@@ -75,6 +87,7 @@ const behovskodeMap = {
   '8001': 'Oppfølgingsoppgave - kontor',
   '8002': 'Oppfølgingsoppgave - NAY',
   '8003': 'Venter på oppfølging',
+  '8004': 'Venter på oppfølging',
   '9001': 'Manuelt satt på vent',
   '9002': 'Bestill brev',
   '9003': 'Bestill legeerklæring',
@@ -89,15 +102,16 @@ const behovskodeMap = {
   '1340': 'Avklar saksnummer',
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
+  '1343': 'Avklar fordeling',
 } as const;
-
-import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
   return behovskodeMap[kode as OppgaveAvklaringsbehovKode] ?? 'Ukjent behovstype';
 }
 
-export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker): string {
+export function mapTilVenteÅrsakTekst(
+  årsak: SettPåVentÅrsaker | PostmottakSettPåVentÅrsaker | TilbakekrevingVenteÅrsaker
+): string {
   switch (årsak) {
     case 'VENTER_PÅ_OPPLYSNINGER':
       return 'Venter på opplysninger';
@@ -123,18 +137,24 @@ export function mapTilVenteÅrsakTekst(årsak: SettPåVentÅrsaker | PostmottakS
       return 'Venter på manglende funksjonalitet';
     case 'VENTER_PÅ_BEHANDLING_I_GOSYS':
       return 'Venter på behandling i Gosys';
+    case 'AVVENTER_BRUKERUTTALELSE':
+      return 'Venter på brukeruttalelse';
   }
   exhaustiveCheck(årsak);
 }
 
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
+    case 'KRAV':
+      return 'Krav';
     case 'SØKNAD':
       return 'Trekk søknad';
     case 'AVBRYT_REVURDERING':
       return 'Avbryt revurdering';
     case 'ALDER':
       return 'Alder';
+    case 'AVSLAG_11_27':
+      return 'Avslag § 11-27';
     case 'LOVVALG':
       return 'Lovvalg og medlemskap';
     case 'START_BEHANDLING':
@@ -236,6 +256,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'FORDELING':
+      return 'Fordeling';
   }
   exhaustiveCheck(behandlingsType);
 }
@@ -350,6 +372,7 @@ export function mapStatusTilTekst(
     | 'VENTEFRIST_UTLØPT'
     | 'RETUR_FRA_VEILEDER'
     | 'RETUR_FRA_SAKSBEHANDLER'
+    | 'AVSLAG_11_5'
 ): string {
   switch (status) {
     case 'VENT':
@@ -366,6 +389,8 @@ export function mapStatusTilTekst(
       return 'Retur fra veileder';
     case 'RETUR_FRA_SAKSBEHANDLER':
       return 'Retur fra saksbehandler';
+    case 'AVSLAG_11_5':
+      return 'Avslag § 11-5';
   }
 }
 

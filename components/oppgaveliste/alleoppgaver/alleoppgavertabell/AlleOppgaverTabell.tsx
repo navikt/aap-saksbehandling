@@ -1,33 +1,35 @@
-import { Oppgave, Vurderingsbehov, ÅrsakTilOpprettelse } from 'lib/types/types';
-import { BodyShort, Checkbox, CopyButton, Table, Tooltip, Link as AkselLink } from '@navikt/ds-react';
+import { Link as AkselLink, BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { AktivKø } from 'hooks/oppgave/aktivkøHook';
+import { OppgaveMedKontekst, SortBy } from 'lib/types/oppgaveTypes';
+import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import {
   mapBehovskodeTilBehovstype,
   mapTilOppgaveBehandlingstypeTekst,
   mapTilÅrsakTilOpprettelseTilTekst,
 } from 'lib/utils/oversettelser';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import Link from 'next/link';
-import { TableStyled } from 'components/tablestyled/TableStyled';
+import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
+import { formaterTilNok } from 'lib/utils/string';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
+import Link from 'next/link';
+import { Dispatch, SetStateAction, useState } from 'react';
+
 import { AlleOppgaverActionMenu } from 'components/oppgaveliste/alleoppgaver/alleoppgaveractionmenu/AlleOppgaverActionMenu';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
-import { Dispatch, SetStateAction, useState } from 'react';
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
-import { NoNavAapOppgaveListeOppgaveSorteringSortBy } from '@navikt/aap-oppgave-typescript-types';
-import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
-import { isOppgavelisteOppgaveSorteringSortBy } from 'lib/utils/request';
-import { AktivKø } from 'hooks/oppgave/aktivkøHook';
-import { Køtype } from 'lib/types/oppgaveTypes';
 
 interface Props {
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   revalidateFunction: () => Promise<unknown>;
   setValgteRader: Dispatch<SetStateAction<number[]>>;
   valgteRader: number[];
-  setSortBy: (orderBy: NoNavAapOppgaveListeOppgaveSorteringSortBy) => void;
-  sort: ScopedBackendSortState<NoNavAapOppgaveListeOppgaveSorteringSortBy> | undefined;
+  setSortBy: (orderBy: SortBy) => void;
+  sort: ScopedBackendSortState<SortBy> | undefined;
   aktivKø: AktivKø | undefined;
+  visBeløpKolonne: boolean;
 }
 
 export const AlleOppgaverTabell = ({
@@ -38,6 +40,7 @@ export const AlleOppgaverTabell = ({
   setSortBy,
   sort,
   aktivKø,
+  visBeløpKolonne,
 }: Props) => {
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
@@ -73,79 +76,72 @@ export const AlleOppgaverTabell = ({
           <Table.Row>
             <Table.HeaderCell />
             <Table.HeaderCell>Sak</Table.HeaderCell>
-            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.PERSONIDENT} sortable={true}>
+            <Table.ColumnHeader sortKey={'PERSONIDENT'} sortable={true}>
               Fnr
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLINGSTYPE} sortable={true}>
+            <Table.ColumnHeader sortKey={'BEHANDLINGSTYPE'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.BEHANDLING_OPPRETTET}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'BEHANDLING_OPPRETTET'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy._RSAK_TIL_OPPRETTELSE}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'ÅRSAK_TIL_OPPRETTELSE'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.AVKLARINGSBEHOV_KODE}
-              sortable={aktivKø?.type !== Køtype.KVALITETSSIKRING}
-            >
-              {aktivKø?.type !== Køtype.KVALITETSSIKRING ? 'Oppgave' : 'Kontor'}
+            <Table.ColumnHeader sortKey={'AVKLARINGSBEHOV_KODE'} sortable={aktivKø?.type !== 'KVALITETSSIKRING'}>
+              {aktivKø?.type !== 'KVALITETSSIKRING' ? 'Oppgave' : 'Kontor'}
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.OPPRETTET_TIDSPUNKT}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={NoNavAapOppgaveListeOppgaveSorteringSortBy.RESERVERT_AV} sortable={true}>
+            <Table.ColumnHeader sortKey={'RESERVERT_AV'} sortable={true}>
               Tildelt
             </Table.ColumnHeader>
+            {visBeløpKolonne && (
+              <Table.ColumnHeader sortKey={'TILBAKEKREVINGS_BELOP'} sortable={true}>
+                Beløp
+              </Table.ColumnHeader>
+            )}
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {oppgaver.map((oppgave, i) => (
-            <Table.Row key={`oppgave-${i}`} selected={oppgave.id ? valgteRader.includes(oppgave.id) : false}>
+            <Table.Row key={`oppgave-${i}`} selected={valgteRader.includes(oppgave.oppgaveMetadata.id)}>
               <Table.DataCell>
                 <Checkbox
                   hideLabel
-                  checked={oppgave.id ? valgteRader.includes(oppgave.id) : false}
-                  onChange={() => oppgave.id && toggleValgtRad(oppgave.id)}
+                  checked={valgteRader.includes(oppgave.oppgaveMetadata.id)}
+                  onChange={() => toggleValgtRad(oppgave.oppgaveMetadata.id)}
                 >
                   {' '}
                 </Checkbox>
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {oppgave.saksnummer ? (
-                  <AkselLink as={Link} prefetch={false} href={`/saksbehandling/sak/${oppgave.saksnummer}`}>
-                    {oppgave.saksnummer}
+                {oppgave.behandlingskontekst.saksnummer ? (
+                  <AkselLink
+                    as={Link}
+                    prefetch={false}
+                    href={`/saksbehandling/sak/${oppgave.behandlingskontekst.saksnummer}`}
+                  >
+                    {oppgave.behandlingskontekst.saksnummer}
                   </AkselLink>
                 ) : (
-                  <span>{oppgave.journalpostId}</span>
+                  <span>{oppgave.behandlingskontekst.journalpostId}</span>
                 )}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {oppgave.personIdent ? (
-                  <CopyButton
-                    copyText={oppgave?.personIdent}
-                    size="xsmall"
-                    text={oppgave?.personIdent}
-                    iconPosition="right"
-                  />
-                ) : (
-                  'Ukjent'
-                )}
+                <CopyButton
+                  copyText={oppgave?.personOgEnhet.personIdent}
+                  size="xsmall"
+                  text={oppgave?.personOgEnhet.personIdent}
+                  iconPosition="right"
+                />
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
-                {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingstype)}
+                {mapTilOppgaveBehandlingstypeTekst(oppgave.behandlingskontekst.behandlingstype)}
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.behandlingOpprettet)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>
@@ -154,17 +150,21 @@ export const AlleOppgaverTabell = ({
                   : '-'}
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                <Tooltip content={oppgave.årsakerTilBehandling.join(', ')}>
+                <Tooltip
+                  content={oppgave.vurderingsbehov
+                    .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
+                    .join(', ')}
+                >
                   <BodyShort truncate size={'small'}>
-                    {oppgave.årsakerTilBehandling
-                      .map((årsak) => formaterVurderingsbehov(årsak as Vurderingsbehov))
+                    {oppgave.vurderingsbehov
+                      .map((årsak) => formaterVurderingsbehov(årsak as VurderingsbehovIntern))
                       .join(', ')}
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
-                {aktivKø?.type === Køtype.KVALITETSSIKRING ? (
-                  (oppgave.enhetForrigeOppgave?.navn ?? '-')
+                {aktivKø?.type === 'KVALITETSSIKRING' ? (
+                  (oppgave.personOgEnhet.enhetForrigeOppgave?.navn ?? '-')
                 ) : (
                   <Tooltip content={mapBehovskodeTilBehovstype(oppgave.avklaringsbehovKode)}>
                     <BodyShort truncate size={'small'}>
@@ -173,7 +173,9 @@ export const AlleOppgaverTabell = ({
                   </Tooltip>
                 )}
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
+              </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>
                   <BodyShort truncate size={'small'}>
@@ -181,6 +183,13 @@ export const AlleOppgaverTabell = ({
                   </BodyShort>
                 </Tooltip>
               </Table.DataCell>
+              {visBeløpKolonne && (
+                <Table.DataCell textSize={'small'}>
+                  {oppgave.behandlingskontekst.behandlingstype === 'TILBAKEKREVING'
+                    ? formaterTilNok(oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp)
+                    : ''}
+                </Table.DataCell>
+              )}
               <Table.DataCell textSize={'small'}>
                 <OppgaveInformasjon oppgave={oppgave} />
               </Table.DataCell>

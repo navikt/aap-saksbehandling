@@ -1,36 +1,20 @@
-import { exhaustiveCheck } from 'lib/utils/typescript';
-import { NoNavAapOppgaveOppgaveDtoBehandlingstype } from '@navikt/aap-oppgave-typescript-types';
+import { Behandlingstype } from 'lib/types/oppgaveTypes';
+
 import { ValuePair } from 'components/form/FormField';
 
-export const oppgaveBehandlingstyper = Object.keys(
-  NoNavAapOppgaveOppgaveDtoBehandlingstype as unknown as keyof (typeof NoNavAapOppgaveOppgaveDtoBehandlingstype)[]
-)
-  .map((key) => key as keyof typeof NoNavAapOppgaveOppgaveDtoBehandlingstype)
-  .map((key) => {
-    switch (key) {
-      case 'F_RSTEGANGSBEHANDLING':
-        return { label: 'Førstegangsbehandling', value: 'FØRSTEGANGSBEHANDLING' };
-      case 'TILBAKEKREVING':
-        return { label: 'Tilbakekreving', value: 'TILBAKEKREVING' };
-      case 'REVURDERING':
-        return { label: 'Revurdering', value: 'REVURDERING' };
-      case 'KLAGE':
-        return { label: 'Klage', value: 'KLAGE' };
-      case 'DOKUMENT_H_NDTERING':
-        return { label: 'Dokumenthåndtering', value: 'DOKUMENT_HÅNDTERING' };
-      case 'JOURNALF_RING':
-        return { label: 'Journalføring', value: 'JOURNALFØRING' };
-      case 'SVAR_FRA_ANDREINSTANS':
-        return { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' };
-      case 'OPPF_LGINGSBEHANDLING':
-        return { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' };
-      case 'AKTIVITETSPLIKT':
-        return { label: 'Aktivitetsplikt', value: 'AKTIVITETSPLIKT' };
-      case 'AKTIVITETSPLIKT_11_9':
-        return { label: 'Aktivitetsplikt 11-9', value: 'AKTIVITETSPLIKT_11_9' };
-    }
-    exhaustiveCheck(key);
-  });
+export const oppgaveBehandlingstyper: { label: string; value: Behandlingstype }[] = [
+  { label: 'Førstegangsbehandling', value: 'FØRSTEGANGSBEHANDLING' },
+  { label: 'Tilbakekreving', value: 'TILBAKEKREVING' },
+  { label: 'Revurdering', value: 'REVURDERING' },
+  { label: 'Klage', value: 'KLAGE' },
+  { label: 'Dokumenthåndtering', value: 'DOKUMENT_HÅNDTERING' },
+  { label: 'Journalføring', value: 'JOURNALFØRING' },
+  { label: 'Svar fra andreinstans', value: 'SVAR_FRA_ANDREINSTANS' },
+  { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' },
+  { label: 'Aktivitetsplikt', value: 'AKTIVITETSPLIKT' },
+  { label: 'Aktivitetsplikt 11-9', value: 'AKTIVITETSPLIKT_11_9' },
+  { label: 'Fordeling', value: 'FORDELING' },
+];
 
 export const OppgaveStatuser: ValuePair[] = [
   { label: 'På vent', value: 'VENT' },

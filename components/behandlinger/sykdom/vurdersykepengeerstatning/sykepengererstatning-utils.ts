@@ -1,3 +1,4 @@
+import { parse } from 'date-fns';
 import {
   SykepengeerstatningGrunnlag,
   SykepengeerstatningVurderingGrunn,
@@ -5,13 +6,13 @@ import {
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+
 import {
   SykepengeerstatningForm,
   SykepengeerstatningVurderingForm,
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstating-types';
-import { parse } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 
 export function getDefaultValuesFromGrunnlag(grunnlag: SykepengeerstatningGrunnlag): SykepengeerstatningForm {
   if (trengerVurderingsForslag(grunnlag)) {
@@ -46,7 +47,7 @@ export const mapFormTilDto = (
 ): SykepengererstatningPeriodeLøsning => {
   return {
     begrunnelse: periodeForm.begrunnelse,
-    fom: formaterDatoForBackend(parse(periodeForm.fraDato!, 'dd.MM.yyyy', new Date())),
+    fom: formaterDatoForBackend(parse(periodeForm.fraDato, 'dd.MM.yyyy', new Date())),
     tom: tilDato,
     harRettPå: periodeForm.erOppfylt === JaEllerNei.Ja,
     dokumenterBruktIVurdering: [],

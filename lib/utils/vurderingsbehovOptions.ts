@@ -1,36 +1,64 @@
-import { ValuePair } from 'components/form/FormField';
-import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
-export const vurderingsbehovOptions = (): ValuePair<Vurderingsbehov>[] => {
-  const behov: Vurderingsbehov[] = [
-    // TODO fjerner denne inntil det er avklart om denne skal brukes { label: 'Helhetlig vurdering', value: 'HELHETLIG_VURDERING' },
-    'VURDER_RETTIGHETSPERIODE',
-    'LOVVALG_OG_MEDLEMSKAP',
-    'REVURDER_STUDENT',
-    'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
-    'OVERGANG_ARBEID',
-    'OVERGANG_UFORE',
-    'REVURDER_YRKESSKADE',
-    'REVURDER_SYKEPENGEERSTATNING',
-    'REVURDER_BEREGNING',
-    'REVURDER_MANUELL_INNTEKT',
-    'FORUTGAENDE_MEDLEMSKAP',
-    'OPPHOLDSKRAV',
-    'BARNETILLEGG',
-    'DØDSFALL_BARN',
-    'INSTITUSJONSOPPHOLD',
-    'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
-    'REVURDER_SAMORDNING_UFØRE',
-    'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
-    'ETABLERING_EGEN_VIRKSOMHET',
-    'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
-    'REVURDER_SAMORDNING_ARBEIDSGIVER',
-    'REVURDER_SAMORDNING_TJENESTEPENSJON',
-    'DØDSFALL_BRUKER',
-    'REVURDER_SAMORDNING_BARNEPENSJON',
-    'VEDTAKSLENGDE_MANUELT',
-  ];
+import { ValuePair } from 'components/form/FormField';
+
+import type { Vurderingsbehov, VurderingsbehovIntern } from '../types/types';
+
+export const vurderingsbehovOptions = (
+  erKravEnabled: boolean,
+  erAvslag11_27Enabled: boolean | undefined,
+  skalInkludereRefusjonkrav: boolean | undefined
+): ValuePair<Vurderingsbehov>[] => {
+  // Disse skal vises i samme rekkefølge som definert i flyten
+  // Se https://nav.atlassian.net/browse/AAP-2335
+  // og https://app.mural.co/t/navdesign3580/m/navdesign3580/1691741508416/fd5f7a66bff6d60858a803726f0485840d12fdac
+  const behov: Vurderingsbehov[] = (
+    [
+      'VURDER_KRAV',
+      'VURDER_RETTIGHETSPERIODE',
+      'LOVVALG_OG_MEDLEMSKAP',
+      'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',
+      'BRUKER_TILBAKE_I_ARBEID',
+      'DØDSFALL_BRUKER',
+      'OVERGANG_UFORE',
+      'OVERGANG_ARBEID',
+      'VURDER_FRITAK_MELDEPLIKT',
+      'ETABLERING_EGEN_VIRKSOMHET',
+      'FASTSETT_ARBEIDSEVNE',
+      'VURDER_ARBEIDSOPPTRAPPING',
+      'REFUSJONSKRAV',
+      'REVURDER_YRKESSKADE',
+      'REVURDER_STUDENT',
+      'REVURDER_SYKEPENGEERSTATNING',
+      'REVURDER_BEREGNING',
+      'REVURDER_MANUELL_INNTEKT',
+      'REVURDER_INNTEKTSBORTFALL',
+      'FORUTGAENDE_MEDLEMSKAP',
+      'OPPHOLDSKRAV',
+      'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET',
+      'BARNETILLEGG',
+      'DØDSFALL_BARN',
+      'INSTITUSJONSOPPHOLD',
+      'INSTITUSJONSOPPHOLD_HELSEINSTITUSJON',
+      'INSTITUSJONSOPPHOLD_SONING',
+      'REVURDER_SAMORDNING_ANDRE_FOLKETRYGDYTELSER',
+      'VURDER_AVSLAG_11_27',
+      'FERIE_I_SYKEPENGEPERIODE',
+      'REVURDER_SAMORDNING_UFØRE',
+      'REVURDER_SAMORDNING_ARBEIDSGIVER',
+      'REVURDER_SAMORDNING_TJENESTEPENSJON',
+      'REVURDER_SAMORDNING_BARNEPENSJON',
+      'REVURDER_SAMORDNING_ANDRE_STATLIGE_YTELSER',
+      'REVURDER_SYKESTIPEND',
+      'REVURDER_MELDEPLIKT_RIMELIG_GRUNN',
+      'VEDTAKSLENGDE_MANUELT',
+    ] satisfies Vurderingsbehov[]
+  ).filter(
+    (option) =>
+      (erKravEnabled || option !== 'VURDER_KRAV') &&
+      (erAvslag11_27Enabled || option !== 'VURDER_AVSLAG_11_27') &&
+      (skalInkludereRefusjonkrav || option !== 'REFUSJONSKRAV')
+  );
 
   return behov.map((behov) => ({
     value: behov,
@@ -50,6 +78,7 @@ export const alleVurderingsbehovOptions: ValuePair<Vurderingsbehov | Vurderingsb
   { value: 'KLAGE_TRUKKET', label: formaterVurderingsbehov('KLAGE_TRUKKET') },
   { value: 'REVURDERING_AVBRUTT', label: formaterVurderingsbehov('REVURDERING_AVBRUTT') },
   { value: 'REVURDER_MEDLEMSKAP', label: formaterVurderingsbehov('REVURDER_MEDLEMSKAP') },
+  { value: 'REVURDER_INNTEKTSBORTFALL', label: formaterVurderingsbehov('REVURDER_INNTEKTSBORTFALL') },
   { value: 'REVURDER_SAMORDNING', label: formaterVurderingsbehov('REVURDER_SAMORDNING') },
   { value: 'REVURDER_LOVVALG', label: formaterVurderingsbehov('REVURDER_LOVVALG') },
   { value: 'REVURDER_BEREGNING', label: formaterVurderingsbehov('REVURDER_BEREGNING') },

@@ -6,7 +6,7 @@ import { logInfo } from 'lib/serverutlis/logger';
 
 interface Props {
   behandlingsreferanse: string;
-  aktivGruppe: string;
+  aktivGruppe: StegGruppe;
 }
 
 export const ForberedBehandling = async ({ behandlingsreferanse, aktivGruppe }: Props) => {
@@ -24,5 +24,5 @@ export const ForberedBehandling = async ({ behandlingsreferanse, aktivGruppe }: 
     // TODO bør vi vise en "Forsøk på nytt"-knapp i stedet når disse tilfellene oppstår? Nå vil behandlingssiden vises i readonly modus
   }
 
-  return <BehandlingPage behandlingsreferanse={behandlingsreferanse} aktivGruppe={aktivGruppe as StegGruppe} />;
+  return <BehandlingPage behandlingsreferanse={behandlingsreferanse} aktivGruppe={aktivGruppe} />;
 };

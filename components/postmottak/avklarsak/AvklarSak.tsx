@@ -3,7 +3,7 @@
 import { SubmitEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo } from 'lib/types/postmottakTypes';
-import { Alert, Detail, Label, Radio, VStack } from '@navikt/ds-react';
+import { Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldToggle } from 'components/form/TextFieldToggle';
@@ -11,6 +11,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { Behovstype } from 'lib/postmottakForm';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingsVersjon: number;

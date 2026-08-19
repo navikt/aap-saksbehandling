@@ -1,48 +1,33 @@
 'use client';
 
-import { BodyShort, Table, VStack } from '@navikt/ds-react';
-import { UnderveisAvslagsÅrsak, UnderveisGrunnlag } from 'lib/types/types';
-import { formaterDatoForFrontend } from 'lib/utils/date';
-import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
-import { exhaustiveCheck } from 'lib/utils/typescript';
-import { Behovstype } from 'lib/utils/form';
-import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { BodyShort, Chips, Table, VStack } from '@navikt/ds-react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { Diff, UnderveisAvslagsÅrsak, UnderveisGrunnlag, UnderveisGrunnlagMedDiff } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { Behovstype } from 'lib/utils/form';
+import { mapUtfallTilTekst } from 'lib/utils/oversettelser';
+import { exhaustiveCheck } from 'lib/utils/typescript';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import React, { useState } from 'react';
+
+import { Alert } from 'components/alert/Alert';
+import styles from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag.module.css';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
-  grunnlag: UnderveisGrunnlag[];
+  grunnlagMedDiff: UnderveisGrunnlagMedDiff;
   readOnly: boolean;
   behandlingVersjon: number;
 };
-
-const Perioderad = ({ periode }: { periode: UnderveisGrunnlag }) => {
-  return (
-    <Table.Row>
-      <Table.HeaderCell>
-        {formaterDatoForFrontend(periode.periode.fom)} - {formaterDatoForFrontend(periode.periode.tom)}
-      </Table.HeaderCell>
-      <Table.DataCell>{mapUtfallTilTekst(periode.utfall)}</Table.DataCell>
-      <Table.DataCell>{periode.avslagsårsak && årsakTilString(periode.avslagsårsak)}</Table.DataCell>
-      <Table.DataCell>
-        <div>Gradering: {periode.gradering.gradering}%</div>
-        <div>Andel arbeid: {periode.gradering.andelArbeid}%</div>
-        <div>Fastsatt arbeidsevne: {periode.gradering.fastsattArbeidsevne}%</div>
-        <div>Grenseverdi: {periode.gradering.grenseverdi}%</div>
-      </Table.DataCell>
-      <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
-      <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
-      <Table.DataCell>
-        {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
-      </Table.DataCell>
-    </Table.Row>
-  );
+type PeriodeProps = {
+  periode: UnderveisGrunnlag;
+  bakgrunnClassName?: string;
 };
 
-export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
+export const Underveisgrunnlag = ({ grunnlagMedDiff, readOnly, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
@@ -77,6 +62,49 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
       visningModus={visningModus}
       visningActions={visningActions}
     >
+      <UnderveisTabellMedDiff grunnlag={grunnlagMedDiff} />
+      <VStack gap={'space-16'}>
+        {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
+        <LøsBehovOgGåTilNesteStegStatusAlert
+          status={status}
+          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        />
+      </VStack>
+    </VilkårskortMedForm>
+  );
+};
+
+export const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnlagMedDiff }) => {
+  const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
+  const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
+
+  const skalViseMeldingOmIngenEndringIPerioder =
+    grunnlag.perioder.length > 0 && grunnlag.perioder.every((periode) => periode.diff === 'Uendret');
+  return (
+    <>
+      <Chips size={'small'}>
+        <Chips.Toggle
+          type={'button'}
+          onClick={() => {
+            setVisHistorikkPåEndredePerioder(!visHistorikkPåEndredePerioder);
+          }}
+          selected={visHistorikkPåEndredePerioder}
+        >
+          Vis historikk på endrede perioder
+        </Chips.Toggle>
+        <Chips.Toggle
+          type={'button'}
+          onClick={() => {
+            setVisPerioderUtenEndringFraTidligere(!visPerioderUtenEndringFraTidligere);
+          }}
+          selected={visPerioderUtenEndringFraTidligere}
+        >
+          Vis perioder uten endring fra tidligere behandling
+        </Chips.Toggle>
+      </Chips>
+      {skalViseMeldingOmIngenEndringIPerioder && (
+        <Alert variant={'info'}>Ingen nye eller endrede perioder siden forrige behandling</Alert>
+      )}
       <Table>
         <Table.Header>
           <Table.Row>
@@ -90,19 +118,54 @@ export const Underveisgrunnlag = ({ grunnlag, readOnly, behandlingVersjon }: Pro
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {grunnlag.map((periode, index) => (
-            <Perioderad key={index} periode={periode} />
-          ))}
+          {grunnlag.perioder.map((periode, periodeIndex) => {
+            const nyPeriode = utledNyPeriode(periode);
+            const uendretPeriode =
+              visPerioderUtenEndringFraTidligere && periode.diff === 'Uendret' ? periode.uendret : null;
+            const historiskPeriode = visHistorikkPåEndredePerioder ? utledHistoriskPeriode(periode) : null;
+
+            return (
+              <React.Fragment key={periodeIndex}>
+                {nyPeriode && <Perioderad key={`ny-${periodeIndex}`} periode={nyPeriode} bakgrunnClassName={''} />}
+                {historiskPeriode && (
+                  <Perioderad
+                    key={`historisk-${periodeIndex}`}
+                    periode={historiskPeriode}
+                    bakgrunnClassName={styles.tablerowhistoriskinnhold}
+                  />
+                )}
+                {uendretPeriode && (
+                  <Perioderad key={`uendret-${periodeIndex}`} periode={uendretPeriode} bakgrunnClassName={''} />
+                )}
+              </React.Fragment>
+            );
+          })}
         </Table.Body>
       </Table>
-      <VStack gap={'space-16'}>
-        {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
-        <LøsBehovOgGåTilNesteStegStatusAlert
-          status={status}
-          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-        />
-      </VStack>
-    </VilkårskortMedForm>
+    </>
+  );
+};
+
+const Perioderad = ({ periode, bakgrunnClassName }: PeriodeProps) => {
+  return (
+    <Table.Row className={bakgrunnClassName}>
+      <Table.HeaderCell>
+        {formaterDatoForFrontend(periode.periode.fom)} - {formaterDatoForFrontend(periode.periode.tom)}
+      </Table.HeaderCell>
+      <Table.DataCell>{mapUtfallTilTekst(periode.utfall)}</Table.DataCell>
+      <Table.DataCell>{periode.avslagsårsak && årsakTilString(periode.avslagsårsak)}</Table.DataCell>
+      <Table.DataCell>
+        <div>Gradering: {periode.gradering.gradering}%</div>
+        <div>Andel arbeid: {periode.gradering.andelArbeid}%</div>
+        <div>Fastsatt arbeidsevne: {periode.gradering.fastsattArbeidsevne}%</div>
+        <div>Grenseverdi: {periode.gradering.grenseverdi}%</div>
+      </Table.DataCell>
+      <Table.DataCell>{periode.trekk.antall}</Table.DataCell>
+      <Table.DataCell>{periode.rettighetsType?.hjemmel}</Table.DataCell>
+      <Table.DataCell>
+        {formaterDatoForFrontend(periode.meldePeriode.fom)} - {formaterDatoForFrontend(periode.meldePeriode.tom)}
+      </Table.DataCell>
+    </Table.Row>
   );
 };
 
@@ -132,3 +195,27 @@ function årsakTilString(avslagsÅrsak: UnderveisAvslagsÅrsak): string {
       exhaustiveCheck(avslagsÅrsak);
   }
 }
+
+const utledNyPeriode = (periode: Diff<UnderveisGrunnlag>) => {
+  switch (periode.diff) {
+    case 'Endret':
+      return periode.til;
+    case 'LagtTil':
+      return periode.lagtTil;
+    case 'Fjernet':
+    case 'Uendret':
+      return null;
+  }
+};
+
+const utledHistoriskPeriode = (periode: Diff<UnderveisGrunnlag>) => {
+  switch (periode.diff) {
+    case 'Endret':
+      return periode.fra;
+    case 'Fjernet':
+      return periode.fjernet;
+    case 'LagtTil':
+    case 'Uendret':
+      return null;
+  }
+};

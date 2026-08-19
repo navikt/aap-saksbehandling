@@ -1,27 +1,30 @@
+import { ExternalLinkIcon, EyeIcon } from '@navikt/aksel-icons';
+import { Button, HStack } from '@navikt/ds-react';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
+import { OppgavePåBehandling } from 'lib/types/oppgaveTypes';
 import { SaksInfo } from 'lib/types/types';
+import { isSuccess } from 'lib/utils/api';
+import { isLocal } from 'lib/utils/environment';
+import { byggKelvinURL } from 'lib/utils/request';
+import { loggUmamiGåTilBehandling, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami/navigering';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useTransition } from 'react';
-import { Button, HStack } from '@navikt/ds-react';
-import { isLocal } from 'lib/utils/environment';
+
 import { BestillBrevTestKnapp } from 'components/behandlinger/brev/BestillBrevTestKnapp';
-import { ExternalLinkIcon, EyeIcon } from '@navikt/aksel-icons';
+
 import { BehandlingsflytEllerPostmottakBehandling } from './types';
-import { plukkOppgaveClient } from 'lib/oppgaveClientApi';
-import { isSuccess } from 'lib/utils/api';
-import { byggKelvinURL } from 'lib/utils/request';
-import { OppgaveInfo } from 'hooks/oppgave/OppgaverPåSakHook';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 const lokalBrevBestillingKnapp = isLocal();
 export const BehandlingButtons = ({
   sak,
   behandling,
-  oppgaveInfo,
+  oppgavePåBehandling,
   setFeilmelding,
 }: {
   sak: SaksInfo;
   behandling: BehandlingsflytEllerPostmottakBehandling;
-  oppgaveInfo?: OppgaveInfo;
+  oppgavePåBehandling?: OppgavePåBehandling;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
 }) => {
   const router = useRouter();
@@ -30,9 +33,10 @@ export const BehandlingButtons = ({
   const [isPendingPlukk, startTransitionPlukk] = useTransition();
   const behandlingErÅpen = behandling.behandling.status === 'OPPRETTET' || behandling.behandling.status === 'UTREDES';
   const kildeErBehandlingsflyt = behandling.kilde === 'BEHANDLINGSFLYT';
-  const oppgaveReservertAvInnloggetBruker = oppgaveInfo?.reservertAvIdent === innloggetBruker.NAVident;
+  const oppgaveReservertAvInnloggetBruker = oppgavePåBehandling?.reservertAvIdent === innloggetBruker.NAVident;
 
   async function gåTilBehandling(behandlingsreferanse: string) {
+    loggUmamiGåTilBehandling('SAKSOVERSIKT');
     setFeilmelding('');
     startTransitionBehandling(async () => {
       const internUrl = `/saksbehandling/sak/${sak.saksnummer}/${behandlingsreferanse}`;
@@ -41,6 +45,7 @@ export const BehandlingButtons = ({
   }
 
   async function gåTilPostmottakBehandling(behandlingsreferanse: string) {
+    loggUmamiGåTilBehandling('SAKSOVERSIKT');
     setFeilmelding('');
     startTransitionBehandling(async () => {
       const internUrl = `/postmottak/${behandlingsreferanse}`;
@@ -48,18 +53,15 @@ export const BehandlingButtons = ({
     });
   }
 
-  async function plukkOgGåTilBehandling(oppgaveInfo: OppgaveInfo) {
+  async function plukkOgGåTilBehandling(oppgave: OppgavePåBehandling) {
+    loggUmamiGåTilBehandlingOgReserver('SAKSOVERSIKT');
     setFeilmelding('');
     startTransitionPlukk(async () => {
-      if (oppgaveInfo.id == null || oppgaveInfo.versjon == null) {
-        setFeilmelding('Kunne ikke plukke oppgave.');
-        return;
-      }
-      const plukketOppgave = await plukkOppgaveClient(oppgaveInfo.id, oppgaveInfo.versjon);
+      const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
       if (isSuccess(plukketOppgave)) {
-        router.push(byggKelvinURL(plukketOppgave.data));
+        router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
       } else {
-        if (plukketOppgave.status == 401) {
+        if (plukketOppgave.status == 403) {
           setFeilmelding('Du har ikke tilgang til å behandle denne oppgaven.');
         }
       }
@@ -67,8 +69,8 @@ export const BehandlingButtons = ({
   }
   const visBehandleKnapp =
     behandlingErÅpen &&
-    !oppgaveInfo?.feilmelding &&
-    (!oppgaveInfo?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
+    oppgavePåBehandling &&
+    (!oppgavePåBehandling?.reservertAvIdent || oppgaveReservertAvInnloggetBruker);
 
   if (kildeErBehandlingsflyt && behandling.behandling.eksternSaksbehandlingsløsningUrl) {
     return (
@@ -84,6 +86,7 @@ export const BehandlingButtons = ({
           variant={'secondary'}
           icon={<ExternalLinkIcon aria-hidden />}
           title={'Gå til behandling'}
+          onClick={() => loggUmamiGåTilBehandling('SAKSOVERSIKT_EKSTERN_LØSNING')}
         >
           {behandlingErÅpen ? 'Åpne' : 'Vis'}
         </Button>
@@ -117,12 +120,12 @@ export const BehandlingButtons = ({
               {behandlingErÅpen ? 'Åpne' : 'Vis'}
             </Button>
           ))}
-        {visBehandleKnapp && oppgaveInfo && (
+        {visBehandleKnapp && oppgavePåBehandling && (
           <Button
             size="small"
             type={'button'}
             icon={!behandlingErÅpen && <EyeIcon />}
-            onClick={() => plukkOgGåTilBehandling(oppgaveInfo)}
+            onClick={() => plukkOgGåTilBehandling(oppgavePåBehandling)}
             variant={'primary'}
             loading={isPendingPlukk}
           >

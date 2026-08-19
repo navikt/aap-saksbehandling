@@ -1,40 +1,41 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { Behovstype } from 'lib/utils/form';
+import { parseISO } from 'date-fns';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import {
   BeregningTidspunktGrunnlag,
   MellomlagretVurdering,
   PeriodisertForutgåendeMedlemskapGrunnlag,
 } from 'lib/types/types';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import {
-  NyVurderingExpandableCard,
-  skalVæreInitiellEkspandert,
-} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { Behovstype } from 'lib/utils/form';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
-import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
+import { useFieldArray, useForm } from 'react-hook-form';
+
+import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
+import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
 import {
   erNyVurderingOppfylt,
   getDefaultValuesFromGrunnlag,
   hentPeriodiserteVerdierFraMellomlagretVurdering,
   mapFormTilDto,
 } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/forutgåendemedlemskap-utils';
-import { ForutgåendeMedlemskapTidligereVurdering } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapTidligereVurdering';
-import { ForutgåendeMedlemskapFormInput } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/ForutgåendeMedlemskapFormInput';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { ForutgåendeMedlemskapVurderingForm } from 'components/behandlinger/forutgåendemedlemskap/manuellvurderingperiodisert/types';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 
 interface Props {
   behandlingVersjon: number;

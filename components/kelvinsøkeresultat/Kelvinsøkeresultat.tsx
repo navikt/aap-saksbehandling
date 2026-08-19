@@ -1,27 +1,28 @@
 'use client';
 
-import { Alert, BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
-import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
-import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
-
-import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
-import { storForbokstavIHvertOrd } from 'lib/utils/string';
-import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
-import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
+import { BodyShort, Detail, HStack, Link, VStack } from '@navikt/ds-react';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
+import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { loggUmamiGåTilBehandling, loggUmamiGåTilSaksoversikt } from 'lib/utils/umami/navigering';
+
+import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
+import { Alert } from 'components/alert/Alert';
+import styles from 'components/kelvinsøkeresultat/Kelvinsøkeresultat.module.css';
 import { MarkeringStatus } from 'components/markeringstatus/MarkeringStatus';
+import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 
 interface Props {
   søkeresultat: SøkeResultat;
 }
 
 export const Kelvinsøkeresultat = ({
-  søkeresultat: { oppgaver, saker, kontor, person, behandlingsStatus, harTilgang, harAdressebeskyttelse },
+  søkeresultat: { oppgaver, saker, kontor, person, kanSaksbehandle, harAdressebeskyttelse },
 }: Props) => {
   if (saker?.length == 0 && oppgaver?.length == 0) {
     return (
       <HStack>
-        <Alert variant={'info'} size={'small'} className={styles.info}>
+        <Alert variant={'info'} className={styles.info}>
           Du fikk ingen treff. Sjekk at saksnummeret eller fødselsnummer er riktig skrevet.
         </Alert>
       </HStack>
@@ -30,9 +31,9 @@ export const Kelvinsøkeresultat = ({
 
   return (
     <VStack gap={'space-8'}>
-      {!harTilgang && (
+      {!kanSaksbehandle && (
         <HStack>
-          <Alert variant={'info'} size={'small'} className={styles.info}>
+          <Alert variant={'info'} className={styles.info}>
             {harAdressebeskyttelse
               ? 'Du har ikke tilgang til saken fordi personen er egen ansatt eller har adressebeskyttelse.'
               : 'Du har ikke tilgang til saken.'}
@@ -51,7 +52,8 @@ export const Kelvinsøkeresultat = ({
                   className={styles.linkName}
                   key={`sak-resultat-${index}`}
                   href={søk.href}
-                  skalViseLenke={harTilgang}
+                  skalViseLenke={kanSaksbehandle}
+                  onClick={() => loggUmamiGåTilSaksoversikt('SØK_PERSON')}
                 >
                   <BodyShort size={'small'}>{storForbokstavIHvertOrd(søk.label)}</BodyShort>
                 </LenkeHvisHarTilgang>
@@ -71,7 +73,8 @@ export const Kelvinsøkeresultat = ({
                   className={styles.link}
                   key={`sak-resultat-${index}`}
                   href={søk.href}
-                  skalViseLenke={harTilgang}
+                  skalViseLenke={kanSaksbehandle}
+                  onClick={() => loggUmamiGåTilSaksoversikt('SØK_SAK')}
                 >
                   <BodyShort size={'small'}>{søk.label}</BodyShort>
                 </LenkeHvisHarTilgang>
@@ -95,7 +98,8 @@ export const Kelvinsøkeresultat = ({
                       className={styles.link}
                       key={`oppgave-resultat-${index}`}
                       href={søk.href}
-                      skalViseLenke={harTilgang}
+                      skalViseLenke={kanSaksbehandle}
+                      onClick={() => loggUmamiGåTilBehandling('SØK_OPPGAVE')}
                     >
                       <BodyShort size={'small'}>{søk.label}</BodyShort>
                     </LenkeHvisHarTilgang>
@@ -131,17 +135,6 @@ export const Kelvinsøkeresultat = ({
             )}
           </VStack>
         </VStack>
-
-        <VStack gap={'space-4'}>
-          <Detail className={styles.detail}>Status</Detail>
-          <VStack gap="space-8">
-            {!behandlingsStatus?.length ? (
-              <BodyShort size={'small'}>Fant ikke status</BodyShort>
-            ) : (
-              behandlingsStatus.map((søk, index) => <Behandlingsstatus key={index} status={søk.status} />)
-            )}
-          </VStack>
-        </VStack>
       </HStack>
     </VStack>
   );
@@ -161,15 +154,17 @@ const LenkeHvisHarTilgang = ({
   children,
   skalViseLenke,
   className,
+  onClick,
 }: {
   href: string | null;
   children: React.ReactNode;
   skalViseLenke: boolean;
   className?: string;
+  onClick?: () => void;
 }) => {
   if (skalViseLenke && href) {
     return (
-      <Link className={className} href={href}>
+      <Link className={className} href={href} onClick={onClick}>
         {children}
       </Link>
     );

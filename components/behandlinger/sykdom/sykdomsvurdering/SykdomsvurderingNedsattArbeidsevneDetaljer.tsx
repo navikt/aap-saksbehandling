@@ -1,17 +1,17 @@
-import { JaEllerNei } from 'lib/utils/form';
-import { UseFormReturn } from 'react-hook-form';
-import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import { Periode } from 'lib/types/types';
-import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
-import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { JaEllerNei } from 'lib/utils/form';
+import React from 'react';
+import { UseFormReturn } from 'react-hook-form';
+
+import type { SykdomsvurderingerForm } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 import {
   erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense,
   yrkesskadeBegrunnelse,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
-import React from 'react';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { vurderingFraDatoErSammeSomRettighetsperiodeStart } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
+import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
+import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 
 interface Props {
   index: number;
@@ -21,6 +21,7 @@ interface Props {
   rettighetsperiodeStartdato: Date;
   skalVurdereYrkesskade: boolean;
   erÅrsakssammenhengYrkesskade: boolean;
+  skalViseAlleSykdomSteg: boolean;
 }
 
 export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
@@ -28,10 +29,10 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   rettighetsperiodeStartdato,
   skalVurdereYrkesskade,
   erÅrsakssammenhengYrkesskade,
+  skalViseAlleSykdomSteg,
   index,
   readonly,
 }: Props) => {
-  const sykdomUtenVissVarighetToggle = useFeatureFlag('SykdomUtenVissVarighetFrontend');
   const valgtDato = parseDatoFraDatePicker(form.watch(`vurderinger.${index}.fraDato`));
   const vurderingDatoSammeSomRettighetsperiodeStart = vurderingFraDatoErSammeSomRettighetsperiodeStart(
     valgtDato,
@@ -42,6 +43,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja ||
     form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`) === JaEllerNei.Ja;
 
+  const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
   return (
     <>
       {!erÅrsakssammenhengYrkesskade && (
@@ -57,7 +59,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
           readOnly={readonly}
         />
       )}
-
       <SykdomsvurderingYrkesskade
         form={form}
         index={index}
@@ -65,7 +66,8 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         skalVurdereYrkesskade={skalVurdereYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
-      {erTilstrekkeligNedsatt && (
+
+      {((!skalViseAlleSykdomSteg && erTilstrekkeligNedsatt) || (skalViseAlleSykdomSteg && harSkadeSykdomEllerLyte)) && (
         <>
           <RadioGroupJaNei
             name={`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`}
@@ -77,21 +79,6 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
             }}
             readOnly={readonly}
           />
-
-          {form.watch(`vurderinger.${index}.erSkadeSykdomEllerLyteVesentligdel`) === JaEllerNei.Ja &&
-            !sykdomUtenVissVarighetToggle && (
-              <RadioGroupJaNei
-                name={`vurderinger.${index}.erNedsettelseIArbeidsevneAvEnVissVarighet`}
-                control={form.control}
-                label={'Er den nedsatte arbeidsevnen av en viss varighet?'}
-                description={'Om du svarer nei, vil brukeren vurderes for AAP som sykepengeerstatning etter § 11-13.'}
-                horisontal={true}
-                rules={{
-                  required: 'Du må svare på om den nedsatte arbeidsevnen er av en viss varighet',
-                }}
-                readOnly={readonly}
-              />
-            )}
         </>
       )}
     </>

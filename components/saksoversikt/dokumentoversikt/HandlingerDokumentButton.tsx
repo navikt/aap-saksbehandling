@@ -1,24 +1,18 @@
 'use client';
 
-import { ActionMenu, Button } from '@navikt/ds-react';
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
+import { ActionMenu, Button } from '@navikt/ds-react';
+import { Journalpost } from 'lib/types/journalpost';
 import { SaksInfo } from 'lib/types/types';
-import { useState } from 'react';
 import { erFerdigstilt } from 'lib/utils/journalpost';
+import { useState } from 'react';
+
 import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumentoversikt/FeilregistrerJournalpost';
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
-import { Journalpost, Journalposttype } from 'lib/types/journalpost';
-import { RedigitaliserJournalpost } from 'components/saksoversikt/dokumentoversikt/RedigitaliserJournalpost';
-import { useFeatureFlag } from '../../../context/UnleashContext';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
   const [knyttTilSakOpen, setKnyttTilSakOpen] = useState(false);
   const [feilregistrerOpen, setFeilregistrerOpen] = useState(false);
-  const [redigitaliserOpen, setRedigitaliserOpen] = useState(false);
-
-  const redigitaliserToggle = useFeatureFlag('RedigitaliseringV2');
-  const redigitaliserDokument =
-    journalpost.journalposttype != Journalposttype.U && journalpost.sak?.fagsakId && redigitaliserToggle;
 
   return (
     <>
@@ -54,11 +48,6 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                     Feilregistrer sakstilknytning
                   </ActionMenu.Item>
                 )}
-                {redigitaliserDokument && (
-                  <ActionMenu.Item onSelect={() => setRedigitaliserOpen(true)}>
-                    Digitaliser dokument på nytt
-                  </ActionMenu.Item>
-                )}
               </>
             )}
           </ActionMenu.Group>
@@ -66,7 +55,7 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
       </ActionMenu>
       <KnyttTilSakModal
         journalpostId={journalpost.journalpostId}
-        tema={journalpost.tema!!}
+        tema={journalpost.tema!}
         saksnummer={sak.saksnummer}
         brukerIdent={sak.ident}
         isOpen={knyttTilSakOpen}
@@ -78,14 +67,6 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
         isOpen={feilregistrerOpen}
         onClose={() => setFeilregistrerOpen(false)}
       />
-      {redigitaliserDokument && (
-        <RedigitaliserJournalpost
-          sak={sak}
-          journalpost={journalpost}
-          isOpen={redigitaliserOpen}
-          onClose={() => setRedigitaliserOpen(false)}
-        />
-      )}
     </>
   );
 };

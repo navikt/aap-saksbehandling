@@ -1,38 +1,39 @@
 'use client';
 
-import { Button, Dropdown } from '@navikt/ds-react';
-import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
-import { useState } from 'react';
-import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
+import { Button, Dropdown } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
+import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
+import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
+import { useState } from 'react';
+
+import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
+import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
+import { Avslag11_27Dialog } from 'components/saksinfobanner/avslag11_27dialog/Avslag11_27Dialog';
+import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
+import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
+import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbehandlingmodal/SettMarkeringForBehandlingModal';
 
 import styles from './SaksinfoBanner.module.css';
-import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
-import { TrekkSøknadModal } from 'components/saksinfobanner/trekksøknadmodal/TrekkSøknadModal';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
-import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbehandlingmodal/SettMarkeringForBehandlingModal';
-import { MarkeringType, Oppgave } from 'lib/types/oppgaveTypes';
-import { NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType } from '@navikt/aap-oppgave-typescript-types';
-import { AvbrytRevurderingModal } from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
-import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
-import { AvbrytAktivitetspliktbehandlingModal } from 'components/saksinfobanner/avbrytaktivitetspliktbehandlingmodal/AvbrytAktivitetspliktbehandlingModal';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export const SaksmenyDropdown = ({
   flyt,
   visning,
   brukerInformasjon,
   behandling,
-  oppgave,
+  reservertAvIdent,
 }: {
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
   brukerInformasjon?: BrukerInformasjon;
   behandling: DetaljertBehandling;
-  oppgave?: Oppgave;
+  reservertAvIdent?: string | null;
 }) => {
   const { saksnummer } = useParamsMedType();
   const innloggetBruker = useInnloggetBruker();
@@ -55,6 +56,8 @@ export const SaksmenyDropdown = ({
   const behandlerRevurderingSomSkalAvbrytes = avbrytRevurderingSteg && avbrytRevurderingSteg.skalVises;
   const behandlerAktivitetspliktbehandlingSomSkalAvbrytes =
     avbrytAktivitetspliktbehandlingSteg && avbrytAktivitetspliktbehandlingSteg.skalVises;
+  const avslag1127Steg = flyt && flyt.find((f) => f.stegGruppe === 'AVSLAG_11_27');
+  const harAlleredeValgtAvslag1127 = avslag1127Steg && avslag1127Steg.skalVises;
 
   const trekkKlageSteg = flyt && flyt.find((f) => f.stegGruppe === 'TREKK_KLAGE');
   const harAlleredeValgtTrekkKlage = trekkKlageSteg && trekkKlageSteg.skalVises;
@@ -66,7 +69,7 @@ export const SaksmenyDropdown = ({
     typeBehandling && (typeBehandling === 'Aktivitetsplikt' || typeBehandling === 'Aktivitetsplikt11_9');
   const behandlingErIkkeAvsluttet = behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling.status !== 'IVERKSETTES';
-  const skalViseAvbrytAktivitetspliktbehandling = useFeatureFlag('AvbrytAktivitetspliktbehandling');
+  const [visAvslag1127Modal, settVisAvslag1127Modal] = useState(false);
 
   const visValgForÅTrekkeSøknad =
     !behandlerEnSøknadSomSkalTrekkes &&
@@ -87,8 +90,7 @@ export const SaksmenyDropdown = ({
     innloggetBrukerKanSaksbehandle &&
     behandlingErAktivitetspliktbehandling &&
     behandlingErIkkeAvsluttet &&
-    !behandlerAktivitetspliktbehandlingSomSkalAvbrytes &&
-    skalViseAvbrytAktivitetspliktbehandling;
+    !behandlerAktivitetspliktbehandlingSomSkalAvbrytes;
 
   const visValgForÅTrekkeKlage =
     innloggetBrukerKanSaksbehandle &&
@@ -103,6 +105,16 @@ export const SaksmenyDropdown = ({
     behandlingErIkkeIverksatt;
 
   const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle && behandlingErIkkeAvsluttet;
+
+  const avslag11_27Enable = useFeatureFlag('Avslag11_27');
+
+  const visValgForAvslag1127 =
+    avslag11_27Enable &&
+    behandlingErIkkeIverksatt &&
+    innloggetBrukerKanSaksbehandle &&
+    behandlingErIkkeAvsluttet &&
+    (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
+    !harAlleredeValgtAvslag1127;
 
   return (
     <div className={styles.saksmeny}>
@@ -150,10 +162,13 @@ export const SaksmenyDropdown = ({
               </Dropdown.Menu.GroupedList.Item>
             )}
             {visValgForÅSetteMarkering && (
-              <Dropdown.Menu.GroupedList.Item
-                onClick={() => settAktivMarkeringType(NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER)}
-              >
+              <Dropdown.Menu.GroupedList.Item onClick={() => settAktivMarkeringType('HASTER')}>
                 Marker som haster
+              </Dropdown.Menu.GroupedList.Item>
+            )}
+            {visValgForAvslag1127 && (
+              <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvslag1127Modal(true)}>
+                Vurder avslag § 11-27
               </Dropdown.Menu.GroupedList.Item>
             )}
           </Dropdown.Menu.GroupedList>
@@ -161,7 +176,7 @@ export const SaksmenyDropdown = ({
       </Dropdown>
 
       <SettBehandlingPåVentModal
-        reservert={!!oppgave?.reservertAv}
+        reservert={!!reservertAvIdent}
         isOpen={settBehandlingPåVentmodalIsOpen}
         onClose={() => setSettBehandlingPåVentmodalIsOpen(false)}
       />
@@ -169,14 +184,14 @@ export const SaksmenyDropdown = ({
         isOpen={visTrekkSøknadModal}
         onClose={() => settVisTrekkSøknadModal(false)}
         saksnummer={saksnummer}
-        behandlingReferanse={behandling?.referanse!}
+        behandlingReferanse={behandling?.referanse}
         navIdent={brukerInformasjon?.NAVident ? brukerInformasjon.NAVident : null}
       />
       <TrekkKlageModal
         isOpen={visTrekkKlageModal}
         onClose={() => settVisTrekkKlageModal(false)}
         saksnummer={saksnummer}
-        behandlingReferanse={behandling?.referanse!}
+        behandlingReferanse={behandling?.referanse}
       />
       <AvbrytRevurderingModal
         isOpen={visAvbrytRevurderingModal}
@@ -194,17 +209,25 @@ export const SaksmenyDropdown = ({
       />
       <VurderRettighetsperiodeModal
         isOpen={visVurderRettighetsperiodeModal}
-        behandlingReferanse={behandling?.referanse!}
+        behandlingReferanse={behandling?.referanse}
         onClose={() => settVisVurderRettighetsperiodeModal(false)}
         saksnummer={saksnummer}
         behandling={behandling}
       />
       {aktivMarkeringType && (
         <SettMarkeringForBehandlingModal
-          referanse={behandling?.referanse!}
+          referanse={behandling?.referanse}
           type={aktivMarkeringType}
           isOpen={true}
           onClose={() => settAktivMarkeringType(null)}
+        />
+      )}
+      {visAvslag1127Modal && (
+        <Avslag11_27Dialog
+          isOpen={visAvslag1127Modal}
+          onClose={() => settVisAvslag1127Modal(false)}
+          saksnummer={saksnummer}
+          behandlingReferanse={behandling?.referanse}
         />
       )}
     </div>

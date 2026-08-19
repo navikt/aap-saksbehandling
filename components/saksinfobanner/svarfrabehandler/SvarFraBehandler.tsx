@@ -1,11 +1,12 @@
 'use client';
 
-import { Alert, BodyLong, BodyShort, Box, Button, HStack, Popover, Tag, VStack } from '@navikt/ds-react';
-import { useRef, useState } from 'react';
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
+import { BodyLong, BodyShort, Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
 import { useMottattDokumenterLest } from 'hooks/FetchHook';
 
+import { Alert } from 'components/alert/Alert';
 import styles from 'components/saksinfobanner/svarfrabehandler/SvarFraBehandler.module.css';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 interface SvarFraBehandlerProps {
   behandlingReferanse: string;
@@ -13,32 +14,19 @@ interface SvarFraBehandlerProps {
 }
 
 export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDokumenter }: SvarFraBehandlerProps) => {
-  const buttonRef = useRef(null);
-  const [vis, setVis] = useState(false);
   const { mottattDokumenterLest, isLoading, error } = useMottattDokumenterLest();
 
   return (
-    <>
-      <Button
-        icon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
-        className={styles.knapp}
-        onClick={() => setVis(!vis)}
-        ref={buttonRef}
-        size="xsmall"
-      >
-        Svar fra behandler
-      </Button>
-      <Popover
-        onClose={() => setVis(false)}
-        open={vis}
-        anchorEl={buttonRef.current}
-        placement={'bottom-end'}
-        offset={8}
-      >
+    <TagMedPopover
+      ikon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
+      dataColor={'meta-purple'}
+      størrelse={'small'}
+      tagContent={'Svar fra behandler'}
+      popoverContent={
         <Box maxWidth={'400px'} minWidth={'400px'}>
           <VStack gap={'space-0'}>
             <Tag
-              data-color="warning"
+              data-color="meta-purple"
               icon={<FirstAidKitIcon />}
               variant={'moderate'}
               size={'medium'}
@@ -57,9 +45,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
           <Box borderWidth={'1'} borderColor={'neutral-subtle'} />
           {error && (
             <HStack padding={'space-8'} justify={'center'}>
-              <Alert size={'small'} variant={'error'}>
-                Kunne ikke markere dokument som lest
-              </Alert>
+              <Alert variant={'error'}>Kunne ikke markere dokument som lest</Alert>
             </HStack>
           )}
           <HStack padding={'space-8'} justify={'end'}>
@@ -79,7 +65,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
             </Button>
           </HStack>
         </Box>
-      </Popover>
-    </>
+      }
+    />
   );
 };

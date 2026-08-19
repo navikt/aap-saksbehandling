@@ -1,16 +1,18 @@
-import { Button, Dropdown, HStack, Loader } from '@navikt/ds-react';
 import { ChevronDownIcon } from '@navikt/aksel-icons';
-import { Oppgave } from 'lib/types/oppgaveTypes';
+import { Button, Dropdown, HStack, Loader } from '@navikt/ds-react';
+import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { avreserverOppgaveClient, plukkOppgaveClient } from 'lib/oppgaveClientApi';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import { byggKelvinURL } from 'lib/utils/request';
-import { Dispatch, SetStateAction, useTransition } from 'react';
+import { loggUmamiFrigiOppgave, loggUmamiGåTilBehandlingOgReserver } from 'lib/utils/umami/navigering';
 import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useTransition } from 'react';
+
 import styles from './MineOppgaverMeny.module.css';
-import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 
 interface Props {
-  oppgave: Oppgave;
+  oppgave: OppgaveMedKontekst;
   setFeilmelding: Dispatch<SetStateAction<string | undefined>>;
   setÅpenModal: Dispatch<SetStateAction<boolean>>;
   revalidateFunction: () => void;
@@ -23,37 +25,33 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
   const { setOppgaveIder, visModal } = useTildelOppgaver();
   const router = useRouter();
 
-  async function frigiOppgave(oppgave: Oppgave) {
+  async function frigiOppgave(oppgaveId: number) {
+    loggUmamiFrigiOppgave('MINE_OPPGAVER');
     startTransitionFrigi(async () => {
-      if (oppgave.id) {
-        const res = await avreserverOppgaveClient([oppgave.id]);
+      const res = await avreserverOppgaveClient([oppgaveId]);
 
-        if (isSuccess(res)) {
-          if (revalidateFunction) {
-            revalidateFunction();
-          }
-        } else if (res.status == 401) {
-          setÅpenModal(true);
-        } else {
-          setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
+      if (isSuccess(res)) {
+        if (revalidateFunction) {
+          revalidateFunction();
         }
+      } else if (res.status == 403) {
+        setÅpenModal(true);
       } else {
-        setFeilmelding('Feil ved avreservering av oppgave: OppgaveId mangler');
+        setFeilmelding(`Feil ved avreservering av oppgave: ${res.apiException.message}`);
       }
     });
   }
 
-  async function plukkOgGåTilOppgave(oppgave: Oppgave) {
+  async function plukkOgGåTilOppgave(oppgave: OppgaveMedKontekst) {
+    loggUmamiGåTilBehandlingOgReserver('MINE_OPPGAVER');
     startTransitionBehandle(async () => {
-      if (oppgave.id !== undefined && oppgave.id !== null && oppgave.versjon >= 0) {
-        const plukketOppgave = await plukkOppgaveClient(oppgave.id, oppgave.versjon);
-        if (isSuccess(plukketOppgave)) {
-          router.push(byggKelvinURL(plukketOppgave.data));
-        } else if (plukketOppgave.status == 401) {
-          setÅpenModal(true);
-        } else {
-          setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
-        }
+      const plukketOppgave = await plukkOppgaveClient(oppgave.oppgaveMetadata.id, oppgave.oppgaveMetadata.versjon);
+      if (isSuccess(plukketOppgave)) {
+        router.push(byggKelvinURL(plukketOppgave.data.behandlingskontekst));
+      } else if (plukketOppgave.status == 403) {
+        setÅpenModal(true);
+      } else {
+        setFeilmelding(`Feil ved plukking av oppgave: ${plukketOppgave.apiException.message}`);
       }
     });
   }
@@ -76,12 +74,12 @@ export const MineOppgaverMeny = ({ oppgave, setFeilmelding, setÅpenModal, reval
         </Button>
         <Dropdown.Menu>
           <Dropdown.Menu.GroupedList>
-            <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave)}>
+            <Dropdown.Menu.GroupedList.Item onClick={() => frigiOppgave(oppgave.oppgaveMetadata.id)}>
               Frigi oppgave
             </Dropdown.Menu.GroupedList.Item>
             <Dropdown.Menu.GroupedList.Item
               onClick={() => {
-                oppgave.id && setOppgaveIder([oppgave.id]);
+                setOppgaveIder([oppgave.oppgaveMetadata.id]);
                 visModal();
               }}
             >

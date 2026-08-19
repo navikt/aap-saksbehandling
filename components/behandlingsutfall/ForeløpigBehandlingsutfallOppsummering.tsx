@@ -65,7 +65,13 @@ function mapTidligereVurderingTilTekst(tidligereVurdering: ForeløpigBehandlings
       if (tidligereVurdering.rettighetstype) {
         return `Oppfyller ${mapRettighetsTypeTilTekst(tidligereVurdering.rettighetstype)}`;
       } else {
-        return 'Bruker blir vurdert for AAP etter § 11-13'; // Eneste mulige rettighetstype dersom ingen er satt til nå
+        if (tidligereVurdering.muligRettighetstypeFraNavkontor == 'SYKEPENGEERSTATNING') {
+          return 'Bruker blir vurdert for AAP etter § 11-13';
+        } else if (tidligereVurdering.muligRettighetstypeFraNavkontor == 'STUDENT') {
+          return 'Bruker blir vurdert for AAP etter § 11-14';
+        } else {
+          return ''; // TODO skal ikke kunne havne her
+        }
       }
     case 'IKKE_BEHANDLINGSGRUNNLAG':
       return 'Ikke behandlingsgrunnlag';

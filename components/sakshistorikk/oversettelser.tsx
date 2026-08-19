@@ -22,7 +22,11 @@ export type HistorikkEvent =
   | 'MOTTATT_DIALOGMELDING' // ? Mottatt legeerklæring og dialogmelding
   | 'BESTILT_LEGEERKLÆRING'
   | 'KVALITETSSIKRET'
-  | 'SØKNAD_TRUKKET';
+  | 'SØKNAD_TRUKKET'
+  | 'MARKERING_HASTER_OPPRETTET'
+  | 'MARKERING_HASTER_FJERNET'
+  | 'MARKERING_AVSLAG_SYKDOM_OPPRETTET'
+  | 'MARKERING_AVSLAG_SYKDOM_FJERNET';
 
 export function mapEventTilString(historikkEvent: HistorikkEvent) {
   switch (historikkEvent) {
@@ -56,6 +60,14 @@ export function mapEventTilString(historikkEvent: HistorikkEvent) {
       return 'Kvalitetssikret';
     case 'SØKNAD_TRUKKET':
       return 'Søknad trukket';
+    case 'MARKERING_HASTER_OPPRETTET':
+      return 'Markering "Haster" lagt til';
+    case 'MARKERING_HASTER_FJERNET':
+      return 'Markering "Haster" fjernet';
+    case 'MARKERING_AVSLAG_SYKDOM_OPPRETTET':
+      return 'Markering "Avslag § 11-5" lagt til';
+    case 'MARKERING_AVSLAG_SYKDOM_FJERNET':
+      return 'Markering "Avslag § 11-5" fjernet';
   }
   exhaustiveCheck(historikkEvent);
 }
@@ -92,6 +104,14 @@ export function mapEventTilIkon(historikkEvent: HistorikkEvent) {
       return <CheckmarkCircleIcon title="kvalitetssikret" fontSize="1.5rem" />;
     case 'SØKNAD_TRUKKET':
       return <FileXMarkIcon title="søknad trukket" fontSize="1.5rem" />;
+    case 'MARKERING_HASTER_OPPRETTET':
+      return null;
+    case 'MARKERING_HASTER_FJERNET':
+      return null;
+    case 'MARKERING_AVSLAG_SYKDOM_OPPRETTET':
+      return null;
+    case 'MARKERING_AVSLAG_SYKDOM_FJERNET':
+      return null;
   }
   exhaustiveCheck(historikkEvent);
 }

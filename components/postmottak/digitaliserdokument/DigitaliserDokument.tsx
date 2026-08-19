@@ -1,22 +1,26 @@
 'use client';
 
-import { Kategoriser } from './kategoriser/Kategoriser';
-import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
-import { useState } from 'react';
-import { DigitaliserSøknad } from './søknad/DigitaliserSøknad';
-import { Behovstype } from 'lib/postmottakForm';
-import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { formaterDatoForBackend } from 'lib/utils/date';
-import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
 import { VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
+import { Behovstype } from 'lib/postmottakForm';
+import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
+import { formaterDatoForBackend } from 'lib/utils/date';
+import { useState } from 'react';
+
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
-import { DigitaliserMeldekortV2 } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekortV2';
+import { DigitaliserMeldekort } from 'components/postmottak/digitaliserdokument/meldekort/DigitaliserMeldekort';
+
+import { DigitaliserAnnetRelevantDokument } from './annetrelevantdokument/DigitaliserAnnetRelevantDokument';
+import { Kategoriser } from './kategoriser/Kategoriser';
+import { DigitaliserSøknad } from './søknad/DigitaliserSøknad';
 
 interface Props {
   behandlingsVersjon: number;
   behandlingsreferanse: string;
   registrertDato?: string | null;
   grunnlag: DigitaliseringsGrunnlag;
+  saksnummer: string | undefined;
   readOnly: boolean;
 }
 
@@ -29,6 +33,7 @@ export const DigitaliserDokument = ({
   behandlingsreferanse,
   grunnlag,
   readOnly,
+  saksnummer,
   registrertDato,
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
@@ -46,6 +51,8 @@ export const DigitaliserDokument = ({
       referanse: behandlingsreferanse,
     });
   }
+
+  const erKravEnabled = useFeatureFlag('KravSteg');
 
   return (
     <VStack gap={'space-16'}>
@@ -66,8 +73,9 @@ export const DigitaliserDokument = ({
         />
       )}
       {kategori === 'MELDEKORT' && (
-        <DigitaliserMeldekortV2 submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} />
+        <DigitaliserMeldekort submit={handleSubmit} readOnly={readOnly} isLoading={isLoading} saksnummer={saksnummer} />
       )}
+
       {kategori === 'KLAGE' && (
         <DigitaliserKlage
           submit={handleSubmit}
@@ -83,6 +91,7 @@ export const DigitaliserDokument = ({
           grunnlag={grunnlag}
           readOnly={readOnly}
           isLoading={isLoading}
+          erKravEnabled={erKravEnabled}
         />
       )}
     </VStack>

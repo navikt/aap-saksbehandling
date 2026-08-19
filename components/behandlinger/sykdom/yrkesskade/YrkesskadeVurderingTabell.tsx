@@ -1,23 +1,24 @@
 'use client';
 
-import { FieldArray, UseFormReturn } from 'react-hook-form';
-import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Checkbox, ErrorMessage, Table, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { JaEllerNei } from 'lib/utils/form';
+import { storForbokstav } from 'lib/utils/string';
 import { validerDato } from 'lib/validation/dateValidation';
+import { UseFormReturn } from 'react-hook-form';
+
 import {
   YrkesskadeMedSkadeDatoFormFields,
   YrkesskadeMedSkadeDatoSak,
 } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
-import { JaEllerNei } from 'lib/utils/form';
-import { storForbokstav } from 'lib/utils/string';
+import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
   form: UseFormReturn<YrkesskadeMedSkadeDatoFormFields>;
   readOnly: boolean;
   yrkesskader: YrkesskadeMedSkadeDatoSak[];
-  update: (index: number, value: FieldArray<YrkesskadeMedSkadeDatoFormFields, 'relevanteYrkesskadeSaker'>) => void;
+  update: (index: number, value: YrkesskadeMedSkadeDatoSak) => void;
   erÅrsakssammenheng: string;
 }
 
@@ -122,7 +123,7 @@ export const YrkesskadeVurderingTabell = ({ form, yrkesskader, readOnly, update,
       </TableStyled>
       {form.formState.errors.relevanteYrkesskadeSaker && ingenYrkesskadeErTilknyttet && (
         <ErrorMessage size={'small'} showIcon>
-          {form.formState.errors.relevanteYrkesskadeSaker[0]?.message}
+          {form.formState.errors.relevanteYrkesskadeSaker?.root?.message}
         </ErrorMessage>
       )}
     </VStack>

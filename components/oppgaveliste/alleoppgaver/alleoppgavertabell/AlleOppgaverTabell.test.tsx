@@ -1,50 +1,51 @@
-import { describe, expect, it, vi } from 'vitest';
-import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
 import { screen } from '@testing-library/react';
-import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
-import { Oppgave } from 'lib/types/oppgaveTypes';
-import {
-  NoNavAapOppgaveOppgaveDtoBehandlingstype,
-  NoNavAapOppgaveOppgaveDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
+import { customRenderWithTildelOppgaveContext } from 'lib/test/CustomRender';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
+import { describe, expect, it, vi } from 'vitest';
 
-const oppgaver: Oppgave[] = [
-  {
-    behandlingRef: 'dgklasdf',
-    vurderingsbehov: [],
-    avklaringsbehovKode: '',
-    behandlingOpprettet: '2025-02-09',
-    behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-    enhet: '',
-    opprettetAv: '',
-    opprettetTidspunkt: '2025-02-09',
-    status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
-    versjon: 0,
-    årsakerTilBehandling: [],
-    markeringer: [],
-    reservertAv: 'ident',
-    reservertAvNavn: 'Test Testesen',
-    enhetForKø: '4491',
-    erPåVent: false,
-    erÅpen: true,
+import { AlleOppgaverTabell } from 'components/oppgaveliste/alleoppgaver/alleoppgavertabell/AlleOppgaverTabell';
+
+const baseOppgave: OppgaveMedKontekst = {
+  årsakTilOpprettelse: undefined,
+  avklaringsbehovKode: '',
+  behandlingOpprettet: '2026-01-04',
+  behandlingskontekst: {
+    behandlingsreferanse: '',
+    behandlingstype: 'FØRSTEGANGSBEHANDLING',
   },
-  {
-    behandlingRef: 'sdfgaf',
-    vurderingsbehov: [],
-    avklaringsbehovKode: '',
-    behandlingOpprettet: '2025-02-09',
-    behandlingstype: NoNavAapOppgaveOppgaveDtoBehandlingstype.F_RSTEGANGSBEHANDLING,
-    enhet: '',
-    opprettetAv: '',
-    opprettetTidspunkt: '2025-02-09',
-    status: NoNavAapOppgaveOppgaveDtoStatus.OPPRETTET,
+  oppgaveMetadata: {
+    id: 0,
+    opprettetTidspunkt: '2026-01-04',
+    status: 'OPPRETTET',
     versjon: 0,
-    årsakerTilBehandling: [],
+  },
+  personOgEnhet: {
+    enhet: '',
+    personIdent: '',
+  },
+  vurderingsbehov: [],
+  oppgavelisteTags: {
     markeringer: [],
+    skjermingInfo: {
+      erSkjermet: false,
+      harFortroligAdresse: false,
+      harStrengtFortroligAdresse: false,
+    },
+  },
+  reservertAv: 'z123',
+  reservertAvNavn: 'Test Testesen',
+};
+
+const oppgaver: OppgaveMedKontekst[] = [
+  baseOppgave,
+  {
+    ...baseOppgave,
+    behandlingskontekst: {
+      ...baseOppgave.behandlingskontekst,
+      behandlingsreferanse: 'sdfgaf',
+    },
     reservertAv: 'ident2',
-    enhetForKø: '4491',
-    erPåVent: false,
-    erÅpen: true,
+    reservertAvNavn: undefined,
   },
 ];
 
@@ -59,6 +60,7 @@ describe('AlleOppgaverTabell', () => {
         setSortBy={() => {}}
         sort={undefined}
         aktivKø={undefined}
+        visBeløpKolonne={false}
       />,
       false
     );
@@ -79,6 +81,7 @@ describe('AlleOppgaverTabell', () => {
         setSortBy={() => {}}
         sort={undefined}
         aktivKø={undefined}
+        visBeløpKolonne={false}
       />,
       false
     );
@@ -87,5 +90,40 @@ describe('AlleOppgaverTabell', () => {
 
     const saksbehandlernavn = screen.queryByText('Test Testesen');
     expect(saksbehandlernavn).not.toBeInTheDocument();
+  });
+
+  it('skal vise PÅ_VENT-indikator for tilbakekrevingsbehandling som er på vent', async () => {
+    const tilbakekrevingPåVent: OppgaveMedKontekst = {
+      ...baseOppgave,
+      behandlingskontekst: {
+        ...baseOppgave.behandlingskontekst,
+        behandlingsreferanse: 'tilbakekreving-behandling',
+        behandlingstype: 'TILBAKEKREVING',
+      },
+      oppgavelisteTags: {
+        ...baseOppgave.oppgavelisteTags,
+        påVentInfo: {
+          påVentTil: '2025-12-31',
+          påVentÅrsak: 'AVVENTER_BRUKERUTTALELSE',
+        },
+      },
+    };
+
+    customRenderWithTildelOppgaveContext(
+      <AlleOppgaverTabell
+        oppgaver={[tilbakekrevingPåVent]}
+        revalidateFunction={vi.fn()}
+        setValgteRader={vi.fn()}
+        valgteRader={[]}
+        setSortBy={() => {}}
+        sort={undefined}
+        aktivKø={undefined}
+        visBeløpKolonne={false}
+      />,
+      false
+    );
+
+    const påVentKnapp = screen.getByTitle('Oppgave på vent').closest('button');
+    expect(påVentKnapp).toBeInTheDocument();
   });
 });

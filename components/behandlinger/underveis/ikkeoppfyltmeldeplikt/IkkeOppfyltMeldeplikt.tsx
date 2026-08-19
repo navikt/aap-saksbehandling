@@ -1,22 +1,23 @@
 'use client';
 
-import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
-import { SubmitEventHandler } from 'react';
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
+import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { SubmitEventHandler } from 'react';
+import { useFieldArray } from 'react-hook-form';
+
 import { IkkeMeldtPerioderTable } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/IkkeMeldtPerioderTable';
 import { VurderingMeldepliktOverstyringSkjema } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/VurderingMeldepliktOverstyringSkjema';
-import { useConfigForm } from 'components/form/FormHook';
-import { useFieldArray } from 'react-hook-form';
 import {
   MeldepliktOverstyringFormFields,
   MeldepliktOverstyringVurdering,
 } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
-import { Behovstype } from 'lib/utils/form';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;

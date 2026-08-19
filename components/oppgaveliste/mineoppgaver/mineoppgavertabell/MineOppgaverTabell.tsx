@@ -1,16 +1,18 @@
-import { Oppgave } from 'lib/types/oppgaveTypes';
+import { SortState, Table, VStack } from '@navikt/ds-react';
+import { MineOppgaverSortBy } from 'lib/types/oppgaveTypes';
+import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
-import { Alert, SortState, Table, VStack } from '@navikt/ds-react';
-import { TableStyled } from 'components/tablestyled/TableStyled';
+
+import { Alert } from 'components/alert/Alert';
 import { ManglerTilgangModal } from 'components/oppgaveliste/manglertilgangmodal/ManglerTilgangModal';
 import { MineOppgaverTabellRad } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabellRad';
+import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
-import { PathsMineOppgaverGetParametersQuerySortby } from '@navikt/aap-oppgave-typescript-types';
 
 interface Props {
-  oppgaver: Oppgave[];
+  oppgaver: OppgaveMedKontekst[];
   revalidateFunction: () => void;
-  setSortBy: (orderBy: PathsMineOppgaverGetParametersQuerySortby) => void;
+  setSortBy: (orderBy: MineOppgaverSortBy) => void;
   sort: SortState | undefined;
 }
 
@@ -31,44 +33,31 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
         size={'small'}
         zebraStripes
         sort={sort}
-        onSortChange={(sortKey) => setSortBy(sortKey as PathsMineOppgaverGetParametersQuerySortby)}
+        onSortChange={(sortKey) => setSortBy(sortKey as MineOppgaverSortBy)}
       >
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader textSize={'small'}>Navn</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={PathsMineOppgaverGetParametersQuerySortby.PERSONIDENT}
-              sortable={true}
-              textSize={'small'}
-            >
+            <Table.ColumnHeader sortKey={'PERSONIDENT'} sortable={true} textSize={'small'}>
               Fnr
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={PathsMineOppgaverGetParametersQuerySortby.SAKSNUMMER} sortable={true}>
+            <Table.ColumnHeader sortKey={'SAKSNUMMER'} sortable={true}>
               Sak
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={PathsMineOppgaverGetParametersQuerySortby.BEHANDLINGSTYPE} sortable={true}>
+            <Table.ColumnHeader sortKey={'BEHANDLINGSTYPE'} sortable={true}>
               Behandlingstype
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={PathsMineOppgaverGetParametersQuerySortby.BEHANDLING_OPPRETTET}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'BEHANDLING_OPPRETTET'} sortable={true}>
               Beh. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={PathsMineOppgaverGetParametersQuerySortby._RSAK_TIL_OPPRETTELSE}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'ÅRSAK_TIL_OPPRETTELSE'} sortable={true}>
               Årsak
             </Table.ColumnHeader>
             <Table.ColumnHeader>Vurderingsbehov</Table.ColumnHeader>
-            <Table.ColumnHeader
-              sortKey={PathsMineOppgaverGetParametersQuerySortby.AVKLARINGSBEHOV_KODE}
-              sortable={true}
-            >
+            <Table.ColumnHeader sortKey={'AVKLARINGSBEHOV_KODE'} sortable={true}>
               Oppgave
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={PathsMineOppgaverGetParametersQuerySortby.OPPRETTET_TIDSPUNKT} sortable={true}>
+            <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
             <Table.HeaderCell></Table.HeaderCell>
@@ -78,7 +67,7 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
         <Table.Body>
           {oppgaver.map((oppgave) => (
             <MineOppgaverTabellRad
-              key={oppgave.id}
+              key={oppgave.oppgaveMetadata.id}
               oppgave={oppgave}
               setFeilmelding={setFeilmelding}
               setIsModalOpen={setIsModalOpen}

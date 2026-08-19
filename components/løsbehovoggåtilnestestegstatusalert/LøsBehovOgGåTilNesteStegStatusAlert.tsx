@@ -1,9 +1,10 @@
 'use client';
 
-import { Alert, BodyShort } from '@navikt/ds-react';
+import { BodyShort } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { ApiException } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;

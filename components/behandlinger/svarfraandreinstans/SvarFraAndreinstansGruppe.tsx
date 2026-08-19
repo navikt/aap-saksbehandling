@@ -1,36 +1,31 @@
-import { hentFlyt } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { getStegSomSkalVises } from 'lib/utils/steg';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SvarFraAndreinstansMedDatafetching } from 'components/behandlinger/svarfraandreinstans/SvarFraAndreinstansMedDatafetching';
+import { BehandlingFlytOgTilstand } from 'lib/types/types';
 
 interface Props {
   behandlingsreferanse: string;
+  flyt: BehandlingFlytOgTilstand;
 }
 
-export const SvarFraAndreinstansGruppe = async ({ behandlingsreferanse }: Props) => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  if (isError(flyt)) {
-    return <ApiException apiResponses={[flyt]} />;
-  }
-  const stegSomSkalVises = getStegSomSkalVises('SVAR_FRA_ANDREINSTANS', flyt.data);
+export const SvarFraAndreinstansGruppe = async ({ behandlingsreferanse, flyt }: Props) => {
+  const stegSomSkalVises = getStegSomSkalVises('SVAR_FRA_ANDREINSTANS', flyt);
 
   return (
     <GruppeSteg
-      prosessering={flyt.data.prosessering}
-      visning={flyt.data.visning}
+      prosessering={flyt.prosessering}
+      visning={flyt.visning}
       behandlingReferanse={behandlingsreferanse}
-      behandlingVersjon={flyt.data.behandlingVersjon}
-      aktivtSteg={flyt.data.aktivtSteg}
+      behandlingVersjon={flyt.behandlingVersjon}
+      aktivtSteg={flyt.aktivtSteg}
     >
       {stegSomSkalVises.includes('SVAR_FRA_ANDREINSTANS') && (
         <StegSuspense>
           <SvarFraAndreinstansMedDatafetching
             behandlingsreferanse={behandlingsreferanse}
-            readOnly={flyt.data.visning.saksbehandlerReadOnly}
-            behandlingVersjon={flyt.data.behandlingVersjon}
+            readOnly={flyt.visning.saksbehandlerReadOnly}
+            behandlingVersjon={flyt.behandlingVersjon}
           />
         </StegSuspense>
       )}

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from 'lib/test/CustomRender';
 import { Behovstype } from 'lib/utils/form';
 import { TotrinnsvurderingForm } from 'components/totrinnsvurdering/totrinnsvurderingform/TotrinnsvurderingForm';
-import { FatteVedtakGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
+import { FatteVedtakGrunnlag, KvalitetssikringGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
@@ -173,58 +173,6 @@ describe('totrinnsvurderingform', () => {
     expect(errorMessage).toBeVisible();
   });
 
-  it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
-    render(
-      <TotrinnsvurderingForm
-        behandlingsversjon={1}
-        grunnlag={grunnlagUtenVurdering}
-        erKvalitetssikring={false}
-        readOnly={false}
-      />
-    );
-
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
-    await user.click(vurderPåNyttValg);
-
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFelt).not.toBeInTheDocument();
-
-    const annetValg = screen.getByRole('checkbox', { name: /annen returårsak/i });
-    await user.click(annetValg);
-
-    const fritekstFeltEtterAnnetErValgt = screen.getByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
-  });
-
-  it('skal dukke opp error på fritekst felt for å skrive inn en grunn dersom ANNET er valgt og det ikke er besvart', async () => {
-    render(
-      <TotrinnsvurderingForm
-        behandlingsversjon={1}
-        grunnlag={grunnlagUtenVurdering}
-        erKvalitetssikring={false}
-        readOnly={false}
-      />
-    );
-
-    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
-    await user.click(vurderPåNyttValg);
-
-    const fritekstFelt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFelt).not.toBeInTheDocument();
-
-    const annetValg = screen.getByRole('checkbox', { name: /annen returårsak/i });
-    await user.click(annetValg);
-
-    const fritekstFeltEtterAnnetErValgt = await screen.queryByRole('textbox', { name: /annen returårsak/i });
-    expect(fritekstFeltEtterAnnetErValgt).toBeVisible();
-
-    const knapp = screen.getByRole('button', { name: 'Bekreft og send videre' });
-    await user.click(knapp);
-
-    const errorMessage = await screen.getByText('Annen returårsak må fylles ut');
-    expect(errorMessage).toBeVisible();
-  });
-
   it('gir feilmelding hvis man velger en grunn for så å fjerne den igjen', async () => {
     render(
       <TotrinnsvurderingForm
@@ -289,7 +237,7 @@ describe('totrinnsvurderingform', () => {
     await user.click(sendInnButton);
 
     expect(
-      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis ikke du underkjenner.')
+      screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.')
     ).toBeInTheDocument();
   });
 
@@ -318,6 +266,72 @@ describe('totrinnsvurderingform', () => {
   });
 });
 
+it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens alt annet er godkjent', async () => {
+  render(
+    <TotrinnsvurderingForm
+      behandlingsversjon={1}
+      grunnlag={{
+        ...grunnlagUtenVurdering,
+        vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+      }}
+      erKvalitetssikring={true}
+      readOnly={false}
+      hastemarkering={{
+        begrunnelse: 'Avtalt med leder',
+        markeringType: 'HASTER',
+        opprettetAv: null,
+        opprettetAvNavn: null,
+        opprettetTidspunkt: Date.now().toString(),
+      }}
+    />
+  );
+  const radioJa = screen.getAllByRole('radio', { name: /ja/i });
+  await user.click(radioJa[0]);
+  await user.click(radioJa[1]);
+
+  const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+  await user.click(sendInnButton);
+
+  expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+  expect(
+    screen.queryByText('Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.')
+  ).toBeInTheDocument();
+});
+
+it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert hvis kun en av to tidligere vurderinger er vurdert og den siste er godkjent', async () => {
+  render(
+    <TotrinnsvurderingForm
+      behandlingsversjon={1}
+      grunnlag={{
+        ...grunnlagUtenVurdering,
+        vurderinger: [...grunnlagUtenVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY }],
+      }}
+      erKvalitetssikring={true}
+      readOnly={false}
+      hastemarkering={{
+        begrunnelse: 'Avtalt med leder',
+        markeringType: 'HASTER',
+        opprettetAv: null,
+        opprettetAvNavn: null,
+        opprettetTidspunkt: Date.now().toString(),
+      }}
+    />
+  );
+  const radioJa = screen.getAllByRole('radio', { name: /ja/i });
+  await user.click(radioJa[0]);
+
+  const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+  await user.click(sendInnButton);
+
+  expect(
+    screen.getByText('Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.')
+  ).toBeInTheDocument();
+  expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
+  expect(
+    screen.queryByText('Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.')
+  ).not.toBeInTheDocument();
+});
+
 describe('Totrinnsvurdering av vedtaksbrev', () => {
   const grunnlaget: FatteVedtakGrunnlag = {
     harGjortVilkårsvurderingerPåBehandling: false,
@@ -325,6 +339,30 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     vurderinger: [
       {
         definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+      },
+    ],
+    historikk: [],
+  };
+
+  const grunnlagMedEndringSidenSist: KvalitetssikringGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [
+      {
+        definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+        endretSidenSist: true,
+      },
+    ],
+    historikk: [],
+  };
+
+  const grunnlagUtenEndringSidenSist: KvalitetssikringGrunnlag = {
+    harGjortVilkårsvurderingerPåBehandling: false,
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [
+      {
+        definisjon: Behovstype.SYKDOMSVURDERING_BREV_KODE,
+        endretSidenSist: false,
       },
     ],
     historikk: [],
@@ -349,25 +387,28 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
     expect(screen.getByRole('checkbox', { name: /Annen returårsak/ })).toBeVisible();
   });
 
-  it('skal dukke opp et fritekst felt for å skrive inn en grunn dersom ANNET er valgt', async () => {
+  it('skal vise at vurdering er endret siden forrige retur', () => {
     render(
       <TotrinnsvurderingForm
         behandlingsversjon={1}
-        grunnlag={grunnlagUtenVurdering}
-        erKvalitetssikring={false}
+        grunnlag={grunnlagMedEndringSidenSist}
+        erKvalitetssikring={true}
         readOnly={false}
       />
     );
+    expect(screen.getByText('Vurderingen er endret siden forrige retur')).toBeVisible();
+  });
 
-    const vurderPåNyttValg = screen.getByRole('radio', { name: 'Nei' });
-    await user.click(vurderPåNyttValg);
-
-    expect(screen.queryByRole('textbox', { name: 'Annen returårsak' })).not.toBeInTheDocument();
-
-    const annetValg = screen.getByRole('checkbox', { name: 'Annen returårsak' });
-    await user.click(annetValg);
-
-    expect(screen.getByRole('textbox', { name: 'Annen returårsak' })).toBeVisible();
+  it('skal vise at vurdering ikke endret siden forrige retur', () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagUtenEndringSidenSist}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+    expect(screen.getByText('Ingen endring siden forrige retur')).toBeVisible();
   });
 });
 
