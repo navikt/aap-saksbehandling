@@ -3,12 +3,11 @@
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { Table } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { InntektsbortfallResponse, MellomlagretVurdering } from 'lib/types/types';
 import { VisningModus } from 'lib/types/visningTypes';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { formaterTilG } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
@@ -19,6 +18,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 import styles from './Inntektsbortfall.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -56,8 +56,8 @@ export const Inntektsbortfall = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_INNTEKTSBORTFALL');
+  const { løsAvklaringsbehovStatus, løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('VURDER_INNTEKTSBORTFALL');
 
   const { visningActions, visningModus, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -105,13 +105,13 @@ export const Inntektsbortfall = ({
       heading="§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år"
       steg={'VURDER_INNTEKTSBORTFALL'}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       vurderingerMeta={{ vurdertAutomatisk: grunnlag.kanBehandlesAutomatisk, ...vurdering?.vurderingerMeta }}
       onSubmit={(event) => {
         form.handleSubmit((data) => {
-          løsBehovOgGåTilNesteSteg(
+          løsAvklaringsbehov(
             {
               behandlingVersjon: behandlingVersjon,
               behov: {

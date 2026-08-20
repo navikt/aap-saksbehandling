@@ -6,10 +6,11 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 import styles from './VilkårsKort.module.css';
 import { usePostmottakRequiredFlyt } from 'hooks/postmottak/PostmottakFlytHook';
 import { ReactNode, SubmitEventHandler } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { StegType as PostmottakStegType } from 'lib/types/postmottakTypes';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface PostmottakVilkårskortProps {
   heading: string;

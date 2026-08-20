@@ -7,7 +7,6 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -32,6 +31,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,8 +60,12 @@ export const OvergangUforePeriodisert = ({
   skalStegVurderes,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('OVERGANG_UFORE');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -86,7 +90,7 @@ export const OvergangUforePeriodisert = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsreferanse,
@@ -126,9 +130,9 @@ export const OvergangUforePeriodisert = ({
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
       steg={'OVERGANG_UFORE'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={true}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}

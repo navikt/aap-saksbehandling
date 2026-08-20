@@ -3,7 +3,6 @@
 import { VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { parse } from 'date-fns';
@@ -24,6 +23,7 @@ import { Avslag11_27KravGruppe } from 'components/behandlinger/samordning/avslag
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: Avslag11_27Grunnlag;
@@ -64,8 +64,8 @@ export const Avslag11_27 = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_AVSLAG_11_27');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('VURDER_AVSLAG_11_27');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -146,7 +146,9 @@ export const Avslag11_27 = ({
     const vurdering = krav.vurdering;
     const harAnnenFullYtelse = vurdering.harAnnenFullYtelse === JaEllerNei.Ja;
 
-    const harArbeidsgiverSykepengerUtbetaling = getTrueFalseEllerUndefined(vurdering.harArbeidsgiverSykepengerUtbetaling)
+    const harArbeidsgiverSykepengerUtbetaling = getTrueFalseEllerUndefined(
+      vurdering.harArbeidsgiverSykepengerUtbetaling
+    );
 
     return {
       referanse: vurdering.referanse,
@@ -192,7 +194,7 @@ export const Avslag11_27 = ({
 
       const vurderinger = data.avslag11_27vurderinger.filter(skalSendeVurdering).map(mapTilVurderingPayload);
 
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -215,9 +217,9 @@ export const Avslag11_27 = ({
       heading={'§ 11-27 Brukeren har annen full trygdeytelse i en lengre periode etter AAP søknad'}
       steg={'VURDER_AVSLAG_11_27'}
       onSubmit={handleSubmit}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

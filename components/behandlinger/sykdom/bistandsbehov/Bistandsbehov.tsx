@@ -5,7 +5,6 @@ import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { SubmitEventHandler } from 'react';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -34,6 +33,7 @@ import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingS
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -63,8 +63,12 @@ export const Bistandsbehov = ({
   erRevurderingAvOvergangUføre,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_BISTANDSBEHOV');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('VURDER_BISTANDSBEHOV');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -98,7 +102,7 @@ export const Bistandsbehov = ({
       if (!erPerioderGyldige) {
         return;
       }
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -130,9 +134,9 @@ export const Bistandsbehov = ({
       heading={'§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid'}
       steg={'VURDER_BISTANDSBEHOV'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={true}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() => {

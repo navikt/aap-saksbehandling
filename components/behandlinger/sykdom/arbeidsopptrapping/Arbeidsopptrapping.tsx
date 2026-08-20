@@ -4,7 +4,6 @@ import { VStack } from '@navikt/ds-react';
 import { parse, parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
@@ -15,7 +14,7 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -33,6 +32,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -55,8 +55,12 @@ export interface ArbeidsopptrappingVurderingForm extends VurderingFormMeta {
 export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('ARBEIDSOPPTRAPPING');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+    løsAvklaringsbehovIsLoading,
+  } = useLøsAvklaringsbehov('ARBEIDSOPPTRAPPING');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -121,7 +125,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       visningActions.onBekreftClick();
       closeAllAccordions();
       nullstillMellomlagretVurdering();
@@ -136,10 +140,10 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       heading={'§ 11-23 sjette ledd. Arbeidsopptrapping (valgfritt)'}
       steg={'ARBEIDSOPPTRAPPING'}
       onSubmit={form.handleSubmit(onSubmit)}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={true}
-      isLoading={isLoading}
-      status={status}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

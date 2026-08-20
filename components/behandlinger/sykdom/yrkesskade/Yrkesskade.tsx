@@ -2,12 +2,11 @@
 
 import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { erProsent } from 'lib/utils/validering';
 import { SubmitEventHandler } from 'react';
@@ -17,6 +16,7 @@ import { YrkesskadeVurderingTabell } from 'components/behandlinger/sykdom/yrkess
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -55,8 +55,8 @@ export const Yrkesskade = ({
   readOnly,
   initialMellomlagretVurdering,
 }: Props) => {
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_YRKESSKADE');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('VURDER_YRKESSKADE');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -145,7 +145,7 @@ export const Yrkesskade = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behov: {
             behovstype: Behovstype.YRKESSKADE_KODE,
@@ -182,9 +182,9 @@ export const Yrkesskade = ({
       steg={'VURDER_YRKESSKADE'}
       vilkårTilhørerNavKontor={false}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vurderingerMeta={grunnlag.yrkesskadeVurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {

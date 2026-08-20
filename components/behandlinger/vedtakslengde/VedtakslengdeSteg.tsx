@@ -4,7 +4,6 @@ import { Radio, VStack } from '@navikt/ds-react';
 import { addDays, parse, parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
@@ -37,6 +36,7 @@ import {
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface VedtakslengdeVurderingForm extends VurderingFormMeta {
   manuellVurdering: boolean;
@@ -90,8 +90,12 @@ export const VedtakslengdeSteg = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_VEDTAKSLENGDE');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('FASTSETT_VEDTAKSLENGDE');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -170,7 +174,7 @@ export const VedtakslengdeSteg = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(løsning, () => {
+    løsPeriodisertAvklaringsbehov(løsning, () => {
       loggUmamiVarighet('STEG_VEDTAKSLENGDE_VARIGHET', umamiStartTidspunkt, Date.now());
       closeAllAccordions();
       visningActions.onBekreftClick();
@@ -184,9 +188,9 @@ export const VedtakslengdeSteg = ({
       steg={'FASTSETT_VEDTAKSLENGDE'}
       vilkårTilhørerNavKontor={false}
       onSubmit={form.handleSubmit(onSubmit)}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}
       visningModus={visningModus}

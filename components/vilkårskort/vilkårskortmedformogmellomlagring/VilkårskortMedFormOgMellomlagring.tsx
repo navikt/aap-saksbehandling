@@ -8,10 +8,11 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { ReactNode, SubmitEventHandler } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;

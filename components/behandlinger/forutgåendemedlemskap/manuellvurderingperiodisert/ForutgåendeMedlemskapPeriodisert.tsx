@@ -3,7 +3,6 @@
 import { parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
@@ -36,6 +35,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -57,8 +57,12 @@ export const ForutgåendeMedlemskapPeriodisert = ({
   beregningstidspunktGrunnlag,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_MEDLEMSKAP');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+    løsAvklaringsbehovIsLoading,
+  } = useLøsAvklaringsbehov('VURDER_MEDLEMSKAP');
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -120,7 +124,7 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       loggUmamiVarighet('STEG_FORUTGÅENDE_MEDLEMSKAP_VARIGHET', umamiStartTidspunkt, Date.now());
       closeAllAccordions();
       visningActions.onBekreftClick();
@@ -140,9 +144,9 @@ export const ForutgåendeMedlemskapPeriodisert = ({
       heading={heading}
       steg={'VURDER_MEDLEMSKAP'}
       onSubmit={form.handleSubmit(onSubmit)}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}

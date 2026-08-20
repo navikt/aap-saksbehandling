@@ -1,7 +1,5 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-
 import { useFieldArray, useForm } from 'react-hook-form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
 import {
@@ -37,6 +35,7 @@ import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilslut
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -76,8 +75,12 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('FASTSETT_ARBEIDSEVNE');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -147,7 +150,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       nullstillMellomlagretVurdering();
       closeAllAccordions();
       visningActions.onBekreftClick();
@@ -163,9 +166,9 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       onSubmit={form.handleSubmit(onSubmit)}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

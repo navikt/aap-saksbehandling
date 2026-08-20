@@ -48,7 +48,7 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
         >
           <HStack justify="space-between">
             <Heading level="2" size="small">
-              {delmal.beskrivelse}
+              {delmal.brevbyggerTittel ?? delmal.beskrivelse}
             </Heading>
 
             {!obligatorisk && (

@@ -6,7 +6,6 @@ import { parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
@@ -21,7 +20,7 @@ import {
 } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { Behovstype, JaEllerNei, getJaNeiEllerUndefined, getStringEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
@@ -55,6 +54,7 @@ import {
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -118,8 +118,12 @@ export const Sykdomsvurdering = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('AVKLAR_SYKDOM');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -158,7 +162,7 @@ export const Sykdomsvurdering = ({
       if (!erPerioderGyldige) {
         return;
       }
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -200,9 +204,9 @@ export const Sykdomsvurdering = ({
       steg="AVKLAR_SYKDOM"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       knappTekst={'Bekreft'}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}

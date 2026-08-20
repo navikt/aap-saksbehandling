@@ -2,7 +2,6 @@
 
 import { VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { BarnepensjonGrunnlag, MellomlagretVurdering } from 'lib/types/types';
@@ -17,6 +16,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: BarnepensjonGrunnlag;
@@ -41,8 +41,8 @@ type DraftFormFields = Partial<BarnepensjonFormFields>;
 export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlingVersjon, grunnlag }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_BARNEPENSJON');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+    useLøsAvklaringsbehov('SAMORDNING_BARNEPENSJON');
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -84,7 +84,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
       heading={'§ 11-27 Samordning barnepensjon (valgfritt)'}
       steg={'SAMORDNING_BARNEPENSJON'}
       onSubmit={form.handleSubmit((data) => {
-        løsBehovOgGåTilNesteSteg(
+        løsAvklaringsbehov(
           {
             behandlingVersjon: behandlingVersjon,
             referanse: behandlingsreferanse,
@@ -109,9 +109,9 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
           }
         );
       })}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
