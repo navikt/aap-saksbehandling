@@ -1,7 +1,7 @@
 import { VStack } from '@navikt/ds-react';
 import { Avslag11_27Vurdering } from 'lib/types/types';
 import { getJaEllerNei } from 'lib/utils/form';
-import { formaterTilNok, storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -31,10 +31,10 @@ export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
           svar={formaterDatoForFrontend(vurdering.brukersYtelseTom)}
         />
       )}
-      {vurdering.sykepengegrunnlag && (
+      {!isNullOrUndefined(vurdering.harSykepengegrunnlagOver2G) && (
         <SpørsmålOgSvar
-          spørsmål={'Brukerens sykepengegrunnlag (årssats)'}
-          svar={formaterTilNok(vurdering.sykepengegrunnlag.verdi)}
+          spørsmål={'Har brukeren sykepengegrunnlag større enn 2 G?'}
+          svar={getJaEllerNei(vurdering.harSykepengegrunnlagOver2G)}
         />
       )}
       {!isNullOrUndefined(vurdering.harArbeidsgiverSykepengerUtbetaling) && (

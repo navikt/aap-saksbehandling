@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, HStack, Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { UseFormReturn } from 'react-hook-form';
@@ -10,7 +10,6 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
@@ -25,8 +24,6 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
   const visYtelseSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
   const visSykepengegrunnlagSpørsmål = visYtelseSpørsmål && vurdering?.brukersYtelse === 'SYKEPENGER';
   const visAvslagsSpørsmål = harAnnenFullYtelse === JaEllerNei.Ja;
-  const sykepengegrunnlagINumber = Number(vurdering?.sykepengegrunnlag);
-  const visningsverdiSykepengegrunnlag = Number.isFinite(sykepengegrunnlagINumber) ? sykepengegrunnlagINumber : 0;
 
   return (
     <VStack gap={'space-16'}>
@@ -78,18 +75,20 @@ export const Avslag11_27Vurdering = ({ form, kravIndex, readonly, brukersYtelseA
         </VStack>
       )}
       {visSykepengegrunnlagSpørsmål && (
-        <HStack gap="space-8" align="end">
-          <TextFieldWrapper
-            label={'Brukerens sykepengegrunnlag (årssats)'}
-            description={'Ved sykepengegrunnlag under 2 G kan det lønne seg for bruker å velge AAP'}
-            name={`avslag11_27vurderinger.${kravIndex}.vurdering.sykepengegrunnlag`}
-            control={form.control}
-            rules={{ required: 'Du må svare om brukerens sykepengegrunnlag.' }}
-            readOnly={readonly}
-            type={'number'}
-          />
-          <BodyShort>{visningsverdiSykepengegrunnlag} G</BodyShort>
-        </HStack>
+        <RadioGroupWrapper
+          name={`avslag11_27vurderinger.${kravIndex}.vurdering.harSykepengegrunnlagOver2G`}
+          description={
+            'Ved sykepengegrunnlag er under 2 G kan det lønne seg for bruker å velge AAP. Brukeren blir informert i vedtaksbrevet'
+          }
+          control={form.control}
+          label={'Har brukeren sykepengegrunnlag større enn 2 G?'}
+          rules={{ required: 'Du må svare om brukeren har sykepengegrunnlag større enn 2 G.' }}
+          readOnly={readonly}
+          horisontal
+        >
+          <Radio value={JaEllerNei.Ja}>Ja</Radio>
+          <Radio value={JaEllerNei.Nei}>Nei</Radio>
+        </RadioGroupWrapper>
       )}
       {visSykepengegrunnlagSpørsmål && (
         <VStack key={kravIndex} gap="space-8" align="start">

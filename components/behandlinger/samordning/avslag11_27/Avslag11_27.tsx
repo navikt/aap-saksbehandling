@@ -48,7 +48,7 @@ export interface KravMedVurdering extends VurderingFormMeta {
   harAnnenFullYtelse: JaEllerNei | undefined;
   brukersYtelse: Avslag11_27BrukersYtelse | undefined;
   brukersYtelseTom: string | undefined;
-  sykepengegrunnlag: number | undefined;
+  harSykepengegrunnlagOver2G: JaEllerNei | undefined;
   harArbeidsgiverSykepengerUtbetaling: JaEllerNei | undefined;
   skalAvslås1127: JaEllerNei | undefined;
 }
@@ -159,10 +159,9 @@ export const Avslag11_27 = ({
         harAnnenFullYtelse && vurdering.brukersYtelseTom
           ? formaterDatoForBackend(parse(vurdering.brukersYtelseTom, 'dd.MM.yyyy', new Date()))
           : undefined,
-      sykepengegrunnlag:
-        harAnnenFullYtelse && vurdering.sykepengegrunnlag !== undefined
-          ? { verdi: vurdering.sykepengegrunnlag }
-          : undefined,
+      harSykepengegrunnlagOver2G: harAnnenFullYtelse
+        ? vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja
+        : undefined,
       harArbeidsgiverSykepengerUtbetaling: harAnnenFullYtelse ? harArbeidsgiverSykepengerUtbetaling : undefined,
       skalAvslås1127: harAnnenFullYtelse ? vurdering.skalAvslås1127 === JaEllerNei.Ja : undefined,
     };
@@ -314,7 +313,7 @@ function mapVurderingToDraftFormFields(
             harAnnenFullYtelse: undefined,
             brukersYtelse: undefined,
             brukersYtelseTom: undefined,
-            sykepengegrunnlag: undefined,
+            harSykepengegrunnlagOver2G: undefined,
             harArbeidsgiverSykepengerUtbetaling: undefined,
             skalAvslås1127: undefined,
           },
@@ -332,7 +331,7 @@ function mapVurderingToDraftFormFields(
           brukersYtelseTom: nåværende.brukersYtelseTom
             ? formaterDatoForFrontend(nåværende.brukersYtelseTom)
             : undefined,
-          sykepengegrunnlag: nåværende.sykepengegrunnlag?.verdi ?? undefined,
+          harSykepengegrunnlagOver2G: getJaNeiEllerUndefined(nåværende.harSykepengegrunnlagOver2G),
           harArbeidsgiverSykepengerUtbetaling: getJaNeiEllerUndefined(nåværende.harArbeidsgiverSykepengerUtbetaling),
           skalAvslås1127: getJaNeiEllerUndefined(nåværende.skalAvslås1127),
         },

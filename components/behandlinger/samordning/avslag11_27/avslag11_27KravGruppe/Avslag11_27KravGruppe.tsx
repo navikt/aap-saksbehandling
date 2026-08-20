@@ -63,7 +63,7 @@ export const Avslag11_27KravGruppe = ({
       harAnnenFullYtelse: undefined,
       brukersYtelse: undefined,
       brukersYtelseTom: undefined,
-      sykepengegrunnlag: undefined,
+      harSykepengegrunnlagOver2G: undefined,
       harArbeidsgiverSykepengerUtbetaling: undefined,
       skalAvslås1127: undefined,
     });
