@@ -5,14 +5,14 @@ import { EtableringEgenVirksomhetGrunnlagResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
-const løsPeriodisertBehovOgGåTilNesteStegMock = vi.fn();
+const løsPeriodisertAvklaringsbehov = vi.fn();
 
-vi.mock('hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook', () => ({
-  useLøsBehovOgGåTilNesteSteg: () => ({
-    løsPeriodisertBehovOgGåTilNesteSteg: løsPeriodisertBehovOgGåTilNesteStegMock,
-    isLoading: false,
-    status: undefined,
-    løsBehovOgGåTilNesteStegError: undefined,
+vi.mock('hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov', () => ({
+  useLøsAvklaringsbehov: () => ({
+    løsAvklaringsbehovError: undefined,
+    løsAvklaringsbehovStatus: undefined,
+    løsAvklaringsbehovIsLoading: false,
+    løsPeriodisertAvklaringsbehov: løsPeriodisertAvklaringsbehov,
   }),
 }));
 
@@ -31,17 +31,15 @@ const tomtGrunnlag: EtableringEgenVirksomhetGrunnlagResponse = {
 describe('EtableringAvEgenVirksomhet', () => {
   beforeEach(() => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'ETABLERING_EGEN_VIRKSOMHET' });
-    løsPeriodisertBehovOgGåTilNesteStegMock.mockReset();
+    løsPeriodisertAvklaringsbehov.mockReset();
   });
 
   it('skal ikke kalle backend ved submit uten vurderinger', async () => {
-    render(
-      <EtableringAvEgenVirksomhet grunnlag={tomtGrunnlag} readOnly={false} behandlingVersjon={0} />
-    );
+    render(<EtableringAvEgenVirksomhet grunnlag={tomtGrunnlag} readOnly={false} behandlingVersjon={0} />);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertBehovOgGåTilNesteStegMock).not.toHaveBeenCalled();
+    expect(løsPeriodisertAvklaringsbehov).not.toHaveBeenCalled();
   });
 
   it('skal kalle backend ved submit med vurderinger', async () => {
@@ -64,12 +62,10 @@ describe('EtableringAvEgenVirksomhet', () => {
       ],
     };
 
-    render(
-      <EtableringAvEgenVirksomhet grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />
-    );
+    render(<EtableringAvEgenVirksomhet grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertBehovOgGåTilNesteStegMock).toHaveBeenCalledOnce();
+    expect(løsPeriodisertAvklaringsbehov).toHaveBeenCalledOnce();
   });
 });
