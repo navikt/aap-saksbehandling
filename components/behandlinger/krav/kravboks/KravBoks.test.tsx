@@ -95,31 +95,35 @@ describe('KravBoks', () => {
     expect(screen.getByText('Søknadsdato: 10.05.2025')).toBeVisible();
   });
 
-  it('viser "-" for mulig rett fra når kravet ikke har et slikt felt (f.eks. en ny søknad)', () => {
+  it('viser "-" for mulig rett fra når kravet ikke har et slikt felt (f.eks. en ny søknad)', async () => {
     const søknad = søknadUtenKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+
+    await user.click(screen.getByRole('radio', { name: 'Ja' }));
 
     expect(screen.getByText('-')).toBeVisible();
   });
 });
 
 describe('KravBoks - åpne/lukke bolker', () => {
-  it('åpner Kravtype-bolken ved klikk, og viser select-feltet', async () => {
+  it('åpner Kravtype-bolken ved klikk, og viser Ja/Nei-valget for om kravet er relevant', async () => {
     const krav = relevantKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
-    expect(screen.queryByRole('combobox', { name: 'Kravtype' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: 'Ja' })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
 
-    expect(screen.getByRole('combobox', { name: 'Kravtype' })).toBeVisible();
+    expect(screen.getByRole('radio', { name: 'Ja' })).toBeVisible();
+    expect(screen.getByRole('radio', { name: 'Ja' })).toBeChecked();
   });
 
-  it('viser Kravtype-bolken forhåndsåpnet for en ny søknad, slik at saksbehandler må ta stilling til kravtype', () => {
+  it('viser Kravtype-bolken forhåndsåpnet for en ny søknad, uten at Ja/Nei-valget er forhåndsutfylt', () => {
     const søknad = søknadUtenKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
-    expect(screen.getByRole('combobox', { name: 'Kravtype' })).toBeVisible();
+    expect(screen.getByRole('radio', { name: 'Ja' })).not.toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Nei' })).not.toBeChecked();
     expect(screen.getByRole('button', { name: 'Avbryt vurder om krav er relevant' })).toBeVisible();
   });
 
@@ -131,19 +135,20 @@ describe('KravBoks - åpne/lukke bolker', () => {
     expect(screen.getByRole('button', { name: 'Vurder om krav er relevant' })).toBeVisible();
   });
 
-  it('nullstiller kravtype til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
+  it('nullstiller Ja/Nei-valget til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
     const krav = relevantKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'KLAGE');
-    expect(screen.getByRole('combobox', { name: 'Kravtype' })).toHaveValue('KLAGE');
+    expect(screen.getByRole('radio', { name: 'Ja' })).toBeChecked();
+
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
+    expect(screen.getByRole('radio', { name: 'Nei' })).toBeChecked();
 
     await user.click(screen.getByRole('button', { name: 'Avbryt vurder om krav er relevant' }));
-    expect(screen.queryByRole('combobox', { name: 'Kravtype' })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
-    expect(screen.getByRole('combobox', { name: 'Kravtype' })).toHaveValue('RELEVANT_KRAV');
+    expect(screen.getByRole('radio', { name: 'Ja' })).toBeChecked();
   });
 
   it('nullstiller søknadsdato-feltene til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
@@ -194,18 +199,20 @@ describe('KravBoks - Lukk-knapp og begrunnelse', () => {
     expect(onLukk).toHaveBeenCalledOnce();
   });
 
-  it('viser begrunnelsesfeltet forhåndsutfylt med eksisterende begrunnelse for et allerede vurdert krav', () => {
+  it('viser begrunnelsesfeltet (Vurdering) forhåndsutfylt med eksisterende begrunnelse for et allerede vurdert krav', async () => {
     const krav = relevantKrav({ begrunnelse: 'En begrunnelse fra før' });
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
-    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('En begrunnelse fra før');
+    await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
+
+    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('En begrunnelse fra før');
   });
 
-  it('viser tomt begrunnelsesfelt for en ny søknad uten kravvurdering', () => {
+  it('viser tomt Vurdering-felt for en ny søknad uten kravvurdering', () => {
     const søknad = søknadUtenKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
 
-    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('');
   });
 });
 
@@ -218,9 +225,14 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
   });
 
-  it('viser knappene for §22-13 5.ledd og 7.ledd forhåndsåpnet for en ny søknad (default kravtype er relevant krav)', () => {
+  it('skjuler knappene for §22-13 5.ledd og 7.ledd for en ny søknad før Ja/Nei-valget er besvart', async () => {
     const søknad = søknadUtenKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'NY_SØKNAD', søknad }} />);
+
+    expect(screen.queryByRole('button', { name: 'Vurder §22-13 5.ledd' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vurder §22-13 7.ledd' })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('radio', { name: 'Ja' }));
 
     expect(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
@@ -237,7 +249,7 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     }
   );
 
-  it('skjuler §22-13-bolkene med det samme kravtypen endres bort fra relevant krav i kravtype-selecten', async () => {
+  it('skjuler §22-13-bolkene med det samme kravtypen endres bort fra relevant krav via Ja/Nei-valget', async () => {
     const krav = relevantKrav();
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
@@ -245,7 +257,7 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'KLAGE');
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
 
     expect(screen.queryByRole('button', { name: 'Vurder §22-13 5.ledd' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Vurder §22-13 7.ledd' })).not.toBeInTheDocument();
@@ -258,7 +270,9 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     expect(screen.queryByRole('button', { name: 'Vurder §22-13 5.ledd' })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'RELEVANT_KRAV');
+    expect(screen.getByRole('radio', { name: 'Nei' })).toBeChecked();
+
+    await user.click(screen.getByRole('radio', { name: 'Ja' }));
 
     expect(screen.getByRole('button', { name: 'Vurder §22-13 5.ledd' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Vurder §22-13 7.ledd' })).toBeVisible();
@@ -272,7 +286,7 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     expect(screen.getByRole('textbox', { name: 'Søknadsdato' })).toBeVisible();
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));
-    await user.selectOptions(screen.getByRole('combobox', { name: 'Kravtype' }), 'TRUKKET_SØKNAD');
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
 
     expect(screen.queryByRole('textbox', { name: 'Søknadsdato' })).not.toBeInTheDocument();
   });
