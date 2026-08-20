@@ -61,7 +61,52 @@ describe('Delmalvelger', () => {
     delmaler: [valgfriDelmal, obligatoriskDelmal],
   };
 
-  test('Overskrift hentes fra beskrivelse', () => {
+  test('Overskrift hentes fra beskrivelse når brevbyggerTittel ikke er satt', () => {
+    const delmalOverskrift = 'Delmaloverskrift';
+    const enMal: BrevmalType = {
+      ...sanityAttrs,
+      _id: 'brevmal-id',
+      beskrivelse: 'Beskrivelse av mal',
+      overskrift: 'En overskrift',
+      journalposttittel: 'jp-tittel',
+      kanSendesAutomatisk: false,
+      delmaler: [
+        {
+          _key: 'valgfriDelmalKey',
+          _type: 'delmalRef',
+          delmal: {
+            ...sanityAttrs,
+            _id: 'valgfriDelmal',
+            beskrivelse: delmalOverskrift,
+            teksteditor: [
+              {
+                _key: 'teksteditor-key',
+                _type: 'fritekst',
+                fritekst: '',
+              },
+            ],
+          },
+          obligatorisk: false,
+        },
+      ],
+    };
+
+    render(
+      <Brevbygger
+        brevtype={'INNVILGELSE'}
+        referanse={'1234'}
+        brevmal={JSON.stringify(enMal)}
+        brevdata={brevdata}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+    expect(screen.getByRole('heading', { name: delmalOverskrift })).toBeVisible();
+  });
+
+  test('Overskrift hentes fra brevbyggerTittel når den er satt', () => {
     render(
       <Brevbygger
         brevtype={'INNVILGELSE'}
@@ -74,7 +119,7 @@ describe('Delmalvelger', () => {
         readOnly={false}
       />
     );
-    expect(screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse })).toBeVisible();
+    expect(screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel })).toBeVisible();
   });
 
   test('Valgfrie delmaler har en checkbox (Switch fra Aksel)', () => {
@@ -90,7 +135,7 @@ describe('Delmalvelger', () => {
         brevtype={'INNVILGELSE'}
       />
     );
-    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse }).closest('div');
+    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel }).closest('div');
 
     if (kort) {
       expect(within(kort).getByRole('checkbox', { name: 'Inkluder i brev' })).toBeVisible();
@@ -128,7 +173,7 @@ describe('Delmalvelger', () => {
         brevtype={'INNVILGELSE'}
       />
     );
-    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse }).closest('div');
+    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel }).closest('div');
 
     if (kort) {
       expect(within(kort).getByRole('checkbox', { name: 'Inkluder i brev' })).not.toBeChecked();
@@ -150,7 +195,7 @@ describe('Delmalvelger', () => {
         brevtype={'INNVILGELSE'}
       />
     );
-    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.beskrivelse }).closest('div');
+    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel }).closest('div');
 
     if (kort) {
       expect(within(kort).getByRole('checkbox', { name: 'Inkluder i brev' })).toBeChecked();
