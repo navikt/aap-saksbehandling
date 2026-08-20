@@ -60,7 +60,7 @@ const grunnlagMedVurdering: Avslag11_27Grunnlag = {
       harAnnenFullYtelse: true,
       brukersYtelse: 'SYKEPENGER',
       brukersYtelseTom: '2026-06-30',
-      sykepengegrunnlag: { verdi: 500000 },
+      harSykepengegrunnlagOver2G: true,
       harArbeidsgiverSykepengerUtbetaling: true,
       skalAvslås1127: true,
     },
@@ -105,7 +105,7 @@ const grunnlagMedVedtattOgNyVurdering: Avslag11_27Grunnlag = {
       harAnnenFullYtelse: true,
       brukersYtelse: 'SYKEPENGER',
       brukersYtelseTom: '2026-06-30',
-      sykepengegrunnlag: { verdi: 500000 },
+      harSykepengegrunnlagOver2G: true,
       harArbeidsgiverSykepengerUtbetaling: true,
       skalAvslås1127: true,
       vurderingerMeta: {
@@ -228,7 +228,7 @@ describe('Avslag11_27 - skjema vises/skjules', () => {
 });
 
 describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
-  it.each([['Eksisterende begrunnelse'], ['500000'], ['30.06.2026']] as const)(
+  it.each([['Eksisterende begrunnelse'], ['30.06.2026']] as const)(
     'fyller inn verdi %s fra eksisterende vurdering',
     (forventetVerdi) => {
       render(
@@ -259,7 +259,7 @@ describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
               harAnnenFullYtelse: 'Ja',
               brukersYtelse: 'SYKEPENGER',
               brukersYtelseTom: '30.06.2026',
-              sykepengegrunnlag: 500000,
+              harSykepengegrunnlagOver2G: 'Ja',
               harArbeidsgiverSykepengerUtbetaling: 'Ja',
               skalAvslås1127: 'Ja',
             },
@@ -385,7 +385,7 @@ describe('Avslag11_27 - mellomlagring', () => {
               harAnnenFullYtelse: undefined,
               brukersYtelse: undefined,
               brukersYtelseTom: undefined,
-              sykepengegrunnlag: undefined,
+              harSykepengegrunnlagOver2G: undefined,
               harArbeidsgiverSykepengerUtbetaling: undefined,
               skalAvslås1127: undefined,
             },
@@ -424,7 +424,7 @@ describe('Avslag11_27 - mellomlagring', () => {
               harAnnenFullYtelse: 'Ja',
               brukersYtelse: 'SYKEPENGER',
               brukersYtelseTom: '30.06.2026',
-              sykepengegrunnlag: 500000,
+              harSykepengegrunnlagOver2G: 'Ja',
               harArbeidsgiverSykepengerUtbetaling: 'Ja',
               skalAvslås1127: 'Ja',
             },
