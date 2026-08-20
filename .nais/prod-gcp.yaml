@@ -1,0 +1,93 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
+  name: saksbehandling
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  image: {{image}}
+  ingresses:
+    - https://kelvin.intern.nav.no
+  port: 3000
+  liveness:
+    path: /actuator/live
+    initialDelay: 20
+    timeout: 60
+  readiness:
+    path: /actuator/ready
+    initialDelay: 20
+    timeout: 60
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
+  replicas:
+    min: 2
+    max: 4
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      memory: 512Mi
+  azure:
+    application:
+      enabled: true
+      allowAllUsers: false
+      claims:
+        groups:
+          # 0000-GA-AAP_BESLUTTER
+          - id: 5763b52f-f16a-483d-8f40-25be9de95c0a
+          # 0000-GA-AAP_LES
+          - id: 963df3e5-04f7-415e-8d13-1de981603940
+          # 0000-GA-AAP_SAKSBEHANDLER_OPPFOLGING
+          - id: dc8b0182-1449-445a-833c-1a4620b7c2be
+          # 0000-GA-AAP_KVALITETSSIKRER
+          - id: a6bf143f-fee9-41ab-a487-f54503a28de6
+          # 0000-GA-AAP_SAKSBEHANDLER_NASJONAL
+          - id: 3a65f41a-b3f3-4b1c-830a-df20ff020980
+          # 0000-GA-AAP_DRIFT
+          - id: ff9a228b-4aab-47bd-8aee-598d80f0fb4b
+          # 0000-GA-AAP_PRODUKSJONSSTYRING
+          - id: 1d61ecf2-fcca-4dbb-ba49-82ab01aef96e
+    sidecar:
+      enabled: true
+      autoLogin: true
+  frontend:
+    generatedConfig:
+      mountPath: /tmp/nais.js
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
+  filesFrom:
+    - emptyDir:
+        medium: Memory
+      mountPath: /app/.next/cache
+  envFrom:
+    - secret: kelvin-unleash-api-token
+  accessPolicy:
+    outbound:
+      rules:
+        - application: behandlingsflyt
+        - application: oppgave
+        - application: postmottak-backend
+        - application: statistikk
+        - application: saksbehandling-pdfgen
+        - application: dokumentinnhenting
+        - application: tilgang
+        - application: api-intern
+        - application: endringslogg
+          namespace: k9saksbehandling
+      external:
+        - host: cdn.nav.no
+        - host: aap-unleash-api.nav.cloud.nais.io
+        - host: arbeid-og-inntekt.prod-fss-pub.nais.io
+        - host: reops-event-proxy.nav.no
