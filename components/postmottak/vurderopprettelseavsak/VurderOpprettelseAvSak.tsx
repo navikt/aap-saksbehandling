@@ -77,6 +77,11 @@ const getSisteVedtakTekst = (sisteVedtak: ManuellFordelingsgrunnlagResponse['sis
   return `${aktfaseTekst}  ${datointervall}`;
 };
 
+const ARENA_DAGER_DIVISOR = 20;
+
+const getDagerFraArenaVerdi = (verdi: number | null | undefined): number | null =>
+  verdi == null ? null : verdi / ARENA_DAGER_DIVISOR;
+
 export const VurderOpprettelseAvSak = ({
   behandlingsVersjon,
   behandlingsreferanse,
@@ -113,6 +118,8 @@ export const VurderOpprettelseAvSak = ({
 
   const valgtHvorBehandles = form.watch('hvorBehandles');
   const opprettesOppgaveIArena = valgtHvorBehandles === HvorSkalSøknadenBehandles.ARENA;
+  const gjenståendeOrdinæreDager = getDagerFraArenaVerdi(arenaSak.gjenståendeOrdinæreDager);
+  const gjenståendeUnntaksDager = getDagerFraArenaVerdi(arenaSak.gjenståendeUnntaksDager);
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
@@ -172,15 +179,13 @@ export const VurderOpprettelseAvSak = ({
               <VStack gap="space-4">
                 <Label size="small">Gjenstående ordinær periode</Label>
                 <BodyShort size="small">
-                  {arenaSak.gjenståendeOrdinæreDager != null ? `${arenaSak.gjenståendeOrdinæreDager} dager` : '-'}
+                  {gjenståendeOrdinæreDager != null ? `${gjenståendeOrdinæreDager} dager` : '-'}
                 </BodyShort>
               </VStack>
               <VStack gap="space-4">
                 <Label size="small">Gjenstående unntaksperiode §11-12 andre og tredje ledd</Label>
                 <BodyShort size="small">
-                  {arenaSak.gjenståendeUnntaksDager && arenaSak.gjenståendeUnntaksDager > 0
-                    ? `${arenaSak.gjenståendeUnntaksDager} dager`
-                    : '-'}
+                  {gjenståendeUnntaksDager != null && gjenståendeUnntaksDager > 0 ? `${gjenståendeUnntaksDager} dager` : '-'}
                 </BodyShort>
               </VStack>
             </HStack>
