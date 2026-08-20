@@ -67,7 +67,7 @@ export const SamordningGradering = ({
   oppfølgningOppgave,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const [errorMessage, setErrorMessage] = useState<String | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
 
   const handleSuccess = () => {
