@@ -21107,6 +21107,8 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       'planlagtKj\u00F8retidspunkt': string;
+      /** Format: int32 */
+      prioritet?: number | null;
       /** @enum {string} */
       status: 'AVBRUTT' | 'FEILET' | 'FERDIG' | 'KLAR' | 'PLUKKET';
       tilleggsinfo?: components['schemas']['no.nav.aap.motor.JobbTilleggsinfo'];
