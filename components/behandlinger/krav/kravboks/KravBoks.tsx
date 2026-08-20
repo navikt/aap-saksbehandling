@@ -134,7 +134,7 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
                 control={form.control}
                 name={`vurderinger.${referanse}.skalVurderesForNyEllerGjenopptattAAPRettighet`}
                 size="small"
-                label="Brukeren skal vurderes for ny eller gjenopptatt AAP rettighet på bakgrunn av denne søknaden?"
+                label="Skal brukeren vurderes for ny eller gjenopptatt AAP rettighet på bakgrunn av denne søknaden?"
                 description={
                   'Svar nei hvis søknaden er tilleggsopplysninger, eller det ikke er relevant å vurdere ny eller gjenopptatt rettighet '
                 }
