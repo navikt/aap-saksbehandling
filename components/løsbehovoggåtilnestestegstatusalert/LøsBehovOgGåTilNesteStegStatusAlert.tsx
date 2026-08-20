@@ -1,10 +1,11 @@
 'use client';
 
 import { BodyShort } from '@navikt/ds-react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { Alert } from 'components/alert/Alert';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   status?: LøsBehovOgGåTilNesteStegStatus;
