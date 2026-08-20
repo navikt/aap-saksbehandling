@@ -21,7 +21,7 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-type TrukketSøknadÅrsak = 'BRUKER_SOKTE_FOR_TIDLIG' | 'BRUKER_SOKTE_FEIL_YTELSE' | 'BRUKER_ONSKER_IKKE_SOKE_LENGER' | 'ANNET';
+type TrukketSøknadÅrsak = TrukketSøknadVurdering['aarsak'];
 
 interface FormFields {
   begrunnelse: string;
@@ -66,7 +66,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       },
       aarsak: {
         type: 'radio',
-        label: 'Hva er årsaken?',
+        label: 'Hvorfor trekkes søknaden?',
         options: [
           { label: 'Brukeren søkte for tidlig', value: 'BRUKER_SOKTE_FOR_TIDLIG' },
           { label: 'Brukeren søkte på feil ytelse', value: 'BRUKER_SOKTE_FEIL_YTELSE' },
@@ -74,7 +74,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
           { label: 'Annet', value: 'ANNET' },
         ],
         rules: { required: 'Du må velge en årsak for å trekke søknaden' },
-        defaultValue: defaultValues.aarsak,
+        defaultValue: defaultValues.aarsak || undefined,
       },
     },
     { readOnly: formReadOnly }
@@ -97,7 +97,7 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
             behovstype: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
             begrunnelse: data.begrunnelse,
             skalTrekkes: data.skalTrekkes === JaEllerNei.Ja,
-            aarsak: data.aarsak
+            aarsak: data.aarsak || undefined
           },
           referanse: behandlingsreferanse,
         });
