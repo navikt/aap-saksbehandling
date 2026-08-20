@@ -14087,7 +14087,11 @@ export interface components {
       /** @enum {string|null} */
       'ytterligereNedsatt\u00C5rsak'?:
         | 'ANNET'
+        | 'DATO_PAA_LEGEERKLÆRING'
+        | 'HENVIST_TIL_BEHANDLING'
         | 'IKKE_BETYDNING_IKKE_RELEVANT'
+        | 'KRAVDATO'
+        | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | 'YTTERLIGERE_NEDSATT'
         | 'ØKT_UFØREGRAD'
@@ -17725,7 +17729,11 @@ export interface components {
       /** @enum {string|null} */
       'ytterligereNedsatt\u00C5rsak'?:
         | 'ANNET'
+        | 'DATO_PAA_LEGEERKLÆRING'
+        | 'HENVIST_TIL_BEHANDLING'
         | 'IKKE_BETYDNING_IKKE_RELEVANT'
+        | 'KRAVDATO'
+        | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | 'YTTERLIGERE_NEDSATT'
         | 'ØKT_UFØREGRAD'
@@ -21108,6 +21116,8 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       'planlagtKj\u00F8retidspunkt': string;
+      /** Format: int32 */
+      prioritet?: number | null;
       /** @enum {string} */
       status: 'AVBRUTT' | 'FEILET' | 'FERDIG' | 'KLAR' | 'PLUKKET';
       tilleggsinfo?: components['schemas']['no.nav.aap.motor.JobbTilleggsinfo'];

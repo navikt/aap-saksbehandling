@@ -43,8 +43,8 @@ export const dummyManuellFordelingsgrunnlagResponse: ManuellFordelingsgrunnlagRe
   saksnummer: '2024-100241',
   erAktiv: true,
   under52Uker: true,
-  gjenstaendeOrdinaereDager: 120,
-  gjenstaendeUnntaksDager: 0,
+  gjenståendeOrdinæreDager: 120,
+  gjenståendeUnntaksDager: 0,
   sisteVedtak: {
     vedtakId: 1001,
     aktfaseKode: 'UA',

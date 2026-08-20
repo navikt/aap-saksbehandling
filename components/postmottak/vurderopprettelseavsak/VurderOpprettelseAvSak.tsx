@@ -172,14 +172,14 @@ export const VurderOpprettelseAvSak = ({
               <VStack gap="space-4">
                 <Label size="small">Gjenstående ordinær periode</Label>
                 <BodyShort size="small">
-                  {arenaSak.gjenstaendeOrdinaereDager != null ? `${arenaSak.gjenstaendeOrdinaereDager} dager` : '-'}
+                  {arenaSak.gjenståendeOrdinæreDager != null ? `${arenaSak.gjenståendeOrdinæreDager} dager` : '-'}
                 </BodyShort>
               </VStack>
               <VStack gap="space-4">
                 <Label size="small">Gjenstående unntaksperiode §11-12 andre og tredje ledd</Label>
                 <BodyShort size="small">
-                  {arenaSak.gjenstaendeUnntaksDager && arenaSak.gjenstaendeUnntaksDager > 0
-                    ? `${arenaSak.gjenstaendeUnntaksDager} dager`
+                  {arenaSak.gjenståendeUnntaksDager && arenaSak.gjenståendeUnntaksDager > 0
+                    ? `${arenaSak.gjenståendeUnntaksDager} dager`
                     : '-'}
                 </BodyShort>
               </VStack>

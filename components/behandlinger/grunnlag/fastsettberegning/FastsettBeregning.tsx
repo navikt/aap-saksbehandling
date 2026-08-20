@@ -37,23 +37,45 @@ interface Props {
   visAarsakDropdowns: boolean;
 }
 
-const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS: ValuePair<ÅrsakBeregningstidspunkt | ''>[] = [
+// Kun nedsatt arbeidsevne (ikke ytterligere nedsatt, jf. § 11-28)
+const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS: ValuePair<ÅrsakBeregningstidspunkt | ''>[] = [
   { label: '', value: '' },
   { label: 'Sykemeldingsdato', value: 'SYKEMELDINGSDATO' },
   { label: 'Kravdato', value: 'KRAVDATO' },
   { label: 'Dato på legeerklæring', value: 'DATO_PAA_LEGEERKLÆRING' },
   { label: 'Henvist til behandling', value: 'HENVIST_TIL_BEHANDLING' },
-  { label: '16 år som beregningstidspunkt', value: 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT' },
+  { label: 'Annet', value: 'ANNET' },
+];
+
+// Nedsatt arbeidsevne når det også skal vurderes ytterligere nedsatt, jf. § 11-28
+const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_KOMBINERT_OPTIONS: ValuePair<ÅrsakBeregningstidspunkt | ''>[] = [
+  { label: '', value: '' },
+  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Annet', value: 'ANNET' },
 ];
 
 const ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS: ValuePair<ÅrsakYtterligereNedsatt | ''>[] = [
   { label: '', value: '' },
+  { label: 'Sykemeldingsdato', value: 'SYKEMELDINGSDATO' },
+  { label: 'Kravdato', value: 'KRAVDATO' },
+  { label: 'Dato på legeerklæring', value: 'DATO_PAA_LEGEERKLÆRING' },
+  { label: 'Henvist til behandling', value: 'HENVIST_TIL_BEHANDLING' },
+  { label: 'Annet', value: 'ANNET' },
+];
+
+// Supersett av labels, inkl. verdier som ikke lenger kan velges, brukt for å vise historiske vurderinger korrekt
+const ALLE_ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_LABELS: ValuePair[] = [
+  ...ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS,
+  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
+  { label: '16 år som beregningstidspunkt', value: 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT' },
+];
+
+const ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS: ValuePair[] = [
+  ...ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS,
   { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Ytterligere nedsatt', value: 'YTTERLIGERE_NEDSATT' },
   { label: 'Økt uføregrad', value: 'ØKT_UFØREGRAD' },
   { label: 'Ikke betydning / ikke relevant', value: 'IKKE_BETYDNING_IKKE_RELEVANT' },
-  { label: 'Annet', value: 'ANNET' },
 ];
 
 interface FormFields {
@@ -91,6 +113,10 @@ export const FastsettBeregning = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
+  const årsakTilBeregningstidspunktOptions = grunnlag?.skalVurdereYtterligere
+    ? ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_KOMBINERT_OPTIONS
+    : ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS;
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       nedsattArbeidsevneDatobegrunnelse: {
@@ -119,7 +145,7 @@ export const FastsettBeregning = ({
       årsak: {
         type: 'select',
         label: 'Årsak til beregningstidspunkt',
-        options: ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS,
+        options: årsakTilBeregningstidspunktOptions,
         defaultValue: defaultValues.årsak,
         rules: visAarsakDropdowns ? { required: 'Du må velge årsak til beregningstidspunkt.' } : {},
       },
@@ -318,7 +344,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
     ? [
         {
           label: 'Årsak til beregningstidspunkt.',
-          value: finnÅrsakLabel(ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS, vurdering.årsak),
+          value: finnÅrsakLabel(ALLE_ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_LABELS, vurdering.årsak),
         },
       ]
     : []),
@@ -336,7 +362,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
     ? [
         {
           label: 'Årsak til ytterligere nedsatt tidspunkt.',
-          value: finnÅrsakLabel(ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS, vurdering.ytterligereNedsattÅrsak),
+          value: finnÅrsakLabel(ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS, vurdering.ytterligereNedsattÅrsak),
         },
       ]
     : []),
