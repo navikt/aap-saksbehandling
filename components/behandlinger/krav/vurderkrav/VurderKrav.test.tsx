@@ -58,7 +58,7 @@ describe('VurderKrav - visning av søknader uten kravvurdering', () => {
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
     expect(screen.getAllByText('Må vurderes').length).toBeGreaterThan(0);
     // Begrunnelsesfeltet er alltid synlig når boksen er åpen, ikke bak en "Vurder"-knapp.
-    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toBeVisible();
   });
 
   it('viser ikke noen KravBoks når det ikke finnes søknader uten kravvurdering eller valgte krav', () => {
@@ -85,8 +85,14 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
     render(<VurderKrav grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
-    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), ' med endring');
-    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('Opprinnelig begrunnelse med endring');
+    await user.click(
+      screen.getByRole('button', {
+        name: /vurder om krav er relevant/i,
+      })
+    );
+
+    await user.type(screen.getByRole('textbox', { name: 'Vurdering' }), ' med endring');
+    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('Opprinnelig begrunnelse med endring');
 
     const kravRad = screen.getByRole('row', { name: /jp-1/ });
     await user.click(within(kravRad).getByRole('button', { name: 'Lukk' }));
@@ -95,7 +101,12 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
 
     // Åpner igjen for å bekrefte at begrunnelsen faktisk ble nullstilt, ikke bare skjult.
     await user.click(screen.getByRole('button', { name: 'Endre' }));
-    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('Opprinnelig begrunnelse');
+    await user.click(
+      screen.getByRole('button', {
+        name: /vurder om krav er relevant/i,
+      })
+    );
+    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('Opprinnelig begrunnelse');
   });
 
   it('lukker og fjerner en søknad-KravBoks når "Lukk" klikkes i tabellen', async () => {
@@ -117,7 +128,11 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
 });
 
 describe('VurderKrav - handleSubmit', () => {
-  let capturedRequest: { behov: { kravVurderinger: Array<{ referanse?: string; journalpostId: { identifikator: string }; begrunnelse: string }> } } | null = null;
+  let capturedRequest: {
+    behov: {
+      kravVurderinger: Array<{ referanse?: string; journalpostId: { identifikator: string }; begrunnelse: string }>;
+    };
+  } | null = null;
 
   beforeEach(() => {
     capturedRequest = null;
@@ -179,17 +194,27 @@ describe('VurderKrav - handleSubmit', () => {
     // Rediger krav-endret (nyeVurderinger)
     const kravEndretRad = within(screen.getByRole('row', { name: /jp-endret/ }));
     await user.click(kravEndretRad.getByRole('button', { name: 'Endre' }));
-    const kravEndretBegrunnelse = screen.getAllByRole('textbox', { name: 'Begrunnelse' })[1];
+    await user.click(
+      screen.getAllByRole('button', {
+        name: /vurder om krav er relevant/i,
+      })[1]
+    );
+    const kravEndretBegrunnelse = screen.getAllByRole('textbox', { name: 'Vurdering' })[1];
     await user.type(kravEndretBegrunnelse, ' - oppdatert');
 
     // Rediger krav-vedtatt-endret (vedtatteVurderinger)
     const vedtattRad = within(screen.getByRole('row', { name: /jp-vedtatt/ }));
     await user.click(vedtattRad.getByRole('button', { name: 'Endre' }));
-    const vedtattBegrunnelse = screen.getAllByRole('textbox', { name: 'Begrunnelse' })[2];
+    await user.click(
+      screen.getAllByRole('button', {
+        name: /vurder om krav er relevant/i,
+      })[2]
+    );
+    const vedtattBegrunnelse = screen.getAllByRole('textbox', { name: 'Vurdering' })[2];
     await user.type(vedtattBegrunnelse, ' - overstyrt');
 
     // Fyll ut begrunnelse for det nye søknad-utkastet (auto-åpnet)
-    const søknadBegrunnelse = screen.getAllByRole('textbox', { name: 'Begrunnelse' })[0];
+    const søknadBegrunnelse = screen.getAllByRole('textbox', { name: 'Vurdering' })[0];
     await user.type(søknadBegrunnelse, 'Nytt krav opprettet av saksbehandler');
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
@@ -227,7 +252,7 @@ describe('VurderKrav - mellomlagring', () => {
     },
   };
 
-  it('gjenoppretter valgteKrav/vurderinger fra mellomlagring, slik at boksen vises åpen med mellomlagret begrunnelse', () => {
+  it('gjenoppretter valgteKrav/vurderinger fra mellomlagring, slik at boksen vises åpen med mellomlagret begrunnelse', async () => {
     const krav = relevantKrav();
 
     render(
@@ -240,6 +265,11 @@ describe('VurderKrav - mellomlagring', () => {
     );
 
     expect(screen.getByText('Vurder krav krav-1')).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('Mellomlagret tekst');
+    await user.click(
+      screen.getByRole('button', {
+        name: /vurder om krav er relevant/i,
+      })
+    );
+    expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('Mellomlagret tekst');
   });
 });

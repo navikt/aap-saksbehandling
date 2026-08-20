@@ -13,6 +13,7 @@ import {
 } from 'lib/types/types';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { JaEllerNei } from 'lib/utils/form';
 
 export function finnSøknadsdato(vurdering: KravVurdering): Søknadsdato | null {
   switch (vurdering.type) {
@@ -56,7 +57,7 @@ export function formaterKravtype(type: KravType) {
 }
 
 export interface KravVurderingFormFields {
-  kravtype: KravType;
+  skalVurderesForNyEllerGjenopptattAAPRettighet: string;
   journalpostId: string;
   begrunnelse: string;
   søknadsdatoDato: string;
@@ -70,7 +71,7 @@ export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurder
   const overstyr = finnOverstyrMuligRettFra(vurdering);
 
   return {
-    kravtype: vurdering.type,
+    skalVurderesForNyEllerGjenopptattAAPRettighet: vurdering.type === 'RELEVANT_KRAV' ? JaEllerNei.Ja : JaEllerNei.Nei,
     journalpostId: vurdering.journalpostId.identifikator,
     begrunnelse: vurdering.begrunnelse,
     søknadsdatoDato: søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '',
@@ -87,7 +88,7 @@ export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurder
  */
 export function søknadUtenKravTilFormFields(søknad: SøknadUtenKrav): KravVurderingFormFields {
   return {
-    kravtype: 'RELEVANT_KRAV',
+    skalVurderesForNyEllerGjenopptattAAPRettighet: '',
     journalpostId: søknad.journalpostId.identifikator,
     begrunnelse: '',
     søknadsdatoDato: formaterDatoForFrontend(søknad.mottattTidspunkt),
@@ -201,7 +202,8 @@ function byggLøsningFraFelter(felter: {
 
 function erFelterEndret(original: KravVurderingFormFields, gjeldende: KravVurderingFormFields): boolean {
   return (
-    original.kravtype !== gjeldende.kravtype ||
+    original.skalVurderesForNyEllerGjenopptattAAPRettighet !==
+      gjeldende.skalVurderesForNyEllerGjenopptattAAPRettighet ||
     original.begrunnelse !== gjeldende.begrunnelse ||
     original.søknadsdatoDato !== gjeldende.søknadsdatoDato ||
     original.søknadsdatoÅrsak !== gjeldende.søknadsdatoÅrsak ||
@@ -228,7 +230,8 @@ export function byggKravVurderingerFraSkjema(
     })
     .map(([referanse, felt]) =>
       byggLøsningFraFelter({
-        kravType: felt.kravtype,
+        kravType:
+          felt.skalVurderesForNyEllerGjenopptattAAPRettighet === JaEllerNei.Ja ? 'RELEVANT_KRAV' : 'TILLEGGSOPPLYSNING',
         journalpostId: felt.journalpostId,
         begrunnelse: felt.begrunnelse,
         søknadsdatoDato: felt.søknadsdatoDato,
