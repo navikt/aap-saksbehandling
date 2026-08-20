@@ -4,7 +4,6 @@ import { VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Dato } from 'lib/types/Dato';
@@ -16,7 +15,7 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -34,6 +33,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -64,8 +64,12 @@ export const StudentVurderingV2 = ({ readOnly, initialMellomlagretVurdering, gru
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError, status } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_STUDENT_V2');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovError,
+    løsAvklaringsbehovStatus,
+  } = useLøsAvklaringsbehov('AVKLAR_STUDENT_V2');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagring(initialMellomlagretVurdering.data)
@@ -115,7 +119,7 @@ export const StudentVurderingV2 = ({ readOnly, initialMellomlagretVurdering, gru
         };
       });
 
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -150,9 +154,9 @@ export const StudentVurderingV2 = ({ readOnly, initialMellomlagretVurdering, gru
       heading={'§ 11-14 Student'}
       steg={'AVKLAR_STUDENT'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       formReset={() => form.reset()}
     >

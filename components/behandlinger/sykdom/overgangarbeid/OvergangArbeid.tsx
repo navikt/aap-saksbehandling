@@ -2,7 +2,6 @@
 
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { MellomlagretVurdering, OvergangArbeidGrunnlag } from 'lib/types/types';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -34,6 +33,7 @@ import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeri
 import React from 'react';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VStack } from '@navikt/ds-react';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -51,8 +51,12 @@ export const OvergangArbeid = ({
   skalStegVurderes,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('OVERGANG_ARBEID');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('OVERGANG_ARBEID');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
   const { visningActions, visningModus, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
@@ -124,7 +128,7 @@ export const OvergangArbeid = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       visningActions.onBekreftClick();
       closeAllAccordions();
       nullstillMellomlagretVurdering();
@@ -139,9 +143,9 @@ export const OvergangArbeid = ({
       heading={'§ 11-17 AAP i perioden som arbeidssøker'}
       steg="OVERGANG_ARBEID"
       onSubmit={form.handleSubmit(onSubmit)}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={true}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {

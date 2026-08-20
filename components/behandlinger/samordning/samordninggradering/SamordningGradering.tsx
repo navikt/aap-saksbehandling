@@ -1,10 +1,9 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Button, HStack, Heading, Modal, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
 import { addDays, format, isValid, parse } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
@@ -12,8 +11,8 @@ import {
   OppfølgningOppgaveOpprinnelseResponse,
   Periode,
   SamordningGraderingGrunnlag,
-  SamordningYtelseVurdering,
   SamordningYtelsestype,
+  SamordningYtelseVurdering,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -33,6 +32,7 @@ import { OpprettOppfølgingsBehandling } from 'components/saksoversikt/opprettop
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -81,8 +81,8 @@ export const SamordningGradering = ({
 
   const [visForm, setVisForm] = useState<boolean>(finnesYtelserEllerVurderinger);
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_GRADERING');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SAMORDNING_GRADERING');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -123,7 +123,7 @@ export const SamordningGradering = ({
       if (grunnlag.ytelser.length > 0 && data.vurderteSamordninger.length === 0) {
         setErrorMessage('Du må gjøre en vurdering av periodene');
       } else {
-        return løsBehovOgGåTilNesteSteg(
+        løsAvklaringsbehov(
           {
             behandlingVersjon: behandlingVersjon,
             behov: {
@@ -206,9 +206,9 @@ export const SamordningGradering = ({
         heading="§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser"
         steg="SAMORDNING_GRADERING"
         onSubmit={handleSubmit}
-        isLoading={isLoading}
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        isLoading={løsAvklaringsbehovIsLoading}
+        status={løsAvklaringsbehovStatus}
+        løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
         vilkårTilhørerNavKontor={false}
         vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
         onDeleteMellomlagringClick={() => {

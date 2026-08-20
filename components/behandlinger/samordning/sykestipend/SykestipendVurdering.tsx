@@ -3,7 +3,6 @@
 import { BodyLong, VStack } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, SykestipendGrunnlag } from 'lib/types/types';
@@ -16,6 +15,7 @@ import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/syk
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: SykestipendGrunnlag;
@@ -31,8 +31,8 @@ export const SykestipendVurdering = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_SYKESTIPEND');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SAMORDNING_SYKESTIPEND');
 
   const harSvartJaISøknad = grunnlag.sykeStipendSvarFraSøknad
     ? 'Ja'
@@ -75,7 +75,7 @@ export const SykestipendVurdering = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -104,9 +104,9 @@ export const SykestipendVurdering = ({
       heading={'§ 11-29 Sykestipend fra lånekassen'}
       steg={'SAMORDNING_SYKESTIPEND'}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={grunnlag?.gjeldendeVurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}

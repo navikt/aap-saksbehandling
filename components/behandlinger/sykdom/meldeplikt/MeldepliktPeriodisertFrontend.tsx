@@ -2,7 +2,6 @@
 
 import { Radio, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
   FritakMeldepliktGrunnlag,
   MellomlagretVurdering,
@@ -35,6 +34,7 @@ import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilslut
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -61,8 +61,12 @@ export const MeldepliktPeriodisertFrontend = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FRITAK_MELDEPLIKT');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('FRITAK_MELDEPLIKT');
 
   const { visningActions, formReadOnly, visningModus, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
@@ -126,7 +130,7 @@ export const MeldepliktPeriodisertFrontend = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       nullstillMellomlagretVurdering();
       closeAllAccordions();
       visningActions.onBekreftClick();
@@ -142,9 +146,9 @@ export const MeldepliktPeriodisertFrontend = ({
       steg="FRITAK_MELDEPLIKT"
       vilkårTilhørerNavKontor={true}
       onSubmit={form.handleSubmit(onSubmit)}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

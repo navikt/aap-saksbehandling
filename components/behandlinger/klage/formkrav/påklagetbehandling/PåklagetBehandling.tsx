@@ -1,6 +1,5 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, PåklagetBehandlingGrunnlag, TypeBehandling } from 'lib/types/types';
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
@@ -10,6 +9,7 @@ import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -28,8 +28,8 @@ type DraftFormFields = Partial<FormFields>;
 export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('PÅKLAGET_BEHANDLING');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+    useLøsAvklaringsbehov('PÅKLAGET_BEHANDLING');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -54,7 +54,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   );
 
   const onSubmit = (data: FormFields) => {
-    løsBehovOgGåTilNesteSteg(
+    løsAvklaringsbehov(
       {
         behandlingVersjon: behandlingVersjon,
         referanse: behandlingsreferanse,
@@ -78,10 +78,10 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
       heading={'Klage på vedtak'}
       steg={'PÅKLAGET_BEHANDLING'}
       onSubmit={form.handleSubmit(onSubmit)}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
-      isLoading={isLoading}
-      status={status}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
       vurderingerMeta={grunnlag?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

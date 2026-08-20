@@ -2,7 +2,6 @@
 
 import { BodyLong, Link, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MeldepliktOverstyringLøsningDto, OverstyringMeldepliktGrunnlag, Periode } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -18,6 +17,7 @@ import {
 } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 type Props = {
   grunnlag?: OverstyringMeldepliktGrunnlag;
@@ -28,8 +28,8 @@ type Props = {
 export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('IKKE_OPPFYLT_MELDEPLIKT');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('IKKE_OPPFYLT_MELDEPLIKT');
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -117,7 +117,7 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
           })),
       };
 
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsreferanse,
@@ -159,9 +159,9 @@ export const IkkeOppfyltMeldeplikt = ({ grunnlag, behandlingVersjon, readOnly }:
       steg={'IKKE_OPPFYLT_MELDEPLIKT'}
       vilkårTilhørerNavKontor={false}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset()}

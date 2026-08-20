@@ -3,7 +3,6 @@
 import { parseISO } from 'date-fns';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
@@ -12,8 +11,8 @@ import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import {
-  LovvalgMedlemskapFelt,
   loggUmamiVarighetHendelser,
+  LovvalgMedlemskapFelt,
   useUmamiVarighetHendelser,
 } from 'lib/utils/umami/hendelserVarighet';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
@@ -36,6 +35,7 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -55,8 +55,12 @@ export const LovvalgOgMedlemskapPeriodisert = ({
   behovstype,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_LOVVALG');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+    løsAvklaringsbehovIsLoading,
+  } = useLøsAvklaringsbehov('VURDER_LOVVALG');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -124,7 +128,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
       closeAllAccordions();
       visningActions.onBekreftClick();
       nullstillMellomlagretVurdering();
@@ -145,9 +149,9 @@ export const LovvalgOgMedlemskapPeriodisert = ({
       heading={heading}
       steg={'VURDER_LOVVALG'}
       onSubmit={form.handleSubmit(onSubmit)}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}

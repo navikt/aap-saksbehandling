@@ -2,7 +2,6 @@
 
 import { BodyShort, Chips, Table, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Diff, UnderveisAvslagsÅrsak, UnderveisGrunnlag, UnderveisGrunnlagMedDiff } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -16,6 +15,7 @@ import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 type Props = {
   grunnlagMedDiff: UnderveisGrunnlagMedDiff;
@@ -30,8 +30,8 @@ type PeriodeProps = {
 export const Underveisgrunnlag = ({ grunnlagMedDiff, readOnly, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_UTTAK');
+  const { løsAvklaringsbehovStatus, løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FASTSETT_UTTAK');
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'FASTSETT_UTTAK', undefined);
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
@@ -40,12 +40,12 @@ export const Underveisgrunnlag = ({ grunnlagMedDiff, readOnly, behandlingVersjon
       heading="Underveis"
       steg={'FASTSETT_UTTAK'}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       onSubmit={(event) => {
         event.preventDefault();
-        løsBehovOgGåTilNesteSteg(
+        løsAvklaringsbehov(
           {
             behandlingVersjon: behandlingVersjon,
             behov: {
@@ -66,8 +66,8 @@ export const Underveisgrunnlag = ({ grunnlagMedDiff, readOnly, behandlingVersjon
       <VStack gap={'space-16'}>
         {!readOnly && <BodyShort>Trykk på neste steg for å komme videre.</BodyShort>}
         <LøsBehovOgGåTilNesteStegStatusAlert
-          status={status}
-          løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+          status={løsAvklaringsbehovStatus}
+          løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
         />
       </VStack>
     </VilkårskortMedForm>

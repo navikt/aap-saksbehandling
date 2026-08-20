@@ -4,7 +4,6 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Button, Label, Radio } from '@navikt/ds-react';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, Soningsgrunnlag } from 'lib/types/types';
@@ -23,6 +22,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import styles from './Soningsvurdering.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: Soningsgrunnlag;
@@ -44,8 +44,8 @@ interface Vurdering {
 type DraftFormFields = Partial<FormFields>;
 
 export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initialMellomlagretVurdering }: Props) => {
-  const { isLoading, status, løsBehovOgGåTilNesteSteg, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const { løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehov, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('DU_ER_ET_ANNET_STED');
   const { behandlingsreferanse } = useParamsMedType();
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
@@ -76,7 +76,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
 
   const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behov: {
             behovstype: Behovstype.AVKLAR_SONINGSFORRHOLD,
@@ -107,9 +107,9 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
       heading={'§ 11-26 Soning'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={grunnlag.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}

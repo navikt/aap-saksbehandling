@@ -3,7 +3,6 @@
 import { BodyShort, Label, Table, VStack } from '@navikt/ds-react';
 import { format, parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, SamordningUføreGrunnlag } from 'lib/types/types';
@@ -17,6 +16,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
@@ -38,8 +38,8 @@ type DraftFormFields = Partial<SamordningUføreFormFields>;
 
 export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_UFØRE');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SAMORDNING_UFØRE');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -76,7 +76,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -107,9 +107,9 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
       heading="§ 11-28 Samordning med delvis uføre"
       steg="SAMORDNING_UFØRE"
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}

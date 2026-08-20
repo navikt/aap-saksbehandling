@@ -23,7 +23,6 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { EtableringAvEgenVirksomhetFormInput } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetForm';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
   getDefaultValuesFromGrunnlag,
   mapEtableringEgenVirksomhetVurderingTilDto,
@@ -41,6 +40,7 @@ import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeri
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -73,8 +73,12 @@ export const EtableringAvEgenVirksomhet = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('ETABLERING_EGEN_VIRKSOMHET');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
 
   const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -147,7 +151,7 @@ export const EtableringAvEgenVirksomhet = ({
       if (!validering) {
         return;
       }
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -182,9 +186,9 @@ export const EtableringAvEgenVirksomhet = ({
       steg={'ETABLERING_EGEN_VIRKSOMHET'}
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

@@ -4,7 +4,6 @@ import { BodyLong, BodyShort, Label, Link, VStack } from '@navikt/ds-react';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Dato } from 'lib/types/Dato';
@@ -23,6 +22,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingsversjon: number;
@@ -58,8 +58,8 @@ export const FastsettManuellInntekt = ({
   behandlingErRevurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('MANGLENDE_LIGNING');
+  const { løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading, løsAvklaringsbehov } =
+    useLøsAvklaringsbehov('MANGLENDE_LIGNING');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -135,7 +135,7 @@ export const FastsettManuellInntekt = ({
 
   function handleSubmit(event: SubmitEvent) {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingsversjon,
           behov: {
@@ -202,9 +202,9 @@ export const FastsettManuellInntekt = ({
       heading={'Manglende pensjonsgivende inntekt / EØS-beregnet inntekt'}
       steg={'MANGLENDE_LIGNING'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      status={status}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      status={løsAvklaringsbehovStatus}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={grunnlag.manuelleVurderinger?.vurderingerMeta}
       onDeleteMellomlagringClick={() => {

@@ -1,7 +1,6 @@
 'use client';
 
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { AvbrytRevurderingGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -11,6 +10,7 @@ import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -25,8 +25,8 @@ interface FormFields {
 
 export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVBRYT_REVURDERING');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('AVBRYT_REVURDERING');
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -65,7 +65,7 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -89,9 +89,9 @@ export const AvbrytRevurderingVurdering = ({ grunnlag, readOnly, behandlingVersj
       heading={'Avbryt revurdering'}
       steg={'AVBRYT_REVURDERING'}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       visningModus={visningModus}
       visningActions={visningActions}
