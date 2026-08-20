@@ -8,9 +8,10 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { ReactNode, SubmitEventHandler } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 export interface VilkårsKortMedFormProps {
   heading: string;

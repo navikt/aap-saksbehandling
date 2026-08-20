@@ -3,9 +3,10 @@ import { Button, Dialog, HStack } from '@navikt/ds-react';
 import { ForhåndsvisBrev } from 'components/brevbygger/ForhåndsvisBrev';
 
 import styles from './FerdigstillBrevDialog.module.css';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   referanse: string;
