@@ -12179,6 +12179,13 @@ export interface components {
       vurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TrekkS\u00F8knadL\u00F8sning': {
+      /** @enum {string|null} */
+      aarsak?:
+        | 'ANNET'
+        | 'BRUKER_ONSKER_IKKE_SOKE_LENGER'
+        | 'BRUKER_SOKTE_FEIL_YTELSE'
+        | 'BRUKER_SOKTE_FOR_TIDLIG'
+        | null;
       begrunnelse: string;
       /** @enum {string} */
       behovstype:
@@ -16019,6 +16026,13 @@ export interface components {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.s\u00F8knad.TrukketS\u00F8knadVurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.s\u00F8knad.TrukketS\u00F8knadVurderingDto': {
+      /** @enum {string|null} */
+      aarsak?:
+        | 'ANNET'
+        | 'BRUKER_ONSKER_IKKE_SOKE_LENGER'
+        | 'BRUKER_SOKTE_FEIL_YTELSE'
+        | 'BRUKER_SOKTE_FOR_TIDLIG'
+        | null;
       begrunnelse: string;
       journalpostId: string;
       skalTrekkes: boolean;
