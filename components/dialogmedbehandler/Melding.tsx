@@ -9,25 +9,26 @@ import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 import styles from './Melding.module.css';
+import { DokumentInfo } from 'lib/types/journalpost';
 
+// TODO: Fjerne?
 export type DokumentasjonType =
-  | 'FORESPØRSEL_L120'
-  | 'FORESPØRSEL_L40'
-  | 'FORESPØRSEL_L8'
-  | 'MOTTATT_L120'
-  | 'MOTTATT_L40'
-  | 'MOTTATT_L8'
+  | 'L120'
+  | 'L40'
+  | 'L8'
   | 'MELDING_FRA_NAV'
   | 'MELDING_FRA_BEHANDLER'
-  | 'PÅMINNELSE'
+  | 'PURRING'
   | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
-  dokumentasjonType: DokumentasjonType;
+  dokumentasjonType?: DokumentasjonType;
   meldingFraNavn: string;
   opprettetTidspunkt: string;
-  status: 'SENDT' | 'LEVERT' | 'FEILET';
+  status?: 'SENDT' | 'LEVERT' | 'FEILET';
+  journalpostId: string | undefined;
+  dokumentInfoIdListe: DokumentInfo[];
   children: React.ReactNode;
 }
 
@@ -37,6 +38,8 @@ export const Melding = ({
   meldingFraNavn,
   opprettetTidspunkt,
   status,
+  journalpostId,
+  dokumentInfoIdListe,
   children,
 }: Props) => {
   return (
@@ -56,14 +59,24 @@ export const Melding = ({
             <Label size={'small'}>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</Label>
             <BodyShort size={'small'}>{children}</BodyShort>
           </VStack>
-          <Box className={styles.vedleggboks}>
-            <Link inlineText={true} target="_blank" rel="noopener noreferrer">
-              <HStack align={'center'} gap={'space-8'}>
-                <PaperclipIcon title="Vedlagt fil" fontSize="2rem" className={styles.vedleggikon} />
-                <BodyShort>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</BodyShort>
-              </HStack>
-            </Link>
-          </Box>
+          {dokumentInfoIdListe.length > 0 && (
+            <Box className={styles.vedleggboks}>
+              {dokumentInfoIdListe?.map((dokumentInfoObjekt, index) => (
+                <Link
+                  key={index}
+                  inlineText={true}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`/saksbehandling/api/dokumenter/${journalpostId}/${dokumentInfoObjekt.dokumentInfoId}`}
+                >
+                  <HStack align={'center'} gap={'space-8'}>
+                    <PaperclipIcon title="Vedlagt fil" fontSize="2rem" className={styles.vedleggikon} />
+                    <BodyShort>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</BodyShort>
+                  </HStack>
+                </Link>
+              ))}
+            </Box>
+          )}
           {visningType === 'INNKOMMENDE' && (
             <HStack gap={'space-20'}>
               <Link>
@@ -94,25 +107,25 @@ export const Melding = ({
   );
 };
 
-const mapDokumentasjonTypeTilTekst = (dokumentasjonType: DokumentasjonType) => {
+const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => {
+  if (!dokumentasjonType) {
+    // TODO: Hva skal defaultverdien være? Bør aldri inntreffe fordi feltet ikke er nullable i dokumentinnhenting hvor
+    //  det settes for utgående meldinger, mens innkommende meldinger
+    return '';
+  }
+
   switch (dokumentasjonType) {
-    case 'FORESPØRSEL_L120':
+    case 'L120':
       return 'Forespørsel om legeerklæring L120';
-    case 'FORESPØRSEL_L40':
+    case 'L40':
       return 'Forespørsel om legeerklæring L40';
-    case 'FORESPØRSEL_L8':
+    case 'L8':
       return 'Forespørsel om tilleggsopplysninger L8';
-    case 'MOTTATT_L120':
-      return 'Mottatt legeerklæring L120';
-    case 'MOTTATT_L40':
-      return 'Mottatt legeerklæring L40';
-    case 'MOTTATT_L8':
-      return 'Mottatt tilleggsopplysninger L8';
     case 'MELDING_FRA_NAV':
       return 'Melding fra NAV';
     case 'MELDING_FRA_BEHANDLER':
       return 'Melding fra behandler';
-    case 'PÅMINNELSE':
+    case 'PURRING':
       return 'Påminnelse til behandler';
     case 'RETUR_LEGEERKLÆRING':
       return 'Retur legeerklæring';

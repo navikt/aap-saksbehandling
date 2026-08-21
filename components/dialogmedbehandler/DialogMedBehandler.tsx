@@ -1,61 +1,15 @@
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { Button, Label, Link, VStack } from '@navikt/ds-react';
+import { Label, Link, VStack } from '@navikt/ds-react';
 
 import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMeldinger';
-import { DokumentasjonType, Melding } from 'components/dialogmedbehandler/Melding';
+import { Melding } from 'components/dialogmedbehandler/Melding';
 
 import styles from './DialogMedBehandler.module.css';
-
-interface MeldingDto {
-  visningType: 'INNKOMMENDE' | 'UTGÅENDE';
-  dokumentasjonType: DokumentasjonType;
-  meldingFraNavn: string;
-  opprettetTidspunkt: string;
-  tekst: string;
-  status: 'SENDT' | 'LEVERT' | 'FEILET';
-}
-
-const innkommendeMeldingerMock: MeldingDto[] = [
-  {
-    visningType: 'INNKOMMENDE',
-    dokumentasjonType: 'MOTTATT_L40',
-    meldingFraNavn: 'Dr. Sonja Paracet',
-    opprettetTidspunkt: '2026-07-12',
-    tekst: 'foo',
-    status: 'LEVERT',
-  },
-];
-
-const utgåendeMeldingerMock: MeldingDto[] = [
-  {
-    visningType: 'UTGÅENDE',
-    dokumentasjonType: 'MELDING_FRA_NAV',
-    meldingFraNavn: 'Nav, Kari Normann',
-    opprettetTidspunkt: '2026-06-18',
-    tekst: 'foo',
-    status: 'LEVERT',
-  },
-  {
-    visningType: 'UTGÅENDE',
-    dokumentasjonType: 'PÅMINNELSE',
-    meldingFraNavn: 'Nav, automatisk',
-    opprettetTidspunkt: '2026-07-09',
-    tekst: 'foo',
-    status: 'FEILET',
-  },
-  {
-    visningType: 'UTGÅENDE',
-    dokumentasjonType: 'RETUR_LEGEERKLÆRING',
-    meldingFraNavn: 'Nav, Kari Normann',
-    opprettetTidspunkt: '2026-06-18',
-    tekst: 'foo',
-    status: 'SENDT',
-  },
-];
-
-const meldingerMock = [...utgåendeMeldingerMock, ...innkommendeMeldingerMock];
+import { useDialogmeldinger } from 'hooks/saksbehandling/SakDialogmeldingerHook';
 
 export const DialogMedBehandler = () => {
+  const { dialogmeldinger } = useDialogmeldinger();
+
   return (
     <section>
       <VStack>
@@ -70,25 +24,28 @@ export const DialogMedBehandler = () => {
       </VStack>
 
       <VStack gap={'space-20'} className={styles.meldingervindu}>
-        {meldingerMock.map((melding, index) => (
+        {dialogmeldinger?.map((dialogmelding, index) => (
           <Melding
             key={index}
-            visningType={melding.visningType}
-            dokumentasjonType={melding.dokumentasjonType}
-            meldingFraNavn={melding.meldingFraNavn}
-            opprettetTidspunkt={melding.opprettetTidspunkt}
-            status={melding.status}
+            visningType={dialogmelding.innkommendeUtgaaende}
+            // TODO: Rydd opp bruken av dokumentasjonsType!
+            dokumentasjonType={
+              dialogmelding.innkommendeUtgaaende === 'INNKOMMENDE'
+                ? 'MELDING_FRA_BEHANDLER'
+                : dialogmelding.dokumentasjonsType
+            }
+            meldingFraNavn={dialogmelding.meldingFraNavn}
+            opprettetTidspunkt={dialogmelding.opprettetTidspunkt?.toString()}
+            status={dialogmelding.meldingStatus}
+            journalpostId={dialogmelding.journalpostId}
+            dokumentInfoIdListe={dialogmelding.dokumentIdListe}
           >
-            {melding.tekst}
+            {dialogmelding.tekst}
           </Melding>
         ))}
       </VStack>
 
       <KommendeMeldinger />
-
-      <VStack align={'end'}>
-        <Button variant={'secondary'}>Send forespørsel til behandler</Button>
-      </VStack>
     </section>
   );
 };
