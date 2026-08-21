@@ -12179,8 +12179,13 @@ export interface components {
       vurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.trekkklage.flate.TrekkKlageVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.TrekkS\u00F8knadL\u00F8sning': {
-      /** @enum {string} */
-      aarsak: 'ANNET' | 'BRUKER_ONSKER_IKKE_SOKE_LENGER' | 'BRUKER_SOKTE_FEIL_YTELSE' | 'BRUKER_SOKTE_FOR_TIDLIG';
+      /** @enum {string|null} */
+      aarsak?:
+        | 'ANNET'
+        | 'BRUKER_ONSKER_IKKE_SOKE_LENGER'
+        | 'BRUKER_SOKTE_FEIL_YTELSE'
+        | 'BRUKER_SOKTE_FOR_TIDLIG'
+        | null;
       begrunnelse: string;
       /** @enum {string} */
       behovstype:
@@ -14490,9 +14495,9 @@ export interface components {
       brukersYtelseTom?: string | null;
       harAnnenFullYtelse: boolean;
       harArbeidsgiverSykepengerUtbetaling?: boolean | null;
+      harSykepengegrunnlagOver2G?: boolean | null;
       referanse: string;
       'skalAvsl\u00E5s1127'?: boolean | null;
-      sykepengegrunnlag?: components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
       vurderingerMeta?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto': {
@@ -17661,9 +17666,9 @@ export interface components {
       brukersYtelseTom?: string | null;
       harAnnenFullYtelse: boolean;
       harArbeidsgiverSykepengerUtbetaling?: boolean | null;
+      harSykepengegrunnlagOver2G?: boolean | null;
       referanse: string;
       'skalAvsl\u00E5s1127'?: boolean | null;
-      sykepengegrunnlag?: components['schemas']['no.nav.aap.komponenter.verdityper.Bel\u00F8p'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.avslag11_27.flate.Avslag11_27VurderingerDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.avslag11_27.flate.Avslag11_27VurderingDto'][];
