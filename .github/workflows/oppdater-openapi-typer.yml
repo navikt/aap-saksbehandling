@@ -66,7 +66,7 @@ jobs:
           BRANCH_NAME="chore/oppdater-openapi-typer"
           git checkout -B "$BRANCH_NAME"
           git add lib/types/schema.d.ts
-          git commit -m "chore: oppdater genererte typer fra aap-behandlingsflyt openapi.json"
+          git commit -m "AAP-BAU oppdater genererte typer fra aap-behandlingsflyt openapi.json"
           git push --force origin HEAD:"$BRANCH_NAME"
 
           EXISTING_PR=$(gh pr list --state open --head "$BRANCH_NAME" --json number --jq '.[0].number')
@@ -75,7 +75,7 @@ jobs:
             gh pr comment "$EXISTING_PR" --body "Oppdatert med nye typer fra run ${{ inputs.run-id }}."
           else
             gh pr create --head "$BRANCH_NAME" \
-              --title "chore: Oppdater genererte typer fra aap-behandlingsflyt" \
+              --title "AAP-BAU: Oppdater genererte typer fra aap-behandlingsflyt" \
               --body "Automatisk generert PR. openapi.json har endret seg i navikt/aap-behandlingsflyt (run ${{ inputs.run-id }}), og \`lib/types/schema.d.ts\` er regenerert med \`yarn gentypes:ci\`."
           fi
         env:
