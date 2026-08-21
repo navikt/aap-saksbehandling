@@ -109,7 +109,7 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
     expect(screen.getByRole('textbox', { name: 'Vurdering' })).toHaveValue('Opprinnelig begrunnelse');
   });
 
-  it('lukker og fjerner en søknad-KravBoks når "Lukk" klikkes i tabellen', async () => {
+  it('kan ikke lukkes eller fjernes fra tabellen for en søknad uten kravvurdering, siden den må vurderes', () => {
     render(
       <VurderKrav
         grunnlag={grunnlag({ søknaderUtenKravvurdering: [søknadUtenKrav()] })}
@@ -120,10 +120,10 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
 
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
 
-    const lukkKnappRad = within(screen.getByRole('row', { name: /jp-ny/ })).getByRole('button', { name: 'Lukk' });
-    await user.click(lukkKnappRad);
-
-    expect(screen.queryByText('Ny søknad jp-ny')).not.toBeInTheDocument();
+    const søknadRad = screen.getByRole('row', { name: /jp-ny/ });
+    expect(within(søknadRad).queryByRole('button', { name: 'Lukk' })).not.toBeInTheDocument();
+    expect(within(søknadRad).queryByRole('button', { name: 'Vurder' })).not.toBeInTheDocument();
+    expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
   });
 });
 
@@ -197,7 +197,7 @@ describe('VurderKrav - handleSubmit', () => {
     await user.click(
       screen.getAllByRole('button', {
         name: /vurder om krav er relevant/i,
-      })[1]
+      })[0]
     );
     const kravEndretBegrunnelse = screen.getAllByRole('textbox', { name: 'Vurdering' })[1];
     await user.type(kravEndretBegrunnelse, ' - oppdatert');
@@ -208,7 +208,7 @@ describe('VurderKrav - handleSubmit', () => {
     await user.click(
       screen.getAllByRole('button', {
         name: /vurder om krav er relevant/i,
-      })[2]
+      })[1]
     );
     const vedtattBegrunnelse = screen.getAllByRole('textbox', { name: 'Vurdering' })[2];
     await user.type(vedtattBegrunnelse, ' - overstyrt');
@@ -216,6 +216,7 @@ describe('VurderKrav - handleSubmit', () => {
     // Fyll ut begrunnelse for det nye søknad-utkastet (auto-åpnet)
     const søknadBegrunnelse = screen.getAllByRole('textbox', { name: 'Vurdering' })[0];
     await user.type(søknadBegrunnelse, 'Nytt krav opprettet av saksbehandler');
+    await user.click(screen.getAllByRole('radio', { name: 'Ja' })[0]);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
