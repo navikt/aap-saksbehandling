@@ -124,7 +124,8 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
     expect(screen.getByRole('radio', { name: 'Ja' })).not.toBeChecked();
     expect(screen.getByRole('radio', { name: 'Nei' })).not.toBeChecked();
-    expect(screen.getByRole('button', { name: 'Avbryt vurder om krav er relevant' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Avbryt vurder om krav er relevant' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Vurder om krav er relevant' })).not.toBeInTheDocument();
   });
 
   it('viser Kravtype-bolken lukket for et eksisterende krav (skal ikke forhåndsåpnes)', () => {

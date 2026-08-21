@@ -107,9 +107,11 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
         <VStack gap="space-16">
           <HStack justify="space-between">
             <BodyShort weight={'semibold'}>{formaterKravtype(kravtypeVisning)}</BodyShort>
-            <Button type="button" size="small" variant="tertiary" onClick={onLukk}>
-              Lukk
-            </Button>
+            {!erNySøknad && (
+              <Button type="button" size="small" variant="tertiary" onClick={onLukk}>
+                Lukk
+              </Button>
+            )}
           </HStack>
 
           <Bolk
@@ -118,6 +120,7 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
             buttonTekst={
               visVurderOmKravErRelevantFelt ? 'Avbryt vurder om krav er relevant' : 'Vurder om krav er relevant'
             }
+            visKnapp={!erNySøknad}
             onClick={toggleVurderOmKravErRelevantFelt}
             isOpen={visVurderOmKravErRelevantFelt}
           >
@@ -139,6 +142,7 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
                   'Svar nei hvis søknaden er tilleggsopplysninger, eller det ikke er relevant å vurdere ny eller gjenopptatt rettighet '
                 }
                 horisontal
+                rules={{ required: 'Du må svare ja eller nei.' }}
               >
                 {JaEllerNeiOptions.map((option) => (
                   <Radio value={option.value} key={option.value}>
@@ -219,10 +223,12 @@ function Bolk({
   buttonTekst,
   isOpen,
   children,
+  visKnapp = true,
 }: {
   label: string;
   value: string;
   buttonTekst: string;
+  visKnapp?: boolean;
   onClick: () => void;
   isOpen: boolean;
   children: ReactNode;
@@ -239,9 +245,11 @@ function Bolk({
         <Label size={'small'}>{label}</Label>
         <HStack align={'center'} justify={'space-between'} gap={'space-4'}>
           <BodyShort size={'small'}>{value}</BodyShort>
-          <Button type="button" size={'small'} variant={'tertiary'} onClick={onClick}>
-            {buttonTekst}
-          </Button>
+          {visKnapp && (
+            <Button type="button" size={'small'} variant={'tertiary'} onClick={onClick}>
+              {buttonTekst}
+            </Button>
+          )}
         </HStack>
       </VStack>
       {isOpen && (

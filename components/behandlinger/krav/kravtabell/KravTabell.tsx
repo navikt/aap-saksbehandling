@@ -136,17 +136,7 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
                     Må vurderes
                   </Tag>
                 </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <Button
-                    type="button"
-                    size="small"
-                    variant={valgteKrav.includes(referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(referanse)}
-                    disabled={readOnly}
-                  >
-                    {valgteKrav.includes(referanse) ? 'Lukk' : 'Vurder'}
-                  </Button>
-                </Table.DataCell>
+                <Table.DataCell textSize={'small'}></Table.DataCell>
               </Table.ExpandableRow>
             );
           })}
