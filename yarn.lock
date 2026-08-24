@@ -3130,7 +3130,7 @@ __metadata:
     server-only: "npm:0.0.1"
     swr: "npm:2.5.1"
     typescript: "npm:6.0.3"
-    unleash-client: "npm:6.12.0"
+    unleash-client: "npm:6.12.1"
     vitest: "npm:4.1.10"
     vitest-fetch-mock: "npm:0.4.5"
   languageName: unknown
@@ -7551,10 +7551,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re2js@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "re2js@npm:1.2.2"
-  checksum: 10c0/423b058c205cb35b5d89b401268f0587798d33cefe94e43863c428b9bd0eb993102658201b52ffd13338e657a8e81d4a99a2de11d43a71303ad155065d8ea95c
+"re2js@npm:^2.3.2":
+  version: 2.8.6
+  resolution: "re2js@npm:2.8.6"
+  checksum: 10c0/70a7ae4778429ddd8dfef6af3ee65e152999e31a894f19f3eb4820f5267d2ac0c5797b60f988139a5d72a9f06bb5c0b7fd05c4aaa6272970b006772aa956fb51
   languageName: node
   linkType: hard
 
@@ -9000,9 +9000,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unleash-client@npm:6.12.0":
-  version: 6.12.0
-  resolution: "unleash-client@npm:6.12.0"
+"unleash-client@npm:6.12.1":
+  version: 6.12.1
+  resolution: "unleash-client@npm:6.12.1"
   dependencies:
     http-proxy-agent: "npm:^7.0.2"
     https-proxy-agent: "npm:^7.0.5"
@@ -9012,9 +9012,9 @@ __metadata:
     make-fetch-happen: "npm:^15.0.3"
     murmurhash3js: "npm:^3.0.1"
     proxy-from-env: "npm:^1.1.0"
-    re2js: "npm:^1.2.2"
+    re2js: "npm:^2.3.2"
     semver: "npm:^7.7.3"
-  checksum: 10c0/4d773cb852abc8268d04bc680e0d83edbfbc7b8352d027989c50b6390fa68ed871aafaee288cfb653734c28d25f0758ae69688d4f5b85704675f2c80b8db9887
+  checksum: 10c0/d7f6b20e3a5f319c6600b26b2255131513059383c08e7f5dcdd82c41f2e62bc4d0b992f97950b83e5288f77f3f51dc01a8ab868414f7989731ca74e428c847eb
   languageName: node
   linkType: hard
 
