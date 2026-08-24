@@ -29,7 +29,9 @@ export const YtelseTabell = ({ ytelser, readOnly, onKopierYtelser }: Props) => {
               <Table.HeaderCell>Periode</Table.HeaderCell>
               <Table.HeaderCell>Kilde</Table.HeaderCell>
               <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell>
+                <span className="aksel-sr-only">Kopier</span>
+              </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
