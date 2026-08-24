@@ -11,6 +11,7 @@ import {
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { parse, parseISO } from 'date-fns';
 
 import { HStack, Label, VStack } from '@navikt/ds-react';
@@ -89,6 +90,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     'FASTSETT_ARBEIDSEVNE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
@@ -151,6 +153,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     };
 
     løsPeriodisertAvklaringsbehov(losning, () => {
+      loggUmamiVarighet('STEG_FASTSETT_ARBEIDSEVNE_VARIGHET', umamiStartTidspunkt, Date.now());
       nullstillMellomlagretVurdering();
       closeAllAccordions();
       visningActions.onBekreftClick();

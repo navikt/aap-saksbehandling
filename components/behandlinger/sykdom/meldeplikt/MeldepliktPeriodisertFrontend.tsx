@@ -9,6 +9,7 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
@@ -73,6 +74,7 @@ export const MeldepliktPeriodisertFrontend = ({
     'FRITAK_MELDEPLIKT',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -131,6 +133,7 @@ export const MeldepliktPeriodisertFrontend = ({
     };
 
     løsPeriodisertAvklaringsbehov(losning, () => {
+      loggUmamiVarighet('STEG_FRITAK_MELDEPLIKT_VARIGHET', umamiStartTidspunkt, Date.now());
       nullstillMellomlagretVurdering();
       closeAllAccordions();
       visningActions.onBekreftClick();

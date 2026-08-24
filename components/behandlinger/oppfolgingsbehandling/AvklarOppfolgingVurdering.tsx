@@ -12,6 +12,7 @@ import {
 } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { vurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { SubmitEventHandler } from 'react';
 
@@ -60,6 +61,7 @@ export const AvklaroppfolgingVurdering = ({
   );
 
   const skalVurderesAvNavKontor = grunnlag.hvemSkalFølgeOpp == 'Lokalkontor';
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -117,6 +119,7 @@ export const AvklaroppfolgingVurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_AVKLAR_OPPFØLGING_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

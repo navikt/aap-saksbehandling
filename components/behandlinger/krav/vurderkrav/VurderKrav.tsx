@@ -17,6 +17,7 @@ import {
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { SubmitEventHandler } from 'react';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -41,6 +42,7 @@ export const VurderKrav = ({ grunnlag, initialMellomlagretVurdering, behandlingV
     'KRAV',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: KravFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -87,6 +89,7 @@ export const VurderKrav = ({ grunnlag, initialMellomlagretVurdering, behandlingV
           },
         },
         () => {
+          loggUmamiVarighet('STEG_KRAV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           slettMellomlagring();
         }

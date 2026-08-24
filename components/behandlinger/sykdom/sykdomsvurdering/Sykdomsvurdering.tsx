@@ -21,6 +21,7 @@ import {
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
@@ -130,6 +131,7 @@ export const Sykdomsvurdering = ({
     'AVKLAR_SYKDOM',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
@@ -185,6 +187,7 @@ export const Sykdomsvurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_AVKLAR_SYKDOM_VARIGHET', umamiStartTidspunkt, Date.now());
           closeAllAccordions();
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();

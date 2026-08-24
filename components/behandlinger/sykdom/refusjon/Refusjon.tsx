@@ -6,6 +6,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { BodyLong, Radio, VStack } from '@navikt/ds-react';
@@ -52,6 +53,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
     'REFUSJON_KRAV',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -93,6 +95,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_REFUSJON_KRAV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

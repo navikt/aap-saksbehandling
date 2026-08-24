@@ -10,6 +10,7 @@ import {
   TypeBehandling,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -55,6 +56,7 @@ export const SykdomsvurderingBrev = ({
     'SYKDOMSVURDERING_BREV',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -89,6 +91,7 @@ export const SykdomsvurderingBrev = ({
           },
         },
         () => {
+          loggUmamiVarighet('STEG_SYKDOMSVURDERING_BREV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
