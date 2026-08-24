@@ -58,7 +58,6 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
 
   function leggTilRad() {
     append({
-      kilde: '', // TODO denne skal vekk vel?
       manuell: true,
       ytelseType: undefined,
       periode: { fom: '', tom: '' },

@@ -46,11 +46,8 @@ interface Props {
 
 interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
-  kilde: string;
   manuell?: boolean;
-  graderingFraKilde?: number;
   gradering?: number;
-  kronseum?: number;
   periode: Periode;
 }
 
@@ -127,7 +124,6 @@ export const SamordningGradering = ({
   const kopierYtelserTilVurdering = (ytelser: SamordningGraderingYtelse[]) => {
     vurderteSamordningerFieldArray.append(
       ytelser.map((ytelse) => ({
-        kilde: '',
         manuell: true,
         ytelseType: ytelse.ytelseType,
         gradering: undefined,
@@ -339,8 +335,6 @@ function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): D
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
     vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
       ytelseType: ytelse.ytelseType,
-      kilde: '',
-      graderingFraKilde: undefined,
       gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
       manuell: ytelse.manuell || undefined,
       periode: {
