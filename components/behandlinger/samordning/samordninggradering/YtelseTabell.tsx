@@ -1,6 +1,7 @@
 'use client';
 
-import { BodyShort, Box, HStack, Label, Table, VStack } from '@navikt/ds-react';
+import { FilesIcon } from '@navikt/aksel-icons';
+import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingYtelse } from 'lib/types/types';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
@@ -9,9 +10,11 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   ytelser: SamordningGraderingYtelse[];
+  readOnly: boolean;
+  onKopierYtelser: (ytelser: SamordningGraderingYtelse[]) => void;
 }
 
-export const YtelseTabell = ({ ytelser }: Props) => {
+export const YtelseTabell = ({ ytelser, readOnly, onKopierYtelser }: Props) => {
   return (
     <Box>
       <VStack gap={'space-8'}>
@@ -26,12 +29,13 @@ export const YtelseTabell = ({ ytelser }: Props) => {
               <Table.HeaderCell>Periode</Table.HeaderCell>
               <Table.HeaderCell>Kilde</Table.HeaderCell>
               <Table.HeaderCell>Grad fra kilde</Table.HeaderCell>
+              <Table.HeaderCell></Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
             {!ytelser.length && (
               <Table.Row>
-                <Table.DataCell colSpan={4}>Ingen andre ytelser funnet</Table.DataCell>
+                <Table.DataCell colSpan={5}>Ingen andre ytelser funnet</Table.DataCell>
               </Table.Row>
             )}
             {ytelser.map((ytelse, index) => {
@@ -54,11 +58,35 @@ export const YtelseTabell = ({ ytelser }: Props) => {
                   </Table.DataCell>
                   <Table.DataCell textSize="small">{ytelse.kilde}</Table.DataCell>
                   <Table.DataCell textSize="small">{ytelse.gradering} %</Table.DataCell>
+                  <Table.DataCell>
+                    <Button
+                      size={'small'}
+                      variant={'tertiary'}
+                      type={'button'}
+                      icon={<FilesIcon title={'Kopier periode'} />}
+                      onClick={() => onKopierYtelser([ytelse])}
+                      disabled={readOnly}
+                    />
+                  </Table.DataCell>
                 </Table.Row>
               );
             })}
           </Table.Body>
         </TableStyled>
+        {ytelser.length > 0 && (
+          <HStack>
+            <Button
+              size={'small'}
+              variant={'tertiary'}
+              type={'button'}
+              icon={<FilesIcon aria-hidden />}
+              onClick={() => onKopierYtelser(ytelser)}
+              disabled={readOnly}
+            >
+              Kopier alle perioder
+            </Button>
+          </HStack>
+        )}
       </VStack>
     </Box>
   );
