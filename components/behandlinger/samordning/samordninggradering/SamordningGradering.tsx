@@ -11,6 +11,7 @@ import {
   OppfølgningOppgaveOpprinnelseResponse,
   Periode,
   SamordningGraderingGrunnlag,
+  SamordningGraderingYtelse,
   SamordningYtelsestype,
   SamordningYtelseVurdering,
 } from 'lib/types/types';
@@ -20,6 +21,7 @@ import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { SubmitEventHandler, useRef, useState } from 'react';
+import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
@@ -44,11 +46,8 @@ interface Props {
 
 interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
-  kilde: string;
   manuell?: boolean;
-  graderingFraKilde?: number;
   gradering?: number;
-  kronseum?: number;
   periode: Periode;
 }
 
@@ -116,6 +115,25 @@ export const SamordningGradering = ({
     initialMellomlagretVurdering,
     form
   );
+
+  const vurderteSamordningerFieldArray = useFieldArray({
+    control: form.control,
+    name: 'vurderteSamordninger',
+  });
+
+  const kopierYtelserTilVurdering = (ytelser: SamordningGraderingYtelse[]) => {
+    vurderteSamordningerFieldArray.append(
+      ytelser.map((ytelse) => ({
+        manuell: true,
+        ytelseType: ytelse.ytelseType,
+        gradering: undefined,
+        periode: {
+          fom: formaterDatoForFrontend(ytelse.periode.fom),
+          tom: formaterDatoForFrontend(ytelse.periode.tom),
+        },
+      }))
+    );
+  };
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
@@ -249,8 +267,12 @@ export const SamordningGradering = ({
               defaultOpen={false}
             />
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-            <YtelseTabell ytelser={grunnlag.ytelser} />
-            <Ytelsesvurderinger form={form} readOnly={formReadOnly} />
+            <YtelseTabell
+              ytelser={grunnlag.ytelser}
+              readOnly={formReadOnly}
+              onKopierYtelser={kopierYtelserTilVurdering}
+            />
+            <Ytelsesvurderinger form={form} readOnly={formReadOnly} fieldArray={vurderteSamordningerFieldArray} />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
@@ -313,8 +335,6 @@ function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): D
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
     vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
       ytelseType: ytelse.ytelseType,
-      kilde: '',
-      graderingFraKilde: undefined,
       gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
       manuell: ytelse.manuell || undefined,
       periode: {
