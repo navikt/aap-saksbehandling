@@ -40,6 +40,7 @@ import {
   hentSisteLagredeVurdering,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import {
+  defaultBegrunnelseSpørsmål,
   emptySykdomsvurderingMedDefaultBegrunnelse,
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
@@ -55,6 +56,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { loggUmamiSykdomsvurderingAntallSpørsmålFraMal } from 'lib/utils/umami/sykdomsvurdering';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -162,6 +164,10 @@ export const Sykdomsvurdering = ({
       if (!erPerioderGyldige) {
         return;
       }
+      data.vurderinger.forEach((vurdering) => {
+        loggUmamiSykdomsvurderingAntallSpørsmålFraMal(vurdering.begrunnelse, defaultBegrunnelseSpørsmål);
+      });
+
       løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
