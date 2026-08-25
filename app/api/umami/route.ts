@@ -61,7 +61,7 @@ function buildEventData(payload: UmamiKelvinEvent): UmamiEventData {
       };
     case 'SYKDOMSVURDERING':
       return {
-        antallSpørsmålFraMal: payload.antallSpørsmålFraMal,
+        antallSpoersmaalFraMal: payload.antallSpoersmaalFraMal,
       }
   }
 }
