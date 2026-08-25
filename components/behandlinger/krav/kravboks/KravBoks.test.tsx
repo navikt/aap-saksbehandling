@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { KravVurdering, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
+import { KravVurderingForSøknad, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 import { byggInitielleVurderinger } from 'components/behandlinger/krav/kravutils';
 import { KravBoks, KravBoksInnhold } from 'components/behandlinger/krav/kravboks/KravBoks';
@@ -27,8 +27,8 @@ function relevantKrav(overrides: Partial<RelevantKrav> = {}): RelevantKrav {
 
 function annenKravtypeKrav(
   type: 'KLAGE' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD',
-  overrides: Partial<KravVurdering> = {}
-): KravVurdering {
+  overrides: Partial<KravVurderingForSøknad> = {}
+): KravVurderingForSøknad {
   return {
     type,
     referanse: 'krav-2',

@@ -1,4 +1,4 @@
-import { KravVurdering, SøknadUtenKrav } from 'lib/types/types';
+import { KravVurderingForSøknad, SøknadUtenKrav } from 'lib/types/types';
 import {
   finnSøknadsdato,
   formaterKravtype,
@@ -25,7 +25,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { Alert } from 'components/alert/Alert';
 
 export type KravBoksInnhold =
-  | { kilde: 'EKSISTERENDE'; krav: KravVurdering }
+  | { kilde: 'EKSISTERENDE'; krav: KravVurderingForSøknad }
   | { kilde: 'NY_SØKNAD'; søknad: SøknadUtenKrav };
 
 interface Props {

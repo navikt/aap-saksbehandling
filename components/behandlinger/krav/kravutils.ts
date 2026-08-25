@@ -2,7 +2,10 @@ import {
   KlageKravLøsning,
   KravGrunnlag,
   KravVurdering,
+  KravVurderingForSøknad,
   KravVurderingLøsning,
+  MigrertKravLøsning,
+  MigrertKravVurdering,
   OverstyrMuligRettFra,
   RelevantKrav,
   RelevantKravLøsning,
@@ -43,6 +46,153 @@ export function finnOverstyrMuligRettFraFraLøsning(løsning: KravVurderingLøsn
   return null;
 }
 
+export function kravVurderingIsKravVurderingForSøknad(
+  kravVurdering: KravVurdering
+): kravVurdering is KravVurderingForSøknad {
+  return kravVurdering.type !== 'MIGRERT_KRAV';
+}
+
+export function kravVurderingIsKMigrertKrav(kravVurdering: KravVurdering): kravVurdering is MigrertKravVurdering {
+  return kravVurdering.type === 'MIGRERT_KRAV';
+}
+
+export function getKravVurderingerForSøknad(
+  kravVurderinger: KravVurdering[] | null | undefined
+): KravVurderingForSøknad[] {
+  if (kravVurderinger == null) {
+    return [];
+  }
+  return kravVurderinger.filter(kravVurderingIsKravVurderingForSøknad);
+}
+
+export function getMigrerteKrav(kravVurderinger: KravVurdering[] | null | undefined): MigrertKravVurdering[] {
+  if (kravVurderinger == null) {
+    return [];
+  }
+  return kravVurderinger.filter(kravVurderingIsKMigrertKrav);
+}
+
+export interface MigrertKravFormFields {
+  arenaSaksnummer: string;
+  rettighetstype: string;
+  muligRettFra: string;
+  virkningstidspunktArena: string;
+  resterendeKvoteOrdinær: string;
+  begrunnelse: string;
+}
+
+export function migrertKravTilFormFields(vurdering: MigrertKravVurdering): MigrertKravFormFields {
+  return {
+    arenaSaksnummer: vurdering.arenaSaksnummer,
+    rettighetstype: vurdering.rettighetstype,
+    muligRettFra: formaterDatoForFrontend(vurdering.muligRettFra),
+    virkningstidspunktArena: formaterDatoForFrontend(vurdering.virkningstidspunktArena),
+    resterendeKvoteOrdinær: String(vurdering.resterendeKvoteOrdinær),
+    begrunnelse: vurdering.begrunnelse,
+  };
+}
+
+export function emptyMigrertKravFormFields(): MigrertKravFormFields {
+  return {
+    arenaSaksnummer: '',
+    rettighetstype: '',
+    muligRettFra: '',
+    virkningstidspunktArena: '',
+    resterendeKvoteOrdinær: '',
+    begrunnelse: '',
+  };
+}
+
+export function byggInitielleMigrerteKravVurderinger(grunnlag?: KravGrunnlag): Record<string, MigrertKravFormFields> {
+  const alleMigrerteKrav = getMigrerteKrav([
+    ...(grunnlag?.nyeVurderinger ?? []),
+    ...(grunnlag?.vedtatteVurderinger ?? []),
+  ]);
+  return Object.fromEntries(alleMigrerteKrav.map((v) => [v.referanse, migrertKravTilFormFields(v)]));
+}
+
+/**
+ * Brukes som referanse for det automatisk fremviste, tomme migrert krav-skjemaet som legges
+ * til når behandlingen gjelder migrering fra Arena og det ikke finnes noen kravvurderinger
+ * fra før (uavhengig av krav-type).
+ */
+export const NYTT_MIGRERT_KRAV_REFERANSE = 'nytt-migrert-krav';
+
+export function harIngenKravvurderinger(grunnlag?: KravGrunnlag): boolean {
+  return (grunnlag?.nyeVurderinger.length ?? 0) + (grunnlag?.vedtatteVurderinger.length ?? 0) === 0;
+}
+
+export function finnMigrertKravByReferanse(
+  grunnlag: KravGrunnlag | undefined,
+  referanse: string
+): MigrertKravVurdering | undefined {
+  return (
+    getMigrerteKrav(grunnlag?.nyeVurderinger).find((v) => v.referanse === referanse) ??
+    getMigrerteKrav(grunnlag?.vedtatteVurderinger).find((v) => v.referanse === referanse)
+  );
+}
+
+/**
+ * Returnerer originalverdiene et migrert krav skal nullstilles til når det lukkes. Returnerer
+ * undefined dersom referansen ikke finnes i grunnlaget - da er raden lagt til av saksbehandler
+ * i dette skjemaet, og skal fjernes helt i stedet for å nullstilles.
+ */
+export function hentOriginaleMigrertKravFormFelter(
+  grunnlag: KravGrunnlag | undefined,
+  referanse: string
+): MigrertKravFormFields | undefined {
+  const krav = finnMigrertKravByReferanse(grunnlag, referanse);
+  return krav ? migrertKravTilFormFields(krav) : undefined;
+}
+
+function erMigrertKravFelterEndret(original: MigrertKravFormFields, gjeldende: MigrertKravFormFields): boolean {
+  return (
+    original.arenaSaksnummer !== gjeldende.arenaSaksnummer ||
+    original.rettighetstype !== gjeldende.rettighetstype ||
+    original.muligRettFra !== gjeldende.muligRettFra ||
+    original.virkningstidspunktArena !== gjeldende.virkningstidspunktArena ||
+    original.resterendeKvoteOrdinær !== gjeldende.resterendeKvoteOrdinær ||
+    original.begrunnelse !== gjeldende.begrunnelse
+  );
+}
+
+export function byggMigrerteKravLøsningerFraSkjema(
+  grunnlag: KravGrunnlag | undefined,
+  migrerteKravVurderinger: Record<string, MigrertKravFormFields>
+): MigrertKravLøsning[] {
+  return Object.entries(migrerteKravVurderinger)
+    .filter(([referanse, felt]) => {
+      const original = hentOriginaleMigrertKravFormFelter(grunnlag, referanse);
+      // Ny rad lagt til av saksbehandler (finnes ikke i grunnlaget) - skal alltid sendes inn.
+      if (!original) return true;
+      return erMigrertKravFelterEndret(original, felt);
+    })
+    .map(([referanse, felt]) => {
+      const muligRettFraParsed = parseDatoFraDatePicker(felt.muligRettFra);
+      const virkningstidspunktArenaParsed = parseDatoFraDatePicker(felt.virkningstidspunktArena);
+
+      if (!muligRettFraParsed) {
+        throw new Error(`Mangler gyldig "mulig rett fra"-dato for migrert krav ${felt.arenaSaksnummer}`);
+      }
+      if (!virkningstidspunktArenaParsed) {
+        throw new Error(`Mangler gyldig virkningstidspunkt på sak for migrert krav ${felt.arenaSaksnummer}`);
+      }
+
+      const erNyRad = hentOriginaleMigrertKravFormFelter(grunnlag, referanse) === undefined;
+
+      return {
+        kravType: 'MIGRERT_KRAV',
+        arenaSaksnummer: felt.arenaSaksnummer,
+        rettighetstype: felt.rettighetstype as MigrertKravLøsning['rettighetstype'],
+        muligRettFra: formaterDatoForBackend(muligRettFraParsed),
+        virkningstidspunktArena: formaterDatoForBackend(virkningstidspunktArenaParsed),
+        resterendeKvoteOrdinær: Number(felt.resterendeKvoteOrdinær),
+        begrunnelse: felt.begrunnelse,
+        referanse: erNyRad ? undefined : referanse,
+      } satisfies MigrertKravLøsning;
+    });
+}
+
 export function formaterKravtype(type: KravType) {
   switch (type) {
     case 'RELEVANT_KRAV':
@@ -53,6 +203,8 @@ export function formaterKravtype(type: KravType) {
       return 'Tilleggsopplysning';
     case 'TRUKKET_SØKNAD':
       return 'Trukket søknad';
+    case 'MIGRERT_KRAV':
+      return 'Migrert krav';
   }
 }
 
@@ -90,7 +242,7 @@ function utledMuligRettFraTilbakedateres(årsak: string): string {
   }
 }
 
-export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurderingFormFields {
+export function kravVurderingTilFormFields(vurdering: KravVurderingForSøknad): KravVurderingFormFields {
   const søknadsdato = finnSøknadsdato(vurdering);
   const overstyr = finnOverstyrMuligRettFra(vurdering);
 
@@ -130,9 +282,11 @@ export function søknadUtenKravTilFormFields(søknad: SøknadUtenKrav): KravVurd
   };
 }
 
-
 export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string, KravVurderingFormFields> {
-  const alleVurderinger = [...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])];
+  const alleVurderinger = getKravVurderingerForSøknad([
+    ...(grunnlag?.nyeVurderinger ?? []),
+    ...(grunnlag?.vedtatteVurderinger ?? []),
+  ]);
   const fraVurderinger = Object.fromEntries(alleVurderinger.map((v) => [v.referanse, kravVurderingTilFormFields(v)]));
   const fraSøknaderUtenKrav = Object.fromEntries(
     (grunnlag?.søknaderUtenKravvurdering ?? []).map((s) => [
@@ -150,10 +304,10 @@ export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string
 export function finnKravVurderingByReferanse(
   grunnlag: KravGrunnlag | undefined,
   referanse: string
-): KravVurdering | undefined {
+): KravVurderingForSøknad | undefined {
   return (
-    grunnlag?.nyeVurderinger.find((v) => v.referanse === referanse) ??
-    grunnlag?.vedtatteVurderinger.find((v) => v.referanse === referanse)
+    getKravVurderingerForSøknad(grunnlag?.nyeVurderinger).find((v) => v.referanse === referanse) ??
+    getKravVurderingerForSøknad(grunnlag?.vedtatteVurderinger).find((v) => v.referanse === referanse)
   );
 }
 
@@ -173,7 +327,7 @@ export function hentOriginaleFormFelter(
   referanse: string
 ): KravVurderingFormFields | undefined {
   const krav = finnKravVurderingByReferanse(grunnlag, referanse);
-  if (krav) return kravVurderingTilFormFields(krav);
+  if (krav && kravVurderingIsKravVurderingForSøknad(krav)) return kravVurderingTilFormFields(krav);
 
   const søknad = finnSøknadUtenKravByReferanse(grunnlag, referanse);
   if (søknad) return søknadUtenKravTilFormFields(søknad);
