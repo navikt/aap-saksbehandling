@@ -19,6 +19,8 @@ import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varig
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 
+import { useFeatureFlag } from 'context/UnleashContext';
+
 import { Alert } from 'components/alert/Alert';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
@@ -78,6 +80,10 @@ const ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS: ValuePair[] = [
   { label: 'Ikke betydning / ikke relevant', value: 'IKKE_BETYDNING_IKKE_RELEVANT' },
 ];
 
+export const defaultNedsattArbeidsevneBegrunnelseOverskrifter = ['Relevant faktum', 'Vurdering', 'Konklusjon'];
+
+export const defaultNedsattArbeidsevneBegrunnelse = defaultNedsattArbeidsevneBegrunnelseOverskrifter.join('\n\n');
+
 interface FormFields {
   nedsattArbeidsevneDatobegrunnelse: string;
   nedsattArbeidsevneDato: string;
@@ -108,10 +114,11 @@ export const FastsettBeregning = ({
     initialMellomlagretVurdering
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
+  const visSubHeadings = useFeatureFlag('visSubHeadingsIFastsettBeregningstidspunkt');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering, visSubHeadings);
 
   const årsakTilBeregningstidspunktOptions = grunnlag?.skalVurdereYtterligere
     ? ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_KOMBINERT_OPTIONS
@@ -123,7 +130,16 @@ export const FastsettBeregning = ({
         type: 'textarea',
         label: 'Vilkårsvurdering',
         defaultValue: defaultValues.nedsattArbeidsevneDatobegrunnelse,
-        rules: { required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne' },
+        rules: {
+          required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne',
+          ...(visSubHeadings && {
+            validate: {
+              kanIkkeVæreDefaultBegrunnelse: (value) =>
+                (value as string).trim() !== defaultNedsattArbeidsevneBegrunnelse.trim() ||
+                'Du må skrive en egen vilkårsvurdering',
+            },
+          }),
+        },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
@@ -254,7 +270,11 @@ export const FastsettBeregning = ({
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
-          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
+          form.reset(
+            grunnlag?.vurdering
+              ? mapVurderingToDraftFormFields(grunnlag.vurdering, visSubHeadings)
+              : emptyDraftFormFields(visSubHeadings)
+          )
         );
       }}
       visningModus={visningModus}
@@ -302,9 +322,13 @@ export const FastsettBeregning = ({
   );
 };
 
-function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vurdering']): DraftFormFields {
+function mapVurderingToDraftFormFields(
+  vurdering: BeregningTidspunktGrunnlag['vurdering'],
+  visSubHeadings: boolean
+): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse,
+    nedsattArbeidsevneDatobegrunnelse:
+      vurdering?.begrunnelse ?? (visSubHeadings ? defaultNedsattArbeidsevneBegrunnelse : undefined),
     nedsattArbeidsevneDato: vurdering?.nedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato)
       : undefined,
@@ -317,9 +341,9 @@ function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vu
   };
 }
 
-function emptyDraftFormFields(): DraftFormFields {
+function emptyDraftFormFields(visSubHeadings: boolean): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: '',
+    nedsattArbeidsevneDatobegrunnelse: visSubHeadings ? defaultNedsattArbeidsevneBegrunnelse : '',
     nedsattArbeidsevneDato: '',
     årsak: '',
     ytterligereNedsattArbeidsevneDato: '',

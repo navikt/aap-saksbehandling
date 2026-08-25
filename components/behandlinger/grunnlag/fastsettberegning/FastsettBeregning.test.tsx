@@ -8,6 +8,8 @@ import { FetchResponse } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -198,7 +200,20 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
     expect(felt).toBeVisible();
   });
 
-  it('skal vise feilmelding hvis ikke besvart', async () => {
+  it('skal ha standardtekst med overskrifter forhåndsutfylt', () => {
+    render(
+      <FastsettBeregning
+        readOnly={false}
+        behandlingVersjon={0}
+        visAarsakDropdowns={true}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+    const felt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(felt).toHaveValue('Relevant faktum\n\nVurdering\n\nKonklusjon');
+  });
+
+  it('skal vise feilmelding hvis saksbehandler prøver å bekrefte med uendret standardtekst', async () => {
     render(
       <FastsettBeregning
         readOnly={false}
@@ -208,8 +223,39 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
       />
     );
     await velgBekreft();
-    const feilmelding = screen.getByText('Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne');
+    const feilmelding = screen.getByText('Du må skrive en egen vilkårsvurdering');
     expect(feilmelding).toBeVisible();
+  });
+
+  it('skal ikke forhåndsutfylle standardtekst når featureflagget er av', () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, visSubHeadingsIFastsettBeregningstidspunkt: false }}>
+        <FastsettBeregning
+          readOnly={false}
+          behandlingVersjon={0}
+          visAarsakDropdowns={true}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      </FeatureFlagProvider>
+    );
+    const felt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(felt).toHaveValue('');
+  });
+
+  it('skal vise feilmelding for tomt felt (ikke standardtekst-feilmelding) når featureflagget er av', async () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, visSubHeadingsIFastsettBeregningstidspunkt: false }}>
+        <FastsettBeregning
+          readOnly={false}
+          behandlingVersjon={0}
+          visAarsakDropdowns={true}
+          grunnlag={grunnlagUtenVurdering}
+        />
+      </FeatureFlagProvider>
+    );
+    await velgBekreft();
+    expect(screen.getByText('Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne')).toBeVisible();
+    expect(screen.queryByText('Du må skrive en egen vilkårsvurdering')).not.toBeInTheDocument();
   });
 
   it('skal vise feilmelding hvis satt frem i tid', async () => {
@@ -458,7 +504,9 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
+      'Relevant faktum\n\nVurdering\n\nKonklusjon'
+    );
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -609,7 +657,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
     );
     await velgBekreft();
     expect(screen.queryByText('Du må velge årsak til beregningstidspunkt.')).not.toBeInTheDocument();
-    expect(screen.getByText('Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne')).toBeVisible();
+    expect(screen.getByText('Du må skrive en egen vilkårsvurdering')).toBeVisible();
   });
 
   it('skal forhåndsvelge årsak fra eksisterende vurdering', () => {
