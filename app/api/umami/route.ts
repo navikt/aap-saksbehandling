@@ -59,5 +59,9 @@ function buildEventData(payload: UmamiKelvinEvent): UmamiEventData {
         inngang: payload.inngang,
         ...(payload.reserverer ? { reserverer: 'true' } : {}),
       };
+    case 'SYKDOMSVURDERING':
+      return {
+        antallSpørsmålFraMal: payload.antallSpørsmålFraMal,
+      }
   }
 }
