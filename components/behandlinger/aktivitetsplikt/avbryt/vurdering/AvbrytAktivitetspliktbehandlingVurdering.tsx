@@ -6,6 +6,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
 import { FormField } from 'components/form/FormField';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -31,6 +32,7 @@ export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, b
     'AVBRYT_AKTIVITETSPLIKTBEHANDLING',
     undefined
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { form, formFields } = useConfigForm<FormFields>(
     {
@@ -62,17 +64,22 @@ export const AvbrytAktivitetspliktbehandlingVurdering = ({ grunnlag, readOnly, b
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsAvklaringsbehov({
-        behandlingVersjon: behandlingVersjon,
-        behov: {
-          behovstype: Behovstype.AVBRYT_AKTIVITETSPLIKTBEHANDLING,
-          vurdering: {
-            begrunnelse: data.begrunnelse,
-            årsak: data.aarsak,
+      løsAvklaringsbehov(
+        {
+          behandlingVersjon: behandlingVersjon,
+          behov: {
+            behovstype: Behovstype.AVBRYT_AKTIVITETSPLIKTBEHANDLING,
+            vurdering: {
+              begrunnelse: data.begrunnelse,
+              årsak: data.aarsak,
+            },
           },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      });
+        () => {
+          loggUmamiVarighet('STEG_AVBRYT_AKTIVITETSPLIKTBEHANDLING_VARIGHET', umamiStartTidspunkt, Date.now());
+        }
+      );
     })(event);
   };
 

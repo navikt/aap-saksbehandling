@@ -7,6 +7,7 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -74,6 +75,7 @@ export const OvergangUforePeriodisert = ({
     'OVERGANG_UFORE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: OvergangUforeForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -113,6 +115,7 @@ export const OvergangUforePeriodisert = ({
           },
         },
         () => {
+          loggUmamiVarighet('STEG_OVERGANG_UFORE_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           closeAllAccordions();
           nullstillMellomlagretVurdering();

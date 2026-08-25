@@ -16,6 +16,7 @@ import {
 } from 'lib/types/types';
 import { erUendeligSlutt, formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -84,6 +85,7 @@ export const StudentVurderingV2 = ({ readOnly, initialMellomlagretVurdering, gru
     'AVKLAR_STUDENT_V2',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
     Behovstype.AVKLAR_STUDENT_KODE_V2,
@@ -129,6 +131,7 @@ export const StudentVurderingV2 = ({ readOnly, initialMellomlagretVurdering, gru
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_AVKLAR_STUDENT_V2_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
           closeAllAccordions();

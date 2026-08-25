@@ -5,6 +5,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -21,6 +22,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const { løsAvklaringsbehovStatus, løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
     useLøsAvklaringsbehov('BEKREFT_VURDERINGER_OPPFØLGING');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('BEKREFT_VURDERINGER_OPPFØLGING');
 
   const { grunnlag } = useBekreftVurderingerGrunnlag(initialGrunnlag);
 
@@ -55,13 +57,18 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
             className="fit-content"
             disabled={grunnlag?.mellomlagredeVurderinger.length != 0}
             onClick={() =>
-              løsAvklaringsbehov({
-                behandlingVersjon: behandlingVersjon,
-                behov: {
-                  behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+              løsAvklaringsbehov(
+                {
+                  behandlingVersjon: behandlingVersjon,
+                  behov: {
+                    behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+                  },
+                  referanse: behandlingsreferanse,
                 },
-                referanse: behandlingsreferanse,
-              })
+                () => {
+                  loggUmamiVarighet('STEG_BEKREFT_VURDERINGER_OPPFØLGING_VARIGHET', umamiStartTidspunkt, Date.now());
+                }
+              )
             }
             loading={løsAvklaringsbehovIsLoading}
           >
