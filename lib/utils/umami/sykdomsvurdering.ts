@@ -3,7 +3,7 @@ import { clientLoggUmamiEvent } from 'lib/utils/umami/client';
 export interface UmamiSykdomsvurderingEvent {
   type: 'SYKDOMSVURDERING';
   name: 'SYKDOMSVURDERING_INKLUDERER_MAL';
-  antallSpørsmålFraMal: number;
+  antallSpoersmaalFraMal: number;
 }
 
 export function loggUmamiSykdomsvurderingAntallSpørsmålFraMal(begrunnelse: string, spørsmålIMal: string[]) {
@@ -12,6 +12,6 @@ export function loggUmamiSykdomsvurderingAntallSpørsmålFraMal(begrunnelse: str
   clientLoggUmamiEvent({
     type: 'SYKDOMSVURDERING',
     name: 'SYKDOMSVURDERING_INKLUDERER_MAL',
-    antallSpørsmålFraMal: antallSpørsmålFraMal,
+    antallSpoersmaalFraMal: antallSpørsmålFraMal,
   });
 }
