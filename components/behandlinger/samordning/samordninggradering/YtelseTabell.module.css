@@ -19,3 +19,7 @@
   text-decoration: line-through;
   color: var(--ax-text-neutral-subtle);
 }
+
+.splittet {
+  background-color: var(--ax-bg-warning-soft);
+}
