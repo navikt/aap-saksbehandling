@@ -1,4 +1,4 @@
-import { render, screen } from 'lib/test/CustomRender';
+import { render, screen, act } from 'lib/test/CustomRender';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
@@ -267,6 +267,123 @@ describe('kopiering av perioder fra oppslag', () => {
 
     expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
+  });
+});
+
+describe('ferie i sykepengeperiode', () => {
+  const grunnlagMedSykepengerad: SamordningGraderingGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    feriePerioder: [],
+    historiskeVurderinger: [],
+    ytelser: [],
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      vurderinger: [
+        {
+          ytelseType: 'SYKEPENGER',
+          gradering: 100,
+          manuell: true,
+          periode: { fom: '2025-03-01', tom: '2025-03-31' },
+        },
+      ],
+      vurderingerMeta: {},
+    },
+  };
+
+  async function leggInnFerie(fom: string, tom: string) {
+    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+
+    const ytelseFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    await user.selectOptions(ytelseFelter[ytelseFelter.length - 1], 'FERIE_I_SYKEPENGEPERIODE');
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    await user.type(fomFelter[fomFelter.length - 1], fom);
+
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    await user.type(tomFelter[tomFelter.length - 1], tom);
+
+    await user.click(screen.getByRole('textbox', { name: 'Vurder vilkåret' }));
+  }
+
+  function perioder() {
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    return fomFelter.map(
+      (fom, index) => `${(fom as HTMLInputElement).value} - ${(tomFelter[index] as HTMLInputElement).value}`
+    );
+  }
+
+  test('viser tekst om at ferie fra sykepenger splitter opp sykepengeperioden', () => {
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />);
+
+    expect(
+      screen.getByText('Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.')
+    ).toBeVisible();
+  });
+
+  test('deler opp sykepengeperioden og skyver de resterende dagene til etter ferien', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />);
+
+    await leggInnFerie('10.03.2025', '14.03.2025');
+
+    expect(perioder()).toEqual(['01.03.2025 - 09.03.2025', '15.03.2025 - 05.04.2025', '10.03.2025 - 14.03.2025']);
+  });
+
+  test('lar sykepengeperioden være i fred når ferien ikke overlapper', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />);
+
+    await leggInnFerie('01.06.2025', '10.06.2025');
+
+    expect(perioder()).toEqual(['01.03.2025 - 31.03.2025', '01.06.2025 - 10.06.2025']);
+  });
+
+  test('regner om fra den opprinnelige perioden når feriedatoene rettes', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />);
+
+    await leggInnFerie('10.03.2025', '14.03.2025');
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    await user.clear(fomFelter[2]);
+    await user.type(fomFelter[2], '20.03.2025');
+    await user.clear(tomFelter[2]);
+    await user.type(tomFelter[2], '21.03.2025');
+    await user.click(screen.getByRole('textbox', { name: 'Vurder vilkåret' }));
+
+    expect(perioder()).toEqual(['01.03.2025 - 19.03.2025', '22.03.2025 - 02.04.2025', '20.03.2025 - 21.03.2025']);
+  });
+
+  test('markerer de endrede sykepengeradene', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />);
+
+    await leggInnFerie('10.03.2025', '14.03.2025');
+
+    expect(document.querySelectorAll('[data-splittet="true"]')).toHaveLength(2);
+  });
+
+  test('fjerner markeringen etter ti sekunder', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const bruker = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+    render(<SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />);
+
+    await bruker.click(screen.getByRole('button', { name: 'Legg til' }));
+    const ytelseFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    await bruker.selectOptions(ytelseFelter[ytelseFelter.length - 1], 'FERIE_I_SYKEPENGEPERIODE');
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    await bruker.type(fomFelter[fomFelter.length - 1], '10.03.2025');
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    await bruker.type(tomFelter[tomFelter.length - 1], '14.03.2025');
+    await bruker.click(screen.getByRole('textbox', { name: 'Vurder vilkåret' }));
+
+    expect(document.querySelectorAll('[data-splittet="true"]')).toHaveLength(2);
+
+    await act(async () => {
+      vi.advanceTimersByTime(10000);
+    });
+
+    expect(document.querySelectorAll('[data-splittet="true"]')).toHaveLength(0);
+    vi.useRealTimers();
   });
 });
 
