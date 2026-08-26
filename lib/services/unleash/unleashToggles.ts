@@ -17,6 +17,7 @@ export const FLAGS = [
   'DialogMedBehandler',
   'FaktiskArbeidTilkjentYtelse',
   'kopierPerioder',
+  'visSubHeadingsIFastsettBeregningstidspunkt',
   'autoSplittSykepenger',
 ] as const;
 
@@ -42,5 +43,6 @@ export const mockedFlags: Flags = {
   DialogMedBehandler: true,
   FaktiskArbeidTilkjentYtelse: true,
   kopierPerioder: true,
+  visSubHeadingsIFastsettBeregningstidspunkt: true,
   autoSplittSykepenger: true,
 };
