@@ -105,7 +105,7 @@ export const Refusjonskrav = ({ form, readOnly }: Props) => {
                       variant={'tertiary'}
                       type={'button'}
                       onClick={() => remove(index)}
-                      disabled={readOnly}
+                      disabled={readOnly || index === 0}
                     />
                   </Table.DataCell>
                 </Table.Row>
