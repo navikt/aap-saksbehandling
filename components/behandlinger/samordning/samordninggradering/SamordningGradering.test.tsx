@@ -385,6 +385,22 @@ describe('ferie i sykepengeperiode', () => {
     expect(document.querySelectorAll('[data-splittet="true"]')).toHaveLength(0);
     vi.useRealTimers();
   });
+
+  test('splitter ikke og viser ikke teksten når autoSplittSykepenger-toggelen er av', async () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+        <SamordningGradering grunnlag={grunnlagMedSykepengerad} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    expect(
+      screen.queryByText('Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.')
+    ).not.toBeInTheDocument();
+
+    await leggInnFerie('10.03.2025', '14.03.2025');
+
+    expect(perioder()).toEqual(['01.03.2025 - 31.03.2025', '10.03.2025 - 14.03.2025']);
+  });
 });
 
 describe('mellomlagring', () => {
