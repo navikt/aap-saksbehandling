@@ -18,6 +18,7 @@ export const FLAGS = [
   'FaktiskArbeidTilkjentYtelse',
   'kopierPerioder',
   'visSubHeadingsIFastsettBeregningstidspunkt',
+  'autoSplittSykepenger',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -43,4 +44,5 @@ export const mockedFlags: Flags = {
   FaktiskArbeidTilkjentYtelse: true,
   kopierPerioder: true,
   visSubHeadingsIFastsettBeregningstidspunkt: true,
+  autoSplittSykepenger: true,
 };

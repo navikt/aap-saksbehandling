@@ -1,16 +1,21 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ValuePair } from 'components/form/FormField';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SamordningYtelsestype } from 'lib/types/types';
 import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
+import { useEffect, useRef, useState } from 'react';
 import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
+import { splittSykepengerVedFerie } from 'components/behandlinger/samordning/samordninggradering/splittSykepengerVedFerie';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+
+const MARKERING_VARIGHET_MS = 10000;
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -54,7 +59,12 @@ const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
 ];
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
-  const { fields, remove, append } = fieldArray;
+  const { fields, remove, append, replace } = fieldArray;
+  const skalSplitteAutomatisk = useFeatureFlag('autoSplittSykepenger');
+  const [markerteRader, setMarkerteRader] = useState<number[]>([]);
+  const markeringTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  useEffect(() => () => clearTimeout(markeringTimeout.current), []);
 
   function leggTilRad() {
     append({
@@ -63,6 +73,25 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
       periode: { fom: '', tom: '' },
       gradering: undefined,
     });
+  }
+
+  function beregnSplittEtterFerie(ferieIndex: number) {
+    const gjeldendeRader = form.getValues('vurderteSamordninger');
+
+    if (!skalSplitteAutomatisk || gjeldendeRader[ferieIndex]?.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE') {
+      return;
+    }
+
+    const { rader, endredeIndekser } = splittSykepengerVedFerie(gjeldendeRader, ferieIndex);
+
+    if (JSON.stringify(rader) === JSON.stringify(gjeldendeRader)) {
+      return;
+    }
+
+    replace(rader);
+    setMarkerteRader(endredeIndekser);
+    clearTimeout(markeringTimeout.current);
+    markeringTimeout.current = setTimeout(() => setMarkerteRader([]), MARKERING_VARIGHET_MS);
   }
 
   return (
@@ -77,6 +106,11 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           <BodyShort size="small">
             100 % samordningsgrad vil gi stans av AAP i perioden etter § 11-27. Lavere prosent gir redusert ytelse.
           </BodyShort>
+          {skalSplitteAutomatisk && (
+            <BodyShort size="small">
+              Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.
+            </BodyShort>
+          )}
         </VStack>
         <VStack gap={'space-8'}>
           <TableStyled>
@@ -90,7 +124,17 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
             </Table.Header>
             <Table.Body>
               {fields.map((field, index) => (
-                <Table.Row key={field.id}>
+                <Table.Row
+                  key={field.id}
+                  className={markerteRader.includes(index) ? styles.splittet : undefined}
+                  data-splittet={markerteRader.includes(index) || undefined}
+                  onBlur={(event) => {
+                    if (event.currentTarget.contains(event.relatedTarget)) {
+                      return;
+                    }
+                    beregnSplittEtterFerie(index);
+                  }}
+                >
                   <Table.DataCell>
                     <HStack align={'center'} gap={'space-4'}>
                       <DateInputWrapper

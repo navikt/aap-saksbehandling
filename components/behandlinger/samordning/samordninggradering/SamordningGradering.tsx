@@ -49,6 +49,7 @@ interface SamordnetYtelse {
   manuell?: boolean;
   gradering?: number;
   periode: Periode;
+  opprinneligPeriode?: Periode;
 }
 
 export interface SamordningGraderingFormfields {
