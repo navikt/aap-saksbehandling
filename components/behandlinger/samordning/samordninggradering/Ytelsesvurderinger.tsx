@@ -1,6 +1,7 @@
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ValuePair } from 'components/form/FormField';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -59,6 +60,7 @@ const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
   const { fields, remove, append, replace } = fieldArray;
+  const skalSplitteAutomatisk = useFeatureFlag('autoSplittSykepenger');
   const [markerteRader, setMarkerteRader] = useState<number[]>([]);
   const markeringTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -76,7 +78,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
   function beregnSplittEtterFerie(ferieIndex: number) {
     const gjeldendeRader = form.getValues('vurderteSamordninger');
 
-    if (gjeldendeRader[ferieIndex]?.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE') {
+    if (!skalSplitteAutomatisk || gjeldendeRader[ferieIndex]?.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE') {
       return;
     }
 
@@ -104,9 +106,11 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           <BodyShort size="small">
             100 % samordningsgrad vil gi stans av AAP i perioden etter § 11-27. Lavere prosent gir redusert ytelse.
           </BodyShort>
-          <BodyShort size="small">
-            Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.
-          </BodyShort>
+          {skalSplitteAutomatisk && (
+            <BodyShort size="small">
+              Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.
+            </BodyShort>
+          )}
         </VStack>
         <VStack gap={'space-8'}>
           <TableStyled>
