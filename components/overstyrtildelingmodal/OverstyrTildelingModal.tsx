@@ -5,7 +5,7 @@ import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevur
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 
 export const OverstyrTildelingModal = () => {
-  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, callback, bekreftTildeling, avbrytTildeling } =
+  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, bekreftTildeling, avbrytTildeling } =
     useOverstyrTildelingHook();
 
   const handleClose = () => {
@@ -34,7 +34,6 @@ export const OverstyrTildelingModal = () => {
           type={'button'}
           className={'fit-content'}
           onClick={async () => {
-            callback();
             bekreftTildeling();
             setVisOverstyrModal(false);
           }}
