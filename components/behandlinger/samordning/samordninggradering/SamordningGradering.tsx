@@ -375,7 +375,7 @@ export function beregnTidligsteVirkningstidspunkt(
   samordninger: SamordnetYtelse[],
   rettighetsperiodeFom: Date
 ): string | undefined {
-  const perioder = samordninger
+  const perioderMedFullSamordning = samordninger
     .filter((s) => s.gradering === 100 && !!s.periode.fom && !!s.periode.tom)
     .map((s) => ({
       fom: parse(s.periode.fom, 'dd.MM.yyyy', new Date()),
@@ -384,12 +384,19 @@ export function beregnTidligsteVirkningstidspunkt(
     .filter((p) => isValid(p.fom) && isValid(p.tom))
     .sort((a, b) => a.fom.getTime() - b.fom.getTime());
 
-  if (!perioder.length) return undefined;
+  if (!perioderMedFullSamordning.length) return undefined;
 
-  let expected = rettighetsperiodeFom;
-  for (const { fom, tom } of perioder) {
-    if (fom > expected) return format(expected, 'dd.MM.yyyy');
-    expected = addDays(tom, 1);
+  // Gå gjennom periodene fra rettighetsperiodens start.
+  // Første dag som ikke er dekket av en 100%-periode er tidligste virkningstidspunkt.
+  let førsteDagUtenFullSamordning = rettighetsperiodeFom;
+  for (const { fom, tom } of perioderMedFullSamordning) {
+    const erHullFørDennePerioden = fom > førsteDagUtenFullSamordning;
+    if (erHullFørDennePerioden) {
+      return format(førsteDagUtenFullSamordning, 'dd.MM.yyyy');
+    }
+    førsteDagUtenFullSamordning = addDays(tom, 1);
   }
-  return format(expected, 'dd.MM.yyyy');
+
+  // Fant ingen hull, så første dag uten full samordning er dagen etter siste periode
+  return format(førsteDagUtenFullSamordning, 'dd.MM.yyyy');
 }
