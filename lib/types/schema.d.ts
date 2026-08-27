@@ -4786,14 +4786,20 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: {
+    get?: never;
+    put?: never;
+    post: {
       parameters: {
         query?: never;
         header?: never;
         path?: never;
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.dokumentinnhenting.p\u00E5minnelse.KandidatForP\u00E5minnelseRequest'];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -4806,8 +4812,6 @@ export interface paths {
         };
       };
     };
-    put?: never;
-    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -10720,10 +10724,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -14868,10 +14873,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -14906,10 +14912,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -14951,10 +14958,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -14989,10 +14997,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -16004,10 +16013,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17194,10 +17204,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17232,10 +17243,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17276,10 +17288,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17314,10 +17327,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17368,10 +17382,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17406,10 +17421,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17455,10 +17471,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17497,10 +17514,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_26'
         | 'FOLKETRYGDLOVEN_11_27'
         | 'FOLKETRYGDLOVEN_11_28'
-        | 'FOLKETRYGDLOVEN_11_29'
+        | 'FOLKETRYGDLOVEN_11_29_SYKESTIPEND'
         | 'FOLKETRYGDLOVEN_11_3'
         | 'FOLKETRYGDLOVEN_11_31'
         | 'FOLKETRYGDLOVEN_11_4'
+        | 'FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL'
         | 'FOLKETRYGDLOVEN_11_5'
         | 'FOLKETRYGDLOVEN_11_6'
         | 'FOLKETRYGDLOVEN_11_7'
@@ -17583,6 +17601,10 @@ export interface components {
       varMedlemMedNedsattArbeidsevne?: boolean | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto': {
+      /**
+       * @deprecated
+       * @description Bruk begrunnelse i lovvag/medlemskap istedet
+       */
       begrunnelse: string;
       /**
        * Format: date
@@ -19181,6 +19203,13 @@ export interface components {
     };
     /** Format: uuid */
     'no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse': string;
+    'no.nav.aap.behandlingsflyt.kontrakt.dokumentinnhenting.p\u00E5minnelse.KandidatForP\u00E5minnelseRequest': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      bestillingOpprettetDato: string;
+    };
     /** Format: uuid */
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerkl\u00E6ringId': string;
     /** Format: uuid */
