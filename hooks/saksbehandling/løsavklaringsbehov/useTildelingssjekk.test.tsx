@@ -3,15 +3,15 @@ import { renderHook, act } from '@testing-library/react';
 import { useTildelingssjekk } from './useTildelingssjekk';
 
 const mockSetVisOverstyrModal = vi.fn();
-const mockSetBekreftTildeling = vi.fn();
-const mockSetAvbrytTildeling = vi.fn();
+const mockSetBekreftOverstyring = vi.fn();
+const mockSetAvbrytOverstyring = vi.fn();
 const mockSetReservertAvNavn = vi.fn();
 
 vi.mock('hooks/saksbehandling/løsavklaringsbehov/useOverstyrTildeling', () => ({
   useOverstyrTildelingNyHook: () => ({
     setVisOverstyrModal: mockSetVisOverstyrModal,
-    setBekreftTildeling: mockSetBekreftTildeling,
-    setAvbrytTildeling: mockSetAvbrytTildeling,
+    setBekreftOverstyring: mockSetBekreftOverstyring,
+    setAvbrytOverstyring: mockSetAvbrytOverstyring,
     setReservertAvNavn: mockSetReservertAvNavn,
   }),
 }));
@@ -50,7 +50,7 @@ describe('useTildelingssjekk', () => {
 
     expect(kanFortsette).toBe(true);
     expect(mockSetVisOverstyrModal).not.toHaveBeenCalled();
-    expect(mockSetBekreftTildeling).not.toHaveBeenCalled();
+    expect(mockSetBekreftOverstyring).not.toHaveBeenCalled();
   });
 
   test('skal returnere true når ingen saksbehandler er tildelt', async () => {
@@ -92,8 +92,8 @@ describe('useTildelingssjekk', () => {
 
       await Promise.resolve();
 
-      const simulerBekreftTildeling = mockSetBekreftTildeling.mock.calls[0][0];
-      simulerBekreftTildeling()();
+      const simulerBekreftOverstyring = mockSetBekreftOverstyring.mock.calls[0][0];
+      simulerBekreftOverstyring()();
 
       kanFortsette = await promise;
     });
@@ -121,8 +121,8 @@ describe('useTildelingssjekk', () => {
 
       await Promise.resolve();
 
-      const simulerAvbrytTildeling = mockSetAvbrytTildeling.mock.calls[0][0];
-      simulerAvbrytTildeling()();
+      const simulerAvbrytOverstyring = mockSetAvbrytOverstyring.mock.calls[0][0];
+      simulerAvbrytOverstyring()();
 
       kanFortsette = await promise;
     });

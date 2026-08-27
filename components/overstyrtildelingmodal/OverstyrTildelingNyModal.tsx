@@ -5,11 +5,11 @@ import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevur
 import { useOverstyrTildelingNyHook } from 'hooks/saksbehandling/løsavklaringsbehov/useOverstyrTildeling';
 
 export const OverstyrTildelingNyModal = () => {
-  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, bekreftTildeling, avbrytTildeling } =
+  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, bekreftOverstyring, avbrytOverstyring } =
     useOverstyrTildelingNyHook();
 
   const handleClose = () => {
-    avbrytTildeling();
+    avbrytOverstyring();
     setVisOverstyrModal(false);
   };
 
@@ -34,7 +34,7 @@ export const OverstyrTildelingNyModal = () => {
           type={'button'}
           className={'fit-content'}
           onClick={async () => {
-            bekreftTildeling();
+            bekreftOverstyring();
             setVisOverstyrModal(false);
           }}
         >
