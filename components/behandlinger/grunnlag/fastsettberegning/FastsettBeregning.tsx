@@ -19,8 +19,6 @@ import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varig
 import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 
-import { useFeatureFlag } from 'context/UnleashContext';
-
 import { Alert } from 'components/alert/Alert';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
@@ -114,11 +112,10 @@ export const FastsettBeregning = ({
     initialMellomlagretVurdering
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
-  const visSubHeadings = useFeatureFlag('visSubHeadingsIFastsettBeregningstidspunkt');
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag?.vurdering, visSubHeadings);
+    : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
   const årsakTilBeregningstidspunktOptions = grunnlag?.skalVurdereYtterligere
     ? ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_KOMBINERT_OPTIONS
@@ -132,13 +129,11 @@ export const FastsettBeregning = ({
         defaultValue: defaultValues.nedsattArbeidsevneDatobegrunnelse,
         rules: {
           required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne',
-          ...(visSubHeadings && {
-            validate: {
-              kanIkkeVæreDefaultBegrunnelse: (value) =>
-                (value as string).trim() !== defaultNedsattArbeidsevneBegrunnelse.trim() ||
-                'Du må skrive en egen vilkårsvurdering',
-            },
-          }),
+          validate: {
+            kanIkkeVæreDefaultBegrunnelse: (value) =>
+              (value as string).trim() !== defaultNedsattArbeidsevneBegrunnelse.trim() ||
+              'Du må skrive en egen vilkårsvurdering',
+          },
         },
       },
       nedsattArbeidsevneDato: {
@@ -270,11 +265,7 @@ export const FastsettBeregning = ({
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
         slettMellomlagring(() =>
-          form.reset(
-            grunnlag?.vurdering
-              ? mapVurderingToDraftFormFields(grunnlag.vurdering, visSubHeadings)
-              : emptyDraftFormFields(visSubHeadings)
-          )
+          form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         );
       }}
       visningModus={visningModus}
@@ -322,13 +313,9 @@ export const FastsettBeregning = ({
   );
 };
 
-function mapVurderingToDraftFormFields(
-  vurdering: BeregningTidspunktGrunnlag['vurdering'],
-  visSubHeadings: boolean
-): DraftFormFields {
+function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vurdering']): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse:
-      vurdering?.begrunnelse ?? (visSubHeadings ? defaultNedsattArbeidsevneBegrunnelse : undefined),
+    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse ?? defaultNedsattArbeidsevneBegrunnelse,
     nedsattArbeidsevneDato: vurdering?.nedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato)
       : undefined,
@@ -341,9 +328,9 @@ function mapVurderingToDraftFormFields(
   };
 }
 
-function emptyDraftFormFields(visSubHeadings: boolean): DraftFormFields {
+function emptyDraftFormFields(): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: visSubHeadings ? defaultNedsattArbeidsevneBegrunnelse : '',
+    nedsattArbeidsevneDatobegrunnelse: defaultNedsattArbeidsevneBegrunnelse,
     nedsattArbeidsevneDato: '',
     årsak: '',
     ytterligereNedsattArbeidsevneDato: '',
