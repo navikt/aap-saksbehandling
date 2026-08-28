@@ -376,7 +376,7 @@ export function beregnTidligsteVirkningstidspunkt(
   rettighetsperiodeFom: Date
 ): string | undefined {
   const perioderMedFullSamordning = samordninger
-    .filter((s) => s.gradering === 100 && !!s.periode.fom && !!s.periode.tom)
+    .filter((s) => s.gradering == 100 && !!s.periode.fom && !!s.periode.tom)
     .map((s) => ({
       fom: parse(s.periode.fom, 'dd.MM.yyyy', new Date()),
       tom: parse(s.periode.tom, 'dd.MM.yyyy', new Date()),
