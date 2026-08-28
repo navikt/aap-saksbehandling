@@ -9,7 +9,7 @@ import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 import styles from './Melding.module.css';
-import { DokumentInfo } from 'lib/types/journalpost';
+import { BegrensetDokumentInfoDto } from 'lib/types/dialogmelding';
 
 // TODO: Fjerne?
 export type DokumentasjonType =
@@ -28,7 +28,7 @@ interface Props {
   opprettetTidspunkt: string;
   status?: 'SENDT' | 'LEVERT' | 'FEILET';
   journalpostId: string | undefined;
-  dokumentInfoIdListe: DokumentInfo[];
+  dokumentInfoIdListe: BegrensetDokumentInfoDto[];
   children: React.ReactNode;
 }
 

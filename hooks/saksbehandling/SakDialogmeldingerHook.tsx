@@ -2,12 +2,12 @@
 
 import useSWR from 'swr';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { FellesDialogmeldingDto } from 'lib/types/dialogmelding';
+import { DialogmeldingMedDokumenter } from 'lib/types/dialogmelding';
 import { isError } from 'lib/utils/api';
-import { clientHentDialogmeldingerForSak } from 'lib/dokumentClientApi';
+import { hentAlleDialogmeldingerMedDokumentIdPåSak } from 'lib/clientApi';
 
 export function useDialogmeldinger(): {
-  dialogmeldinger?: FellesDialogmeldingDto[];
+  dialogmeldingerMedDokumentliste?: DialogmeldingMedDokumenter[];
   refetchDialogmeldingerClient: () => void;
 } {
   const params = useParamsMedType();
@@ -17,13 +17,13 @@ export function useDialogmeldinger(): {
   }
 
   const { data, mutate } = useSWR(
-    `api/dialogmelding/${params.saksnummer}/dialogmeldinger`,
-    () => clientHentDialogmeldingerForSak(params.saksnummer),
+    `api/dokumentinnhenting/syfo/dialogmeldinger/${params.saksnummer}`,
+    () => hentAlleDialogmeldingerMedDokumentIdPåSak(params.saksnummer),
     { revalidateOnFocus: true, shouldRetryOnError: true }
   );
 
   return {
-    dialogmeldinger: !isError(data) ? data?.data : undefined,
+    dialogmeldingerMedDokumentliste: !isError(data) ? data?.data : undefined,
     refetchDialogmeldingerClient: mutate,
   };
 }

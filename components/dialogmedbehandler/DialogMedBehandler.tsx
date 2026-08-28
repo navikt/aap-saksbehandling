@@ -8,7 +8,7 @@ import styles from './DialogMedBehandler.module.css';
 import { useDialogmeldinger } from 'hooks/saksbehandling/SakDialogmeldingerHook';
 
 export const DialogMedBehandler = () => {
-  const { dialogmeldinger } = useDialogmeldinger();
+  const { dialogmeldingerMedDokumentliste } = useDialogmeldinger();
 
   return (
     <section>
@@ -24,23 +24,23 @@ export const DialogMedBehandler = () => {
       </VStack>
 
       <VStack gap={'space-20'} className={styles.meldingervindu}>
-        {dialogmeldinger?.map((dialogmelding, index) => (
+        {dialogmeldingerMedDokumentliste?.map((dialogmeldingMedDokumentliste, index) => (
           <Melding
             key={index}
-            visningType={dialogmelding.innkommendeUtgaaende}
-            // TODO: Rydd opp bruken av dokumentasjonsType!
+            visningType={dialogmeldingMedDokumentliste.dialogmelding.innkommendeUtgaaende}
+            // TODO: Er dette alltid riktig meldingstype for innkommende meldinger?
             dokumentasjonType={
-              dialogmelding.innkommendeUtgaaende === 'INNKOMMENDE'
+              dialogmeldingMedDokumentliste.dialogmelding.innkommendeUtgaaende === 'INNKOMMENDE'
                 ? 'MELDING_FRA_BEHANDLER'
-                : dialogmelding.dokumentasjonsType
+                : dialogmeldingMedDokumentliste.dialogmelding.dokumentasjonsType
             }
-            meldingFraNavn={dialogmelding.meldingFraNavn}
-            opprettetTidspunkt={dialogmelding.opprettetTidspunkt?.toString()}
-            status={dialogmelding.meldingStatus}
-            journalpostId={dialogmelding.journalpostId}
-            dokumentInfoIdListe={dialogmelding.dokumentIdListe}
+            meldingFraNavn={dialogmeldingMedDokumentliste.dialogmelding.meldingFraNavn}
+            opprettetTidspunkt={dialogmeldingMedDokumentliste.dialogmelding.opprettetTidspunkt?.toString()}
+            status={dialogmeldingMedDokumentliste.dialogmelding.meldingStatus}
+            journalpostId={dialogmeldingMedDokumentliste.dialogmelding.journalpostId}
+            dokumentInfoIdListe={dialogmeldingMedDokumentliste.dokumentIdListe}
           >
-            {dialogmelding.tekst}
+            {dialogmeldingMedDokumentliste.dialogmelding.tekst}
           </Melding>
         ))}
       </VStack>

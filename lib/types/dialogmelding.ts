@@ -1,6 +1,5 @@
 // TODO: Ha dette i egen fil eller i en annen, f.eks. journalpost?
 
-import { DokumentInfo } from 'lib/types/journalpost';
 import { DokumentasjonType } from 'components/dialogmedbehandler/Melding';
 
 export enum InnkommendeUtgaaende {
@@ -22,5 +21,14 @@ export interface FellesDialogmeldingDto {
   tekst?: string;
   meldingStatus?: DialogmeldingLeveringStatus;
   journalpostId?: string;
-  dokumentIdListe: DokumentInfo[];
+}
+
+export interface BegrensetDokumentInfoDto {
+  dokumentInfoId: String;
+  tittel?: String;
+}
+
+export interface DialogmeldingMedDokumenter {
+  dialogmelding: FellesDialogmeldingDto;
+  dokumentIdListe: BegrensetDokumentInfoDto[];
 }

@@ -42,6 +42,7 @@ import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'l
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
+import { DialogmeldingMedDokumenter } from 'lib/types/dialogmelding';
 const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
@@ -166,6 +167,13 @@ export function clientHentTilgangForKvalitetssikring(referanse: string) {
 
 export function clientHentSakshistorikk(saksnummer: string) {
   return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}/historikk`, 'GET');
+}
+
+export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
+  return clientFetch<Array<DialogmeldingMedDokumenter>>(
+    `${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`,
+    'GET'
+  );
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {

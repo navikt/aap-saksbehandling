@@ -2,7 +2,6 @@ import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversik
 import { clientFetch } from 'lib/clientApi';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { Journalpost } from 'lib/types/journalpost';
-import { FellesDialogmeldingDto } from 'lib/types/dialogmelding';
 
 const BASE_URL = '/saksbehandling';
 
@@ -37,11 +36,4 @@ export function clientHentRelevanteDokumenter(saksnummer: string, personIdent: s
     saksnummer,
     personIdent,
   });
-}
-
-export function clientHentDialogmeldingerForSak(saksnummer: string) {
-  return clientFetch<Array<FellesDialogmeldingDto>>(
-    `${BASE_URL}/api/dialogmelding/${saksnummer}/dialogmeldinger`,
-    'GET'
-  );
 }
