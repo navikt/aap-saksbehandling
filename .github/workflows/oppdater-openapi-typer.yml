@@ -72,7 +72,7 @@ jobs:
           EXISTING_PR=$(gh pr list --state open --head "$BRANCH_NAME" --json number --jq '.[0].number')
           if [ -n "$EXISTING_PR" ]; then
             echo "Oppdaterer eksisterende PR #$EXISTING_PR"
-            gh pr comment "$EXISTING_PR" --body "Oppdatert med nye typer fra run ${{ inputs.run-id }}."
+            gh pr comment "$EXISTING_PR" --edit-last --create-if-none --body "Oppdatert med nye typer fra run ${{ inputs.run-id }}."
           else
             gh pr create --head "$BRANCH_NAME" \
               --title "AAP-BAU: Oppdater genererte typer fra aap-behandlingsflyt" \
