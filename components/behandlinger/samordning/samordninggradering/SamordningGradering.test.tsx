@@ -1,7 +1,10 @@
 import { render, screen } from 'lib/test/CustomRender';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
-import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import {
+  beregnTidligsteVirkningstidspunkt,
+  SamordningGradering,
+} from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { format, subWeeks } from 'date-fns';
 import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
 import { beforeEach, describe, expect, it, test, vi } from 'vitest';
@@ -402,5 +405,70 @@ describe('mellomlagring', () => {
 
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
+  });
+});
+
+describe('beregnTidligsteVirkningstidspunkt', () => {
+  const ytelse = (fom: string, tom: string, gradering: number) => ({
+    gradering,
+    periode: { fom, tom },
+    ytelseType: 'SYKEPENGER' as const,
+    manuell: true,
+  });
+
+  it('returnerer undefined når det ikke finnes perioder med gradering 100', () => {
+    expect(
+      beregnTidligsteVirkningstidspunkt([ytelse('01.01.2025', '31.01.2025', 50)], new Date(2025, 0, 1))
+    ).toBeUndefined();
+  });
+
+  it('returnerer undefined når samordninger er tom', () => {
+    expect(beregnTidligsteVirkningstidspunkt([], new Date(2025, 0, 1))).toBeUndefined();
+  });
+
+  it('finner første hull mellom perioder', () => {
+    const samordninger = [
+      ytelse('01.01.2025', '10.01.2025', 100),
+      ytelse('11.01.2025', '12.01.2025', 100),
+      ytelse('15.01.2025', '18.01.2025', 100),
+      ytelse('01.02.2025', '10.02.2025', 100),
+    ];
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('13.01.2025');
+  });
+
+  it('returnerer dagen etter siste tom når det ikke finnes hull', () => {
+    const samordninger = [ytelse('01.01.2025', '10.01.2025', 100), ytelse('11.01.2025', '31.01.2025', 100)];
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('01.02.2025');
+  });
+
+  it('bruker rettighetsperiodeFom som startpunkt og oppdager hull før første periode', () => {
+    const samordninger = [ytelse('15.01.2025', '31.01.2025', 100)];
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('01.01.2025');
+  });
+
+  it('ignorerer perioder med gradering som ikke er 100', () => {
+    const samordninger = [
+      ytelse('01.01.2025', '10.01.2025', 100),
+      ytelse('11.01.2025', '20.01.2025', 50),
+      ytelse('25.01.2025', '31.01.2025', 100),
+    ];
+    // 50%-perioden ignoreres → hull mellom 10jan og 25jan
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('11.01.2025');
+  });
+
+  it('håndterer enkelt periode uten hull', () => {
+    expect(beregnTidligsteVirkningstidspunkt([ytelse('01.01.2025', '31.01.2025', 100)], new Date(2025, 0, 1))).toBe(
+      '01.02.2025'
+    );
+  });
+
+  it('sorterer perioder etter fom selv om de er usortert', () => {
+    const samordninger = [
+      ytelse('15.01.2025', '18.01.2025', 100),
+      ytelse('01.01.2025', '10.01.2025', 100),
+      ytelse('11.01.2025', '12.01.2025', 100),
+    ];
+    // Etter sortering: 1jan-10jan, 11jan-12jan, 15jan-18jan → hull 13jan
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('13.01.2025');
   });
 });
