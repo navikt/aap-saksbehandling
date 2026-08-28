@@ -26,7 +26,7 @@ export const OppholdskravStegMedDataFatching = async ({ behandlingVersjon, behan
       grunnlag={grunnlag.data}
       initialMellomlagring={mellomlagring}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };
