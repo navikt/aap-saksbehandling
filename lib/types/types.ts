@@ -494,6 +494,9 @@ export type ForeslåVedtakVedtakslengdeGrunnlag =
 
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
 
+export type VilkårsavslagDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VilkårsavslagDto'];
+
 export type AutomatiskLovvalgOgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
 

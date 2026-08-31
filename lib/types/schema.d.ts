@@ -14461,7 +14461,7 @@ export interface components {
         | 'SONER_STRAFF'
         | 'VARIGHETSKVOTE_BRUKT_OPP'
         | null;
-      'vilk\u00E5rsavslag': string[];
+      'vilk\u00E5rsavslag': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Vilk\u00E5rsavslagDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Foresl\u00E5VedtakDto': {
       'avslags\u00E5rsak': components['schemas']['no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Avslags\u00E5rsakDto'];
@@ -14547,6 +14547,42 @@ export interface components {
         | null;
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.foresl\u00E5vedtak.Vilk\u00E5rsavslagDto': {
+      /** @enum {string|null} */
+      'avslags\u00E5rsak'?:
+        | 'ANNEN_FULL_YTELSE'
+        | 'ANNEN_FULL_YTELSE_AVSLAG'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR'
+        | 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'
+        | 'BRUDD_PÅ_OPPHOLDSKRAV_STANS'
+        | 'BRUKER_OVER_67'
+        | 'BRUKER_UNDER_18'
+        | 'HAR_RETT_TIL_FULLT_UTTAK_ALDERSPENSJON'
+        | 'IKKE_BEHOV_FOR_OPPFOLGING'
+        | 'IKKE_MEDLEM'
+        | 'IKKE_MEDLEM_FORUTGÅENDE'
+        | 'IKKE_NOK_REDUSERT_ARBEIDSEVNE'
+        | 'IKKE_OPPFYLT_OPPHOLDSKRAV_EØS'
+        | 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'
+        | 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE'
+        | 'IKKE_RETT_PA_STUDENT'
+        | 'IKKE_RETT_PA_SYKEPENGEERSTATNING'
+        | 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING'
+        | 'IKKE_SYKDOM_AV_VISS_VARIGHET'
+        | 'IKKE_SYKDOM_SKADE_LYTE'
+        | 'IKKE_SYKDOM_SKADE_LYTE_VESENTLIGDEL'
+        | 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING'
+        | 'MANGLENDE_DOKUMENTASJON'
+        | 'NORGE_IKKE_KOMPETENT_STAT'
+        | 'ORDINÆRKVOTE_BRUKT_OPP'
+        | 'SYKEPENGEERSTATNINGKVOTE_BRUKT_OPP'
+        | 'VARIGHET_OVERSKREDET_ARBEIDSSØKER'
+        | 'VARIGHET_OVERSKREDET_OVERGANG_UFORE'
+        | 'VARIGHET_OVERSKREDET_STUDENT'
+        | null;
+      'vilk\u00E5r': string;
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27GrunnlagDto': {
       brukersYtelseAlternativer: (
@@ -16923,6 +16959,7 @@ export interface components {
       type:
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
+        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
@@ -18997,6 +19034,7 @@ export interface components {
       'vilk\u00E5rtype':
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
+        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
@@ -19283,6 +19321,7 @@ export interface components {
       'vurdererVilk\u00E5r'?:
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
+        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
