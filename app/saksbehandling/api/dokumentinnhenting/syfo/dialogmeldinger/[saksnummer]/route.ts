@@ -6,7 +6,6 @@ import { hentAlleDialogmeldingerMedDokumentIdPåSak } from 'lib/services/saksbeh
 
 export async function GET(_: NextApiRequest, props: { params: Promise<{ saksnummer: string }> }) {
   if (isLocal()) {
-    // TODO: Fyll med noe relevant!
     return NextResponse.json(mockResponseDokumenter, { status: 200 });
   }
 

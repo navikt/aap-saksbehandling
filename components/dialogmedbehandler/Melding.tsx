@@ -11,7 +11,6 @@ import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import styles from './Melding.module.css';
 import { BegrensetDokumentInfoDto } from 'lib/types/dialogmelding';
 
-// TODO: Fjerne?
 export type DokumentasjonType =
   | 'L120'
   | 'L40'
@@ -109,8 +108,6 @@ export const Melding = ({
 
 const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => {
   if (!dokumentasjonType) {
-    // TODO: Hva skal defaultverdien være? Bør aldri inntreffe fordi feltet ikke er nullable i dokumentinnhenting hvor
-    //  det settes for utgående meldinger, mens innkommende meldinger
     return '';
   }
 

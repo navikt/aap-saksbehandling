@@ -28,7 +28,7 @@ export const DialogMedBehandler = () => {
           <Melding
             key={index}
             visningType={dialogmeldingMedDokumentliste.dialogmelding.innkommendeUtgaaende}
-            // TODO: Er dette alltid riktig meldingstype for innkommende meldinger?
+            // Mangler dokumentasjonstype i mottatt_dialogmelding-tabellen i 'dokumentinnhenting'
             dokumentasjonType={
               dialogmeldingMedDokumentliste.dialogmelding.innkommendeUtgaaende === 'INNKOMMENDE'
                 ? 'MELDING_FRA_BEHANDLER'
