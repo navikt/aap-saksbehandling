@@ -49,7 +49,7 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
 // Denne listen kan f.eks. brukes til for å sjekke om brukes velger omgjøring
 // på en av disse hjemmlene, slik at vi kan vise en feilmelding i stede for å la det
 // feilge pga manglende mapping i backend
-export const ikkeImplementertKlageHjemmler: Hjemmel[] = [
+const ikkeImplementertKlageHjemmler: Hjemmel[] = [
   'FOLKETRYGDLOVEN_11_4',
   'FOLKETRYGDLOVEN_11_8',
   'FOLKETRYGDLOVEN_11_12',

@@ -4,7 +4,7 @@ export function byggVilkårskortLenke(saknummer: string, behandlingsreferanse: s
   return `/saksbehandling/sak/${saknummer}/${behandlingsreferanse}/${behovstypeTilVilkårskortLink(behovstype)}`;
 }
 
-export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
+function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
   switch (behovstype) {
     case Behovstype.AVKLAR_SYKDOM_KODE:
       return 'SYKDOM/#AVKLAR_SYKDOM';

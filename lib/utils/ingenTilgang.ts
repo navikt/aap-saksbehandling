@@ -1,4 +1,4 @@
-export const INGEN_TILGANG_DIGEST = 'INGEN_TILGANG';
+const INGEN_TILGANG_DIGEST = 'INGEN_TILGANG';
 
 /**
  * Kaster en feil som error-grensen (error.tsx) gjenkjenner som en 403-tilgangsfeil.

@@ -1,7 +1,7 @@
 /**
  * Behandlingssteget (eller tilsvarende vilkårskort/seksjon) en umami-hendelse måles for.
  */
-export const UMAMI_STEG = [
+const UMAMI_STEG = [
   'TREKK_SØKNAD',
   'RETTIGHETSPERIODE',
   'LOVVALG_MEDLEMSKAP',

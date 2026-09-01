@@ -102,7 +102,7 @@ enum AndreUtbetalingerYtelser {
   NEI = 'NEI',
 }
 
-export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetalingerYtelser).map(([k, v]) => ({
+const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetalingerYtelser).map(([k, v]) => ({
   value: k,
   label: v,
 }));

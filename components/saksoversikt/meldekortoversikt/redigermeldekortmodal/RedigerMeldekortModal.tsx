@@ -317,7 +317,7 @@ export function mapFormDataTilOppdaterMeldekortRequest(
   };
 }
 
-export function replaceCommasWithDots(input: string): string {
+function replaceCommasWithDots(input: string): string {
   return input.replace(/,/g, '.');
 }
 

@@ -46,7 +46,7 @@ interface AvsenderMottaker {
   navn?: string;
 }
 
-export enum AvsenderMottakerIdType {
+enum AvsenderMottakerIdType {
   FNR = 'FNR',
   ORGNR = 'ORGNR',
   HPRNR = 'HPRNR',

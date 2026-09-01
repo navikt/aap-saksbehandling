@@ -252,6 +252,6 @@ export const FormField = <FormFieldIds extends FieldValues>(props: Props<FormFie
   );
 };
 
-export function mapToValuePair(option: string | ValuePair) {
+function mapToValuePair(option: string | ValuePair) {
   return typeof option == 'string' ? { label: option, value: option } : option;
 }

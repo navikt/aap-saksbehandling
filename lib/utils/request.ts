@@ -51,7 +51,7 @@ export function mapSortStateTilOppgaveSortering(
     : undefined;
 }
 
-export function mapSortStateDirectionTilBackendEnum(direction: SortState['direction']): SortOrder {
+function mapSortStateDirectionTilBackendEnum(direction: SortState['direction']): SortOrder {
   switch (direction) {
     case 'ascending':
       return 'ASC';

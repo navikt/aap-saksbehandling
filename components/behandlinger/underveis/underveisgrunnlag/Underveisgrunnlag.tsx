@@ -74,7 +74,7 @@ export const Underveisgrunnlag = ({ grunnlagMedDiff, readOnly, behandlingVersjon
   );
 };
 
-export const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnlagMedDiff }) => {
+const UnderveisTabellMedDiff = ({ grunnlag }: { grunnlag: UnderveisGrunnlagMedDiff }) => {
   const [visHistorikkPåEndredePerioder, setVisHistorikkPåEndredePerioder] = useState(false);
   const [visPerioderUtenEndringFraTidligere, setVisPerioderUtenEndringFraTidligere] = useState(false);
 

@@ -60,7 +60,7 @@ export function isNotEmpty<T>(item: T | null | undefined): item is T {
   return item != null && item !== '';
 }
 
-export function getLandkodeOrAnnet(value: string): string {
+function getLandkodeOrAnnet(value: string): string {
   if (alleLandUtenNorge.some((l) => l.value === value)) {
     return value;
   }

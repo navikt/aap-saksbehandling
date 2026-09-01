@@ -24,7 +24,7 @@ export type LeggTilBarnFormFields = BarneTilleggVurdering & {
   manglerIdent: boolean;
 };
 
-export enum Relasjon {
+enum Relasjon {
   FORELDER = 'FORELDER',
   FOSTERFORELDER = 'FOSTERFORELDER',
 }

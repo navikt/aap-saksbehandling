@@ -182,7 +182,7 @@ export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
   };
 }
 
-export function getStegDataForBekreftVurderingerOppfølgingSteg(
+function getStegDataForBekreftVurderingerOppfølgingSteg(
   aktivStegGruppe: StegGruppe,
   flyt: BehandlingFlytOgTilstand
 ) {

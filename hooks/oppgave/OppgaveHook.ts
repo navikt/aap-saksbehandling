@@ -86,7 +86,7 @@ function lagUrlSuffix(filter: OppgavelisteRequest['utvidetFilter']): string {
   return queryString ? `?${queryString}` : '';
 }
 
-export function useOppgaver({
+function useOppgaver({
   aktiveEnheter,
   visKunOppgaverSomBrukerErVeilederPå = false,
   aktivKøId,

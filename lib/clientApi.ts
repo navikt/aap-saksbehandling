@@ -172,7 +172,7 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
-export function clientHentRettighetsinfo(saksnummer: string) {
+function clientHentRettighetsinfo(saksnummer: string) {
   return clientFetch<RettighetsinfoDto>(`${BASE_URL}/api/sak/${saksnummer}/rettighetsinfo`, 'GET');
 }
 

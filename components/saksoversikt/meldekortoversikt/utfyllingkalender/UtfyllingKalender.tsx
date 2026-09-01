@@ -24,7 +24,7 @@ export interface MeldeperiodeUke {
   felter: FieldArrayWithIndex[];
 }
 
-export const utfyllingKalenderId = 'rapporteringskalender';
+const utfyllingKalenderId = 'rapporteringskalender';
 
 export const UtfyllingKalender = ({ readOnly }: Props) => {
   const form = useFormContext<RedigerMeldekortFormFields>();

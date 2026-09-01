@@ -265,6 +265,6 @@ function mapVurderingToDraftFormFields(
   };
 }
 
-export function formaterDatoForFrontendMedStøtteForUendeligSlutt(dato: Date | string): string {
+function formaterDatoForFrontendMedStøtteForUendeligSlutt(dato: Date | string): string {
   return format(dato, DATO_FORMATER.ddMMyyyy, { locale: nb });
 }

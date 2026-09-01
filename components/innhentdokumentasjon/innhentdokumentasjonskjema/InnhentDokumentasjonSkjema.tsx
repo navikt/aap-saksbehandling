@@ -60,7 +60,7 @@ interface Props {
   onSuccess: () => void;
 }
 
-export const formaterBehandlernavn = (behandler: Behandler): string => {
+const formaterBehandlernavn = (behandler: Behandler): string => {
   if (behandler.mellomnavn) {
     return `${behandler.fornavn} ${behandler.mellomnavn} ${behandler.etternavn}`;
   }

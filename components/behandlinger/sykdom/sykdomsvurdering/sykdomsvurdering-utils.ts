@@ -59,7 +59,7 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
   }
 }
 
-export function emptySykdomsvurdering(diagnoser?: {
+function emptySykdomsvurdering(diagnoser?: {
   kodeverk?: string;
   hoveddiagnose?: ValuePair | null;
   bidiagnose?: ValuePair[] | null;

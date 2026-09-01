@@ -7,11 +7,11 @@ export type OppgaveInngang = 'MINE_OPPGAVER'; // TODO, MINE_OPPGAVER, LEDIGE_OPP
 /**
  * Målet man navigerer til i `GÅ_TIL_<MÅL>`.
  */
-export const UMAMI_NAVIGERING_MÅL = ['BEHANDLING', 'SAKSOVERSIKT'] as const;
+const UMAMI_NAVIGERING_MÅL = ['BEHANDLING', 'SAKSOVERSIKT'] as const;
 type UmamiNavigeringMål = (typeof UMAMI_NAVIGERING_MÅL)[number];
 
 /** Handlingen som utføres på en oppgave i `<HANDLING>_OPPGAVE`, se `UMAMI_NAVIGERING_MÅL`. */
-export const UMAMI_OPPGAVE_HANDLING = ['RESERVER', 'FRIGI', 'TILDEL'] as const;
+const UMAMI_OPPGAVE_HANDLING = ['RESERVER', 'FRIGI', 'TILDEL'] as const;
 type UmamiOppgaveHandling = (typeof UMAMI_OPPGAVE_HANDLING)[number];
 
 export type UmamiNavigeringNavn = `GÅ_TIL_${UmamiNavigeringMål}` | `${UmamiOppgaveHandling}_OPPGAVE`;
@@ -32,7 +32,7 @@ export const loggUmamiGåTilBehandlingOgReserver = (inngang: BehandlingInngang) 
 export const loggUmamiGåTilSaksoversikt = (inngang: SaksoversiktInngang) =>
   clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'GÅ_TIL_SAKSOVERSIKT', inngang });
 
-export const loggUmamiReserverOppgave = (inngang: BehandlingInngang) =>
+const loggUmamiReserverOppgave = (inngang: BehandlingInngang) =>
   clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'RESERVER_OPPGAVE', inngang });
 
 export const loggUmamiFrigiOppgave = (inngang: OppgaveInngang) =>

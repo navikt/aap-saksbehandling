@@ -110,7 +110,7 @@ export function finnDiagnoseGrunnlagForSykdom(grunnlag: SykdomsGrunnlag): Diagno
   });
 }
 
-export function finnDiagnoseGrunnlagForStudent(grunnlag: StudentGrunnlag): Diagnoser[] {
+function finnDiagnoseGrunnlagForStudent(grunnlag: StudentGrunnlag): Diagnoser[] {
   return grunnlag.nyeVurderinger.flatMap((vurdering) => {
     const result: Diagnoser[] = [];
 

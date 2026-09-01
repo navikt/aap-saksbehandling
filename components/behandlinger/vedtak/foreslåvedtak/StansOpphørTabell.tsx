@@ -41,7 +41,7 @@ export const StansOpphørTabell = ({ stansOpphør }: { stansOpphør: StansOpphø
   </TableStyled>
 );
 
-export function mapÅrsakTilTekst(årsak: StansOpphørÅrsak): string {
+function mapÅrsakTilTekst(årsak: StansOpphørÅrsak): string {
   switch (årsak) {
     case 'IKKE_SYKDOM_SKADE_LYTE':
       return 'Ikke sykdom, skade eller lyte';

@@ -42,7 +42,7 @@ export const landMedTrygdesamarbeid: ValuePair[] = [
   { value: 'AUS', label: countries.getName('AUS', 'no', { select: 'official' }) || '' },
   { value: 'GBR', label: countries.getName('GBR', 'no', { select: 'official' }) || '' },
 ];
-export const landMedTrygdesamarbeidAlpha2: ValuePair[] = [
+const landMedTrygdesamarbeidAlpha2: ValuePair[] = [
   { value: '', label: '' },
   ...filteredEeaCountriesAlpha2.sort((code, name) => code.label.localeCompare(name.label, 'no')),
   { value: 'CH', label: countries.getName('CH', 'no', { select: 'official' }) || '' },

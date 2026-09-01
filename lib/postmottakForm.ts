@@ -11,13 +11,13 @@ export enum JaNeiIkkeOppgitt {
   IKKE_OPPGITT = 'Ikke oppgitt',
 }
 
-export const JaNeiEllerIkkeOppgittOptions: ValuePair[] = [
+const JaNeiEllerIkkeOppgittOptions: ValuePair[] = [
   { label: 'Ja', value: JaNeiIkkeOppgitt.JA },
   { label: 'Nei', value: JaNeiIkkeOppgitt.NEI },
   { label: 'Ikke oppgitt', value: JaNeiIkkeOppgitt.IKKE_OPPGITT },
 ];
 
-export function stringToJaNeiIkkeOppgitt(value: string) {
+function stringToJaNeiIkkeOppgitt(value: string) {
   switch (value) {
     case 'Ja':
       return JaNeiIkkeOppgitt.JA;
@@ -93,7 +93,6 @@ export function stringToJaEllerNei(value: string): JaEllerNei | undefined {
 }
 
 export enum Behovstype {
-  KATEGORISER_DOKUMENT = '1337',
   DIGITALISER_DOKUMENT = '1338',
   AVKLAR_TEMA = '1339',
   FINN_SAK = '1340',
@@ -107,7 +106,6 @@ export enum Behovstype {
 export enum HvorSkalSøknadenBehandles {
   ARENA = 'ARENA',
   KELVIN = 'KELVIN',
-  BEGGE = 'BEGGE',
 }
 export const getJaNeiEllerUndefined = (value?: boolean | null): JaEllerNei | undefined => {
   if (value === null || value === undefined) {

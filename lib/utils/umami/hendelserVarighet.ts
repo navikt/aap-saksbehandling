@@ -2,7 +2,7 @@ import { clientLoggUmamiEvent } from 'lib/utils/umami/client';
 import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 
-export const UMAMI_HENDELSER_SERIE_KONTEKST = ['LOVVALG_MEDLEMSKAP', 'BESLUTTER', 'KVALITETSSIKRER'] as const;
+const UMAMI_HENDELSER_SERIE_KONTEKST = ['LOVVALG_MEDLEMSKAP', 'BESLUTTER', 'KVALITETSSIKRER'] as const;
 type UmamiHendelserSerieKontekst = (typeof UMAMI_HENDELSER_SERIE_KONTEKST)[number];
 
 /** `<KONTEKST>_HENDELSER_VARIGHET` — navnet på en serie tidsmålte delhendelser. */

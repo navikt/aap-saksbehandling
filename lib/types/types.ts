@@ -117,17 +117,17 @@ export type TilkjentYtelseGrunnlagMedDiff = Omit<TilkjentYtelseGrunnlagMedDiffFr
 };
 
 // Type guards for Diff-utledning
-export function erDiffUendret<T>(d: Diff<T>): d is DiffUendret<T> {
+function erDiffUendret<T>(d: Diff<T>): d is DiffUendret<T> {
   return d.diff === 'Uendret';
 }
-export function erDiffEndret<T>(d: Diff<T>): d is DiffEndret<T> {
+function erDiffEndret<T>(d: Diff<T>): d is DiffEndret<T> {
   return d.diff === 'Endret';
 }
-export function erDiffFjernet<T>(d: Diff<T>): d is DiffFjernet<T> {
+function erDiffFjernet<T>(d: Diff<T>): d is DiffFjernet<T> {
   return d.diff === 'Fjernet';
 }
 
-export function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
+function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
   return d.diff === 'LagtTil';
 }
 
@@ -599,7 +599,7 @@ export type MeldekortV0 =
 export type HarRegistrertTimerResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.HarRegistrertTimerResponse'];
 
-export const KlageV0 = 'KlageV0';
+const KlageV0 = 'KlageV0';
 export type KlageV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KlageV0}`] & {
     meldingType: typeof KlageV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
@@ -613,13 +613,13 @@ export type AnnetRelevantDokument =
 export type AnnetRelevantDokumentUnderkategori =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument`]['underkategori'];
 
-export const ManuellRevurderingV0 = 'ManuellRevurderingV0';
+const ManuellRevurderingV0 = 'ManuellRevurderingV0';
 export type ManuellRevurderingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof ManuellRevurderingV0}`] & {
     meldingType: typeof ManuellRevurderingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
-export const NyÅrsakTilBehandlingV0 = 'NyÅrsakTilBehandlingV0';
+const NyÅrsakTilBehandlingV0 = 'NyÅrsakTilBehandlingV0';
 export type NyÅrsakTilBehandlingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof NyÅrsakTilBehandlingV0}`] & {
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
@@ -628,7 +628,7 @@ export type NyÅrsakTilBehandlingV0 =
 export type AvklarOppfolgingsoppgaveGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse'];
 
-export const OppfølgingoppgaveV0 = 'OppfølgingsoppgaveV0';
+const OppfølgingoppgaveV0 = 'OppfølgingsoppgaveV0';
 
 export type OppfølgingsoppgaveV0 =
   components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppf\u00F8lgingsoppgaveV0'] & {
