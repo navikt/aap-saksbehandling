@@ -4,6 +4,7 @@ import { Sykdomvurdering } from 'lib/types/types';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { isAfter } from 'date-fns';
 import { ValuePair } from 'components/form/FormField';
+import { VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 
 /**
  * Dette er en litt uheldig "hack" som har blitt brukt for å utlede om viss varighet skal vurderes.
@@ -23,7 +24,10 @@ export function vurderingFraDatoErSammeSomRettighetsperiodeStart(
     return false;
   }
 }
-export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering, skalVurdereYrkesskade: boolean): boolean | undefined {
+export function utledVurderingStatus(
+  vurdering: Sykdomsvurdering,
+  skalVurdereYrkesskade: boolean
+): VurderingStatus | undefined {
   if (
     vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
     vurdering.harNedsattArbeidsevne == 'NEI' ||
@@ -32,15 +36,18 @@ export function erNyVurderingOppfylt(vurdering: Sykdomsvurdering, skalVurdereYrk
     vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
     vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
   ) {
-    return false;
+    return VurderingStatus.IkkeOppfylt;
   }
 
   if (vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja) {
-    return true;
+    if (skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) {
+      return VurderingStatus.OppfyltVedÅrsakssammenheng;
+    }
+    return VurderingStatus.Oppfylt;
   }
 }
 
-export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean | undefined {
+export function utledVurderingStatusForTidligereVurdering(vurdering: Sykdomvurdering): VurderingStatus | undefined {
   if (
     !vurdering.harSkadeSykdomEllerLyte ||
     vurdering.harNedsattArbeidsevne === 'NEI' ||
@@ -48,38 +55,16 @@ export function erTidligereVurderingOppfylt(vurdering: Sykdomvurdering): boolean
     vurdering.erSkadeSykdomEllerLyteVesentligdel === false ||
     vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === false
   ) {
-    return false;
+    return VurderingStatus.IkkeOppfylt;
   }
 
-  if (
-    vurdering.harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER' ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === true
-  ) {
-    return true;
+  if (vurdering.harNedsattArbeidsevne === 'JA_FORBIGÅENDE_PROBLEMER') {
+    return VurderingStatus.Oppfylt;
   }
-}
-
-export function emptySykdomsvurdering(diagnoser?: {
-  kodeverk?: string;
-  hoveddiagnose?: ValuePair | null;
-  bidiagnose?: ValuePair[] | null;
-}): Sykdomsvurdering {
-  return {
-    fraDato: '',
-    begrunnelse: '',
-    vurderingenGjelderFra: '',
-    harSkadeSykdomEllerLyte: '',
-    harNedsattArbeidsevne: undefined,
-    erNedsettelseIArbeidsevneMerEnnHalvparten: undefined,
-    erSkadeSykdomEllerLyteVesentligdel: undefined,
-    kodeverk: diagnoser?.kodeverk,
-    hoveddiagnose: diagnoser?.hoveddiagnose,
-    bidiagnose: diagnoser?.bidiagnose,
-    erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: undefined,
-    yrkesskadeBegrunnelse: '',
-    erNyVurdering: true,
-    behøverVurdering: false,
-  };
+  if (vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === true) {
+    return VurderingStatus.OppfyltVedÅrsakssammenheng;
+  }
+  return undefined;
 }
 
 export const defaultBegrunnelseSpørsmål = [

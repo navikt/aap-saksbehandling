@@ -43,12 +43,11 @@ import {
 import {
   defaultBegrunnelseSpørsmål,
   emptySykdomsvurderingMedDefaultBegrunnelse,
-  erNyVurderingOppfylt,
-  erTidligereVurderingOppfylt,
+  utledVurderingStatusForTidligereVurdering,
+  utledVurderingStatus,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
 import { ValuePair } from 'components/form/FormField';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -259,7 +258,7 @@ export const Sykdomsvurdering = ({
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
+            vurderingStatus={utledVurderingStatusForTidligereVurdering(vurdering)}
             defaultCollapsed={nyeVurderingerFields.length > 0}
             vurderingerMeta={vurdering.vurderingerMeta}
           >
@@ -272,8 +271,9 @@ export const Sykdomsvurdering = ({
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
-              erNyVurderingOppfylt(form.watch(`vurderinger.${index}`), grunnlag.skalVurdereYrkesskade)
+            vurderingStatus={utledVurderingStatus(
+              form.watch(`vurderinger.${index}`),
+              grunnlag.skalVurdereYrkesskade
             )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}
