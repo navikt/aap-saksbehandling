@@ -6,7 +6,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Hjemmel, MellomlagretVurdering, SvarFraAndreinstansGrunnlag, SvarKonsekvens } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
+import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativerOmgjøring, hjemmelMap } from 'lib/utils/hjemmel';
 import { formaterSvartype, formaterUtfall } from 'lib/utils/svarfraandreinstans';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
@@ -85,7 +85,7 @@ export const SvarFraAndreinstans = ({ grunnlag, readOnly, behandlingVersjon, ini
             return true;
           },
         },
-        options: hjemmelalternativer,
+        options: hjemmelalternativerOmgjøring,
         defaultValue: defaultValue.vilkårSomSkalOmgjøres,
       },
     },
