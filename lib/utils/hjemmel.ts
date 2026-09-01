@@ -7,6 +7,8 @@ export const getValgteHjemlerSomIkkeErImplementert = (value: string | Hjemmel[] 
 };
 
 export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
+  FOLKETRYGDLOVEN_21_12: '§ 21-12',
+  FVL_31: 'Fvl. § 31',
   EOES_883_2004: 'EØS-forordningen (lovvalg / medlemskap)',
   FOLKETRYGDLOVEN_KAPITTEL_2: 'Kapittel 2',
   FOLKETRYGDLOVEN_11_2: '§ 11-2',
@@ -60,10 +62,17 @@ export const ikkeImplementertKlageHjemmler: Hjemmel[] = [
   'FOLKETRYGDLOVEN_22_17',
 ];
 
-export const hjemmelalternativer = Object.entries(hjemmelMap).map(([k, v]) => ({
+export const hjemmelalternativerOpprettholdelse = Object.entries(hjemmelMap).map(([k, v]) => ({
   value: k,
   label: v,
 }));
+
+export const hjemmelalternativerOmgjøring = Object.entries(hjemmelMap)
+  .filter(([k]) => !['FOLKETRYGDLOVEN_21_12', 'FVL_31'].includes(k))
+  .map(([k, v]) => ({
+    value: k,
+    label: v,
+  }));
 
 export const hjemmelÅrsakMapMap: Partial<Record<Hjemmel, Vurderingsbehov>> = {
   FOLKETRYGDLOVEN_11_5: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',

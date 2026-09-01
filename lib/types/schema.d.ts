@@ -10735,12 +10735,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning': {
@@ -14213,7 +14215,6 @@ export interface components {
         | 'DATO_PAA_LEGEERKLÆRING'
         | 'HENVIST_TIL_BEHANDLING'
         | 'KRAVDATO'
-        | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | null;
@@ -14984,12 +14985,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -15023,12 +15026,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -15069,12 +15074,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -15108,12 +15115,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -15248,10 +15257,21 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.KlagebehandlingDto': {
+      /** Format: uuid */
+      referanse: string;
+      saksnummer: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingDto'];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      vedtatteKlagebehandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.KlagebehandlingDto'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingDto': {
@@ -16124,12 +16144,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -17344,12 +17366,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -17383,12 +17407,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.KlagevurderingNayL\u00F8sningDto': {
@@ -17428,12 +17454,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -17467,12 +17495,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingL\u00F8sningDto': {
@@ -17522,12 +17552,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomSkalOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -17561,12 +17593,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.KlageResultat':
@@ -17611,12 +17645,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Opprettholdes': {
@@ -17654,12 +17690,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Trukket': {
@@ -17901,7 +17939,6 @@ export interface components {
         | 'DATO_PAA_LEGEERKLÆRING'
         | 'HENVIST_TIL_BEHANDLING'
         | 'KRAVDATO'
-        | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | null;
