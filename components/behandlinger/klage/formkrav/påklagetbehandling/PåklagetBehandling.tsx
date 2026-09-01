@@ -135,6 +135,7 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
       vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
+<<<<<<< HEAD
       eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl,
     })) ?? [];
 
@@ -148,5 +149,9 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
     })) ?? [];
   return [...ytelsesbehandlinger, ...klagebehandlinger].sort(
     (a, b) => b.vedtaksdato.getTime() - a.vedtaksdato.getTime()
+=======
+      eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl ?? undefined,
+    })) ?? []
+>>>>>>> a8286e9b3 (Fiks null til undefined verdi oppdaget i lintsjekk)
   );
 }
