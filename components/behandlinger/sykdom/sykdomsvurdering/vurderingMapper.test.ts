@@ -168,14 +168,14 @@ describe('mapTilPeriodisertVurdering', () => {
           expect(result.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
         });
 
-        it('skal bruke erNedsettelseIArbeidsevneMerEnnHalvparten (Nei) og nullstille videre-felt', () => {
+        it('skal bruke erNedsettelseIArbeidsevneMerEnnHalvparten (Nei) og beholde tidligere svar på vesentlig medvirkende', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
             erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
           };
           const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart);
           expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBe(false);
-          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
         });
 
         it('skal ikke sette yrkesskade-felt', () => {
@@ -281,13 +281,13 @@ describe('mapTilPeriodisertVurdering', () => {
           expect(result.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
         });
 
-        it('skal nullstille erSkadeSykdomEllerLyteVesentligdel hvis yrkesskadegrense er false', () => {
+        it('skal beholde erSkadeSykdomEllerLyteVesentligdel hvis yrkesskadegrense er false', () => {
           const dataWithNei: Sykdomsvurdering = {
             ...data,
             erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Nei,
           };
           const result = mapTilPeriodisertVurdering(dataWithNei, true, false, rettighetsperiodeStart);
-          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
         });
       });
 
@@ -325,18 +325,18 @@ describe('mapTilPeriodisertVurdering', () => {
           expect(result.yrkesskadeBegrunnelse).toBeUndefined();
         });
 
-        it('skal mappe erSkadeSykdomEllerLyteVesentligdel via yrkesskadegrense', () => {
+        it('skal mappe erSkadeSykdomEllerLyteVesentligdel', () => {
           const result = mapTilPeriodisertVurdering(data, false, true, rettighetsperiodeStart);
-          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined;
+          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
         });
 
-        it('skal nullstille resterende felter hvis yrkesskadegrense er false', () => {
+        it('skal beholde erSkadeSykdomEllerLyteVesentligdel hvis yrkesskadegrense er false', () => {
           const dataWithNei: Sykdomsvurdering = {
             ...data,
             erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense: JaEllerNei.Nei,
           };
           const result = mapTilPeriodisertVurdering(dataWithNei, false, true, rettighetsperiodeStart);
-          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+          expect(result.erSkadeSykdomEllerLyteVesentligdel).toBe(true);
         });
       });
 
