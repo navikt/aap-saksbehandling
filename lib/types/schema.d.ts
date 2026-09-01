@@ -16486,6 +16486,21 @@ export interface components {
       virksomhetId: string;
       virksomhetNavn?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BosattOgNorskStatsborgerskapGrunnlag': {
+      /** @enum {string|null} */
+      personStatus?:
+        | 'bosatt'
+        | 'doed'
+        | 'foedselsregistrert'
+        | 'forsvunnet'
+        | 'ikkeBosatt'
+        | 'inaktiv'
+        | 'midlertidig'
+        | 'opphort'
+        | 'utflyttet'
+        | null;
+      statsborgerskap: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.GyldigStatsborgerskap'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.FolkeregisterStatusDto': {
       /**
        * Format: date
@@ -16509,6 +16524,19 @@ export interface components {
         | 'opphort'
         | 'utflyttet'
         | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.GyldigStatsborgerskap': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gyldigFraOgMed?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gyldigTilOgMed?: string | null;
+      land: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering': {
       kanBehandlesAutomatisk: boolean;
@@ -16565,6 +16593,7 @@ export interface components {
       bestemtArbeidsgruppeINorge?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BestemtArbeidsgruppeINorgeGrunnlag'][]
         | null;
+      bosattStatusOgNorskStatsborgerskap?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BosattOgNorskStatsborgerskapGrunnlag'];
       /** @enum {string} */
       indikasjon: 'I_NORGE' | 'UTENFOR_NORGE';
       kilde: ('AA_REGISTERET' | 'A_INNTEKT' | 'EREG' | 'MEDL' | 'PDL' | 'SØKNAD')[];
