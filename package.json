@@ -15,6 +15,7 @@
     "gentypes:postmottak": "openapi-typescript http://localhost:8070/openapi.json -o lib/types/postmottakSchema.d.ts && prettier --write lib/types/postmottakSchema.d.ts",
     "gentypes:oppgave": "openapi-typescript http://localhost:8084/openapi.json -o lib/types/oppgaveSchema.d.ts && prettier --write lib/types/oppgaveSchema.d.ts",
     "gentypes:all": "yarn gentypes:behandlingsflyt && yarn gentypes:postmottak && yarn gentypes:oppgave",
+    "gentypes:fil": "openapi-typescript ../aap-behandlingsflyt/openapi.json -o lib/types/schema.d.ts && prettier --write lib/types/schema.d.ts",
     "run-prettier": "prettier --write .",
     "gen-umami-docs": "node scripts/generate-umami-docs.mjs"
   },
