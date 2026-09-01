@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { KravGrunnlag, KravVurdering, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
+import { KravGrunnlag, KravVurdering, RelevantKrav, RelevantKravLøsning, SøknadUtenKrav } from 'lib/types/types';
 import {
   byggInitielleVurderinger,
   byggKravVurderingerFraSkjema,
@@ -10,7 +10,7 @@ import {
   KravVurderingFormFields,
   søknadUtenKravTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
-import { JaEllerNei } from 'lib/utils/form';
+import { JaEllerNei, MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
 
 const bruker = 'Z000000';
 const behandlingId = { id: 1 };
@@ -77,6 +77,44 @@ describe('kravVurderingTilFormFields og søknadUtenKravTilFormFields', () => {
 
     expect(felter.overstyrDato).toEqual('15.06.2025');
     expect(felter.overstyrÅrsak).toEqual('MisvisendeOpplysninger');
+    expect(felter.muligRettFraTilbakedateres).toEqual(MuligRettFraTilbakedateresValg.MisvisendeOpplysninger);
+    expect(felter.muligRettFraBegrunnelse).toEqual('Feil informasjon fra Nav');
+  });
+
+  it.each([['BrukerHarSøktTidligere'], ['FeilregistrertSøknadsdato']] as const)(
+    'utleder søknadsdatoEndres=%s fra søknadsdato.årsak, og mapper søknadsdatoBegrunnelse',
+    (årsak) => {
+      const krav = relevantKrav({
+        søknadsdato: { dato: '2025-04-10', årsak, begrunnelse: 'Bruker har dokumentert tidligere kontakt' },
+      });
+
+      const felter = kravVurderingTilFormFields(krav);
+
+      expect(felter.søknadsdatoEndres).toEqual(årsak);
+      expect(felter.søknadsdatoBegrunnelse).toEqual('Bruker har dokumentert tidligere kontakt');
+    }
+  );
+
+  it('utleder muligRettFraTilbakedateres=IkkeIStandTilÅSøkeTidligere fra overstyrMuligRettFra.årsak', () => {
+    const krav = relevantKrav({
+      overstyrMuligRettFra: {
+        dato: '2025-02-01',
+        årsak: 'IkkeIStandTilÅSøkeTidligere',
+        begrunnelse: 'Bruker var innlagt på sykehus',
+      },
+    });
+
+    const felter = kravVurderingTilFormFields(krav);
+
+    expect(felter.muligRettFraTilbakedateres).toEqual(MuligRettFraTilbakedateresValg.IkkeIStandTilÅSøkeTidligere);
+    expect(felter.muligRettFraBegrunnelse).toEqual('Bruker var innlagt på sykehus');
+  });
+
+  it('utleder søknadsdatoEndres=Nei og muligRettFraTilbakedateres=Nei når overstyrMuligRettFra mangler', () => {
+    const felter = kravVurderingTilFormFields(relevantKrav());
+
+    expect(felter.søknadsdatoEndres).toEqual(SøknadsdatoEndresValg.Nei);
+    expect(felter.muligRettFraTilbakedateres).toEqual(MuligRettFraTilbakedateresValg.Nei);
   });
 
   it('returnerer tomme søknadsdato-/overstyr-felter for kravtyper uten søknadsdato (f.eks. KLAGE)', () => {
@@ -253,5 +291,98 @@ describe('byggKravVurderingerFraSkjema', () => {
     };
 
     expect(() => byggKravVurderingerFraSkjema(grunnlagMedSøknad, { 'jp-uten-dato': ugyldigUtkast })).toThrow();
+  });
+});
+
+describe('byggKravVurderingerFraSkjema - §22-13 femte og syvende ledd', () => {
+  function relevantKravLøsning(felter: KravVurderingFormFields): RelevantKravLøsning {
+    const krav = relevantKrav({ referanse: 'krav-1' });
+    const løsninger = byggKravVurderingerFraSkjema(grunnlag({ nyeVurderinger: [krav] }), {
+      'krav-1': felter,
+    });
+    expect(løsninger).toHaveLength(1);
+    return løsninger[0] as RelevantKravLøsning;
+  }
+
+  it.each([['BrukerHarSøktTidligere'], ['FeilregistrertSøknadsdato']] as const)(
+    'setter søknadsdato.årsak=%s og videresender søknadsdatoBegrunnelse når søknadsdatoEndres=%s',
+    (valg) => {
+      const felter: KravVurderingFormFields = {
+        ...kravVurderingTilFormFields(relevantKrav({ referanse: 'krav-1' })),
+        søknadsdatoDato: '10.02.2025',
+        søknadsdatoEndres: valg,
+        søknadsdatoBegrunnelse: 'Bruker dokumenterte tidligere kontakt med Nav',
+      };
+
+      const løsning = relevantKravLøsning(felter);
+
+      expect(løsning.søknadsdato).toEqual({
+        dato: '2025-02-10',
+        årsak: valg,
+        begrunnelse: 'Bruker dokumenterte tidligere kontakt med Nav',
+      });
+    }
+  );
+
+  it('setter søknadsdato.årsak=SøknadMottatt når søknadsdatoEndres=Nei, men videresender begrunnelsen likevel', () => {
+    const felter: KravVurderingFormFields = {
+      ...kravVurderingTilFormFields(relevantKrav({ referanse: 'krav-1' })),
+      søknadsdatoEndres: SøknadsdatoEndresValg.Nei,
+      søknadsdatoBegrunnelse: 'Vurdert, men ingen grunn til å endre søknadsdato',
+    };
+
+    const løsning = relevantKravLøsning(felter);
+
+    expect(løsning.søknadsdato).toEqual({
+      dato: '2025-04-01',
+      årsak: 'SøknadMottatt',
+      begrunnelse: 'Vurdert, men ingen grunn til å endre søknadsdato',
+    });
+  });
+
+  it.each([['IkkeIStandTilÅSøkeTidligere'], ['MisvisendeOpplysninger']] as const)(
+    'bygger overstyrMuligRettFra med årsak=%s og begrunnelse når muligRettFraTilbakedateres=%s og dato er fylt ut',
+    (valg) => {
+      const felter: KravVurderingFormFields = {
+        ...kravVurderingTilFormFields(relevantKrav({ referanse: 'krav-1' })),
+        overstyrDato: '01.03.2025',
+        muligRettFraTilbakedateres: valg,
+        muligRettFraBegrunnelse: 'Dokumentert i journalnotat',
+      };
+
+      const løsning = relevantKravLøsning(felter);
+
+      expect(løsning.overstyrMuligRettFra).toEqual({
+        dato: '2025-03-01',
+        årsak: valg,
+        begrunnelse: 'Dokumentert i journalnotat',
+      });
+    }
+  );
+
+  it('utelater overstyrMuligRettFra når muligRettFraTilbakedateres=Nei, selv om overstyrDato er fylt ut', () => {
+    const felter: KravVurderingFormFields = {
+      ...kravVurderingTilFormFields(relevantKrav({ referanse: 'krav-1' })),
+      overstyrDato: '01.03.2025',
+      muligRettFraTilbakedateres: MuligRettFraTilbakedateresValg.Nei,
+      muligRettFraBegrunnelse: 'Ikke aktuelt',
+    };
+
+    const løsning = relevantKravLøsning(felter);
+
+    expect(løsning.overstyrMuligRettFra).toBeUndefined();
+  });
+
+  it('utelater overstyrMuligRettFra når muligRettFraTilbakedateres er Ja, men overstyrDato mangler', () => {
+    const felter: KravVurderingFormFields = {
+      ...kravVurderingTilFormFields(relevantKrav({ referanse: 'krav-1' })),
+      overstyrDato: '',
+      muligRettFraTilbakedateres: MuligRettFraTilbakedateresValg.MisvisendeOpplysninger,
+      muligRettFraBegrunnelse: 'Mangler dato',
+    };
+
+    const løsning = relevantKravLøsning(felter);
+
+    expect(løsning.overstyrMuligRettFra).toBeUndefined();
   });
 });

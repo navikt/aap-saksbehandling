@@ -177,7 +177,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' }));
-    const overstyrFelt = screen.getByRole('textbox', { name: 'Dato bruker har rett på ytelse fra' });
+    const overstyrFelt = screen.getByRole('textbox', { name: 'Brukeren har tidligst rett på AAP fra' });
     expect(overstyrFelt).toHaveValue('01.07.2025');
 
     await user.clear(overstyrFelt);
@@ -187,7 +187,7 @@ describe('KravBoks - åpne/lukke bolker', () => {
     await user.click(screen.getByRole('button', { name: 'Avbryt vurder § 22-13 syvende ledd' }));
     await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' }));
 
-    expect(screen.getByRole('textbox', { name: 'Dato bruker har rett på ytelse fra' })).toHaveValue('01.07.2025');
+    expect(screen.getByRole('textbox', { name: 'Brukeren har tidligst rett på AAP fra' })).toHaveValue('01.07.2025');
   });
 });
 
@@ -295,5 +295,113 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     await user.click(screen.getAllByRole('radio', { name: 'Nei' })[0]);
 
     expect(screen.queryByRole('textbox', { name: 'Ny søknadsdato' })).not.toBeInTheDocument();
+  });
+});
+
+describe('KravBoks - §22-13 femte ledd (Skal brukerens søknadsdato endres?)', () => {
+  it('skjuler datofelt og infoalert som standard (søknadsdatoEndres=Nei)', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
+
+    expect(screen.getByRole('radio', { name: 'Nei' })).toBeChecked();
+    expect(screen.queryByRole('textbox', { name: 'Ny søknadsdato' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'Husk å journalføre relevant dokument som dokumenterer riktig søknadsdato til AAP-saken. Endret søknadsdato gir ikke krav på renter.'
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['Ja, bruker har søkt tidligere enn første registrerte søknad'],
+    ['Ja, søknadsdato er feilregistrert'],
+  ] as const)('viser nytt datofelt og infoalert når svaret er "%s"', async (svar) => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
+    await user.click(screen.getByRole('radio', { name: svar }));
+
+    expect(screen.getByRole('textbox', { name: 'Ny søknadsdato' })).toBeVisible();
+    expect(
+      screen.getByText(
+        'Husk å journalføre relevant dokument som dokumenterer riktig søknadsdato til AAP-saken. Endret søknadsdato gir ikke krav på renter.'
+      )
+    ).toBeVisible();
+  });
+
+  it('skjuler datofelt og infoalert igjen når svaret endres tilbake til Nei', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
+    await user.click(screen.getByRole('radio', { name: 'Ja, søknadsdato er feilregistrert' }));
+    expect(screen.getByRole('textbox', { name: 'Ny søknadsdato' })).toBeVisible();
+
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
+
+    expect(screen.queryByRole('textbox', { name: 'Ny søknadsdato' })).not.toBeInTheDocument();
+  });
+
+  it('krever begrunnelse for §22-13 femte ledd uansett hvilket Ja/Nei-svar som er valgt', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
+
+    const [begrunnelsesfelt] = screen.getAllByRole('textbox', { name: 'Begrunnelse' });
+    expect(begrunnelsesfelt).toHaveValue('');
+  });
+});
+
+describe('KravBoks - §22-13 syvende ledd (Skal brukerens rett på ytelse tilbakedateres?)', () => {
+  it('skjuler datofelt og warningalert som standard (muligRettFraTilbakedateres=Nei)', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' }));
+
+    expect(screen.getByRole('radio', { name: 'Nei' })).toBeChecked();
+    expect(screen.queryByRole('textbox', { name: 'Brukeren har tidligst rett på AAP fra' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        'Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via Gosys).'
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['Ja, brukeren har åpenbart ikke vært i stand til å sette fram krav tidligere'],
+    ['Ja, brukeren har ikke satt fram krav tidligere fordi trygdens organer har gitt misvisende opplysninger'],
+  ] as const)('viser datofelt og warningalert når svaret er "%s"', async (svar) => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' }));
+    await user.click(screen.getByRole('radio', { name: svar }));
+
+    expect(screen.getByRole('textbox', { name: 'Brukeren har tidligst rett på AAP fra' })).toBeVisible();
+    expect(
+      screen.getByText(
+        'Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på Arena-saker (via Gosys).'
+      )
+    ).toBeVisible();
+  });
+
+  it('skjuler datofelt og warningalert igjen når svaret endres tilbake til Nei', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' }));
+    await user.click(
+      screen.getByRole('radio', { name: 'Ja, brukeren har åpenbart ikke vært i stand til å sette fram krav tidligere' })
+    );
+    expect(screen.getByRole('textbox', { name: 'Brukeren har tidligst rett på AAP fra' })).toBeVisible();
+
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
+
+    expect(screen.queryByRole('textbox', { name: 'Brukeren har tidligst rett på AAP fra' })).not.toBeInTheDocument();
   });
 });
