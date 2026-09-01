@@ -135,7 +135,7 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
       vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
-      eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl,
+      eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl ?? undefined,
     })) ?? []
   );
 }
