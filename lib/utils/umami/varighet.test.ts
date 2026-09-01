@@ -33,12 +33,13 @@ describe('useUmamiStartTidspunkt', () => {
     vi.setSystemTime(1_005_000);
     rerender({ visningsModus: 'REDIGERING' });
 
-    // Regresjonstest: med den gamle useEffect-baserte implementasjonen ville rendringen rett
-    // etter et modus-bytte fortsatt returnert *forrige* starttidspunkt (1_000_000), fordi
-    // effekten som skulle satt det nye tidspunktet ikke hadde rukket å kjøre ennå. Det gjorde at
-    // varigheten som ble logget for den nye modusen feilaktig inkluderte tiden brukt i forrige
-    // modus. Med fiksen skal starttidspunktet være oppdatert allerede i rendringen som følger
-    // modus-byttet.
+    // Regresjonstest: den opprinnelige buggy implementasjonen lagret starttidspunktet i en ren
+    // `ref` som ble mutert inni en `useEffect`. En ref-mutasjon trigger ikke noen re-rendring i
+    // React, så komponenten fortsatte å vise *forrige* starttidspunkt (1_000_000) helt til en
+    // *annen*, urelatert re-rendring tilfeldigvis kom innom og plukket opp den oppdaterte
+    // ref-verdien. Det gjorde at varigheten logget for den nye modusen feilaktig inkluderte tiden
+    // brukt i forrige modus. Fiksen lagrer i stedet tidspunktet i reaktiv `useState`, slik at
+    // `setTidspunkt` i effekten selv trigger en korrigerende re-rendring umiddelbart.
     expect(result.current).toBe(1_005_000);
   });
 

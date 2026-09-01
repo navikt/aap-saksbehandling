@@ -1,7 +1,7 @@
 import { BrevGrunnlagBrev } from 'lib/types/types';
 import { clientLoggUmamiEvent } from 'lib/utils/umami/client';
 import type { UmamiSteg } from 'lib/utils/umami/steg';
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * `STEG_<KONTEKST>_VARIGHET` — engangs tidsmåling for hvor lenge en saksbehandler bruker på et
@@ -43,21 +43,23 @@ export function loggUmamiVarighet(hendelse: UmamiStegVarighetTag, start: number,
  * Tidspunktet en visning ble montert/byttet til, brukt som startpunkt for `loggUmamiVarighet`/
  * `loggUmamiBrevVarighet`.
  *
- * Merk: dette settes bevisst under selve renderingen (ikke i en `useEffect`). Hadde vi satt
- * tidspunktet i en effekt ville verdien blitt lest ett render-steg for sent — første gang
- * komponenten rendres ville `visningsModus`-bytter blitt logget med forrige/manglende
- * starttidspunkt (helt ned til 0) helt til en *annen*, urelatert re-rendring tilfeldigvis
- * oppdaterte den. Ved å sammenligne mot forrige `visningsModus` under rendering og kalle
- * `setState` med en gang, tvinger vi React til å re-rendre med riktig verdi før noe committes.
+ * Merk: starttidspunktet lagres i `useState` (ikke bare en ref) og oppdateres i en `useEffect`
+ * når `visningsModus` endres. Første render setter riktig verdi direkte via
+ * `useState(() => Date.now())`, så vi unngår `0`/stale-verdier på selve mount-rendringen. Fordi
+ * vi bruker `setTidspunkt` (ikke bare `ref.current = ...`) i effekten, tvinges komponenten til å
+ * re-rendre med det oppdaterte tidspunktet — i motsetning til en ren ref-oppdatering, som ikke
+ * trigger noen re-rendring og dermed kunne la et etterfølgende `onSubmit` bruke et
+ * foreldet/forrige starttidspunkt helt til en *annen*, urelatert re-rendring tilfeldigvis kom
+ * innom. `Date.now()` kalles bevisst kun i effekten, aldri direkte i rendering-koden, for å
+ * overholde React sin renhets-regel om at komponenter/hooks ikke skal kalle urene funksjoner
+ * under rendering.
  */
 export function useUmamiStartTidspunkt(visningsModus: string): number {
   const [tidspunkt, setTidspunkt] = useState(() => Date.now());
-  const forrigeVisningsModus = useRef(visningsModus);
 
-  if (forrigeVisningsModus.current !== visningsModus) {
-    forrigeVisningsModus.current = visningsModus;
+  useEffect(() => {
     setTidspunkt(Date.now());
-  }
+  }, [visningsModus]);
 
   return tidspunkt;
 }
