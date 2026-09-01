@@ -15297,7 +15297,6 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettetTidspunkt: string;
-      /** Format: uuid */
       referanse: string;
       saksnummer: string;
       /** @enum {string} */
@@ -15433,18 +15432,18 @@ export interface components {
        */
       vedtaksdato: string;
     };
-    'no.nav.aap.behandlingsflyt.behandling.klage.påklagetbehandling.PåklagetBehandlingGrunnlagDto': {
-      behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.påklagetbehandling.BehandlingMedVedtakDto'][];
-      gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.påklagetbehandling.PåklagetBehandlingVurderingDto'];
-      harTilgangTilÅSaksbehandle: boolean;
-      vedtatteKlagebehandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.påklagetbehandling.KlagebehandlingDto'][];
+    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
+      behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
+      gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingDto'];
+      'harTilgangTil\u00C5Saksbehandle': boolean;
+      vedtatteKlagebehandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.KlagebehandlingDto'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.påklagetbehandling.PåklagetBehandlingVurderingDto': {
       /** Format: uuid */
       påklagetBehandling?: string | null;
       /** @enum {string} */
-      påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING';
+      'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING';
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.resultat.KabalKlageResultat': {
       svarFraAndreinstans: components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto'][];
@@ -17768,7 +17767,7 @@ export interface components {
       /** Format: uuid */
       påklagetBehandling?: string | null;
       /** @enum {string} */
-      påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING';
+      'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Avslått': {
       /** @enum {string} */
@@ -20729,6 +20728,11 @@ export interface components {
        * @example 2025-04-01
        */
       varselSendt?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
       venter?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingVenterKafkaDto'];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingPeriode': {
