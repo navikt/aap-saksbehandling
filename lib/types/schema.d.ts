@@ -14213,7 +14213,6 @@ export interface components {
         | 'DATO_PAA_LEGEERKLÆRING'
         | 'HENVIST_TIL_BEHANDLING'
         | 'KRAVDATO'
-        | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | null;
@@ -17901,7 +17900,6 @@ export interface components {
         | 'DATO_PAA_LEGEERKLÆRING'
         | 'HENVIST_TIL_BEHANDLING'
         | 'KRAVDATO'
-        | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | null;
