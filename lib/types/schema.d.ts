@@ -15325,7 +15325,6 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       opprettetTidspunkt: string;
-      /** Format: uuid */
       referanse: string;
       saksnummer: string;
       /** @enum {string} */
