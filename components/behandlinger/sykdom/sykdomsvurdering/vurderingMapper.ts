@@ -40,11 +40,7 @@ function mapArbeidsevneOgYrkesskade(
       ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
       : undefined;
 
-  // Kun mappe derson bruker har tilstrekkelig nedsatt arbeidsevne
-  const erSkadeSykdomEllerLyteVesentligdel =
-    erNedsettelseIArbeidsevneMerEnnHalvparten || erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense
-      ? getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel)
-      : undefined;
+  const erSkadeSykdomEllerLyteVesentligdel = getTrueFalseEllerUndefined(data.erSkadeSykdomEllerLyteVesentligdel);
 
   return {
     yrkesskadeBegrunnelse,
