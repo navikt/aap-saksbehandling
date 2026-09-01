@@ -9,7 +9,7 @@ type RadioOption = {
   vedtaksdato: Date;
   behandlingstype: string;
   vurderingsbehov: string[];
-  eksternSaksbehandlingsUrl?: string;
+  eksternSaksbehandlingUrl?: string;
 };
 
 type FormFieldRadioTableProps = {
