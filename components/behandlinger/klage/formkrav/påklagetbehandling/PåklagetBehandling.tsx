@@ -63,7 +63,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
         behov: {
           behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
           påklagetBehandlingVurdering: {
-            påklagetVedtakType: 'KELVIN_BEHANDLING',
+            påklagetVedtakType: 'KELVIN_BEHANDLING', // TODO: varier mellom KELVIN_BEHANDLING og TILBAKEKREVING
             påklagetBehandling: data.vedtak,
           },
         },
@@ -135,6 +135,7 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
       vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
+      eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl,
     })) ?? []
   );
 }

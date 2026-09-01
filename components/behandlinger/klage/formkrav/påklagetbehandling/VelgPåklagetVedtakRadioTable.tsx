@@ -9,6 +9,7 @@ type RadioOption = {
   vedtaksdato: Date;
   behandlingstype: string;
   vurderingsbehov: string[];
+  eksternSaksbehandlingsUrl?: string;
 };
 
 type FormFieldRadioTableProps = {
@@ -105,14 +106,24 @@ export const VelgPåklagetVedtakRadioTable = ({
                 <Table.DataCell>{option.saksnummer}</Table.DataCell>
                 <Table.DataCell>{formaterDatoForFrontend(option.vedtaksdato)}</Table.DataCell>
                 <Table.DataCell>
-                  <Link
-                    href={`/saksbehandling/sak/${option.saksnummer}/${option.value}`}
-                    prefetch={false}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                  >
-                    {option.behandlingstype}
-                  </Link>
+                  {(option.behandlingstype === 'Tilbakekreving' &&
+                    option.eksternSaksbehandlingUrl?.startsWith('http')) ||
+                  option.behandlingstype !== 'Tilbakekreving' ? (
+                    <Link
+                      href={
+                        option.behandlingstype === 'Tilbakekreving'
+                          ? option.eksternSaksbehandlingUrl!
+                          : `/saksbehandling/sak/${option.saksnummer}/${option.value}`
+                      }
+                      prefetch={false}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      {option.behandlingstype}
+                    </Link>
+                  ) : (
+                    <span className="disabled-link">{option.behandlingstype}</span>
+                  )}
                 </Table.DataCell>
 
                 <Table.DataCell>{option.vurderingsbehov.join(', ')}</Table.DataCell>
