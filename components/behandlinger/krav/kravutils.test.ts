@@ -23,7 +23,7 @@ function relevantKrav(overrides: Partial<RelevantKrav> = {}): RelevantKrav {
     begrunnelse: 'Opprinnelig begrunnelse',
     opprettet: '2025-04-01T10:30:00Z',
     muligRettFra: '2025-04-01',
-    søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt' },
+    søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt', begrunnelse: '' },
     vurdertAv: bruker,
     vurdertIBehandling: behandlingId,
     ...overrides,
@@ -59,14 +59,18 @@ describe('kravVurderingTilFormFields og søknadUtenKravTilFormFields', () => {
       begrunnelse: 'Opprinnelig begrunnelse',
       søknadsdatoDato: '01.04.2025',
       søknadsdatoÅrsak: 'SøknadMottatt',
+      søknadsdatoEndres: 'Nei',
+      søknadsdatoBegrunnelse: '',
       overstyrDato: '',
       overstyrÅrsak: '',
+      muligRettFraTilbakedateres: 'Nei',
+      muligRettFraBegrunnelse: '',
     });
   });
 
   it('mapper overstyrMuligRettFra når det finnes på kravet', () => {
     const krav = relevantKrav({
-      overstyrMuligRettFra: { dato: '2025-06-15', årsak: 'MisvisendeOpplysninger' },
+      overstyrMuligRettFra: { dato: '2025-06-15', årsak: 'MisvisendeOpplysninger', begrunnelse: 'Feil informasjon fra Nav' },
     });
 
     const felter = kravVurderingTilFormFields(krav);
@@ -105,8 +109,12 @@ describe('kravVurderingTilFormFields og søknadUtenKravTilFormFields', () => {
       begrunnelse: '',
       søknadsdatoDato: '10.05.2025',
       søknadsdatoÅrsak: 'SøknadMottatt',
+      søknadsdatoEndres: 'Nei',
+      søknadsdatoBegrunnelse: '',
       overstyrDato: '',
       overstyrÅrsak: '',
+      muligRettFraTilbakedateres: 'Nei',
+      muligRettFraBegrunnelse: '',
     });
   });
 });

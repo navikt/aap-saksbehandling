@@ -12,10 +12,17 @@ import { useFormContext } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ReactNode, useMemo, useState } from 'react';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import {
+  JaEllerNei,
+  JaEllerNeiOptions,
+  MuligRettFraTilbakedateresOptions,
+  MuligRettFraTilbakedateresValg,
+  SøknadsdatoEndresOptions,
+  SøknadsdatoEndresValg,
+} from 'lib/utils/form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
+import { Alert } from 'components/alert/Alert';
 
 export type KravBoksInnhold =
   | { kilde: 'EKSISTERENDE'; krav: KravVurdering }
@@ -40,6 +47,16 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
 
   const kravTypeErRelevantKrav =
     form.watch(`vurderinger.${referanse}.skalVurderesForNyEllerGjenopptattAAPRettighet`) === JaEllerNei.Ja;
+
+  const søknadsdatoEndres = form.watch(`vurderinger.${referanse}.søknadsdatoEndres`);
+  const visNySøknadsdatoFelt =
+    søknadsdatoEndres === SøknadsdatoEndresValg.BrukerHarSøktTidligere ||
+    søknadsdatoEndres === SøknadsdatoEndresValg.FeilregistrertSøknadsdato;
+
+  const muligRettFraTilbakedateres = form.watch(`vurderinger.${referanse}.muligRettFraTilbakedateres`);
+  const visMuligRettFraDatoFelt =
+    muligRettFraTilbakedateres === MuligRettFraTilbakedateresValg.IkkeIStandTilÅSøkeTidligere ||
+    muligRettFraTilbakedateres === MuligRettFraTilbakedateresValg.MisvisendeOpplysninger;
 
   const kravtypeVisning = innhold.kilde === 'EKSISTERENDE' ? innhold.krav.type : 'RELEVANT_KRAV';
   const søknadsdato =
@@ -69,8 +86,8 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
   const toggleEndreSøknadsdatoFelt = () => {
     if (visEndreSøknadsdatoFelt) {
       form.setValue(`vurderinger.${referanse}.søknadsdatoDato`, originaleVerdier.søknadsdatoDato);
-      form.setValue(`vurderinger.${referanse}.søknadsdatoÅrsak`, originaleVerdier.søknadsdatoÅrsak);
-      form.setValue(`vurderinger.${referanse}.overstyrÅrsak`, originaleVerdier.overstyrÅrsak);
+      form.setValue(`vurderinger.${referanse}.søknadsdatoEndres`, originaleVerdier.søknadsdatoEndres);
+      form.setValue(`vurderinger.${referanse}.søknadsdatoBegrunnelse`, originaleVerdier.søknadsdatoBegrunnelse);
     }
     setVisEndreSøknadsdatoFelt(!visEndreSøknadsdatoFelt);
   };
@@ -78,6 +95,8 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
   const toggleMuligRettFraFelt = () => {
     if (visMuligRettFraFelt) {
       form.setValue(`vurderinger.${referanse}.overstyrDato`, originaleVerdier.overstyrDato);
+      form.setValue(`vurderinger.${referanse}.muligRettFraTilbakedateres`, originaleVerdier.muligRettFraTilbakedateres);
+      form.setValue(`vurderinger.${referanse}.muligRettFraBegrunnelse`, originaleVerdier.muligRettFraBegrunnelse);
     }
     setVisMuligRettFraFelt(!visMuligRettFraFelt);
   };
@@ -157,40 +176,48 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
             <Bolk
               label={'Søknadsdato'}
               value={søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '-'}
-              buttonTekst={visEndreSøknadsdatoFelt ? 'Avbryt Vurder §22-13 5.ledd' : 'Vurder §22-13 5.ledd'}
+              buttonTekst={visEndreSøknadsdatoFelt ? 'Avbryt Vurder § 22-13 femte ledd' : 'Vurder § 22-13 femte ledd'}
               onClick={toggleEndreSøknadsdatoFelt}
               isOpen={visEndreSøknadsdatoFelt}
             >
               <VStack gap={'space-16'}>
-                <DateInputWrapper
-                  name={`vurderinger.${referanse}.søknadsdatoDato`}
+                <TextAreaWrapper
                   control={form.control}
-                  label="Søknadsdato"
-                  size={'small'}
-                  rules={{ required: 'Du må fylle inn søknadsdato.' }}
+                  name={`vurderinger.${referanse}.søknadsdatoBegrunnelse`}
+                  label="Begrunnelse"
+                  size="small"
+                  rules={{ required: 'Du må skrive inn en begrunnelse.' }}
                 />
-                <SelectWrapper
+
+                <RadioGroupWrapper
                   control={form.control}
-                  name={`vurderinger.${referanse}.søknadsdatoÅrsak`}
-                  label="Årsak for søknadsdato"
+                  name={`vurderinger.${referanse}.søknadsdatoEndres`}
                   size="small"
-                  rules={{ required: 'Du må velge årsak for søknadsdato.' }}
+                  label="Skal brukerens søknadsdato endres?"
+                  rules={{ required: 'Du må svare på om søknadsdatoen skal endres.' }}
                 >
-                  <option value="">Velg årsak</option>
-                  <option value="SøknadMottatt">Søknad mottatt</option>
-                  <option value="BrukerHarSøktTidligere">Bruker har søkt tidligere</option>
-                  <option value="FeilregistrertSøknadsdato">Feilregistrert søknadsdato</option>
-                </SelectWrapper>
-                <SelectWrapper
-                  control={form.control}
-                  name={`vurderinger.${referanse}.overstyrÅrsak`}
-                  label="Årsak for overstyring (valgfri)"
-                  size="small"
-                >
-                  <option value="">Ingen overstyring</option>
-                  <option value="IkkeIStandTilÅSøkeTidligere">Ikke i stand til å søke tidligere</option>
-                  <option value="MisvisendeOpplysninger">Misvisende opplysninger</option>
-                </SelectWrapper>
+                  {SøknadsdatoEndresOptions.map((option) => (
+                    <Radio value={option.value} key={option.value}>
+                      {option.label}
+                    </Radio>
+                  ))}
+                </RadioGroupWrapper>
+
+                {visNySøknadsdatoFelt && (
+                  <>
+                    <DateInputWrapper
+                      name={`vurderinger.${referanse}.søknadsdatoDato`}
+                      control={form.control}
+                      label="Ny søknadsdato"
+                      size={'small'}
+                      rules={{ required: 'Du må fylle inn ny søknadsdato.' }}
+                    />
+                    <Alert variant="info">
+                      Husk å journalføre relevant dokument som dokumenterer riktig søknadsdato til AAP-saken. Endret
+                      søknadsdato gir ikke krav på renter.
+                    </Alert>
+                  </>
+                )}
               </VStack>
             </Bolk>
           )}
@@ -199,15 +226,49 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
             <Bolk
               label={'Mulig rett fra'}
               value={muligRettFra ? formaterDatoForFrontend(muligRettFra) : '-'}
-              buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder §22-13 7.ledd' : 'Vurder §22-13 7.ledd'}
+              buttonTekst={visMuligRettFraFelt ? 'Avbryt vurder § 22-13 syvende ledd' : 'Vurder § 22-13 syvende ledd'}
               onClick={toggleMuligRettFraFelt}
               isOpen={visMuligRettFraFelt}
             >
-              <DateInputWrapper
-                name={`vurderinger.${referanse}.overstyrDato`}
-                control={form.control}
-                label="Overstyr mulig rett fra"
-              />
+              <VStack gap={'space-16'}>
+                <TextAreaWrapper
+                  control={form.control}
+                  name={`vurderinger.${referanse}.muligRettFraBegrunnelse`}
+                  label="Begrunnelse"
+                  size="small"
+                  rules={{ required: 'Du må skrive inn en begrunnelse.' }}
+                />
+
+                <RadioGroupWrapper
+                  control={form.control}
+                  name={`vurderinger.${referanse}.muligRettFraTilbakedateres`}
+                  size="small"
+                  label="Skal brukerens rett på ytelse tilbakedateres før søknadstidspunktet?"
+                  rules={{ required: 'Du må svare på om retten på ytelse skal tilbakedateres.' }}
+                >
+                  {MuligRettFraTilbakedateresOptions.map((option) => (
+                    <Radio value={option.value} key={option.value}>
+                      {option.label}
+                    </Radio>
+                  ))}
+                </RadioGroupWrapper>
+
+                {visMuligRettFraDatoFelt && (
+                  <>
+                    <DateInputWrapper
+                      name={`vurderinger.${referanse}.overstyrDato`}
+                      control={form.control}
+                      label="Brukeren har tidligst rett på AAP fra"
+                      size={'small'}
+                      rules={{ required: 'Du må fylle inn dato bruker har tidligst rett på AAP fra.' }}
+                    />
+                    <Alert variant="warning">
+                      Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på
+                      Arena-saker (via Gosys).
+                    </Alert>
+                  </>
+                )}
+              </VStack>
             </Bolk>
           )}
         </VStack>
