@@ -102,6 +102,7 @@ const behovskodeMap = {
   '1340': 'Avklar saksnummer',
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
+  '1343': 'Avklar fordeling',
 } as const;
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
@@ -295,8 +296,6 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
-    case 'MIGRERING_FRA_ARENA':
-      return 'Migrering fra Arena';
   }
 }
 
@@ -359,8 +358,6 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-9';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
-    case 'MigreringFraArena':
-      return 'Migrering fra Arena';
     default:
       return typeBehandling;
   }

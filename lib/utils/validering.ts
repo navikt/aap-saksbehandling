@@ -8,7 +8,7 @@ export function erProsent(value: number): boolean {
   return value >= 0 && value <= 100;
 }
 
-export const isNullOrUndefined = (value: number | null | undefined) => value === null || value === undefined;
+export const isNullOrUndefined = (value: number | boolean | null | undefined) => value === null || value === undefined;
 
 export function validerPeriodiserteVurderingerRekkefølge<T extends FieldValues>(params: {
   form: UseFormReturn<T>;

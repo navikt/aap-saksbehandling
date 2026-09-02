@@ -1,7 +1,11 @@
 import { VStack } from '@navikt/ds-react';
-import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { getJaEllerNei } from 'lib/utils/form';
 import { Avslag11_27Vurdering } from 'lib/types/types';
+import { getJaEllerNei } from 'lib/utils/form';
+import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
+
+import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { isNullOrUndefined } from 'lib/utils/validering';
 
 interface Props {
   vurdering: Avslag11_27Vurdering;
@@ -15,19 +19,31 @@ export const Avslag11_27TidligereVurdering = ({ vurdering }: Props) => {
         spørsmål={'Har brukeren en annen ytelse som regnes som full ytelse fra folketrygden?'}
         svar={getJaEllerNei(vurdering.harAnnenFullYtelse)}
       />
-      {vurdering.harAnnenFullYtelse !== null &&
-        vurdering.harAnnenFullYtelse !== undefined &&
-        vurdering.brukersYtelse !== null &&
-        vurdering.brukersYtelse !== undefined && (
-          <SpørsmålOgSvar spørsmål={'Hvilken ytelse har brukeren?'} svar={vurdering.brukersYtelse} />
-        )}
-      {vurdering.harSykepengegrunnlagOver2G !== null && vurdering.harSykepengegrunnlagOver2G !== undefined && (
+      {vurdering.harAnnenFullYtelse && vurdering.brukersYtelse && (
         <SpørsmålOgSvar
-          spørsmål={'Har brukeren sykepengegrunnlag større enn 2G?'}
+          spørsmål={'Hvilken ytelse har brukeren?'}
+          svar={storForbokstavOgMellomromForUnderstrek(vurdering.brukersYtelse)}
+        />
+      )}
+      {vurdering.harAnnenFullYtelse && vurdering.brukersYtelseTom && (
+        <SpørsmålOgSvar
+          spørsmål={'Bruker har annen full ytelse til og med dato'}
+          svar={formaterDatoForFrontend(vurdering.brukersYtelseTom)}
+        />
+      )}
+      {!isNullOrUndefined(vurdering.harSykepengegrunnlagOver2G) && (
+        <SpørsmålOgSvar
+          spørsmål={'Har brukeren sykepengegrunnlag større enn 2 G?'}
           svar={getJaEllerNei(vurdering.harSykepengegrunnlagOver2G)}
         />
       )}
-      {vurdering.skalAvslås1127 !== null && vurdering.skalAvslås1127 !== undefined && (
+      {!isNullOrUndefined(vurdering.harArbeidsgiverSykepengerUtbetaling) && (
+        <SpørsmålOgSvar
+          spørsmål={'Utbetaler arbeidsgiver sykepenger til bruker?'}
+          svar={getJaEllerNei(vurdering.harArbeidsgiverSykepengerUtbetaling)}
+        />
+      )}
+      {!isNullOrUndefined(vurdering.skalAvslås1127) && (
         <SpørsmålOgSvar
           spørsmål={
             'Skal søknaden avslås etter § 11-27 fordi det er for tidlig å vurdere vilkårene for AAP mens brukeren har en annen ytelse?'

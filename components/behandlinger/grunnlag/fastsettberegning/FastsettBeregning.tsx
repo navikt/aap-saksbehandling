@@ -4,12 +4,11 @@ import { Heading } from '@navikt/ds-react';
 import { isBefore, parse } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
-  BeregningTidspunktGrunnlag,
   BeregningstidspunktVurderingResponse,
+  BeregningTidspunktGrunnlag,
   MellomlagretVurdering,
   ÅrsakBeregningstidspunkt,
   ÅrsakYtterligereNedsatt,
@@ -28,6 +27,7 @@ import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerU
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 import styles from './FastsettBeregning.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag?: BeregningTidspunktGrunnlag;
@@ -37,24 +37,50 @@ interface Props {
   visAarsakDropdowns: boolean;
 }
 
-const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS: ValuePair<ÅrsakBeregningstidspunkt | ''>[] = [
+// Kun nedsatt arbeidsevne (ikke ytterligere nedsatt, jf. § 11-28)
+const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS: ValuePair<ÅrsakBeregningstidspunkt | ''>[] = [
   { label: '', value: '' },
   { label: 'Sykemeldingsdato', value: 'SYKEMELDINGSDATO' },
   { label: 'Kravdato', value: 'KRAVDATO' },
   { label: 'Dato på legeerklæring', value: 'DATO_PAA_LEGEERKLÆRING' },
   { label: 'Henvist til behandling', value: 'HENVIST_TIL_BEHANDLING' },
-  { label: '16 år som beregningstidspunkt', value: 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT' },
+  { label: 'Annet', value: 'ANNET' },
+];
+
+// Nedsatt arbeidsevne når det også skal vurderes ytterligere nedsatt, jf. § 11-28
+const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_KOMBINERT_OPTIONS: ValuePair<ÅrsakBeregningstidspunkt | ''>[] = [
+  { label: '', value: '' },
+  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Annet', value: 'ANNET' },
 ];
 
 const ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS: ValuePair<ÅrsakYtterligereNedsatt | ''>[] = [
   { label: '', value: '' },
+  { label: 'Sykemeldingsdato', value: 'SYKEMELDINGSDATO' },
+  { label: 'Kravdato', value: 'KRAVDATO' },
+  { label: 'Dato på legeerklæring', value: 'DATO_PAA_LEGEERKLÆRING' },
+  { label: 'Henvist til behandling', value: 'HENVIST_TIL_BEHANDLING' },
+  { label: 'Annet', value: 'ANNET' },
+];
+
+// Supersett av labels, inkl. verdier som ikke lenger kan velges, brukt for å vise historiske vurderinger korrekt
+const ALLE_ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_LABELS: ValuePair[] = [
+  ...ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS,
+  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
+  { label: '16 år som beregningstidspunkt', value: 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT' },
+];
+
+const ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS: ValuePair[] = [
+  ...ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS,
   { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Ytterligere nedsatt', value: 'YTTERLIGERE_NEDSATT' },
   { label: 'Økt uføregrad', value: 'ØKT_UFØREGRAD' },
   { label: 'Ikke betydning / ikke relevant', value: 'IKKE_BETYDNING_IKKE_RELEVANT' },
-  { label: 'Annet', value: 'ANNET' },
 ];
+
+export const defaultNedsattArbeidsevneBegrunnelseOverskrifter = ['Relevant faktum', 'Vurdering', 'Konklusjon'];
+
+export const defaultNedsattArbeidsevneBegrunnelse = defaultNedsattArbeidsevneBegrunnelseOverskrifter.join('\n\n');
 
 interface FormFields {
   nedsattArbeidsevneDatobegrunnelse: string;
@@ -77,8 +103,8 @@ export const FastsettBeregning = ({
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_BEREGNINGSTIDSPUNKT');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FASTSETT_BEREGNINGSTIDSPUNKT');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -91,13 +117,24 @@ export const FastsettBeregning = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag?.vurdering);
 
+  const årsakTilBeregningstidspunktOptions = grunnlag?.skalVurdereYtterligere
+    ? ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_KOMBINERT_OPTIONS
+    : ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS;
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       nedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
         defaultValue: defaultValues.nedsattArbeidsevneDatobegrunnelse,
-        rules: { required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne' },
+        rules: {
+          required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne',
+          validate: {
+            kanIkkeVæreDefaultBegrunnelse: (value) =>
+              (value as string).trim() !== defaultNedsattArbeidsevneBegrunnelse.trim() ||
+              'Du må skrive en egen vilkårsvurdering',
+          },
+        },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
@@ -118,8 +155,8 @@ export const FastsettBeregning = ({
       },
       årsak: {
         type: 'select',
-        label: 'Årsak til beregningstidspunkt.',
-        options: ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS,
+        label: 'Årsak til beregningstidspunkt',
+        options: årsakTilBeregningstidspunktOptions,
         defaultValue: defaultValues.årsak,
         rules: visAarsakDropdowns ? { required: 'Du må velge årsak til beregningstidspunkt.' } : {},
       },
@@ -165,7 +202,7 @@ export const FastsettBeregning = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -220,10 +257,10 @@ export const FastsettBeregning = ({
       heading={heading}
       steg={'FASTSETT_BEREGNINGSTIDSPUNKT'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
+      isLoading={løsAvklaringsbehovIsLoading}
       vilkårTilhørerNavKontor={false}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      status={status}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      status={løsAvklaringsbehovStatus}
       vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
@@ -254,7 +291,11 @@ export const FastsettBeregning = ({
           Du har satt beregningsdato etter søknadsdato. Hvis det er korrekt kan du bekrefte vilkåret.
         </Alert>
       )}
-      {visAarsakDropdowns && <FormField form={form} formField={formFields.årsak} />}
+      {visAarsakDropdowns && (
+        <div style={{ maxWidth: '90ch' }}>
+          <FormField form={form} formField={formFields.årsak} />
+        </div>
+      )}
       {grunnlag?.skalVurdereYtterligere && (
         <div className={styles.ytterligerenedsattfelter}>
           <Heading size={'small'}>Tidspunktet da arbeidsevnen ble ytterligere nedsatt § 11-28</Heading>
@@ -274,7 +315,7 @@ export const FastsettBeregning = ({
 
 function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vurdering']): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse,
+    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse ?? defaultNedsattArbeidsevneBegrunnelse,
     nedsattArbeidsevneDato: vurdering?.nedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato)
       : undefined,
@@ -289,7 +330,7 @@ function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vu
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: '',
+    nedsattArbeidsevneDatobegrunnelse: defaultNedsattArbeidsevneBegrunnelse,
     nedsattArbeidsevneDato: '',
     årsak: '',
     ytterligereNedsattArbeidsevneDato: '',
@@ -314,7 +355,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
     ? [
         {
           label: 'Årsak til beregningstidspunkt.',
-          value: finnÅrsakLabel(ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_OPTIONS, vurdering.årsak),
+          value: finnÅrsakLabel(ALLE_ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_LABELS, vurdering.årsak),
         },
       ]
     : []),
@@ -332,7 +373,7 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
     ? [
         {
           label: 'Årsak til ytterligere nedsatt tidspunkt.',
-          value: finnÅrsakLabel(ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS, vurdering.ytterligereNedsattÅrsak),
+          value: finnÅrsakLabel(ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS, vurdering.ytterligereNedsattÅrsak),
         },
       ]
     : []),

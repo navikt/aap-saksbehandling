@@ -3,12 +3,12 @@
 import { addDays, isBefore, parse, startOfDay } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Aktivitetsplikt11_7Grunnlag, Aktivitetsplikt11_7Vurdering, MellomlagretVurdering } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 
@@ -17,6 +17,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { deepEqual } from 'components/tidligerevurderinger/TidligereVurderingerUtils';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -42,14 +43,15 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
   const { behandlingsreferanse } = useParamsMedType();
   const vedtatteVurderinger = grunnlag?.vedtatteVurderinger;
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_AKTIVITETSPLIKT_11_7');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('VURDER_AKTIVITETSPLIKT_11_7');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'VURDER_AKTIVITETSPLIKT_11_7',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -61,7 +63,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           referanse: behandlingsreferanse,
           behandlingVersjon: behandlingVersjon,
@@ -78,6 +80,7 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
           },
         },
         () => {
+          loggUmamiVarighet('STEG_VURDER_AKTIVITETSPLIKT_11_7_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
@@ -177,11 +180,11 @@ export const Vurder11_7 = ({ grunnlag, behandlingVersjon, readOnly, initialMello
       heading="§ 11-7 Medlemmets aktivitetsplikt"
       steg={'VURDER_AKTIVITETSPLIKT_11_7'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
       knappTekst={knapptekst()}
       vilkårTilhørerNavKontor={true}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

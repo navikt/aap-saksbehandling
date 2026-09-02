@@ -1,18 +1,19 @@
 'use client';
 
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurderingerMeta } from 'lib/types/types';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
+import { Alert } from 'components/alert/Alert';
 interface Props {
   grunnlag: TrukketSøknadGrunnlag;
   readOnly: boolean;
@@ -20,17 +21,20 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
+type TrukketSøknadÅrsak = TrukketSøknadVurdering['aarsak'];
+
 interface FormFields {
   begrunnelse: string;
   skalTrekkes?: string;
+  aarsak?: TrukketSøknadÅrsak
 }
 
 type DraftFormFields = Partial<FormFields>;
 
 export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SØKNAD');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SØKNAD');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -60,9 +64,23 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
         rules: { required: 'Du må velge om søknaden skal trekkes' },
         defaultValue: defaultValues.skalTrekkes,
       },
+      aarsak: {
+        type: 'radio',
+        label: 'Hvorfor trekkes søknaden?',
+        options: [
+          { label: 'Brukeren søkte for tidlig', value: 'BRUKER_SOKTE_FOR_TIDLIG' },
+          { label: 'Brukeren søkte på feil ytelse', value: 'BRUKER_SOKTE_FEIL_YTELSE' },
+          { label: 'Brukeren ønsker ikke å søke om AAP lenger', value: 'BRUKER_ONSKER_IKKE_SOKE_LENGER' },
+          { label: 'Annet', value: 'ANNET' },
+        ],
+        rules: { required: 'Du må velge en årsak for å trekke søknaden' },
+        defaultValue: defaultValues.aarsak || undefined,
+      },
     },
     { readOnly: formReadOnly }
   );
+
+  const harValgtAtSoknadTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
@@ -73,12 +91,13 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(
       (data) => {
-        løsBehovOgGåTilNesteSteg({
+        løsAvklaringsbehov({
           behandlingVersjon: behandlingVersjon,
           behov: {
             behovstype: Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
             begrunnelse: data.begrunnelse,
             skalTrekkes: data.skalTrekkes === JaEllerNei.Ja,
+            aarsak: data.aarsak || undefined
           },
           referanse: behandlingsreferanse,
         });
@@ -95,9 +114,9 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       heading={'Trekk søknad'}
       steg={'SØKNAD'}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {
@@ -112,6 +131,16 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
     >
       <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.skalTrekkes} horizontalRadio />
+      {harValgtAtSoknadTrekkes && (
+        <>
+          <FormField form={form} formField={formFields.aarsak} />
+          <Alert variant={'info'}>
+            Husk at trekk av søknad skal være brukers eget ønske, og at dialogen med bruker må journalføres. Informer
+            bruker om at saken avsluttes, og at ny søknad må sendes dersom bruker ombestemmer seg. Alle vurderinger som
+            er gjort på saken vil bli slettet når søknaden trekkes.
+          </Alert>
+        </>
+      )}
     </VilkårskortMedFormOgMellomlagring>
   );
 };
@@ -130,6 +159,7 @@ function mapVurderingToDraftFormFields(vurdering?: TrukketSøknadVurdering): Dra
   return {
     begrunnelse: vurdering?.begrunnelse,
     skalTrekkes: getJaNeiEllerUndefined(vurdering?.skalTrekkes),
+    aarsak: vurdering?.aarsak ?? undefined,
   };
 }
 

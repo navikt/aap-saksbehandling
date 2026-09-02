@@ -3,9 +3,9 @@
 import { VStack } from '@navikt/ds-react';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { parse } from 'date-fns';
 import {
   Avslag11_27BrukersYtelse,
   Avslag11_27Grunnlag,
@@ -13,7 +13,7 @@ import {
   TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
-import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEvent, SubmitEventHandler, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -22,6 +22,8 @@ import { Avslag11_27KravTabell } from 'components/behandlinger/samordning/avslag
 import { Avslag11_27KravGruppe } from 'components/behandlinger/samordning/avslag11_27/avslag11_27KravGruppe/Avslag11_27KravGruppe';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: Avslag11_27Grunnlag;
@@ -45,7 +47,9 @@ export interface KravMedVurdering extends VurderingFormMeta {
   begrunnelse: string;
   harAnnenFullYtelse: JaEllerNei | undefined;
   brukersYtelse: Avslag11_27BrukersYtelse | undefined;
+  brukersYtelseTom: string | undefined;
   harSykepengegrunnlagOver2G: JaEllerNei | undefined;
+  harArbeidsgiverSykepengerUtbetaling: JaEllerNei | undefined;
   skalAvslås1127: JaEllerNei | undefined;
 }
 
@@ -60,8 +64,8 @@ export const Avslag11_27 = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('VURDER_AVSLAG_11_27');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('VURDER_AVSLAG_11_27');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -140,13 +144,26 @@ export const Avslag11_27 = ({
 
   const mapTilVurderingPayload = (krav: KravMedVurderinger) => {
     const vurdering = krav.vurdering;
+    const harAnnenFullYtelse = vurdering.harAnnenFullYtelse === JaEllerNei.Ja;
+
+    const harArbeidsgiverSykepengerUtbetaling = getTrueFalseEllerUndefined(
+      vurdering.harArbeidsgiverSykepengerUtbetaling
+    );
+
     return {
       referanse: vurdering.referanse,
       begrunnelse: vurdering.begrunnelse,
-      harAnnenFullYtelse: vurdering.harAnnenFullYtelse === JaEllerNei.Ja,
-      brukersYtelse: vurdering.brukersYtelse,
-      harSykepengegrunnlagOver2G: vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja,
-      skalAvslås1127: vurdering.skalAvslås1127 === JaEllerNei.Ja,
+      harAnnenFullYtelse,
+      brukersYtelse: harAnnenFullYtelse ? vurdering.brukersYtelse : undefined,
+      brukersYtelseTom:
+        harAnnenFullYtelse && vurdering.brukersYtelseTom
+          ? formaterDatoForBackend(parse(vurdering.brukersYtelseTom, 'dd.MM.yyyy', new Date()))
+          : undefined,
+      harSykepengegrunnlagOver2G: harAnnenFullYtelse
+        ? vurdering.harSykepengegrunnlagOver2G === JaEllerNei.Ja
+        : undefined,
+      harArbeidsgiverSykepengerUtbetaling: harAnnenFullYtelse ? harArbeidsgiverSykepengerUtbetaling : undefined,
+      skalAvslås1127: harAnnenFullYtelse ? vurdering.skalAvslås1127 === JaEllerNei.Ja : undefined,
     };
   };
 
@@ -176,7 +193,7 @@ export const Avslag11_27 = ({
 
       const vurderinger = data.avslag11_27vurderinger.filter(skalSendeVurdering).map(mapTilVurderingPayload);
 
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -199,9 +216,9 @@ export const Avslag11_27 = ({
       heading={'§ 11-27 Brukeren har annen full trygdeytelse i en lengre periode etter AAP søknad'}
       steg={'VURDER_AVSLAG_11_27'}
       onSubmit={handleSubmit}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
@@ -243,6 +260,12 @@ export const Avslag11_27 = ({
           const nåværendeVurdering = (grunnlag.vurderinger ?? []).find((v) => v.referanse === faktiskKrav.referanse);
           const visLeggTilVurderingKnapp = erRevurdering && !!vedtattVurdering;
 
+          const sorterteKrav = [...grunnlag.krav].sort(
+            (a, b) => new Date(a.søknadsdato).getTime() - new Date(b.søknadsdato).getTime()
+          );
+          const kravSortIndex = sorterteKrav.findIndex((k) => k.referanse === faktiskKrav.referanse);
+          const nesteKravSøknadsdato = sorterteKrav[kravSortIndex + 1]?.søknadsdato;
+
           return (
             <Avslag11_27KravGruppe
               key={kravField.id}
@@ -255,7 +278,10 @@ export const Avslag11_27 = ({
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
               visLeggTilVurderingKnapp={visLeggTilVurderingKnapp}
-              brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer}
+              nesteKravSøknadsdato={nesteKravSøknadsdato}
+              brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer.filter(
+                (ytelse) => ytelse !== 'FERIE_I_SYKEPENGEPERIODE' && ytelse !== 'SVANGERSKAPSPENGER'
+              )}
             />
           );
         })}
@@ -286,15 +312,12 @@ function mapVurderingToDraftFormFields(
             begrunnelse: '',
             harAnnenFullYtelse: undefined,
             brukersYtelse: undefined,
+            brukersYtelseTom: undefined,
             harSykepengegrunnlagOver2G: undefined,
+            harArbeidsgiverSykepengerUtbetaling: undefined,
             skalAvslås1127: undefined,
           },
         };
-      }
-
-      let harSykepengegrunnlagOver2G: JaEllerNei | undefined;
-      if (nåværende.harSykepengegrunnlagOver2G !== undefined && nåværende.harSykepengegrunnlagOver2G !== null) {
-        harSykepengegrunnlagOver2G = nåværende.harSykepengegrunnlagOver2G ? JaEllerNei.Ja : JaEllerNei.Nei;
       }
 
       return {
@@ -305,8 +328,12 @@ function mapVurderingToDraftFormFields(
           begrunnelse: nåværende.begrunnelse ?? '',
           harAnnenFullYtelse: nåværende.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
           brukersYtelse: nåværende.brukersYtelse ?? undefined,
-          harSykepengegrunnlagOver2G,
-          skalAvslås1127: nåværende.skalAvslås1127 ? JaEllerNei.Ja : JaEllerNei.Nei,
+          brukersYtelseTom: nåværende.brukersYtelseTom
+            ? formaterDatoForFrontend(nåværende.brukersYtelseTom)
+            : undefined,
+          harSykepengegrunnlagOver2G: getJaNeiEllerUndefined(nåværende.harSykepengegrunnlagOver2G),
+          harArbeidsgiverSykepengerUtbetaling: getJaNeiEllerUndefined(nåværende.harArbeidsgiverSykepengerUtbetaling),
+          skalAvslås1127: getJaNeiEllerUndefined(nåværende.skalAvslås1127),
         },
       };
     }),

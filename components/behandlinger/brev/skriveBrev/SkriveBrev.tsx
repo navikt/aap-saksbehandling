@@ -5,7 +5,6 @@ import { ChevronDownIcon, GlassIcon, TrashIcon } from '@navikt/aksel-icons';
 import { ActionMenu, BodyShort, Button, HStack, Label, List, Loader, LocalAlert, VStack } from '@navikt/ds-react';
 import { useDebounce } from 'hooks/DebounceHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
 import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
@@ -23,6 +22,7 @@ import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 export const SkriveBrev = ({
   referanse,
@@ -77,12 +77,8 @@ export const SkriveBrev = ({
     setIsSaving(false);
   }, [debouncedBrev, referanse]);
 
-  const {
-    løsBehovOgGåTilNesteSteg,
-    status: løsBehovStatus,
-    isLoading,
-    løsBehovOgGåTilNesteStegError,
-  } = useLøsBehovOgGåTilNesteSteg('BREV');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('BREV');
 
   useEffect(() => {
     if (kanMellomlagreBrev && !readOnly) {
@@ -95,7 +91,7 @@ export const SkriveBrev = ({
   };
 
   const slettBrev = async (ikkeSendBrevForm: IkkeSendFields) => {
-    løsBehovOgGåTilNesteSteg({
+    løsAvklaringsbehov({
       behandlingVersjon: behandlingVersjon,
       behov: {
         behovstype: behovstype,
@@ -193,8 +189,8 @@ export const SkriveBrev = ({
             readonly={readOnly}
           />
           <LøsBehovOgGåTilNesteStegStatusAlert
-            status={løsBehovStatus}
-            løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+            status={løsAvklaringsbehovStatus}
+            løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
           />
           <Distribusjonssjekk
             readOnly={readOnly}
@@ -212,7 +208,7 @@ export const SkriveBrev = ({
                 const flyt = await clientHentFlyt(behandlingsreferanse);
                 if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
                   setKanMellomlagreBrev(false);
-                  løsBehovOgGåTilNesteSteg(
+                  løsAvklaringsbehov(
                     {
                       behandlingVersjon: flyt.data.behandlingVersjon,
                       behov: {
@@ -228,7 +224,7 @@ export const SkriveBrev = ({
                 }
               }}
               className={'fit-content'}
-              loading={isLoading}
+              loading={løsAvklaringsbehovIsLoading}
             >
               Send brev
             </Button>

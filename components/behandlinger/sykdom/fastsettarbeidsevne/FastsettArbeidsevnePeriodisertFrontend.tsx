@@ -1,7 +1,5 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-
 import { useFieldArray, useForm } from 'react-hook-form';
 import { gyldigDatoEllerNull, validerDato } from 'lib/validation/dateValidation';
 import {
@@ -13,6 +11,7 @@ import {
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { parse, parseISO } from 'date-fns';
 
 import { HStack, Label, VStack } from '@navikt/ds-react';
@@ -37,6 +36,7 @@ import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilslut
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: ArbeidsevneGrunnlag;
@@ -76,8 +76,12 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FASTSETT_ARBEIDSEVNE');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('FASTSETT_ARBEIDSEVNE');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -86,6 +90,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
     'FASTSETT_ARBEIDSEVNE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
 
@@ -147,7 +152,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       },
     };
 
-    løsPeriodisertBehovOgGåTilNesteSteg(losning, () => {
+    løsPeriodisertAvklaringsbehov(losning, () => {
+      loggUmamiVarighet('STEG_FASTSETT_ARBEIDSEVNE_VARIGHET', umamiStartTidspunkt, Date.now());
       nullstillMellomlagretVurdering();
       closeAllAccordions();
       visningActions.onBekreftClick();
@@ -163,9 +169,9 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
       steg={'FASTSETT_ARBEIDSEVNE'}
       vilkårTilhørerNavKontor={true}
       onSubmit={form.handleSubmit(onSubmit)}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

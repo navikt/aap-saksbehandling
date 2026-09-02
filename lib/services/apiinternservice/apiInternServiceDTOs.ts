@@ -2,6 +2,46 @@ export type ArenaoppslagSakerRequestV1 = {
   personidentifikator: string;
 };
 
+export type ManuellFordelingsgrunnlagRequest = {
+  personidentifikator: string;
+};
+
+export type LocalDateString = string;
+
+export type ManuellFordelingsgrunnlagResponse = {
+  saksnummer: string;
+  erAktiv: boolean;
+  under52Uker?: boolean | null;
+  gjenståendeOrdinæreDager?: number | null;
+  gjenståendeUnntaksDager?: number | null;
+  sisteVedtak?: VedtakMedMaksdato | null;
+  sisteUtbetaling?: LocalDateString | null;
+  oppgaver: Oppgave[];
+};
+
+export type Oppgave = {
+  oppgaveId: number;
+  beskrivelse: string | null;
+  sakskontekst: string | null;
+  visningsnavn: string | null;
+  fristDato: LocalDateString | null;
+  arbeidsbenk: string | null;
+  oppgaveEnhet: string | null;
+  navEnhet: string | null;
+  notat: string | null;
+};
+
+export type VedtakMedMaksdato = {
+  vedtakId: number;
+  aktfaseKode: string;
+  vedtaktypeKode: string;
+  fra: LocalDateString | null;
+  til: LocalDateString | null;
+  maxdatoOrdinaer: LocalDateString | null;
+  maxdatoUnntak: LocalDateString | null;
+  maxdatoAap: LocalDateString | null;
+};
+
 export type ArenaSakOppsummeringKontrakt = {
   sakId: string;
   lopenummer: number;

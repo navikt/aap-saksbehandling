@@ -82,12 +82,14 @@ export function emptySykdomsvurdering(diagnoser?: {
   };
 }
 
-export const defaultBegrunnelse = [
+export const defaultBegrunnelseSpørsmål = [
   'Har brukeren sykdom, skade eller lyte?',
   'Har brukeren fått arbeidsevnen nedsatt?',
   'Har brukeren fått arbeidsevnen nedsatt med minst halvparten?',
   'Er sykdom, skade eller lyte vesentlig medvirkende årsak til at brukerens arbeidsevne er nedsatt med minst halvparten (årsakssammenheng)?',
-].join('\n\n');
+];
+
+export const defaultBegrunnelse = defaultBegrunnelseSpørsmål.join('\n\n');
 
 export function emptySykdomsvurderingMedDefaultBegrunnelse(diagnoser?: {
   kodeverk?: string;

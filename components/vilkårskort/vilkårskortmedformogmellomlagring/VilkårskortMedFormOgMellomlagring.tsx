@@ -6,12 +6,13 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 
 import styles from 'components/vilkårskort/Vilkårskort.module.css';
 import { ReactNode, SubmitEventHandler } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 export interface VilkårsKortMedFormOgMellomlagringProps {
   heading: string;

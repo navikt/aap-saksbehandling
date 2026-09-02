@@ -3,13 +3,14 @@
 import { Button, ErrorSummary, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useBekreftVurderingerGrunnlag } from 'hooks/saksbehandling/BekrefteVurderingerHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { BekreftVurderingerOppfølgingGrunnlag } from 'lib/types/types';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -19,9 +20,9 @@ interface Props {
 
 export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, initialGrunnlag }: Props) => {
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
-  const { status, løsBehovOgGåTilNesteSteg, isLoading, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    'BEKREFT_VURDERINGER_OPPFØLGING'
-  );
+  const { løsAvklaringsbehovStatus, løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('BEKREFT_VURDERINGER_OPPFØLGING');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('BEKREFT_VURDERINGER_OPPFØLGING');
 
   const { grunnlag } = useBekreftVurderingerGrunnlag(initialGrunnlag);
 
@@ -44,7 +45,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                       vurdering.avklaringsbehovKode as Behovstype
                     )}
                   >
-                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode as Behovstype)}
+                    {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
                   </ErrorSummary.Item>
                 ))}
               </ErrorSummary>
@@ -56,23 +57,28 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
             className="fit-content"
             disabled={grunnlag?.mellomlagredeVurderinger.length != 0}
             onClick={() =>
-              løsBehovOgGåTilNesteSteg({
-                behandlingVersjon: behandlingVersjon,
-                behov: {
-                  behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+              løsAvklaringsbehov(
+                {
+                  behandlingVersjon: behandlingVersjon,
+                  behov: {
+                    behovstype: Behovstype.BEKREFT_VURDERINGER_OPPFØLGING,
+                  },
+                  referanse: behandlingsreferanse,
                 },
-                referanse: behandlingsreferanse,
-              })
+                () => {
+                  loggUmamiVarighet('STEG_BEKREFT_VURDERINGER_OPPFØLGING_VARIGHET', umamiStartTidspunkt, Date.now());
+                }
+              )
             }
-            loading={isLoading}
+            loading={løsAvklaringsbehovIsLoading}
           >
             Bekreft vurderinger og send videre
           </Button>
         </VStack>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        status={løsAvklaringsbehovStatus}
+        løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       />
     </VilkårsKort>
   );

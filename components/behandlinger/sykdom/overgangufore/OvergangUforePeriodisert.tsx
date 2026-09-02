@@ -7,7 +7,7 @@ import {
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -32,6 +32,7 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -60,8 +61,12 @@ export const OvergangUforePeriodisert = ({
   skalStegVurderes,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('OVERGANG_UFORE');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('OVERGANG_UFORE');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -70,6 +75,7 @@ export const OvergangUforePeriodisert = ({
     'OVERGANG_UFORE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: OvergangUforeForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -86,7 +92,7 @@ export const OvergangUforePeriodisert = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsreferanse,
@@ -109,6 +115,7 @@ export const OvergangUforePeriodisert = ({
           },
         },
         () => {
+          loggUmamiVarighet('STEG_OVERGANG_UFORE_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           closeAllAccordions();
           nullstillMellomlagretVurdering();
@@ -126,9 +133,9 @@ export const OvergangUforePeriodisert = ({
       heading={'§ 11-18 AAP under behandling av krav om uføretrygd'}
       steg={'OVERGANG_UFORE'}
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={true}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       mellomlagretVurdering={mellomlagretVurdering}

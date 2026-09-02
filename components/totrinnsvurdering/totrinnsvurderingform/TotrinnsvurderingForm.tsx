@@ -2,11 +2,11 @@
 
 import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
-import { Markering, MarkeringHaster } from 'lib/types/oppgaveTypes';
+import { Markering } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -17,10 +17,10 @@ import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { isLocal } from 'lib/utils/environment';
 import {
   Behovstype,
-  JaEllerNei,
-  JaEllerNeiOptions,
   getJaNeiEllerUndefined,
   getTrueFalseEllerUndefined,
+  JaEllerNei,
+  JaEllerNeiOptions,
 } from 'lib/utils/form';
 import {
   BeslutterFeltTag,
@@ -66,9 +66,8 @@ export const TotrinnsvurderingForm = ({
 }: Props) => {
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } = useLøsBehovOgGåTilNesteSteg(
-    erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK'
-  );
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov(erKvalitetssikring ? 'KVALITETSSIKRING' : 'FATTE_VEDTAK');
 
   const { addHendelse, varighetHendelseRef, hendelseSerieRef } = useUmamiVarighetHendelser<BeslutterFeltTag>(
     erKvalitetssikring ? 'KVALITETSSIKRER_HENDELSER_VARIGHET' : 'BESLUTTER_HENDELSER_VARIGHET'
@@ -148,56 +147,58 @@ export const TotrinnsvurderingForm = ({
         }
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           clientOpprettMarkeringHendelse(behandlingsreferanse, {
-            markeringType: MarkeringHaster,
+            markeringType: 'HASTER',
             hendelseType: MarkeringHendelseType.FJERNET,
           });
         }
         if (isError) {
           return;
         }
-        løsBehovOgGåTilNesteSteg(
-          {
-            behandlingVersjon: behandlingsversjon,
-            behov: {
-              behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
-              vurderinger: assessedFields.map((vurdering) => {
-                if (vurdering.godkjent === JaEllerNei.Ja) {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: true,
-                  };
-                } else {
-                  return {
-                    definisjon: vurdering.definisjon,
-                    godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                    grunner: vurdering.grunner?.map((grunn) => {
-                      return {
-                        årsak: grunn,
-                        årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                      };
-                    }),
-                    begrunnelse: vurdering.begrunnelse,
-                  };
-                }
-              }),
-            },
-            referanse: behandlingsreferanse,
-          },
-          () => {
-            loggUmamiVarighet(
-              erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
-              umamiStartTidspunkt,
-              Date.now()
-            );
-            if (!erKvalitetssikring) {
-              loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-            } else {
-              clientFjernHelseopplysningIkon(behandlingsreferanse);
-            }
 
-            nullstillMellomlagretVurdering();
+        const behovParams = {
+          behandlingVersjon: behandlingsversjon,
+          behov: {
+            behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+            vurderinger: assessedFields.map((vurdering) => {
+              if (vurdering.godkjent === JaEllerNei.Ja) {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: true,
+                };
+              } else {
+                return {
+                  definisjon: vurdering.definisjon,
+                  godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+                  grunner: vurdering.grunner?.map((grunn) => {
+                    return {
+                      årsak: grunn,
+                      årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                    };
+                  }),
+                  begrunnelse: vurdering.begrunnelse,
+                };
+              }
+            }),
+          },
+          referanse: behandlingsreferanse,
+        };
+
+        const onSuccessLøsBehovCallback = () => {
+          loggUmamiVarighet(
+            erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+            umamiStartTidspunkt,
+            Date.now()
+          );
+          if (!erKvalitetssikring) {
+            loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+          } else {
+            clientFjernHelseopplysningIkon(behandlingsreferanse);
           }
-        );
+
+          nullstillMellomlagretVurdering();
+        };
+
+        løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
       })}
       className={'flex-column'}
       autoComplete={'off'}
@@ -247,12 +248,12 @@ export const TotrinnsvurderingForm = ({
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
       <LøsBehovOgGåTilNesteStegStatusAlert
-        status={status}
-        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+        status={løsAvklaringsbehovStatus}
+        løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       />
       {!readOnly && (
         <VStack gap="space-8">
-          <Button size={'medium'} className={'fit-content'} loading={isLoading}>
+          <Button size={'medium'} className={'fit-content'} loading={løsAvklaringsbehovIsLoading}>
             Bekreft og send videre
           </Button>
 

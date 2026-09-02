@@ -3,10 +3,10 @@
 import { useConfigForm } from 'components/form/FormHook';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { MellomlagretVurdering, RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 import { useSak } from 'hooks/SakHook';
 import { BodyLong, Radio, VStack } from '@navikt/ds-react';
@@ -19,6 +19,7 @@ import { Refusjonskrav } from 'components/behandlinger/sykdom/refusjon/Refusjons
 import { ValuePair } from 'components/form/FormField';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -44,14 +45,15 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
   const { sak } = useSak();
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('REFUSJON_KRAV');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('REFUSJON_KRAV');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'REFUSJON_KRAV',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -79,7 +81,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behov: {
             behovstype: Behovstype.REFUSJON_KRAV_KODE,
@@ -93,6 +95,7 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_REFUSJON_KRAV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
@@ -112,9 +115,9 @@ export const Refusjon = ({ behandlingVersjon, grunnlag, readOnly, initialMelloml
       steg="REFUSJON_KRAV"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vurderingerMeta={grunnlag.gjeldendeVurderinger?.[0]?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

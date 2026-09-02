@@ -1,7 +1,3 @@
-import {
-  NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType,
-  NoNavAapOppgaveReturInformasjonDtoStatus,
-} from '@navikt/aap-oppgave-typescript-types';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
@@ -14,19 +10,15 @@ import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppga
 const oppgaveStatus = {
   VENT: (oppgave: OppgaveMedKontekst) => !!oppgave.oppgavelisteTags?.påVentInfo?.påVentTil,
   RETUR_FRA_KVALITETSSIKRER: (oppgave: OppgaveMedKontekst) =>
-    oppgave.oppgavelisteTags.returInformasjon?.status ===
-    NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_KVALITETSSIKRER,
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_KVALITETSSIKRER',
   RETUR_FRA_BESLUTTER: (oppgave: OppgaveMedKontekst) =>
-    oppgave.oppgavelisteTags.returInformasjon?.status === NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_BESLUTTER,
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_BESLUTTER',
   RETUR_FRA_VEILEDER: (oppgave: OppgaveMedKontekst) =>
-    oppgave.oppgavelisteTags.returInformasjon?.status === NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_VEILEDER,
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_VEILEDER',
   RETUR_FRA_SAKSBEHANDLER: (oppgave: OppgaveMedKontekst) =>
-    oppgave.oppgavelisteTags.returInformasjon?.status ===
-    NoNavAapOppgaveReturInformasjonDtoStatus.RETUR_FRA_SAKSBEHANDLER,
+    oppgave.oppgavelisteTags.returInformasjon?.status === 'RETUR_FRA_SAKSBEHANDLER',
   ER_HASTESAK: (oppgave: OppgaveMedKontekst) =>
-    oppgave.oppgavelisteTags.markeringer?.some(
-      (it) => it.markeringType === NoNavAapOppgaveMarkeringMarkeringDtoMarkeringType.HASTER
-    ) ?? false,
+    oppgave.oppgavelisteTags.markeringer?.some((it) => it.markeringType === 'HASTER') ?? false,
   VENTEFRIST_UTLØPT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.forrigePåVentInfo != null,
 } as const;
 

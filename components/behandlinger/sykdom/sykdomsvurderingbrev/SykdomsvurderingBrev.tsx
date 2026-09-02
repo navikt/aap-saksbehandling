@@ -2,7 +2,6 @@
 
 import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
   ForeløpigBehandlingsutfall,
   MellomlagretVurdering,
@@ -11,6 +10,7 @@ import {
   TypeBehandling,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -21,6 +21,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
@@ -47,14 +48,15 @@ export const SykdomsvurderingBrev = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SYKDOMSVURDERING_BREV');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SYKDOMSVURDERING_BREV');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'SYKDOMSVURDERING_BREV',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -79,7 +81,7 @@ export const SykdomsvurderingBrev = ({
   );
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           referanse: behandlingsreferanse,
@@ -89,6 +91,7 @@ export const SykdomsvurderingBrev = ({
           },
         },
         () => {
+          loggUmamiVarighet('STEG_SYKDOMSVURDERING_BREV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
@@ -107,9 +110,9 @@ export const SykdomsvurderingBrev = ({
       vilkårTilhørerNavKontor={true}
       defaultOpen={true}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => {

@@ -45,7 +45,7 @@ export const Distribusjonssjekk = ({
       } else {
         setDistribusjonssjekkFeil(undefined);
         const kanDistribuereTilAlleMottakere = !response.data.mottakereDistStatus.some(
-          (distStatus: { mottakerIdent: String; kanDistribuere: boolean }) => !distStatus.kanDistribuere
+          (distStatus: { mottakerIdent: string; kanDistribuere: boolean }) => !distStatus.kanDistribuere
         );
         setVisKanIkkeDistribuereAdvarsel(!kanDistribuereTilAlleMottakere);
       }

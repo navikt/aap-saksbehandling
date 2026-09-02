@@ -22,8 +22,8 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { EtableringAvEgenVirksomhetFormInput } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetForm';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import {
   getDefaultValuesFromGrunnlag,
   mapEtableringEgenVirksomhetVurderingTilDto,
@@ -41,6 +41,7 @@ import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeri
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -73,8 +74,12 @@ export const EtableringAvEgenVirksomhet = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('ETABLERING_EGEN_VIRKSOMHET');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
 
   const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -85,6 +90,7 @@ export const EtableringAvEgenVirksomhet = ({
     'ETABLERING_EGEN_VIRKSOMHET',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
   const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
@@ -97,6 +103,10 @@ export const EtableringAvEgenVirksomhet = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
+      if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
+        visningActions.avbrytEndringClick();
+        return;
+      }
       // Må finnes minst en oppstart eller utviklingsperiode hvis vilkår er oppfylt
       let validerTidsplan = true;
       data.vurderinger.forEach((vurdering) => {
@@ -106,7 +116,7 @@ export const EtableringAvEgenVirksomhet = ({
             validerTidsplan = false;
             form.setError('root', {
               type: 'custom',
-              message: 'Det må være minst en periode lagt i oppstartperiode eller uviklingsperiode',
+              message: 'Det må være minst en periode lagt i oppstartperiode eller uviklingsperiode.',
             });
           }
         }
@@ -143,7 +153,7 @@ export const EtableringAvEgenVirksomhet = ({
       if (!validering) {
         return;
       }
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -157,6 +167,7 @@ export const EtableringAvEgenVirksomhet = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_ETABLERING_EGEN_VIRKSOMHET_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
           closeAllAccordions();
@@ -178,9 +189,9 @@ export const EtableringAvEgenVirksomhet = ({
       steg={'ETABLERING_EGEN_VIRKSOMHET'}
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
       visningModus={visningModus}

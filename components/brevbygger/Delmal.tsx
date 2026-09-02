@@ -48,7 +48,7 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
         >
           <HStack justify="space-between">
             <Heading level="2" size="small">
-              {delmal.beskrivelse}
+              {delmal.brevbyggerTittel ?? delmal.beskrivelse}
             </Heading>
 
             {!obligatorisk && (
@@ -67,9 +67,7 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
             <VStack gap="space-16" marginBlock="space-8">
               {valgOgFritekst.map((node) => {
                 if (node._type === 'fritekst') {
-                  return (
-                    <DelmalFritekst key={node._key} node={node} control={control} delmalId={delmal._id} />
-                  );
+                  return <DelmalFritekst key={node._key} node={node} control={control} delmalId={delmal._id} />;
                 }
                 return <Valg key={node._key} valgRef={node} control={control} />;
               })}

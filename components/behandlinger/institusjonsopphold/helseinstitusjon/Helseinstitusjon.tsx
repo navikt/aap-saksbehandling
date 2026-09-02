@@ -5,13 +5,12 @@ import { format, parse, subDays } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { Dato } from 'lib/types/Dato';
 import { HelseinstitusjonGrunnlag, MellomlagretVurdering, Periode, VurderingFormMeta } from 'lib/types/types';
 import { DATO_FORMATER, erUendeligSlutt, formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
-import { Behovstype, JaEllerNei, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEvent } from 'react';
 import { useFieldArray } from 'react-hook-form';
@@ -20,6 +19,7 @@ import { InstitusjonsoppholdTabell } from 'components/behandlinger/institusjonso
 import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonoppholdgruppe/HelseinstitusjonOppholdGruppe';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -52,8 +52,8 @@ type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
 
 export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('DU_ER_ET_ANNET_STED');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('DU_ER_ET_ANNET_STED');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -113,7 +113,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         });
       });
 
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -136,9 +136,9 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       heading={'§ 11-25 Helseinstitusjon'}
       steg={'DU_ER_ET_ANNET_STED'}
       onSubmit={handleSubmit}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
-      isLoading={isLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      isLoading={løsAvklaringsbehovIsLoading}
       vilkårTilhørerNavKontor={false}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

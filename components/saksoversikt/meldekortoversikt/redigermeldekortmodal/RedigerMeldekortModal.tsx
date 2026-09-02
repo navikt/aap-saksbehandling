@@ -193,7 +193,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                               ? formaterDatoForFrontend(meldekort.meldekort.mottattTidspunkt)
                               : undefined;
                             if (eksisterendeMottattDato && erDatoFoerDato(value as string, eksisterendeMottattDato)) {
-                              return 'Du har satt en meldedato som er før et eksisterende meldekort for perioden';
+                              return `Meldedatoen kan ikke være før ${eksisterendeMottattDato}, fordi det allerede finnes et innsendt meldekort med denne meldedatoen for perioden.`;
                             }
                           },
                           validerIkkeFørMeldeperiodeTom: (value) => {

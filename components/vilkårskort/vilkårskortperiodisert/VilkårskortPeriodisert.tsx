@@ -7,12 +7,13 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { ErrorList } from 'lib/utils/formerrors';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
 import { Dispatch, ReactNode, SetStateAction, SubmitEventHandler } from 'react';
-import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
+import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface VilkårsKortPeriodisertProps {
   heading: string;

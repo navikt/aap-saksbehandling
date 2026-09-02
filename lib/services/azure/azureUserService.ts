@@ -53,7 +53,7 @@ function hentRollerForBruker(payload: JWTPayload): Roller[] {
   return roller;
 }
 
-// Disse må stemme med UUID i dev.yaml
+// Disse må stemme med UUID i dev-gcp.yaml
 enum RollerDev {
   BESLUTTER = 'f0f6cad5-e3c0-4308-99a2-3630ac60174a',
   LES = '96e18023-db50-45f7-b023-3251279df28d',
@@ -83,7 +83,7 @@ function mapRollerFraTokenTilKelvinRollerDev(rolle: string): Roller | undefined 
   }
 }
 
-// Disse må stemme med UUID i prod.yaml
+// Disse må stemme med UUID i prod-gcp.yaml
 enum RollerProd {
   BESLUTTER = '5763b52f-f16a-483d-8f40-25be9de95c0a',
   LES = '963df3e5-04f7-415e-8d13-1de981603940',

@@ -18,6 +18,7 @@ export const valgfriDelmal: DelmalReferanse = {
     ...sanityAttrs,
     _id: 'valgfriDelmal',
     beskrivelse: 'En valgfri delmal',
+    brevbyggerTittel: 'Brevbyggertittel',
     teksteditor: [
       {
         _key: 'teksteditor-key',

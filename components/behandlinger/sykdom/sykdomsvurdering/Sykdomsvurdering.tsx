@@ -1,11 +1,15 @@
 'use client';
 
-import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
-import { SubmitEventHandler } from 'react';
-import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { LightBulbIcon } from '@navikt/aksel-icons';
+import { InfoCard, VStack } from '@navikt/ds-react';
 import { parseISO } from 'date-fns';
-import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import { useSak } from 'hooks/SakHook';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
+import { Dato } from 'lib/types/Dato';
 import {
   ArbeidsevneNedsattValg,
   MellomlagretVurdering,
@@ -14,46 +18,46 @@ import {
   TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
+import { isSuccess } from 'lib/utils/api';
+import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
+import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
+import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
+import { SubmitEventHandler } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import useSWR from 'swr';
+
+import { Alert } from 'components/alert/Alert';
+import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
+import styles from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering.module.css';
+import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
+import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
+import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
 import {
   DiagnoserDefaultOptions,
   hentSisteLagredeVurdering,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
-import { ValuePair } from 'components/form/FormField';
-import { useSak } from 'hooks/SakHook';
-import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
-import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { useFieldArray, useForm } from 'react-hook-form';
 import {
-  NyVurderingExpandableCard,
-  skalVæreInitiellEkspandert,
-} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
-import { Dato } from 'lib/types/Dato';
-import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { SykdomsvurderingFormInput } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingFormInput';
-import { TidligereSykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/TidligereSykdomsvurdering';
-import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
-import { parseOgMigrerMellomlagretData } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMellomlagringParser';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
-import { InfoCard, VStack } from '@navikt/ds-react';
-import { parseDatoFraDatePickerOgTrekkFra1Dag } from 'components/behandlinger/oppholdskrav/oppholdskrav-utils';
-import {
+  defaultBegrunnelseSpørsmål,
   emptySykdomsvurderingMedDefaultBegrunnelse,
   erNyVurderingOppfylt,
   erTidligereVurderingOppfylt,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
-import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
+import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
+import { ValuePair } from 'components/form/FormField';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
+import {
+  NyVurderingExpandableCard,
+  skalVæreInitiellEkspandert,
+} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
-import { Alert } from 'components/alert/Alert';
-import useSWR from 'swr';
-import { clientHentRelevanteDokumenter } from 'lib/dokumentClientApi';
-import { isSuccess } from 'lib/utils/api';
-import { LightBulbIcon } from '@navikt/aksel-icons';
-import styles from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering.module.css';
+import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { loggUmamiSykdomsvurderingAntallSpørsmålFraMal } from 'lib/utils/umami/sykdomsvurdering';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -117,14 +121,19 @@ export const Sykdomsvurdering = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsPeriodisertBehovOgGåTilNesteSteg, isLoading, status, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('AVKLAR_SYKDOM');
+  const {
+    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('AVKLAR_SYKDOM');
 
   const { visningModus, visningActions, formReadOnly, erAktivUtenAvbryt } = useVilkårskortVisning(
     readOnly,
     'AVKLAR_SYKDOM',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
@@ -157,7 +166,11 @@ export const Sykdomsvurdering = ({
       if (!erPerioderGyldige) {
         return;
       }
-      løsPeriodisertBehovOgGåTilNesteSteg(
+      data.vurderinger.forEach((vurdering) => {
+        loggUmamiSykdomsvurderingAntallSpørsmålFraMal(vurdering.begrunnelse, defaultBegrunnelseSpørsmål);
+      });
+
+      løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -180,6 +193,7 @@ export const Sykdomsvurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_AVKLAR_SYKDOM_VARIGHET', umamiStartTidspunkt, Date.now());
           closeAllAccordions();
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
@@ -199,9 +213,9 @@ export const Sykdomsvurdering = ({
       steg="AVKLAR_SYKDOM"
       vilkårTilhørerNavKontor={true}
       onSubmit={handleSubmit}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       knappTekst={'Bekreft'}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(mapGrunnlagTilDefaultvalues(grunnlag)))}
@@ -316,7 +330,7 @@ export const Sykdomsvurdering = ({
           : undefined;
 
         return {
-          fraDato: new Dato(vurdering.vurderingenGjelderFra || vurdering.fom).formaterForFrontend(),
+          fraDato: new Dato(vurdering.fom).formaterForFrontend(),
           begrunnelse: vurdering?.begrunnelse,
           harSkadeSykdomEllerLyte: getJaNeiEllerUndefined(vurdering?.harSkadeSykdomEllerLyte)!,
           harNedsattArbeidsevne: vurdering?.harNedsattArbeidsevne,

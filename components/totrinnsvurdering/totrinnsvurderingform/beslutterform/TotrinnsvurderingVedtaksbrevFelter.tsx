@@ -54,9 +54,8 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   const behovstypeEllerKode =
     Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
   const eventPrefix = behovstypeEllerKode;
-  const kvalitetssikringDiffFeatureToggle = useFeatureFlag('KvalitetssikringDiff');
   const skalViseEndretSidenSistInfo =
-    endretSidenForrigeGang != null && erKvalitetssikring && kvalitetssikringDiffFeatureToggle;
+    endretSidenForrigeGang != null && erKvalitetssikring;
 
   const visEndretTekst = skalViseEndretSidenSistInfo && endretSidenForrigeGang;
   const visIkkeEndretTekst = skalViseEndretSidenSistInfo && !endretSidenForrigeGang;
@@ -82,7 +81,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
             href={link}
             onClick={() => felterOnBlur(`${eventPrefix}_LINK`, Date.now())}
           >
-            {mapBehovskodeTilBehovstype(field.definisjon as Behovstype)}
+            {mapBehovskodeTilBehovstype(field.definisjon)}
           </AkselLink>
         </VStack>
       </div>

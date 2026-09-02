@@ -1,7 +1,6 @@
 'use client';
 
 import { useConfigForm } from 'components/form/FormHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { FormField } from 'components/form/FormField';
 import {
   Hjemmel,
@@ -12,11 +11,18 @@ import {
 } from 'lib/types/types';
 import { SubmitEvent, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
-import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
+import {
+  getValgteHjemlerSomIkkeErImplementert,
+  hjemmelalternativerOmgjøring,
+  hjemmelalternativerOpprettholdelse,
+  hjemmelMap,
+} from 'lib/utils/hjemmel';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -43,14 +49,15 @@ export const KlagebehandlingVurderingNay = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_NAY');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('KLAGEBEHANDLING_NAY');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'KLAGEBEHANDLING_NAY',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -89,7 +96,7 @@ export const KlagebehandlingVurderingNay = ({
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
         description: 'Velg alle påklagde vilkår som skal omgjøres som følge av klagen',
-        options: hjemmelalternativer,
+        options: hjemmelalternativerOmgjøring,
         defaultValue: defaultValue.vilkårSomSkalOmgjøres,
         rules: {
           required: 'Du velge hvilke påklagde vilkår som skal omgjøres',
@@ -107,7 +114,7 @@ export const KlagebehandlingVurderingNay = ({
         type: 'combobox_multiple',
         label: 'Hvilke vilkår er blitt vurdert til å opprettholdes?',
         description: 'Velg alle påklagde vilkår som blir opprettholdt',
-        options: hjemmelalternativer,
+        options: hjemmelalternativerOpprettholdelse,
         defaultValue: defaultValue.vilkårSomSkalOpprettholdes,
         rules: { required: 'Du velge hvilke påklagde vilkår som skal opprettholdes' },
       },
@@ -133,7 +140,7 @@ export const KlagebehandlingVurderingNay = ({
 
   const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -149,6 +156,7 @@ export const KlagebehandlingVurderingNay = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_KLAGEBEHANDLING_NAY_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
@@ -162,9 +170,9 @@ export const KlagebehandlingVurderingNay = ({
       steg={'KLAGEBEHANDLING_NAY'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>

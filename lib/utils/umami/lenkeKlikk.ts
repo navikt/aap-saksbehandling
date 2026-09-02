@@ -8,6 +8,6 @@ export interface UmamiLenkeKlikkEvent {
   steg?: StegType;
 }
 
-export function loggUmamiEksternLenkeKlikk(steg: StegType, lenketekst: string) {
+export function loggUmamiEksternLenkeKlikk(steg: StegType | undefined, lenketekst: string) {
   clientLoggUmamiEvent({ type: 'LENKE_KLIKK', name: 'EKSTERN_LENKE_KLIKK', lenketekst, steg });
 }

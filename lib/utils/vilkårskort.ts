@@ -1,6 +1,6 @@
 import { Behovstype } from 'lib/utils/form';
 
-export function byggVilkårskortLenke(saknummer: String, behandlingsreferanse: String, behovstype: Behovstype): string {
+export function byggVilkårskortLenke(saknummer: string, behandlingsreferanse: string, behovstype: Behovstype): string {
   return `/saksbehandling/sak/${saknummer}/${behandlingsreferanse}/${behovstypeTilVilkårskortLink(behovstype)}`;
 }
 
@@ -78,6 +78,8 @@ export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
       return 'GRUNNLAG/#INNTEKTSBORTFALL';
     case Behovstype.FASTSETT_VEDTAKSLENGDE:
       return 'VEDTAKSLENGDE/#VEDTAKSLENGDE';
+    case Behovstype.VURDER_AVSLAG_11_27:
+      return 'AVSLAG_11_27';
     default:
       return 'SYKDOM';
   }

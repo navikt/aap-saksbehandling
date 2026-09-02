@@ -50,7 +50,7 @@ export function mapÅrsakTilTekst(årsak: StansOpphørÅrsak): string {
     case 'BRUKER_OVER_67':
       return 'Brukeren er over 67 år';
     case 'MANGLENDE_DOKUMENTASJON':
-      return 'Brukeren har ikke oppfylt opplysningsplikten sin etter § 21-3';
+      return '§ 21-3 Manglende dokumentasjon';
     case 'IKKE_RETT_PA_SYKEPENGEERSTATNING':
       return 'Ikke rett til AAP som sykepengeerstatning';
     case 'IKKE_RETT_PA_STUDENT':

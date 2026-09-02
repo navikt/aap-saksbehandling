@@ -1,5 +1,5 @@
 import { FetchResponse } from 'lib/utils/api';
-import { ArenaSakMedVedtakResponse, SakerResponse } from './apiInternServiceDTOs';
+import { ArenaSakMedVedtakResponse, ManuellFordelingsgrunnlagResponse, SakerResponse } from './apiInternServiceDTOs';
 
 export const dummySakerResponse: SakerResponse = {
   saker: [
@@ -35,6 +35,49 @@ export const dummySakerResponse: SakerResponse = {
       avsluttetDato: '2023-12-15',
       statuskode: 'INAKT',
       statusnavn: 'Inaktiv',
+    },
+  ],
+};
+
+export const dummyManuellFordelingsgrunnlagResponse: ManuellFordelingsgrunnlagResponse = {
+  saksnummer: '2024-100241',
+  erAktiv: true,
+  under52Uker: true,
+  gjenståendeOrdinæreDager: 120,
+  gjenståendeUnntaksDager: 0,
+  sisteVedtak: {
+    vedtakId: 1001,
+    aktfaseKode: 'UA',
+    vedtaktypeKode: 'O',
+    fra: '2024-01-15',
+    til: '2024-12-31',
+    maxdatoOrdinaer: '2025-01-15',
+    maxdatoUnntak: null,
+    maxdatoAap: '2025-01-15',
+  },
+  sisteUtbetaling: '2024-11-15',
+  oppgaver: [
+    {
+      oppgaveId: 5001,
+      beskrivelse: 'Vurder aktivitetsplikt',
+      sakskontekst: 'AAP 2024-100241',
+      visningsnavn: 'Ola Nordmann',
+      fristDato: '2024-12-01',
+      arbeidsbenk: 'AAP',
+      oppgaveEnhet: '0415',
+      navEnhet: '0415',
+      notat: 'Bruker har levert nye opplysninger',
+    },
+    {
+      oppgaveId: 5002,
+      beskrivelse: 'Behandle meldekort',
+      sakskontekst: 'AAP 2024-100241',
+      visningsnavn: 'Ola Nordmann',
+      fristDato: null,
+      arbeidsbenk: 'AAP',
+      oppgaveEnhet: '0415',
+      navEnhet: null,
+      notat: null,
     },
   ],
 };

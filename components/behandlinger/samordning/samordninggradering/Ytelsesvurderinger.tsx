@@ -7,7 +7,7 @@ import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SamordningYtelsestype } from 'lib/types/types';
 import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
 
 import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -15,6 +15,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
   readOnly: boolean;
+  fieldArray: UseFieldArrayReturn<SamordningGraderingFormfields, 'vurderteSamordninger'>;
 }
 
 const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
@@ -52,15 +53,11 @@ const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
   },
 ];
 
-export const Ytelsesvurderinger = ({ form, readOnly }: Props) => {
-  const { fields, remove, append } = useFieldArray({
-    control: form.control,
-    name: 'vurderteSamordninger',
-  });
+export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
+  const { fields, remove, append } = fieldArray;
 
   function leggTilRad() {
     append({
-      kilde: '', // TODO denne skal vekk vel?
       manuell: true,
       ytelseType: undefined,
       periode: { fom: '', tom: '' },

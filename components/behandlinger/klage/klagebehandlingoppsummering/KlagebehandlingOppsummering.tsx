@@ -1,8 +1,8 @@
 'use client';
 
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
@@ -11,6 +11,7 @@ import styles from './KlagebehandlingOppsummering.module.css';
 import { SubmitEventHandler } from 'react';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -58,10 +59,11 @@ const utledVilkårSomOmgjøres = (
 
 export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunnlagNay, grunnlagKontor }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('KLAGEBEHANDLING_OPPSUMMERING');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('KLAGEBEHANDLING_OPPSUMMERING');
 
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'KLAGEBEHANDLING_OPPSUMMERING', undefined);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const utledetInnstilling = utledInnstilling(grunnlagNay, grunnlagKontor);
   const vilkårSomOmgjøres = utledVilkårSomOmgjøres(grunnlagKontor, grunnlagNay);
@@ -69,13 +71,18 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
 
   const handleSubmit: SubmitEventHandler = (event) => {
     event.preventDefault();
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingVersjon,
-      behov: {
-        behovstype: Behovstype.KLAGE_OPPSUMMERING,
+    løsAvklaringsbehov(
+      {
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.KLAGE_OPPSUMMERING,
+        },
+        referanse: behandlingsreferanse,
       },
-      referanse: behandlingsreferanse,
-    });
+      () => {
+        loggUmamiVarighet('STEG_KLAGEBEHANDLING_OPPSUMMERING_VARIGHET', umamiStartTidspunkt, Date.now());
+      }
+    );
   };
   return (
     <VilkårskortMedForm
@@ -83,9 +90,9 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
       steg={'KLAGEBEHANDLING_OPPSUMMERING'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       knappTekst={'Bekreft og send til beslutter'}
       visningModus={visningModus}
       visningActions={visningActions}

@@ -482,6 +482,8 @@ export type VedtakslengdeVurderingResponse =
 export type VedtakslengdeVurderingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.vedtakslengde.VedtakslengdeVurderingDto'];
 
+export type VedtakslengdeÅrsak = VedtakslengdeVurderingDto['årsaker'][number];
+
 export type ForeslåVedtakGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse'];
 
@@ -571,6 +573,14 @@ export type OvergangArbeidLøsning =
 
 export type NavEnhetRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterRequest'];
+
+export type YtelseoppslagRequest =
+  components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.YtelseoppslagRequest'];
+
+export type ForeldrepengeperiodeDTO =
+  components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.ForeldrepengeperiodeDTO'];
+
+export type SykepengeperiodeDTO = components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.SykepengeperiodeDTO'];
 
 export type NavEnheterResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterResponse'];

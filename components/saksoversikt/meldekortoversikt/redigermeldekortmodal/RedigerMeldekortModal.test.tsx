@@ -298,7 +298,9 @@ describe('RedigerMeldekortModal', () => {
       await fyllUtOgSubmit('20.01.2025'); // etter meldeperiode tom+1, men før mottattTidspunkt
 
       expect(
-        screen.getAllByText('Du har satt en meldedato som er før et eksisterende meldekort for perioden')[0]
+        screen.getAllByText(
+          'Meldedatoen kan ikke være før 21.01.2025, fordi det allerede finnes et innsendt meldekort med denne meldedatoen for perioden.'
+        )[0]
       ).toBeVisible();
     });
 

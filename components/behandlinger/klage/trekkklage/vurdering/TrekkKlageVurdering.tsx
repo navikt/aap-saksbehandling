@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { MellomlagretVurdering, TrekkKlageGrunnlag, TypeBehandling } from 'lib/types/types';
 import { useConfigForm } from 'components/form/FormHook';
@@ -10,6 +10,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { SubmitEventHandler } from 'react';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   behandlingVersjon: number;
@@ -32,14 +33,15 @@ type DraftFormFields = Partial<FormFields>;
 export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, status, løsBehovOgGåTilNesteStegError, isLoading } =
-    useLøsBehovOgGåTilNesteSteg('TREKK_KLAGE');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+    useLøsAvklaringsbehov('TREKK_KLAGE');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'TREKK_KLAGE',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -82,7 +84,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -96,6 +98,7 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_TREKK_KLAGE_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }
@@ -110,10 +113,10 @@ export const TrekkKlageVurdering = ({ behandlingVersjon, readOnly, grunnlag, ini
       heading={'Trekk klage'}
       steg={'TREKK_KLAGE'}
       onSubmit={handleSubmit}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
-      isLoading={isLoading}
-      status={status}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
         slettMellomlagring(() =>

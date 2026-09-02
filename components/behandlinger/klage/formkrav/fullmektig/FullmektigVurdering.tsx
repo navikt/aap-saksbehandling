@@ -1,14 +1,14 @@
 'use client';
 
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { FullmektigGrunnlag, MellomlagretVurdering, TypeBehandling } from 'lib/types/types';
 import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
-import { Behovstype, JaEllerNei, JaEllerNeiOptions, getJaNeiEllerUndefined } from 'lib/utils/form';
+import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -16,6 +16,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 import styles from './fullmektig.module.css';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag?: FullmektigGrunnlag;
@@ -50,14 +51,15 @@ type IndentAndType = {
 export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('FULLMEKTIG');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FULLMEKTIG');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
     'FULLMEKTIG',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -197,7 +199,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
             }
           : undefined;
 
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -211,6 +213,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_FULLMEKTIG_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }
@@ -224,9 +227,9 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       steg={'FULLMEKTIG'}
       onSubmit={handleSubmit}
       vilkårTilhørerNavKontor={false}
-      status={status}
-      isLoading={isLoading}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      status={løsAvklaringsbehovStatus}
+      isLoading={løsAvklaringsbehovIsLoading}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vurderingerMeta={grunnlag?.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}
       onDeleteMellomlagringClick={() =>
@@ -274,9 +277,18 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
         grunnlag?.vurdering?.fullmektigIdentMedType?.type,
         grunnlag?.vurdering?.fullmektigNavnOgAdresse != null
       ),
-      fnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
-      orgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
-      utlOrgnr: grunnlag?.vurdering?.fullmektigIdent ?? undefined,
+      fnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'FNR_DNR'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
+      orgnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'ORGNR'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
+      utlOrgnr:
+        grunnlag?.vurdering?.fullmektigIdentMedType?.type === 'UTL_ORG'
+          ? grunnlag?.vurdering?.fullmektigIdentMedType?.ident
+          : undefined,
       navn: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.navn ?? undefined,
       adresselinje1: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje1 ?? undefined,
       adresselinje2: grunnlag?.vurdering?.fullmektigNavnOgAdresse?.adresse?.adresselinje2 ?? undefined,

@@ -3,7 +3,6 @@
 import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
 import { differenceInBusinessDays, parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { useLøsBehovOgGåTilNesteSteg } from 'hooks/saksbehandling/LøsBehovOgGåTilNesteStegHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import {
@@ -21,6 +20,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
   grunnlag: SamordningArbeidsgiverGrunnlag;
@@ -49,8 +49,8 @@ export const SamordningArbeidsgiver = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
-  const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    useLøsBehovOgGåTilNesteSteg('SAMORDNING_ARBEIDSGIVER');
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('SAMORDNING_ARBEIDSGIVER');
 
   const { visningActions, formReadOnly, visningModus } = useVilkårskortVisning(
     readOnly,
@@ -90,7 +90,7 @@ export const SamordningArbeidsgiver = ({
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) =>
-      løsBehovOgGåTilNesteSteg(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -121,9 +121,9 @@ export const SamordningArbeidsgiver = ({
       heading="§ 11-24 Reduksjon av AAP på grunn av ytelser fra arbeidsgiver"
       steg="SAMORDNING_ARBEIDSGIVER"
       onSubmit={handleSubmit}
-      isLoading={isLoading}
-      status={status}
-      løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       vilkårTilhørerNavKontor={false}
       vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
       mellomlagretVurdering={mellomlagretVurdering}

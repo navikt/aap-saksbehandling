@@ -115,7 +115,12 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
               placeholder="xxxx-xxxxxx"
               value={saksnummer}
               onSearchClick={handleSearch}
-              onChange={(val) => { setSaksnummer(val); setError(null); setSubmitError(null); setArenasak(null); }}
+              onChange={(val) => {
+                setSaksnummer(val);
+                setError(null);
+                setSubmitError(null);
+                setArenasak(null);
+              }}
               error={error}
             />
           </form>

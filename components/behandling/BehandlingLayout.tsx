@@ -26,8 +26,6 @@ import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
 
-import { visÅrsakTilVurdering } from './visÅrsakTilVurdering';
-
 interface Props {
   saksnummer: string;
   behandlingsreferanse: string;
@@ -70,17 +68,6 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
-
-  const visÅrsakTilAktivitetspliktBehandling =
-    ['Aktivitetsplikt', 'Aktivitetsplikt11_9'].includes(behandling.data.type) &&
-    behandling.data.vurderingsbehovOgÅrsaker?.some((e) => e.årsak === 'OMGJØRING_ETTER_KLAGE');
-  const visÅrsakTilRevurdering = visÅrsakTilVurdering(behandling.data);
-  const visÅrsakTilEndreStartstidspunkt = behandling.data.vurderingsbehovOgÅrsaker
-    ?.flatMap((v) => v.vurderingsbehov)
-    ?.some((v) => v.type === 'VURDER_RETTIGHETSPERIODE');
-
-  const visÅrsakTilBehandling =
-    visÅrsakTilAktivitetspliktBehandling || visÅrsakTilRevurdering || visÅrsakTilEndreStartstidspunkt;
 
   return (
     <SWRConfig
@@ -132,12 +119,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
                 kabalKlageresultat={kabalKlageResultat}
                 hovedkolonneInnhold={
                   <VStack gap={'space-20'}>
-                    {visÅrsakTilBehandling && (
-                      <ÅrsakTilBehandling
-                        behandlingType={behandling.data.type}
-                        vurderingsbehovOgÅrsaker={behandling.data.vurderingsbehovOgÅrsaker}
-                      />
-                    )}
+                    <ÅrsakTilBehandling behandling={behandling.data} />
                     {/*Vi må ha children inne i en div for å unngå layoutshift*/}
                     <div style={{ width: '100%' }}>{children}</div>
                   </VStack>

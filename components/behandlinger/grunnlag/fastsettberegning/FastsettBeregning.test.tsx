@@ -42,8 +42,8 @@ const grunnlagMedÅrsak: BeregningTidspunktGrunnlag = {
   vurdering: {
     begrunnelse: 'En begrunnelse',
     nedsattArbeidsevneDato: '2022-01-01',
-    årsak: 'KRAVDATO',
-    ytterligereNedsattÅrsak: 'UFØRETIDSPUNKT',
+    årsak: 'UFØRETIDSPUNKT',
+    ytterligereNedsattÅrsak: 'KRAVDATO',
     vurderingerMeta: {
       vurdertAv: {
         ident: 'Saksbehandler',
@@ -198,7 +198,20 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
     expect(felt).toBeVisible();
   });
 
-  it('skal vise feilmelding hvis ikke besvart', async () => {
+  it('skal ha standardtekst med overskrifter forhåndsutfylt', () => {
+    render(
+      <FastsettBeregning
+        readOnly={false}
+        behandlingVersjon={0}
+        visAarsakDropdowns={true}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+    const felt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(felt).toHaveValue('Relevant faktum\n\nVurdering\n\nKonklusjon');
+  });
+
+  it('skal vise feilmelding hvis saksbehandler prøver å bekrefte med uendret standardtekst', async () => {
     render(
       <FastsettBeregning
         readOnly={false}
@@ -208,7 +221,7 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
       />
     );
     await velgBekreft();
-    const feilmelding = screen.getByText('Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne');
+    const feilmelding = screen.getByText('Du må skrive en egen vilkårsvurdering');
     expect(feilmelding).toBeVisible();
   });
 
@@ -458,7 +471,9 @@ describe('mellomlagring', () => {
 
     await user.click(slettKnapp);
 
-    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Vilkårsvurdering' })).toHaveValue(
+      'Relevant faktum\n\nVurdering\n\nKonklusjon'
+    );
   });
 
   it('Skal resette skjema til bekreftet vurdering dersom det finnes en bekreftet vurdering og bruker sletter mellomlagring', async () => {
@@ -517,7 +532,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    expect(screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt.' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' })).toBeVisible();
   });
 
   it('skal ikke vise dropdown for årsak til beregningstidspunkt når visAarsakDropdowns er false', () => {
@@ -529,7 +544,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    expect(screen.queryByRole('combobox', { name: 'Årsak til beregningstidspunkt.' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Årsak til beregningstidspunkt' })).not.toBeInTheDocument();
   });
 
   it('skal vise dropdown for årsak til ytterligere nedsatt tidspunkt når toggle er på og det skal vurderes ytterligere', () => {
@@ -553,7 +568,9 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    expect(screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })
+    ).not.toBeInTheDocument();
   });
 
   it('skal ikke vise dropdown for årsak til ytterligere nedsatt tidspunkt når det ikke skal vurderes ytterligere', () => {
@@ -565,7 +582,9 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
       />
     );
-    expect(screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })
+    ).not.toBeInTheDocument();
   });
 
   it('skal vise feilmelding hvis årsak ikke er valgt og toggle er på', async () => {
@@ -605,17 +624,15 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
     );
     await velgBekreft();
     expect(screen.queryByText('Du må velge årsak til beregningstidspunkt.')).not.toBeInTheDocument();
-    expect(screen.getByText('Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne')).toBeVisible();
+    expect(screen.getByText('Du må skrive en egen vilkårsvurdering')).toBeVisible();
   });
 
   it('skal forhåndsvelge årsak fra eksisterende vurdering', () => {
     render(
       <FastsettBeregning readOnly={false} behandlingVersjon={0} visAarsakDropdowns={true} grunnlag={grunnlagMedÅrsak} />
     );
-    expect(screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt.' })).toHaveValue('KRAVDATO');
-    expect(screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).toHaveValue(
-      'UFØRETIDSPUNKT'
-    );
+    expect(screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' })).toHaveValue('UFØRETIDSPUNKT');
+    expect(screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).toHaveValue('KRAVDATO');
   });
 
   it('skal la saksbehandler velge en årsak', async () => {
@@ -627,9 +644,44 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={grunnlagUtenVurdering}
       />
     );
-    const dropdown = screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt.' });
-    await user.selectOptions(dropdown, 'SYKEMELDINGSDATO');
-    expect(dropdown).toHaveValue('SYKEMELDINGSDATO');
+    const dropdown = screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' });
+    await user.selectOptions(dropdown, 'UFØRETIDSPUNKT');
+    expect(dropdown).toHaveValue('UFØRETIDSPUNKT');
+  });
+
+  it('skal kun tilby Uføretidspunkt og Annet for beregningstidspunkt når det skal vurderes ytterligere nedsatt', () => {
+    render(
+      <FastsettBeregning
+        readOnly={false}
+        behandlingVersjon={0}
+        visAarsakDropdowns={true}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+    const dropdown = screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' });
+    const optionLabels = Array.from(dropdown.querySelectorAll('option')).map((option) => option.textContent);
+    expect(optionLabels).toEqual(['', 'Uføretidspunkt', 'Annet']);
+  });
+
+  it('skal tilby Sykemeldingsdato, Kravdato, Dato på legeerklæring, Henvist til behandling og Annet for beregningstidspunkt når det ikke skal vurderes ytterligere nedsatt', () => {
+    render(
+      <FastsettBeregning
+        readOnly={false}
+        behandlingVersjon={0}
+        visAarsakDropdowns={true}
+        grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
+      />
+    );
+    const dropdown = screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' });
+    const optionLabels = Array.from(dropdown.querySelectorAll('option')).map((option) => option.textContent);
+    expect(optionLabels).toEqual([
+      '',
+      'Sykemeldingsdato',
+      'Kravdato',
+      'Dato på legeerklæring',
+      'Henvist til behandling',
+      'Annet',
+    ]);
   });
 
   it('skal vise valgt årsak med lesbar tekst i tidligere vurderinger når toggle er på', () => {
@@ -654,7 +706,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
         grunnlag={grunnlagMedHistorikk}
       />
     );
-    expect(screen.queryByText('Årsak til beregningstidspunkt.')).not.toBeInTheDocument();
+    expect(screen.queryByText('Årsak til beregningstidspunkt')).not.toBeInTheDocument();
     expect(screen.queryByText('Kravdato')).not.toBeInTheDocument();
   });
 });

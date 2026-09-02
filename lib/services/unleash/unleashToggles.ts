@@ -3,7 +3,6 @@ export const FLAGS = [
   'TilbakekrevingBelopFilter',
   'VisArenasakerOversikt',
   'ArenasakerLenkeTilVisninsklient',
-  'BegrunnelseForIkkeSendBrev',
   'ReturAarsakJournalforing',
   'VisValgForDialogmelding',
   'HentFastlege',
@@ -13,11 +12,11 @@ export const FLAGS = [
   'BeregningstidspunktAarsak',
   'VentStatusForTilbakekreving',
   'VisMigrereSakFraArenaKnapp',
-  'KvalitetssikringDiff',
   'Avslag11_27',
   'SkalViseAlleSykdomssteg',
-  'RevurdereFrivillige',
   'DialogMedBehandler',
+  'FaktiskArbeidTilkjentYtelse',
+  'kopierPerioder',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -28,7 +27,6 @@ export const mockedFlags: Flags = {
   TilbakekrevingBelopFilter: true,
   VisArenasakerOversikt: true,
   ArenasakerLenkeTilVisninsklient: true,
-  BegrunnelseForIkkeSendBrev: true,
   ReturAarsakJournalforing: true,
   VisValgForDialogmelding: true,
   StudentV2: true,
@@ -38,9 +36,9 @@ export const mockedFlags: Flags = {
   BeregningstidspunktAarsak: true,
   VentStatusForTilbakekreving: true,
   VisMigrereSakFraArenaKnapp: true,
-  KvalitetssikringDiff: true,
   Avslag11_27: true,
   SkalViseAlleSykdomssteg: true,
-  RevurdereFrivillige: true,
   DialogMedBehandler: true,
+  FaktiskArbeidTilkjentYtelse: true,
+  kopierPerioder: true,
 };

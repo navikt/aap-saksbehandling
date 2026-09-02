@@ -53,7 +53,6 @@ export const DigitaliserDokument = ({
   }
 
   const erKravEnabled = useFeatureFlag('KravSteg');
-  const erRevurdereFrivilligeEnabled = useFeatureFlag('RevurdereFrivillige');
 
   return (
     <VStack gap={'space-16'}>
@@ -93,7 +92,6 @@ export const DigitaliserDokument = ({
           readOnly={readOnly}
           isLoading={isLoading}
           erKravEnabled={erKravEnabled}
-          erRevurdereFrivilligeEnabled={erRevurdereFrivilligeEnabled}
         />
       )}
     </VStack>

@@ -59,7 +59,9 @@ const grunnlagMedVurdering: Avslag11_27Grunnlag = {
       begrunnelse: 'Eksisterende begrunnelse',
       harAnnenFullYtelse: true,
       brukersYtelse: 'SYKEPENGER',
+      brukersYtelseTom: '2026-06-30',
       harSykepengegrunnlagOver2G: true,
+      harArbeidsgiverSykepengerUtbetaling: true,
       skalAvslås1127: true,
     },
   ],
@@ -91,7 +93,8 @@ const grunnlagMedVedtattOgNyVurdering: Avslag11_27Grunnlag = {
       begrunnelse: 'Nåværende vurdering gjenopptak',
       harAnnenFullYtelse: false,
       brukersYtelse: null,
-      harSykepengegrunnlagOver2G: null,
+      brukersYtelseTom: null,
+      harArbeidsgiverSykepengerUtbetaling: null,
       skalAvslås1127: false,
     },
   ],
@@ -101,7 +104,9 @@ const grunnlagMedVedtattOgNyVurdering: Avslag11_27Grunnlag = {
       begrunnelse: 'Vedtatt vurdering fra førstegangsbehandling',
       harAnnenFullYtelse: true,
       brukersYtelse: 'SYKEPENGER',
+      brukersYtelseTom: '2026-06-30',
       harSykepengegrunnlagOver2G: true,
+      harArbeidsgiverSykepengerUtbetaling: true,
       skalAvslås1127: true,
       vurderingerMeta: {
         vurdertAv: { ident: 'Z123456', dato: '2025-12-01' },
@@ -223,18 +228,21 @@ describe('Avslag11_27 - skjema vises/skjules', () => {
 });
 
 describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
-  it('fyller inn begrunnelse fra eksisterende vurdering', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-        typeBehandling="Førstegangsbehandling"
-      />
-    );
+  it.each([['Eksisterende begrunnelse'], ['30.06.2026']] as const)(
+    'fyller inn verdi %s fra eksisterende vurdering',
+    (forventetVerdi) => {
+      render(
+        <Avslag11_27
+          grunnlag={grunnlagMedVurdering}
+          behandlingVersjon={1}
+          readOnly={false}
+          typeBehandling="Førstegangsbehandling"
+        />
+      );
 
-    expect(screen.getByDisplayValue('Eksisterende begrunnelse')).toBeInTheDocument();
-  });
+      expect(screen.getByDisplayValue(forventetVerdi)).toBeInTheDocument();
+    }
+  );
 
   it('bruker mellomlagring som defaultValue fremfor grunnlag', () => {
     const mellomlagring: MellomlagretVurdering = {
@@ -250,7 +258,9 @@ describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
               erNyVurdering: false,
               harAnnenFullYtelse: 'Ja',
               brukersYtelse: 'SYKEPENGER',
+              brukersYtelseTom: '30.06.2026',
               harSykepengegrunnlagOver2G: 'Ja',
+              harArbeidsgiverSykepengerUtbetaling: 'Ja',
               skalAvslås1127: 'Ja',
             },
           },
@@ -374,7 +384,9 @@ describe('Avslag11_27 - mellomlagring', () => {
               erNyVurdering: true,
               harAnnenFullYtelse: undefined,
               brukersYtelse: undefined,
+              brukersYtelseTom: undefined,
               harSykepengegrunnlagOver2G: undefined,
+              harArbeidsgiverSykepengerUtbetaling: undefined,
               skalAvslås1127: undefined,
             },
           },
@@ -411,7 +423,9 @@ describe('Avslag11_27 - mellomlagring', () => {
               erNyVurdering: false,
               harAnnenFullYtelse: 'Ja',
               brukersYtelse: 'SYKEPENGER',
+              brukersYtelseTom: '30.06.2026',
               harSykepengegrunnlagOver2G: 'Ja',
+              harArbeidsgiverSykepengerUtbetaling: 'Ja',
               skalAvslås1127: 'Ja',
             },
           },

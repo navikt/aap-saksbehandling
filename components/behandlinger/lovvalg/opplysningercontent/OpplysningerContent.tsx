@@ -213,6 +213,31 @@ export const OpplysningerContent = ({ opplysning }: Props) => {
       </VStack>
     );
   }
+
+  if (opplysning.bosattStatusOgNorskStatsborgerskap) {
+    const norskStatsborgerskapOgBosattStatus = opplysning.bosattStatusOgNorskStatsborgerskap;
+    return (
+      <VStack gap={'space-8'}>
+        <VStack gap={'space-4'} className={styles.sideDivider}>
+          <LabelValue label={'Folkeregisterstatus:'} value={`${norskStatsborgerskapOgBosattStatus.personStatus}`} />
+        </VStack>
+        {norskStatsborgerskapOgBosattStatus.statsborgerskap.map((sb, index) => {
+          const landNavn = getLandNavn(sb.land);
+          return (
+            <VStack gap={'space-4'} key={index} className={styles.sideDivider}>
+              <LabelValue
+                label={landNavn ? 'Land/landkode:' : 'Landkode:'}
+                value={landNavn ? `${landNavn.label}, ${sb.land}` : sb.land}
+              />
+              {sb.gyldigFraOgMed && (
+                <LabelValue label={'Periode:'} value={formaterPeriode(sb.gyldigFraOgMed, sb.gyldigTilOgMed)} />
+              )}
+            </VStack>
+          );
+        })}
+      </VStack>
+    );
+  }
 };
 
 function LabelValue({ label, value }: { label?: string; value: string }) {

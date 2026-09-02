@@ -1,18 +1,19 @@
 'use client';
 
 import { Button, HStack, Page, VStack } from '@navikt/ds-react';
-import { KlageV0, SaksInfo } from 'lib/types/types';
-import { useConfigForm } from 'components/form/FormHook';
-import { FormField } from 'components/form/FormField';
+import { parse } from 'date-fns';
 import { clientSendHendelse } from 'lib/clientApi';
-import { useState } from 'react';
-import { Spinner } from 'components/felles/Spinner';
-import { useRouter } from 'next/navigation';
+import { KlageV0, SaksInfo } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { parse } from 'date-fns';
-import { Kort } from 'components/kort/Kort';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
 import { Alert } from 'components/alert/Alert';
+import { Spinner } from 'components/felles/Spinner';
+import { FormField } from 'components/form/FormField';
+import { useConfigForm } from 'components/form/FormHook';
+import { Kort } from 'components/kort/Kort';
 
 export interface KlageFormFields {
   kravMottatt: string;
@@ -39,7 +40,6 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
         meldingType: 'KlageV0',
         kravMottatt: formaterDatoForBackend(parse(data.kravMottatt, 'dd.MM.yyyy', new Date())),
         beskrivelse: data.beskrivelse,
-        skalOppretteNyBehandling: true,
       } satisfies KlageV0,
     };
 
@@ -75,7 +75,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="space-16">
-          <Kort heading={'Opprettt klage'}>
+          <Kort heading={'Opprett klage'}>
             <VStack gap={'space-16'}>
               <FormField form={form} formField={formFields.kravMottatt} size="medium" />
               <FormField form={form} formField={formFields.beskrivelse} size="medium" />
