@@ -27,7 +27,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const behovstype = skalBrukeNyttStudentsteg ? Behovstype.AVKLAR_STUDENT_KODE_V2 : Behovstype.AVKLAR_STUDENT_KODE;
-  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovstype, totalReadOnly);
+  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovstype, totalReadOnly, stegData.erIkkePåVent);
 
   if (skalBrukeNyttStudentsteg) {
     return (

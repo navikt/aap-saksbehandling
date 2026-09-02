@@ -25,7 +25,8 @@ export const RefusjonMedDataFetching = async ({ behandlingsreferanse, stegData }
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.REFUSJON_KRAV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

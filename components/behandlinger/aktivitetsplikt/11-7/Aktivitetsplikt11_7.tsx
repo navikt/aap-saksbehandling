@@ -29,6 +29,7 @@ export const Aktivitetsplikt11_7 = async ({ behandlingsreferanse, flyt }: Props)
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

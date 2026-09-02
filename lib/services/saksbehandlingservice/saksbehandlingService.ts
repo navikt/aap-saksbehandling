@@ -721,18 +721,20 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
   );
 };
 
-// hentFlyt bruker Next.js request memoization, så dette fører ikke til ekstra API-kall
-const behandlingErIkkePåVent = async (behandlingsreferanse: string): Promise<boolean> => {
-  const flyt = await hentFlyt(behandlingsreferanse);
-  return isSuccess(flyt) && !flyt.data.visning.visVentekort;
-};
-
 /**
  * Vi ønsker å hente mellomlagring når behandling er på vent slik at saksbehandler ser siste mellomlagrede vurdering ved gjenopptak av behandlingen.
  * Etter innsending til beslutter/KS skal kun bekreftede vurderinger vises.
+ *
+ * erIkkePåVent skal være `!flyt.visning.visVentekort` fra flyten som allerede er hentet av kalleren,
+ * slik at vi slipper å hente flyt på nytt her.
  */
-export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
-  if (readOnly && (await behandlingErIkkePåVent(behandlingsreferanse))) {
+export const hentMellomlagring = async (
+  behandlingsreferanse: string,
+  kode: string,
+  readOnly: boolean,
+  erIkkePåVent: boolean
+) => {
+  if (readOnly && erIkkePåVent) {
     return undefined;
   }
 

@@ -23,7 +23,8 @@ export const SamordningAndreStatligeYtelserMedDatafetching = async ({ behandling
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_ANDRE_STATLIGE_YTELSER,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

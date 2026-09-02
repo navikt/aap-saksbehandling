@@ -33,7 +33,8 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP,
-    readOnly
+    readOnly,
+    vurderLovvalgSteg.erIkkePåVent
   );
 
   const behandlingsVersjon = flyt.behandlingVersjon;

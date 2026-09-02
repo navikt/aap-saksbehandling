@@ -29,6 +29,7 @@ export const AvslagForAndreYtelser = async ({ behandlingsreferanse, flyt }: prop
             behandlingVersjon={behandlingVersjon}
             readOnly={stegData.readOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            erIkkePåVent={stegData.erIkkePåVent}
           />
         </StegSuspense>
       )}

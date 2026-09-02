@@ -26,6 +26,7 @@ export const SvarFraAndreinstansGruppe = async ({ behandlingsreferanse, flyt }: 
             behandlingsreferanse={behandlingsreferanse}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             behandlingVersjon={flyt.behandlingVersjon}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
