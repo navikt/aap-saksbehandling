@@ -3,7 +3,7 @@ import { clientOpprettDummySak, clientOpprettSak, clientPurrPåLegeerklæring } 
 import { OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
-import { postmottakEndreTemaClient, postmottakSettPåVentClient } from 'lib/postmottakClientApi';
+import { postmottakSettPåVentClient } from 'lib/postmottakClientApi';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { clientMottattDokumenterLest } from 'lib/oppgaveClientApi';
 
@@ -113,18 +113,4 @@ export function usePostmottakSettPåVent(): {
   }
 
   return { postmottakSettPåVent: settPåVent, isLoading, error };
-}
-
-export function usePostmottakEndreTema(): {
-  postmottakEndreTema: (behandlingsreferanse: string) => Promise<{ ok: boolean }>;
-  error?: string;
-  data?: { redirectUrl: string };
-} {
-  const { method, error, data } = useFetch(postmottakEndreTemaClient);
-
-  async function endreTema(behandlingsreferanse: string) {
-    return await method(behandlingsreferanse);
-  }
-
-  return { postmottakEndreTema: endreTema, error, data };
 }
