@@ -724,9 +724,6 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
 /**
  * Vi ønsker å hente mellomlagring når behandling er på vent slik at saksbehandler ser siste mellomlagrede vurdering ved gjenopptak av behandlingen.
  * Etter innsending til beslutter/KS skal kun bekreftede vurderinger vises.
- *
- * erIkkePåVent skal være `!flyt.visning.visVentekort` fra flyten som allerede er hentet av kalleren,
- * slik at vi slipper å hente flyt på nytt her.
  */
 export const hentMellomlagring = async (
   behandlingsreferanse: string,
