@@ -8,9 +8,15 @@ interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }
 
-export const VurderKravMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+export const VurderKravMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingVersjon,
+  readOnly,
+  erIkkePåVent,
+}: Props) => {
   const grunnlag = await hentKravGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
@@ -21,7 +27,8 @@ export const VurderKravMedDataFetching = async ({ behandlingsreferanse, behandli
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_KRAV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   return (

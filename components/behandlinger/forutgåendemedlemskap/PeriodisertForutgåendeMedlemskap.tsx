@@ -44,7 +44,8 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse, 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
-    readOnly
+    readOnly,
+    vurderMedlemskapSteg.erIkkePåVent
   );
 
   const erOverstyrtTilbakeførtVurdering =

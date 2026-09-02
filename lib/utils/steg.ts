@@ -55,6 +55,7 @@ export const getStegData = (
     avklaringsbehov: avklaringsbehov,
     skalViseSteg: harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
     readOnly: readOnly,
+    erIkkePåVent: !behandlingFlytOgTilstand.visning.visVentekort,
   };
 };
 
@@ -69,4 +70,5 @@ export interface StegData {
   avklaringsbehov: Array<Avklaringsbehov>;
   skalViseSteg: boolean;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }

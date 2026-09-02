@@ -20,6 +20,7 @@ export const AvklarOppfolgingsSteg = async ({ behandlingsreferanse, flyt }: Prop
         behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={flyt.behandlingVersjon}
         readOnly={flyt.visning.saksbehandlerReadOnly}
+        erIkkePåVent={!flyt.visning.visVentekort}
       />
     </GruppeSteg>
   );

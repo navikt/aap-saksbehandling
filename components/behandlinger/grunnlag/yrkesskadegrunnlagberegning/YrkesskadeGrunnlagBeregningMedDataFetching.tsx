@@ -28,7 +28,8 @@ export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({ behandlingsre
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_YRKESSKADEINNTEKT,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

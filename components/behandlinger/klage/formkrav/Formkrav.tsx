@@ -33,6 +33,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
@@ -43,6 +44,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
@@ -53,6 +55,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}
@@ -71,6 +74,7 @@ export const Formkrav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

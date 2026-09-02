@@ -30,7 +30,8 @@ export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, s
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

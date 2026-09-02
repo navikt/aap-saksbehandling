@@ -10,6 +10,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  erIkkePåVent: boolean;
 }
 
 export const FullmektigVurderingMedDataFetching = async ({
@@ -17,6 +18,7 @@ export const FullmektigVurderingMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
+  erIkkePåVent,
 }: Props) => {
   const grunnlag = await hentFullmektigGrunnlag(behandlingsreferanse);
 
@@ -28,7 +30,8 @@ export const FullmektigVurderingMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_FULLMEKTIG,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   return (

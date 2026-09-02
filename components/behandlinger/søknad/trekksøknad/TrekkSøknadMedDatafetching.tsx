@@ -8,9 +8,15 @@ interface Props {
   behandlingsreferanse: string;
   readOnly: boolean;
   behandlingVersjon: number;
+  erIkkePåVent: boolean;
 }
 
-export const TrekkSøknadMedDatafetching = async ({ behandlingsreferanse, readOnly, behandlingVersjon }: Props) => {
+export const TrekkSøknadMedDatafetching = async ({
+  behandlingsreferanse,
+  readOnly,
+  behandlingVersjon,
+  erIkkePåVent,
+}: Props) => {
   const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
 
   if (isError(trukketSøknadGrunnlag)) {
@@ -20,7 +26,8 @@ export const TrekkSøknadMedDatafetching = async ({ behandlingsreferanse, readOn
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
-    readOnly
+    readOnly,
+    erIkkePåVent
   );
 
   return (

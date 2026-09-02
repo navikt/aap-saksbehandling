@@ -13,6 +13,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  erIkkePåVent: boolean;
 }
 
 export const KlagebehandlingVurderingNayMedDataFetching = async ({
@@ -20,6 +21,7 @@ export const KlagebehandlingVurderingNayMedDataFetching = async ({
   behandlingVersjon,
   readOnly,
   typeBehandling,
+  erIkkePåVent,
 }: Props) => {
   const grunnlag = await hentKlagebehandlingNayGrunnlag(behandlingsreferanse);
 
@@ -31,7 +33,8 @@ export const KlagebehandlingVurderingNayMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_KLAGE_NAY,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   return (
