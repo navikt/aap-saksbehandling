@@ -14215,6 +14215,7 @@ export interface components {
         | 'DATO_PAA_LEGEERKLÆRING'
         | 'HENVIST_TIL_BEHANDLING'
         | 'KRAVDATO'
+        | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | null;
@@ -15242,6 +15243,7 @@ export interface components {
         | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
         | 'MIGRERING_FRA_ARENA'
@@ -16801,6 +16803,7 @@ export interface components {
         | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
         | 'MIGRERING_FRA_ARENA'
@@ -16925,6 +16928,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -17939,6 +17943,7 @@ export interface components {
         | 'DATO_PAA_LEGEERKLÆRING'
         | 'HENVIST_TIL_BEHANDLING'
         | 'KRAVDATO'
+        | 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT'
         | 'SYKEMELDINGSDATO'
         | 'UFØRETIDSPUNKT'
         | null;
@@ -19810,6 +19815,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -19899,6 +19905,10 @@ export interface components {
         | 'STADFESTELSE'
         | 'TRUKKET'
         | 'UGUNST';
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KorrigerS\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KorrigerS\u00F8knadsdatoV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KorrigerS\u00F8knadsdatoV0': {
+      begrunnelse: string;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0': {
@@ -20000,6 +20010,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KabalHendelse']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KorrigerS\u00F8knadsdato']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Meldekort']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MigreringFraArenaV0']
@@ -20294,6 +20305,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -20585,6 +20597,7 @@ export interface components {
         | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
         | 'MIGRERING_FRA_ARENA'
@@ -20835,6 +20848,7 @@ export interface components {
         | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
         | 'MIGRERING_FRA_ARENA'
