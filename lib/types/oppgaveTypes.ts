@@ -57,6 +57,8 @@ export type ReturÅrsaker = components['schemas']['no.nav.aap.oppgave.ReturInfor
 export type MineOppgaverQueryParams = oppgavePaths['/mine-oppgaver']['get']['parameters']['query'];
 export type MineOppgaverSortBy = NonNullable<NonNullable<MineOppgaverQueryParams>['sortby']>;
 export type MineOppgaverSortOrder = NonNullable<NonNullable<MineOppgaverQueryParams>['sortorder']>;
+export type ForespørselTilBehandler =
+  components['schemas']['no.nav.aap.oppgave.dialogmedbehandler.Foresp\u00F8rselHendelseDto'];
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 
