@@ -14,6 +14,7 @@ import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefrist
 import { Returboks } from '../returboks/Returboks';
 import { UførevedtakInfoBoks } from '../uførevedtakBoks/UførevedtakInfoBoks';
 import { useState } from 'react';
+import { DialogMedBehandlerInfoboks } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
 
 interface Props {
   oppgave: OppgaveMedKontekst;
@@ -66,6 +67,9 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
           behandlingsReferanse={oppgave.behandlingskontekst.behandlingsreferanse}
           resultat={oppgave.oppgavelisteTags.uføreVedtak.resultat}
         />
+      )}
+      {oppgave.oppgavelisteTags.forespørselTilBehandler && (
+        <DialogMedBehandlerInfoboks forespørsel={oppgave.oppgavelisteTags.forespørselTilBehandler} />
       )}
     </HStack>
   );
