@@ -113,7 +113,6 @@ import {
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
-import { isLocal } from 'lib/utils/environment';
 import { Behovstype } from 'lib/utils/form';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
 import { notFound } from 'next/navigation';
@@ -248,17 +247,7 @@ export const hentKvalitetssikringGrunnlag = async (behandlingsreferanse: string)
   return await apiFetch<KvalitetssikringGrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-const lokalFakeKvalitetssikrerTilgang = isLocal();
 export const hentKvalitetssikringTilgang = async (behandlingsreferanse: string) => {
-  if (lokalFakeKvalitetssikrerTilgang) {
-    const res: FetchResponse<KvalitetssikringTilgang> = {
-      type: 'SUCCESS',
-      status: 200,
-      data: { harTilgangTilÅKvalitetssikre: true },
-    };
-
-    return res;
-  }
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/kvalitetssikring-tilgang`;
   return await apiFetch<KvalitetssikringTilgang>(url, saksbehandlingApiScope, 'GET');
 };

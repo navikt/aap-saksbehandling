@@ -15,9 +15,8 @@ interface SimulerJournalpostHendelseFormFields {
   tema: string;
   temaGammelt: string;
   journalpostStatus: string;
-  mottaksKanal: string;
   hendelsesType: string;
-  erDigitalSøknad: boolean;
+  scenario: string;
 }
 
 export const SimulerJournalpostHendelse = () => {
@@ -67,21 +66,22 @@ export const SimulerJournalpostHendelse = () => {
       defaultValue: 'MOTTATT',
       options: ['MOTTATT', 'JOURNALFOERT', 'FERDIGSTILT', 'UTGAAR'],
     },
-    mottaksKanal: {
-      type: 'text',
-      label: 'Mottakskanal',
-      defaultValue: 'NAV_NO',
-    },
     hendelsesType: {
       type: 'select',
       label: 'Hendelsestype',
       defaultValue: 'JournalpostMottatt',
       options: ['JournalpostMottatt', 'TemaEndret'],
     },
-    erDigitalSøknad: {
-      type: 'switch',
-      label: 'Digital søknad (samme oppsett som TestJournalPostBuilder.digitalSøknad())',
-      defaultValue: false,
+    scenario: {
+      type: 'select',
+      label: 'Scenario (samme oppsett som TestJournalPostBuilder)',
+      defaultValue: 'LEGEERKLÆRING',
+      options: [
+        { value: 'LEGEERKLÆRING', label: 'Legeerklæring' },
+        { value: 'DIGITAL_SØKNAD', label: 'Digital søknad' },
+        { value: 'PAPIRSØKNAD', label: 'Papirsøknad' },
+        { value: 'UTENLANDSK_ORGNR', label: 'Utenlandsk orgnr (krever journalpoststatus JOURNALFOERT)' },
+      ],
     },
   });
 
@@ -95,9 +95,8 @@ export const SimulerJournalpostHendelse = () => {
         tema: data.tema,
         temaGammelt: data.temaGammelt || undefined,
         journalpostStatus: data.journalpostStatus,
-        mottaksKanal: data.mottaksKanal,
         hendelsesType: data.hendelsesType,
-        erDigitalSøknad: data.erDigitalSøknad,
+        scenario: data.scenario as 'DIGITAL_SØKNAD' | 'LEGEERKLÆRING' | 'PAPIRSØKNAD' | 'UTENLANDSK_ORGNR',
       });
       if (isSuccess(res)) {
         setMessage(`Journalpost ${data.journalpostId} sendt som Kafka-hendelse til postmottak`);
@@ -119,9 +118,8 @@ export const SimulerJournalpostHendelse = () => {
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.temaGammelt} />
           <FormField form={form} formField={formFields.journalpostStatus} />
-          <FormField form={form} formField={formFields.mottaksKanal} />
           <FormField form={form} formField={formFields.hendelsesType} />
-          <FormField form={form} formField={formFields.erDigitalSøknad} />
+          <FormField form={form} formField={formFields.scenario} />
         </HGrid>
 
         {message && <Alert variant="info">{message}</Alert>}
