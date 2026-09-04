@@ -14,7 +14,6 @@ export const FLAGS = [
   'Avslag11_27',
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
-  'FaktiskArbeidTilkjentYtelse',
   'kopierPerioder',
 ] as const;
 
@@ -37,6 +36,5 @@ export const mockedFlags: Flags = {
   Avslag11_27: true,
   SkalViseAlleSykdomssteg: true,
   DialogMedBehandler: true,
-  FaktiskArbeidTilkjentYtelse: true,
   kopierPerioder: true,
 };
