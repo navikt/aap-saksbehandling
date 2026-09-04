@@ -1,10 +1,10 @@
 import { logError } from 'lib/serverutlis/logger';
 import { purrPåLegeerklæring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isLocal } from 'lib/utils/environment';
+import { skalMockeBackend } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
 
-const lokalFakePurringAvDokumenter = isLocal();
+const lokalFakePurringAvDokumenter = skalMockeBackend(process.env.DOKUMENTINNHENTING_API_BASE_URL);
 export async function POST(req: NextRequest) {
   if (lokalFakePurringAvDokumenter) {
     return NextResponse.json({ message: 'ok' }, { status: 200 });

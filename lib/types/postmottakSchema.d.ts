@@ -464,44 +464,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/{referanse}/endre-tema': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.tema.EndreTemaResponse'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/behandling/{referanse}/grunnlag/finnSak': {
     parameters: {
       query?: never;
@@ -1230,6 +1192,43 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/test/simulerJournalpostHendelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.postmottak.SimulerJournalpostHendelseRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1293,6 +1292,8 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       'planlagtKj\u00F8retidspunkt': string;
+      /** Format: int32 */
+      prioritet?: number | null;
       /** @enum {string} */
       status: 'AVBRUTT' | 'FEILET' | 'FERDIG' | 'KLAR' | 'PLUKKET';
       tilleggsinfo?: components['schemas']['no.nav.aap.motor.JobbTilleggsinfo'];
@@ -1303,6 +1304,17 @@ export interface components {
     };
     'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`': {
       begrunnelse: string;
+    };
+    'no.nav.aap.postmottak.SimulerJournalpostHendelseRequest': {
+      fnr?: string | null;
+      hendelsesType: string;
+      /** Format: int64 */
+      journalpostId: number;
+      journalpostStatus: string;
+      /** @enum {string} */
+      scenario: 'DIGITAL_SØKNAD' | 'LEGEERKLÆRING' | 'PAPIRSØKNAD' | 'UTENLANDSK_ORGNR';
+      tema: string;
+      temaGammelt?: string | null;
     };
     'no.nav.aap.postmottak.api.drift.BehandlingDriftsinfo': {
       aktivtSteg: string;
@@ -1519,9 +1531,6 @@ export interface components {
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.AvklarTemaVurderingDto': {
       skalTilAap: boolean;
-    };
-    'no.nav.aap.postmottak.api.faktagrunnlag.tema.EndreTemaResponse': {
-      redirectUrl: string;
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.JournalpostMetadata': {
       brevkode?: string | null;
