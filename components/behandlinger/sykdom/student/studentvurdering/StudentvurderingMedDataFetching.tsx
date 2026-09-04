@@ -1,7 +1,7 @@
 import { hentMellomlagring, hentStudentGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { StegData, skalViseSteg } from 'lib/utils/steg';
+import { StegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 
 import { StudentVurderingV2 } from 'components/behandlinger/sykdom/student/studentvurdering/StudentVurderingV2';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -18,7 +18,7 @@ export const StudentvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, grunnlag.data.sisteVedtatteVurderinger != null)) {
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
     return null;
   }
 

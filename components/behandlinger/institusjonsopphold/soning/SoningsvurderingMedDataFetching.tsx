@@ -3,7 +3,7 @@ import { hentMellomlagring, hentSoningsvurdering } from 'lib/services/saksbehand
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,7 +17,7 @@ export const SoningsvurderingMedDataFetching = async ({ behandlingsreferanse, st
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, grunnlag.data.vurderinger.length > 0)) {
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.vurderinger.length > 0)) {
     return null;
   }
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;

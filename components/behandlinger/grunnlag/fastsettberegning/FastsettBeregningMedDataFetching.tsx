@@ -6,7 +6,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
@@ -22,7 +22,7 @@ export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, s
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, !!grunnlag.data.vurdering)) {
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, !!grunnlag.data.vurdering)) {
     return null;
   }
 

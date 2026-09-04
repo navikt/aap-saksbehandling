@@ -2,7 +2,7 @@ import { hentMellomlagring, hentRefusjonGrunnlag } from 'lib/services/saksbehand
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Refusjon } from 'components/behandlinger/sykdom/refusjon/Refusjon';
 
 interface Props {
@@ -17,7 +17,9 @@ export const RefusjonMedDataFetching = async ({ behandlingsreferanse, stegData }
     return <ApiException apiResponses={[refusjonGrunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, refusjonGrunnlag.data.gjeldendeVurderinger != null)) {
+  if (
+    !skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, refusjonGrunnlag.data.gjeldendeVurderinger != null)
+  ) {
     return null;
   }
 
