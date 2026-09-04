@@ -1,5 +1,10 @@
 import { render, screen } from 'lib/test/CustomRender';
-import { SamordningGradering } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import {
+  beregnTidligsteVirkningstidspunkt,
+  SamordningGradering,
+} from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { format, subWeeks } from 'date-fns';
 import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
 import { beforeEach, describe, expect, it, test, vi } from 'vitest';
@@ -159,6 +164,115 @@ describe('Samordning gradering', () => {
   });
 });
 
+describe('kopiering av perioder fra oppslag', () => {
+  const grunnlagMedFlereYtelserOgVurdering: SamordningGraderingGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    feriePerioder: [],
+    historiskeVurderinger: [],
+    ytelser: [
+      {
+        gradering: 100,
+        periode: { fom: '2025-03-01', tom: '2025-03-31' },
+        endringStatus: 'NY',
+        kilde: 'SP',
+        ytelseType: 'SYKEPENGER',
+      },
+      {
+        gradering: 50,
+        periode: { fom: '2025-05-01', tom: '2025-05-31' },
+        endringStatus: 'NY',
+        kilde: 'FP',
+        ytelseType: 'FORELDREPENGER',
+      },
+    ],
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      vurderinger: [
+        {
+          ytelseType: 'PLEIEPENGER',
+          gradering: 20,
+          manuell: true,
+          periode: { fom: '2025-01-01', tom: '2025-01-31' },
+        },
+      ],
+      vurderingerMeta: {},
+    },
+  };
+
+  test('kopierer én periode fra oppslaget til en ny rad', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    const ytelseFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+
+    expect(fomFelter).toHaveLength(2);
+    expect(fomFelter[1]).toHaveValue('01.03.2025');
+    expect(tomFelter[1]).toHaveValue('31.03.2025');
+    expect(ytelseFelter[1]).toHaveValue('SYKEPENGER');
+  });
+
+  test('kopierer alle perioder fra oppslaget uten å endre eksisterende rader', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Kopier alle perioder' }));
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const ytelseFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+
+    expect(fomFelter).toHaveLength(3);
+    expect(fomFelter[0]).toHaveValue('01.01.2025');
+    expect(ytelseFelter[0]).toHaveValue('PLEIEPENGER');
+
+    expect(fomFelter[1]).toHaveValue('01.03.2025');
+    expect(ytelseFelter[1]).toHaveValue('SYKEPENGER');
+
+    expect(fomFelter[2]).toHaveValue('01.05.2025');
+    expect(ytelseFelter[2]).toHaveValue('FORELDREPENGER');
+  });
+
+  test('setter ikke samordningsgrad på kopierte rader', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
+
+    expect(screen.getAllByRole('textbox', { name: 'Utbetalingsgrad' })[1]).toHaveValue('');
+  });
+
+  test('viser ikke kopier-knapper når oppslaget er tomt', () => {
+    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+
+    expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
+  });
+
+  test('kopier-knappene er deaktivert når kortet er readOnly', () => {
+    render(<SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={true} />);
+
+    expect(screen.getAllByRole('button', { name: 'Kopier periode' })[0]).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Kopier alle perioder' })).toBeDisabled();
+  });
+
+  test('viser ikke kopier-knapper når kopierPerioder-toggelen er av', () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, kopierPerioder: false }}>
+        <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
+  });
+});
+
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
@@ -291,5 +405,70 @@ describe('mellomlagring', () => {
 
     const slettKnapp = screen.queryByRole('button', { name: 'Slett utkast' });
     expect(slettKnapp).not.toBeInTheDocument();
+  });
+});
+
+describe('beregnTidligsteVirkningstidspunkt', () => {
+  const ytelse = (fom: string, tom: string, gradering: number) => ({
+    gradering,
+    periode: { fom, tom },
+    ytelseType: 'SYKEPENGER' as const,
+    manuell: true,
+  });
+
+  it('returnerer undefined når det ikke finnes perioder med gradering 100', () => {
+    expect(
+      beregnTidligsteVirkningstidspunkt([ytelse('01.01.2025', '31.01.2025', 50)], new Date(2025, 0, 1))
+    ).toBeUndefined();
+  });
+
+  it('returnerer undefined når samordninger er tom', () => {
+    expect(beregnTidligsteVirkningstidspunkt([], new Date(2025, 0, 1))).toBeUndefined();
+  });
+
+  it('finner første hull mellom perioder', () => {
+    const samordninger = [
+      ytelse('01.01.2025', '10.01.2025', 100),
+      ytelse('11.01.2025', '12.01.2025', 100),
+      ytelse('15.01.2025', '18.01.2025', 100),
+      ytelse('01.02.2025', '10.02.2025', 100),
+    ];
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('13.01.2025');
+  });
+
+  it('returnerer dagen etter siste tom når det ikke finnes hull', () => {
+    const samordninger = [ytelse('01.01.2025', '10.01.2025', 100), ytelse('11.01.2025', '31.01.2025', 100)];
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('01.02.2025');
+  });
+
+  it('bruker rettighetsperiodeFom som startpunkt og oppdager hull før første periode', () => {
+    const samordninger = [ytelse('15.01.2025', '31.01.2025', 100)];
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('01.01.2025');
+  });
+
+  it('ignorerer perioder med gradering som ikke er 100', () => {
+    const samordninger = [
+      ytelse('01.01.2025', '10.01.2025', 100),
+      ytelse('11.01.2025', '20.01.2025', 50),
+      ytelse('25.01.2025', '31.01.2025', 100),
+    ];
+    // 50%-perioden ignoreres → hull mellom 10jan og 25jan
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('11.01.2025');
+  });
+
+  it('håndterer enkelt periode uten hull', () => {
+    expect(beregnTidligsteVirkningstidspunkt([ytelse('01.01.2025', '31.01.2025', 100)], new Date(2025, 0, 1))).toBe(
+      '01.02.2025'
+    );
+  });
+
+  it('sorterer perioder etter fom selv om de er usortert', () => {
+    const samordninger = [
+      ytelse('15.01.2025', '18.01.2025', 100),
+      ytelse('01.01.2025', '10.01.2025', 100),
+      ytelse('11.01.2025', '12.01.2025', 100),
+    ];
+    // Etter sortering: 1jan-10jan, 11jan-12jan, 15jan-18jan → hull 13jan
+    expect(beregnTidligsteVirkningstidspunkt(samordninger, new Date(2025, 0, 1))).toBe('13.01.2025');
   });
 });

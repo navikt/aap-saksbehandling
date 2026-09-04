@@ -170,7 +170,6 @@ export const FastsettManuellInntekt = ({
     })(event);
   }
 
-  const visHovedinnhold = !formReadOnly || grunnlag.manuelleVurderinger !== null;
   const vurderinger = grunnlag.historiskeManuelleVurderinger?.sort((a, b) => {
     return sorterEtterNyesteDato(a.vurderingerMeta.vurdertAv?.dato ?? '', b.vurderingerMeta.vurdertAv?.dato ?? '');
   });
@@ -288,32 +287,31 @@ export const FastsettManuellInntekt = ({
         utgangspunkt i arbeidsperioder i EØS, så kan brukerens inntekt overstyres. Inntekter skal ikke oppjusteres etter
         G, da det gjøres automatisk av systemet.
       </BodyShort>
-      {visHovedinnhold && (
-        <>
-          <BodyLong size={'small'}>
-            <Link
-              href="https://lovdata.no/pro/rundskriv/r45-00/KAPITTEL_10-7-3'"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
-            </Link>
-          </BodyLong>
-          <FormField form={form} formField={formFields.begrunnelse} />
-          <FastsettManuellInntektTabell
-            form={form}
-            tabellår={tabellår}
-            readOnly={formReadOnly}
-            overstyrteÅrFraRegister={overstyrteÅrFraRegister}
-          />
-          {harAvvikMotFerdigLignet && (
-            <Alert variant={'warning'}>
-              Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at
-              beregnet inntekt er riktig?
-            </Alert>
-          )}
-        </>
-      )}
+
+      <>
+        <BodyLong size={'small'}>
+          <Link
+            href="https://lovdata.no/pro/rundskriv/r45-00/KAPITTEL_10-7-3'"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Du kan lese mer om hvordan EØS-inntekt skal beregnes i kapittel 11.7 av EØS-rundskrivet.
+          </Link>
+        </BodyLong>
+        <FormField form={form} formField={formFields.begrunnelse} />
+        <FastsettManuellInntektTabell
+          form={form}
+          tabellår={tabellår}
+          readOnly={formReadOnly}
+          overstyrteÅrFraRegister={overstyrteÅrFraRegister}
+        />
+        {harAvvikMotFerdigLignet && (
+          <Alert variant={'warning'}>
+            Beregnet pensjonsgivende inntekt avviker fra ferdig lignet pensjonsgivende inntekt. Er du sikker på at
+            beregnet inntekt er riktig?
+          </Alert>
+        )}
+      </>
     </VilkårskortMedFormOgMellomlagring>
   );
 };
@@ -398,7 +396,7 @@ const berikMedDelperioder = (
 };
 
 const byggTabellData = ({ relevanteÅr, pgi, manuelleInntekter, delperioder }: ByggTabellDataProps): Tabellår[] => {
-  let tabellår: Tabellår[] = [];
+  let tabellår: Tabellår[];
   tabellår = relevanteÅr.map((år) => berikMedManglendeÅr(år));
   tabellår = berikMedPGI(tabellår, pgi);
   tabellår = berikMedManuelleInntekter(tabellår, manuelleInntekter);

@@ -9,9 +9,15 @@ import {
   MellomlagretVurdering,
   TypeBehandling,
 } from 'lib/types/types';
-import { getValgteHjemlerSomIkkeErImplementert, hjemmelalternativer, hjemmelMap } from 'lib/utils/hjemmel';
+import {
+  getValgteHjemlerSomIkkeErImplementert,
+  hjemmelalternativerOmgjøring,
+  hjemmelalternativerOpprettholdelse,
+  hjemmelMap,
+} from 'lib/utils/hjemmel';
 import { SubmitEventHandler, useEffect } from 'react';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -52,6 +58,7 @@ export const KlagebehandlingVurderingKontor = ({
     'KLAGEBEHANDLING_KONTOR',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormfields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -90,7 +97,7 @@ export const KlagebehandlingVurderingKontor = ({
         type: 'combobox_multiple',
         label: 'Hvilke vilkår skal omgjøres?',
         description: 'Velg alle påklagde vilkår som skal omgjøres som følge av klagen',
-        options: hjemmelalternativer,
+        options: hjemmelalternativerOmgjøring,
         defaultValue: defaultValue.vilkårSomSkalOmgjøres,
         rules: {
           required: 'Du velge hvilke påklagde vilkår som skal omgjøres',
@@ -108,7 +115,7 @@ export const KlagebehandlingVurderingKontor = ({
         type: 'combobox_multiple',
         label: 'Hvilke vilkår er blitt vurdert til å opprettholdes?',
         description: 'Velg alle påklagde vilkår som blir opprettholdt',
-        options: hjemmelalternativer,
+        options: hjemmelalternativerOpprettholdelse,
         defaultValue: defaultValue.vilkårSomSkalOpprettholdes,
         rules: { required: 'Du velge hvilke påklagde vilkår som skal opprettholdes' },
       },
@@ -150,6 +157,7 @@ export const KlagebehandlingVurderingKontor = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_KLAGEBEHANDLING_KONTOR_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }

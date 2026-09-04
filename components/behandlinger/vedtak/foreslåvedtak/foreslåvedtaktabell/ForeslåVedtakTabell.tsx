@@ -14,6 +14,7 @@ interface Props {
 
 export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
   const visAvslagsårsakerEnabled = useFeatureFlag('VisAvslagsaarsaker');
+  const sistePeriodeMedRettighetIndex = grunnlag.perioder.findLastIndex((periode) => periode.utfall === 'OPPFYLT');
 
   return (
     <TableStyled>
@@ -37,33 +38,40 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
             <Table.DataCell>-</Table.DataCell>
           </Table.Row>
         ) : (
-          grunnlag.perioder.map((vedtaksPeriode) => (
-            <Table.Row key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}>
-              <Table.DataCell>
-                <HStack gap={'space-8'} align={'center'}>
-                  {vedtaksPeriode.utfall == 'OPPFYLT' ? (
-                    <CheckmarkCircleIcon className={styles.godkjentIcon} />
-                  ) : (
-                    <XMarkOctagonIcon className={styles.avslåttIcon} />
-                  )}
-                  {mapUtfallTilTekst(vedtaksPeriode.utfall)}
-                </HStack>
-              </Table.DataCell>
-              <Table.DataCell>
-                {formaterDatoForFrontend(vedtaksPeriode.periode.fom)} -{' '}
-                {formaterDatoForFrontend(vedtaksPeriode.periode.tom)}
-              </Table.DataCell>
-              <Table.DataCell>
-                {vedtaksPeriode.utfall == 'OPPFYLT'
-                  ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType)
-                  : mapAvslagsÅrsakTilTekst(
-                      vedtaksPeriode.avslagsårsak.vilkårsavslag,
-                      visAvslagsårsakerEnabled,
-                      vedtaksPeriode.avslagsårsak.underveisavslag
+          grunnlag.perioder.map((vedtaksPeriode, index) => {
+            const avslagUtenViderePerioder =
+              vedtaksPeriode.utfall === 'IKKE_OPPFYLT' && index > sistePeriodeMedRettighetIndex;
+
+            return (
+              <Table.Row
+                key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}
+              >
+                <Table.DataCell>
+                  <HStack gap={'space-8'} align={'center'}>
+                    {vedtaksPeriode.utfall == 'OPPFYLT' ? (
+                      <CheckmarkCircleIcon className={styles.godkjentIcon} />
+                    ) : (
+                      <XMarkOctagonIcon className={styles.avslåttIcon} />
                     )}
-              </Table.DataCell>
-            </Table.Row>
-          ))
+                    {mapUtfallTilTekst(vedtaksPeriode.utfall)}
+                  </HStack>
+                </Table.DataCell>
+                <Table.DataCell>
+                  {formaterDatoForFrontend(vedtaksPeriode.periode.fom)} -
+                  {!avslagUtenViderePerioder && formaterDatoForFrontend(vedtaksPeriode.periode.tom)}
+                </Table.DataCell>
+                <Table.DataCell>
+                  {vedtaksPeriode.utfall == 'OPPFYLT'
+                    ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType)
+                    : mapAvslagsÅrsakTilTekst(
+                        vedtaksPeriode.avslagsårsak.vilkårsavslag,
+                        visAvslagsårsakerEnabled,
+                        vedtaksPeriode.avslagsårsak.underveisavslag
+                      )}
+                </Table.DataCell>
+              </Table.Row>
+            );
+          })
         )}
       </Table.Body>
     </TableStyled>

@@ -28,7 +28,8 @@ export const VurderRettighetsperiodeMedDataFetching = async ({ behandlingsrefera
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.VURDER_RETTIGHETSPERIODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

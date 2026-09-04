@@ -720,8 +720,18 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
     saksbehandlingApiScope
   );
 };
-export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
-  if (readOnly) {
+
+/**
+ * Vi ønsker å hente mellomlagring når behandling er på vent slik at saksbehandler ser siste mellomlagrede vurdering ved gjenopptak av behandlingen.
+ * Etter innsending til beslutter/KS skal kun bekreftede vurderinger vises.
+ */
+export const hentMellomlagring = async (
+  behandlingsreferanse: string,
+  kode: string,
+  readOnly: boolean,
+  erIkkePåVent: boolean
+) => {
+  if (readOnly && erIkkePåVent) {
     return undefined;
   }
 

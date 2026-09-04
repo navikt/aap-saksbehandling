@@ -293,6 +293,36 @@ export const getStringEllerUndefined = (value?: number | string | null) => {
   return value.toString();
 };
 
+export enum SøknadsdatoEndresValg {
+  BrukerHarSøktTidligere = 'BrukerHarSøktTidligere',
+  FeilregistrertSøknadsdato = 'FeilregistrertSøknadsdato',
+  Nei = 'Nei',
+}
+
+export const SøknadsdatoEndresOptions: ValuePair[] = [
+  { label: 'Ja, bruker har søkt tidligere enn første registrerte søknad', value: SøknadsdatoEndresValg.BrukerHarSøktTidligere },
+  { label: 'Ja, søknadsdato er feilregistrert', value: SøknadsdatoEndresValg.FeilregistrertSøknadsdato },
+  { label: 'Nei', value: SøknadsdatoEndresValg.Nei },
+];
+
+export enum MuligRettFraTilbakedateresValg {
+  IkkeIStandTilÅSøkeTidligere = 'IkkeIStandTilÅSøkeTidligere',
+  MisvisendeOpplysninger = 'MisvisendeOpplysninger',
+  Nei = 'Nei',
+}
+
+export const MuligRettFraTilbakedateresOptions: ValuePair[] = [
+  {
+    label: 'Ja, brukeren har åpenbart ikke vært i stand til å sette fram krav tidligere',
+    value: MuligRettFraTilbakedateresValg.IkkeIStandTilÅSøkeTidligere,
+  },
+  {
+    label: 'Ja, brukeren har ikke satt fram krav tidligere fordi trygdens organer har gitt misvisende opplysninger',
+    value: MuligRettFraTilbakedateresValg.MisvisendeOpplysninger,
+  },
+  { label: 'Nei', value: MuligRettFraTilbakedateresValg.Nei },
+];
+
 export function getJaNeiEllerIkkeBesvart(value?: boolean | null) {
   if (value === undefined || value === null) {
     return 'Ikke besvart';

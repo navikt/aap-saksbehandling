@@ -13,7 +13,7 @@ import {
 } from 'lib/types/types';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { JaEllerNei } from 'lib/utils/form';
+import { JaEllerNei, MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
 
 export function finnSøknadsdato(vurdering: KravVurdering): Søknadsdato | null {
   switch (vurdering.type) {
@@ -62,8 +62,32 @@ export interface KravVurderingFormFields {
   begrunnelse: string;
   søknadsdatoDato: string;
   søknadsdatoÅrsak: string;
+  søknadsdatoEndres: string;
+  søknadsdatoBegrunnelse: string;
   overstyrDato: string;
   overstyrÅrsak: string;
+  muligRettFraTilbakedateres: string;
+  muligRettFraBegrunnelse: string;
+}
+
+function utledSøknadsdatoEndres(årsak: string): string {
+  switch (årsak) {
+    case SøknadsdatoEndresValg.BrukerHarSøktTidligere:
+    case SøknadsdatoEndresValg.FeilregistrertSøknadsdato:
+      return årsak;
+    default:
+      return SøknadsdatoEndresValg.Nei;
+  }
+}
+
+function utledMuligRettFraTilbakedateres(årsak: string): string {
+  switch (årsak) {
+    case MuligRettFraTilbakedateresValg.IkkeIStandTilÅSøkeTidligere:
+    case MuligRettFraTilbakedateresValg.MisvisendeOpplysninger:
+      return årsak;
+    default:
+      return MuligRettFraTilbakedateresValg.Nei;
+  }
 }
 
 export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurderingFormFields {
@@ -76,8 +100,12 @@ export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurder
     begrunnelse: vurdering.begrunnelse,
     søknadsdatoDato: søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '',
     søknadsdatoÅrsak: søknadsdato?.årsak ?? '',
+    søknadsdatoEndres: utledSøknadsdatoEndres(søknadsdato?.årsak ?? ''),
+    søknadsdatoBegrunnelse: søknadsdato?.begrunnelse ?? '',
     overstyrDato: overstyr ? formaterDatoForFrontend(overstyr.dato) : '',
     overstyrÅrsak: overstyr?.årsak ?? '',
+    muligRettFraTilbakedateres: utledMuligRettFraTilbakedateres(overstyr?.årsak ?? ''),
+    muligRettFraBegrunnelse: overstyr?.begrunnelse ?? '',
   };
 }
 
@@ -93,10 +121,15 @@ export function søknadUtenKravTilFormFields(søknad: SøknadUtenKrav): KravVurd
     begrunnelse: '',
     søknadsdatoDato: formaterDatoForFrontend(søknad.mottattTidspunkt),
     søknadsdatoÅrsak: 'SøknadMottatt',
+    søknadsdatoEndres: SøknadsdatoEndresValg.Nei,
+    søknadsdatoBegrunnelse: '',
     overstyrDato: '',
     overstyrÅrsak: '',
+    muligRettFraTilbakedateres: MuligRettFraTilbakedateresValg.Nei,
+    muligRettFraBegrunnelse: '',
   };
 }
+
 
 export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string, KravVurderingFormFields> {
   const alleVurderinger = [...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])];
@@ -153,9 +186,11 @@ function byggLøsningFraFelter(felter: {
   journalpostId: string;
   begrunnelse: string;
   søknadsdatoDato: string;
-  søknadsdatoÅrsak: string;
+  søknadsdatoEndres: string;
+  søknadsdatoBegrunnelse: string;
   overstyrDato: string;
-  overstyrÅrsak: string;
+  muligRettFraTilbakedateres: string;
+  muligRettFraBegrunnelse: string;
   referanse: string | undefined;
 }): KravVurderingLøsning {
   const journalpostId = { identifikator: felter.journalpostId };
@@ -163,27 +198,41 @@ function byggLøsningFraFelter(felter: {
   if (felter.kravType === 'RELEVANT_KRAV') {
     const søknadsdatoParsed = parseDatoFraDatePicker(felter.søknadsdatoDato);
     const overstyrParsed = felter.overstyrDato ? parseDatoFraDatePicker(felter.overstyrDato) : undefined;
+    const søknadsdatoEndres = felter.søknadsdatoEndres || SøknadsdatoEndresValg.Nei;
+    const muligRettFraTilbakedateres = felter.muligRettFraTilbakedateres || MuligRettFraTilbakedateresValg.Nei;
 
     // Skjemaet krever søknadsdato for RELEVANT_KRAV (se KravBoks), så denne skal alltid finnes ved submit.
     if (!søknadsdatoParsed) {
       throw new Error(`Mangler gyldig søknadsdato for krav med journalpost ${felter.journalpostId}`);
     }
 
+    // Begrunnelsen for §22-13 femte ledd er obligatorisk i skjemaet uansett Ja/Nei-svar (se
+    // KravBoks), og sendes derfor alltid – uavhengig av søknadsdatoEndres.
+    const søknadsdato: Søknadsdato = {
+      dato: formaterDatoForBackend(søknadsdatoParsed),
+      årsak: (søknadsdatoEndres === SøknadsdatoEndresValg.Nei
+        ? 'SøknadMottatt'
+        : søknadsdatoEndres) as Søknadsdato['årsak'],
+      begrunnelse: felter.søknadsdatoBegrunnelse,
+    };
+
+    // overstyrMuligRettFra sendes kun når bruker har svart Ja (§22-13 syvende ledd), og har da
+    // alltid begrunnelse siden feltet er obligatorisk i skjemaet når bolken er i bruk.
+    const overstyrMuligRettFra: OverstyrMuligRettFra | undefined =
+      muligRettFraTilbakedateres !== MuligRettFraTilbakedateresValg.Nei && overstyrParsed
+        ? {
+            dato: formaterDatoForBackend(overstyrParsed),
+            årsak: muligRettFraTilbakedateres as NonNullable<OverstyrMuligRettFra>['årsak'],
+            begrunnelse: felter.muligRettFraBegrunnelse,
+          }
+        : undefined;
+
     return {
       kravType: 'RELEVANT_KRAV',
       journalpostId,
       begrunnelse: felter.begrunnelse,
-      søknadsdato: {
-        dato: formaterDatoForBackend(søknadsdatoParsed),
-        årsak: felter.søknadsdatoÅrsak as 'BrukerHarSøktTidligere' | 'FeilregistrertSøknadsdato' | 'SøknadMottatt',
-      },
-      overstyrMuligRettFra:
-        overstyrParsed && felter.overstyrÅrsak
-          ? {
-              dato: formaterDatoForBackend(overstyrParsed),
-              årsak: felter.overstyrÅrsak as 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger',
-            }
-          : undefined,
+      søknadsdato,
+      overstyrMuligRettFra,
       referanse: felter.referanse,
     } satisfies RelevantKravLøsning;
   }
@@ -206,9 +255,11 @@ function erFelterEndret(original: KravVurderingFormFields, gjeldende: KravVurder
       gjeldende.skalVurderesForNyEllerGjenopptattAAPRettighet ||
     original.begrunnelse !== gjeldende.begrunnelse ||
     original.søknadsdatoDato !== gjeldende.søknadsdatoDato ||
-    original.søknadsdatoÅrsak !== gjeldende.søknadsdatoÅrsak ||
+    original.søknadsdatoEndres !== gjeldende.søknadsdatoEndres ||
+    original.søknadsdatoBegrunnelse !== gjeldende.søknadsdatoBegrunnelse ||
     original.overstyrDato !== gjeldende.overstyrDato ||
-    original.overstyrÅrsak !== gjeldende.overstyrÅrsak
+    original.muligRettFraTilbakedateres !== gjeldende.muligRettFraTilbakedateres ||
+    original.muligRettFraBegrunnelse !== gjeldende.muligRettFraBegrunnelse
   );
 }
 
@@ -235,9 +286,11 @@ export function byggKravVurderingerFraSkjema(
         journalpostId: felt.journalpostId,
         begrunnelse: felt.begrunnelse,
         søknadsdatoDato: felt.søknadsdatoDato,
-        søknadsdatoÅrsak: felt.søknadsdatoÅrsak,
+        søknadsdatoEndres: felt.søknadsdatoEndres,
+        søknadsdatoBegrunnelse: felt.søknadsdatoBegrunnelse,
         overstyrDato: felt.overstyrDato,
-        overstyrÅrsak: felt.overstyrÅrsak,
+        muligRettFraTilbakedateres: felt.muligRettFraTilbakedateres,
+        muligRettFraBegrunnelse: felt.muligRettFraBegrunnelse,
         referanse: eksisterendeReferanser.has(referanse) ? referanse : undefined,
       })
     );

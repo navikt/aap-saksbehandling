@@ -8,6 +8,7 @@ import { landMedTrygdesamarbeidInklNorgeAlpha2 } from 'lib/utils/countries';
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { erGyldigOrganisasjonsnummer } from 'lib/utils/orgnr';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 
 import { FormField, ValuePair } from 'components/form/FormField';
@@ -58,6 +59,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
     'FULLMEKTIG',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -211,6 +213,7 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_FULLMEKTIG_VARIGHET', umamiStartTidspunkt, Date.now());
           nullstillMellomlagretVurdering();
           visningActions.onBekreftClick();
         }

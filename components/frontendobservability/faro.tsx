@@ -1,12 +1,18 @@
 'use client';
 
 import { useEffect } from 'react';
-import { getWebInstrumentations, initializeFaro, LogLevel } from '@grafana/faro-web-sdk';
+import { getWebInstrumentations, initializeFaro, isInternalFaroOnGlobalObject, LogLevel } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { generateKelvinFaroPageId } from 'lib/utils/faro';
 
 export default function Faro({ collectorUrl }: { collectorUrl?: string }) {
   useEffect(() => {
+    // Avoid re-initializing (and the associated console warning) on re-renders caused by
+    // React StrictMode / Fast Refresh in dev, since Faro registers itself on the global object.
+    if (isInternalFaroOnGlobalObject()) {
+      return;
+    }
+
     try {
       initializeFaro({
         url: collectorUrl || 'https://telemetry.nav.no/collect',

@@ -21,6 +21,7 @@ import {
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, getStringEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { hentPerioderSomTrengerVurdering, trengerVurderingsForslag } from 'lib/utils/periodisering';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
@@ -40,13 +41,13 @@ import {
   hentSisteLagredeVurdering,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/diagnoseUtil';
 import {
+  defaultBegrunnelseSpørsmål,
   emptySykdomsvurderingMedDefaultBegrunnelse,
-  erNyVurderingOppfylt,
-  erTidligereVurderingOppfylt,
+  utledVurderingStatusForTidligereVurdering,
+  utledVurderingStatus,
 } from 'components/behandlinger/sykdom/sykdomsvurdering/sykdomsvurdering-utils';
 import mapTilPeriodisertVurdering from 'components/behandlinger/sykdom/sykdomsvurdering/vurderingMapper';
 import { ValuePair } from 'components/form/FormField';
-import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -55,6 +56,7 @@ import { TidligereVurderingExpandableCard } from 'components/periodisering/tidli
 import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { loggUmamiSykdomsvurderingAntallSpørsmålFraMal } from 'lib/utils/umami/sykdomsvurdering';
 
 export interface SykdomsvurderingerForm {
   vurderinger: Array<Sykdomsvurdering>;
@@ -130,6 +132,7 @@ export const Sykdomsvurdering = ({
     'AVKLAR_SYKDOM',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues: SykdomsvurderingerForm = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
@@ -162,6 +165,10 @@ export const Sykdomsvurdering = ({
       if (!erPerioderGyldige) {
         return;
       }
+      data.vurderinger.forEach((vurdering) => {
+        loggUmamiSykdomsvurderingAntallSpørsmålFraMal(vurdering.begrunnelse, defaultBegrunnelseSpørsmål);
+      });
+
       løsPeriodisertAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
@@ -185,6 +192,7 @@ export const Sykdomsvurdering = ({
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_AVKLAR_SYKDOM_VARIGHET', umamiStartTidspunkt, Date.now());
           closeAllAccordions();
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
@@ -250,7 +258,7 @@ export const Sykdomsvurdering = ({
             fom={new Dato(vurdering.fom).dato}
             tom={vurdering.tom ? parseISO(vurdering.tom) : undefined}
             førsteNyePeriodeFraDato={foersteNyePeriode != null ? parseDatoFraDatePicker(foersteNyePeriode) : null}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(erTidligereVurderingOppfylt(vurdering))}
+            vurderingStatus={utledVurderingStatusForTidligereVurdering(vurdering)}
             defaultCollapsed={nyeVurderingerFields.length > 0}
             vurderingerMeta={vurdering.vurderingerMeta}
           >
@@ -263,8 +271,9 @@ export const Sykdomsvurdering = ({
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(
-              erNyVurderingOppfylt(form.watch(`vurderinger.${index}`), grunnlag.skalVurdereYrkesskade)
+            vurderingStatus={utledVurderingStatus(
+              form.watch(`vurderinger.${index}`),
+              grunnlag.skalVurdereYrkesskade
             )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === nyeVurderingerFields.length - 1}

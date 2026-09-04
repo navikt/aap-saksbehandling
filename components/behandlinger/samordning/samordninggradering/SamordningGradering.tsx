@@ -11,6 +11,7 @@ import {
   OppfølgningOppgaveOpprinnelseResponse,
   Periode,
   SamordningGraderingGrunnlag,
+  SamordningGraderingYtelse,
   SamordningYtelsestype,
   SamordningYtelseVurdering,
 } from 'lib/types/types';
@@ -20,6 +21,7 @@ import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { isNullOrUndefined } from 'lib/utils/validering';
 import { SubmitEventHandler, useRef, useState } from 'react';
+import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
@@ -44,11 +46,8 @@ interface Props {
 
 interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
-  kilde: string;
   manuell?: boolean;
-  graderingFraKilde?: number;
   gradering?: number;
-  kronseum?: number;
   periode: Periode;
 }
 
@@ -117,6 +116,25 @@ export const SamordningGradering = ({
     form
   );
 
+  const vurderteSamordningerFieldArray = useFieldArray({
+    control: form.control,
+    name: 'vurderteSamordninger',
+  });
+
+  const kopierYtelserTilVurdering = (ytelser: SamordningGraderingYtelse[]) => {
+    vurderteSamordningerFieldArray.append(
+      ytelser.map((ytelse) => ({
+        manuell: true,
+        ytelseType: ytelse.ytelseType,
+        gradering: undefined,
+        periode: {
+          fom: formaterDatoForFrontend(ytelse.periode.fom),
+          tom: formaterDatoForFrontend(ytelse.periode.tom),
+        },
+      }))
+    );
+  };
+
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
@@ -157,27 +175,14 @@ export const SamordningGradering = ({
 
   const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => Number(verdi) === 100);
 
-  const finnTidligsteVirkningstidspunkt = () => {
-    const alleTomDatoer = form
-      .getValues('vurderteSamordninger')
-      .filter((vurdering) => !!vurdering.periode.tom)
-      .filter((vurdering) => vurdering.gradering == 100)
-      .map((vurdert) => parse(vurdert.periode.tom, 'dd.MM.yyyy', new Date()))
-      .filter((dato) => isValid(dato));
-
-    if (!alleTomDatoer.length) {
-      return undefined;
-    }
-
-    const senesteDato = Math.max(...alleTomDatoer.map((e) => e.getTime()));
-    return format(addDays(new Date(senesteDato), 1), 'dd.MM.yyyy');
-  };
-
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
   const erAllereddeOppfølgningsOppgave = oppfølgningOppgave && oppfølgningOppgave?.data.length > 0;
 
   const sak = useSak();
+  const rettighetsperiodeFom = parse(sak.sak.periode.fom, 'yyyy-MM-dd', new Date());
+  const finnTidligsteVirkningstidspunkt = () =>
+    beregnTidligsteVirkningstidspunkt(form.getValues('vurderteSamordninger'), rettighetsperiodeFom);
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -249,8 +254,12 @@ export const SamordningGradering = ({
               defaultOpen={false}
             />
             <FormField form={form} formField={formFields.begrunnelse} className="begrunnelse" />
-            <YtelseTabell ytelser={grunnlag.ytelser} />
-            <Ytelsesvurderinger form={form} readOnly={formReadOnly} />
+            <YtelseTabell
+              ytelser={grunnlag.ytelser}
+              readOnly={formReadOnly}
+              onKopierYtelser={kopierYtelserTilVurdering}
+            />
+            <Ytelsesvurderinger form={form} readOnly={formReadOnly} fieldArray={vurderteSamordningerFieldArray} />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
@@ -313,8 +322,6 @@ function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): D
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
     vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
       ytelseType: ytelse.ytelseType,
-      kilde: '',
-      graderingFraKilde: undefined,
       gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
       manuell: ytelse.manuell || undefined,
       periode: {
@@ -362,4 +369,34 @@ function byggFelter(vurdering: SamordningYtelseVurdering): ValuePair<string>[] {
   }
 
   return felter;
+}
+
+export function beregnTidligsteVirkningstidspunkt(
+  samordninger: SamordnetYtelse[],
+  rettighetsperiodeFom: Date
+): string | undefined {
+  const perioderMedFullSamordning = samordninger
+    .filter((s) => s.gradering == 100 && !!s.periode.fom && !!s.periode.tom)
+    .map((s) => ({
+      fom: parse(s.periode.fom, 'dd.MM.yyyy', new Date()),
+      tom: parse(s.periode.tom, 'dd.MM.yyyy', new Date()),
+    }))
+    .filter((p) => isValid(p.fom) && isValid(p.tom))
+    .sort((a, b) => a.fom.getTime() - b.fom.getTime());
+
+  if (!perioderMedFullSamordning.length) return undefined;
+
+  // Gå gjennom periodene fra rettighetsperiodens start.
+  // Første dag som ikke er dekket av en 100%-periode er tidligste virkningstidspunkt.
+  let førsteDagUtenFullSamordning = rettighetsperiodeFom;
+  for (const { fom, tom } of perioderMedFullSamordning) {
+    const erHullFørDennePerioden = fom > førsteDagUtenFullSamordning;
+    if (erHullFørDennePerioden) {
+      return format(førsteDagUtenFullSamordning, 'dd.MM.yyyy');
+    }
+    førsteDagUtenFullSamordning = addDays(tom, 1);
+  }
+
+  // Fant ingen hull, så første dag uten full samordning er dagen etter siste periode
+  return format(førsteDagUtenFullSamordning, 'dd.MM.yyyy');
 }

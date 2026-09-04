@@ -23,7 +23,7 @@ function relevantKrav(overrides: Partial<RelevantKrav> = {}): RelevantKrav {
     begrunnelse: 'Opprinnelig begrunnelse',
     opprettet: '2025-04-01T10:30:00Z',
     muligRettFra: '2025-04-15',
-    søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt' },
+    søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt', begrunnelse: '' },
     vurdertAv: 'Z000000',
     vurdertIBehandling: { id: 1 },
     ...overrides,

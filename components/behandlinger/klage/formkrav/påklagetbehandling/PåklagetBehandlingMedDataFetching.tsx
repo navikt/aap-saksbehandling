@@ -13,6 +13,7 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   typeBehandling: TypeBehandling;
+  erIkkePåVent: boolean;
 }
 
 export const PåklagetBehandlingMedDataFetching = async ({
@@ -20,6 +21,7 @@ export const PåklagetBehandlingMedDataFetching = async ({
   readOnly,
   typeBehandling,
   behandlingsreferanse,
+  erIkkePåVent,
 }: Props) => {
   const grunnlag = await hentPåklagetBehandlingGrunnlag(behandlingsreferanse);
 
@@ -31,7 +33,8 @@ export const PåklagetBehandlingMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   return (

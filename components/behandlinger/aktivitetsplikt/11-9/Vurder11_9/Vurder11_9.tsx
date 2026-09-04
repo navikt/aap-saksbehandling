@@ -11,6 +11,7 @@ import { defaultRad, useMellomlagre11_9 } from './Mellomlagre11_9Hook';
 import { Behovstype } from 'lib/utils/form';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { Vurdering11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Vurder11_9MedDataFetching';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { omit } from 'lodash';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
@@ -33,6 +34,7 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
       id: v.dato,
     })) ?? [];
   const { behandlingsreferanse } = useParamsMedType();
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('VURDER_AKTIVITETSPLIKT_11_9');
 
   const { valgtRad, velgRad, mellomlagreVurdering, fjernRad, mellomlagredeVurderinger } = useMellomlagre11_9(
     vurderingerSendtTilBeslutter,
@@ -44,14 +46,19 @@ export const Vurder11_9 = ({ readOnly, grunnlag, initialMellomlagretVurdering, b
       ...omit(vurdering, 'id'),
     }));
 
-    løsAvklaringsbehov({
-      behandlingVersjon: behandlingVersjon,
-      referanse: behandlingsreferanse,
-      behov: {
-        behovstype: Behovstype.VURDER_BRUDD_11_9_KODE,
-        aktivitetsplikt11_9Vurderinger: vurderingerSomSendesInn,
+    løsAvklaringsbehov(
+      {
+        behandlingVersjon: behandlingVersjon,
+        referanse: behandlingsreferanse,
+        behov: {
+          behovstype: Behovstype.VURDER_BRUDD_11_9_KODE,
+          aktivitetsplikt11_9Vurderinger: vurderingerSomSendesInn,
+        },
       },
-    });
+      () => {
+        loggUmamiVarighet('STEG_VURDER_AKTIVITETSPLIKT_11_9_VARIGHET', umamiStartTidspunkt, Date.now());
+      }
+    );
   };
 
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =

@@ -5,6 +5,7 @@ import { MellomlagretVurdering, PåklagetBehandlingGrunnlag, TypeBehandling } fr
 import { VelgPåklagetVedtakRadioTable } from 'components/behandlinger/klage/formkrav/påklagetbehandling/VelgPåklagetVedtakRadioTable';
 import { Controller, useForm } from 'react-hook-form';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -36,6 +37,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
     'PÅKLAGET_BEHANDLING',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -67,6 +69,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
         },
       },
       () => {
+        loggUmamiVarighet('STEG_PÅKLAGET_BEHANDLING_VARIGHET', umamiStartTidspunkt, Date.now());
         visningActions.onBekreftClick();
         nullstillMellomlagretVurdering();
       }
@@ -125,13 +128,24 @@ function emptyDraftFormFields(): DraftFormFields {
 }
 
 function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
-  return (
+  const ytelsesbehandlinger =
     grunnlag?.behandlinger.map((behandling) => ({
       saksnummer: behandling.saksnummer,
       value: behandling.referanse,
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
       vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
-    })) ?? []
+    })) ?? [];
+
+  const klagebehandlinger =
+    grunnlag?.vedtatteKlagebehandlinger.map((behandling) => ({
+      saksnummer: behandling.saksnummer,
+      value: behandling.referanse,
+      vedtaksdato: new Date(behandling.vedtaksdato),
+      behandlingstype: 'Klage',
+      vurderingsbehov: [],
+    })) ?? [];
+  return [...ytelsesbehandlinger, ...klagebehandlinger].sort(
+    (a, b) => b.vedtaksdato.getTime() - a.vedtaksdato.getTime()
   );
 }

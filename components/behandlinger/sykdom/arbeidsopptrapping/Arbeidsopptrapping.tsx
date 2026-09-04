@@ -15,6 +15,7 @@ import {
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { validerPeriodiserteVurderingerRekkefølge } from 'lib/utils/validering';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
@@ -69,6 +70,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     'ARBEIDSOPPTRAPPING',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -126,6 +128,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     };
 
     løsPeriodisertAvklaringsbehov(losning, () => {
+      loggUmamiVarighet('STEG_ARBEIDSOPPTRAPPING_VARIGHET', umamiStartTidspunkt, Date.now());
       visningActions.onBekreftClick();
       closeAllAccordions();
       nullstillMellomlagretVurdering();

@@ -1,6 +1,7 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { FormField } from 'components/form/FormField';
@@ -42,6 +43,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
     'FORMKRAV',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -132,6 +134,7 @@ export const FormkravVurdering = ({ behandlingVersjon, grunnlag, readOnly, initi
           referanse: behandlingsreferanse,
         },
         () => {
+          loggUmamiVarighet('STEG_FORMKRAV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
         }

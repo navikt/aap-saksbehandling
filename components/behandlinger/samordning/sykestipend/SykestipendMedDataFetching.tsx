@@ -25,7 +25,8 @@ export const SykestipendMedDataFetching = async ({ behandlingsreferanse, stegDat
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

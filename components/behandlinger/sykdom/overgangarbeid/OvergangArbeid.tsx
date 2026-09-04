@@ -1,6 +1,7 @@
 'use client';
 
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { MellomlagretVurdering, OvergangArbeidGrunnlag } from 'lib/types/types';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -64,6 +65,7 @@ export const OvergangArbeid = ({
     'OVERGANG_ARBEID',
     initialMellomlagretVurdering
   );
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValues = initialMellomlagretVurdering
     ? parseOgMigrerMellomlagretData(initialMellomlagretVurdering.data)
@@ -129,6 +131,7 @@ export const OvergangArbeid = ({
     };
 
     løsPeriodisertAvklaringsbehov(losning, () => {
+      loggUmamiVarighet('STEG_OVERGANG_ARBEID_VARIGHET', umamiStartTidspunkt, Date.now());
       visningActions.onBekreftClick();
       closeAllAccordions();
       nullstillMellomlagretVurdering();

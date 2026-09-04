@@ -2,6 +2,7 @@
 
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag, TypeBehandling } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { hjemmelMap } from 'lib/utils/hjemmel';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { BodyShort, Detail, VStack } from '@navikt/ds-react';
@@ -62,6 +63,7 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
     useLøsAvklaringsbehov('KLAGEBEHANDLING_OPPSUMMERING');
 
   const { visningModus, visningActions } = useVilkårskortVisning(readOnly, 'KLAGEBEHANDLING_OPPSUMMERING', undefined);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const utledetInnstilling = utledInnstilling(grunnlagNay, grunnlagKontor);
   const vilkårSomOmgjøres = utledVilkårSomOmgjøres(grunnlagKontor, grunnlagNay);
@@ -69,13 +71,18 @@ export const KlagebehandlingOppsummering = ({ behandlingVersjon, readOnly, grunn
 
   const handleSubmit: SubmitEventHandler = (event) => {
     event.preventDefault();
-    løsAvklaringsbehov({
-      behandlingVersjon: behandlingVersjon,
-      behov: {
-        behovstype: Behovstype.KLAGE_OPPSUMMERING,
+    løsAvklaringsbehov(
+      {
+        behandlingVersjon: behandlingVersjon,
+        behov: {
+          behovstype: Behovstype.KLAGE_OPPSUMMERING,
+        },
+        referanse: behandlingsreferanse,
       },
-      referanse: behandlingsreferanse,
-    });
+      () => {
+        loggUmamiVarighet('STEG_KLAGEBEHANDLING_OPPSUMMERING_VARIGHET', umamiStartTidspunkt, Date.now());
+      }
+    );
   };
   return (
     <VilkårskortMedForm

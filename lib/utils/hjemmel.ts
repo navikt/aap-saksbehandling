@@ -7,11 +7,14 @@ export const getValgteHjemlerSomIkkeErImplementert = (value: string | Hjemmel[] 
 };
 
 export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
+  FOLKETRYGDLOVEN_21_12: '§ 21-12',
+  FVL_31: 'Fvl. § 31',
   EOES_883_2004: 'EØS-forordningen (lovvalg / medlemskap)',
   FOLKETRYGDLOVEN_KAPITTEL_2: 'Kapittel 2',
   FOLKETRYGDLOVEN_11_2: '§ 11-2',
   FOLKETRYGDLOVEN_11_3: '§ 11-3',
   FOLKETRYGDLOVEN_11_4: '§ 11-4',
+  FOLKETRYGDLOVEN_11_4_INNTEKTSBORTFALL: '§ 11-4 2. ledd',
   FOLKETRYGDLOVEN_11_5: '§ 11-5',
   FOLKETRYGDLOVEN_11_6: '§ 11-6',
   FOLKETRYGDLOVEN_11_7: '§ 11-7',
@@ -35,7 +38,7 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_11_26: '§ 11-26',
   FOLKETRYGDLOVEN_11_27: '§ 11-27',
   FOLKETRYGDLOVEN_11_28: '§ 11-28',
-  FOLKETRYGDLOVEN_11_29: '§ 11-29',
+  FOLKETRYGDLOVEN_11_29_SYKESTIPEND: '§ 11-29 Sykestipend',
   FOLKETRYGDLOVEN_11_31: '§ 11-31',
   FOLKETRYGDLOVEN_21_3: '§ 21-3',
   FOLKETRYGDLOVEN_21_7: '§ 21-7',
@@ -52,20 +55,24 @@ export const ikkeImplementertKlageHjemmler: Hjemmel[] = [
   'FOLKETRYGDLOVEN_11_4',
   'FOLKETRYGDLOVEN_11_8',
   'FOLKETRYGDLOVEN_11_12',
-  'FOLKETRYGDLOVEN_11_14',
-  'FOLKETRYGDLOVEN_11_15',
-  'FOLKETRYGDLOVEN_11_23_OVERGNG_ARB',
-  'FOLKETRYGDLOVEN_11_29',
   'FOLKETRYGDLOVEN_11_31',
   'FOLKETRYGDLOVEN_21_3',
   'FOLKETRYGDLOVEN_21_7',
+  'FOLKETRYGDLOVEN_22_15',
   'FOLKETRYGDLOVEN_22_17',
 ];
 
-export const hjemmelalternativer = Object.entries(hjemmelMap).map(([k, v]) => ({
+export const hjemmelalternativerOpprettholdelse = Object.entries(hjemmelMap).map(([k, v]) => ({
   value: k,
   label: v,
 }));
+
+export const hjemmelalternativerOmgjøring = Object.entries(hjemmelMap)
+  .filter(([k]) => !['FOLKETRYGDLOVEN_21_12', 'FVL_31'].includes(k))
+  .map(([k, v]) => ({
+    value: k,
+    label: v,
+  }));
 
 export const hjemmelÅrsakMapMap: Partial<Record<Hjemmel, Vurderingsbehov>> = {
   FOLKETRYGDLOVEN_11_5: 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND',

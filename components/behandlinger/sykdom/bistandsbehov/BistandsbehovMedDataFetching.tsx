@@ -35,7 +35,8 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   const vurderingsbehov =

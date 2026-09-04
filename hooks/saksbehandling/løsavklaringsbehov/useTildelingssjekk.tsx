@@ -3,7 +3,7 @@ import { isSuccess } from 'lib/utils/api';
 import { useOverstyrTildelingNyHook } from 'hooks/saksbehandling/løsavklaringsbehov/useOverstyrTildeling';
 
 export const useTildelingssjekk = (behandlingsreferanse: string) => {
-  const { setVisOverstyrModal, setBekreftTildeling, setAvbrytTildeling, setReservertAvNavn } =
+  const { setVisOverstyrModal, setBekreftOverstyring, setAvbrytOverstyring, setReservertAvNavn } =
     useOverstyrTildelingNyHook();
 
   const sjekkTildeling = async (): Promise<boolean> => {
@@ -17,11 +17,11 @@ export const useTildelingssjekk = (behandlingsreferanse: string) => {
       setVisOverstyrModal(true);
 
       /**
-       * Vent på at saksbehandler enten bekrefter eller avbryter tildeling i modalen
+       * Vent på at saksbehandler enten bekrefter eller avbryter overstyring i modalen
        */
       return new Promise<boolean>((resolve) => {
-        setBekreftTildeling(() => () => resolve(true));
-        setAvbrytTildeling(() => () => resolve(false));
+        setBekreftOverstyring(() => () => resolve(true));
+        setAvbrytOverstyring(() => () => resolve(false));
       });
     }
     return true;

@@ -2,6 +2,7 @@ import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { OppholdskravStegMedDataFatching } from 'components/behandlinger/oppholdskrav/OppholdskravStegMedDataFatching';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { getStegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export const OppholdskravStegGruppe = async ({ behandlingsreferanse, flyt }: Props) => {
+  const stegData = getStegData('OPPHOLDSKRAV', 'VURDER_OPPHOLDSKRAV', flyt);
+
   return (
     <GruppeSteg
       behandlingVersjon={flyt.behandlingVersjon}
@@ -21,7 +24,8 @@ export const OppholdskravStegGruppe = async ({ behandlingsreferanse, flyt }: Pro
         <OppholdskravStegMedDataFatching
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.behandlingVersjon}
-          readOnly={flyt.visning.saksbehandlerReadOnly}
+          readOnly={stegData.readOnly}
+          erIkkePåVent={stegData.erIkkePåVent}
         />
       </StegSuspense>
     </GruppeSteg>

@@ -78,6 +78,10 @@ const ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS: ValuePair[] = [
   { label: 'Ikke betydning / ikke relevant', value: 'IKKE_BETYDNING_IKKE_RELEVANT' },
 ];
 
+export const defaultNedsattArbeidsevneBegrunnelseOverskrifter = ['Relevant faktum', 'Vurdering', 'Konklusjon'];
+
+export const defaultNedsattArbeidsevneBegrunnelse = defaultNedsattArbeidsevneBegrunnelseOverskrifter.join('\n\n');
+
 interface FormFields {
   nedsattArbeidsevneDatobegrunnelse: string;
   nedsattArbeidsevneDato: string;
@@ -123,7 +127,14 @@ export const FastsettBeregning = ({
         type: 'textarea',
         label: 'Vilkårsvurdering',
         defaultValue: defaultValues.nedsattArbeidsevneDatobegrunnelse,
-        rules: { required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne' },
+        rules: {
+          required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne',
+          validate: {
+            kanIkkeVæreDefaultBegrunnelse: (value) =>
+              (value as string).trim() !== defaultNedsattArbeidsevneBegrunnelse.trim() ||
+              'Du må skrive en egen vilkårsvurdering',
+          },
+        },
       },
       nedsattArbeidsevneDato: {
         type: 'date_input',
@@ -304,7 +315,7 @@ export const FastsettBeregning = ({
 
 function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vurdering']): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse,
+    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse ?? defaultNedsattArbeidsevneBegrunnelse,
     nedsattArbeidsevneDato: vurdering?.nedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato)
       : undefined,
@@ -319,7 +330,7 @@ function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vu
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: '',
+    nedsattArbeidsevneDatobegrunnelse: defaultNedsattArbeidsevneBegrunnelse,
     nedsattArbeidsevneDato: '',
     årsak: '',
     ytterligereNedsattArbeidsevneDato: '',

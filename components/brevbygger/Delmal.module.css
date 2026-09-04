@@ -19,3 +19,19 @@
   display: flex;
   justify-content: center;
 }
+
+.delmal table {
+  width: 100%;
+}
+
+.delmal th {
+  text-align: left;
+}
+
+.delmal table:global(.yrkesskadetabell) tr :nth-child(1) {
+  width: 20%;
+}
+
+.delmal table:global(.yrkesskadetabell) tr :nth-child(3) {
+  width: 20%;
+}
