@@ -4666,6 +4666,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/dokumentinnhenting/syfo/dialogmeldinger/{saksnummer}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto'][];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/dokumentinnhenting/paaminnelse/send': {
     parameters: {
       query?: never;
@@ -13717,6 +13755,10 @@ export interface components {
       dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
       fritekst: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto': {
+      dokumentInfoId: string;
+      tittel?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.FastlegeResponse': {
       'andreBehandlereFraS\u00F8knad': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.ManueltOppgittBehandlerDto'][];
       'erFastlegeEndretSidenS\u00F8knadstidspunkt': boolean;
@@ -13736,6 +13778,26 @@ export interface components {
       postnummer?: string | null;
       poststed?: string | null;
       telefon?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto': {
+      /** @enum {string|null} */
+      dokumentasjonsType?: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING' | null;
+      /** @enum {string} */
+      'innkommendeUtg\u00E5ende': 'INNKOMMENDE' | 'UTGÅENDE';
+      journalpostId?: string | null;
+      meldingFraNavn: string;
+      /** @enum {string|null} */
+      meldingStatus?: 'FEILET' | 'LEVERT' | 'SENDT' | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettetTidspunkt: string;
+      tekst?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto': {
+      dokumentIdListe: components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto'][];
+      melding: components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest': {
       /** Format: uuid */

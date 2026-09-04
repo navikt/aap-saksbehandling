@@ -187,7 +187,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   return (
     <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
-        Be om opplysninger fra behandler
+        Send forespørsel til behandler
       </Heading>
       <Link
         href={

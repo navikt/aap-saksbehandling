@@ -110,6 +110,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   YtelseoppslagRequest,
+  MeldingMedDokumenterDto,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -615,6 +616,11 @@ export const forberedBehandlingOgVentPåProsessering = async (
 export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
   return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`;
+  return await apiFetch<Array<MeldingMedDokumenterDto>>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFastlege = async (saksnummer: string) => {
