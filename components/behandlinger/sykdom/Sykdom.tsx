@@ -1,7 +1,7 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
 import { hentYrkesskadeVurderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getAvklaringsbehovForSteg, getStegData } from 'lib/utils/steg';
+import { getAvklaringsbehovForSteg, getStegData, skalViseStegIkkePeriodisertGrunnlag } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
 import { SykepengeerstatningMedDataFetching } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/SykepengeerstatningMedDataFetching';
@@ -52,6 +52,14 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt);
   const oppgittYrkesskadeInfoSteg = hentStegDataForOppgittYrkesskadeInfo(yrkesskadeVurderingGrunnlag.data);
 
+  const harInnhentedeYrkesskader =
+    (yrkesskadeVurderingGrunnlag.data.opplysninger?.innhentedeYrkesskader?.length ?? 0) > 0;
+  const vurderYrkesskadeStegSkalVises =
+    skalViseStegIkkePeriodisertGrunnlag(
+      vurderYrkesskadeSteg.avklaringsbehov,
+      yrkesskadeVurderingGrunnlag.data.yrkesskadeVurdering != null
+    ) || harInnhentedeYrkesskader;
+
   const skalViseAlleSykdomSteg = unleashService.isEnabled('SkalViseAlleSykdomssteg');
 
   return (
@@ -62,52 +70,37 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
       visning={flyt.visning}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {sykdomSteg.skalViseSteg && (
-        <StegSuspense>
-          <SykdomsvurderingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={sykdomSteg}
-            skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
-          />
-        </StegSuspense>
-      )}
-      {vurderBistandsbehovSteg.skalViseSteg && (
-        <StegSuspense>
-          <BistandsbehovMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={vurderBistandsbehovSteg}
-          />
-        </StegSuspense>
-      )}
-      {fritakMeldepliktSteg.skalViseSteg && (
-        <StegSuspense>
-          <MeldepliktMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={fritakMeldepliktSteg} />
-        </StegSuspense>
-      )}
-      {etableringAvEgenVirksomhetSteg.skalViseSteg && (
-        <StegSuspense>
-          <EtableringAvEgenVirksomhetMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={etableringAvEgenVirksomhetSteg}
-          />
-        </StegSuspense>
-      )}
-      {fastsettArbeidsevneSteg.skalViseSteg && (
-        <StegSuspense>
-          <FastsettArbeidsevneMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={fastsettArbeidsevneSteg}
-          />
-        </StegSuspense>
-      )}
-      {arbeidsopptrappingSteg.skalViseSteg && (
-        <StegSuspense>
-          <ArbeidsopptrappingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={arbeidsopptrappingSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SykdomsvurderingMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={sykdomSteg}
+          skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <BistandsbehovMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderBistandsbehovSteg} />
+      </StegSuspense>
+      <StegSuspense>
+        <MeldepliktMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={fritakMeldepliktSteg} />
+      </StegSuspense>
+      <StegSuspense>
+        <EtableringAvEgenVirksomhetMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={etableringAvEgenVirksomhetSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <FastsettArbeidsevneMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={fastsettArbeidsevneSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <ArbeidsopptrappingMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={arbeidsopptrappingSteg}
+        />
+      </StegSuspense>
 
       <StegSuspense>
         <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
@@ -117,19 +110,15 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
         <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
       </StegSuspense>
 
-      {refusjonskravSteg.skalViseSteg && (
-        <StegSuspense>
-          <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
-        </StegSuspense>
-      )}
-      {sykdomsvurderingBrevSteg.skalViseSteg && (
-        <StegSuspense>
-          <SykdomsvurderingBrevMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={sykdomsvurderingBrevSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
+      </StegSuspense>
+      <StegSuspense>
+        <SykdomsvurderingBrevMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={sykdomsvurderingBrevSteg}
+        />
+      </StegSuspense>
       {bekreftVurderingerOppfølgingSteg.skalViseSteg && !bekreftVurderingerOppfølgingSteg.readOnly && (
         <StegSuspense>
           <BekreftVurderingerOppfølgingMedDataFetching
@@ -139,29 +128,23 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
           />
         </StegSuspense>
       )}
-      {vurderYrkesskadeSteg.skalViseSteg && (
-        <StegSuspense>
-          <YrkesskadeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderYrkesskadeSteg} />
-        </StegSuspense>
-      )}
-      {oppgittYrkesskadeInfoSteg.skalViseSteg && !vurderYrkesskadeSteg.skalViseSteg && (
+      <StegSuspense>
+        <YrkesskadeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderYrkesskadeSteg} />
+      </StegSuspense>
+      {oppgittYrkesskadeInfoSteg.skalViseSteg && !vurderYrkesskadeStegSkalVises && (
         <StegSuspense>
           <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
         </StegSuspense>
       )}
-      {vurderStudentStegV2.skalViseSteg && (
-        <StegSuspense>
-          <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderStudentStegV2} />
-        </StegSuspense>
-      )}
-      {vurderSykepengeerstatningSteg.skalViseSteg && (
-        <StegSuspense>
-          <SykepengeerstatningMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={vurderSykepengeerstatningSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderStudentStegV2} />
+      </StegSuspense>
+      <StegSuspense>
+        <SykepengeerstatningMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={vurderSykepengeerstatningSteg}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

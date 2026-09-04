@@ -20,14 +20,12 @@ export const Rettighetsperiode = async ({ behandlingsreferanse, flyt }: Props) =
       visning={flyt.visning}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {rettighetsperiodeSteg.skalViseSteg && (
-        <StegSuspense>
-          <VurderRettighetsperiodeMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={rettighetsperiodeSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <VurderRettighetsperiodeMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={rettighetsperiodeSteg}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

@@ -54,17 +54,9 @@ export const getStegData = (
     behandlingVersjon: behandlingFlytOgTilstand.behandlingVersjon,
     typeBehandling: typeBehandling,
     avklaringsbehov: avklaringsbehov,
-    skalViseSteg: harAvklaringsbehov || behandlingFlytOgTilstand.visning.typeBehandling === 'Revurdering',
     readOnly: readOnly,
     erIkkePåVent: !behandlingFlytOgTilstand.visning.visVentekort,
   };
-};
-
-/**
- * @deprecated Bruk {@link skalViseStegForPeriodisertGrunnlag} eller {@link skalViseStegIkkePeriodisertGrunnlag}
- */
-export const skalViseSteg = (stegData: StegData, harTidligereVurdering: boolean) => {
-  return stegData.avklaringsbehov.length > 0 || (stegData.typeBehandling === 'Revurdering' && harTidligereVurdering);
 };
 
 /**
@@ -93,11 +85,6 @@ export interface StegData {
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   avklaringsbehov: Array<Avklaringsbehov>;
-  /**
-   * @deprecated Bruk {@link skalViseStegForPeriodisertGrunnlag} eller {@link skalViseStegIkkePeriodisertGrunnlag}.
-   * Merk at dette må gjøres etter at grunnlaget er hentet. Atlså må denne sjekken i mange tilfeller flyttes ett nivå inn.
-   */
-  skalViseSteg: boolean;
   readOnly: boolean;
   erIkkePåVent: boolean;
 }
