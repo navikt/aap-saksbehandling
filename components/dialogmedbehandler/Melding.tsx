@@ -41,6 +41,8 @@ export const Melding = ({
   dokumentInfoIdListe,
   children,
 }: Props) => {
+  /* TODO: Hvilke dokumentasjonstyper skal ikke ha lenkene under, utover MELDING_FRA_BEHANDLER? */
+
   return (
     <VStack gap={'space-4'} align={visningType === 'INNKOMMENDE' ? 'start' : 'end'}>
       <Detail>
@@ -76,7 +78,7 @@ export const Melding = ({
               ))}
             </Box>
           )}
-          {visningType === 'INNKOMMENDE' && (
+          {visningType === 'INNKOMMENDE' && dokumentasjonType === 'L40' && (
             <HStack gap={'space-20'}>
               <Link>
                 <PlusIcon fontSize="1.5rem" aria-hidden />
