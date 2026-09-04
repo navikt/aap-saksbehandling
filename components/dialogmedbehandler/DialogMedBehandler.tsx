@@ -5,10 +5,10 @@ import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMelding
 import { Melding } from 'components/dialogmedbehandler/Melding';
 
 import styles from './DialogMedBehandler.module.css';
-import { useDialogmeldinger } from 'hooks/saksbehandling/SakDialogmeldingerHook';
+import { useMeldingerFraDialog } from 'hooks/saksbehandling/SakMeldingerFraDialogHook';
 
 export const DialogMedBehandler = () => {
-  const { dialogmeldingerMedDokumentliste } = useDialogmeldinger();
+  const { meldingerMedDokumenliste } = useMeldingerFraDialog();
 
   return (
     <section>
@@ -24,23 +24,23 @@ export const DialogMedBehandler = () => {
       </VStack>
 
       <VStack gap={'space-20'} className={styles.meldingervindu}>
-        {dialogmeldingerMedDokumentliste?.map((dialogmeldingMedDokumentliste, index) => (
+        {meldingerMedDokumenliste?.map((meldingMedDokumentliste, index) => (
           <Melding
             key={index}
-            visningType={dialogmeldingMedDokumentliste.dialogmelding.innkommendeUtgaaende}
+            visningType={meldingMedDokumentliste.melding.innkommendeUtgående}
             // Mangler dokumentasjonstype i mottatt_dialogmelding-tabellen i 'dokumentinnhenting'
             dokumentasjonType={
-              dialogmeldingMedDokumentliste.dialogmelding.innkommendeUtgaaende === 'INNKOMMENDE'
+              meldingMedDokumentliste.melding.innkommendeUtgående === 'INNKOMMENDE'
                 ? 'MELDING_FRA_BEHANDLER'
-                : dialogmeldingMedDokumentliste.dialogmelding.dokumentasjonsType
+                : meldingMedDokumentliste.melding.dokumentasjonsType!
             }
-            meldingFraNavn={dialogmeldingMedDokumentliste.dialogmelding.meldingFraNavn}
-            opprettetTidspunkt={dialogmeldingMedDokumentliste.dialogmelding.opprettetTidspunkt?.toString()}
-            status={dialogmeldingMedDokumentliste.dialogmelding.meldingStatus}
-            journalpostId={dialogmeldingMedDokumentliste.dialogmelding.journalpostId}
-            dokumentInfoIdListe={dialogmeldingMedDokumentliste.dokumentIdListe}
+            meldingFraNavn={meldingMedDokumentliste.melding.meldingFraNavn}
+            opprettetTidspunkt={meldingMedDokumentliste.melding.opprettetTidspunkt}
+            status={meldingMedDokumentliste.melding.meldingStatus}
+            journalpostId={meldingMedDokumentliste.melding.journalpostId}
+            dokumentInfoIdListe={meldingMedDokumentliste.dokumentIdListe}
           >
-            {dialogmeldingMedDokumentliste.dialogmelding.tekst}
+            {meldingMedDokumentliste.melding.tekst}
           </Melding>
         ))}
       </VStack>

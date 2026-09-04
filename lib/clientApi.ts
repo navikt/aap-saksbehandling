@@ -19,6 +19,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   MeldePerioderMedMEldekortResponse,
+  MeldingMedDokumenterDto,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnheterResponse,
@@ -42,7 +43,7 @@ import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'l
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
-import { DialogmeldingMedDokumenter } from 'lib/types/dialogmelding';
+
 const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
@@ -170,7 +171,7 @@ export function clientHentSakshistorikk(saksnummer: string) {
 }
 
 export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
-  return clientFetch<Array<DialogmeldingMedDokumenter>>(
+  return clientFetch<Array<MeldingMedDokumenterDto>>(
     `${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`,
     'GET'
   );

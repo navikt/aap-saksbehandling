@@ -421,6 +421,12 @@ export type Periode = components['schemas']['no.nav.aap.komponenter.type.Periode
 
 export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingPersoninfo'];
 
+export type MeldingMedDokumenterDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto'];
+export type MeldingDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto'];
+export type DokumentInfoDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto'];
+
 export type AvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
 

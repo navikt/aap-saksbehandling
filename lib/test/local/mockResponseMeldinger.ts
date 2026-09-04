@@ -1,24 +1,22 @@
-import { DialogmeldingLeveringStatus, InnkommendeUtgaaende } from 'lib/types/dialogmelding';
-
-export const mockResponseDokumenter = {
+export const mockResponseMeldinger = {
   type: 'SUCCESS',
   status: 200,
   data: [
     {
-      dialogmelding: {
-        innkommendeUtgaaende: InnkommendeUtgaaende.UTGÅENDE,
+      melding: {
+        innkommendeUtgående: 'UTGÅENDE',
         meldingFraNavn: 'Nav, Kari Normann',
         opprettetTidspunkt: new Date('2026-08-10'),
         dokumentasjonsType: 'MELDING_FRA_NAV',
         tekst: 'Hei, kan dere sende over legeerklæring for pasienten?',
-        meldingStatus: DialogmeldingLeveringStatus.SENDT,
+        meldingStatus: 'SENDT',
         journalpostId: '454048894',
       },
       dokumentIdListe: [],
     },
     {
-      dialogmelding: {
-        innkommendeUtgaaende: InnkommendeUtgaaende.INNKOMMENDE,
+      melding: {
+        innkommendeUtgående: 'INNKOMMENDE',
         meldingFraNavn: 'Dr. Sonja Paracet',
         opprettetTidspunkt: new Date('2026-08-21'),
         dokumentasjonsType: 'L40',

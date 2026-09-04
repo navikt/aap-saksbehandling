@@ -2,12 +2,12 @@
 
 import useSWR from 'swr';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
-import { DialogmeldingMedDokumenter } from 'lib/types/dialogmelding';
 import { isError } from 'lib/utils/api';
 import { hentAlleDialogmeldingerMedDokumentIdPåSak } from 'lib/clientApi';
+import { MeldingMedDokumenterDto } from 'lib/types/types';
 
-export function useDialogmeldinger(): {
-  dialogmeldingerMedDokumentliste?: DialogmeldingMedDokumenter[];
+export function useMeldingerFraDialog(): {
+  meldingerMedDokumenliste?: MeldingMedDokumenterDto[];
   refetchDialogmeldingerClient: () => void;
 } {
   const params = useParamsMedType();
@@ -23,7 +23,7 @@ export function useDialogmeldinger(): {
   );
 
   return {
-    dialogmeldingerMedDokumentliste: !isError(data) ? data?.data : undefined,
+    meldingerMedDokumenliste: !isError(data) ? data?.data : undefined,
     refetchDialogmeldingerClient: mutate,
   };
 }

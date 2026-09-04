@@ -110,6 +110,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   YtelseoppslagRequest,
+  MeldingMedDokumenterDto,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -118,7 +119,6 @@ import { Behovstype } from 'lib/utils/form';
 import { ingenTilgang } from 'lib/utils/ingenTilgang';
 import { notFound } from 'next/navigation';
 import 'server-only';
-import { DialogmeldingMedDokumenter } from 'lib/types/dialogmelding';
 
 const saksbehandlingApiBaseUrl = process.env.BEHANDLING_API_BASE_URL;
 const saksbehandlingApiScope = process.env.BEHANDLING_API_SCOPE ?? '';
@@ -620,7 +620,7 @@ export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
 
 export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`;
-  return await apiFetch<Array<DialogmeldingMedDokumenter>>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<Array<MeldingMedDokumenterDto>>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFastlege = async (saksnummer: string) => {
