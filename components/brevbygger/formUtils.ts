@@ -22,8 +22,10 @@ export function initialiserFormVerdier(brevmal: BrevmalType, brevdata: BrevdataD
         fritekster[sammensattNøkkel] = lagretDelmalFritekst ? (JSON.parse(lagretDelmalFritekst).tekst ?? '') : '';
       } else if (node._type === 'valgRef') {
         const valgId = node.valg._id;
-
-        valg[valgId] = brevdata?.valg.find((v) => v.id === valgId)?.key ?? '';
+        const defaultAlternativ = node.valg.alternativer.find(
+          (a) => a._type === 'kategorisertTekstRef' && a.erDefault === true
+        );
+        valg[valgId] = brevdata?.valg.find((v) => v.id === valgId)?.key ?? defaultAlternativ?._key ?? '';
 
         const lagretFritekst = brevdata?.fritekster.find((f) => f.parentId === valgId)?.fritekst;
         fritekster[valgId] = lagretFritekst ? (JSON.parse(lagretFritekst).tekst ?? '') : '';
