@@ -8,7 +8,6 @@ import { SakOversiktContainer } from 'components/saksoversikt/SakOversiktContain
 import { Suspense } from 'react';
 import { isSuccess } from 'lib/utils/api';
 import { hentArenaSakerForPerson } from 'lib/services/apiinternservice/apiInternService';
-import { unleashService } from 'lib/services/unleash/unleashService';
 import { Box } from '@navikt/ds-react';
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { erIngenTilgangError } from 'lib/utils/ingenTilgang';
@@ -29,10 +28,9 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
   });
   const rettighetsinfo = isSuccess(rettihetsinfoRes) ? rettihetsinfoRes.data : null;
 
-  const visArenasakerOversikt = unleashService.isEnabled('VisArenasakerOversikt');
   const arenaSakerRes = await (async () => {
     try {
-      return visArenasakerOversikt ? await hentArenaSakerForPerson(personInfo.fnr) : undefined;
+      return await hentArenaSakerForPerson(personInfo.fnr);
     } catch (err) {
       logError(`Feil ved henting av Arena-saker for sak ${params.saksnummer}`, err);
       throw err;
