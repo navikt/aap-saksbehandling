@@ -23,12 +23,16 @@ import {
   TildeltStatus,
 } from 'lib/types/oppgaveTypes';
 import { FetchResponse } from 'lib/utils/api';
-import { isLocal } from 'lib/utils/environment';
+import { skalMockeBackend } from 'lib/utils/environment';
 import { mineOppgaverQueryParams, queryParamsArray } from 'lib/utils/request';
 import 'server-only';
 
 const oppgaveApiBaseURL = process.env.OPPGAVE_API_BASE_URL;
 const oppgaveApiScope = process.env.OPPGAVE_API_SCOPE ?? '';
+
+// Brukes til å fake oppgave-kall når aap-oppgave ikke kjører lokalt (f.eks. når man kun kjører
+// aap-behandlingsflyt lokalt). Om OPPGAVE_API_BASE_URL faktisk peker på localhost gjøres ekte kall.
+const lokalFakeOppgave = skalMockeBackend(oppgaveApiBaseURL);
 
 export const hentKøer = async (enheter: string[]) => {
   const url = `${oppgaveApiBaseURL}/filter?${queryParamsArray('enheter', enheter)}`;
@@ -43,7 +47,6 @@ export const hentOppgaverForFilter = async (data: OppgavelisteRequest) => {
   return await apiFetch<OppgavelisteResponse>(url, oppgaveApiScope, 'POST', data);
 };
 
-const lokalFakeOppgave = isLocal();
 export async function hentSaksnummerGittBehandling(behandlingReferanse: string) {
   if (lokalFakeOppgave) {
     const mockResponse: FetchResponse<SaksnummerResponse> = {
@@ -149,9 +152,8 @@ export async function fjernHelseopplysningIkon(behandlingRef: string) {
   return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
 }
 
-const lokalFakeOppgaveSøk = isLocal();
 export async function oppgaveTekstSøk(søketekst: string) {
-  if (lokalFakeOppgaveSøk) {
+  if (lokalFakeOppgave) {
     const oppgaver: OppgaveInfoTilSøk[] = [
       {
         // @ts-expect-error Fiks type i backend

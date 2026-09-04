@@ -1306,13 +1306,13 @@ export interface components {
       begrunnelse: string;
     };
     'no.nav.aap.postmottak.SimulerJournalpostHendelseRequest': {
-      'erDigitalS\u00F8knad': boolean;
       fnr?: string | null;
       hendelsesType: string;
       /** Format: int64 */
       journalpostId: number;
       journalpostStatus: string;
-      mottaksKanal: string;
+      /** @enum {string} */
+      scenario: 'DIGITAL_SØKNAD' | 'LEGEERKLÆRING' | 'PAPIRSØKNAD' | 'UTENLANDSK_ORGNR';
       tema: string;
       temaGammelt?: string | null;
     };
