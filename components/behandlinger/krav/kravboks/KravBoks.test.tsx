@@ -2,11 +2,13 @@ import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
+import { addDays, subDays } from 'date-fns';
 import { KravVurdering, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 import { byggInitielleVurderinger } from 'components/behandlinger/krav/kravutils';
 import { KravBoks, KravBoksInnhold } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 const user = userEvent.setup();
 
@@ -71,6 +73,10 @@ function KravBoksWrapper({ innhold, onLukk = vi.fn() }: { innhold: KravBoksInnho
   return (
     <FormProvider {...form}>
       <KravBoks innhold={innhold} erVedtatt={false} onLukk={onLukk} />
+      {/* Kun for å trigge react-hook-form-validering i tester, uten en full submit-flyt. */}
+      <button type="button" onClick={() => form.trigger()}>
+        Valider
+      </button>
     </FormProvider>
   );
 }
@@ -168,6 +174,38 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
     expect(screen.getByRole('radio', { name: 'Nei' })).toBeChecked();
     expect(screen.queryByRole('textbox', { name: 'Ny søknadsdato' })).not.toBeInTheDocument();
+  });
+
+  it('viser feilmelding når ny søknadsdato er i fremtiden', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
+    await user.click(screen.getByRole('radio', { name: 'Ja, bruker har søkt tidligere enn første registrerte søknad' }));
+
+    const søknadsdatoFelt = screen.getByRole('textbox', { name: 'Ny søknadsdato' });
+    await user.clear(søknadsdatoFelt);
+    await user.type(søknadsdatoFelt, formaterDatoForFrontend(addDays(new Date(), 1)));
+
+    await user.click(screen.getByRole('button', { name: 'Valider' }));
+
+    expect(await screen.findByText('Søknadsdato kan ikke være i fremtiden.')).toBeVisible();
+  });
+
+  it('viser ikke feilmelding når ny søknadsdato er dagens dato eller tidligere', async () => {
+    const krav = relevantKrav();
+    customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
+
+    await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
+    await user.click(screen.getByRole('radio', { name: 'Ja, bruker har søkt tidligere enn første registrerte søknad' }));
+
+    const søknadsdatoFelt = screen.getByRole('textbox', { name: 'Ny søknadsdato' });
+    await user.clear(søknadsdatoFelt);
+    await user.type(søknadsdatoFelt, formaterDatoForFrontend(subDays(new Date(), 1)));
+
+    await user.click(screen.getByRole('button', { name: 'Valider' }));
+
+    expect(screen.queryByText('Søknadsdato kan ikke være i fremtiden.')).not.toBeInTheDocument();
   });
 
   it('nullstiller overstyr mulig rett fra til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
