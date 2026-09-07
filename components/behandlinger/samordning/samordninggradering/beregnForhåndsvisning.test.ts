@@ -183,6 +183,37 @@ describe('beregnForhåndsvisning', () => {
     ]);
   });
 
+  test('slår sammen sykepengeperioder igjen når ferien mellom dem fjernes, uten å røre andre perioder', () => {
+
+    const splittedeRaderUtenFørsteFerie = [
+      rad('SYKEPENGER', '01.01.2026', '09.01.2026'),
+      rad('SYKEPENGER', '17.01.2026', '19.01.2026'),
+      rad('FERIE_I_SYKEPENGEPERIODE', '20.01.2026', '21.01.2026'),
+      rad('SYKEPENGER', '22.01.2026', '01.02.2026'),
+      rad('FERIE_I_SYKEPENGEPERIODE', '02.02.2026', '03.02.2026'),
+      rad('SYKEPENGER', '04.02.2026', '10.02.2026'),
+    ];
+
+    const resultat = beregnForhåndsvisning(splittedeRaderUtenFørsteFerie);
+
+    expect(resultat.map((r) => ({ ytelseType: r.ytelseType, periode: r.periode }))).toEqual([
+      { ytelseType: 'SYKEPENGER', periode: { fom: '01.01.2026', tom: '19.01.2026' } },
+      { ytelseType: 'FERIE_I_SYKEPENGEPERIODE', periode: { fom: '20.01.2026', tom: '21.01.2026' } },
+      { ytelseType: 'SYKEPENGER', periode: { fom: '22.01.2026', tom: '01.02.2026' } },
+      { ytelseType: 'FERIE_I_SYKEPENGEPERIODE', periode: { fom: '02.02.2026', tom: '03.02.2026' } },
+      { ytelseType: 'SYKEPENGER', periode: { fom: '04.02.2026', tom: '10.02.2026' } },
+    ]);
+  });
+
+  test('slår ikke sammen sykepengeperioder som overlapper hverandre', () => {
+    const rader = [
+      rad('SYKEPENGER', '01.03.2025', '31.03.2025'),
+      rad('SYKEPENGER', '05.03.2025', '20.03.2025'),
+    ];
+
+    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+  });
+
   test('gir samme resultat om forhåndsvisningen beregnes på nytt fra sitt eget resultat (idempotent)', () => {
     const rader = [
       rad('SYKEPENGER', '01.03.2025', '31.03.2025'),
