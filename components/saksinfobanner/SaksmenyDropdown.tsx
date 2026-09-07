@@ -246,7 +246,6 @@ export const SaksmenyDropdown = ({
         <KorrigerSKnadsdatoDialog
           isOpen={visKorrigerSøknadsdato}
           onClose={() => setKorrigerSøknadsdato(false)}
-          behandlingReferanse={behandling?.referanse}
           saksnummer={saksnummer}
         />
       )}

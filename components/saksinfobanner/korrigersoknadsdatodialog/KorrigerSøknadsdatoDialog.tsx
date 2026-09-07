@@ -1,6 +1,6 @@
 import { Button, Dialog } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
-import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
+import { KorrigerSøknadsdatoV0 } from 'lib/types/types';
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -11,10 +11,9 @@ interface Props {
   saksnummer: string;
   isOpen: boolean;
   onClose: () => void;
-  behandlingReferanse: string;
 }
 
-export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
+export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   const { form, formFields } = useConfigForm<{ begrunnelse: string }>({
@@ -32,18 +31,16 @@ export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose, behandli
       {
         saksnummer: saksnummer,
         referanse: {
-          type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+          type: 'MANUELL_OPPRETTELSE',
           verdi: crypto.randomUUID(),
         },
-        type: 'NY_ÅRSAK_TIL_BEHANDLING',
+        type: 'KORRIGER_SØKNADSDATO',
         kanal: 'DIGITAL',
         mottattTidspunkt: new Date().toISOString(),
         melding: {
-          meldingType: 'NyÅrsakTilBehandlingV0',
-          årsakerTilBehandling: ['VURDER_KRAV'],
-          behandlingReferanse: behandlingReferanse,
-          beskrivelse: data.begrunnelse,
-        } satisfies NyÅrsakTilBehandlingV0,
+          meldingType: 'KorrigerSøknadsdatoV0',
+          begrunnelse: data.begrunnelse,
+        } satisfies KorrigerSøknadsdatoV0,
       },
       onClose
     );

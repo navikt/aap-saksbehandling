@@ -625,6 +625,12 @@ export type NyÅrsakTilBehandlingV0 =
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
+export const KorrigerSøknadsdatoV0 = 'KorrigerSøknadsdatoV0';
+export type KorrigerSøknadsdatoV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KorrigerSøknadsdatoV0}`] & {
+    meldingType: typeof KorrigerSøknadsdatoV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
 export type AvklarOppfolgingsoppgaveGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse'];
 
