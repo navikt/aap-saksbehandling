@@ -55,7 +55,7 @@ const behovskodeMap = {
   '5038': 'Vurder krav',
   '5039': 'Avklar stønadsperiode',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
-  '5041': 'Skriv vedtaksbrev',
+  '5041': 'Skriv vedtaksbrev (saksbehandler)',
   '5042': 'Avslag § 11-27',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
