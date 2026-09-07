@@ -12,7 +12,7 @@ import { SvarFraBehandler } from 'components/oppgaveliste/svarfrabehandler/SvarF
 import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 
 import { Returboks } from '../returboks/Returboks';
-import {UførevedtakInfoBoks} from "../uførevedtakBoks/UførevedtakInfoBoks";
+import {UførevedtakInfoBoks} from '../uførevedtakBoks/UførevedtakInfoBoks';
 import { useState } from 'react';
 
 interface Props {
@@ -59,7 +59,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
           size={'xsmall'}
         />
       ))}
-      {oppgave.oppgavelisteTags.uføreVedtak && (
+      {visUføreTag && oppgave.oppgavelisteTags.uføreVedtak && (
           <UførevedtakInfoBoks
             oppdaterVisUforeTag={settVisUføreTag}
             virkningsdato={oppgave.oppgavelisteTags.uføreVedtak.virkningsdato}

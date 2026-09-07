@@ -64,7 +64,7 @@ export function clientMottattDokumenterLest(behandlingsreferanse: string) {
 }
 
 export function clientFjernUføreVedtakTag(behandlingsRef: string) {
-  return clientFetch(`/oppgave/api/oppgave/fjern-u00F8revedtak-ikon`, 'POST', {
+  return clientFetch(`/oppgave/api/oppgave/fjern-uførevedtak-ikon`, 'POST', {
     behandlingsRef: behandlingsRef
   })
 }

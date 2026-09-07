@@ -2,11 +2,13 @@
 
 import { GavelSoundBlockIcon } from '@navikt/aksel-icons';
 import { BodyLong, BodyShort, Box, Button, HStack, Tag, VStack } from '@navikt/ds-react';
+import { UføreVedtakStatus } from 'lib/types/oppgaveTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { mapTilResultat } from 'lib/utils/oversettelser';
 
 import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
-import styles from './PåVentInfoboks.module.css';
+import styles from './UførevedtakInfoBoks.module.css';
 import { useFjernUføreVedtakTag } from '../../../hooks/FetchHook';
 import { Alert } from '../../alert/Alert';
 
@@ -14,7 +16,7 @@ interface Props {
   oppdaterVisUforeTag: (value: ((prevState: boolean) => boolean) | boolean) => void;
   virkningsdato: string;
   behandlingsReferanse: string;
-  resultat?: string;
+  resultat?: UføreVedtakStatus;
 }
 
 export const UførevedtakInfoBoks = ({ behandlingsReferanse, virkningsdato, resultat, oppdaterVisUforeTag }: Props) => {
@@ -41,7 +43,8 @@ export const UførevedtakInfoBoks = ({ behandlingsReferanse, virkningsdato, resu
             </Tag>
             <Box padding={'space-8'}>
               <BodyLong size={'small'}>
-                Det er fattet et vedtak om uføre med [{resultat}][{virkningsdato}]
+                Det er fattet et vedtak om {resultat && mapTilResultat(resultat)} av uføretrygd med virkningsdato{' '}
+                {formaterDatoForFrontend(virkningsdato)}
               </BodyLong>
             </Box>
           </VStack>

@@ -1,4 +1,4 @@
-import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
+import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, UføreVedtakStatus } from 'lib/types/oppgaveTypes';
 import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 import {
   SettPåVentÅrsaker,
@@ -145,17 +145,17 @@ export function mapTilVenteÅrsakTekst(
 
 export function mapTilResultat(resultat: UføreVedtakStatus): string {
   switch (resultat) {
-    case 'INVILGELSE':
-      return 'invilgelse'
+    case 'INNVILGELSE':
+      return 'innvilgelse';
     case 'OPPHØR':
-      return 'opphør'
+      return 'opphør';
     case 'AVSLAG':
-      return 'avslag'
+      return 'avslag';
     case 'ENDRET':
-      return 'endret'
+      return 'endret';
   }
   exhaustiveCheck(resultat);
-};
+}
 
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
