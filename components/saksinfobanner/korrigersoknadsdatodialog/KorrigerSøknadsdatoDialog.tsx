@@ -12,10 +12,9 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   behandlingReferanse: string;
-  navIdent?: string | null;
 }
 
-export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose, behandlingReferanse, navIdent }: Props) => {
+export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose, behandlingReferanse }: Props) => {
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   const { form, formFields } = useConfigForm<{ begrunnelse: string }>({
@@ -44,7 +43,6 @@ export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose, behandli
           årsakerTilBehandling: ['VURDER_KRAV'],
           behandlingReferanse: behandlingReferanse,
           beskrivelse: data.begrunnelse,
-          reserverTilBruker: navIdent ?? null,
         } satisfies NyÅrsakTilBehandlingV0,
       },
       onClose
