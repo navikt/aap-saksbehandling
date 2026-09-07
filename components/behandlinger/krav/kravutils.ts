@@ -130,7 +130,6 @@ export function søknadUtenKravTilFormFields(søknad: SøknadUtenKrav): KravVurd
   };
 }
 
-
 export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string, KravVurderingFormFields> {
   const alleVurderinger = [...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])];
   const fraVurderinger = Object.fromEntries(alleVurderinger.map((v) => [v.referanse, kravVurderingTilFormFields(v)]));
@@ -263,6 +262,22 @@ function erFelterEndret(original: KravVurderingFormFields, gjeldende: KravVurder
   );
 }
 
+function feltTilLøsning(felt: KravVurderingFormFields, referanse: string | undefined): KravVurderingLøsning {
+  return byggLøsningFraFelter({
+    kravType:
+      felt.skalVurderesForNyEllerGjenopptattAAPRettighet === JaEllerNei.Ja ? 'RELEVANT_KRAV' : 'TILLEGGSOPPLYSNING',
+    journalpostId: felt.journalpostId,
+    begrunnelse: felt.begrunnelse,
+    søknadsdatoDato: felt.søknadsdatoDato,
+    søknadsdatoEndres: felt.søknadsdatoEndres,
+    søknadsdatoBegrunnelse: felt.søknadsdatoBegrunnelse,
+    overstyrDato: felt.overstyrDato,
+    muligRettFraTilbakedateres: felt.muligRettFraTilbakedateres,
+    muligRettFraBegrunnelse: felt.muligRettFraBegrunnelse,
+    referanse,
+  });
+}
+
 export function byggKravVurderingerFraSkjema(
   grunnlag: KravGrunnlag | undefined,
   vurderinger: Record<string, KravVurderingFormFields>
@@ -272,26 +287,21 @@ export function byggKravVurderingerFraSkjema(
     ...(grunnlag?.vedtatteVurderinger ?? []).map((v) => v.referanse),
   ]);
 
-  return Object.entries(vurderinger)
-    .filter(([referanse, felt]) => {
-      const original = hentOriginaleFormFelter(grunnlag, referanse);
-      // Ukjent referanse (verken eksisterende krav eller søknad i grunnlaget) - ta ikke med.
-      if (!original) return false;
-      return erFelterEndret(original, felt);
-    })
-    .map(([referanse, felt]) =>
-      byggLøsningFraFelter({
-        kravType:
-          felt.skalVurderesForNyEllerGjenopptattAAPRettighet === JaEllerNei.Ja ? 'RELEVANT_KRAV' : 'TILLEGGSOPPLYSNING',
-        journalpostId: felt.journalpostId,
-        begrunnelse: felt.begrunnelse,
-        søknadsdatoDato: felt.søknadsdatoDato,
-        søknadsdatoEndres: felt.søknadsdatoEndres,
-        søknadsdatoBegrunnelse: felt.søknadsdatoBegrunnelse,
-        overstyrDato: felt.overstyrDato,
-        muligRettFraTilbakedateres: felt.muligRettFraTilbakedateres,
-        muligRettFraBegrunnelse: felt.muligRettFraBegrunnelse,
-        referanse: eksisterendeReferanser.has(referanse) ? referanse : undefined,
-      })
-    );
+  const endredeVurderinger = Object.entries(vurderinger).filter(([referanse, felt]) => {
+    const original = hentOriginaleFormFelter(grunnlag, referanse);
+    if (!original) return false;
+    return erFelterEndret(original, felt);
+  });
+
+  /**
+   * Ingen av vurderingene er endret eller overstyrt.
+   * Saksbehandler skal derfor kun bekrefte de eksisterende nye vurderingene, uten at det er behov for å gjøre ytterligere endringer.
+   */
+  if (endredeVurderinger.length === 0) {
+    return (grunnlag?.nyeVurderinger ?? []).map((v) => feltTilLøsning(kravVurderingTilFormFields(v), v.referanse));
+  }
+
+  return endredeVurderinger.map(([referanse, felt]) =>
+    feltTilLøsning(felt, eksisterendeReferanser.has(referanse) ? referanse : undefined)
+  );
 }

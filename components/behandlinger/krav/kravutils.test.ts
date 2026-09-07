@@ -206,12 +206,77 @@ describe('finnKravVurderingByReferanse, finnSøknadUtenKravByReferanse og hentOr
 });
 
 describe('byggKravVurderingerFraSkjema', () => {
-  it('ekskluderer et eksisterende krav (nyeVurderinger) som ikke er endret av saksbehandler', () => {
+  it('sender alle vurderinger fra nyeVurderinger uendret når ingen vurderinger er endret av saksbehandler', () => {
     const krav = relevantKrav({ referanse: 'krav-uendret' });
     const uendretGrunnlag = grunnlag({ nyeVurderinger: [krav] });
     const vurderinger = { [krav.referanse]: kravVurderingTilFormFields(krav) };
 
     const løsninger = byggKravVurderingerFraSkjema(uendretGrunnlag, vurderinger);
+
+    expect(løsninger).toHaveLength(1);
+    expect(løsninger[0].referanse).toEqual('krav-uendret');
+  });
+
+  it('bekreft uten endring: sender alle krav fra nyeVurderinger (flere), selv om ingen er valgt/åpnet i skjemaet', () => {
+    const krav1 = relevantKrav({ referanse: 'krav-uendret-1', journalpostId: { identifikator: 'jp-1' } });
+    const krav2 = relevantKrav({ referanse: 'krav-uendret-2', journalpostId: { identifikator: 'jp-2' } });
+    const uendretGrunnlag = grunnlag({ nyeVurderinger: [krav1, krav2] });
+    // Skjemaet kan inneholde vurderinger for begge, uten at noen av dem er rørt av saksbehandler.
+    const vurderinger = {
+      [krav1.referanse]: kravVurderingTilFormFields(krav1),
+      [krav2.referanse]: kravVurderingTilFormFields(krav2),
+    };
+
+    const løsninger = byggKravVurderingerFraSkjema(uendretGrunnlag, vurderinger);
+
+    expect(løsninger).toHaveLength(2);
+    expect(løsninger.map((l) => l.referanse)).toEqual(
+      expect.arrayContaining(['krav-uendret-1', 'krav-uendret-2'])
+    );
+  });
+
+  it('bekreft uten endring: inkluderer ikke vedtatteVurderinger eller søknaderUtenKravvurdering, kun nyeVurderinger', () => {
+    const nyttKrav = relevantKrav({ referanse: 'krav-nytt-uendret' });
+    const vedtattKrav = relevantKrav({ referanse: 'krav-vedtatt-uendret', journalpostId: { identifikator: 'jp-vedtatt' } });
+    const søknad = søknadUtenKrav({ journalpostId: { identifikator: 'jp-utkast-uendret' } });
+    const uendretGrunnlag = grunnlag({
+      nyeVurderinger: [nyttKrav],
+      vedtatteVurderinger: [vedtattKrav],
+      søknaderUtenKravvurdering: [søknad],
+    });
+    // Ingen av vurderingene i skjemaet er endret i forhold til original.
+    const vurderinger = {
+      [nyttKrav.referanse]: kravVurderingTilFormFields(nyttKrav),
+      [vedtattKrav.referanse]: kravVurderingTilFormFields(vedtattKrav),
+      [søknad.journalpostId.identifikator]: søknadUtenKravTilFormFields(søknad),
+    };
+
+    const løsninger = byggKravVurderingerFraSkjema(uendretGrunnlag, vurderinger);
+
+    expect(løsninger).toHaveLength(1);
+    expect(løsninger[0].referanse).toEqual('krav-nytt-uendret');
+  });
+
+  it('sender kun de faktisk endrede vurderingene når minst én vurdering er tuklet med (ingen fallback til nyeVurderinger)', () => {
+    const uendretKrav = relevantKrav({ referanse: 'krav-uendret-blant-endret' });
+    const endretKrav = relevantKrav({ referanse: 'krav-endret', journalpostId: { identifikator: 'jp-endret' } });
+    const grunnlagMedBegge = grunnlag({ nyeVurderinger: [uendretKrav, endretKrav] });
+    const vurderinger = {
+      [uendretKrav.referanse]: kravVurderingTilFormFields(uendretKrav),
+      [endretKrav.referanse]: { ...kravVurderingTilFormFields(endretKrav), begrunnelse: 'Oppdatert begrunnelse' },
+    };
+
+    const løsninger = byggKravVurderingerFraSkjema(grunnlagMedBegge, vurderinger);
+
+    expect(løsninger).toHaveLength(1);
+    expect(løsninger[0].referanse).toEqual('krav-endret');
+    expect(løsninger[0].begrunnelse).toEqual('Oppdatert begrunnelse');
+  });
+
+  it('bekreft uten endring: returnerer tom liste dersom nyeVurderinger er tom', () => {
+    const tomtGrunnlag = grunnlag({ nyeVurderinger: [] });
+
+    const løsninger = byggKravVurderingerFraSkjema(tomtGrunnlag, {});
 
     expect(løsninger).toEqual([]);
   });
