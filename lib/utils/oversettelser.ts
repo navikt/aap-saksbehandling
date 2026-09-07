@@ -143,6 +143,20 @@ export function mapTilVenteÅrsakTekst(
   exhaustiveCheck(årsak);
 }
 
+export function mapTilResultat(resultat: UføreVedtakStatus): string {
+  switch (resultat) {
+    case 'INVILGELSE':
+      return 'invilgelse'
+    case 'OPPHØR':
+      return 'opphør'
+    case 'AVSLAG':
+      return 'avslag'
+    case 'ENDRET':
+      return 'endret'
+  }
+  exhaustiveCheck(resultat);
+};
+
 export function mapTilSteggruppeTekst(steggruppe: string) {
   switch (steggruppe) {
     case 'KRAV':

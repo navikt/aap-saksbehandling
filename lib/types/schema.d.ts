@@ -17988,6 +17988,8 @@ export interface components {
       begrunnelse: string;
       /** @enum {string|null} */
       brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
+      /** @enum {string|null} */
+      fase?: 'OPPSTARTSFASE' | 'UTVIKLINGSFASE' | null;
       /**
        * Format: date
        * @example 2025-04-01
