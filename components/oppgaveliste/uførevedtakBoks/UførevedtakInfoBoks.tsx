@@ -9,11 +9,12 @@ import { mapTilResultat } from 'lib/utils/oversettelser';
 import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 import styles from './UførevedtakInfoBoks.module.css';
-import { useFjernUføreVedtakTag } from '../../../hooks/FetchHook';
-import { Alert } from '../../alert/Alert';
+import { useFjernUføreVedtakTag } from 'hooks/FetchHook';
+import { Alert } from 'components/alert/Alert';
+import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
-  oppdaterVisUforeTag: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  oppdaterVisUforeTag: Dispatch<SetStateAction<boolean>>;
   virkningsdato: string;
   behandlingsReferanse: string;
   resultat?: UføreVedtakStatus;

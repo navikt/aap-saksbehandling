@@ -111,7 +111,7 @@ export function useFjernUføreVedtakTag(): {
     return await method(behandlingsreferanse);
   }
 
-  return { fjernTag: fjernUforeTag, isLoading, error}
+  return { fjernTag: fjernUforeTag, isLoading, error };
 }
 
 export function usePostmottakSettPåVent(): {

@@ -54,8 +54,7 @@ export const TotrinnsvurderingVedtaksbrevFelter = ({
   const behovstypeEllerKode =
     Object.keys(Behovstype)[Object.values(Behovstype).indexOf(field.definisjon as Behovstype)] || field.definisjon;
   const eventPrefix = behovstypeEllerKode;
-  const skalViseEndretSidenSistInfo =
-    endretSidenForrigeGang != null && erKvalitetssikring;
+  const skalViseEndretSidenSistInfo = endretSidenForrigeGang != null && erKvalitetssikring;
 
   const visEndretTekst = skalViseEndretSidenSistInfo && endretSidenForrigeGang;
   const visIkkeEndretTekst = skalViseEndretSidenSistInfo && !endretSidenForrigeGang;
