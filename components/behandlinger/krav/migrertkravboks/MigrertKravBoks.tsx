@@ -11,12 +11,11 @@ import { erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 interface Props {
-  referanse: string;
   erNyRad: boolean;
   onLukk: () => void;
 }
 
-export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
+export const MigrertKravBoks = ({ erNyRad, onLukk }: Props) => {
   const form = useFormContext<KravFormFields>();
 
   return (
@@ -32,11 +31,6 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
               </BodyShort>
             </VStack>
           </HStack>
-          {erNyRad && (
-            <Tag variant="warning" size="small">
-              Ikke lagret
-            </Tag>
-          )}
         </HStack>
       </Box>
 
@@ -53,7 +47,7 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
 
           <TextAreaWrapper
             control={form.control}
-            name={`migrerteKravVurderinger.${referanse}.begrunnelse`}
+            name="migrertKravVurdering.begrunnelse"
             label="Vurdering"
             size="small"
             rules={{ required: 'Du må skrive inn en vurdering.' }}
@@ -62,7 +56,7 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
           <HStack>
             <TextFieldWrapper
               control={form.control}
-              name={`migrerteKravVurderinger.${referanse}.arenaSaksnummer`}
+              name="migrertKravVurdering.arenaSaksnummer"
               label="Arenasaksnummer"
               type="text"
               size="small"
@@ -79,7 +73,7 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
           <HStack>
             <SelectWrapper
               control={form.control}
-              name={`migrerteKravVurderinger.${referanse}.rettighetstype`}
+              name="migrertKravVurdering.rettighetstype"
               label="Brukeren har følgende rettighetstype i Arena"
               size="small"
               rules={{ required: 'Du må velge rettighetstype.' }}
@@ -94,7 +88,7 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
 
           <HStack>
             <DateInputWrapper
-              name={`migrerteKravVurderinger.${referanse}.muligRettFra`}
+              name="migrertKravVurdering.muligRettFra"
               control={form.control}
               label="Migrert dato"
               description="Dato Kelvin tar over ansvar for saken"
@@ -113,7 +107,7 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
 
           <HStack>
             <DateInputWrapper
-              name={`migrerteKravVurderinger.${referanse}.virkningstidspunktArena`}
+              name="migrertKravVurdering.virkningstidspunktArena"
               control={form.control}
               label="Virkningstidspunkt på Arena sak"
               description="Dato saken trer i kraft i Arena"
@@ -132,7 +126,7 @@ export const MigrertKravBoks = ({ referanse, erNyRad, onLukk }: Props) => {
           <HStack>
             <TextFieldWrapper
               control={form.control}
-              name={`migrerteKravVurderinger.${referanse}.resterendeKvoteOrdinær`}
+              name={'migrertKravVurdering.resterendeKvoteOrdinær'}
               label="Resterende § 11-12 kvote"
               description="Resterende telleverk i Arena på migreringstidspunkt"
               type="number"

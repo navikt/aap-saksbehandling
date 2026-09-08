@@ -7,21 +7,19 @@ import { KravTabell } from 'components/behandlinger/krav/kravtabell/KravTabell';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { VStack } from '@navikt/ds-react';
 import {
-  byggInitielleMigrerteKravVurderinger,
+  byggInitiellMigrertKravVurdering,
   byggInitielleVurderinger,
   byggKravVurderingerFraSkjema,
-  byggMigrerteKravLøsningerFraSkjema,
-  emptyMigrertKravFormFields,
+  byggMigrertKravLøsningFraSkjema,
   finnKravVurderingByReferanse,
+  finnMigrertKrav,
   finnSøknadUtenKravByReferanse,
   getKravVurderingerForSøknad,
-  getMigrerteKrav,
   harIngenKravvurderinger,
   hentOriginaleFormFelter,
   hentOriginaleMigrertKravFormFelter,
   KravVurderingFormFields,
   MigrertKravFormFields,
-  NYTT_MIGRERT_KRAV_REFERANSE,
 } from 'components/behandlinger/krav/kravutils';
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { MigrertKravBoks } from 'components/behandlinger/krav/migrertkravboks/MigrertKravBoks';
@@ -29,7 +27,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
-import { SubmitEventHandler } from 'react';
+import { SubmitEventHandler, useState } from 'react';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { MigrerteKravTabell } from 'components/behandlinger/krav/kravtabell/MigrerteKravTabell';
 
@@ -44,8 +42,7 @@ interface Props {
 export interface KravFormFields {
   valgteKrav: string[];
   vurderinger: Record<string, KravVurderingFormFields>;
-  valgteMigrerteKrav: string[];
-  migrerteKravVurderinger: Record<string, MigrertKravFormFields>;
+  migrertKravVurdering: MigrertKravFormFields;
 }
 
 export const VurderKrav = ({
@@ -63,19 +60,12 @@ export const VurderKrav = ({
     initialMellomlagretVurdering
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
-
-  const visStandardMigrertKravSkjema = harMigreringsbehov && harIngenKravvurderinger(grunnlag);
-
   const defaultValues: KravFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : {
         valgteKrav: grunnlag.søknaderUtenKravvurdering.map((s) => s.journalpostId.identifikator),
         vurderinger: byggInitielleVurderinger(grunnlag),
-        valgteMigrerteKrav: visStandardMigrertKravSkjema ? [NYTT_MIGRERT_KRAV_REFERANSE] : [],
-        migrerteKravVurderinger: {
-          ...byggInitielleMigrerteKravVurderinger(grunnlag),
-          ...(visStandardMigrertKravSkjema ? { [NYTT_MIGRERT_KRAV_REFERANSE]: emptyMigrertKravFormFields() } : {}),
-        },
+        migrertKravVurdering: byggInitiellMigrertKravVurdering(grunnlag),
       };
 
   const form = useForm<KravFormFields>({ defaultValues });
@@ -98,10 +88,9 @@ export const VurderKrav = ({
       getKravVurderingerForSøknad(grunnlag.nyeVurderinger).length >
     0;
 
-  const harMigrertKrav =
-    getMigrerteKrav(grunnlag.vedtatteVurderinger).length + getMigrerteKrav(grunnlag.nyeVurderinger).length > 0;
-
-  const valgteMigrerteKrav = useWatch({ control, name: 'valgteMigrerteKrav' }) ?? [];
+  const visStandardMigrertKravSkjema = harMigreringsbehov && harIngenKravvurderinger(grunnlag);
+  const migrertKrav = finnMigrertKrav(grunnlag.nyeVurderinger) ?? finnMigrertKrav(grunnlag.vedtatteVurderinger);
+  const [migrertKravÅpen, setMigrertKravÅpen] = useState(visStandardMigrertKravSkjema);
 
   const lukkKrav = (referanse: string) => {
     const originaleFelter = hentOriginaleFormFelter(grunnlag, referanse);
@@ -115,23 +104,27 @@ export const VurderKrav = ({
     );
   };
 
-  const lukkMigrertKrav = (referanse: string) => {
-    const originaleFelter = hentOriginaleMigrertKravFormFelter(grunnlag, referanse);
+  const lukkMigrertKrav = () => {
+    const originaleFelter = hentOriginaleMigrertKravFormFelter(grunnlag);
     if (originaleFelter) {
-      setValue(`migrerteKravVurderinger.${referanse}`, originaleFelter);
-    } else {
-      const { [referanse]: _fjernet, ...resterende } = getValues('migrerteKravVurderinger') ?? {};
-      setValue('migrerteKravVurderinger', resterende);
+      setValue('migrertKravVurdering', originaleFelter);
     }
 
-    setValue(
-      'valgteMigrerteKrav',
-      (getValues('valgteMigrerteKrav') ?? []).filter((r) => r !== referanse)
-    );
+    setMigrertKravÅpen(false);
+  };
+
+  const toggleMigrertKravÅpen = () => {
+    if (migrertKravÅpen) {
+      lukkMigrertKrav();
+    } else {
+      setMigrertKravÅpen(true);
+    }
   };
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
+      const migrertKravLøsning = byggMigrertKravLøsningFraSkjema(grunnlag, data.migrertKravVurdering, migrertKravÅpen);
+
       løsAvklaringsbehov(
         {
           behandlingVersjon,
@@ -140,7 +133,7 @@ export const VurderKrav = ({
             behovstype: Behovstype.VURDER_KRAV_KODE,
             kravVurderinger: [
               ...byggKravVurderingerFraSkjema(grunnlag, data.vurderinger),
-              ...byggMigrerteKravLøsningerFraSkjema(grunnlag, data.migrerteKravVurderinger),
+              ...(migrertKravLøsning ? [migrertKravLøsning] : []),
             ],
           },
         },
@@ -175,18 +168,15 @@ export const VurderKrav = ({
       <VStack gap={'space-16'}>
         <FormProvider {...form}>
           <VStack gap="space-16">
-            {harMigrertKrav && <MigrerteKravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
-            {valgteMigrerteKrav.map((referanse) => {
-              const erNyRad = hentOriginaleMigrertKravFormFelter(grunnlag, referanse) === undefined;
-              return (
-                <MigrertKravBoks
-                  key={referanse}
-                  referanse={referanse}
-                  erNyRad={erNyRad}
-                  onLukk={() => lukkMigrertKrav(referanse)}
-                />
-              );
-            })}
+            {migrertKrav && (
+              <MigrerteKravTabell
+                migrertKrav={migrertKrav}
+                readOnly={formReadOnly}
+                åpen={migrertKravÅpen}
+                onToggleÅpen={toggleMigrertKravÅpen}
+              />
+            )}
+            {migrertKravÅpen && <MigrertKravBoks erNyRad={migrertKrav == null} onLukk={lukkMigrertKrav} />}
 
             {harKravForSøknad && <KravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
 
