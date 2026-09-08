@@ -1,11 +1,7 @@
 export const FLAGS = [
-  'VisAvslagsaarsaker',
   'TilbakekrevingBelopFilter',
   'ArenasakerLenkeTilVisninsklient',
-  'ReturAarsakJournalforing',
-  'VisValgForDialogmelding',
   'HentFastlege',
-  'StudentV2',
   'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
   'BeregningstidspunktAarsak',
@@ -21,12 +17,8 @@ export type FlagNames = (typeof FLAGS)[number];
 export type Flags = Record<FlagNames, boolean>;
 
 export const mockedFlags: Flags = {
-  VisAvslagsaarsaker: true,
   TilbakekrevingBelopFilter: true,
   ArenasakerLenkeTilVisninsklient: true,
-  ReturAarsakJournalforing: true,
-  VisValgForDialogmelding: true,
-  StudentV2: true,
   HentFastlege: true,
   OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
