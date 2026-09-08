@@ -23,7 +23,7 @@ export type DokumentasjonType =
 interface Props {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
   dokumentasjonType?: DokumentasjonType;
-  meldingFraNavn: string;
+  meldingFraNavn: string | undefined | null;
   opprettetTidspunkt: string;
   status?: 'SENDT' | 'LEVERT' | 'FEILET' | null;
   journalpostId: string | undefined | null;

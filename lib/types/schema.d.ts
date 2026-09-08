@@ -13785,7 +13785,7 @@ export interface components {
       /** @enum {string} */
       'innkommendeUtg\u00E5ende': 'INNKOMMENDE' | 'UTGÅENDE';
       journalpostId?: string | null;
-      meldingFraNavn: string;
+      meldingFraNavn?: string | null;
       /** @enum {string|null} */
       meldingStatus?: 'FEILET' | 'LEVERT' | 'SENDT' | null;
       /**
