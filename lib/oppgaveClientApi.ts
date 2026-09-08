@@ -65,7 +65,7 @@ export function clientMottattDokumenterLest(behandlingsreferanse: string) {
 }
 
 export function clientFjernUføreVedtakTag(uføreVedtak: UføreVedtak) {
-  return clientFetch(`/oppgave/api/oppgave/fjern-uførevedtak-ikon`, 'POST', uføreVedtak);
+  return clientFetch(`/oppgave/api/oppgave/fjern-uforevedtak-ikon`, 'POST', uføreVedtak);
 }
 
 export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
