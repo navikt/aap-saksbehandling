@@ -109,42 +109,10 @@ export function harIngenKravvurderinger(grunnlag?: KravGrunnlag): boolean {
   return (grunnlag?.nyeVurderinger.length ?? 0) + (grunnlag?.vedtatteVurderinger.length ?? 0) === 0;
 }
 
-export function hentOriginaleMigrertKravFormFelter(
-  grunnlag: KravGrunnlag | undefined
-): MigrertKravFormFields | undefined {
-  const krav = finnMigrertKrav(grunnlag?.vedtatteVurderinger);
-  return krav ? migrertKravTilFormFields(krav) : undefined;
-}
-
-function erMigrertKravFelterEndret(original: MigrertKravFormFields, gjeldende: MigrertKravFormFields): boolean {
-  return (
-    original.arenaSaksnummer !== gjeldende.arenaSaksnummer ||
-    original.rettighetstype !== gjeldende.rettighetstype ||
-    original.muligRettFra !== gjeldende.muligRettFra ||
-    original.virkningstidspunktArena !== gjeldende.virkningstidspunktArena ||
-    original.resterendeKvoteOrdinær !== gjeldende.resterendeKvoteOrdinær ||
-    original.begrunnelse !== gjeldende.begrunnelse
-  );
-}
-
-export function byggMigrertKravLøsningFraSkjema(
-  grunnlag: KravGrunnlag | undefined,
+function byggMigrertKravLøsning(
   migrertKravVurdering: MigrertKravFormFields,
-  migrertKravÅpen: boolean
-): MigrertKravLøsning | undefined {
-  const original = hentOriginaleMigrertKravFormFelter(grunnlag);
-  const erNyRad = original === undefined;
-
-  // Ingen migrert krav fra før, og saksbehandler har ikke åpnet skjemaet for å legge inn et nytt - ingenting å sende inn.
-  if (erNyRad && !migrertKravÅpen) {
-    return undefined;
-  }
-
-  // Uendret migrert krav - ikke send det inn på nytt.
-  if (!erNyRad && !erMigrertKravFelterEndret(original, migrertKravVurdering)) {
-    return undefined;
-  }
-
+  referanse: string | undefined
+): MigrertKravLøsning {
   const muligRettFraParsed = parseDatoFraDatePicker(migrertKravVurdering.muligRettFra);
   const virkningstidspunktArenaParsed = parseDatoFraDatePicker(migrertKravVurdering.virkningstidspunktArena);
 
@@ -165,8 +133,31 @@ export function byggMigrertKravLøsningFraSkjema(
     virkningstidspunktArena: formaterDatoForBackend(virkningstidspunktArenaParsed),
     resterendeKvoteOrdinær: Number(migrertKravVurdering.resterendeKvoteOrdinær),
     begrunnelse: migrertKravVurdering.begrunnelse,
-    referanse: erNyRad ? undefined : finnMigrertKrav(grunnlag?.vedtatteVurderinger)?.referanse,
+    referanse,
   } satisfies MigrertKravLøsning;
+}
+
+export function byggMigrertKravLøsningFraSkjema(
+  grunnlag: KravGrunnlag | undefined,
+  migrertKravVurdering: MigrertKravFormFields,
+  migrertKravÅpen: boolean
+): MigrertKravLøsning | undefined {
+  const migrertKravFraNye = finnMigrertKrav(grunnlag?.nyeVurderinger);
+  const migrertKravFraVedtatt = finnMigrertKrav(grunnlag?.vedtatteVurderinger);
+  const original = migrertKravFraNye ?? migrertKravFraVedtatt;
+
+  // Hvis migrert-krav-skjemaet er åpent skal denne ALLTID sendes inn, brukes referanse på eksisterende krav (hvis eksisterer)
+  if (migrertKravÅpen) {
+    return byggMigrertKravLøsning(migrertKravVurdering, original?.referanse);
+  }
+
+  // Hvis skjema ikke er åpent, men vi har et eksisterende migrert krav sendes vi inn dette igjen som en løsning
+  if (migrertKravFraNye != null) {
+    return byggMigrertKravLøsning(migrertKravTilFormFields(migrertKravFraNye), migrertKravFraNye.referanse);
+  }
+
+  // Skjemaet er ikke åpent, og vi har IKKE noen nyeVurderinger: Ikke send ikk noe
+  return undefined;
 }
 
 export function formaterKravtype(type: KravType) {

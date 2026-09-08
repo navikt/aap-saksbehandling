@@ -1,4 +1,4 @@
-import { BodyShort, Box, Button, Detail, HStack, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { isMonday } from 'date-fns';
 import { useFormContext } from 'react-hook-form';

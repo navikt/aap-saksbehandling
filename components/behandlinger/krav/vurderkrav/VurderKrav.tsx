@@ -17,9 +17,9 @@ import {
   getKravVurderingerForSøknad,
   harIngenKravvurderinger,
   hentOriginaleFormFelter,
-  hentOriginaleMigrertKravFormFelter,
   KravVurderingFormFields,
   MigrertKravFormFields,
+  migrertKravTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { MigrertKravBoks } from 'components/behandlinger/krav/migrertkravboks/MigrertKravBoks';
@@ -105,9 +105,8 @@ export const VurderKrav = ({
   };
 
   const lukkMigrertKrav = () => {
-    const originaleFelter = hentOriginaleMigrertKravFormFelter(grunnlag);
-    if (originaleFelter) {
-      setValue('migrertKravVurdering', originaleFelter);
+    if (migrertKrav) {
+      setValue('migrertKravVurdering', migrertKravTilFormFields(migrertKrav));
     }
 
     setMigrertKravÅpen(false);
