@@ -156,10 +156,8 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     behandlingstyperFilterFraBackend,
   } = useAlleOppgaverForEnhet(aktiveEnhetsnumre, aktivKø?.id ?? 0, hasteoppgaverØverst, utvidetFilter, sort);
 
-  const { data: køer } = useSWR(
-    `api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`,
-    () => hentKøerForEnheterClient(aktiveEnhetsnumre),
-    { revalidateOnFocus: false }
+  const { data: køer } = useSWR(`api/filter?${queryParamsArray('enheter', aktiveEnhetsnumre)}`, () =>
+    hentKøerForEnheterClient(aktiveEnhetsnumre)
   );
 
   useEffect(() => {
@@ -182,20 +180,15 @@ export const AlleOppgaver = ({ enheter }: Props) => {
     if (isError(køer) || !køer?.data?.length) {
       return;
     }
+    const lagretKø = hentLagretAktivKø();
     const gyldigeKøer = køer.data.map((kø) => kø.id);
 
-    if (aktivKø && gyldigeKøer.includes(aktivKø.id)) {
-      return;
-    }
-
-    const lagretKø = hentLagretAktivKø();
     if (lagretKø && gyldigeKøer.includes(lagretKø.id)) {
       oppdaterKø(lagretKø);
     } else {
       const førsteKø = køer.data[0];
       oppdaterKø({ id: førsteKø.id, type: førsteKø.type, timestamp: new Date().getTime(), user: bruker.NAVident });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [køer]);
 
   if (isError(køer)) {
