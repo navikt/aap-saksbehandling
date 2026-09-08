@@ -18,16 +18,12 @@ interface SplittbarRad {
  * Ferie i en sykepengeperiode forskyver maksdato for sykepenger tilsvarende lengden på ferien.
  * Antall sykepengedager bevares: dagene før ferien blir stående, og de resterende dagene
  * legges som en egen rad rett etter ferieslutt.
- *
- * Radene som lages merkes med perioden de kommer fra, slik at en ny beregning først kan slå dem
- * sammen igjen. Da kan saksbehandler rette opp feriedatoene og få riktig resultat, i stedet for
- * at en ny splitt legger seg oppå den forrige.
  */
 export function beregnForhåndsvisning<T extends SplittbarRad>(rader: T[]): T[] {
   const ferieRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'));
-  const ikkeFerieRader = rader.filter((n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE');
-
-  let resultat = slåSammenSykepengeperioderUtenGyldigMellomrom(ikkeFerieRader, ferieRader);
+  let resultat = slåSammenSplittedeSykepengeperioder(rader).filter(
+    (n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE'
+  );
 
   ferieRader.forEach((rad) => {
     resultat = splittForEnFerie(resultat, rad);
@@ -36,38 +32,72 @@ export function beregnForhåndsvisning<T extends SplittbarRad>(rader: T[]): T[] 
   return sorterEtterFom(resultat.concat(ferieRader));
 }
 
-function slåSammenSykepengeperioderUtenGyldigMellomrom<T extends SplittbarRad>(rader: T[], ferieRader: T[]): T[] {
+export function slåSammenSplittedeSykepengeperioder<T extends SplittbarRad>(rader: T[]): T[] {
+  const ferier = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'))
+    .map(tilPeriode)
+    .filter((periode): periode is Periode => periode !== undefined);
   const andreRader = rader.filter((n) => n.ytelseType !== 'SYKEPENGER');
-  let sykepengeRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'SYKEPENGER'));
+  const sykepengeRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'SYKEPENGER'));
 
-  let slåttSammen = true;
-  while (slåttSammen) {
-    slåttSammen = false;
+  const resultat: T[] = [];
+  let kjede: T[] = [];
 
-    for (let i = 0; i < sykepengeRader.length - 1; i++) {
-      const denne = tilPeriode(sykepengeRader[i]);
-      const neste = tilPeriode(sykepengeRader[i + 1]);
+  function avsluttKjede() {
+    if (kjede.length === 0) {
+      return;
+    }
 
-      if (!denne || !neste || neste.fom <= denne.tom) {
-        continue;
-      }
+    const start = tilPeriode(kjede[0])!.fom;
+    const antallDager = kjede.reduce((sum, rad) => {
+      const periode = tilPeriode(rad)!;
+      return sum + antallDagerMellom(periode.fom, periode.tom);
+    }, 0);
 
-      const gapFom = addDays(denne.tom, 1);
-      const gapTom = subDays(neste.fom, 1);
-      const gapDekketAvFerie =
-        gapFom <= gapTom &&
-        ferieRader.some((ferie) => ferie.periode.fom === format(gapFom, DATOFORMAT) && ferie.periode.tom === format(gapTom, DATOFORMAT));
+    resultat.push(medPeriode(kjede[0], start, addDays(start, antallDager - 1)));
+    kjede = [];
+  }
 
-      if (!gapDekketAvFerie) {
-        const sammenslått = medPeriode(sykepengeRader[i], denne.fom, neste.tom);
-        sykepengeRader = [...sykepengeRader.slice(0, i), sammenslått, ...sykepengeRader.slice(i + 2)];
-        slåttSammen = true;
-        break;
-      }
+  sykepengeRader.forEach((rad) => {
+    const periode = tilPeriode(rad);
+
+    if (!periode) {
+      avsluttKjede();
+      resultat.push(rad);
+      return;
+    }
+
+    const forrige = kjede.length > 0 ? tilPeriode(kjede[kjede.length - 1]) : undefined;
+
+    if (forrige && erDekketAvFerie(addDays(forrige.tom, 1), subDays(periode.fom, 1), ferier)) {
+      kjede.push(rad);
+    } else {
+      avsluttKjede();
+      kjede.push(rad);
+    }
+  });
+
+  avsluttKjede();
+
+  return sorterEtterFom(resultat.concat(andreRader));
+}
+
+function erDekketAvFerie(fom: Date, tom: Date, ferier: Periode[]): boolean {
+  if (fom > tom) {
+    return false;
+  }
+
+  let dekketTilOgMed = fom;
+
+  for (const ferie of ferier) {
+    if (ferie.fom > dekketTilOgMed) {
+      break;
+    }
+    if (ferie.tom >= dekketTilOgMed) {
+      dekketTilOgMed = addDays(ferie.tom, 1);
     }
   }
 
-  return [...sykepengeRader, ...andreRader];
+  return dekketTilOgMed > tom;
 }
 
 function sorterEtterFom<T extends SplittbarRad>(rader: T[]): T[] {

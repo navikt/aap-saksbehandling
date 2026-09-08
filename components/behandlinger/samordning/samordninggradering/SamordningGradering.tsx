@@ -24,6 +24,7 @@ import { SubmitEventHandler, useRef, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
+import { beregnForhåndsvisning, slåSammenSplittedeSykepengeperioder } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
@@ -107,7 +108,7 @@ export const SamordningGradering = ({
         defaultValue: defaultValue.vurderteSamordninger,
       },
     },
-    { readOnly: formReadOnly, shouldUnregister: true }
+    { readOnly: formReadOnly }
   );
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
@@ -148,7 +149,7 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
+                vurderteSamordningerData: beregnForhåndsvisning(data.vurderteSamordninger || []).map((vurdertSamordning) => ({
                   manuell: vurdertSamordning.manuell,
                   gradering: vurdertSamordning.gradering,
                   periode: {
@@ -318,17 +319,19 @@ export const SamordningGradering = ({
 };
 
 function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
+  const vurderteSamordninger = grunnlag.vurdering?.vurderinger.map((ytelse) => ({
+    ytelseType: ytelse.ytelseType,
+    gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
+    manuell: ytelse.manuell || undefined,
+    periode: {
+      fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
+      tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
+    },
+  }));
+
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
-      ytelseType: ytelse.ytelseType,
-      gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
-      manuell: ytelse.manuell || undefined,
-      periode: {
-        fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
-        tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
-      },
-    })),
+    vurderteSamordninger: vurderteSamordninger && slåSammenSplittedeSykepengeperioder(vurderteSamordninger),
   };
 }
 
