@@ -12,7 +12,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 
 interface Props {
-  grunnlag?: KravGrunnlag;
+  grunnlag: KravGrunnlag;
   readOnly: boolean;
 }
 
@@ -36,8 +36,8 @@ export const MigrerteKravTabell = ({ grunnlag, readOnly }: Props) => {
     setValue('valgteMigrerteKrav', nyeValgteMigrerteKrav);
   };
 
-  const nyeVurderinger = getMigrerteKrav(grunnlag?.nyeVurderinger ?? []);
-  const vedtatteVurderinger = getMigrerteKrav(grunnlag?.vedtatteVurderinger ?? []);
+  const nyeVurderinger = getMigrerteKrav(grunnlag.nyeVurderinger);
+  const vedtatteVurderinger = getMigrerteKrav(grunnlag.vedtatteVurderinger);
   const alleVurderinger = [...nyeVurderinger, ...vedtatteVurderinger];
 
   return (
@@ -57,32 +57,31 @@ export const MigrerteKravTabell = ({ grunnlag, readOnly }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {grunnlag != null &&
-            alleVurderinger.map((vurdering) => {
-              return (
-                <Table.ExpandableRow content={vurdering.begrunnelse} key={vurdering.referanse}>
-                  <Table.DataCell textSize={'small'}>{vurdering.arenaSaksnummer}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{formaterKravtype(vurdering.type)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
-                    {formaterDatoForFrontend(vurdering.virkningstidspunktArena)}
-                  </Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(vurdering.muligRettFra)}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>Ordinær: {vurdering.resterendeKvoteOrdinær}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
-                  <Table.DataCell textSize={'small'}>
-                    <Button
-                      type="button"
-                      size="small"
-                      variant={valgteMigrerteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                      onClick={() => toggleValgtMigrertKrav(vurdering.referanse)}
-                      disabled={readOnly}
-                    >
-                      {valgteMigrerteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
-                    </Button>
-                  </Table.DataCell>
-                </Table.ExpandableRow>
-              );
-            })}
+          {alleVurderinger.map((vurdering) => {
+            return (
+              <Table.ExpandableRow content={vurdering.begrunnelse} key={vurdering.referanse}>
+                <Table.DataCell textSize={'small'}>{vurdering.arenaSaksnummer}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterKravtype(vurdering.type)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {formaterDatoForFrontend(vurdering.virkningstidspunktArena)}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(vurdering.muligRettFra)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>Ordinær: {vurdering.resterendeKvoteOrdinær}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  <Button
+                    type="button"
+                    size="small"
+                    variant={valgteMigrerteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
+                    onClick={() => toggleValgtMigrertKrav(vurdering.referanse)}
+                    disabled={readOnly}
+                  >
+                    {valgteMigrerteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
+                  </Button>
+                </Table.DataCell>
+              </Table.ExpandableRow>
+            );
+          })}
         </Table.Body>
       </TableStyled>
     </>

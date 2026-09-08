@@ -34,7 +34,7 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { MigrerteKravTabell } from 'components/behandlinger/krav/kravtabell/MigrerteKravTabell';
 
 interface Props {
-  grunnlag?: KravGrunnlag;
+  grunnlag: KravGrunnlag;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   behandlingVersjon: number;
   readOnly: boolean;
@@ -69,7 +69,7 @@ export const VurderKrav = ({
   const defaultValues: KravFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : {
-        valgteKrav: (grunnlag?.søknaderUtenKravvurdering ?? []).map((s) => s.journalpostId.identifikator),
+        valgteKrav: grunnlag.søknaderUtenKravvurdering.map((s) => s.journalpostId.identifikator),
         vurderinger: byggInitielleVurderinger(grunnlag),
         valgteMigrerteKrav: visStandardMigrertKravSkjema ? [NYTT_MIGRERT_KRAV_REFERANSE] : [],
         migrerteKravVurderinger: {
@@ -92,14 +92,14 @@ export const VurderKrav = ({
 
   const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
   const harKravForSøknad =
-    (grunnlag?.søknader.length ?? 0) +
-      (grunnlag?.søknaderUtenKravvurdering.length ?? 0) +
-      getKravVurderingerForSøknad(grunnlag?.vedtatteVurderinger).length +
-      getKravVurderingerForSøknad(grunnlag?.nyeVurderinger).length >
+    grunnlag.søknader.length +
+      grunnlag.søknaderUtenKravvurdering.length +
+      getKravVurderingerForSøknad(grunnlag.vedtatteVurderinger).length +
+      getKravVurderingerForSøknad(grunnlag.nyeVurderinger).length >
     0;
 
   const harMigrertKrav =
-    getMigrerteKrav(grunnlag?.vedtatteVurderinger).length + getMigrerteKrav(grunnlag?.nyeVurderinger).length > 0;
+    getMigrerteKrav(grunnlag.vedtatteVurderinger).length + getMigrerteKrav(grunnlag.nyeVurderinger).length > 0;
 
   const valgteMigrerteKrav = useWatch({ control, name: 'valgteMigrerteKrav' }) ?? [];
 
@@ -174,27 +174,8 @@ export const VurderKrav = ({
     >
       <VStack gap={'space-16'}>
         <FormProvider {...form}>
-          {harMigrertKrav && <MigrerteKravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
-          {harKravForSøknad && <KravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
           <VStack gap="space-16">
-            {valgteKrav.map((referanse) => {
-              const krav = finnKravVurderingByReferanse(grunnlag, referanse);
-              const søknad = !krav ? finnSøknadUtenKravByReferanse(grunnlag, referanse) : undefined;
-              if (!krav && !søknad) return null;
-
-              const erVedtatt = krav
-                ? (grunnlag?.vedtatteVurderinger.some((v) => v.referanse === referanse) ?? false)
-                : false;
-
-              return (
-                <KravBoks
-                  key={referanse}
-                  innhold={krav ? { kilde: 'EKSISTERENDE', krav } : { kilde: 'NY_SØKNAD', søknad: søknad! }}
-                  erVedtatt={erVedtatt}
-                  onLukk={() => lukkKrav(referanse)}
-                />
-              );
-            })}
+            {harMigrertKrav && <MigrerteKravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
             {valgteMigrerteKrav.map((referanse) => {
               const erNyRad = hentOriginaleMigrertKravFormFelter(grunnlag, referanse) === undefined;
               return (
@@ -203,6 +184,25 @@ export const VurderKrav = ({
                   referanse={referanse}
                   erNyRad={erNyRad}
                   onLukk={() => lukkMigrertKrav(referanse)}
+                />
+              );
+            })}
+
+            {harKravForSøknad && <KravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
+
+            {valgteKrav.map((referanse) => {
+              const krav = finnKravVurderingByReferanse(grunnlag, referanse);
+              const søknad = !krav ? finnSøknadUtenKravByReferanse(grunnlag, referanse) : undefined;
+              if (!krav && !søknad) return null;
+
+              const erVedtatt = krav ? grunnlag.vedtatteVurderinger.some((v) => v.referanse === referanse) : false;
+
+              return (
+                <KravBoks
+                  key={referanse}
+                  innhold={krav ? { kilde: 'EKSISTERENDE', krav } : { kilde: 'NY_SØKNAD', søknad: søknad! }}
+                  erVedtatt={erVedtatt}
+                  onLukk={() => lukkKrav(referanse)}
                 />
               );
             })}

@@ -26,8 +26,8 @@ export const VurderKravMedDataFetching = async ({
     hentBehandling(behandlingsreferanse),
   ]);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(behandling)) {
+    return <ApiException apiResponses={[grunnlag, behandling]} />;
   }
 
   const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
@@ -38,10 +38,9 @@ export const VurderKravMedDataFetching = async ({
     erIkkePåVent
   );
 
-  const vurderingsbehov =
-    behandling.type === 'SUCCESS'
-      ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
-      : [];
+  const vurderingsbehov = behandling.data.vurderingsbehovOgÅrsaker.flatMap(
+    (behovOgÅrsak) => behovOgÅrsak.vurderingsbehov
+  );
   const harMigreringsbehov = vurderingsbehov.some((behov) => behov.type === 'MIGRERING_FRA_ARENA');
 
   return (
