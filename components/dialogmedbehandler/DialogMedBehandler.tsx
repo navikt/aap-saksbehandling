@@ -8,7 +8,7 @@ import styles from './DialogMedBehandler.module.css';
 import { useMeldingerFraDialog } from 'hooks/saksbehandling/SakMeldingerFraDialogHook';
 
 export const DialogMedBehandler = () => {
-  const { meldingerMedDokumenliste } = useMeldingerFraDialog();
+  const { meldingerMedDokumentliste } = useMeldingerFraDialog();
 
   return (
     <section>
@@ -24,7 +24,7 @@ export const DialogMedBehandler = () => {
       </VStack>
 
       <VStack gap={'space-20'} className={styles.meldingervindu}>
-        {meldingerMedDokumenliste?.map((meldingMedDokumentliste, index) => (
+        {meldingerMedDokumentliste?.map((meldingMedDokumentliste, index) => (
           <Melding
             key={index}
             visningType={meldingMedDokumentliste.melding.innkommendeUtgående}

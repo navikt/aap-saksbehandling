@@ -7,7 +7,7 @@ import { hentAlleDialogmeldingerMedDokumentIdPåSak } from 'lib/clientApi';
 import { MeldingMedDokumenterDto } from 'lib/types/types';
 
 export function useMeldingerFraDialog(): {
-  meldingerMedDokumenliste?: MeldingMedDokumenterDto[];
+  meldingerMedDokumentliste?: MeldingMedDokumenterDto[];
   refetchDialogmeldingerClient: () => void;
 } {
   const params = useParamsMedType();
@@ -23,7 +23,7 @@ export function useMeldingerFraDialog(): {
   );
 
   return {
-    meldingerMedDokumenliste: !isError(data) ? data?.data : undefined,
+    meldingerMedDokumentliste: !isError(data) ? data?.data : undefined,
     refetchDialogmeldingerClient: mutate,
   };
 }

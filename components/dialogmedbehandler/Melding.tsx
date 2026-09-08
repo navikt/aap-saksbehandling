@@ -109,10 +109,6 @@ export const Melding = ({
 };
 
 const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => {
-  if (!dokumentasjonType) {
-    return '';
-  }
-
   switch (dokumentasjonType) {
     case 'L120':
       return 'Forespørsel om legeerklæring L120';
@@ -129,7 +125,7 @@ const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => 
     case 'RETUR_LEGEERKLÆRING':
       return 'Retur legeerklæring';
     default:
-      return dokumentasjonType;
+      return '';
   }
 };
 
