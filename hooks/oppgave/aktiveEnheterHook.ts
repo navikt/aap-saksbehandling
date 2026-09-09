@@ -4,7 +4,7 @@ import { dagerTilMillisekunder } from 'lib/utils/time';
 import { ValuePair } from 'components/form/FormField';
 
 const KEY = 'AKTIVE_ENHETER_KEY';
-const MAKS_LEVETID = dagerTilMillisekunder(1);
+const MAKS_LEVETID = dagerTilMillisekunder(7);
 
 interface LagredeValgteEnheter {
   value: ValuePair[];
@@ -30,6 +30,8 @@ export function useLagreAktiveEnheter(): {
       const obj = JSON.parse(localStorage[KEY]) as LagredeValgteEnheter;
 
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
+        // Glidende utløp: forleng levetiden ved hvert vellykkede lesing, slik at saksbehandler/veileder ikke mister valgt enhet midt i arbeidsdagen.
+        lagreAktiveEnheter(obj.value);
         return obj.value;
       } else {
         localStorage.removeItem(KEY);
