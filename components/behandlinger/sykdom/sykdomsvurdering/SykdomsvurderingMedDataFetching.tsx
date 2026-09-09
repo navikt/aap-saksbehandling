@@ -11,7 +11,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegForPeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Sykdomsvurdering } from 'components/behandlinger/sykdom/sykdomsvurdering/Sykdomsvurdering';
 
 interface Props {
@@ -47,10 +47,7 @@ export const SykdomsvurderingMedDataFetching = async ({
 
   const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlagForSykdom(grunnlag.data));
 
-  const harTidligereVurderinger =
-    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
-
-  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
     return null;
   }
 

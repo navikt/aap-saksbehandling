@@ -2,7 +2,7 @@ import { SamordningSosialstønad } from 'components/behandlinger/samordning/samo
 import { hentRefusjonGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -16,7 +16,10 @@ export const SamordningSosialstønadMedDatafetching = async ({ behandlingsrefera
   }
 
   if (
-    !skalViseSteg(stegData, grunnlag.data.gjeldendeVurderinger != null && grunnlag.data.gjeldendeVurderinger.length > 0)
+    !skalViseStegIkkePeriodisertGrunnlag(
+      stegData.avklaringsbehov,
+      grunnlag.data.gjeldendeVurderinger != null && grunnlag.data.gjeldendeVurderinger.length > 0
+    )
   ) {
     return null;
   }
