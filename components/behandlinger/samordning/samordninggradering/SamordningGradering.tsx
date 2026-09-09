@@ -24,7 +24,11 @@ import { SubmitEventHandler, useRef, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
-import { beregnForhåndsvisning, slåSammenSplittedeSykepengeperioder } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
+import { useFeatureFlag } from 'context/UnleashContext';
+import {
+  medAutoSplitt,
+  slåSammenSplittedeSykepengeperioder,
+} from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
@@ -67,6 +71,7 @@ export const SamordningGradering = ({
   oppfølgningOppgave,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
+  const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
 
@@ -93,7 +98,7 @@ export const SamordningGradering = ({
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag);
+    : mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -149,15 +154,17 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                vurderteSamordningerData: beregnForhåndsvisning(data.vurderteSamordninger || []).map((vurdertSamordning) => ({
-                  manuell: vurdertSamordning.manuell,
-                  gradering: vurdertSamordning.gradering,
-                  periode: {
-                    fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
-                    tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
-                  },
-                  ytelseType: vurdertSamordning.ytelseType!,
-                })),
+                vurderteSamordningerData: medAutoSplitt(data.vurderteSamordninger || [], autoSplittSykepenger).map(
+                  (vurdertSamordning) => ({
+                    manuell: vurdertSamordning.manuell,
+                    gradering: vurdertSamordning.gradering,
+                    periode: {
+                      fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                      tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
+                    },
+                    ytelseType: vurdertSamordning.ytelseType!,
+                  })
+                ),
               },
             },
             referanse: behandlingsreferanse,
@@ -219,7 +226,11 @@ export const SamordningGradering = ({
         vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
-            form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
+            form.reset(
+              grunnlag.vurdering
+                ? mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger)
+                : emptyDraftFormFields()
+            )
           );
         }}
         mellomlagretVurdering={mellomlagretVurdering}
@@ -318,7 +329,10 @@ export const SamordningGradering = ({
   );
 };
 
-function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
+function mapVurderingToDraftFormFields(
+  grunnlag: SamordningGraderingGrunnlag,
+  autoSplittSykepenger: boolean
+): DraftFormFields {
   const vurderteSamordninger = grunnlag.vurdering?.vurderinger.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
     gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
@@ -331,7 +345,9 @@ function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): D
 
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    vurderteSamordninger: vurderteSamordninger && slåSammenSplittedeSykepengeperioder(vurderteSamordninger),
+    vurderteSamordninger:
+      vurderteSamordninger &&
+      (autoSplittSykepenger ? slåSammenSplittedeSykepengeperioder(vurderteSamordninger) : vurderteSamordninger),
   };
 }
 

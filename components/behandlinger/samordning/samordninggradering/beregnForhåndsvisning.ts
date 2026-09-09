@@ -13,7 +13,6 @@ interface SplittbarRad {
   periode: PeriodeFelt;
 }
 
-
 /**
  * Ferie i en sykepengeperiode forskyver maksdato for sykepenger tilsvarende lengden på ferien.
  * Antall sykepengedager bevares: dagene før ferien blir stående, og de resterende dagene
@@ -21,15 +20,17 @@ interface SplittbarRad {
  */
 export function beregnForhåndsvisning<T extends SplittbarRad>(rader: T[]): T[] {
   const ferieRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'));
-  let resultat = slåSammenSplittedeSykepengeperioder(rader).filter(
-    (n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE'
-  );
+  let resultat = slåSammenSplittedeSykepengeperioder(rader).filter((n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE');
 
   ferieRader.forEach((rad) => {
     resultat = splittForEnFerie(resultat, rad);
-  })
+  });
 
   return sorterEtterFom(resultat.concat(ferieRader));
+}
+
+export function medAutoSplitt<T extends SplittbarRad>(rader: T[], autoSplittSykepenger: boolean): T[] {
+  return autoSplittSykepenger ? beregnForhåndsvisning(rader) : rader;
 }
 
 export function slåSammenSplittedeSykepengeperioder<T extends SplittbarRad>(rader: T[]): T[] {
@@ -113,7 +114,7 @@ function sorterEtterFom<T extends SplittbarRad>(rader: T[]): T[] {
 
 function splittForEnFerie<T extends SplittbarRad>(rader: T[], ferieRad: T): T[] {
   const nyeRader: T[] = [];
-  const ferieRadPeriode = tilPeriode(ferieRad)
+  const ferieRadPeriode = tilPeriode(ferieRad);
 
   if (!ferieRadPeriode) {
     return rader;
@@ -122,11 +123,7 @@ function splittForEnFerie<T extends SplittbarRad>(rader: T[], ferieRad: T): T[] 
   rader.forEach((rad) => {
     const sykepengeperiode = rad === ferieRad ? undefined : tilPeriode(rad);
 
-    if (
-      rad.ytelseType !== 'SYKEPENGER' ||
-      !sykepengeperiode ||
-      !overlapper(sykepengeperiode, ferieRadPeriode)
-    ) {
+    if (rad.ytelseType !== 'SYKEPENGER' || !sykepengeperiode || !overlapper(sykepengeperiode, ferieRadPeriode)) {
       nyeRader.push(rad);
       return;
     }

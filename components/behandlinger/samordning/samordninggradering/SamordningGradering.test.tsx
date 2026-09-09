@@ -211,6 +211,31 @@ describe('kopiering av perioder fra oppslag', () => {
     },
   };
 
+  const grunnlagMedFerieISykepengeperiode: SamordningGraderingGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    feriePerioder: [],
+    historiskeVurderinger: [],
+    ytelser: [],
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      vurderinger: [
+        {
+          ytelseType: 'SYKEPENGER',
+          gradering: 100,
+          manuell: true,
+          periode: { fom: '2026-01-01', tom: '2026-01-30' },
+        },
+        {
+          ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
+          gradering: 0,
+          manuell: true,
+          periode: { fom: '2026-01-10', tom: '2026-01-16' },
+        },
+      ],
+      vurderingerMeta: {},
+    },
+  };
+
   test('kopierer én periode fra oppslaget til en ny rad', async () => {
     render(
       <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
@@ -280,6 +305,46 @@ describe('kopiering av perioder fra oppslag', () => {
 
     expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
+  });
+
+  test('lar ferie i sykepengeperiode velges også når autoSplittSykepenger-toggelen er av', async () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+        <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+
+    expect(
+      within(screen.getByRole('combobox', { name: 'Ytelsestype' })).getByRole('option', {
+        name: 'Ferie i sykepengeperiode',
+      })
+    ).toBeInTheDocument();
+  });
+
+  test('splitter ikke sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er av', () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+        <SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    expect(rader).toHaveLength(3);
+    expect(within(rader[1]).getByText('01.01.2026 - 30.01.2026')).toBeVisible();
+  });
+
+  test('splitter sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er på', () => {
+    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    expect(rader).toHaveLength(4);
+    expect(within(rader[1]).getByText('01.01.2026 - 09.01.2026')).toBeVisible();
+    expect(within(rader[2]).getByText('10.01.2026 - 16.01.2026')).toBeVisible();
+    expect(within(rader[3]).getByText('17.01.2026 - 06.02.2026')).toBeVisible();
   });
 });
 

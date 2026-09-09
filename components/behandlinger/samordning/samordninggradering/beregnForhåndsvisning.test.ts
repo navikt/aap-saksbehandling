@@ -1,5 +1,8 @@
 import { describe, expect, test } from 'vitest';
-import { beregnForhåndsvisning, slåSammenSplittedeSykepengeperioder } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
+import {
+  beregnForhåndsvisning,
+  slåSammenSplittedeSykepengeperioder,
+} from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import { SamordningYtelsestype } from 'lib/types/types';
 
 interface Rad {
@@ -219,27 +222,19 @@ describe('beregnForhåndsvisning', () => {
       rad('SYKEPENGER', '04.02.2026', '10.02.2026'),
     ];
 
-    const sykepenger = slåSammenSplittedeSykepengeperioder(splittedeRader).filter(
-      (r) => r.ytelseType === 'SYKEPENGER'
-    );
+    const sykepenger = slåSammenSplittedeSykepengeperioder(splittedeRader).filter((r) => r.ytelseType === 'SYKEPENGER');
 
     expect(sykepenger.map((r) => r.periode)).toEqual([{ fom: '01.01.2026', tom: '30.01.2026' }]);
   });
 
   test('slår ikke sammen sykepengeperioder som overlapper hverandre', () => {
-    const rader = [
-      rad('SYKEPENGER', '01.03.2025', '31.03.2025'),
-      rad('SYKEPENGER', '05.03.2025', '20.03.2025'),
-    ];
+    const rader = [rad('SYKEPENGER', '01.03.2025', '31.03.2025'), rad('SYKEPENGER', '05.03.2025', '20.03.2025')];
 
     expect(beregnForhåndsvisning(rader)).toEqual(rader);
   });
 
   test('slår ikke sammen sykepengeperioder når mellomrommet ikke er dekket av ferie', () => {
-    const rader = [
-      rad('SYKEPENGER', '01.03.2025', '10.03.2025'),
-      rad('SYKEPENGER', '01.09.2025', '30.09.2025'),
-    ];
+    const rader = [rad('SYKEPENGER', '01.03.2025', '10.03.2025'), rad('SYKEPENGER', '01.09.2025', '30.09.2025')];
 
     expect(beregnForhåndsvisning(rader)).toEqual(rader);
   });
