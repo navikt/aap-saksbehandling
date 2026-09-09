@@ -214,6 +214,10 @@ export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.beh
 
 export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
 
+export type MigrertKravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.MigrertKravDto'];
+
+export type KravVurderingForSøknad = Exclude<KravVurdering, MigrertKravVurdering>;
+
 export type RelevantKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto'];
 
 export type Tilleggsopplysning =
@@ -239,6 +243,9 @@ export type TilleggsopplysningKravLøsning =
 
 export type TrukketSøknadKravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketSøknadKravLøsningDto'];
+
+export type MigrertKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.MigrertKravLøsningDto'];
 
 export type SøknadUtenKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
 
