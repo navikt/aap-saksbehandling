@@ -41,6 +41,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
   const visUforeTag = !uføreTagSkjult && !!oppgaveVisningsinfo?.uførevedtakinfo;
 
+  const behandlingErAvsluttet = behandling?.status === 'AVSLUTTET';
 
   const adressebeskyttelser = oppgaveVisningsinfo ? utledAdressebeskyttelse(oppgaveVisningsinfo) : [];
 
@@ -184,16 +185,19 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
                 oppdaterVisUforeTag={() => settUføreTagSkjult(true)}
                 behandlingsReferanse={behandling.referanse}
                 virkningsdato={oppgaveVisningsinfo.uførevedtakinfo.virkningsdato}
-                resultat={oppgaveVisningsinfo.uførevedtakinfo.resultat} />
+                resultat={oppgaveVisningsinfo.uførevedtakinfo.resultat}
+              />
             </div>
           )}
-          <SaksmenyDropdown
-            flyt={flyt}
-            visning={visning}
-            behandling={behandling}
-            reservertAvIdent={oppgaveVisningsinfo?.reservertAvIdent}
-            brukerInformasjon={brukerInformasjon}
-          />
+          {!behandlingErAvsluttet && (
+            <SaksmenyDropdown
+              flyt={flyt}
+              visning={visning}
+              behandling={behandling}
+              reservertAvIdent={oppgaveVisningsinfo?.reservertAvIdent}
+              brukerInformasjon={brukerInformasjon}
+            />
+          )}
         </HStack>
       )}
     </div>
