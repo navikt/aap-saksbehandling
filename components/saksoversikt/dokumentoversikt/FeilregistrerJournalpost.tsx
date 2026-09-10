@@ -57,7 +57,7 @@ export const FeilregistrerJournalpostModal = ({
           <Button variant="primary" onClick={feilregistrer} loading={isLoading}>
             Ja, opphev
           </Button>
-          <Button variant="secondary" disabled={isLoading}>
+          <Button variant="secondary" onClick={onClose} disabled={isLoading}>
             Nei, avbryt
           </Button>
         </Modal.Footer>
@@ -101,7 +101,7 @@ export const FeilregistrerJournalpostModal = ({
         <Button data-color="danger" variant="primary" onClick={feilregistrer} loading={isLoading}>
           Ja, feilregistrer
         </Button>
-        <Button variant="secondary" disabled={isLoading}>
+        <Button variant="secondary" onClick={onClose} disabled={isLoading}>
           Nei, avbryt
         </Button>
       </Modal.Footer>

@@ -6,7 +6,7 @@ import {
   hentRettighetsperiodeGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -20,7 +20,9 @@ export const VurderRettighetsperiodeMedDataFetching = async ({ behandlingsrefera
     return <ApiException apiResponses={[rettighetsperiodeGrunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, rettighetsperiodeGrunnlag.data.vurdering != null)) {
+  if (
+    !skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, rettighetsperiodeGrunnlag.data.vurdering != null)
+  ) {
     return null;
   }
 

@@ -5,7 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { YrkesskadeGrunnlagBeregning } from 'components/behandlinger/grunnlag/yrkesskadegrunnlagberegning/YrkesskadeGrunnlagBeregning';
 
 interface Props {
@@ -20,7 +20,12 @@ export const YrkesskadeGrunnlagBeregningMedDataFetching = async ({ behandlingsre
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseSteg(stegData, grunnlag.data.vurderinger != null && grunnlag.data.vurderinger.length > 0)) {
+  if (
+    !skalViseStegIkkePeriodisertGrunnlag(
+      stegData.avklaringsbehov,
+      grunnlag.data.vurderinger != null && grunnlag.data.vurderinger.length > 0
+    )
+  ) {
     return null;
   }
 
