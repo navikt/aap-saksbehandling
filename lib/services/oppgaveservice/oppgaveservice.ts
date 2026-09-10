@@ -75,6 +75,7 @@ export async function hentOppgaveVisningsinfo(behandlingReferanse: string) {
           harFortroligAdresse: false,
           harStrengtFortroligAdresse: false,
         },
+        tilhørerUtlandEnhet: false,
       },
     };
 

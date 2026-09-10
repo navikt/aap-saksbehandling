@@ -125,6 +125,13 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
             </div>
           ))}
+          {oppgaveVisningsinfo?.tilhørerUtlandEnhet && (
+            <div className={styles.oppgavestatus}>
+              <Tag variant="strong" size="small" data-color="info">
+                Utland
+              </Tag>
+            </div>
+          )}
           {visHarUlesteDokumenter && (
             <div className={styles.oppgavestatus}>
               <SvarFraBehandler
