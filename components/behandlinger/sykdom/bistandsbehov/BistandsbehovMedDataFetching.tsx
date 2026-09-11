@@ -20,8 +20,8 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     hentBehandling(behandlingsreferanse),
   ]);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(behandling)) {
+    return <ApiException apiResponses={[grunnlag, behandling]} />;
   }
 
   if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
@@ -36,10 +36,10 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     stegData.erIkkePåVent
   );
 
-  const vurderingsbehov =
-    behandling.type === 'SUCCESS'
-      ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
-      : [];
+  const vurderingsbehov = behandling.data.vurderingsbehovOgÅrsaker.flatMap(
+    (behovOgÅrsak) => behovOgÅrsak.vurderingsbehov
+  );
+
   const erRevurderingAvOvergangUføre = vurderingsbehov.some((behov) => behov.type === 'OVERGANG_UFORE');
 
   return (

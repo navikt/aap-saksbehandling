@@ -6,7 +6,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { MeldepliktPeriodisertFrontend } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktPeriodisertFrontend';
-import { StegData } from 'lib/utils/steg';
+import { skalViseStegForPeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -18,6 +18,10 @@ export const MeldepliktMedDataFetching = async ({ behandlingsreferanse, stegData
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
+  }
+
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
+    return null;
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;

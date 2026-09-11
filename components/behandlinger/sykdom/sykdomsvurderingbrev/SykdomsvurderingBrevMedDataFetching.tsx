@@ -6,7 +6,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { StegData } from 'lib/utils/steg';
+import { StegData, skalViseStegIkkePeriodisertGrunnlag } from 'lib/utils/steg';
 import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrev';
 
 interface Props {
@@ -22,6 +22,10 @@ export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsreferanse
 
   if (isError(grunnlag) || isError(foreløpigBehandlingsutfall)) {
     return <ApiException apiResponses={[grunnlag, foreløpigBehandlingsutfall]} />;
+  }
+
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.historiskeVurderinger.length > 0)) {
+    return null;
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.kanSaksbehandle;
