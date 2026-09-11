@@ -1,4 +1,4 @@
-import { render, screen } from 'lib/test/CustomRender';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import {
@@ -84,19 +84,31 @@ describe('Samordning gradering', () => {
     expect(screen.queryByText('Relevant informasjon fra søknaden')).not.toBeInTheDocument();
   });
 
-  test('skal kunne redigere ytelse, periode og gradering for en manuell rad', () => {
+  test('skal kunne redigere ytelse, periode og gradering for en manuell rad', async () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
-    expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeVisible();
-    expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toBeEnabled();
 
-    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toBeEnabled();
+    await user.click(screen.getByRole('button', { name: 'Rediger' }));
 
-    expect(screen.getByRole('textbox', { name: 'Til og med' })).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Til og med' })).toBeEnabled();
+    expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('SYKEPENGER');
+    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toHaveValue(
+      format(subWeeks(new Date(), 3), 'dd.MM.yyyy')
+    );
+    expect(screen.getByRole('textbox', { name: 'Til og med' })).toHaveValue(format(new Date(), 'dd.MM.yyyy'));
+    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toHaveValue('20');
+  });
 
-    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toBeVisible();
-    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toBeEnabled();
+  test('lagrer endringer fra redigeringsmodalen tilbake til tabellen', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Rediger' }));
+
+    const gradering = screen.getByRole('textbox', { name: 'Utbetalingsgrad' });
+    await user.clear(gradering);
+    await user.type(gradering, '60');
+    await user.click(screen.getByRole('button', { name: 'Lagre endringer' }));
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    expect(within(rader[1]).getByText('60')).toBeVisible();
   });
 
   test('kan slette en rad', () => {
@@ -159,8 +171,8 @@ describe('Samordning gradering', () => {
     const tom = screen.getByRole('textbox', { name: 'Til og med' });
     await user.type(tom, '01.10.2025');
 
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-    expect(screen.getByText('Fra og med dato kan ikke være etter til og med dato')).toBeVisible();
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+    expect(await screen.findByText('Fra og med dato kan ikke være etter til og med dato')).toBeVisible();
   });
 });
 
@@ -199,6 +211,31 @@ describe('kopiering av perioder fra oppslag', () => {
     },
   };
 
+  const grunnlagMedFerieISykepengeperiode: SamordningGraderingGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    feriePerioder: [],
+    historiskeVurderinger: [],
+    ytelser: [],
+    vurdering: {
+      begrunnelse: 'Dette er min vurdering som er bekreftet',
+      vurderinger: [
+        {
+          ytelseType: 'SYKEPENGER',
+          gradering: 100,
+          manuell: true,
+          periode: { fom: '2026-01-01', tom: '2026-01-30' },
+        },
+        {
+          ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
+          gradering: 0,
+          manuell: true,
+          periode: { fom: '2026-01-10', tom: '2026-01-16' },
+        },
+      ],
+      vurderingerMeta: {},
+    },
+  };
+
   test('kopierer én periode fra oppslaget til en ny rad', async () => {
     render(
       <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
@@ -206,14 +243,11 @@ describe('kopiering av perioder fra oppslag', () => {
 
     await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
 
-    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
-    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
-    const ytelseFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
-    expect(fomFelter).toHaveLength(2);
-    expect(fomFelter[1]).toHaveValue('01.03.2025');
-    expect(tomFelter[1]).toHaveValue('31.03.2025');
-    expect(ytelseFelter[1]).toHaveValue('SYKEPENGER');
+    expect(rader).toHaveLength(3);
+    expect(within(rader[2]).getByText('01.03.2025 - 31.03.2025')).toBeVisible();
+    expect(within(rader[2]).getByText('Sykepenger')).toBeVisible();
   });
 
   test('kopierer alle perioder fra oppslaget uten å endre eksisterende rader', async () => {
@@ -223,18 +257,17 @@ describe('kopiering av perioder fra oppslag', () => {
 
     await user.click(screen.getByRole('button', { name: 'Kopier alle perioder' }));
 
-    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
-    const ytelseFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
-    expect(fomFelter).toHaveLength(3);
-    expect(fomFelter[0]).toHaveValue('01.01.2025');
-    expect(ytelseFelter[0]).toHaveValue('PLEIEPENGER');
+    expect(rader).toHaveLength(4);
+    expect(within(rader[1]).getByText('01.01.2025 - 31.01.2025')).toBeVisible();
+    expect(within(rader[1]).getByText('Pleiepenger')).toBeVisible();
 
-    expect(fomFelter[1]).toHaveValue('01.03.2025');
-    expect(ytelseFelter[1]).toHaveValue('SYKEPENGER');
+    expect(within(rader[2]).getByText('01.03.2025 - 31.03.2025')).toBeVisible();
+    expect(within(rader[2]).getByText('Sykepenger')).toBeVisible();
 
-    expect(fomFelter[2]).toHaveValue('01.05.2025');
-    expect(ytelseFelter[2]).toHaveValue('FORELDREPENGER');
+    expect(within(rader[3]).getByText('01.05.2025 - 31.05.2025')).toBeVisible();
+    expect(within(rader[3]).getByText('Foreldrepenger')).toBeVisible();
   });
 
   test('setter ikke samordningsgrad på kopierte rader', async () => {
@@ -244,7 +277,9 @@ describe('kopiering av perioder fra oppslag', () => {
 
     await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
 
-    expect(screen.getAllByRole('textbox', { name: 'Utbetalingsgrad' })[1]).toHaveValue('');
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    expect(within(rader[2]).getAllByRole('cell')[2]).toBeEmptyDOMElement();
   });
 
   test('viser ikke kopier-knapper når oppslaget er tomt', () => {
@@ -270,6 +305,46 @@ describe('kopiering av perioder fra oppslag', () => {
 
     expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
+  });
+
+  test('lar ferie i sykepengeperiode velges også når autoSplittSykepenger-toggelen er av', async () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+        <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+
+    expect(
+      within(screen.getByRole('combobox', { name: 'Ytelsestype' })).getByRole('option', {
+        name: 'Ferie i sykepengeperiode',
+      })
+    ).toBeInTheDocument();
+  });
+
+  test('splitter ikke sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er av', () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+        <SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    expect(rader).toHaveLength(3);
+    expect(within(rader[1]).getByText('01.01.2026 - 30.01.2026')).toBeVisible();
+  });
+
+  test('splitter sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er på', () => {
+    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    expect(rader).toHaveLength(4);
+    expect(within(rader[1]).getByText('01.01.2026 - 09.01.2026')).toBeVisible();
+    expect(within(rader[2]).getByText('10.01.2026 - 16.01.2026')).toBeVisible();
+    expect(within(rader[3]).getByText('17.01.2026 - 06.02.2026')).toBeVisible();
   });
 });
 

@@ -1,15 +1,16 @@
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PencilIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
 import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { ValuePair } from 'components/form/FormField';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { SamordningYtelsestype } from 'lib/types/types';
-import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
+import {
+  RedigerYtelseModal,
+  SamordnetYtelse,
+  ytelseLabel,
+} from 'components/behandlinger/samordning/samordninggradering/RedigerYtelseModal';
+import { useState } from 'react';
 import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
+import { medAutoSplitt } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
+import { useFeatureFlag } from 'context/UnleashContext';
 
-import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
@@ -18,51 +19,37 @@ interface Props {
   fieldArray: UseFieldArrayReturn<SamordningGraderingFormfields, 'vurderteSamordninger'>;
 }
 
-const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
-  {
-    value: undefined,
-    label: 'Velg',
-  },
-  {
-    value: 'SYKEPENGER',
-    label: 'Sykepenger',
-  },
-  {
-    value: 'FORELDREPENGER',
-    label: 'Foreldrepenger',
-  },
-  {
-    value: 'PLEIEPENGER',
-    label: 'Pleiepenger',
-  },
-  {
-    value: 'SVANGERSKAPSPENGER',
-    label: 'Svangerskapspenger',
-  },
-  {
-    value: 'OMSORGSPENGER',
-    label: 'Omsorgspenger',
-  },
-  {
-    value: 'OPPLÆRINGSPENGER',
-    label: 'Opplæringspenger',
-  },
-  {
-    value: 'FERIE_I_SYKEPENGEPERIODE',
-    label: 'Ferie i sykepengeperiode',
-  },
-];
+type SamordnetYtelseMedIndeks = SamordnetYtelse & { _index: number };
+
+function tilTall(verdi: unknown): number | undefined {
+  if (verdi === null || verdi === undefined || `${verdi}`.trim() === '') {
+    return undefined;
+  }
+  const tall = Number(verdi);
+  return Number.isNaN(tall) ? undefined : tall;
+}
+
+type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; indeks: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
-  const { fields, remove, append } = fieldArray;
+  const { remove, append, update } = fieldArray;
+  const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
+  const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
 
-  function leggTilRad() {
-    append({
-      manuell: true,
-      ytelseType: undefined,
-      periode: { fom: '', tom: '' },
-      gradering: undefined,
-    });
+  const rader = form.watch('vurderteSamordninger') ?? [];
+  const raderMedIndeks: SamordnetYtelseMedIndeks[] = rader.map((rad, index) => ({ ...rad, _index: index }));
+  const utfylteRader = raderMedIndeks.filter((rad) => rad.ytelseType && rad.periode.fom && rad.periode.tom);
+  const forhåndsvisning = medAutoSplitt(utfylteRader, autoSplittSykepenger);
+
+  function lagreRad(verdier: SamordnetYtelse) {
+    const rad = { ...verdier, gradering: tilTall(verdier.gradering), manuell: true };
+
+    if (modalTilstand?.modus === 'rediger') {
+      update(modalTilstand.indeks, rad);
+    } else {
+      append(rad);
+    }
+    setModalTilstand(null);
   }
 
   return (
@@ -79,7 +66,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           </BodyShort>
         </VStack>
         <VStack gap={'space-8'}>
-          <TableStyled>
+          <TableStyled aria-label="Perioder med samordning">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Periode</Table.HeaderCell>
@@ -89,108 +76,53 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {fields.map((field, index) => (
-                <Table.Row key={field.id}>
-                  <Table.DataCell>
-                    <HStack align={'center'} gap={'space-4'}>
-                      <DateInputWrapper
-                        label="Fra og med"
-                        control={form.control}
-                        name={`vurderteSamordninger.${index}.periode.fom`}
-                        hideLabel={true}
-                        rules={{
-                          required: 'Du må velge dato for periodestart',
-                          validate: {
-                            gyldigDato: (value) => validerDato(value as string),
-                            ikkeFoerStart: (value, formValues) =>
-                              value &&
-                              erDatoFoerDato(formValues.vurderteSamordninger[index].periode.tom, value as string)
-                                ? 'Fra og med dato kan ikke være etter til og med dato'
-                                : undefined,
-                          },
-                        }}
-                        readOnly={readOnly}
-                      />
-                      {'-'}
-                      <DateInputWrapper
-                        label="Til og med"
-                        control={form.control}
-                        name={`vurderteSamordninger.${index}.periode.tom`}
-                        hideLabel={true}
-                        rules={{
-                          required: 'Du må velge dato for periodeslutt',
-                          validate: (value) => {
-                            return validerDato(value as string);
-                          },
-                        }}
-                        readOnly={readOnly}
-                      />
-                    </HStack>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <SelectWrapper
-                      label="Ytelsestype"
-                      size={'small'}
-                      hideLabel
-                      control={form.control}
-                      readOnly={readOnly}
-                      name={`vurderteSamordninger.${index}.ytelseType`}
-                      rules={{ required: 'Du må velge en ytelsetype' }}
-                    >
-                      {ytelsesoptions.map((ytelse, index) => (
-                        <option value={ytelse.value} key={index}>
-                          {ytelse.label}
-                        </option>
-                      ))}
-                    </SelectWrapper>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <TextFieldWrapper
-                      name={`vurderteSamordninger.${index}.gradering`}
-                      label={'Utbetalingsgrad'}
-                      hideLabel
-                      type={'text'}
-                      size={'small'}
-                      className={styles.utbetalingsgrad}
-                      control={form.control}
-                      readOnly={readOnly}
-                      rules={{
-                        required: 'Du må velge utbetalingsgrad',
-                        validate: (value) => {
-                          if (Number.isNaN(Number(value))) {
-                            return 'Prosent må angis med siffer';
-                          }
-                          if (Number(value) < 0) {
-                            return 'Utbetalingsgrad kan ikke være mindre enn 0%';
-                          }
-                          if (Number(value) > 100) {
-                            return 'Utbetalingsgrad kan ikke være mer enn 100%';
-                          }
-                        },
-                      }}
-                    />
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <Button
-                      size={'small'}
-                      icon={<TrashIcon title={'Slett'} />}
-                      variant={'tertiary'}
-                      type={'button'}
-                      onClick={() => remove(index)}
-                      disabled={readOnly}
-                    />
-                  </Table.DataCell>
-                </Table.Row>
-              ))}
+              {(() => {
+                const alleredeVist = new Set<number>();
+                return forhåndsvisning.map((rad, index) => {
+                  const erFørsteVisningAvRad = !alleredeVist.has(rad._index);
+                  alleredeVist.add(rad._index);
+                  return (
+                    <Table.Row key={index}>
+                      <Table.DataCell>
+                        {rad.periode.fom} - {rad.periode.tom}
+                      </Table.DataCell>
+                      <Table.DataCell>{ytelseLabel(rad.ytelseType)}</Table.DataCell>
+                      <Table.DataCell>{rad.gradering}</Table.DataCell>
+                      <Table.DataCell>
+                        {erFørsteVisningAvRad && (
+                          <HStack gap={'space-4'}>
+                            <Button
+                              size={'small'}
+                              icon={<PencilIcon title={'Rediger'} />}
+                              variant={'tertiary'}
+                              type={'button'}
+                              onClick={() => setModalTilstand({ modus: 'rediger', indeks: rad._index })}
+                              disabled={readOnly}
+                            />
+                            <Button
+                              size={'small'}
+                              icon={<TrashIcon title={'Slett'} />}
+                              variant={'tertiary'}
+                              type={'button'}
+                              onClick={() => remove(rad._index)}
+                              disabled={readOnly}
+                            />
+                          </HStack>
+                        )}
+                      </Table.DataCell>
+                    </Table.Row>
+                  );
+                });
+              })()}
             </Table.Body>
           </TableStyled>
-          <HStack>
+          <HStack gap={'space-8'}>
             <Button
               size={'small'}
               type={'button'}
               variant={'tertiary'}
               icon={<PlusCircleIcon />}
-              onClick={leggTilRad}
+              onClick={() => setModalTilstand({ modus: 'ny' })}
               disabled={readOnly}
             >
               Legg til
@@ -198,6 +130,13 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           </HStack>
         </VStack>
       </VStack>
+      {modalTilstand && (
+        <RedigerYtelseModal
+          initialValues={modalTilstand.modus === 'rediger' ? rader[modalTilstand.indeks] : undefined}
+          onLagre={lagreRad}
+          onLukk={() => setModalTilstand(null)}
+        />
+      )}
     </Box>
   );
 };
