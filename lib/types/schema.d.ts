@@ -15382,6 +15382,7 @@ export interface components {
       'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
+      kvalitetssikrerFatterVedtak: boolean;
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.totrinnsvurdering.TotrinnsVurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto': {
@@ -17992,8 +17993,6 @@ export interface components {
       begrunnelse: string;
       /** @enum {string|null} */
       brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
-      /** @enum {string|null} */
-      fase?: 'OPPSTARTSFASE' | 'UTVIKLINGSFASE' | null;
       /**
        * Format: date
        * @example 2025-04-01
