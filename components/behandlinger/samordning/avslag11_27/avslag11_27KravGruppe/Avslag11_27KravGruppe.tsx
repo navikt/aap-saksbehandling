@@ -1,16 +1,18 @@
 'use client';
 
 import { TasklistIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, HStack, Label, VStack } from '@navikt/ds-react';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Avslag11_27Grunnlag, Avslag11_27Vurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { JaEllerNei } from 'lib/utils/form';
-import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { subDays } from 'date-fns';
 
-import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
+import {
+  Avslag11_27FormFields,
+  mapVurderingTilKravVurderingFormField,
+} from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
 import { Avslag11_27TidligereVurdering } from 'components/behandlinger/samordning/avslag11_27/avslag11_27tidligerevurdering/Avslag11_27TidligereVurdering';
 import { Avslag11_27Vurdering as Avslag11_27VurderingSkjema } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
@@ -27,13 +29,14 @@ interface Props {
   kravIndex: number;
   krav: Avslag11_27Grunnlag['krav'][0];
   vedtattVurdering?: Avslag11_27Vurdering | null;
-  nåværendeVurdering?: Avslag11_27Vurdering | null;
   readonly: boolean;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
-  visLeggTilVurderingKnapp: boolean;
   brukersYtelseAlternativer: string[];
   nesteKravSøknadsdato?: string;
+  visNyVurdering?: boolean;
+  lukkTeller?: number;
+  onSlettVurdering: () => void;
 }
 
 export const Avslag11_27KravGruppe = ({
@@ -41,33 +44,23 @@ export const Avslag11_27KravGruppe = ({
   kravIndex,
   krav,
   vedtattVurdering,
-  nåværendeVurdering,
   readonly,
   accordionsSignal,
   erAktivUtenAvbryt,
-  visLeggTilVurderingKnapp,
   brukersYtelseAlternativer,
   nesteKravSøknadsdato,
+  visNyVurdering,
+  lukkTeller,
+  onSlettVurdering,
 }: Props) => {
   const vurderingFormField = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
 
-  // Vis skjema direkte hvis: ikke revurdering ELLER nåværende vurdering finnes
-  const [visNyVurdering, setVisNyVurdering] = useState(!visLeggTilVurderingKnapp || !!nåværendeVurdering);
-
   const handleSlettNyVurdering = () => {
-    form.setValue(`avslag11_27vurderinger.${kravIndex}.vurdering`, {
-      referanse: krav.referanse,
-      behøverVurdering: true,
-      erNyVurdering: true,
-      begrunnelse: '',
-      harAnnenFullYtelse: undefined,
-      brukersYtelse: undefined,
-      brukersYtelseTom: undefined,
-      harSykepengegrunnlagOver2G: undefined,
-      harArbeidsgiverSykepengerUtbetaling: undefined,
-      skalAvslås1127: undefined,
-    });
-    setVisNyVurdering(false);
+    form.setValue(
+      `avslag11_27vurderinger.${kravIndex}.vurdering`,
+      mapVurderingTilKravVurderingFormField(krav.referanse, null)
+    );
+    onSlettVurdering();
   };
 
   const vurderingStatusForNyVurdering = (() => {
@@ -87,14 +80,16 @@ export const Avslag11_27KravGruppe = ({
       className={styles.kravGruppe}
     >
       <Box background="neutral-soft" padding="space-12" className={styles.kravHeader}>
-        <HStack gap="space-16" align="center">
-          <TasklistIcon fontSize="1.5rem" aria-hidden />
-          <div>
-            <BodyShort className={styles.detailgray} size="small">
-              {krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}
-            </BodyShort>
-            <Label size="medium">Vurder krav {krav.søknadsdokument}</Label>
-          </div>
+        <HStack gap="space-16" align="center" justify="space-between">
+          <HStack gap="space-16" align="center">
+            <TasklistIcon fontSize="1.5rem" aria-hidden />
+            <div>
+              <BodyShort className={styles.detailgray} size="small">
+                {krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}
+              </BodyShort>
+              <Label size="medium">Vurder krav {krav.søknadsdokument}</Label>
+            </div>
+          </HStack>
         </HStack>
       </Box>
       <Box padding="space-16">
@@ -113,6 +108,7 @@ export const Avslag11_27KravGruppe = ({
 
           {visNyVurdering && (
             <NyVurderingExpandableCard
+              key={`${krav.referanse}-${lukkTeller ?? 0}`}
               accordionsSignal={accordionsSignal}
               fraDato={new Date(krav.søknadsdato)}
               nestePeriodeFraDato={nesteKravSøknadsdato ? new Date(nesteKravSøknadsdato) : null}
@@ -124,7 +120,9 @@ export const Avslag11_27KravGruppe = ({
               onSlettVurdering={handleSlettNyVurdering}
               index={vedtattVurdering ? 1 : 0}
               readonly={readonly}
-              initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
+              initiellEkspandert={
+                lukkTeller ? false : skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)
+              }
             >
               <Avslag11_27VurderingSkjema
                 form={form}
@@ -133,18 +131,6 @@ export const Avslag11_27KravGruppe = ({
                 brukersYtelseAlternativer={brukersYtelseAlternativer}
               />
             </NyVurderingExpandableCard>
-          )}
-
-          {visLeggTilVurderingKnapp && !visNyVurdering && !readonly && (
-            <Button
-              type="button"
-              variant="secondary"
-              size="small"
-              className="fit-content"
-              onClick={() => setVisNyVurdering(true)}
-            >
-              Legg til vurdering
-            </Button>
           )}
         </VStack>
       </Box>

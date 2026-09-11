@@ -1,5 +1,5 @@
 import { Avslag11_27Krav } from 'lib/types/types';
-import { BodyShort, Checkbox, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Table, Tag, VStack } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';
@@ -12,6 +12,7 @@ interface Props {
   ingenVurderingerValgtFeil: string | null;
   readonly: boolean;
   vedtatteReferanser: string[];
+  vurderteReferanser: string[];
 }
 
 const kravTypeLabels: Record<string, string> = {
@@ -33,6 +34,7 @@ export const Avslag11_27KravTabell = ({
   ingenVurderingerValgtFeil,
   readonly,
   vedtatteReferanser,
+  vurderteReferanser,
 }: Props) => {
   return (
     <VStack gap={'space-16'}>
@@ -62,29 +64,42 @@ export const Avslag11_27KravTabell = ({
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {avslag11_27krav.map((krav, index) => (
-            <Table.Row key={index}>
-              <Table.DataCell textSize={'small'}>{krav.søknadsdokument}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{formaterKravType(krav.type)}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                {krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}
-              </Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                {krav.muligRettighetFra ? formaterDatoForFrontend(krav.muligRettighetFra) : '-'}
-              </Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                <Checkbox
-                  size={'small'}
-                  hideLabel
-                  checked={selectedReferanser.includes(krav.referanse)}
-                  onChange={() => onToggle(krav.referanse)}
-                  readOnly={readonly || vedtatteReferanser.includes(krav.referanse)}
-                >
-                  Vurder
-                </Checkbox>
-              </Table.DataCell>
-            </Table.Row>
-          ))}
+          {avslag11_27krav.map((krav, index) => {
+            const erValgt = selectedReferanser.includes(krav.referanse);
+            const erVurdert =
+              vedtatteReferanser.includes(krav.referanse) || vurderteReferanser.includes(krav.referanse);
+            const erEnesteUvurderteKrav = avslag11_27krav.length === 1 && !erVurdert;
+
+            return (
+              <Table.Row key={index}>
+                <Table.DataCell textSize={'small'}>{krav.søknadsdokument}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{formaterKravType(krav.type)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {krav.muligRettighetFra ? formaterDatoForFrontend(krav.muligRettighetFra) : '-'}
+                </Table.DataCell>
+                <Table.DataCell textSize={'small'}>
+                  {erEnesteUvurderteKrav ? (
+                    <Tag variant="warning" size="small">
+                      Må vurderes
+                    </Tag>
+                  ) : (
+                    <Button
+                      type="button"
+                      size="small"
+                      variant={erValgt ? 'primary' : 'secondary'}
+                      onClick={() => onToggle(krav.referanse)}
+                      disabled={readonly}
+                    >
+                      {erValgt ? 'Lukk' : 'Vurder'}
+                    </Button>
+                  )}
+                </Table.DataCell>
+              </Table.Row>
+            );
+          })}
         </Table.Body>
       </TableStyled>
       {ingenVurderingerValgtFeil && (
