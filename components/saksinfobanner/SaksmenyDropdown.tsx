@@ -35,6 +35,8 @@ export const SaksmenyDropdown = ({
   behandling: DetaljertBehandling;
   reservertAvIdent?: string | null;
 }) => {
+  const avslag11_27Enable = useFeatureFlag('Avslag11_27');
+
   const { saksnummer } = useParamsMedType();
   const innloggetBruker = useInnloggetBruker();
   const innloggetBrukerKanSaksbehandle = brukerKanSaksbehandle(innloggetBruker);
@@ -47,6 +49,7 @@ export const SaksmenyDropdown = ({
   const [visAvbrytAktivitetspliktbehandlingModal, settVisAvbrytAktivitetspliktbehandlingModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
+  const [visAvslag1127Modal, settVisAvslag1127Modal] = useState(false);
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
   const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
@@ -67,52 +70,38 @@ export const SaksmenyDropdown = ({
   const behandlingErRevurdering = typeBehandling && typeBehandling === 'Revurdering';
   const behandlingErAktivitetspliktbehandling =
     typeBehandling && (typeBehandling === 'Aktivitetsplikt' || typeBehandling === 'Aktivitetsplikt11_9');
-  const behandlingErIkkeAvsluttet = behandling.status !== 'AVSLUTTET';
   const behandlingErIkkeIverksatt = behandling.status !== 'IVERKSETTES';
-  const [visAvslag1127Modal, settVisAvslag1127Modal] = useState(false);
 
   const visValgForÅTrekkeSøknad =
-    !behandlerEnSøknadSomSkalTrekkes &&
-    innloggetBrukerKanSaksbehandle &&
-    behandlingErFørstegangsbehandling &&
-    behandlingErIkkeAvsluttet;
+    !behandlerEnSøknadSomSkalTrekkes && innloggetBrukerKanSaksbehandle && behandlingErFørstegangsbehandling;
 
   const visValgForÅAvbryteRevurdering =
     behandlingErIkkeIverksatt &&
     innloggetBrukerErBeslutter &&
     !behandlerRevurderingSomSkalAvbrytes &&
     innloggetBrukerKanSaksbehandle &&
-    behandlingErRevurdering &&
-    behandlingErIkkeAvsluttet;
+    behandlingErRevurdering;
 
   const visValgForÅAvbryteAktivitetspliktbehandling =
     behandlingErIkkeIverksatt &&
     innloggetBrukerKanSaksbehandle &&
     behandlingErAktivitetspliktbehandling &&
-    behandlingErIkkeAvsluttet &&
     !behandlerAktivitetspliktbehandlingSomSkalAvbrytes;
 
   const visValgForÅTrekkeKlage =
-    innloggetBrukerKanSaksbehandle &&
-    !harAlleredeValgtTrekkKlage &&
-    behandlingErIkkeAvsluttet &&
-    behandling?.type === 'Klage';
+    innloggetBrukerKanSaksbehandle && !harAlleredeValgtTrekkKlage && behandling?.type === 'Klage';
 
   const visValgForÅOverstyreStarttidspunkt =
     innloggetBrukerKanSaksbehandle &&
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
-    behandlingErIkkeAvsluttet &&
     behandlingErIkkeIverksatt;
 
-  const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle && behandlingErIkkeAvsluttet;
-
-  const avslag11_27Enable = useFeatureFlag('Avslag11_27');
+  const visValgForÅSetteMarkering = innloggetBrukerKanSaksbehandle;
 
   const visValgForAvslag1127 =
     avslag11_27Enable &&
     behandlingErIkkeIverksatt &&
     innloggetBrukerKanSaksbehandle &&
-    behandlingErIkkeAvsluttet &&
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     !harAlleredeValgtAvslag1127;
 
@@ -131,11 +120,9 @@ export const SaksmenyDropdown = ({
 
         <Dropdown.Menu className={styles.saksmenyDropdown}>
           <Dropdown.Menu.GroupedList>
-            {behandlingErIkkeAvsluttet && (
-              <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
-                Sett behandling på vent
-              </Dropdown.Menu.GroupedList.Item>
-            )}
+            <Dropdown.Menu.GroupedList.Item onClick={() => setSettBehandlingPåVentmodalIsOpen(true)}>
+              Sett behandling på vent
+            </Dropdown.Menu.GroupedList.Item>
             {visValgForÅTrekkeSøknad && (
               <Dropdown.Menu.GroupedList.Item onClick={() => settVisTrekkSøknadModal(true)}>
                 Trekk søknad
