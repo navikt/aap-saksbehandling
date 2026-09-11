@@ -37,9 +37,9 @@ export const SaksmenyDropdown = ({
 }) => {
   const { saksnummer } = useParamsMedType();
   const innloggetBruker = useInnloggetBruker();
-
   const innloggetBrukerKanSaksbehandle = brukerKanSaksbehandle(innloggetBruker);
   const innloggetBrukerErBeslutter = brukerErBeslutter(innloggetBruker);
+
   const [settBehandlingPåVentmodalIsOpen, setSettBehandlingPåVentmodalIsOpen] = useState(false);
   const [visTrekkSøknadModal, settVisTrekkSøknadModal] = useState(false);
   const [visTrekkKlageModal, settVisTrekkKlageModal] = useState(false);
