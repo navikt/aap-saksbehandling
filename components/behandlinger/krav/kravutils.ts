@@ -420,7 +420,9 @@ export function byggKravVurderingerFraSkjema(
    * Saksbehandler skal derfor kun bekrefte de eksisterende nye vurderingene, uten at det er behov for å gjøre ytterligere endringer.
    */
   if (endredeVurderinger.length === 0) {
-    return (grunnlag?.nyeVurderinger ?? []).map((v) => feltTilLøsning(kravVurderingTilFormFields(v), v.referanse));
+    return (grunnlag?.nyeVurderinger ?? [])
+      .filter(kravVurderingIsKravVurderingForSøknad)
+      .map((v) => feltTilLøsning(kravVurderingTilFormFields(v), v.referanse));
   }
 
   return endredeVurderinger.map(([referanse, felt]) =>
