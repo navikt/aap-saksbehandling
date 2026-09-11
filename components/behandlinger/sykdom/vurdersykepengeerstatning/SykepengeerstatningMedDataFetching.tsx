@@ -6,7 +6,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { Sykepengeerstatning } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/Sykepengeerstatning';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegForPeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
@@ -20,12 +20,7 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (
-    !skalViseSteg(
-      stegData,
-      grunnlag.data.sisteVedtatteVurderinger.length > 0 || grunnlag.data.nyeVurderinger.length > 0
-    )
-  ) {
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
     return null;
   }
 

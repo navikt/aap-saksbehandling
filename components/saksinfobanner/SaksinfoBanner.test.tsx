@@ -28,12 +28,13 @@ const avsluttetSak: SaksInfo = {
 };
 
 const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
+  tilhørerUtlandEnhet: false,
   harUlesteDokumenter: false,
   skjermingInfo: { erSkjermet: false, harFortroligAdresse: false, harStrengtFortroligAdresse: false },
   id: 123,
   versjon: 0,
   markeringer: [],
-  reservertAvIdent: 'navIdent',
+  reservertAvIdent: 'navIdent'
 };
 
 const visning: FlytVisning = {

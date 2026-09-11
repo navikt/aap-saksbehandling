@@ -1,13 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { KravGrunnlag, KravVurdering, RelevantKrav, RelevantKravLøsning, SøknadUtenKrav } from 'lib/types/types';
+import {
+  KravGrunnlag,
+  KravVurdering,
+  MigrertKravVurdering,
+  RelevantKrav,
+  RelevantKravLøsning,
+  SøknadUtenKrav,
+} from 'lib/types/types';
 import {
   byggInitielleVurderinger,
   byggKravVurderingerFraSkjema,
+  byggMigrertKravLøsningFraSkjema,
+  emptyMigrertKravFormFields,
   finnKravVurderingByReferanse,
   finnSøknadUtenKravByReferanse,
   hentOriginaleFormFelter,
   kravVurderingTilFormFields,
   KravVurderingFormFields,
+  migrertKravTilFormFields,
   søknadUtenKravTilFormFields,
 } from 'components/behandlinger/krav/kravutils';
 import { JaEllerNei, MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
@@ -34,6 +44,23 @@ function søknadUtenKrav(overrides: Partial<SøknadUtenKrav> = {}): SøknadUtenK
   return {
     journalpostId: { identifikator: 'jp-ny' },
     mottattTidspunkt: '2025-05-01T12:30:00',
+    ...overrides,
+  };
+}
+
+function migrertKrav(overrides: Partial<MigrertKravVurdering> = {}): MigrertKravVurdering {
+  return {
+    type: 'MIGRERT_KRAV',
+    referanse: 'migrert-1',
+    arenaSaksnummer: '2024-12345',
+    rettighetstype: 'ORDINÆR',
+    muligRettFra: '2025-04-01',
+    virkningstidspunktArena: '2025-04-01',
+    resterendeKvoteOrdinær: 100,
+    begrunnelse: 'Migrert fra Arena',
+    opprettet: '2025-04-01T10:30:00Z',
+    vurdertAv: bruker,
+    vurdertIBehandling: behandlingId,
     ...overrides,
   };
 }
@@ -453,5 +480,95 @@ describe('byggKravVurderingerFraSkjema - §22-13 femte og syvende ledd', () => {
     const løsning = relevantKravLøsning(felter);
 
     expect(løsning.overstyrMuligRettFra).toBeUndefined();
+  });
+});
+
+describe('byggMigrertKravLøsningFraSkjema', () => {
+  it('sender ikke inn noe når skjemaet er lukket og det ikke finnes noe migrert krav fra før', () => {
+    const løsning = byggMigrertKravLøsningFraSkjema(grunnlag(), emptyMigrertKravFormFields(), false);
+
+    expect(løsning).toBeUndefined();
+  });
+
+  it('sender ikke inn noe når skjemaet er lukket og migrert krav kun finnes i vedtatteVurderinger', () => {
+    const krav = migrertKrav({ referanse: 'migrert-1' });
+    const felter = migrertKravTilFormFields(krav);
+
+    const løsning = byggMigrertKravLøsningFraSkjema(grunnlag({ vedtatteVurderinger: [krav] }), felter, false);
+
+    expect(løsning).toBeUndefined();
+  });
+
+  it('sender inn migrert krav på nytt når skjemaet er lukket og kravet finnes i nyeVurderinger - ellers vil backend tolke fraværet som en sletting', () => {
+    const krav = migrertKrav({ referanse: 'migrert-1' });
+    const løsning = byggMigrertKravLøsningFraSkjema(
+      grunnlag({ nyeVurderinger: [krav] }),
+      emptyMigrertKravFormFields(),
+      false
+    );
+
+    expect(løsning).toEqual({
+      kravType: 'MIGRERT_KRAV',
+      arenaSaksnummer: krav.arenaSaksnummer,
+      rettighetstype: krav.rettighetstype,
+      muligRettFra: krav.muligRettFra,
+      virkningstidspunktArena: krav.virkningstidspunktArena,
+      resterendeKvoteOrdinær: krav.resterendeKvoteOrdinær,
+      begrunnelse: krav.begrunnelse,
+      referanse: 'migrert-1',
+    });
+  });
+
+  it('sender inn migrert krav fra nyeVurderinger uansett hva som er lagt i skjemafeltene når det er lukket', () => {
+    const krav = migrertKrav({ referanse: 'migrert-1', begrunnelse: 'Original begrunnelse' });
+    const uendretFelter = migrertKravTilFormFields(krav);
+    const endretFelter = { ...uendretFelter, begrunnelse: 'Skal ikke brukes' };
+
+    const løsning = byggMigrertKravLøsningFraSkjema(grunnlag({ nyeVurderinger: [krav] }), endretFelter, false);
+
+    expect(løsning?.begrunnelse).toBe('Original begrunnelse');
+  });
+
+  it('sender inn nytt migrert krav uten referanse når skjemaet er åpent og det ikke finnes noe fra før', () => {
+    const felter = migrertKravTilFormFields(migrertKrav());
+
+    const løsning = byggMigrertKravLøsningFraSkjema(grunnlag(), felter, true);
+
+    expect(løsning?.referanse).toBeUndefined();
+    expect(løsning?.arenaSaksnummer).toBe(felter.arenaSaksnummer);
+  });
+
+  it('sender inn skjemaverdiene med riktig referanse når skjemaet er åpent og migrert krav finnes i nyeVurderinger', () => {
+    const krav = migrertKrav({ referanse: 'migrert-1' });
+    const endretFelter = { ...migrertKravTilFormFields(krav), begrunnelse: 'Oppdatert begrunnelse' };
+
+    const løsning = byggMigrertKravLøsningFraSkjema(grunnlag({ nyeVurderinger: [krav] }), endretFelter, true);
+
+    expect(løsning?.referanse).toBe('migrert-1');
+    expect(løsning?.begrunnelse).toBe('Oppdatert begrunnelse');
+  });
+
+  it('sender inn skjemaverdiene med riktig referanse når skjemaet er åpent og migrert krav finnes i vedtatteVurderinger', () => {
+    const krav = migrertKrav({ referanse: 'migrert-1' });
+    const endretFelter = { ...migrertKravTilFormFields(krav), resterendeKvoteOrdinær: '50' };
+
+    const løsning = byggMigrertKravLøsningFraSkjema(grunnlag({ vedtatteVurderinger: [krav] }), endretFelter, true);
+
+    expect(løsning?.referanse).toBe('migrert-1');
+    expect(løsning?.resterendeKvoteOrdinær).toBe(50);
+  });
+
+  it('prioriterer nyeVurderinger over vedtatteVurderinger når migrert krav finnes i begge', () => {
+    const kravFraNye = migrertKrav({ referanse: 'migrert-nye', begrunnelse: 'Fra nye' });
+    const kravFraVedtatt = migrertKrav({ referanse: 'migrert-vedtatt', begrunnelse: 'Fra vedtatt' });
+
+    const løsning = byggMigrertKravLøsningFraSkjema(
+      grunnlag({ nyeVurderinger: [kravFraNye], vedtatteVurderinger: [kravFraVedtatt] }),
+      migrertKravTilFormFields(kravFraNye),
+      true
+    );
+
+    expect(løsning?.referanse).toBe('migrert-nye');
+    expect(løsning?.begrunnelse).toBe('Fra nye');
   });
 });

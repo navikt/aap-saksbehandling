@@ -23,6 +23,7 @@ import { SvarFraBehandler } from 'components/saksinfobanner/svarfrabehandler/Sva
 import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
 import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
+import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
 
 interface Props {
   sak: SaksInfoType;
@@ -37,6 +38,9 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
+  const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
+  const visUforeTag = !uføreTagSkjult && !!oppgaveVisningsinfo?.uførevedtakinfo;
+
 
   const adressebeskyttelser = oppgaveVisningsinfo ? utledAdressebeskyttelse(oppgaveVisningsinfo) : [];
 
@@ -125,6 +129,13 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
             </div>
           ))}
+          {oppgaveVisningsinfo?.tilhørerUtlandEnhet && (
+            <div className={styles.oppgavestatus}>
+              <Tag variant="strong" size="small" data-color="info">
+                Utland
+              </Tag>
+            </div>
+          )}
           {visHarUlesteDokumenter && (
             <div className={styles.oppgavestatus}>
               <SvarFraBehandler
@@ -167,6 +178,15 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               <MarkeringInfoboks markering={markering} referanse={behandling.referanse} showLabel={true} />
             </div>
           ))}
+          {visUforeTag && oppgaveVisningsinfo?.uførevedtakinfo && (
+            <div className={styles.oppgavestatus}>
+              <UførevedtakInfoBoks
+                oppdaterVisUforeTag={() => settUføreTagSkjult(true)}
+                behandlingsReferanse={behandling.referanse}
+                virkningsdato={oppgaveVisningsinfo.uførevedtakinfo.virkningsdato}
+                resultat={oppgaveVisningsinfo.uførevedtakinfo.resultat} />
+            </div>
+          )}
           <SaksmenyDropdown
             flyt={flyt}
             visning={visning}
