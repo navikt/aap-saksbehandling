@@ -53,22 +53,18 @@ export const Grunnlag = async ({ behandlingsreferanse, flyt }: Props) => {
       visning={flyt.visning}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {fastsettBeregningstidspunktSteg.skalViseSteg && (
-        <StegSuspense>
-          <FastsettBeregningMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={fastsettBeregningstidspunktSteg}
-          />
-        </StegSuspense>
-      )}
-      {fastsettYrkesskadeInntekt.skalViseSteg && (
-        <StegSuspense>
-          <YrkesskadeGrunnlagBeregningMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={fastsettYrkesskadeInntekt}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <FastsettBeregningMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={fastsettBeregningstidspunktSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <YrkesskadeGrunnlagBeregningMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={fastsettYrkesskadeInntekt}
+        />
+      </StegSuspense>
       <StegSuspense>
         <FastsettManuellInntektMedDataFetching
           behandlingsreferanse={behandlingsreferanse}
