@@ -1,41 +1,22 @@
-import {
-  hentHelseInstitusjonsGrunnlagNy,
-  hentMellomlagring,
-} from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
+import { hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
+import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 
 type Props = {
   behandlingsreferanse: string;
   stegData: StegData;
+  grunnlag: HelseinstitusjonGrunnlag;
 };
 
-export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
-  const grunnlag = await hentHelseInstitusjonsGrunnlagNy(behandlingsreferanse);
-
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
-  }
-
-  const vurderinger = grunnlag.data.vurderinger;
-  const vedtatteVurderinger = grunnlag.data.vedtatteVurderinger;
-
-  if (grunnlag.data.opphold.length === 0 && vurderinger.length == 0 && vedtatteVurderinger.length == 0) return;
-
-  if (
-    !skalViseStegIkkePeriodisertGrunnlag(
-      stegData.avklaringsbehov,
-      vurderinger.length > 0 || vedtatteVurderinger.length > 0
-    )
-  ) {
-    return <ManglendeOpphold />;
-  }
-
-  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+/**
+ * Antar at kalleren (Institusjonsopphold.tsx) allerede har avgjort at steget skal vises
+ * basert på grunnlaget. Denne komponenten henter kun mellomlagring, som er avhengig av
+ * `totalReadOnly`, og rendrer selve vilkårskortet.
+ */
+export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, stegData, grunnlag }: Props) => {
+  const totalReadOnly = stegData.readOnly || !grunnlag.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_HELSEINSTITUSJON,
@@ -45,7 +26,7 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
 
   return (
     <Helseinstitusjon
-      grunnlag={grunnlag.data}
+      grunnlag={grunnlag}
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
