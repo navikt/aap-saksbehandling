@@ -21,6 +21,7 @@ import { SettMarkeringForBehandlingModal } from 'components/settmarkeringforbeha
 import styles from './SaksinfoBanner.module.css';
 import { VurderRettighetsperiodeModal } from './rettighetsperiodemodal/VurderRettighetsperiodeModal';
 import { TrekkKlageModal } from './trekkklagemodal/TrekkKlageModal';
+import { KorrigerSKnadsdatoDialog } from 'components/saksinfobanner/korrigersoknadsdatodialog/KorrigerSøknadsdatoDialog';
 
 export const SaksmenyDropdown = ({
   flyt,
@@ -47,6 +48,7 @@ export const SaksmenyDropdown = ({
   const [visAvbrytAktivitetspliktbehandlingModal, settVisAvbrytAktivitetspliktbehandlingModal] = useState(false);
   const [visVurderRettighetsperiodeModal, settVisVurderRettighetsperiodeModal] = useState(false);
   const [aktivMarkeringType, settAktivMarkeringType] = useState<MarkeringType | null>(null);
+  const [visKorrigerSøknadsdato, setKorrigerSøknadsdato] = useState(false);
 
   const søknadStegGruppe = flyt && flyt.find((f) => f.stegGruppe === 'SØKNAD');
   const avbrytRevurderingSteg = flyt && flyt.find((f) => f.stegGruppe === 'AVBRYT_REVURDERING');
@@ -116,6 +118,10 @@ export const SaksmenyDropdown = ({
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     !harAlleredeValgtAvslag1127;
 
+  const korrigerSoknadsDatoFeatureFlagIsEnabled = useFeatureFlag('KorrigerSoknadsdato');
+
+  const visValgForKorrigerSøknadsdato = korrigerSoknadsDatoFeatureFlagIsEnabled;
+
   return (
     <div className={styles.saksmeny}>
       <Dropdown>
@@ -169,6 +175,11 @@ export const SaksmenyDropdown = ({
             {visValgForAvslag1127 && (
               <Dropdown.Menu.GroupedList.Item onClick={() => settVisAvslag1127Modal(true)}>
                 Vurder avslag § 11-27
+              </Dropdown.Menu.GroupedList.Item>
+            )}
+            {visValgForKorrigerSøknadsdato && (
+              <Dropdown.Menu.GroupedList.Item onClick={() => setKorrigerSøknadsdato(true)}>
+                Korriger søknadsdato (§ 22-13 femte ledd)
               </Dropdown.Menu.GroupedList.Item>
             )}
           </Dropdown.Menu.GroupedList>
@@ -228,6 +239,14 @@ export const SaksmenyDropdown = ({
           onClose={() => settVisAvslag1127Modal(false)}
           saksnummer={saksnummer}
           behandlingReferanse={behandling?.referanse}
+        />
+      )}
+
+      {visKorrigerSøknadsdato && (
+        <KorrigerSKnadsdatoDialog
+          isOpen={visKorrigerSøknadsdato}
+          onClose={() => setKorrigerSøknadsdato(false)}
+          saksnummer={saksnummer}
         />
       )}
     </div>

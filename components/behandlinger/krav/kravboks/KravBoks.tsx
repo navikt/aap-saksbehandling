@@ -7,6 +7,7 @@ import {
 } from 'components/behandlinger/krav/kravutils';
 import { BodyShort, Box, Button, Detail, HStack, Label, Radio, Tag, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { erDatoIFremtiden } from 'lib/validation/dateValidation';
 import { TasklistIcon } from '@navikt/aksel-icons';
 import { useFormContext } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
@@ -210,7 +211,13 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
                       control={form.control}
                       label="Ny søknadsdato"
                       size={'small'}
-                      rules={{ required: 'Du må fylle inn ny søknadsdato.' }}
+                      rules={{
+                        required: 'Du må fylle inn ny søknadsdato.',
+                        validate: {
+                          ikkeFremtidig: (value) =>
+                            erDatoIFremtiden(value as string) ? 'Søknadsdato kan ikke være i fremtiden.' : undefined,
+                        },
+                      }}
                     />
                     <Alert variant="info">
                       Husk å journalføre relevant dokument som dokumenterer riktig søknadsdato til AAP-saken. Endret

@@ -11,6 +11,7 @@ export const FLAGS = [
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
   'kopierPerioder',
+  'KorrigerSoknadsdato',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -29,4 +30,5 @@ export const mockedFlags: Flags = {
   SkalViseAlleSykdomssteg: true,
   DialogMedBehandler: true,
   kopierPerioder: true,
+  KorrigerSoknadsdato: true,
 };
