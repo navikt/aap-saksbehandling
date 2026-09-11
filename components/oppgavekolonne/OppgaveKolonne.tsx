@@ -83,7 +83,11 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
     {aktivGruppe === 'VEDTAKSLENGDE' && <Vedtakslengde behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'UNDERVEIS' && <Underveis behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'SAMORDNING' && <Samordning behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
-    {aktivGruppe === 'ET_ANNET_STED' && <Institusjonsopphold behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
+    {aktivGruppe === 'ET_ANNET_STED' && (
+      <StegSuspense>
+        <Institusjonsopphold behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+      </StegSuspense>
+    )}
     {aktivGruppe === 'BARNETILLEGG' && <Barnetillegg behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'TILKJENT_YTELSE' && <TilkjentYtelse behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
     {aktivGruppe === 'SIMULERING' && <Simulering behandlingsreferanse={behandlingsreferanse} flyt={flyt} />}
