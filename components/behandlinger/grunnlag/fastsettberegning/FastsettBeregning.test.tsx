@@ -663,7 +663,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
     expect(optionLabels).toEqual(['', 'Uføretidspunkt', 'Annet']);
   });
 
-  it('skal tilby Sykemeldingsdato, Kravdato, Dato på legeerklæring, Henvist til behandling og Annet for beregningstidspunkt når det ikke skal vurderes ytterligere nedsatt', () => {
+  it('skal tilby Sykemeldingsdato, Kravdato, Dato på legeerklæring, Henvist til behandling, Uføretidspunkt og Annet for beregningstidspunkt når det ikke skal vurderes ytterligere nedsatt', () => {
     render(
       <FastsettBeregning
         readOnly={false}
@@ -680,6 +680,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
       'Kravdato',
       'Dato på legeerklæring',
       'Henvist til behandling',
+      'Uføretidspunkt',
       'Annet',
     ]);
   });
