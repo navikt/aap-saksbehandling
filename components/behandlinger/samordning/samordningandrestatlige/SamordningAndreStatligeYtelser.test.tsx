@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MellomlagretVurderingResponse, SamordningAndreStatligeYtelserGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { render, screen } from 'lib/test/CustomRender';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
 import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
@@ -27,8 +27,39 @@ const grunnlagUtenVurdering: SamordningAndreStatligeYtelserGrunnlag = {
   historiskeVurderinger: [],
 };
 
+const grunnlagMedBarnepensjon: SamordningAndreStatligeYtelserGrunnlag = {
+  historiskeVurderinger: [],
+  harTilgangTilÅSaksbehandle: true,
+  vurdering: {
+    begrunnelse: 'Bruker har barnepensjon',
+    vurderingPerioder: [
+      { ytelse: 'BARNEPENSJON', periode: { fom: '2025-01-01', tom: '2025-02-01' } },
+      { ytelse: 'DAGPENGER', periode: { fom: '2025-03-01', tom: '2025-04-01' } },
+    ],
+    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' } },
+  },
+};
+
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_ANDRE_STATLIGE_YTELSER' });
+});
+
+describe('barnepensjon', () => {
+  it('skal ikke krasje eller vise Barnepensjon som valg selv om lagret vurdering fra backend inneholder BARNEPENSJON', () => {
+    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagMedBarnepensjon} readOnly={false} behandlingVersjon={0} />);
+
+    const ytelseSelects = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    expect(ytelseSelects).toHaveLength(2);
+
+    ytelseSelects.forEach((select) => {
+      expect(within(select).queryByRole('option', { name: 'Barnepensjon' })).not.toBeInTheDocument();
+    });
+
+    // Raden med barnepensjon har ingen gyldig option og faller tilbake til å vise "Velg", resten er uendret
+    expect(ytelseSelects[0]).toHaveValue('Velg');
+    expect(ytelseSelects[1]).toHaveValue('DAGPENGER');
+    expect(screen.getByDisplayValue('01.01.2025')).toBeVisible();
+  });
 });
 
 describe('AndreStatligeYtelserTabell', () => {
