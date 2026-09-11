@@ -17,7 +17,7 @@ export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegDa
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.historiskeVurderinger.length > 0)) {
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.vurdering != null)) {
     return null;
   }
 

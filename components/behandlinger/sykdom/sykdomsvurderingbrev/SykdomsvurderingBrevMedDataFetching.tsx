@@ -24,7 +24,7 @@ export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsreferanse
     return <ApiException apiResponses={[grunnlag, foreløpigBehandlingsutfall]} />;
   }
 
-  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.historiskeVurderinger.length > 0)) {
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.vurdering != null)) {
     return null;
   }
 
