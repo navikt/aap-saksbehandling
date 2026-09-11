@@ -1,34 +1,34 @@
-import { Soningsvurdering } from './Soningsvurdering';
 import { hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
 import { StegData } from 'lib/utils/steg';
-import { Soningsgrunnlag } from 'lib/types/types';
+import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 
-interface Props {
+type Props = {
   behandlingsreferanse: string;
   stegData: StegData;
-  grunnlag: Soningsgrunnlag;
-}
+  grunnlag: HelseinstitusjonGrunnlag;
+};
 
 /**
  * Antar at kalleren (Institusjonsopphold.tsx) allerede har avgjort at steget skal vises
  * basert på grunnlaget. Denne komponenten henter kun mellomlagring, som er avhengig av
  * `totalReadOnly`, og rendrer selve vilkårskortet.
  */
-export const SoningsvurderingSteg = async ({ behandlingsreferanse, stegData, grunnlag }: Props) => {
+export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, stegData, grunnlag }: Props) => {
   const totalReadOnly = stegData.readOnly || !grunnlag.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
-    Behovstype.AVKLAR_SONINGSFORRHOLD,
+    Behovstype.AVKLAR_HELSEINSTITUSJON,
     totalReadOnly,
     stegData.erIkkePåVent
   );
 
   return (
-    <Soningsvurdering
-      behandlingsversjon={stegData.behandlingVersjon}
+    <Helseinstitusjon
       grunnlag={grunnlag}
       readOnly={totalReadOnly}
+      behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
     />
   );

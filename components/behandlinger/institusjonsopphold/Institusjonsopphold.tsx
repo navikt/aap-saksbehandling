@@ -1,7 +1,7 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { HelseinstitusjonSteg } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/HelseinstitusjonSteg';
-import { SoningsvurderingSteg } from './soning/SoningsvurderingSteg';
+import { HelseinstitusjonMedDataFetching } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/HelseinstitusjonMedDataFetching';
+import { SoningsvurderingMedDataFetching } from 'components/behandlinger/institusjonsopphold/soning/SoningsvurderingMedDataFetching';
 import { Behovstype } from 'lib/utils/form';
 import { getStegData, skalViseStegIkkePeriodisertGrunnlag } from 'lib/utils/steg';
 import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
@@ -73,7 +73,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse, flyt }: Props)
     >
       {helseSkalVises && (
         <StegSuspense>
-          <HelseinstitusjonSteg
+          <HelseinstitusjonMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             stegData={vurderHelseinstitusjonSteg}
             grunnlag={helseinstitusjonGrunnlag.data}
@@ -82,7 +82,7 @@ export const Institusjonsopphold = async ({ behandlingsreferanse, flyt }: Props)
       )}
       {soningSkalVises && (
         <StegSuspense>
-          <SoningsvurderingSteg
+          <SoningsvurderingMedDataFetching
             behandlingsreferanse={behandlingsreferanse}
             stegData={vurderSoningSteg}
             grunnlag={soningGrunnlag.data}
