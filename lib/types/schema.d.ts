@@ -17016,7 +17016,6 @@ export interface components {
       type:
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
-        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
@@ -19162,7 +19161,6 @@ export interface components {
       'vilk\u00E5rtype':
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
-        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
@@ -19449,7 +19447,6 @@ export interface components {
       'vurdererVilk\u00E5r'?:
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
-        | 'AVSLAG_11_27'
         | 'BISTANDSVILKÅRET'
         | 'GRUNNLAGET'
         | 'INNTEKTSBORTFALL'
