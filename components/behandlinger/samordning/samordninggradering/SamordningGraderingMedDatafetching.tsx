@@ -31,7 +31,8 @@ export const SamordningGraderingMedDatafetching = async ({ behandlingsreferanse,
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_GRADERING,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

@@ -10,23 +10,34 @@ interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }
 
-export const OppholdskravStegMedDataFatching = async ({ behandlingVersjon, behandlingsreferanse, readOnly }: Props) => {
+export const OppholdskravStegMedDataFatching = async ({
+  behandlingVersjon,
+  behandlingsreferanse,
+  readOnly,
+  erIkkePåVent,
+}: Props) => {
   const grunnlag = await hentOppholdskravGrunnlag(behandlingsreferanse);
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const mellomlagring = await hentMellomlagring(behandlingsreferanse, Behovstype.OPPHOLDSKRAV_KODE, readOnly);
+  const mellomlagring = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.OPPHOLDSKRAV_KODE,
+    readOnly,
+    erIkkePåVent
+  );
 
   return (
     <OppholdskravSteg
       grunnlag={grunnlag.data}
       initialMellomlagring={mellomlagring}
       behandlingVersjon={behandlingVersjon}
-      readOnly={readOnly}
+      readOnly={readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
     />
   );
 };

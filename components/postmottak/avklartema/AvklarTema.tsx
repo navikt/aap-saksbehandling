@@ -1,7 +1,7 @@
 'use client';
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
-import { SubmitEventHandler, useState } from 'react';
+import { SubmitEventHandler, useEffect, useState } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -9,12 +9,14 @@ import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { usePostmottakEndreTema } from 'hooks/FetchHook';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 import { Alert } from 'components/alert/Alert';
+import { ClientConfig } from 'lib/types/clientTypes';
+import { clientConfig } from 'lib/clientApi';
+import { isSuccess } from 'lib/utils/api';
 
 interface Props {
   behandlingsVersjon: number;
@@ -31,9 +33,9 @@ const NAV_KLAGEINSTANS_ENHET = '4260';
 const KLAGE_ETTERSENDELSE_BREVKODE = 'NAVe 90-00.08 K';
 
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+  const [config, setConfig] = useState<ClientConfig>();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
-  const { postmottakEndreTema, error, data } = usePostmottakEndreTema();
   const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
@@ -51,6 +53,10 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
     { readOnly: formReadOnly }
   );
 
+  useEffect(() => {
+    clientConfig().then((config) => isSuccess(config) && setConfig(config.data));
+  }, []);
+
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       if (data.erTemaAAP === JaEllerNei.Ja) {
@@ -63,8 +69,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           referanse: behandlingsreferanse,
         });
       } else {
-        //TODO Vis modal her ?
-        // "Dokument er sendt til Gosys for journalføring"
         postmottakLøsBehovClient({
           behandlingVersjon: behandlingsVersjon,
           behov: {
@@ -72,13 +76,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
           referanse: behandlingsreferanse,
-        }).then(() =>
-          postmottakEndreTema(behandlingsreferanse).then((res) => {
-            if (res.ok) {
-              setVisModal(true);
-            }
-          })
-        );
+        }).then(() => setVisModal(true));
       }
     })(event);
   };
@@ -130,10 +128,8 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           <Button
             type={'button'}
             onClick={() => {
-              if (data?.redirectUrl) {
-                window.location.replace(data.redirectUrl);
-                setVisModal(false);
-              }
+              window.location.replace(config?.gosysUrl ?? '');
+              setVisModal(false);
             }}
           >
             Gå til Gosys
@@ -150,12 +146,6 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
-        {error && (
-          <Alert size={'small'} variant={'error'}>
-            <BodyShort size={'small'}>Noe gikk galt ved endring av tema</BodyShort>
-            {error}
-          </Alert>
-        )}
       </VStack>
     </PostmottakVilkårskort>
   );

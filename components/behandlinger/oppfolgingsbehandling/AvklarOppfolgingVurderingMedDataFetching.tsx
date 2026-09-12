@@ -11,12 +11,14 @@ interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }
 
 export const AvklarOppfolgingVurderingMedDataFetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,
+  erIkkePåVent,
 }: Props) => {
   const grunnlag = await hentOppfølgingsoppgaveGrunnlag(behandlingsreferanse);
 
@@ -29,7 +31,12 @@ export const AvklarOppfolgingVurderingMedDataFetching = async ({
       ? Behovstype.AVKLAR_OPPFØLGINGSBEHOV_NAY
       : Behovstype.AVKLAR_OPPFØLGINGSBEHOV_LOKALKONTOR;
 
-  const initialMellomlagretVurdering = await hentMellomlagring(behandlingsreferanse, behovsType, readOnly);
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    behovsType,
+    readOnly,
+    erIkkePåVent
+  );
 
   return (
     <AvklaroppfolgingVurdering

@@ -6,7 +6,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegForPeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 
 interface Props {
@@ -24,10 +24,7 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const harTidligereVurderinger =
-    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
-
-  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
     return null;
   }
 
@@ -35,7 +32,8 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_BISTANDSBEHOV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   const vurderingsbehov =

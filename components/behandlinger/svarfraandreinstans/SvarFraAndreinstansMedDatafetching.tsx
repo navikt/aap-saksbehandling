@@ -11,12 +11,14 @@ interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }
 
 export const SvarFraAndreinstansMedDatafetching = async ({
   behandlingsreferanse,
   behandlingVersjon,
   readOnly,
+  erIkkePåVent,
 }: Props) => {
   const grunnlag = await hentSvarFraAndreinstansGrunnlag(behandlingsreferanse);
 
@@ -28,7 +30,8 @@ export const SvarFraAndreinstansMedDatafetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.HÅNDTER_SVAR_FRA_ANDREINSTANS,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   return (

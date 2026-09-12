@@ -2,7 +2,10 @@ import {
   KlageKravLøsning,
   KravGrunnlag,
   KravVurdering,
+  KravVurderingForSøknad,
   KravVurderingLøsning,
+  MigrertKravLøsning,
+  MigrertKravVurdering,
   OverstyrMuligRettFra,
   RelevantKrav,
   RelevantKravLøsning,
@@ -13,7 +16,7 @@ import {
 } from 'lib/types/types';
 import { KravType } from 'components/opprettsak/OpprettSakLocal';
 import { formaterDatoForBackend, formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
-import { JaEllerNei } from 'lib/utils/form';
+import { JaEllerNei, MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
 
 export function finnSøknadsdato(vurdering: KravVurdering): Søknadsdato | null {
   switch (vurdering.type) {
@@ -43,6 +46,120 @@ export function finnOverstyrMuligRettFraFraLøsning(løsning: KravVurderingLøsn
   return null;
 }
 
+export function kravVurderingIsKravVurderingForSøknad(
+  kravVurdering: KravVurdering
+): kravVurdering is KravVurderingForSøknad {
+  return kravVurdering.type !== 'MIGRERT_KRAV';
+}
+
+export function kravVurderingIsKMigrertKrav(kravVurdering: KravVurdering): kravVurdering is MigrertKravVurdering {
+  return kravVurdering.type === 'MIGRERT_KRAV';
+}
+
+export function getKravVurderingerForSøknad(
+  kravVurderinger: KravVurdering[] | null | undefined
+): KravVurderingForSøknad[] {
+  if (kravVurderinger == null) {
+    return [];
+  }
+  return kravVurderinger.filter(kravVurderingIsKravVurderingForSøknad);
+}
+
+export function finnMigrertKrav(kravVurderinger: KravVurdering[] | null | undefined): MigrertKravVurdering | undefined {
+  return kravVurderinger?.find(kravVurderingIsKMigrertKrav);
+}
+
+export interface MigrertKravFormFields {
+  arenaSaksnummer: string;
+  rettighetstype: string;
+  muligRettFra: string;
+  virkningstidspunktArena: string;
+  resterendeKvoteOrdinær: string;
+  begrunnelse: string;
+}
+
+export function migrertKravTilFormFields(vurdering: MigrertKravVurdering): MigrertKravFormFields {
+  return {
+    arenaSaksnummer: vurdering.arenaSaksnummer,
+    rettighetstype: vurdering.rettighetstype,
+    muligRettFra: formaterDatoForFrontend(vurdering.muligRettFra),
+    virkningstidspunktArena: formaterDatoForFrontend(vurdering.virkningstidspunktArena),
+    resterendeKvoteOrdinær: String(vurdering.resterendeKvoteOrdinær),
+    begrunnelse: vurdering.begrunnelse,
+  };
+}
+
+export function emptyMigrertKravFormFields(): MigrertKravFormFields {
+  return {
+    arenaSaksnummer: '',
+    rettighetstype: '',
+    muligRettFra: '',
+    virkningstidspunktArena: '',
+    resterendeKvoteOrdinær: '',
+    begrunnelse: '',
+  };
+}
+
+export function byggInitiellMigrertKravVurdering(grunnlag?: KravGrunnlag): MigrertKravFormFields {
+  const migrertKrav = finnMigrertKrav([...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])]);
+  return migrertKrav ? migrertKravTilFormFields(migrertKrav) : emptyMigrertKravFormFields();
+}
+
+export function harIngenKravvurderinger(grunnlag?: KravGrunnlag): boolean {
+  return (grunnlag?.nyeVurderinger.length ?? 0) + (grunnlag?.vedtatteVurderinger.length ?? 0) === 0;
+}
+
+function byggMigrertKravLøsning(
+  migrertKravVurdering: MigrertKravFormFields,
+  referanse: string | undefined
+): MigrertKravLøsning {
+  const muligRettFraParsed = parseDatoFraDatePicker(migrertKravVurdering.muligRettFra);
+  const virkningstidspunktArenaParsed = parseDatoFraDatePicker(migrertKravVurdering.virkningstidspunktArena);
+
+  if (!muligRettFraParsed) {
+    throw new Error(`Mangler gyldig "mulig rett fra"-dato for migrert krav ${migrertKravVurdering.arenaSaksnummer}`);
+  }
+  if (!virkningstidspunktArenaParsed) {
+    throw new Error(
+      `Mangler gyldig virkningstidspunkt på sak for migrert krav ${migrertKravVurdering.arenaSaksnummer}`
+    );
+  }
+
+  return {
+    kravType: 'MIGRERT_KRAV',
+    arenaSaksnummer: migrertKravVurdering.arenaSaksnummer,
+    rettighetstype: migrertKravVurdering.rettighetstype as MigrertKravLøsning['rettighetstype'],
+    muligRettFra: formaterDatoForBackend(muligRettFraParsed),
+    virkningstidspunktArena: formaterDatoForBackend(virkningstidspunktArenaParsed),
+    resterendeKvoteOrdinær: Number(migrertKravVurdering.resterendeKvoteOrdinær),
+    begrunnelse: migrertKravVurdering.begrunnelse,
+    referanse,
+  } satisfies MigrertKravLøsning;
+}
+
+export function byggMigrertKravLøsningFraSkjema(
+  grunnlag: KravGrunnlag | undefined,
+  migrertKravVurdering: MigrertKravFormFields,
+  migrertKravÅpen: boolean
+): MigrertKravLøsning | undefined {
+  const migrertKravFraNye = finnMigrertKrav(grunnlag?.nyeVurderinger);
+  const migrertKravFraVedtatt = finnMigrertKrav(grunnlag?.vedtatteVurderinger);
+  const original = migrertKravFraNye ?? migrertKravFraVedtatt;
+
+  // Hvis migrert-krav-skjemaet er åpent skal denne ALLTID sendes inn, brukes referanse på eksisterende krav (hvis eksisterer)
+  if (migrertKravÅpen) {
+    return byggMigrertKravLøsning(migrertKravVurdering, original?.referanse);
+  }
+
+  // Hvis skjema ikke er åpent, men vi har et eksisterende migrert krav sendes vi inn dette igjen som en løsning
+  if (migrertKravFraNye != null) {
+    return byggMigrertKravLøsning(migrertKravTilFormFields(migrertKravFraNye), migrertKravFraNye.referanse);
+  }
+
+  // Skjemaet er ikke åpent, og vi har IKKE noen nyeVurderinger: Ikke send ikk noe
+  return undefined;
+}
+
 export function formaterKravtype(type: KravType) {
   switch (type) {
     case 'RELEVANT_KRAV':
@@ -53,6 +170,8 @@ export function formaterKravtype(type: KravType) {
       return 'Tilleggsopplysning';
     case 'TRUKKET_SØKNAD':
       return 'Trukket søknad';
+    case 'MIGRERT_KRAV':
+      return 'Migrert krav';
   }
 }
 
@@ -62,11 +181,35 @@ export interface KravVurderingFormFields {
   begrunnelse: string;
   søknadsdatoDato: string;
   søknadsdatoÅrsak: string;
+  søknadsdatoEndres: string;
+  søknadsdatoBegrunnelse: string;
   overstyrDato: string;
   overstyrÅrsak: string;
+  muligRettFraTilbakedateres: string;
+  muligRettFraBegrunnelse: string;
 }
 
-export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurderingFormFields {
+function utledSøknadsdatoEndres(årsak: string): string {
+  switch (årsak) {
+    case SøknadsdatoEndresValg.BrukerHarSøktTidligere:
+    case SøknadsdatoEndresValg.FeilregistrertSøknadsdato:
+      return årsak;
+    default:
+      return SøknadsdatoEndresValg.Nei;
+  }
+}
+
+function utledMuligRettFraTilbakedateres(årsak: string): string {
+  switch (årsak) {
+    case MuligRettFraTilbakedateresValg.IkkeIStandTilÅSøkeTidligere:
+    case MuligRettFraTilbakedateresValg.MisvisendeOpplysninger:
+      return årsak;
+    default:
+      return MuligRettFraTilbakedateresValg.Nei;
+  }
+}
+
+export function kravVurderingTilFormFields(vurdering: KravVurderingForSøknad): KravVurderingFormFields {
   const søknadsdato = finnSøknadsdato(vurdering);
   const overstyr = finnOverstyrMuligRettFra(vurdering);
 
@@ -76,8 +219,12 @@ export function kravVurderingTilFormFields(vurdering: KravVurdering): KravVurder
     begrunnelse: vurdering.begrunnelse,
     søknadsdatoDato: søknadsdato ? formaterDatoForFrontend(søknadsdato.dato) : '',
     søknadsdatoÅrsak: søknadsdato?.årsak ?? '',
+    søknadsdatoEndres: utledSøknadsdatoEndres(søknadsdato?.årsak ?? ''),
+    søknadsdatoBegrunnelse: søknadsdato?.begrunnelse ?? '',
     overstyrDato: overstyr ? formaterDatoForFrontend(overstyr.dato) : '',
     overstyrÅrsak: overstyr?.årsak ?? '',
+    muligRettFraTilbakedateres: utledMuligRettFraTilbakedateres(overstyr?.årsak ?? ''),
+    muligRettFraBegrunnelse: overstyr?.begrunnelse ?? '',
   };
 }
 
@@ -93,13 +240,20 @@ export function søknadUtenKravTilFormFields(søknad: SøknadUtenKrav): KravVurd
     begrunnelse: '',
     søknadsdatoDato: formaterDatoForFrontend(søknad.mottattTidspunkt),
     søknadsdatoÅrsak: 'SøknadMottatt',
+    søknadsdatoEndres: SøknadsdatoEndresValg.Nei,
+    søknadsdatoBegrunnelse: '',
     overstyrDato: '',
     overstyrÅrsak: '',
+    muligRettFraTilbakedateres: MuligRettFraTilbakedateresValg.Nei,
+    muligRettFraBegrunnelse: '',
   };
 }
 
 export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string, KravVurderingFormFields> {
-  const alleVurderinger = [...(grunnlag?.nyeVurderinger ?? []), ...(grunnlag?.vedtatteVurderinger ?? [])];
+  const alleVurderinger = getKravVurderingerForSøknad([
+    ...(grunnlag?.nyeVurderinger ?? []),
+    ...(grunnlag?.vedtatteVurderinger ?? []),
+  ]);
   const fraVurderinger = Object.fromEntries(alleVurderinger.map((v) => [v.referanse, kravVurderingTilFormFields(v)]));
   const fraSøknaderUtenKrav = Object.fromEntries(
     (grunnlag?.søknaderUtenKravvurdering ?? []).map((s) => [
@@ -117,10 +271,10 @@ export function byggInitielleVurderinger(grunnlag?: KravGrunnlag): Record<string
 export function finnKravVurderingByReferanse(
   grunnlag: KravGrunnlag | undefined,
   referanse: string
-): KravVurdering | undefined {
+): KravVurderingForSøknad | undefined {
   return (
-    grunnlag?.nyeVurderinger.find((v) => v.referanse === referanse) ??
-    grunnlag?.vedtatteVurderinger.find((v) => v.referanse === referanse)
+    getKravVurderingerForSøknad(grunnlag?.nyeVurderinger).find((v) => v.referanse === referanse) ??
+    getKravVurderingerForSøknad(grunnlag?.vedtatteVurderinger).find((v) => v.referanse === referanse)
   );
 }
 
@@ -140,7 +294,7 @@ export function hentOriginaleFormFelter(
   referanse: string
 ): KravVurderingFormFields | undefined {
   const krav = finnKravVurderingByReferanse(grunnlag, referanse);
-  if (krav) return kravVurderingTilFormFields(krav);
+  if (krav && kravVurderingIsKravVurderingForSøknad(krav)) return kravVurderingTilFormFields(krav);
 
   const søknad = finnSøknadUtenKravByReferanse(grunnlag, referanse);
   if (søknad) return søknadUtenKravTilFormFields(søknad);
@@ -153,9 +307,11 @@ function byggLøsningFraFelter(felter: {
   journalpostId: string;
   begrunnelse: string;
   søknadsdatoDato: string;
-  søknadsdatoÅrsak: string;
+  søknadsdatoEndres: string;
+  søknadsdatoBegrunnelse: string;
   overstyrDato: string;
-  overstyrÅrsak: string;
+  muligRettFraTilbakedateres: string;
+  muligRettFraBegrunnelse: string;
   referanse: string | undefined;
 }): KravVurderingLøsning {
   const journalpostId = { identifikator: felter.journalpostId };
@@ -163,27 +319,41 @@ function byggLøsningFraFelter(felter: {
   if (felter.kravType === 'RELEVANT_KRAV') {
     const søknadsdatoParsed = parseDatoFraDatePicker(felter.søknadsdatoDato);
     const overstyrParsed = felter.overstyrDato ? parseDatoFraDatePicker(felter.overstyrDato) : undefined;
+    const søknadsdatoEndres = felter.søknadsdatoEndres || SøknadsdatoEndresValg.Nei;
+    const muligRettFraTilbakedateres = felter.muligRettFraTilbakedateres || MuligRettFraTilbakedateresValg.Nei;
 
     // Skjemaet krever søknadsdato for RELEVANT_KRAV (se KravBoks), så denne skal alltid finnes ved submit.
     if (!søknadsdatoParsed) {
       throw new Error(`Mangler gyldig søknadsdato for krav med journalpost ${felter.journalpostId}`);
     }
 
+    // Begrunnelsen for §22-13 femte ledd er obligatorisk i skjemaet uansett Ja/Nei-svar (se
+    // KravBoks), og sendes derfor alltid – uavhengig av søknadsdatoEndres.
+    const søknadsdato: Søknadsdato = {
+      dato: formaterDatoForBackend(søknadsdatoParsed),
+      årsak: (søknadsdatoEndres === SøknadsdatoEndresValg.Nei
+        ? 'SøknadMottatt'
+        : søknadsdatoEndres) as Søknadsdato['årsak'],
+      begrunnelse: felter.søknadsdatoBegrunnelse,
+    };
+
+    // overstyrMuligRettFra sendes kun når bruker har svart Ja (§22-13 syvende ledd), og har da
+    // alltid begrunnelse siden feltet er obligatorisk i skjemaet når bolken er i bruk.
+    const overstyrMuligRettFra: OverstyrMuligRettFra | undefined =
+      muligRettFraTilbakedateres !== MuligRettFraTilbakedateresValg.Nei && overstyrParsed
+        ? {
+            dato: formaterDatoForBackend(overstyrParsed),
+            årsak: muligRettFraTilbakedateres as NonNullable<OverstyrMuligRettFra>['årsak'],
+            begrunnelse: felter.muligRettFraBegrunnelse,
+          }
+        : undefined;
+
     return {
       kravType: 'RELEVANT_KRAV',
       journalpostId,
       begrunnelse: felter.begrunnelse,
-      søknadsdato: {
-        dato: formaterDatoForBackend(søknadsdatoParsed),
-        årsak: felter.søknadsdatoÅrsak as 'BrukerHarSøktTidligere' | 'FeilregistrertSøknadsdato' | 'SøknadMottatt',
-      },
-      overstyrMuligRettFra:
-        overstyrParsed && felter.overstyrÅrsak
-          ? {
-              dato: formaterDatoForBackend(overstyrParsed),
-              årsak: felter.overstyrÅrsak as 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger',
-            }
-          : undefined,
+      søknadsdato,
+      overstyrMuligRettFra,
       referanse: felter.referanse,
     } satisfies RelevantKravLøsning;
   }
@@ -206,9 +376,11 @@ function erFelterEndret(original: KravVurderingFormFields, gjeldende: KravVurder
       gjeldende.skalVurderesForNyEllerGjenopptattAAPRettighet ||
     original.begrunnelse !== gjeldende.begrunnelse ||
     original.søknadsdatoDato !== gjeldende.søknadsdatoDato ||
-    original.søknadsdatoÅrsak !== gjeldende.søknadsdatoÅrsak ||
+    original.søknadsdatoEndres !== gjeldende.søknadsdatoEndres ||
+    original.søknadsdatoBegrunnelse !== gjeldende.søknadsdatoBegrunnelse ||
     original.overstyrDato !== gjeldende.overstyrDato ||
-    original.overstyrÅrsak !== gjeldende.overstyrÅrsak
+    original.muligRettFraTilbakedateres !== gjeldende.muligRettFraTilbakedateres ||
+    original.muligRettFraBegrunnelse !== gjeldende.muligRettFraBegrunnelse
   );
 }
 
@@ -235,9 +407,11 @@ export function byggKravVurderingerFraSkjema(
         journalpostId: felt.journalpostId,
         begrunnelse: felt.begrunnelse,
         søknadsdatoDato: felt.søknadsdatoDato,
-        søknadsdatoÅrsak: felt.søknadsdatoÅrsak,
+        søknadsdatoEndres: felt.søknadsdatoEndres,
+        søknadsdatoBegrunnelse: felt.søknadsdatoBegrunnelse,
         overstyrDato: felt.overstyrDato,
-        overstyrÅrsak: felt.overstyrÅrsak,
+        muligRettFraTilbakedateres: felt.muligRettFraTilbakedateres,
+        muligRettFraBegrunnelse: felt.muligRettFraBegrunnelse,
         referanse: eksisterendeReferanser.has(referanse) ? referanse : undefined,
       })
     );

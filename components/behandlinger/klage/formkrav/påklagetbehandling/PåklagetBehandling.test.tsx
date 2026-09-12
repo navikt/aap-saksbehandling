@@ -28,6 +28,13 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       virkningstidspunkt: null,
     },
   ],
+  vedtatteKlagebehandlinger: [
+    {
+      saksnummer: '1234',
+      vedtaksdato: '2025-01-01',
+      referanse: 'uuid-3',
+    },
+  ],
   vurderingerMeta: {},
 };
 
@@ -49,7 +56,8 @@ describe('Klage', () => {
     const radios = screen.getAllByRole('radio');
     const radioValues = radios.map((r) => r.getAttribute('value'));
 
-    expect(radios).toHaveLength(2);
+    expect(radios).toHaveLength(3);
+    expect(radioValues).toContain('uuid-3');
     expect(radioValues).toContain('uuid-1');
     expect(radioValues).toContain('uuid-2');
   });

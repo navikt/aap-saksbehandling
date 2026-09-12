@@ -5,7 +5,6 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
 import { exhaustiveCheck } from 'lib/utils/typescript';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
 
 interface Props {
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
-  const visAvslagsårsakerEnabled = useFeatureFlag('VisAvslagsaarsaker');
   const sistePeriodeMedRettighetIndex = grunnlag.perioder.findLastIndex((periode) => periode.utfall === 'OPPFYLT');
 
   return (
@@ -65,7 +63,6 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
                     ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType)
                     : mapAvslagsÅrsakTilTekst(
                         vedtaksPeriode.avslagsårsak.vilkårsavslag,
-                        visAvslagsårsakerEnabled,
                         vedtaksPeriode.avslagsårsak.underveisavslag
                       )}
                 </Table.DataCell>
@@ -116,15 +113,11 @@ function mapUnderveisÅrsakTilHjemmel(underveisAvslag: UnderveisAvslagsÅrsak) {
 
 function mapAvslagsÅrsakTilTekst(
   vilkårAvslag: VilkårsavslagDto[],
-  visAvslagsårsakerEnabled: boolean,
   underveisAvslag?: UnderveisAvslagsÅrsak | null
 ) {
-  if (visAvslagsårsakerEnabled) {
-    const hjemler = vilkårAvslag.map((avslag) => avslag.vilkår);
-    if (underveisAvslag && underveisAvslag != 'IKKE_GRUNNLEGGENDE_RETT') {
-      hjemler.push(mapUnderveisÅrsakTilHjemmel(underveisAvslag));
-    }
-    return [...new Set(hjemler)].join(', ');
+  const hjemler = vilkårAvslag.map((avslag) => avslag.vilkår);
+  if (underveisAvslag && underveisAvslag != 'IKKE_GRUNNLEGGENDE_RETT') {
+    hjemler.push(mapUnderveisÅrsakTilHjemmel(underveisAvslag));
   }
-  return '–';
+  return [...new Set(hjemler)].join(', ');
 }

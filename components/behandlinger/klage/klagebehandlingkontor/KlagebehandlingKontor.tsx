@@ -28,6 +28,7 @@ export const KlagebehandlingKontor = async ({ behandlingsreferanse, flyt }: Prop
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
             typeBehandling={flyt.visning.typeBehandling}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

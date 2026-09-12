@@ -4,6 +4,7 @@ import { Tag, TagProps } from '@navikt/ds-react';
 
 export enum VurderingStatus {
   Oppfylt = 'Oppfylt',
+  OppfyltVedÅrsakssammenheng = 'Oppfylt ved årsakssammenheng',
   IkkeOppfylt = 'Ikke oppfylt',
   Overskrevet = 'Overskrevet',
   Reduksjon = 'Reduksjon',
@@ -32,6 +33,8 @@ function getTagVariant(status: VurderingStatus): TagProps['variant'] {
   switch (status) {
     case VurderingStatus.Oppfylt:
       return 'strong';
+    case VurderingStatus.OppfyltVedÅrsakssammenheng:
+      return 'strong';
     case VurderingStatus.IkkeOppfylt:
       return 'strong';
     case VurderingStatus.Overskrevet:
@@ -50,6 +53,8 @@ function getTagVariant(status: VurderingStatus): TagProps['variant'] {
 function getDataColor(status: VurderingStatus): TagProps['data-color'] {
   switch (status) {
     case VurderingStatus.Oppfylt:
+      return 'success';
+    case VurderingStatus.OppfyltVedÅrsakssammenheng:
       return 'success';
     case VurderingStatus.IkkeOppfylt:
       return 'danger';
@@ -74,6 +79,8 @@ function mapVurderingStatusToVurderingTekst(status: VurderingStatus): string {
       return 'Ikke reduksjon';
     case VurderingStatus.Oppfylt:
       return 'Oppfylt';
+    case VurderingStatus.OppfyltVedÅrsakssammenheng:
+      return 'Oppfylt ved årsakssammenheng';
     case VurderingStatus.IkkeOppfylt:
       return 'Ikke oppfylt';
     case VurderingStatus.Overskrevet:

@@ -9,7 +9,6 @@ import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttrekk/AktivitetspliktTrekk';
 import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import { ArenaSakerListe } from 'components/saksoversikt/ArenaSakerListe';
 
@@ -39,8 +38,6 @@ export const SakOversiktContainer = ({
     router.replace(`?t=${newTab}`);
   };
 
-  const visArenasakerOversikt = useFeatureFlag('VisArenasakerOversikt');
-
   return (
     <Page>
       <Page.Block width="2xl" style={{ padding: '0 var(--ax-space-32)' }}>
@@ -56,7 +53,7 @@ export const SakOversiktContainer = ({
             <Tabs.Panel value={Tab.OVERSIKT}>
               <VStack gap="space-32">
                 <SakMedBehandlinger sak={sak} rettighetsinfo={rettighetsinfo} />
-                {visArenasakerOversikt && arenaSaker && <ArenaSakerListe arenaSaker={arenaSaker} />}
+                {arenaSaker && <ArenaSakerListe arenaSaker={arenaSaker} />}
               </VStack>
             </Tabs.Panel>
 

@@ -47,12 +47,12 @@ export function useLøsAvklaringsbehov(steg: StegType): {
     setError(undefined);
 
     /**
-     * Det første vi må gjøre er å sjekke om saksbehandler fortsatt har behandlingen tildelt.
-     * På den måten unngår vi å løse avklaringsbehov på en behandling som er tildelt en annen saksbehandler.
+     * Det første vi må gjøre er å sjekke om behandlingen er tildelt en annen saksbehandler.
+     * I så tilfelle må saksbehandler manuelt bekrefte overstyring av den gamle tildelingen.
      */
     if (!isLocal()) {
-      const erTildeltInnloggetBruker = await sjekkTildeling();
-      if (!erTildeltInnloggetBruker) {
+      const skalOverstyreTildelingHvisKonflikt = await sjekkTildeling();
+      if (!skalOverstyreTildelingHvisKonflikt) {
         setIsLoading(false);
         return;
       }

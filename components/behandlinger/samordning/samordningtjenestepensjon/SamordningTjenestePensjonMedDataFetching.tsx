@@ -24,7 +24,8 @@ export const SamordningTjenestePensjonMedDataFetching = async ({ behandlingrefer
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingreferanse,
     Behovstype.SAMORDNING_REFUSJONS_KRAV,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

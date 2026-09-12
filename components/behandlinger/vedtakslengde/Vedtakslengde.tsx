@@ -23,6 +23,7 @@ export const Vedtakslengde = async ({ behandlingsreferanse, flyt }: Props) => {
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.behandlingVersjon}
           readOnly={flyt.visning.saksbehandlerReadOnly}
+          erIkkePåVent={!flyt.visning.visVentekort}
         />
       </StegSuspense>
       <StegSuspense>

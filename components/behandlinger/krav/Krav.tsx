@@ -31,6 +31,7 @@ export const Krav = async ({ behandlingsreferanse, flyt }: Props) => {
             behandlingsreferanse={behandlingsreferanse}
             behandlingVersjon={behandlingVersjon}
             readOnly={flyt.visning.saksbehandlerReadOnly}
+            erIkkePåVent={!flyt.visning.visVentekort}
           />
         </StegSuspense>
       )}

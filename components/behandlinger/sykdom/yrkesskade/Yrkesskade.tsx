@@ -5,7 +5,7 @@ import { parse } from 'date-fns';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { MellomlagretVurdering, YrkesskadeVurderingGrunnlag } from 'lib/types/types';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend } from 'lib/utils/date';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { erProsent } from 'lib/utils/validering';
@@ -17,6 +17,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   grunnlag: YrkesskadeVurderingGrunnlag;
@@ -95,7 +96,9 @@ export const Yrkesskade = ({
         type: 'fieldArray',
         defaultValue: defaultValues.relevanteYrkesskadeSaker?.map((sak) => ({
           ...sak,
-          manuellYrkesskadeDato: sak.manuellYrkesskadeDato ? formaterDatoForFrontend(sak.manuellYrkesskadeDato) : null,
+          manuellYrkesskadeDato: sak.manuellYrkesskadeDato
+            ? new Dato(sak.manuellYrkesskadeDato).formaterForFrontend()
+            : null,
         })),
       },
       andelAvNedsettelsen: {

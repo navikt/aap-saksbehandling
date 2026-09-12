@@ -21,7 +21,8 @@ export const OvergangUforeMedDataFetching = async ({ behandlingsreferanse, stegD
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_UFORE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

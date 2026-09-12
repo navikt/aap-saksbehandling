@@ -149,7 +149,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO'][];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksInfoTilPostmottak'][];
           };
         };
       };
@@ -4666,6 +4666,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/dokumentinnhenting/syfo/dialogmeldinger/{saksnummer}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto'][];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/dokumentinnhenting/paaminnelse/send': {
     parameters: {
       query?: never;
@@ -6406,7 +6444,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.KravVurderingTestDto': {
       /** @enum {string} */
-      kravType: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       /**
        * Format: date
        * @example 2025-04-01
@@ -8969,94 +9007,6 @@ export interface components {
         | '9083';
       soningsvurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.SoningsvurderingerDto'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning': {
-      /** @enum {string} */
-      behovstype:
-        | '4101'
-        | '4102'
-        | '4201'
-        | '4301'
-        | '5001'
-        | '5002'
-        | '5003'
-        | '5004'
-        | '5005'
-        | '5006'
-        | '5007'
-        | '5008'
-        | '5009'
-        | '5010'
-        | '5011'
-        | '5012'
-        | '5013'
-        | '5014'
-        | '5015'
-        | '5016'
-        | '5017'
-        | '5018'
-        | '5019'
-        | '5020'
-        | '5021'
-        | '5022'
-        | '5023'
-        | '5024'
-        | '5025'
-        | '5026'
-        | '5027'
-        | '5028'
-        | '5029'
-        | '5030'
-        | '5031'
-        | '5032'
-        | '5033'
-        | '5034'
-        | '5035'
-        | '5036'
-        | '5037'
-        | '5038'
-        | '5039'
-        | '5040'
-        | '5041'
-        | '5042'
-        | '5050'
-        | '5051'
-        | '5052'
-        | '5053'
-        | '5054'
-        | '5056'
-        | '5057'
-        | '5058'
-        | '5059'
-        | '5060'
-        | '5096'
-        | '5097'
-        | '5098'
-        | '5099'
-        | '5999'
-        | '6000'
-        | '6001'
-        | '6002'
-        | '6003'
-        | '6004'
-        | '6005'
-        | '6006'
-        | '6007'
-        | '6008'
-        | '6009'
-        | '6010'
-        | '7001'
-        | '8001'
-        | '8002'
-        | '8003'
-        | '8004'
-        | '9001'
-        | '9002'
-        | '9003'
-        | '9004'
-        | '9082'
-        | '9083';
-      'l\u00F8sningerForPerioder': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'][];
-    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sningV2': {
       /** @enum {string} */
       behovstype:
@@ -10735,12 +10685,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.KvalitetssikringL\u00F8sning': {
@@ -11104,7 +11056,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertLovvalgMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtForutg\u00E5endeMedlemskapL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarPeriodisertOverstyrtLovvalgMedlemskapL\u00F8sning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarStudentL\u00F8sningV2']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarSykdomL\u00F8sning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.l\u00F8sning.AvklarVedtakslengdeL\u00F8sning']
@@ -13715,6 +13666,10 @@ export interface components {
       dokumentasjonType: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
       fritekst: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto': {
+      dokumentInfoId: string;
+      tittel?: string | null;
+    };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.FastlegeResponse': {
       'andreBehandlereFraS\u00F8knad': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.ManueltOppgittBehandlerDto'][];
       'erFastlegeEndretSidenS\u00F8knadstidspunkt': boolean;
@@ -13734,6 +13689,26 @@ export interface components {
       postnummer?: string | null;
       poststed?: string | null;
       telefon?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto': {
+      /** @enum {string|null} */
+      dokumentasjonsType?: 'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'PURRING' | 'RETUR_LEGEERKLÆRING' | null;
+      /** @enum {string} */
+      'innkommendeUtg\u00E5ende': 'INNKOMMENDE' | 'UTGÅENDE';
+      journalpostId?: string | null;
+      meldingFraNavn?: string | null;
+      /** @enum {string|null} */
+      meldingStatus?: 'FEILET' | 'LEVERT' | 'SENDT' | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettetTidspunkt: string;
+      tekst?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto': {
+      dokumentIdListe: components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto'][];
+      melding: components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.PurringLegeerkl\u00E6ringRequest': {
       /** Format: uuid */
@@ -15020,12 +14995,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -15059,12 +15036,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -15105,12 +15084,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -15144,12 +15125,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -15284,10 +15267,21 @@ export interface components {
         | 'UTVID_VEDTAKSLENGDE'
         | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.KlagebehandlingDto': {
+      /** Format: uuid */
+      referanse: string;
+      saksnummer: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingDto'];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      vedtatteKlagebehandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.KlagebehandlingDto'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingDto': {
@@ -15313,7 +15307,7 @@ export interface components {
       /** Format: uuid */
       referanse: string;
       /** @enum {string} */
-      type: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      type: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
@@ -15326,9 +15320,40 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto':
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KlageDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.MigrertKravDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TilleggsopplysningDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.TrukketS\u00F8knadDto'];
+    'no.nav.aap.behandlingsflyt.behandling.krav.MigrertKravDto': {
+      arenaSaksnummer: string;
+      begrunnelse: string;
+      journalpostId?: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      muligRettFra: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      opprettet: string;
+      /** Format: uuid */
+      referanse: string;
+      /** Format: int32 */
+      'resterendeKvoteOrdin\u00E6r': number;
+      /** @enum {string} */
+      rettighetstype: 'ORDINÆR' | 'SP_ERSTATNING_11_13' | 'UNNTAK_11_12_ÅR_4' | 'UNNTAK_11_12_ÅR_5';
+      /** @enum {string} */
+      type: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningstidspunktArena: string;
+      vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto': {
       begrunnelse: string;
       journalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
@@ -15347,7 +15372,7 @@ export interface components {
       referanse: string;
       's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
       /** @enum {string} */
-      type: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      type: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
@@ -15370,7 +15395,7 @@ export interface components {
       /** Format: uuid */
       referanse: string;
       /** @enum {string} */
-      type: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      type: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
@@ -15385,7 +15410,7 @@ export interface components {
       /** Format: uuid */
       referanse: string;
       /** @enum {string} */
-      type: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      type: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
       vurdertAv: components['schemas']['no.nav.aap.komponenter.verdityper.Bruker'];
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
@@ -15393,6 +15418,7 @@ export interface components {
       'harGjortVilk\u00E5rsvurderingerP\u00E5Behandling': boolean;
       'harTilgangTil\u00C5Saksbehandle': boolean;
       historikk: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'][];
+      kvalitetssikrerFatterVedtak: boolean;
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.totrinnsvurdering.TotrinnsVurderingResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto': {
@@ -16160,12 +16186,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -16522,6 +16550,21 @@ export interface components {
       virksomhetId: string;
       virksomhetNavn?: string | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BosattOgNorskStatsborgerskapGrunnlag': {
+      /** @enum {string|null} */
+      personStatus?:
+        | 'bosatt'
+        | 'doed'
+        | 'foedselsregistrert'
+        | 'forsvunnet'
+        | 'ikkeBosatt'
+        | 'inaktiv'
+        | 'midlertidig'
+        | 'opphort'
+        | 'utflyttet'
+        | null;
+      statsborgerskap: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.GyldigStatsborgerskap'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.FolkeregisterStatusDto': {
       /**
        * Format: date
@@ -16545,6 +16588,19 @@ export interface components {
         | 'opphort'
         | 'utflyttet'
         | null;
+    };
+    'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.GyldigStatsborgerskap': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gyldigFraOgMed?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      gyldigTilOgMed?: string | null;
+      land: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering': {
       kanBehandlesAutomatisk: boolean;
@@ -16601,6 +16657,7 @@ export interface components {
       bestemtArbeidsgruppeINorge?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BestemtArbeidsgruppeINorgeGrunnlag'][]
         | null;
+      bosattStatusOgNorskStatsborgerskap?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.BosattOgNorskStatsborgerskapGrunnlag'];
       /** @enum {string} */
       indikasjon: 'I_NORGE' | 'UTENFOR_NORGE';
       kilde: ('AA_REGISTERET' | 'A_INNTEKT' | 'EREG' | 'MEDL' | 'PDL' | 'SØKNAD')[];
@@ -17352,12 +17409,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -17391,12 +17450,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.nay.KlagevurderingNayL\u00F8sningDto': {
@@ -17436,12 +17497,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -17475,12 +17538,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingL\u00F8sningDto': {
@@ -17530,12 +17595,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
       'vilk\u00E5rSomSkalOpprettholdes': (
         | 'ANDRE_TRYGDEAVTALER'
@@ -17569,12 +17636,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.KlageResultat':
@@ -17619,12 +17688,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Opprettholdes': {
@@ -17662,12 +17733,14 @@ export interface components {
         | 'FOLKETRYGDLOVEN_11_7'
         | 'FOLKETRYGDLOVEN_11_8'
         | 'FOLKETRYGDLOVEN_11_9'
+        | 'FOLKETRYGDLOVEN_21_12'
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
+        | 'FVL_31'
       )[];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Trukket': {
@@ -18003,10 +18076,11 @@ export interface components {
       /** Format: uuid */
       referanse?: string | null;
       /** @enum {string} */
-      kravType: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KravVurderingL\u00F8sningDto':
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.KlageKravL\u00F8sningDto']
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.MigrertKravL\u00F8sningDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.RelevantKravL\u00F8sningDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TilleggsopplysningKravL\u00F8sningDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketS\u00F8knadKravL\u00F8sningDto'];
@@ -18014,14 +18088,37 @@ export interface components {
       /** Format: uuid */
       verdi: string;
     };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.MigrertKravL\u00F8sningDto': {
+      arenaSaksnummer: string;
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      muligRettFra: string;
+      /** Format: uuid */
+      referanse?: string | null;
+      /** Format: int32 */
+      'resterendeKvoteOrdin\u00E6r': number;
+      /** @enum {string} */
+      rettighetstype: 'ORDINÆR' | 'SP_ERSTATNING_11_13' | 'UNNTAK_11_12_ÅR_4' | 'UNNTAK_11_12_ÅR_5';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningstidspunktArena: string;
+      /** @enum {string} */
+      kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.OverstyrMuligRettFra': {
+      begrunnelse: string;
       /**
        * Format: date
        * @example 2025-04-01
        */
       dato: string;
       /** @enum {string} */
-      '\u00E5rsak': 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger';
+      '\u00E5rsak': 'IkkeIStandTilÅSøkeTidligere' | 'MisvisendeOpplysninger' | 'Ukjent';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.RelevantKravL\u00F8sningDto': {
       begrunnelse: string;
@@ -18031,9 +18128,10 @@ export interface components {
       referanse?: string | null;
       's\u00F8knadsdato': components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato'];
       /** @enum {string} */
-      kravType: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.S\u00F8knadsdato': {
+      begrunnelse: string;
       /**
        * Format: date
        * @example 2025-04-01
@@ -18048,7 +18146,7 @@ export interface components {
       /** Format: uuid */
       referanse?: string | null;
       /** @enum {string} */
-      kravType: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketS\u00F8knadKravL\u00F8sningDto': {
       begrunnelse: string;
@@ -18056,7 +18154,7 @@ export interface components {
       /** Format: uuid */
       referanse?: string | null;
       /** @enum {string} */
-      kravType: 'KLAGE' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
+      kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.OverstyringMeldepliktVurderingPeriode': {
       begrunnelse: string;
@@ -18218,14 +18316,25 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.AVSLAG']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.GJENINNTREDEN_ETTER_OPPH\u00D8R']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.GJENOPPTAK_ETTER_STANS']
+      | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.MIGRERT_ST\u00D8NADSPERIODE']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.NY_ST\u00D8NADSPERIODE'];
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.AVSLAG': {
       /** @enum {string} */
-      type: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      type:
+        | 'AVSLAG'
+        | 'GJENINNTREDEN_ETTER_OPPHØR'
+        | 'GJENOPPTAK_ETTER_STANS'
+        | 'MIGRERT_STØNADSPERIODE'
+        | 'NY_STØNADSPERIODE';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.GJENINNTREDEN_ETTER_OPPH\u00D8R': {
       /** @enum {string} */
-      type: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      type:
+        | 'AVSLAG'
+        | 'GJENINNTREDEN_ETTER_OPPHØR'
+        | 'GJENOPPTAK_ETTER_STANS'
+        | 'MIGRERT_STØNADSPERIODE'
+        | 'NY_STØNADSPERIODE';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.GJENOPPTAK_ETTER_STANS': {
       gjennopptakEtter: (
@@ -18261,11 +18370,30 @@ export interface components {
         | 'VARIGHET_OVERSKREDET_STUDENT'
       )[];
       /** @enum {string} */
-      type: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      type:
+        | 'AVSLAG'
+        | 'GJENINNTREDEN_ETTER_OPPHØR'
+        | 'GJENOPPTAK_ETTER_STANS'
+        | 'MIGRERT_STØNADSPERIODE'
+        | 'NY_STØNADSPERIODE';
+    };
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.MIGRERT_ST\u00D8NADSPERIODE': {
+      /** @enum {string} */
+      type:
+        | 'AVSLAG'
+        | 'GJENINNTREDEN_ETTER_OPPHØR'
+        | 'GJENOPPTAK_ETTER_STANS'
+        | 'MIGRERT_STØNADSPERIODE'
+        | 'NY_STØNADSPERIODE';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.RelevantKravType.NY_ST\u00D8NADSPERIODE': {
       /** @enum {string} */
-      type: 'AVSLAG' | 'GJENINNTREDEN_ETTER_OPPHØR' | 'GJENOPPTAK_ETTER_STANS' | 'NY_STØNADSPERIODE';
+      type:
+        | 'AVSLAG'
+        | 'GJENINNTREDEN_ETTER_OPPHØR'
+        | 'GJENOPPTAK_ETTER_STANS'
+        | 'MIGRERT_STØNADSPERIODE'
+        | 'NY_STØNADSPERIODE';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.st\u00F8nadsperiode.StansEllerOpph\u00F8rDto': {
       /** @enum {string} */
@@ -20875,6 +21003,23 @@ export interface components {
       navn: string;
       /** Format: uuid */
       personReferanse: string;
+    };
+    'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksInfoTilPostmottak': {
+      'finnes\u00C5penBehandling': boolean;
+      periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      /** @enum {string|null} */
+      resultat?:
+        | 'AVBRUTT'
+        | 'AVSLAG'
+        | 'INNVILGET'
+        | 'KLAGE_AVSLÅTT'
+        | 'KLAGE_DELVIS_OMGJØRES'
+        | 'KLAGE_OMGJØRES'
+        | 'KLAGE_OPPRETTHOLDES'
+        | 'KLAGE_TRUKKET'
+        | 'TRUKKET'
+        | null;
+      saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO': {
       ident: string;

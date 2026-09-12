@@ -22,6 +22,7 @@ export const Søknad = async ({ behandlingsreferanse, flyt }: Props) => {
           behandlingsreferanse={behandlingsreferanse}
           readOnly={flyt.visning.saksbehandlerReadOnly}
           behandlingVersjon={flyt.behandlingVersjon}
+          erIkkePåVent={!flyt.visning.visVentekort}
         />
       </StegSuspense>
     </GruppeSteg>

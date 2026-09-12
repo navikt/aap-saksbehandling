@@ -142,8 +142,8 @@ export const Saksbehandlingsoversikt = ({
               <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
             )}
             {toggleGroupValue === Tab.SAKSDOKUMENTER && <Saksdokumenter />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && !featureDialogMedBehandler && <InnhentDokumentasjon />}
             {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && featureDialogMedBehandler && <DialogMedBehandler />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <InnhentDokumentasjon />}
             {toggleGroupValue === Tab.HISTORIKK && <SaksHistorikk />}
           </div>
         </>

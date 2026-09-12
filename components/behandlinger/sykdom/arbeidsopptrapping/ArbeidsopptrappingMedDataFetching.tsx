@@ -23,7 +23,8 @@ export const ArbeidsopptrappingMedDataFetching = async ({ behandlingsreferanse, 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.ARBEIDSOPPTRAPPING_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

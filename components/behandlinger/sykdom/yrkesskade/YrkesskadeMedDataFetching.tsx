@@ -5,7 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
 
 interface Props {
@@ -24,7 +24,10 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
   const harTidligereVurdering = grunnlag.yrkesskadeVurdering != null;
   const harInnhentedeYrkesskader = (grunnlag.opplysninger?.innhentedeYrkesskader?.length ?? 0) > 0;
 
-  if (!skalViseSteg(stegData, harTidligereVurdering) && !harInnhentedeYrkesskader) {
+  if (
+    !skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, harTidligereVurdering) &&
+    !harInnhentedeYrkesskader
+  ) {
     return null;
   }
 
@@ -32,7 +35,8 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.YRKESSKADE_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

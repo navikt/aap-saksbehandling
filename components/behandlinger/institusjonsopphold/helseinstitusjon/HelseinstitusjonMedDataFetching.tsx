@@ -5,7 +5,7 @@ import {
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { ManglendeOpphold } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/ManglendeOpphold';
 
@@ -26,7 +26,12 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
 
   if (grunnlag.data.opphold.length === 0 && vurderinger.length == 0 && vedtatteVurderinger.length == 0) return;
 
-  if (!skalViseSteg(stegData, vurderinger.length > 0 || vedtatteVurderinger.length > 0)) {
+  if (
+    !skalViseStegIkkePeriodisertGrunnlag(
+      stegData.avklaringsbehov,
+      vurderinger.length > 0 || vedtatteVurderinger.length > 0
+    )
+  ) {
     return <ManglendeOpphold />;
   }
 
@@ -34,7 +39,8 @@ export const HelseinstitusjonMedDataFetching = async ({ behandlingsreferanse, st
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_HELSEINSTITUSJON,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

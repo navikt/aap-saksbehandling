@@ -28,7 +28,8 @@ export const SykdomsvurderingBrevMedDataFetching = async ({ behandlingsreferanse
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.SYKDOMSVURDERING_BREV_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (
