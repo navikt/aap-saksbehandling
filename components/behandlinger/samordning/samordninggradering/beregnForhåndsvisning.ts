@@ -1,24 +1,14 @@
 import { addDays, differenceInCalendarDays, format, isValid, parse, subDays } from 'date-fns';
-import { SamordningYtelsestype } from 'lib/types/types';
+import { SamordnetYtelse } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 
 const DATOFORMAT = 'dd.MM.yyyy';
-
-interface PeriodeFelt {
-  fom: string;
-  tom: string;
-}
-
-interface SplittbarRad {
-  ytelseType?: SamordningYtelsestype;
-  periode: PeriodeFelt;
-}
 
 /**
  * Ferie i en sykepengeperiode forskyver maksdato for sykepenger tilsvarende lengden på ferien.
  * Antall sykepengedager bevares: dagene før ferien blir stående, og de resterende dagene
  * legges som en egen rad rett etter ferieslutt.
  */
-export function beregnForhåndsvisning<T extends SplittbarRad>(rader: T[]): T[] {
+export function beregnForhåndsvisning(rader: SamordnetYtelse[]): SamordnetYtelse[] {
   const ferieRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'));
   let resultat = slåSammenSplittedeSykepengeperioder(rader).filter((n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE');
 
@@ -29,19 +19,19 @@ export function beregnForhåndsvisning<T extends SplittbarRad>(rader: T[]): T[] 
   return sorterEtterFom(resultat.concat(ferieRader));
 }
 
-export function medAutoSplitt<T extends SplittbarRad>(rader: T[], autoSplittSykepenger: boolean): T[] {
+export function medAutoSplitt(rader: SamordnetYtelse[], autoSplittSykepenger: boolean): SamordnetYtelse[] {
   return autoSplittSykepenger ? beregnForhåndsvisning(rader) : rader;
 }
 
-export function slåSammenSplittedeSykepengeperioder<T extends SplittbarRad>(rader: T[]): T[] {
+export function slåSammenSplittedeSykepengeperioder(rader: SamordnetYtelse[]): SamordnetYtelse[] {
   const ferier = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'))
     .map(tilPeriode)
     .filter((periode): periode is Periode => periode !== undefined);
   const andreRader = rader.filter((n) => n.ytelseType !== 'SYKEPENGER');
   const sykepengeRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'SYKEPENGER'));
 
-  const resultat: T[] = [];
-  let kjede: T[] = [];
+  const resultat: SamordnetYtelse[] = [];
+  let kjede: SamordnetYtelse[] = [];
 
   function avsluttKjede() {
     if (kjede.length === 0) {
@@ -101,7 +91,7 @@ function erDekketAvFerie(fom: Date, tom: Date, ferier: Periode[]): boolean {
   return dekketTilOgMed > tom;
 }
 
-function sorterEtterFom<T extends SplittbarRad>(rader: T[]): T[] {
+function sorterEtterFom(rader: SamordnetYtelse[]): SamordnetYtelse[] {
   return [...rader].sort((a, b) => {
     const periodeA = tilPeriode(a);
     const periodeB = tilPeriode(b);
@@ -112,8 +102,8 @@ function sorterEtterFom<T extends SplittbarRad>(rader: T[]): T[] {
   });
 }
 
-function splittForEnFerie<T extends SplittbarRad>(rader: T[], ferieRad: T): T[] {
-  const nyeRader: T[] = [];
+function splittForEnFerie(rader: SamordnetYtelse[], ferieRad: SamordnetYtelse): SamordnetYtelse[] {
+  const nyeRader: SamordnetYtelse[] = [];
   const ferieRadPeriode = tilPeriode(ferieRad);
 
   if (!ferieRadPeriode) {
@@ -136,9 +126,9 @@ function splittForEnFerie<T extends SplittbarRad>(rader: T[], ferieRad: T): T[] 
   return nyeRader;
 }
 
-function forskyvSykepenger<T extends SplittbarRad>(rad: T, sykepenger: Periode, ferie: Periode): T[] {
+function forskyvSykepenger(rad: SamordnetYtelse, sykepenger: Periode, ferie: Periode): SamordnetYtelse[] {
   const antallDager = antallDagerMellom(sykepenger.fom, sykepenger.tom);
-  const resultat: T[] = [];
+  const resultat: SamordnetYtelse[] = [];
 
   const dagerFørFerien = ferie.fom > sykepenger.fom ? antallDagerMellom(sykepenger.fom, subDays(ferie.fom, 1)) : 0;
 
@@ -161,7 +151,7 @@ interface Periode {
   tom: Date;
 }
 
-function tilPeriode(rad: SplittbarRad | undefined): Periode | undefined {
+function tilPeriode(rad: SamordnetYtelse | undefined): Periode | undefined {
   const fom = parse(rad?.periode.fom ?? '', DATOFORMAT, new Date());
   const tom = parse(rad?.periode.tom ?? '', DATOFORMAT, new Date());
 
@@ -180,7 +170,7 @@ function antallDagerMellom(fom: Date, tom: Date): number {
   return differenceInCalendarDays(tom, fom) + 1;
 }
 
-function medPeriode<T extends SplittbarRad>(rad: T, fom: Date, tom: Date): T {
+function medPeriode(rad: SamordnetYtelse, fom: Date, tom: Date): SamordnetYtelse {
   return {
     ...rad,
     periode: { fom: format(fom, DATOFORMAT), tom: format(tom, DATOFORMAT) },
