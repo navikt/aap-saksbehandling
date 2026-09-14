@@ -185,7 +185,7 @@ export const SamordningGradering = ({
   const rettighetsperiodeFom = parse(sak.sak.periode.fom, 'yyyy-MM-dd', new Date());
 
   const finnTidligsteVirkningstidspunkt = beregnTidligsteVirkningstidspunkt(
-    form.getValues('vurderteSamordninger'),
+    form.getValues('vurderteSamordninger') ?? [],
     rettighetsperiodeFom
   );
 

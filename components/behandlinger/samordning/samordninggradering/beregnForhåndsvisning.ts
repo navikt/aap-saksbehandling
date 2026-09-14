@@ -1,7 +1,6 @@
-import { addDays, differenceInCalendarDays, format, isValid, parse, subDays } from 'date-fns';
+import { addDays, differenceInCalendarDays, subDays } from 'date-fns';
 import { SamordnetYtelse } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
-
-const DATOFORMAT = 'dd.MM.yyyy';
+import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 /**
  * Ferie i en sykepengeperiode forskyver maksdato for sykepenger tilsvarende lengden på ferien.
@@ -16,7 +15,7 @@ export function beregnForhåndsvisning(rader: SamordnetYtelse[]): SamordnetYtels
     resultat = splittForEnFerie(resultat, rad);
   });
 
-  return sorterEtterFom(resultat.concat(ferieRader));
+  return sorterEtterFom([...resultat, ...ferieRader]);
 }
 
 export function medAutoSplitt(rader: SamordnetYtelse[], autoSplittSykepenger: boolean): SamordnetYtelse[] {
@@ -69,7 +68,7 @@ export function slåSammenSplittedeSykepengeperioder(rader: SamordnetYtelse[]): 
 
   avsluttKjede();
 
-  return sorterEtterFom(resultat.concat(andreRader));
+  return sorterEtterFom([...resultat, ...andreRader]);
 }
 
 function erDekketAvFerie(fom: Date, tom: Date, ferier: Periode[]): boolean {
@@ -152,10 +151,10 @@ interface Periode {
 }
 
 function tilPeriode(rad: SamordnetYtelse | undefined): Periode | undefined {
-  const fom = parse(rad?.periode.fom ?? '', DATOFORMAT, new Date());
-  const tom = parse(rad?.periode.tom ?? '', DATOFORMAT, new Date());
+  const fom = parseDatoFraDatePicker(rad?.periode.fom);
+  const tom = parseDatoFraDatePicker(rad?.periode.tom);
 
-  if (!isValid(fom) || !isValid(tom) || fom > tom) {
+  if (!fom || !tom || fom > tom) {
     return undefined;
   }
 
@@ -173,6 +172,6 @@ function antallDagerMellom(fom: Date, tom: Date): number {
 function medPeriode(rad: SamordnetYtelse, fom: Date, tom: Date): SamordnetYtelse {
   return {
     ...rad,
-    periode: { fom: format(fom, DATOFORMAT), tom: format(tom, DATOFORMAT) },
+    periode: { fom: formaterDatoForFrontend(fom), tom: formaterDatoForFrontend(tom) },
   };
 }
