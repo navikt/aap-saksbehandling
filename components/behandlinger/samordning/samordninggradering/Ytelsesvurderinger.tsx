@@ -44,7 +44,6 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
 
   const rader = form.watch('vurderteSamordninger') ?? [];
 
-
   function lagreRad(verdier: SamordnetYtelseFormFields) {
     const rad: SamordnetYtelse = {
       periode: { fom: verdier.fom, tom: verdier.tom },
@@ -52,8 +51,13 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
       ytelseType: verdier.ytelseType,
       manuell: true,
     };
-    const oppdaterArray = modalTilstand?.modus === 'rediger' ? rader.map((eksisterendeRad,index) => index === modalTilstand.index? rad : eksisterendeRad): [...rader, rad]
-    const splittet = medAutoSplitt(oppdaterArray,autoSplittSykepenger);
+
+    const oppdaterArray =
+      modalTilstand?.modus === 'rediger'
+        ? rader.map((eksisterendeRad, index) => (index === modalTilstand.index ? rad : eksisterendeRad))
+        : [...rader, rad];
+
+    const splittet = medAutoSplitt(oppdaterArray, autoSplittSykepenger);
 
     replace(splittet);
     setModalTilstand(null);
@@ -90,40 +94,37 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {(() => {
-                return rader.map((rad, index) => {
-
-                  return (
-                    <Table.Row key={index}>
-                      <Table.DataCell>
-                        {rad.periode.fom} - {rad.periode.tom}
-                      </Table.DataCell>
-                      <Table.DataCell>{ytelseLabel(rad.ytelseType)}</Table.DataCell>
-                      <Table.DataCell>{rad.gradering}</Table.DataCell>
-                      <Table.DataCell>
-                        <HStack gap={'space-4'}>
-                          <Button
-                            size={'small'}
-                            icon={<PencilIcon title={'Rediger'} />}
-                            variant={'tertiary'}
-                            type={'button'}
-                            onClick={() => setModalTilstand({ modus: 'rediger', index: index })}
-                            disabled={readOnly}
-                          />
-                          <Button
-                            size={'small'}
-                            icon={<TrashIcon title={'Slett'} />}
-                            variant={'tertiary'}
-                            type={'button'}
-                            onClick={() => fjerneRad(index)}
-                            disabled={readOnly}
-                          />
-                        </HStack>
-                      </Table.DataCell>
-                    </Table.Row>
-                  );
-                });
-              })()}
+              {rader.map((rad, index) => {
+                return (
+                  <Table.Row key={index}>
+                    <Table.DataCell>
+                      {rad.periode.fom} - {rad.periode.tom}
+                    </Table.DataCell>
+                    <Table.DataCell>{ytelseLabel(rad.ytelseType)}</Table.DataCell>
+                    <Table.DataCell>{rad.gradering}</Table.DataCell>
+                    <Table.DataCell>
+                      <HStack gap={'space-4'}>
+                        <Button
+                          size={'small'}
+                          icon={<PencilIcon title={'Rediger'} />}
+                          variant={'tertiary'}
+                          type={'button'}
+                          onClick={() => setModalTilstand({ modus: 'rediger', index: index })}
+                          disabled={readOnly}
+                        />
+                        <Button
+                          size={'small'}
+                          icon={<TrashIcon title={'Slett'} />}
+                          variant={'tertiary'}
+                          type={'button'}
+                          onClick={() => fjerneRad(index)}
+                          disabled={readOnly}
+                        />
+                      </HStack>
+                    </Table.DataCell>
+                  </Table.Row>
+                );
+              })}
             </Table.Body>
           </TableStyled>
           <HStack gap={'space-8'}>
