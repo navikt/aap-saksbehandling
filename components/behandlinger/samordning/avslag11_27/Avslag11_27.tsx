@@ -9,6 +9,7 @@ import { parse } from 'date-fns';
 import {
   Avslag11_27BrukersYtelse,
   Avslag11_27Grunnlag,
+  Avslag11_27Vurdering,
   MellomlagretVurdering,
   TypeBehandling,
   VurderingFormMeta,
@@ -77,10 +78,14 @@ export const Avslag11_27 = ({
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const initialSelectedReferanser = () => {
-    const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
-    const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
-    const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
-    return grunnlag.krav.filter((krav) => alleVurderte.has(krav.referanse)).map((krav) => krav.referanse);
+    const nåværendeIds = new Set((grunnlag.vurderinger ?? []).map((v) => v.referanse));
+    const vedtatteIds = new Set((grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse));
+
+    if (grunnlag.krav.length === 1 && nåværendeIds.size === 0 && vedtatteIds.size === 0) {
+      return grunnlag.krav.map((krav) => krav.referanse);
+    }
+
+    return grunnlag.krav.filter((krav) => nåværendeIds.has(krav.referanse)).map((krav) => krav.referanse);
   };
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
@@ -99,13 +104,36 @@ export const Avslag11_27 = ({
   });
 
   const selectedReferanser: string[] = form.watch('selectedReferanser') ?? [];
+  const [lukkTeller, setLukkTeller] = useState<Record<string, number>>({});
 
   const handleToggle = (referanse: string) => {
     const current = form.getValues('selectedReferanser') ?? [];
-    form.setValue(
-      'selectedReferanser',
-      current.includes(referanse) ? current.filter((id) => id !== referanse) : [...current, referanse]
-    );
+    const erValgt = current.includes(referanse);
+
+    if (erValgt) {
+      const nåværendeVurdering = (grunnlag.vurderinger ?? []).find((v) => v.referanse === referanse);
+      if (nåværendeVurdering) {
+        const kravIndex = grunnlag.krav.findIndex((k) => k.referanse === referanse);
+        if (kravIndex !== -1) {
+          form.setValue(
+            `avslag11_27vurderinger.${kravIndex}.vurdering`,
+            mapVurderingTilKravVurderingFormField(referanse, nåværendeVurdering)
+          );
+        }
+      }
+      setLukkTeller((prev) => ({ ...prev, [referanse]: (prev[referanse] ?? 0) + 1 }));
+    }
+
+    form.setValue('selectedReferanser', erValgt ? current.filter((id) => id !== referanse) : [...current, referanse]);
+
+    if (!erValgt) {
+      setDeletedReferanser((prev) => {
+        const neste = new Set(prev);
+        neste.delete(referanse);
+        return neste;
+      });
+    }
+
     setIngenVurderingerValgtFeil(null);
   };
 
@@ -248,17 +276,24 @@ export const Avslag11_27 = ({
           ingenVurderingerValgtFeil={ingenVurderingerValgtFeil}
           readonly={formReadOnly}
           vedtatteReferanser={(grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse)}
+          vurderteReferanser={[
+            ...(grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse),
+            ...(grunnlag.vurderinger ?? []).map((v) => v.referanse),
+          ]}
         />
         {kravFields.map((kravField, kravIndex) => {
           const faktiskKrav = grunnlag.krav.find((k) => k.referanse === kravField.vurdering.referanse);
           if (!faktiskKrav) return null;
-          if (!selectedReferanser.includes(faktiskKrav.referanse)) return null;
 
+          const nåværendeVurdering = (grunnlag.vurderinger ?? []).some(
+            (v) => v.referanse === faktiskKrav.referanse);
           const vedtattVurdering = (grunnlag.vedtatteVurdering ?? []).find(
             (v) => v.referanse === faktiskKrav.referanse
           );
-          const nåværendeVurdering = (grunnlag.vurderinger ?? []).find((v) => v.referanse === faktiskKrav.referanse);
-          const visLeggTilVurderingKnapp = erRevurdering && !!vedtattVurdering;
+
+          const erValgt = selectedReferanser.includes(faktiskKrav.referanse);
+          const erSlettet = deletedReferanser.has(faktiskKrav.referanse);
+          if (!erValgt && !vedtattVurdering && !nåværendeVurdering) return null;
 
           const sorterteKrav = [...grunnlag.krav].sort(
             (a, b) => new Date(a.søknadsdato).getTime() - new Date(b.søknadsdato).getTime()
@@ -273,15 +308,19 @@ export const Avslag11_27 = ({
               kravIndex={kravIndex}
               krav={faktiskKrav}
               vedtattVurdering={vedtattVurdering}
-              nåværendeVurdering={nåværendeVurdering}
               readonly={formReadOnly}
               accordionsSignal={accordionsSignal}
               erAktivUtenAvbryt={erAktivUtenAvbryt}
-              visLeggTilVurderingKnapp={visLeggTilVurderingKnapp}
               nesteKravSøknadsdato={nesteKravSøknadsdato}
               brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer.filter(
                 (ytelse) => ytelse !== 'FERIE_I_SYKEPENGEPERIODE' && ytelse !== 'SVANGERSKAPSPENGER'
               )}
+              visNyVurdering={(erValgt || !!nåværendeVurdering) && !erSlettet}
+              lukkTeller={lukkTeller[faktiskKrav.referanse] ?? 0}
+              onSlettVurdering={() => {
+                setDeletedReferanser((prev) => new Set(prev).add(faktiskKrav.referanse));
+                handleToggle(faktiskKrav.referanse);
+              }}
             />
           );
         })}
@@ -290,52 +329,59 @@ export const Avslag11_27 = ({
   );
 };
 
+export function mapVurderingTilKravVurderingFormField(
+  referanse: string,
+  vurdering?: Avslag11_27Vurdering | null
+): KravMedVurdering {
+  if (!vurdering) {
+    return {
+      referanse,
+      behøverVurdering: true,
+      erNyVurdering: true,
+      begrunnelse: '',
+      harAnnenFullYtelse: undefined,
+      brukersYtelse: undefined,
+      brukersYtelseTom: undefined,
+      harSykepengegrunnlagOver2G: undefined,
+      harArbeidsgiverSykepengerUtbetaling: undefined,
+      skalAvslås1127: undefined,
+    };
+  }
+
+  return {
+    referanse,
+    behøverVurdering: true,
+    erNyVurdering: false,
+    begrunnelse: vurdering.begrunnelse ?? '',
+    harAnnenFullYtelse: getJaNeiEllerUndefined(vurdering.harAnnenFullYtelse),
+    brukersYtelse: vurdering.brukersYtelse ?? undefined,
+    brukersYtelseTom: vurdering.brukersYtelseTom ? formaterDatoForFrontend(vurdering.brukersYtelseTom) : undefined,
+    harSykepengegrunnlagOver2G: getJaNeiEllerUndefined(vurdering.harSykepengegrunnlagOver2G),
+    harArbeidsgiverSykepengerUtbetaling: getJaNeiEllerUndefined(vurdering.harArbeidsgiverSykepengerUtbetaling),
+    skalAvslås1127: getJaNeiEllerUndefined(vurdering.skalAvslås1127),
+  };
+}
+
 function mapVurderingToDraftFormFields(
   grunnlag: Avslag11_27Grunnlag,
   krav: Avslag11_27Grunnlag['krav']
 ): DraftFormFields {
-  const vedtatteIds = (grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse);
-  const nåværendeIds = (grunnlag.vurderinger ?? []).map((v) => v.referanse);
-  const alleVurderte = new Set([...vedtatteIds, ...nåværendeIds]);
+  const nåværendeIds = new Set((grunnlag.vurderinger ?? []).map((v) => v.referanse));
+  const vedtatteIds = new Set((grunnlag.vedtatteVurdering ?? []).map((v) => v.referanse));
+
+  const erEnesteUvurderteKrav = krav.length === 1 && nåværendeIds.size === 0 && vedtatteIds.size === 0;
+
+  const selectedReferanser = erEnesteUvurderteKrav
+    ? krav.map((k) => k.referanse)
+    : krav.filter((k) => nåværendeIds.has(k.referanse)).map((k) => k.referanse);
 
   return {
-    selectedReferanser: krav.filter((k) => alleVurderte.has(k.referanse)).map((k) => k.referanse),
-    avslag11_27vurderinger: krav.map((kravItem) => {
-      const nåværende = (grunnlag.vurderinger ?? []).find((v) => v.referanse === kravItem.referanse);
-
-      if (!nåværende) {
-        return {
-          vurdering: {
-            referanse: kravItem.referanse,
-            behøverVurdering: true,
-            erNyVurdering: true,
-            begrunnelse: '',
-            harAnnenFullYtelse: undefined,
-            brukersYtelse: undefined,
-            brukersYtelseTom: undefined,
-            harSykepengegrunnlagOver2G: undefined,
-            harArbeidsgiverSykepengerUtbetaling: undefined,
-            skalAvslås1127: undefined,
-          },
-        };
-      }
-
-      return {
-        vurdering: {
-          referanse: kravItem.referanse,
-          behøverVurdering: true,
-          erNyVurdering: !nåværende,
-          begrunnelse: nåværende.begrunnelse ?? '',
-          harAnnenFullYtelse: nåværende.harAnnenFullYtelse ? JaEllerNei.Ja : JaEllerNei.Nei,
-          brukersYtelse: nåværende.brukersYtelse ?? undefined,
-          brukersYtelseTom: nåværende.brukersYtelseTom
-            ? formaterDatoForFrontend(nåværende.brukersYtelseTom)
-            : undefined,
-          harSykepengegrunnlagOver2G: getJaNeiEllerUndefined(nåværende.harSykepengegrunnlagOver2G),
-          harArbeidsgiverSykepengerUtbetaling: getJaNeiEllerUndefined(nåværende.harArbeidsgiverSykepengerUtbetaling),
-          skalAvslås1127: getJaNeiEllerUndefined(nåværende.skalAvslås1127),
-        },
-      };
-    }),
+    selectedReferanser,
+    avslag11_27vurderinger: krav.map((kravItem) => ({
+      vurdering: mapVurderingTilKravVurderingFormField(
+        kravItem.referanse,
+        (grunnlag.vurderinger ?? []).find((v) => v.referanse === kravItem.referanse)
+      ),
+    })),
   };
 }
