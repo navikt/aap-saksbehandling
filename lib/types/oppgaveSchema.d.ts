@@ -2417,6 +2417,7 @@ export interface components {
       returInformasjon?: components['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
       saksnummer?: string | null;
       skjermingInfo: components['schemas']['no.nav.aap.oppgave.hent.SkjermingInfoResponse'];
+      'tilh\u00F8rerUtlandEnhet': boolean;
       'uf\u00F8revedtakinfo'?: components['schemas']['no.nav.aap.oppgave.Uf\u00F8revedtakRespons'];
       'utl\u00F8ptVenteInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       /** Format: int64 */

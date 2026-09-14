@@ -1,4 +1,8 @@
-import { hentKravGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentBehandling,
+  hentKravGrunnlag,
+  hentMellomlagring,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -17,10 +21,13 @@ export const VurderKravMedDataFetching = async ({
   readOnly,
   erIkkePåVent,
 }: Props) => {
-  const grunnlag = await hentKravGrunnlag(behandlingsreferanse);
+  const [grunnlag, behandling] = await Promise.all([
+    hentKravGrunnlag(behandlingsreferanse),
+    hentBehandling(behandlingsreferanse),
+  ]);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(behandling)) {
+    return <ApiException apiResponses={[grunnlag, behandling]} />;
   }
 
   const totalReadOnly = readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
@@ -31,12 +38,18 @@ export const VurderKravMedDataFetching = async ({
     erIkkePåVent
   );
 
+  const vurderingsbehov = behandling.data.vurderingsbehovOgÅrsaker.flatMap(
+    (behovOgÅrsak) => behovOgÅrsak.vurderingsbehov
+  );
+  const harMigreringsbehov = vurderingsbehov.some((behov) => behov.type === 'MIGRERING_FRA_ARENA');
+
   return (
     <VurderKrav
       grunnlag={grunnlag.data}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       behandlingVersjon={behandlingVersjon}
       readOnly={totalReadOnly}
+      harMigreringsbehov={harMigreringsbehov}
     />
   );
 };

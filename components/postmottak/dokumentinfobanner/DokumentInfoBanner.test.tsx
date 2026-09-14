@@ -23,6 +23,7 @@ const journalpostInfo = {
 };
 
 const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
+  tilhørerUtlandEnhet: false,
   saksnummer: '12345',
   harUlesteDokumenter: false,
   id: 1,
