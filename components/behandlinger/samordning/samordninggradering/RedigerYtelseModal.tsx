@@ -26,63 +26,66 @@ export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) =>
     ytelseType: initialValues?.ytelseType || undefined,
   };
 
-  const { form, formFields } = useConfigForm<SamordnetYtelseFormFields>({
-    fom: {
-      type: 'date_input',
-      label: 'Fra og med',
-      defaultValue: defaultValues.fom,
-      rules: {
-        required: 'Du må velge dato for periodestart',
-        validate: {
-          gyldigDato: (value) => validerDato(value),
-          ikkeFoerStart: (value, formValues) =>
-            value && erDatoFoerDato(formValues.tom, value)
-              ? 'Fra og med dato kan ikke være etter til og med dato'
-              : undefined,
+  const { form, formFields } = useConfigForm<SamordnetYtelseFormFields>(
+    {
+      fom: {
+        type: 'date_input',
+        label: 'Fra og med',
+        defaultValue: defaultValues.fom,
+        rules: {
+          required: 'Du må velge dato for periodestart',
+          validate: {
+            gyldigDato: (value) => validerDato(value),
+            ikkeFoerStart: (value, formValues) =>
+              value && erDatoFoerDato(formValues.tom, value)
+                ? 'Fra og med dato kan ikke være etter til og med dato'
+                : undefined,
+          },
+        },
+      },
+      tom: {
+        type: 'date_input',
+        label: 'Til og med',
+        defaultValue: defaultValues.tom,
+        rules: {
+          required: 'Du må velge dato for periodeslutt',
+          validate: (value) => validerDato(value),
+        },
+      },
+      ytelseType: {
+        type: 'select',
+        label: 'Ytelsestype',
+        defaultValue: defaultValues.ytelseType,
+        rules: { required: 'Du må velge en ytelsetype' },
+        options: ytelsesoptions,
+      },
+      gradering: {
+        type: 'text',
+        label: 'Samordningsgrad',
+        defaultValue: defaultValues.gradering,
+        rules: {
+          required: 'Du må velge samordningsgrad',
+          validate: (value) => {
+            if (Number.isNaN(Number(value))) {
+              return 'Prosent må angis med siffer';
+            }
+            if (Number(value) < 0) {
+              return 'Samordningsgrad kan ikke være mindre enn 0%';
+            }
+            if (Number(value) > 100) {
+              return 'Samordningsgrad kan ikke være mer enn 100%';
+            }
+          },
         },
       },
     },
-    tom: {
-      type: 'date_input',
-      label: 'Til og med',
-      defaultValue: defaultValues.tom,
-      rules: {
-        required: 'Du må velge dato for periodeslutt',
-        validate: (value) => validerDato(value),
-      },
-    },
-    ytelseType: {
-      type: 'select',
-      label: 'Ytelsestype',
-      defaultValue: defaultValues.ytelseType,
-      rules: { required: 'Du må velge en ytelsetype' },
-      options: ytelsesoptions,
-    },
-    gradering: {
-      type: 'text',
-      label: 'Samordningsgrad',
-      defaultValue: defaultValues.gradering,
-      rules: {
-        required: 'Du må velge samordningsgrad',
-        validate: (value) => {
-          if (Number.isNaN(Number(value))) {
-            return 'Prosent må angis med siffer';
-          }
-          if (Number(value) < 0) {
-            return 'Samordningsgrad kan ikke være mindre enn 0%';
-          }
-          if (Number(value) > 100) {
-            return 'Samordningsgrad kan ikke være mer enn 100%';
-          }
-        },
-      },
-    },
-  });
+    { shouldUnregister: true }
+  );
 
   const erFerieISykepengeperiode = form.watch('ytelseType') === 'FERIE_I_SYKEPENGEPERIODE';
 
   return (
-    <Dialog open onOpenChange={onLukk} size={"medium"}>
+    <Dialog open onOpenChange={onLukk} size={'medium'}>
       <Dialog.Popup>
         <Dialog.Header>
           <Dialog.Title>{initialValues ? 'Rediger periode' : 'Legg til periode'}</Dialog.Title>
