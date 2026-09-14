@@ -2,8 +2,8 @@ import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { Button, Modal, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
-import { MarkeringHendelseType, clientOpprettMarkeringHendelse } from 'lib/clientApi';
-import { MarkeringType } from 'lib/types/oppgaveTypes';
+import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
+import type { MarkeringType } from 'lib/types/oppgaveTypes';
 import { isSuccess } from 'lib/utils/api';
 import React, { useState } from 'react';
 
@@ -73,7 +73,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 const res = await clientOpprettMarkeringHendelse(referanse, {
                   begrunnelse: markeringsType === 'HASTER' ? data.hasteBegrunnelse : data.begrunnelse,
                   markeringType: markeringsType,
-                  hendelseType: MarkeringHendelseType.OPPRETTET,
+                  hendelseType: 'OPPRETTET',
                 });
 
                 if (isSuccess(res)) {
