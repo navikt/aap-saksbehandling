@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
-import { KravVurdering, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
+import { KravVurderingForSøknad, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
 import { byggInitielleVurderinger } from 'components/behandlinger/krav/kravutils';
 import { KravBoks, KravBoksInnhold } from 'components/behandlinger/krav/kravboks/KravBoks';
@@ -27,8 +27,8 @@ function relevantKrav(overrides: Partial<RelevantKrav> = {}): RelevantKrav {
 
 function annenKravtypeKrav(
   type: 'KLAGE' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD',
-  overrides: Partial<KravVurdering> = {}
-): KravVurdering {
+  overrides: Partial<KravVurderingForSøknad> = {}
+): KravVurderingForSøknad {
   return {
     type,
     referanse: 'krav-2',
@@ -157,7 +157,9 @@ describe('KravBoks - åpne/lukke bolker', () => {
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
-    await user.click(screen.getByRole('radio', { name: 'Ja, bruker har søkt tidligere enn første registrerte søknad' }));
+    await user.click(
+      screen.getByRole('radio', { name: 'Ja, bruker har søkt tidligere enn første registrerte søknad' })
+    );
     const søknadsdatoFelt = screen.getByRole('textbox', { name: 'Ny søknadsdato' });
     await user.clear(søknadsdatoFelt);
     await user.type(søknadsdatoFelt, '15.06.2025');
@@ -172,7 +174,11 @@ describe('KravBoks - åpne/lukke bolker', () => {
 
   it('nullstiller overstyr mulig rett fra til opprinnelig verdi når bolken lukkes igjen uten å lagre', async () => {
     const krav = relevantKrav({
-      overstyrMuligRettFra: { dato: '2025-07-01', årsak: 'MisvisendeOpplysninger', begrunnelse: 'Feil informasjon fra Nav' },
+      overstyrMuligRettFra: {
+        dato: '2025-07-01',
+        årsak: 'MisvisendeOpplysninger',
+        begrunnelse: 'Feil informasjon fra Nav',
+      },
     });
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
@@ -286,7 +292,9 @@ describe('KravBoks - §22-13-bolker vises kun for relevant krav', () => {
     customRender(<KravBoksWrapper innhold={{ kilde: 'EKSISTERENDE', krav }} />);
 
     await user.click(screen.getByRole('button', { name: 'Vurder § 22-13 femte ledd' }));
-    await user.click(screen.getByRole('radio', { name: 'Ja, bruker har søkt tidligere enn første registrerte søknad' }));
+    await user.click(
+      screen.getByRole('radio', { name: 'Ja, bruker har søkt tidligere enn første registrerte søknad' })
+    );
     expect(screen.getByRole('textbox', { name: 'Ny søknadsdato' })).toBeVisible();
 
     await user.click(screen.getByRole('button', { name: 'Vurder om krav er relevant' }));

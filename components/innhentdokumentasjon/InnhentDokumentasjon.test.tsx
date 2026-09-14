@@ -3,6 +3,8 @@ import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDok
 import { LegeerklæringStatus } from 'lib/types/types';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { FeatureFlagProvider } from 'context/UnleashContext';
 
 const testdata: LegeerklæringStatus[] = [
   {
@@ -35,7 +37,11 @@ describe('Innhent dokumentasjon', () => {
 
   test('har en knapp for å åpne skjema for å etterspørre informasjon fra lege', () => {
     fetchMock.mockResponseOnce(JSON.stringify(testdata), { status: 200 });
-    render(<InnhentDokumentasjon />);
-    expect(screen.getByRole('button', { name: 'Be om opplysninger fra behandler' })).toBeVisible();
+    render(
+      <FeatureFlagProvider flags={mockedFlags}>
+        <InnhentDokumentasjon />
+      </FeatureFlagProvider>
+    );
+    expect(screen.getByRole('button', { name: 'Send forespørsel til behandler' })).toBeVisible();
   });
 });

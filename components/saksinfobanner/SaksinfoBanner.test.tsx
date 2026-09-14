@@ -28,12 +28,13 @@ const avsluttetSak: SaksInfo = {
 };
 
 const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
+  tilhørerUtlandEnhet: false,
   harUlesteDokumenter: false,
   skjermingInfo: { erSkjermet: false, harFortroligAdresse: false, harStrengtFortroligAdresse: false },
   id: 123,
   versjon: 0,
   markeringer: [],
-  reservertAvIdent: 'navIdent',
+  reservertAvIdent: 'navIdent'
 };
 
 const visning: FlytVisning = {
@@ -152,12 +153,18 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
   });
 
-  it('menyvalg for å trekke søknad vises ikke for en avsluttet førstegangsbehandling', async () => {
+  it('skal ikke ha en knapp for å åpne saksmenyen for en avsluttet behandling', () => {
     customRenderMedRoller(<SaksinfoBanner sak={avsluttetSak} behandling={avsluttetBehandling} visning={visning} />, [
       Roller.SAKSBEHANDLER_OPPFØLGING,
     ]);
-    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
-    expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Saksmeny' })).not.toBeInTheDocument();
+  });
+
+  it('skal ha en knapp for å åpne saksmenyen for en behandling som ikke er avsluttet', () => {
+    customRenderMedRoller(<SaksinfoBanner sak={sak} behandling={behandling} visning={visning} />, [
+      Roller.SAKSBEHANDLER_OPPFØLGING,
+    ]);
+    expect(screen.getByRole('button', { name: 'Saksmeny' })).toBeVisible();
   });
 
   it('menyvalg for å trekke søknad vises ikke for revurdering', async () => {

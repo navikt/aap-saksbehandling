@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Detail, HStack, VStack } from '@navikt/ds-react';
+import { Button, Detail, HStack, InfoCard, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -39,6 +39,8 @@ import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinns
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -81,6 +83,10 @@ export const TotrinnsvurderingForm = ({
   const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
   const erBehandlingHastemarkert = hastemarkering !== undefined;
   const skalFjerningAvHastemarkeringVurderes = erBehandlingHastemarkert && erKvalitetssikring;
+  const skalViseKvalitetssikrerFatterVedtakBoks =
+    useFeatureFlag('HoppOverBeslutterVedAvslagSykdom') &&
+    'kvalitetssikrerFatterVedtak' in grunnlag &&
+    grunnlag.kvalitetssikrerFatterVedtak;
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
@@ -113,6 +119,10 @@ export const TotrinnsvurderingForm = ({
       },
     },
   });
+
+  const finnesUnderkjentVilkår = form
+    .watch('totrinnsvurderinger')
+    .find((vurdering) => vurdering.godkjent === JaEllerNei.Nei) !== undefined;
 
   return (
     <form
@@ -247,6 +257,17 @@ export const TotrinnsvurderingForm = ({
       {form.formState.errors.totrinnsvurderinger?.root && (
         <Alert variant={'error'}>{form.formState.errors.totrinnsvurderinger.root.message}</Alert>
       )}
+      {skalViseKvalitetssikrerFatterVedtakBoks && (
+        <InfoCard data-color="warning">
+          <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
+            <InfoCard.Title>Obs! Behandlingen fullføres automatisk</InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            Siden dette er avslag på § 11-5 vil resten av behandlingen gå automatisk når alle vilkårene er godkjent.
+            Brevet vil sendes direkte til bruker uten flere kontroller.
+          </InfoCard.Content>
+        </InfoCard>
+      )}
       <LøsBehovOgGåTilNesteStegStatusAlert
         status={løsAvklaringsbehovStatus}
         løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
@@ -254,7 +275,7 @@ export const TotrinnsvurderingForm = ({
       {!readOnly && (
         <VStack gap="space-8">
           <Button size={'medium'} className={'fit-content'} loading={løsAvklaringsbehovIsLoading}>
-            Bekreft og send videre
+            {utledKnappetekst(finnesUnderkjentVilkår, skalViseKvalitetssikrerFatterVedtakBoks)}
           </Button>
 
           {isLocal() && <TotrinnsvurderingDevtools form={form} />}
@@ -280,6 +301,17 @@ export const TotrinnsvurderingForm = ({
     </form>
   );
 };
+
+function utledKnappetekst(finnesUnderkjentVilkår: Boolean, vedtakFattesAvKvalitetssikrer: Boolean) {
+  if (finnesUnderkjentVilkår) {
+    return 'Returner';
+  } else if (vedtakFattesAvKvalitetssikrer) {
+    return 'Godkjenn og fullfør behandling';
+  } else {
+    return 'Godkjenn';
+  }
+}
+
 function mapTrueFalseStringTilJaNei(str: 'true' | 'false') {
   return str === 'true' ? JaEllerNei.Ja : JaEllerNei.Nei;
 }

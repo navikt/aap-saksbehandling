@@ -36,7 +36,7 @@ interface Inntekt {
   beløp: string;
 }
 
-export type KravType = 'RELEVANT_KRAV' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING';
+export type KravType = 'RELEVANT_KRAV' | 'TRUKKET_SØKNAD' | 'KLAGE' | 'TILLEGGSOPPLYSNING' | 'MIGRERT_KRAV';
 
 export interface KravVurderingOppføring {
   kravType: KravType;
