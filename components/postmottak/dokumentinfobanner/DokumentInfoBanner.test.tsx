@@ -29,7 +29,7 @@ const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
   id: 1,
   markeringer: [],
   skjermingInfo: { erSkjermet: false, harFortroligAdresse: false, harStrengtFortroligAdresse: false },
-  versjon: 0
+  versjon: 0,
 };
 
 describe('Dokumentinfobanner', () => {

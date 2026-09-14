@@ -120,9 +120,8 @@ export const TotrinnsvurderingForm = ({
     },
   });
 
-  const finnesUnderkjentVilkår = form
-    .watch('totrinnsvurderinger')
-    .find((vurdering) => vurdering.godkjent === JaEllerNei.Nei) !== undefined;
+  const finnesUnderkjentVilkår =
+    form.watch('totrinnsvurderinger').find((vurdering) => vurdering.godkjent === JaEllerNei.Nei) !== undefined;
 
   return (
     <form

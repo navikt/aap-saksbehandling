@@ -5,7 +5,7 @@ import {
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { StegData } from 'lib/utils/steg';
+import { StegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { Arbeidsopptrapping } from 'components/behandlinger/sykdom/arbeidsopptrapping/Arbeidsopptrapping';
 
 interface Props {
@@ -17,6 +17,10 @@ export const ArbeidsopptrappingMedDataFetching = async ({ behandlingsreferanse, 
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
+  }
+
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
+    return null;
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
