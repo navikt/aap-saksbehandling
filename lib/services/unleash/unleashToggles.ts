@@ -12,6 +12,7 @@ export const FLAGS = [
   'DialogMedBehandler',
   'kopierPerioder',
   'HoppOverBeslutterVedAvslagSykdom',
+  'KanVurdereRefusjonIRevurdering',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -31,4 +32,5 @@ export const mockedFlags: Flags = {
   DialogMedBehandler: true,
   kopierPerioder: true,
   HoppOverBeslutterVedAvslagSykdom: true,
+  KanVurdereRefusjonIRevurdering: true,
 };
