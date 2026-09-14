@@ -1,6 +1,5 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { SykdomsvurderingMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurdering/SykdomsvurderingMedDataFetching';
-import { hentYrkesskadeVurderingGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { getAvklaringsbehovForSteg, getStegData } from 'lib/utils/steg';
 import { BistandsbehovMedDataFetching } from 'components/behandlinger/sykdom/bistandsbehov/BistandsbehovMedDataFetching';
 import { MeldepliktMedDataFetching } from 'components/behandlinger/sykdom/meldeplikt/MeldepliktMedDataFetching';
@@ -9,8 +8,6 @@ import { FastsettArbeidsevneMedDataFetching } from 'components/behandlinger/sykd
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { YrkesskadeMedDataFetching } from 'components/behandlinger/sykdom/yrkesskade/YrkesskadeMedDataFetching';
 import { RefusjonMedDataFetching } from 'components/behandlinger/sykdom/refusjon/RefusjonMedDataFetching';
-import { isError } from 'lib/utils/api';
-import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { SykdomsvurderingBrevMedDataFetching } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrevMedDataFetching';
 import { OvergangUforeMedDataFetching } from './overgangufore/OvergangUforeMedDataFetching';
 import { OvergangArbeidMedDataFetching } from './overgangarbeid/OvergangArbeidMedDataFetching';
@@ -19,7 +16,6 @@ import { EtableringAvEgenVirksomhetMedDatafetching } from 'components/behandling
 import { Behovstype } from 'lib/utils/form';
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
-import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffInfo';
 import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
 import { unleashService } from 'lib/services/unleash/unleashService';
 
@@ -29,12 +25,6 @@ interface Props {
 }
 
 export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
-  const yrkesskadeVurderingGrunnlag = await hentYrkesskadeVurderingGrunnlag(behandlingsreferanse);
-
-  if (isError(yrkesskadeVurderingGrunnlag)) {
-    return <ApiException apiResponses={[yrkesskadeVurderingGrunnlag]} />;
-  }
-
   const aktivStegGruppe = 'SYKDOM';
   const sykdomSteg = getStegData(aktivStegGruppe, 'AVKLAR_SYKDOM', flyt);
   const vurderBistandsbehovSteg = getStegData(aktivStegGruppe, 'VURDER_BISTANDSBEHOV', flyt);
@@ -50,7 +40,6 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const vurderSykepengeerstatningSteg = getStegData(aktivStegGruppe, 'VURDER_SYKEPENGEERSTATNING', flyt);
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt);
   const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt);
-  const oppgittYrkesskadeInfoSteg = hentStegDataForOppgittYrkesskadeInfo(yrkesskadeVurderingGrunnlag.data);
 
   const skalViseAlleSykdomSteg = unleashService.isEnabled('SkalViseAlleSykdomssteg');
 
@@ -139,16 +128,9 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
           />
         </StegSuspense>
       )}
-      {vurderYrkesskadeSteg.skalViseSteg && (
-        <StegSuspense>
-          <YrkesskadeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderYrkesskadeSteg} />
-        </StegSuspense>
-      )}
-      {oppgittYrkesskadeInfoSteg.skalViseSteg && !vurderYrkesskadeSteg.skalViseSteg && (
-        <StegSuspense>
-          <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={yrkesskadeVurderingGrunnlag.data} />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <YrkesskadeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderYrkesskadeSteg} />
+      </StegSuspense>
       {vurderStudentStegV2.skalViseSteg && (
         <StegSuspense>
           <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderStudentStegV2} />
@@ -165,21 +147,6 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
     </GruppeSteg>
   );
 };
-
-export function hentStegDataForOppgittYrkesskadeInfo(grunnlag: {
-  opplysninger: { oppgittYrkesskadeISøknad?: boolean | null; innhentedeYrkesskader: unknown[] };
-  yrkesskadeVurdering?: unknown;
-}) {
-  const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
-  const harIngenYrkesskadeId = grunnlag.yrkesskadeVurdering == null;
-  const harIngenInnhentetYrkesskade =
-    grunnlag.opplysninger.innhentedeYrkesskader == null || grunnlag.opplysninger.innhentedeYrkesskader.length === 0;
-
-  return {
-    skalViseSteg: oppgittYrkesskadeISøknad === true && harIngenYrkesskadeId && harIngenInnhentetYrkesskade,
-    readOnly: true,
-  };
-}
 
 export function getStegDataForBekreftVurderingerOppfølgingSteg(
   aktivStegGruppe: StegGruppe,
