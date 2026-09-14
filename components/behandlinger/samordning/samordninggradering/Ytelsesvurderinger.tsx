@@ -1,17 +1,21 @@
 import { PencilIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import {
+  SamordnetYtelse,
+  SamordningGraderingFormfields,
+} from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import {
   RedigerYtelseModal,
-  SamordnetYtelse,
-  ytelseLabel,
+  SamordnetYtelseFormFields,
+  ytelsesoptions,
 } from 'components/behandlinger/samordning/samordninggradering/RedigerYtelseModal';
 import { useState } from 'react';
 import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
-import { medAutoSplitt } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import { useFeatureFlag } from 'context/UnleashContext';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { SamordningYtelsestype } from '/lib/types/types';
+import { medAutoSplitt } from './beregnForhåndsvisning';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -19,7 +23,9 @@ interface Props {
   fieldArray: UseFieldArrayReturn<SamordningGraderingFormfields, 'vurderteSamordninger'>;
 }
 
-type SamordnetYtelseMedIndeks = SamordnetYtelse & { _index: number };
+function ytelseLabel(ytelseType: SamordningYtelsestype | undefined) {
+  return ytelsesoptions.find((ytelse) => ytelse.value === ytelseType)?.label ?? '';
+}
 
 function tilTall(verdi: unknown): number | undefined {
   if (verdi === null || verdi === undefined || `${verdi}`.trim() === '') {
@@ -29,27 +35,35 @@ function tilTall(verdi: unknown): number | undefined {
   return Number.isNaN(tall) ? undefined : tall;
 }
 
-type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; indeks: number };
+type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
-  const { remove, append, update } = fieldArray;
+  const { replace } = fieldArray;
   const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
   const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
 
   const rader = form.watch('vurderteSamordninger') ?? [];
-  const raderMedIndeks: SamordnetYtelseMedIndeks[] = rader.map((rad, index) => ({ ...rad, _index: index }));
-  const utfylteRader = raderMedIndeks.filter((rad) => rad.ytelseType && rad.periode.fom && rad.periode.tom);
-  const forhåndsvisning = medAutoSplitt(utfylteRader, autoSplittSykepenger);
 
-  function lagreRad(verdier: SamordnetYtelse) {
-    const rad = { ...verdier, gradering: tilTall(verdier.gradering), manuell: true };
 
-    if (modalTilstand?.modus === 'rediger') {
-      update(modalTilstand.indeks, rad);
-    } else {
-      append(rad);
-    }
+  function lagreRad(verdier: SamordnetYtelseFormFields) {
+    const rad: SamordnetYtelse = {
+      periode: { fom: verdier.fom, tom: verdier.tom },
+      gradering: tilTall(verdier.gradering),
+      ytelseType: verdier.ytelseType,
+      manuell: true,
+    };
+    const oppdaterArray = modalTilstand?.modus === 'rediger' ? rader.map((eksisterendeRad,index) => index === modalTilstand.index? rad : eksisterendeRad): [...rader, rad]
+    const splittet = medAutoSplitt(oppdaterArray,autoSplittSykepenger);
+
+    replace(splittet);
     setModalTilstand(null);
+  }
+
+  function fjerneRad(fjernetIndex: number) {
+    const utenSlettetElement = rader.filter((rad, index) => index !== fjernetIndex);
+    const splittet = medAutoSplitt(utenSlettetElement, autoSplittSykepenger);
+
+    replace(splittet);
   }
 
   return (
@@ -77,10 +91,8 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
             </Table.Header>
             <Table.Body>
               {(() => {
-                const alleredeVist = new Set<number>();
-                return forhåndsvisning.map((rad, index) => {
-                  const erFørsteVisningAvRad = !alleredeVist.has(rad._index);
-                  alleredeVist.add(rad._index);
+                return rader.map((rad, index) => {
+
                   return (
                     <Table.Row key={index}>
                       <Table.DataCell>
@@ -89,26 +101,24 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
                       <Table.DataCell>{ytelseLabel(rad.ytelseType)}</Table.DataCell>
                       <Table.DataCell>{rad.gradering}</Table.DataCell>
                       <Table.DataCell>
-                        {erFørsteVisningAvRad && (
-                          <HStack gap={'space-4'}>
-                            <Button
-                              size={'small'}
-                              icon={<PencilIcon title={'Rediger'} />}
-                              variant={'tertiary'}
-                              type={'button'}
-                              onClick={() => setModalTilstand({ modus: 'rediger', indeks: rad._index })}
-                              disabled={readOnly}
-                            />
-                            <Button
-                              size={'small'}
-                              icon={<TrashIcon title={'Slett'} />}
-                              variant={'tertiary'}
-                              type={'button'}
-                              onClick={() => remove(rad._index)}
-                              disabled={readOnly}
-                            />
-                          </HStack>
-                        )}
+                        <HStack gap={'space-4'}>
+                          <Button
+                            size={'small'}
+                            icon={<PencilIcon title={'Rediger'} />}
+                            variant={'tertiary'}
+                            type={'button'}
+                            onClick={() => setModalTilstand({ modus: 'rediger', index: index })}
+                            disabled={readOnly}
+                          />
+                          <Button
+                            size={'small'}
+                            icon={<TrashIcon title={'Slett'} />}
+                            variant={'tertiary'}
+                            type={'button'}
+                            onClick={() => fjerneRad(index)}
+                            disabled={readOnly}
+                          />
+                        </HStack>
                       </Table.DataCell>
                     </Table.Row>
                   );
@@ -132,7 +142,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
       </VStack>
       {modalTilstand && (
         <RedigerYtelseModal
-          initialValues={modalTilstand.modus === 'rediger' ? rader[modalTilstand.indeks] : undefined}
+          initialValues={modalTilstand.modus === 'rediger' ? rader[modalTilstand.index] : undefined}
           onLagre={lagreRad}
           onLukk={() => setModalTilstand(null)}
         />

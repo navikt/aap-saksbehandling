@@ -1,5 +1,4 @@
 import { Button, HStack, Modal } from '@navikt/ds-react';
-import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { ValuePair } from 'components/form/FormField';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -7,8 +6,14 @@ import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrap
 import { SamordningYtelsestype } from 'lib/types/types';
 import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { useForm } from 'react-hook-form';
+import { SamordnetYtelse } from './SamordningGradering';
 
-export type SamordnetYtelse = SamordningGraderingFormfields['vurderteSamordninger'][number];
+export interface SamordnetYtelseFormFields {
+  tom: string;
+  fom: string;
+  gradering?: string;
+  ytelseType?: SamordningYtelsestype | undefined;
+}
 
 export const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
   {
@@ -45,44 +50,46 @@ export const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
   },
 ];
 
-export function ytelseLabel(ytelseType: SamordningYtelsestype | undefined) {
-  return ytelsesoptions.find((ytelse) => ytelse.value === ytelseType)?.label ?? '';
-}
-
-const tomRad: SamordnetYtelse = {
+const tomRad: SamordnetYtelseFormFields = {
   ytelseType: undefined,
-  periode: { fom: '', tom: '' },
+  fom: '',
+  tom: '',
   gradering: undefined,
 };
 
 interface Props {
   initialValues?: SamordnetYtelse;
-  onLagre: (verdier: SamordnetYtelse) => void;
+  onLagre: (verdier: SamordnetYtelseFormFields) => void;
   onLukk: () => void;
 }
 
 export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) => {
-  const radForm = useForm<SamordnetYtelse>({ defaultValues: initialValues ?? tomRad });
+  const radForm = useForm<SamordnetYtelseFormFields>({
+    defaultValues: initialValues
+      ? {
+          tom: initialValues?.periode.tom,
+          fom: initialValues?.periode.fom,
+          gradering: initialValues?.gradering?.toString(),
+          ytelseType: initialValues?.ytelseType,
+        }
+      : tomRad,
+  });
+  const erFerieISykepengeperiode = radForm.watch('ytelseType') === 'FERIE_I_SYKEPENGEPERIODE';
 
   return (
-    <Modal
-      open
-      onClose={onLukk}
-      header={{ heading: initialValues ? 'Rediger periode' : 'Legg til periode' }}
-      width={'medium'}
-    >
+    <Modal open onClose={onLukk} header={{ heading: initialValues ? 'Rediger periode' : 'Legg til periode' }}>
       <Modal.Body>
-        <HStack align={'end'} gap={'space-4'} wrap={false}>
+        <HStack gap={'space-12'}>
           <DateInputWrapper
             label="Fra og med"
             control={radForm.control}
-            name={'periode.fom'}
+            name={'fom'}
             rules={{
               required: 'Du må velge dato for periodestart',
               validate: {
-                gyldigDato: (value) => validerDato(value as string),
+                gyldigDato: (value) => validerDato(value),
                 ikkeFoerStart: (value, formValues) =>
-                  value && erDatoFoerDato(formValues.periode.tom, value as string)
+                  value && erDatoFoerDato(formValues.tom, value)
                     ? 'Fra og med dato kan ikke være etter til og med dato'
                     : undefined,
               },
@@ -91,10 +98,10 @@ export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) =>
           <DateInputWrapper
             label="Til og med"
             control={radForm.control}
-            name={'periode.tom'}
+            name={'tom'}
             rules={{
               required: 'Du må velge dato for periodeslutt',
-              validate: (value) => validerDato(value as string),
+              validate: (value) => validerDato(value),
             }}
           />
           <SelectWrapper
@@ -110,27 +117,29 @@ export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) =>
               </option>
             ))}
           </SelectWrapper>
+          {!erFerieISykepengeperiode &&
           <TextFieldWrapper
             name={'gradering'}
-            label={'Utbetalingsgrad'}
+            label={'Samordningsgrad'}
             type={'text'}
             size={'small'}
             control={radForm.control}
             rules={{
-              required: 'Du må velge utbetalingsgrad',
+              required: 'Du må velge samordningsgrad',
               validate: (value) => {
                 if (Number.isNaN(Number(value))) {
                   return 'Prosent må angis med siffer';
                 }
                 if (Number(value) < 0) {
-                  return 'Utbetalingsgrad kan ikke være mindre enn 0%';
+                  return 'Samordningsgrad kan ikke være mindre enn 0%';
                 }
                 if (Number(value) > 100) {
-                  return 'Utbetalingsgrad kan ikke være mer enn 100%';
+                  return 'Samordningsgrad kan ikke være mer enn 100%';
                 }
               },
             }}
           />
+          }
         </HStack>
       </Modal.Body>
       <Modal.Footer>

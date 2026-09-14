@@ -94,7 +94,7 @@ describe('Samordning gradering', () => {
       format(subWeeks(new Date(), 3), 'dd.MM.yyyy')
     );
     expect(screen.getByRole('textbox', { name: 'Til og med' })).toHaveValue(format(new Date(), 'dd.MM.yyyy'));
-    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toHaveValue('20');
+    expect(screen.getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('20');
   });
 
   test('lagrer endringer fra redigeringsmodalen tilbake til tabellen', async () => {
@@ -102,7 +102,7 @@ describe('Samordning gradering', () => {
 
     await user.click(screen.getByRole('button', { name: 'Rediger' }));
 
-    const gradering = screen.getByRole('textbox', { name: 'Utbetalingsgrad' });
+    const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
     await user.clear(gradering);
     await user.type(gradering, '60');
     await user.click(screen.getByRole('button', { name: 'Lagre endringer' }));

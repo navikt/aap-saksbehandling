@@ -49,7 +49,7 @@ interface Props {
   oppfølgningOppgave?: OppfølgningOppgaveOpprinnelseResponse;
 }
 
-interface SamordnetYtelse {
+export interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
   manuell?: boolean;
   gradering?: number;
@@ -154,7 +154,7 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                vurderteSamordningerData: medAutoSplitt(data.vurderteSamordninger || [], autoSplittSykepenger).map(
+                vurderteSamordningerData: data.vurderteSamordninger?.map(
                   (vurdertSamordning) => ({
                     manuell: vurdertSamordning.manuell,
                     gradering: vurdertSamordning.gradering,
