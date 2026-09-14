@@ -75,7 +75,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit((data) => sendHendelse(data))}>
         <VStack gap="space-16">
-          <Kort heading={'Opprettt klage'}>
+          <Kort heading={'Opprett klage'}>
             <VStack gap={'space-16'}>
               <FormField form={form} formField={formFields.kravMottatt} size="medium" />
               <FormField form={form} formField={formFields.beskrivelse} size="medium" />

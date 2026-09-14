@@ -24,7 +24,8 @@ export const MeldepliktMedDataFetching = async ({ behandlingsreferanse, stegData
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FRITAK_MELDEPLIKT_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

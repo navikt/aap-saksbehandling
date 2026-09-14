@@ -24,7 +24,8 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
   const initalMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

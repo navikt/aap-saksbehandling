@@ -23,7 +23,7 @@ function relevantKrav(overrides: Partial<RelevantKrav> = {}): RelevantKrav {
     begrunnelse: 'Opprinnelig begrunnelse',
     opprettet: '2025-04-01T10:30:00Z',
     muligRettFra: '2025-04-15',
-    søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt' },
+    søknadsdato: { dato: '2025-04-01', årsak: 'SøknadMottatt', begrunnelse: '' },
     vurdertAv: 'Z000000',
     vurdertIBehandling: { id: 1 },
     ...overrides,
@@ -53,7 +53,9 @@ describe('VurderKrav - visning av søknader uten kravvurdering', () => {
   it('viser en søknad uten kravvurdering automatisk som en åpen KravBoks med "Må vurderes"-tag', () => {
     const grunnlagMedSøknad = grunnlag({ søknaderUtenKravvurdering: [søknadUtenKrav()] });
 
-    render(<VurderKrav grunnlag={grunnlagMedSøknad} behandlingVersjon={0} readOnly={false} />);
+    render(
+      <VurderKrav grunnlag={grunnlagMedSøknad} behandlingVersjon={0} readOnly={false} harMigreringsbehov={false} />
+    );
 
     expect(screen.getByText('Ny søknad jp-ny')).toBeVisible();
     expect(screen.getAllByText('Må vurderes').length).toBeGreaterThan(0);
@@ -62,7 +64,7 @@ describe('VurderKrav - visning av søknader uten kravvurdering', () => {
   });
 
   it('viser ikke noen KravBoks når det ikke finnes søknader uten kravvurdering eller valgte krav', () => {
-    render(<VurderKrav grunnlag={grunnlag()} behandlingVersjon={0} readOnly={false} />);
+    render(<VurderKrav grunnlag={grunnlag()} behandlingVersjon={0} readOnly={false} harMigreringsbehov={false} />);
 
     expect(screen.queryByRole('textbox', { name: 'Begrunnelse' })).not.toBeInTheDocument();
   });
@@ -71,7 +73,14 @@ describe('VurderKrav - visning av søknader uten kravvurdering', () => {
 describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
   it('åpner en KravBoks for et eksisterende krav når "Endre" klikkes i tabellen', async () => {
     const krav = relevantKrav();
-    render(<VurderKrav grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
+    render(
+      <VurderKrav
+        grunnlag={grunnlag({ nyeVurderinger: [krav] })}
+        behandlingVersjon={0}
+        readOnly={false}
+        harMigreringsbehov={false}
+      />
+    );
 
     expect(screen.queryByText('Vurder krav krav-1')).not.toBeInTheDocument();
 
@@ -82,7 +91,14 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
 
   it('lukker og nullstiller en KravBoks når "Lukk" klikkes i tabellen etter redigering', async () => {
     const krav = relevantKrav();
-    render(<VurderKrav grunnlag={grunnlag({ nyeVurderinger: [krav] })} behandlingVersjon={0} readOnly={false} />);
+    render(
+      <VurderKrav
+        grunnlag={grunnlag({ nyeVurderinger: [krav] })}
+        behandlingVersjon={0}
+        readOnly={false}
+        harMigreringsbehov={false}
+      />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
     await user.click(
@@ -115,6 +131,7 @@ describe('VurderKrav - åpne og lukke krav fra tabellen', () => {
         grunnlag={grunnlag({ søknaderUtenKravvurdering: [søknadUtenKrav()] })}
         behandlingVersjon={0}
         readOnly={false}
+        harMigreringsbehov={false}
       />
     );
 
@@ -188,6 +205,7 @@ describe('VurderKrav - handleSubmit', () => {
         })}
         behandlingVersjon={0}
         readOnly={false}
+        harMigreringsbehov={false}
       />
     );
 
@@ -261,6 +279,7 @@ describe('VurderKrav - mellomlagring', () => {
         grunnlag={grunnlag({ nyeVurderinger: [krav] })}
         behandlingVersjon={0}
         readOnly={false}
+        harMigreringsbehov={false}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );

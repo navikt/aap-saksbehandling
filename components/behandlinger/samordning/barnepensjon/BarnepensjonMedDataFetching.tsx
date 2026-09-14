@@ -21,7 +21,8 @@ export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegDa
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_BARNEPENSJON_KODE,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

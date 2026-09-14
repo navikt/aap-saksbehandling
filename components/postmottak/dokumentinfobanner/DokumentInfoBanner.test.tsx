@@ -23,12 +23,13 @@ const journalpostInfo = {
 };
 
 const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
+  tilhørerUtlandEnhet: false,
   saksnummer: '12345',
   harUlesteDokumenter: false,
   id: 1,
   markeringer: [],
   skjermingInfo: { erSkjermet: false, harFortroligAdresse: false, harStrengtFortroligAdresse: false },
-  versjon: 0,
+  versjon: 0
 };
 
 describe('Dokumentinfobanner', () => {

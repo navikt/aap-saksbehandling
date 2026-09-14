@@ -6,7 +6,7 @@ import {
   hentMellomlagring,
   hentYrkesskadeVurderingGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegData, skalViseSteg } from 'lib/utils/steg';
+import { getStegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
@@ -44,14 +44,15 @@ export const PeriodisertForutgåendeMedlemskap = async ({ behandlingsreferanse, 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_FORUTGÅENDE_MEDLEMSKAP,
-    readOnly
+    readOnly,
+    vurderMedlemskapSteg.erIkkePåVent
   );
 
   const erOverstyrtTilbakeførtVurdering =
     automatiskVurdering.data.kanBehandlesAutomatisk &&
     (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
 
-  const visManuellVurdering = skalViseSteg(vurderMedlemskapSteg, grunnlag.data.sisteVedtatteVurderinger.length > 0);
+  const visManuellVurdering = skalViseStegForPeriodisertGrunnlag(vurderMedlemskapSteg.avklaringsbehov, grunnlag.data);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
     automatiskVurdering.data.kanBehandlesAutomatisk,
     readOnly,

@@ -1,4 +1,4 @@
-import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype } from 'lib/types/oppgaveTypes';
+import { OppgaveAvklaringsbehovKode, OppgaveBehandlingstype, UføreVedtakStatus } from 'lib/types/oppgaveTypes';
 import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/types/postmottakTypes';
 import {
   SettPåVentÅrsaker,
@@ -55,7 +55,7 @@ const behovskodeMap = {
   '5038': 'Vurder krav',
   '5039': 'Avklar stønadsperiode',
   '5040': '§ 11-4 andre ledd. Krav om inntektsbortfall etter fylte 62 år',
-  '5041': 'Skriv vedtaksbrev',
+  '5041': 'Skriv vedtaksbrev (saksbehandler)',
   '5042': 'Avslag § 11-27',
   '5050': 'Skriv brev',
   '5051': 'Skriv vedtaksbrev',
@@ -141,6 +141,20 @@ export function mapTilVenteÅrsakTekst(
       return 'Venter på brukeruttalelse';
   }
   exhaustiveCheck(årsak);
+}
+
+export function mapTilResultat(resultat: UføreVedtakStatus): string {
+  switch (resultat) {
+    case 'INNVILGELSE':
+      return 'innvilgelse';
+    case 'OPPHØR':
+      return 'opphør';
+    case 'AVSLAG':
+      return 'avslag';
+    case 'ENDRET':
+      return 'endret';
+  }
+  exhaustiveCheck(resultat);
 }
 
 export function mapTilSteggruppeTekst(steggruppe: string) {
@@ -296,6 +310,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Aktivitetsplikt';
     case 'UTVID_VEDTAKSLENGDE':
       return 'Utvid vedtaksperiode';
+    case 'MIGRERING_FRA_ARENA':
+      return 'Migrering';
   }
 }
 

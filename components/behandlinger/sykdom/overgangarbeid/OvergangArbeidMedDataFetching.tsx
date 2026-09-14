@@ -24,7 +24,8 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_ARBEID,
-    totalReadOnly
+    totalReadOnly,
+    stegData.erIkkePåVent
   );
 
   return (

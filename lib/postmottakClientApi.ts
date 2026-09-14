@@ -23,10 +23,6 @@ export function postmottakLøsBehovClient(avklaringsBehov: LøsAvklaringsbehovP�
   return clientFetch<void>('/postmottak/api/post/los-behov/', 'POST', avklaringsBehov);
 }
 
-export function postmottakEndreTemaClient(behandlingsreferanse: string) {
-  return clientFetch<{ redirectUrl: string }>(`/postmottak/api/post/${behandlingsreferanse}/endre-tema`, 'POST', {});
-}
-
 export function postmottakAlleBehandlinger(ident: string) {
   return clientFetch<FinnBehandlingerRespons>(`/postmottak/api/post/alle-behandlinger`, 'POST', { ident: ident });
 }

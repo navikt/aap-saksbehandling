@@ -110,6 +110,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   YtelseoppslagRequest,
+  MeldingMedDokumenterDto,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -617,6 +618,11 @@ export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
   return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`;
+  return await apiFetch<Array<MeldingMedDokumenterDto>>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentFastlege = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/fastlege/${saksnummer}`;
   return await apiFetch<FastlegeResponse[]>(url, saksbehandlingApiScope, 'GET');
@@ -720,8 +726,18 @@ export const hentMellomlagringMedStatus = (behandlingsreferanse: string, kode: s
     saksbehandlingApiScope
   );
 };
-export const hentMellomlagring = async (behandlingsreferanse: string, kode: string, readOnly: boolean) => {
-  if (readOnly) {
+
+/**
+ * Vi ønsker å hente mellomlagring når behandling er på vent slik at saksbehandler ser siste mellomlagrede vurdering ved gjenopptak av behandlingen.
+ * Etter innsending til beslutter/KS skal kun bekreftede vurderinger vises.
+ */
+export const hentMellomlagring = async (
+  behandlingsreferanse: string,
+  kode: string,
+  readOnly: boolean,
+  erIkkePåVent: boolean
+) => {
+  if (readOnly && erIkkePåVent) {
     return undefined;
   }
 

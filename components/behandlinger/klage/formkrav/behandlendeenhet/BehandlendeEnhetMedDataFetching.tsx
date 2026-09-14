@@ -13,11 +13,13 @@ export const BehandlendeEnhetMedDataFetching = async ({
   behandlingVersjon,
   typeBehandling,
   readOnly,
+  erIkkePåVent,
 }: {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   typeBehandling: TypeBehandling;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }) => {
   const grunnlag = await hentBehandlendeEnhetGrunnlag(behandlingsreferanse);
 
@@ -29,7 +31,8 @@ export const BehandlendeEnhetMedDataFetching = async ({
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_BEHANDLENDE_ENHET,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   return (

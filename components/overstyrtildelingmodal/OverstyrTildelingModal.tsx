@@ -5,7 +5,13 @@ import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevur
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 
 export const OverstyrTildelingModal = () => {
-  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, callback } = useOverstyrTildelingHook();
+  const { visOverstyrModal, setVisOverstyrModal, reservertAvNavn, bekreftOverstyring, avbrytOverstyring } =
+    useOverstyrTildelingHook();
+
+  const handleClose = () => {
+    avbrytOverstyring();
+    setVisOverstyrModal(false);
+  };
 
   return (
     <Modal
@@ -13,7 +19,7 @@ export const OverstyrTildelingModal = () => {
         heading: 'Er du sikker på at du vil jobbe med denne oppgaven?',
       }}
       open={visOverstyrModal}
-      onClose={() => setVisOverstyrModal(false)}
+      onClose={handleClose}
       className={styles.modal}
     >
       <Modal.Body>
@@ -28,19 +34,13 @@ export const OverstyrTildelingModal = () => {
           type={'button'}
           className={'fit-content'}
           onClick={async () => {
-            callback();
+            bekreftOverstyring();
             setVisOverstyrModal(false);
           }}
         >
           Bekreft og fortsett
         </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => {
-            setVisOverstyrModal(false);
-          }}
-        >
+        <Button type="button" variant="secondary" onClick={handleClose}>
           Avbryt
         </Button>
       </Modal.Footer>

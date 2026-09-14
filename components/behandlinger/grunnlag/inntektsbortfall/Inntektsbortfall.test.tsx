@@ -37,6 +37,7 @@ describe('InntektsbortfallMedDataFetching', () => {
         typeBehandling: 'Førstegangsbehandling',
         avklaringsbehov: [],
         skalViseSteg: true,
+        erIkkePåVent: true,
       },
     });
 
@@ -68,6 +69,7 @@ describe('InntektsbortfallMedDataFetching', () => {
         typeBehandling: 'Førstegangsbehandling',
         avklaringsbehov: [],
         skalViseSteg: true,
+        erIkkePåVent: true,
       },
     });
 

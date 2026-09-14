@@ -19,7 +19,7 @@ export function ArenaSakKort({ sak }: { sak: ArenaSakOppsummeringKontrakt }) {
             Arena {sak.sakstype}
           </Heading>
           {visLenke ? (
-            <Link href={`${arenaVisningsklientBaseUrl}sak/${sak.sakId}`} target="_blank">
+            <Link href={`${arenaVisningsklientBaseUrl}sak/${sak.aar}-${sak.lopenummer}`} target="_blank">
               <Heading as="h3" size="small">
                 {sak.aar} {sak.lopenummer}
               </Heading>

@@ -128,13 +128,24 @@ function emptyDraftFormFields(): DraftFormFields {
 }
 
 function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
-  return (
+  const ytelsesbehandlinger =
     grunnlag?.behandlinger.map((behandling) => ({
       saksnummer: behandling.saksnummer,
       value: behandling.referanse,
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
       vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
-    })) ?? []
+    })) ?? [];
+
+  const klagebehandlinger =
+    grunnlag?.vedtatteKlagebehandlinger.map((behandling) => ({
+      saksnummer: behandling.saksnummer,
+      value: behandling.referanse,
+      vedtaksdato: new Date(behandling.vedtaksdato),
+      behandlingstype: 'Klage',
+      vurderingsbehov: [],
+    })) ?? [];
+  return [...ytelsesbehandlinger, ...klagebehandlinger].sort(
+    (a, b) => b.vedtaksdato.getTime() - a.vedtaksdato.getTime()
   );
 }

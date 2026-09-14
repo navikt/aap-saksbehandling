@@ -12,9 +12,15 @@ interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
+  erIkkePåVent: boolean;
 }
 
-export const VedtakslengdeMedDataFetching = async ({ behandlingsreferanse, behandlingVersjon, readOnly }: Props) => {
+export const VedtakslengdeMedDataFetching = async ({
+  behandlingsreferanse,
+  behandlingVersjon,
+  readOnly,
+  erIkkePåVent,
+}: Props) => {
   const [grunnlag, behandling] = await Promise.all([
     hentVedtakslengdeGrunnlag(behandlingsreferanse),
     hentBehandling(behandlingsreferanse),
@@ -28,7 +34,8 @@ export const VedtakslengdeMedDataFetching = async ({ behandlingsreferanse, behan
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.FASTSETT_VEDTAKSLENGDE,
-    totalReadOnly
+    totalReadOnly,
+    erIkkePåVent
   );
 
   const erVedtakslengdeManuelt =

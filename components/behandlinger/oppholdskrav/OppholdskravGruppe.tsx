@@ -25,6 +25,7 @@ export const OppholdskravStegGruppe = async ({ behandlingsreferanse, flyt }: Pro
           behandlingsreferanse={behandlingsreferanse}
           behandlingVersjon={flyt.behandlingVersjon}
           readOnly={stegData.readOnly}
+          erIkkePåVent={stegData.erIkkePåVent}
         />
       </StegSuspense>
     </GruppeSteg>

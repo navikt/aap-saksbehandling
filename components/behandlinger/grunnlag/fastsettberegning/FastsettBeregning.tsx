@@ -44,6 +44,7 @@ const ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS: ValuePair<ÅrsakBeregningstid
   { label: 'Kravdato', value: 'KRAVDATO' },
   { label: 'Dato på legeerklæring', value: 'DATO_PAA_LEGEERKLÆRING' },
   { label: 'Henvist til behandling', value: 'HENVIST_TIL_BEHANDLING' },
+  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Annet', value: 'ANNET' },
 ];
 
@@ -66,7 +67,6 @@ const ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS: ValuePair<ÅrsakYtterligereNedsatt
 // Supersett av labels, inkl. verdier som ikke lenger kan velges, brukt for å vise historiske vurderinger korrekt
 const ALLE_ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_LABELS: ValuePair[] = [
   ...ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS,
-  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: '16 år som beregningstidspunkt', value: 'SEKSTEN_ÅR_SOM_BEREGNINGSTIDSPUNKT' },
 ];
 

@@ -10,10 +10,10 @@ interface OverstyrTildelingContextType {
   reservertAvNavn: string | null;
   setReservertAvNavn: Dispatch<SetStateAction<string | null>>;
   // Nye states
-  bekreftTildeling: () => void;
-  setBekreftTildeling: Dispatch<SetStateAction<() => void>>;
-  avbrytTildeling: () => void;
-  setAvbrytTildeling: Dispatch<SetStateAction<() => void>>;
+  bekreftOverstyring: () => void;
+  setBekreftOverstyring: Dispatch<SetStateAction<() => void>>;
+  avbrytOverstyring: () => void;
+  setAvbrytOverstyring: Dispatch<SetStateAction<() => void>>;
 }
 
 export const OverstyrTildelingContext = createContext<OverstyrTildelingContextType | null>(null);
@@ -28,8 +28,8 @@ export function OverstyrTildelingContextProvider(props: Props) {
   const [callback, setCallback] = useState<() => void>(() => {});
   const [reservertAvNavn, setReservertAvNavn] = useState<string | null>(null);
   // Nye states
-  const [bekreftTildeling, setBekreftTildeling] = useState<() => void>(() => {});
-  const [avbrytTildeling, setAvbrytTildeling] = useState<() => void>(() => {});
+  const [bekreftOverstyring, setBekreftOverstyring] = useState<() => void>(() => {});
+  const [avbrytOverstyring, setAvbrytOverstyring] = useState<() => void>(() => {});
 
   const context: OverstyrTildelingContextType = {
     visOverstyrModal: visOverstyrModal,
@@ -39,10 +39,10 @@ export function OverstyrTildelingContextProvider(props: Props) {
     reservertAvNavn,
     setReservertAvNavn,
     // Nye states
-    bekreftTildeling,
-    setBekreftTildeling,
-    avbrytTildeling,
-    setAvbrytTildeling,
+    bekreftOverstyring: bekreftOverstyring,
+    setBekreftOverstyring: setBekreftOverstyring,
+    avbrytOverstyring: avbrytOverstyring,
+    setAvbrytOverstyring: setAvbrytOverstyring,
   };
 
   return <OverstyrTildelingContext.Provider value={context}>{children}</OverstyrTildelingContext.Provider>;
