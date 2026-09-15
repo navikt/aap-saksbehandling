@@ -4,9 +4,9 @@ import { Button, Detail, HStack, InfoCard, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
-import { clientOpprettMarkeringHendelse, MarkeringHendelseType } from 'lib/clientApi';
+import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
 import { clientFjernHelseopplysningIkon } from 'lib/oppgaveClientApi';
-import { Markering } from 'lib/types/oppgaveTypes';
+import type { Markering } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
@@ -157,7 +157,7 @@ export const TotrinnsvurderingForm = ({
         if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
           clientOpprettMarkeringHendelse(behandlingsreferanse, {
             markeringType: 'HASTER',
-            hendelseType: MarkeringHendelseType.FJERNET,
+            hendelseType: 'FJERNET',
           });
         }
         if (isError) {

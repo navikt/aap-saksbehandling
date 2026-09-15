@@ -59,3 +59,5 @@ export type MineOppgaverSortBy = NonNullable<NonNullable<MineOppgaverQueryParams
 export type MineOppgaverSortOrder = NonNullable<NonNullable<MineOppgaverQueryParams>['sortorder']>;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
+
+export type OpprettMarkeringDto = components['schemas']['no.nav.aap.oppgave.markering.OpprettMarkeringDto'];
