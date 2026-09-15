@@ -46,19 +46,19 @@ async function åpneMeny() {
 
 describe('SaksmenyDropdown', () => {
   it('viser knapp for å åpne saksmenyen', () => {
-    customRender(<SaksmenyDropdown behandling={behandling} visning={visning} />);
+    customRender(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />);
     expect(screen.getByRole('button', { name: 'Saksmeny' })).toBeVisible();
   });
 
   it('viser alltid valg for å sette behandling på vent', async () => {
-    customRender(<SaksmenyDropdown behandling={behandling} visning={visning} />);
+    customRender(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />);
     await åpneMeny();
     expect(screen.getByRole('button', { name: 'Sett behandling på vent' })).toBeVisible();
   });
 
   describe('Trekk søknad', () => {
     it('vises for førstegangsbehandling når bruker kan saksbehandle', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={visning} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -66,14 +66,14 @@ describe('SaksmenyDropdown', () => {
     });
 
     it('vises ikke når innlogget bruker ikke kan saksbehandle', async () => {
-      customRender(<SaksmenyDropdown behandling={behandling} visning={visning} />);
+      customRender(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />);
       await åpneMeny();
       expect(screen.queryByRole('button', { name: 'Trekk søknad' })).not.toBeInTheDocument();
     });
 
     it('vises ikke for revurdering', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown behandling={behandling} visning={{ ...visning, typeBehandling: 'Revurdering' }} />,
+        <SaksmenyDropdown flyt={[]} behandling={behandling} visning={{ ...visning, typeBehandling: 'Revurdering' }} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -82,11 +82,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke dersom behandlingen allerede behandler trekk av søknad', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown
-          behandling={behandling}
-          visning={visning}
-          flyt={[flytGruppe('SØKNAD', true)]}
-        />,
+        <SaksmenyDropdown behandling={behandling} visning={visning} flyt={[flytGruppe('SØKNAD', true)]} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -98,16 +94,16 @@ describe('SaksmenyDropdown', () => {
     const revurdering = { ...visning, typeBehandling: 'Revurdering' as const };
 
     it('vises for beslutter på revurdering som ikke er iverksatt', async () => {
-      customRenderMedRoller(
-        <SaksmenyDropdown behandling={behandling} visning={revurdering} />,
-        [Roller.SAKSBEHANDLER_NASJONAL, Roller.BESLUTTER]
-      );
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={revurdering} />, [
+        Roller.SAKSBEHANDLER_NASJONAL,
+        Roller.BESLUTTER,
+      ]);
       await åpneMeny();
       expect(screen.getByRole('button', { name: 'Avbryt behandling' })).toBeVisible();
     });
 
     it('vises ikke for bruker som ikke er beslutter', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={revurdering} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={revurdering} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -116,7 +112,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke når behandlingen er iverksatt', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={revurdering} />,
+        <SaksmenyDropdown flyt={[]} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={revurdering} />,
         [Roller.SAKSBEHANDLER_NASJONAL, Roller.BESLUTTER]
       );
       await åpneMeny();
@@ -141,7 +137,7 @@ describe('SaksmenyDropdown', () => {
     const aktivitetsplikt = { ...visning, typeBehandling: 'Aktivitetsplikt' as const };
 
     it('vises for saksbehandler på aktivitetspliktbehandling som ikke er iverksatt', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={aktivitetsplikt} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={aktivitetsplikt} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -150,7 +146,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke når behandlingen er iverksatt', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={aktivitetsplikt} />,
+        <SaksmenyDropdown flyt={[]} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={aktivitetsplikt} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -175,7 +171,7 @@ describe('SaksmenyDropdown', () => {
     const klageBehandling: DetaljertBehandling = { ...behandling, type: 'Klage' };
 
     it('vises for klagebehandling når bruker kan saksbehandle', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={klageBehandling} visning={visning} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={klageBehandling} visning={visning} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -183,7 +179,7 @@ describe('SaksmenyDropdown', () => {
     });
 
     it('vises ikke for behandlinger som ikke er klage', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={visning} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -192,11 +188,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke dersom klagen allerede skal trekkes', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown
-          behandling={klageBehandling}
-          visning={visning}
-          flyt={[flytGruppe('TREKK_KLAGE', true)]}
-        />,
+        <SaksmenyDropdown behandling={klageBehandling} visning={visning} flyt={[flytGruppe('TREKK_KLAGE', true)]} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -206,7 +198,7 @@ describe('SaksmenyDropdown', () => {
 
   describe('Overstyr starttidspunkt (§ 22-13 syvende ledd)', () => {
     it('vises for førstegangsbehandling som ikke er iverksatt', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={visning} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -215,7 +207,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises for revurdering som ikke er iverksatt', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown behandling={behandling} visning={{ ...visning, typeBehandling: 'Revurdering' }} />,
+        <SaksmenyDropdown flyt={[]} behandling={behandling} visning={{ ...visning, typeBehandling: 'Revurdering' }} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -224,7 +216,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke når behandlingen er iverksatt', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
+        <SaksmenyDropdown flyt={[]} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -232,7 +224,7 @@ describe('SaksmenyDropdown', () => {
     });
 
     it('vises ikke når bruker ikke kan saksbehandle', async () => {
-      customRender(<SaksmenyDropdown behandling={behandling} visning={visning} />);
+      customRender(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />);
       await åpneMeny();
       expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
     });
@@ -240,7 +232,7 @@ describe('SaksmenyDropdown', () => {
 
   describe('Marker som haster', () => {
     it('vises når bruker kan saksbehandle', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={visning} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -248,7 +240,7 @@ describe('SaksmenyDropdown', () => {
     });
 
     it('vises ikke når bruker ikke kan saksbehandle', async () => {
-      customRender(<SaksmenyDropdown behandling={behandling} visning={visning} />);
+      customRender(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />);
       await åpneMeny();
       expect(screen.queryByRole('button', { name: 'Marker som haster' })).not.toBeInTheDocument();
     });
@@ -256,7 +248,7 @@ describe('SaksmenyDropdown', () => {
 
   describe('Vurder avslag § 11-27', () => {
     it('vises for førstegangsbehandling som ikke er iverksatt', async () => {
-      customRenderMedRoller(<SaksmenyDropdown behandling={behandling} visning={visning} />, [
+      customRenderMedRoller(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />, [
         Roller.SAKSBEHANDLER_NASJONAL,
       ]);
       await åpneMeny();
@@ -265,7 +257,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke når behandlingen er iverksatt', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
+        <SaksmenyDropdown flyt={[]} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -274,11 +266,7 @@ describe('SaksmenyDropdown', () => {
 
     it('vises ikke dersom avslag allerede er valgt', async () => {
       customRenderMedRoller(
-        <SaksmenyDropdown
-          behandling={behandling}
-          visning={visning}
-          flyt={[flytGruppe('AVSLAG_11_27', true)]}
-        />,
+        <SaksmenyDropdown behandling={behandling} visning={visning} flyt={[flytGruppe('AVSLAG_11_27', true)]} />,
         [Roller.SAKSBEHANDLER_NASJONAL]
       );
       await åpneMeny();
@@ -287,7 +275,7 @@ describe('SaksmenyDropdown', () => {
   });
 
   it('åpner modal for å sette behandling på vent når menyvalget trykkes', async () => {
-    customRender(<SaksmenyDropdown behandling={behandling} visning={visning} />);
+    customRender(<SaksmenyDropdown flyt={[]} behandling={behandling} visning={visning} />);
     await åpneMeny();
     await user.click(screen.getByRole('button', { name: 'Sett behandling på vent' }));
     expect(screen.getByRole('heading', { name: /vent/i })).toBeVisible();

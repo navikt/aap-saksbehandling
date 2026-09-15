@@ -29,8 +29,8 @@ interface Props {
   sak: SaksInfoType;
   behandling?: DetaljertBehandling;
   oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
-  flyt?: FlytGruppe[];
-  visning?: FlytVisning;
+  flyt: FlytGruppe[];
+  visning: FlytVisning;
 }
 
 export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning }: Props) => {
@@ -46,11 +46,11 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
   const adressebeskyttelser = oppgaveVisningsinfo ? utledAdressebeskyttelse(oppgaveVisningsinfo) : [];
 
   const hentOppgaveStatus = (): OppgaveStatusType | undefined => {
-    if (visning?.visVentekort) {
+    if (visning.visVentekort) {
       return { status: 'PÅ_VENT', label: 'På vent' };
     } else if (sak.søknadErTrukket) {
       return { status: 'TRUKKET', label: 'Trukket' };
-    } else if (visning?.resultatKode) {
+    } else if (visning.resultatKode) {
       return { status: 'AVBRUTT', label: 'Avbrutt' };
     }
   };
