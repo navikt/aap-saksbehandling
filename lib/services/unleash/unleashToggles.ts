@@ -11,6 +11,7 @@ export const FLAGS = [
   'SkalViseAlleSykdomssteg',
   'DialogMedBehandler',
   'kopierPerioder',
+  'autoSplittSykepenger',
   'HoppOverBeslutterVedAvslagSykdom',
 ] as const;
 
@@ -31,4 +32,5 @@ export const mockedFlags: Flags = {
   DialogMedBehandler: true,
   kopierPerioder: true,
   HoppOverBeslutterVedAvslagSykdom: true,
+  autoSplittSykepenger: true,
 };
