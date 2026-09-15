@@ -234,7 +234,7 @@ describe('mapTilPeriodisertVurdering', () => {
         });
       });
 
-      describe('skalViseAlleSykdomssteg = true', () => {
+      describe('skal nullstille alle sykdomssteg', () => {
         it('skal nullstille erNedsettelseIArbeidsevneMerEnnHalvparten når harNedsattArbeidsevne = NEI', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
