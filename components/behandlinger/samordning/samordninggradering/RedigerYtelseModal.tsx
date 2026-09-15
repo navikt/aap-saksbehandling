@@ -99,11 +99,11 @@ export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) =>
           </HStack>
         </Dialog.Body>
         <Dialog.Footer>
-          <Button size={'small'} type={'button'} onClick={form.handleSubmit(onLagre)}>
+          <Button type={'button'} onClick={form.handleSubmit(onLagre)}>
             {initialValues ? 'Lagre endringer' : 'Legg til periode'}
           </Button>
           <Dialog.CloseTrigger>
-            <Button size={'small'} type={'button'} variant={'secondary'}>
+            <Button type={'button'} variant={'secondary'}>
               Avbryt
             </Button>
           </Dialog.CloseTrigger>
