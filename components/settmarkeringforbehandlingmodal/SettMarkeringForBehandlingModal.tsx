@@ -15,7 +15,6 @@ import styles from 'components/settbehandlingpåventmodal/SettBehandlingPåVentM
 interface Props {
   referanse: string;
   type: MarkeringType;
-  isOpen: boolean;
   onClose: () => void;
 }
 
@@ -24,7 +23,7 @@ interface FormFields {
   hasteBegrunnelse: string;
 }
 
-export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClose }: Props) => {
+export const SettMarkeringForBehandlingModal = ({ referanse, type, onClose }: Props) => {
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const markeringsType = markeringTypeTilEnum(type);
@@ -57,44 +56,42 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
 
   return (
     <Modal
-      open={isOpen}
+      open
       onClose={onCloseClick}
       header={markeringTypeTilOverskrift(type)}
       className={styles.settBehandlingPåVentModal}
     >
       <Modal.Body>
         <VStack gap={'space-16'}>
-          {isOpen && (
-            <form
-              id={'settMarkeringPåBehandling'}
-              onSubmit={form.handleSubmit(async (data) => {
-                setIsLoading(true);
+          <form
+            id={'settMarkeringPåBehandling'}
+            onSubmit={form.handleSubmit(async (data) => {
+              setIsLoading(true);
 
-                const res = await clientOpprettMarkeringHendelse(referanse, {
-                  begrunnelse: markeringsType === 'HASTER' ? data.hasteBegrunnelse : data.begrunnelse,
-                  markeringType: markeringsType,
-                  hendelseType: 'OPPRETTET',
-                });
+              const res = await clientOpprettMarkeringHendelse(referanse, {
+                begrunnelse: markeringsType === 'HASTER' ? data.hasteBegrunnelse : data.begrunnelse,
+                markeringType: markeringsType,
+                hendelseType: 'OPPRETTET',
+              });
 
-                if (isSuccess(res)) {
-                  await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
-                  onClose();
-                } else {
-                  setError(res.apiException.message);
-                }
+              if (isSuccess(res)) {
+                await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
+                onClose();
+              } else {
+                setError(res.apiException.message);
+              }
 
-                setIsLoading(false);
-              })}
-              className={'flex-column'}
-              autoComplete={'off'}
-            >
-              {markeringsType === 'HASTER' ? (
-                <FormField form={form} formField={formFields.hasteBegrunnelse} />
-              ) : (
-                <FormField form={form} formField={formFields.begrunnelse} />
-              )}
-            </form>
-          )}
+              setIsLoading(false);
+            })}
+            className={'flex-column'}
+            autoComplete={'off'}
+          >
+            {markeringsType === 'HASTER' ? (
+              <FormField form={form} formField={formFields.hasteBegrunnelse} />
+            ) : (
+              <FormField form={form} formField={formFields.begrunnelse} />
+            )}
+          </form>
           {error && <Alert variant={'error'}>{error}</Alert>}
         </VStack>
       </Modal.Body>
