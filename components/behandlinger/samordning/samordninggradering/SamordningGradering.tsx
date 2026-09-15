@@ -24,6 +24,8 @@ import { SubmitEventHandler, useRef, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { medAutoSplitt } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
@@ -44,7 +46,7 @@ interface Props {
   oppfølgningOppgave?: OppfølgningOppgaveOpprinnelseResponse;
 }
 
-interface SamordnetYtelse {
+export interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
   manuell?: boolean;
   gradering?: number;
@@ -65,19 +67,19 @@ export const SamordningGradering = ({
   initialMellomlagretVurdering,
   oppfølgningOppgave,
 }: Props) => {
+  const sak = useSak();
   const { behandlingsreferanse } = useParamsMedType();
+  const ref = useRef<HTMLDialogElement>(null);
+  const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
+
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
-
-  const handleSuccess = () => {
-    setSuccess(true);
-  };
+  const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
 
   const finnesYtelserEllerVurderinger = !!(
     grunnlag.ytelser.length > 0 ||
     (grunnlag.vurdering && grunnlag.vurdering?.vurderinger?.length > 0)
   );
-
   const [visForm, setVisForm] = useState<boolean>(finnesYtelserEllerVurderinger);
 
   const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =
@@ -88,11 +90,12 @@ export const SamordningGradering = ({
     'SAMORDNING_GRADERING',
     initialMellomlagretVurdering
   );
+
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag);
+    : mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -107,7 +110,7 @@ export const SamordningGradering = ({
         defaultValue: defaultValue.vurderteSamordninger,
       },
     },
-    { readOnly: formReadOnly, shouldUnregister: true }
+    { readOnly: formReadOnly }
   );
 
   const { mellomlagretVurdering, nullstillMellomlagretVurdering, slettMellomlagring } = useMellomlagring(
@@ -148,7 +151,7 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                vurderteSamordningerData: (data.vurderteSamordninger || []).map((vurdertSamordning) => ({
+                vurderteSamordningerData: data.vurderteSamordninger?.map((vurdertSamordning) => ({
                   manuell: vurdertSamordning.manuell,
                   gradering: vurdertSamordning.gradering,
                   periode: {
@@ -179,12 +182,12 @@ export const SamordningGradering = ({
 
   const erAllereddeOppfølgningsOppgave = oppfølgningOppgave && oppfølgningOppgave?.data.length > 0;
 
-  const sak = useSak();
   const rettighetsperiodeFom = parse(sak.sak.periode.fom, 'yyyy-MM-dd', new Date());
-  const finnTidligsteVirkningstidspunkt = () =>
-    beregnTidligsteVirkningstidspunkt(form.getValues('vurderteSamordninger'), rettighetsperiodeFom);
-  const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
-  const ref = useRef<HTMLDialogElement>(null);
+
+  const finnTidligsteVirkningstidspunkt = beregnTidligsteVirkningstidspunkt(
+    form.getValues('vurderteSamordninger') ?? [],
+    rettighetsperiodeFom
+  );
 
   return (
     <>
@@ -201,8 +204,8 @@ export const SamordningGradering = ({
               behandlingsreferanse={behandlingsreferanse}
               saksnummer={sak.sak.saksnummer}
               modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
-              successfullOpprettelse={handleSuccess}
-              finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt()}
+              successfullOpprettelse={() => setSuccess(true)}
+              finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt}
             />
           </Modal.Body>
         </Modal>
@@ -218,7 +221,11 @@ export const SamordningGradering = ({
         vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
-            form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
+            form.reset(
+              grunnlag.vurdering
+                ? mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger)
+                : emptyDraftFormFields()
+            )
           );
         }}
         mellomlagretVurdering={mellomlagretVurdering}
@@ -269,8 +276,7 @@ export const SamordningGradering = ({
               <Box maxWidth={'90ch'}>
                 <Alert variant="info">
                   <Heading spacing size="small" level="3">
-                    Tidligste virkningstidspunkt etter samordning er{' '}
-                    <strong>{finnTidligsteVirkningstidspunkt()}</strong>
+                    Tidligste virkningstidspunkt etter samordning er <strong>{finnTidligsteVirkningstidspunkt}</strong>
                   </Heading>
                   <VStack gap={'space-8'}>
                     <BodyLong size="small">
@@ -317,18 +323,23 @@ export const SamordningGradering = ({
   );
 };
 
-function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
+function mapVurderingToDraftFormFields(
+  grunnlag: SamordningGraderingGrunnlag,
+  autoSplittSykepenger: boolean
+): DraftFormFields {
+  const vurderteSamordninger = grunnlag.vurdering?.vurderinger.map((ytelse) => ({
+    ytelseType: ytelse.ytelseType,
+    gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
+    manuell: ytelse.manuell || undefined,
+    periode: {
+      fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
+      tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
+    },
+  }));
+
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    vurderteSamordninger: grunnlag.vurdering?.vurderinger.map((ytelse) => ({
-      ytelseType: ytelse.ytelseType,
-      gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
-      manuell: ytelse.manuell || undefined,
-      periode: {
-        fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
-        tom: format(new Date(ytelse.periode.tom), 'dd.MM.yyyy'),
-      },
-    })),
+    vurderteSamordninger: vurderteSamordninger && medAutoSplitt(vurderteSamordninger, autoSplittSykepenger),
   };
 }
 
@@ -339,11 +350,11 @@ function emptyDraftFormFields(): DraftFormFields {
   };
 }
 
-function byggFelter(vurdering: SamordningYtelseVurdering): ValuePair<string>[] {
+function byggFelter(vurdering: SamordningYtelseVurdering): ValuePair[] {
   const begrunnelse = vurdering?.begrunnelse || 'Ingen begrunnelse på behandling funnet';
   const perioder = vurdering.vurderinger || [];
 
-  const felter: ValuePair<string>[] = [
+  const felter: ValuePair[] = [
     {
       label: 'Begrunnelse',
       value: begrunnelse,

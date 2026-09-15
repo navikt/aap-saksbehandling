@@ -20,11 +20,9 @@ export const Student = async ({ behandlingsreferanse, flyt }: Props) => {
       behandlingVersjon={flyt.behandlingVersjon}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {avklarStudentSteg.skalViseSteg && (
-        <StegSuspense>
-          <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <StudentvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={avklarStudentSteg} />
+      </StegSuspense>
     </GruppeSteg>
   );
 };

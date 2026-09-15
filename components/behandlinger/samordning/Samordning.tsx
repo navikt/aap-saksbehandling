@@ -35,14 +35,12 @@ export const Samordning = async ({ behandlingsreferanse, flyt }: Props) => {
       visning={flyt.visning}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {samordningSosialStønadSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningSosialstønadMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={samordningSosialStønadSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningSosialstønadMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={samordningSosialStønadSteg}
+        />
+      </StegSuspense>
 
       <StegSuspense>
         <SamordningGraderingMedDatafetching
@@ -62,29 +60,23 @@ export const Samordning = async ({ behandlingsreferanse, flyt }: Props) => {
         />
       </StegSuspense>
 
-      {samordningTjenestepensjonSteg.skalViseSteg && (
-        <StegSuspense>
-          <SamordningTjenestePensjonMedDataFetching
-            behandlingreferanse={behandlingsreferanse}
-            stegData={samordningTjenestepensjonSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SamordningTjenestePensjonMedDataFetching
+          behandlingreferanse={behandlingsreferanse}
+          stegData={samordningTjenestepensjonSteg}
+        />
+      </StegSuspense>
 
-      {sykestipendSteg.skalViseSteg && (
-        <StegSuspense>
-          <SykestipendMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykestipendSteg} />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SykestipendMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykestipendSteg} />
+      </StegSuspense>
 
-      {samordningBarnepensjonSteg.skalViseSteg && (
-        <StegSuspense>
-          <BarnepensjonMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={samordningBarnepensjonSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <BarnepensjonMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={samordningBarnepensjonSteg}
+        />
+      </StegSuspense>
 
       <StegSuspense>
         <SamordningAndreStatligeYtelserMedDatafetching

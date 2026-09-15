@@ -5,7 +5,7 @@ import {
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { StegData } from 'lib/utils/steg';
+import { StegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {
@@ -18,6 +18,10 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
+  }
+
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
+    return null;
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;

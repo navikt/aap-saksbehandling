@@ -51,52 +51,37 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
       visning={flyt.visning}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {sykdomSteg.skalViseSteg && (
-        <StegSuspense>
-          <SykdomsvurderingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={sykdomSteg}
-            skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
-          />
-        </StegSuspense>
-      )}
-      {vurderBistandsbehovSteg.skalViseSteg && (
-        <StegSuspense>
-          <BistandsbehovMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={vurderBistandsbehovSteg}
-          />
-        </StegSuspense>
-      )}
-      {fritakMeldepliktSteg.skalViseSteg && (
-        <StegSuspense>
-          <MeldepliktMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={fritakMeldepliktSteg} />
-        </StegSuspense>
-      )}
-      {etableringAvEgenVirksomhetSteg.skalViseSteg && (
-        <StegSuspense>
-          <EtableringAvEgenVirksomhetMedDatafetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={etableringAvEgenVirksomhetSteg}
-          />
-        </StegSuspense>
-      )}
-      {fastsettArbeidsevneSteg.skalViseSteg && (
-        <StegSuspense>
-          <FastsettArbeidsevneMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={fastsettArbeidsevneSteg}
-          />
-        </StegSuspense>
-      )}
-      {arbeidsopptrappingSteg.skalViseSteg && (
-        <StegSuspense>
-          <ArbeidsopptrappingMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={arbeidsopptrappingSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <SykdomsvurderingMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={sykdomSteg}
+          skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <BistandsbehovMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderBistandsbehovSteg} />
+      </StegSuspense>
+      <StegSuspense>
+        <MeldepliktMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={fritakMeldepliktSteg} />
+      </StegSuspense>
+      <StegSuspense>
+        <EtableringAvEgenVirksomhetMedDatafetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={etableringAvEgenVirksomhetSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <FastsettArbeidsevneMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={fastsettArbeidsevneSteg}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <ArbeidsopptrappingMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={arbeidsopptrappingSteg}
+        />
+      </StegSuspense>
 
       <StegSuspense>
         <OvergangUforeMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overganguføreSteg} />
@@ -106,19 +91,15 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
         <OvergangArbeidMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={overgangarbeidSteg} />
       </StegSuspense>
 
-      {refusjonskravSteg.skalViseSteg && (
-        <StegSuspense>
-          <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
-        </StegSuspense>
-      )}
-      {sykdomsvurderingBrevSteg.skalViseSteg && (
-        <StegSuspense>
-          <SykdomsvurderingBrevMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            stegData={sykdomsvurderingBrevSteg}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <RefusjonMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={refusjonskravSteg} />
+      </StegSuspense>
+      <StegSuspense>
+        <SykdomsvurderingBrevMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          stegData={sykdomsvurderingBrevSteg}
+        />
+      </StegSuspense>
       {bekreftVurderingerOppfølgingSteg.skalViseSteg && !bekreftVurderingerOppfølgingSteg.readOnly && (
         <StegSuspense>
           <BekreftVurderingerOppfølgingMedDataFetching

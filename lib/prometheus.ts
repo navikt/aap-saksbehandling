@@ -1,4 +1,4 @@
-import client, { Histogram } from 'prom-client';
+import client, { Histogram } from '@prometheus-io/client';
 
 class Prometheus {
   public register;
