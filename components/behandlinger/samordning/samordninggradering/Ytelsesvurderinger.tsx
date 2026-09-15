@@ -39,7 +39,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
   function lagreRad(verdier: SamordnetYtelseFormFields) {
     const rad: SamordnetYtelse = {
       periode: { fom: verdier.fom, tom: verdier.tom },
-      gradering: verdier.gradering ? Number(verdier.gradering) : undefined,
+      gradering: verdier.gradering ? Number(verdier.gradering) : 0,
       ytelseType: verdier.ytelseType,
       manuell: true,
     };
