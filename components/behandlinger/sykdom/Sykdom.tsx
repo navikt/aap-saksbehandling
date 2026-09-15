@@ -17,7 +17,6 @@ import { Behovstype } from 'lib/utils/form';
 import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 import { BekreftVurderingerOppfølgingMedDataFetching } from 'components/behandlinger/sykdom/bekreftvurderingeroppfølging/BekreftVurderingerOppfølgingMedDataFetching';
 import { StudentvurderingMedDataFetching } from 'components/behandlinger/sykdom/student/studentvurdering/StudentvurderingMedDataFetching';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -41,8 +40,6 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
   const overganguføreSteg = getStegData(aktivStegGruppe, 'OVERGANG_UFORE', flyt);
   const overgangarbeidSteg = getStegData(aktivStegGruppe, 'OVERGANG_ARBEID', flyt);
 
-  const skalViseAlleSykdomSteg = unleashService.isEnabled('SkalViseAlleSykdomssteg');
-
   return (
     <GruppeSteg
       behandlingReferanse={behandlingsreferanse}
@@ -52,11 +49,7 @@ export const Sykdom = async ({ behandlingsreferanse, flyt }: Props) => {
       aktivtSteg={flyt.aktivtSteg}
     >
       <StegSuspense>
-        <SykdomsvurderingMedDataFetching
-          behandlingsreferanse={behandlingsreferanse}
-          stegData={sykdomSteg}
-          skalViseAlleSykdomsSteg={skalViseAlleSykdomSteg}
-        />
+        <SykdomsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={sykdomSteg} />
       </StegSuspense>
       <StegSuspense>
         <BistandsbehovMedDataFetching behandlingsreferanse={behandlingsreferanse} stegData={vurderBistandsbehovSteg} />
