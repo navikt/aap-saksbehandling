@@ -15,7 +15,7 @@ export interface SamordnetYtelseFormFields {
   tom: string;
   fom: string;
   gradering?: string;
-  ytelseType?: SamordningYtelsestype | undefined;
+  ytelseType: SamordningYtelsestype | undefined;
 }
 
 export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) => {
@@ -86,12 +86,12 @@ export const RedigerYtelseModal = ({ initialValues, onLagre, onLukk }: Props) =>
 
   return (
     <Dialog open onOpenChange={onLukk} size={'medium'}>
-      <Dialog.Popup>
+      <Dialog.Popup width={'large'}>
         <Dialog.Header>
           <Dialog.Title>{initialValues ? 'Rediger periode' : 'Legg til periode'}</Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>
-          <HStack gap={'space-12'} wrap={false}>
+          <HStack gap={'space-12'} wrap={false} align={'start'}>
             <FormField form={form} formField={formFields.fom} />
             <FormField form={form} formField={formFields.tom} />
             <FormField form={form} formField={formFields.ytelseType} />
