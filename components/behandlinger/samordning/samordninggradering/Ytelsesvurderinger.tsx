@@ -27,14 +27,6 @@ function ytelseLabel(ytelseType: SamordningYtelsestype | undefined) {
   return ytelsesoptions.find((ytelse) => ytelse.value === ytelseType)?.label ?? '';
 }
 
-function tilTall(verdi: unknown): number | undefined {
-  if (verdi === null || verdi === undefined || `${verdi}`.trim() === '') {
-    return undefined;
-  }
-  const tall = Number(verdi);
-  return Number.isNaN(tall) ? undefined : tall;
-}
-
 type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
@@ -47,7 +39,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
   function lagreRad(verdier: SamordnetYtelseFormFields) {
     const rad: SamordnetYtelse = {
       periode: { fom: verdier.fom, tom: verdier.tom },
-      gradering: tilTall(verdier.gradering),
+      gradering: Number(verdier.gradering),
       ytelseType: verdier.ytelseType,
       manuell: true,
     };
