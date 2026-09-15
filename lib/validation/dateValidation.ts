@@ -32,8 +32,8 @@ export function erDatoFoerDato(inputDato: string, referanseDato: string): boolea
 
 export function erDatoIPeriode(inputDato: Date, periodeFra: Date, periodeTil: Date): boolean {
   return (
-    isAfter(inputDato, periodeFra) ||
-    (isEqual(inputDato, periodeFra) && (isBefore(inputDato, periodeTil) || isEqual(inputDato, periodeTil)))
+    (isAfter(inputDato, periodeFra) || isEqual(inputDato, periodeFra)) &&
+    (isBefore(inputDato, periodeTil) || isEqual(inputDato, periodeTil))
   );
 }
 

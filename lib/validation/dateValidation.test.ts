@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { erDatoFoerDato, validerDato, erDatoIFremtiden, validerÅrstall } from './dateValidation';
+import { erDatoFoerDato, validerDato, erDatoIFremtiden, validerÅrstall, erDatoIPeriode } from './dateValidation';
 import { addDays, format, subDays } from 'date-fns';
 
 describe('Dato-validering', () => {
@@ -54,6 +54,31 @@ describe('Dato-validering', () => {
     it('returnerer false når datoen er i dag', () => {
       const dato = format(new Date(), 'dd.MM.yyyy');
       expect(erDatoIFremtiden(dato)).toBeFalsy();
+    });
+  });
+
+  describe('er dato i periode', () => {
+    const fom = new Date('2026-09-15');
+    const tom = new Date('2026-10-09');
+
+    it('returnerer false når datoen er etter periodens tom-dato', () => {
+      expect(erDatoIPeriode(new Date('2026-10-15'), fom, tom)).toBeFalsy();
+    });
+
+    it('returnerer false når datoen er før periodens fom-dato', () => {
+      expect(erDatoIPeriode(new Date('2026-09-10'), fom, tom)).toBeFalsy();
+    });
+
+    it('returnerer true når datoen er midt i perioden', () => {
+      expect(erDatoIPeriode(new Date('2026-09-20'), fom, tom)).toBeTruthy();
+    });
+
+    it('returnerer true når datoen er lik fom-dato', () => {
+      expect(erDatoIPeriode(fom, fom, tom)).toBeTruthy();
+    });
+
+    it('returnerer true når datoen er lik tom-dato', () => {
+      expect(erDatoIPeriode(tom, fom, tom)).toBeTruthy();
     });
   });
 
