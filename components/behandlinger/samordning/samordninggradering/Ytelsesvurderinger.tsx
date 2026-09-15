@@ -74,6 +74,9 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           <BodyShort size="small">
             100 % samordningsgrad vil gi stans av AAP i perioden etter § 11-27. Lavere prosent gir redusert ytelse.
           </BodyShort>
+          <BodyShort size="small">
+            Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.
+          </BodyShort>
         </VStack>
         <VStack gap={'space-8'}>
           <TableStyled aria-label="Perioder med samordning">
