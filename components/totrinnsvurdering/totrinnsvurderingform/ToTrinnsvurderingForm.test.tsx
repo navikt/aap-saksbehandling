@@ -106,7 +106,7 @@ describe('totrinnsvurderingform', () => {
     render(
       <TotrinnsvurderingForm
         behandlingsversjon={1}
-        grunnlag={{...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: true}}
+        grunnlag={{ ...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: true }}
         erKvalitetssikring={true}
         readOnly={false}
       />
@@ -115,7 +115,6 @@ describe('totrinnsvurderingform', () => {
     const knapp = screen.getByRole('button', { name: 'Godkjenn og fullfør behandling' });
     expect(knapp).toBeVisible();
   });
-
 
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
     render(

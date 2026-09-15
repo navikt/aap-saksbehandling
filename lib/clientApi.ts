@@ -39,7 +39,7 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
@@ -257,20 +257,7 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   });
 }
 
-// TODO: hent fra aap-oppgave
-export enum MarkeringHendelseType {
-  OPPRETTET = 'OPPRETTET',
-  FJERNET = 'FJERNET',
-}
-
-// TODO: hent fra aap-oppgave
-export interface OpprettMarkeringHendelse {
-  markeringType: MarkeringType;
-  begrunnelse?: string;
-  hendelseType: MarkeringHendelseType;
-}
-
-export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringHendelse) {
+export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringDto) {
   return clientFetch(
     `${BASE_URL}/api/behandling/${referanse}/opprett-markering-hendelse`,
     'POST',

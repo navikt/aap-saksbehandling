@@ -34,7 +34,7 @@ const oppgaveVisningsinfo: OppgaveVisningsinformasjon = {
   id: 123,
   versjon: 0,
   markeringer: [],
-  reservertAvIdent: 'navIdent'
+  reservertAvIdent: 'navIdent',
 };
 
 const visning: FlytVisning = {

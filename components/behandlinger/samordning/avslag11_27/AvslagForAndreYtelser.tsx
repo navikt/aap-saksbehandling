@@ -22,17 +22,16 @@ export const AvslagForAndreYtelser = async ({ behandlingsreferanse, flyt }: prop
       behandlingVersjon={behandlingVersjon}
       aktivtSteg={flyt.aktivtSteg}
     >
-      {stegData.skalViseSteg && (
-        <StegSuspense>
-          <AvslagAndreYtelserMedDataFetching
-            behandlingsreferanse={behandlingsreferanse}
-            behandlingVersjon={behandlingVersjon}
-            readOnly={stegData.readOnly}
-            typeBehandling={flyt.visning.typeBehandling}
-            erIkkePåVent={stegData.erIkkePåVent}
-          />
-        </StegSuspense>
-      )}
+      <StegSuspense>
+        <AvslagAndreYtelserMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          behandlingVersjon={behandlingVersjon}
+          readOnly={stegData.readOnly}
+          typeBehandling={flyt.visning.typeBehandling}
+          erIkkePåVent={stegData.erIkkePåVent}
+          avklaringsbehov={stegData.avklaringsbehov}
+        />
+      </StegSuspense>
     </GruppeSteg>
   );
 };
