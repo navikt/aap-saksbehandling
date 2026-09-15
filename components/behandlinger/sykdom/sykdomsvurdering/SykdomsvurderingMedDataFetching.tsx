@@ -31,12 +31,15 @@ export const SykdomsvurderingMedDataFetching = async ({
     hentStudentGrunnlag(behandlingsreferanse),
   ]);
 
-  const typeBehandling = stegData.typeBehandling;
-
-  if (isError(grunnlag) || isError(studentgrunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(studentgrunnlag) || isError(behandling)) {
+    return <ApiException apiResponses={[grunnlag, studentgrunnlag, behandling]} />;
   }
 
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
+    return null;
+  }
+
+  const typeBehandling = stegData.typeBehandling;
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -47,14 +50,10 @@ export const SykdomsvurderingMedDataFetching = async ({
 
   const diagnoseDefaultOptions = await getDefaultOptionsForDiagnosesystem(finnDiagnoseGrunnlagForSykdom(grunnlag.data));
 
-  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
-    return null;
-  }
+  const vurderingsbehov = behandling.data.vurderingsbehovOgÅrsaker.flatMap(
+    (behovOgÅrsak) => behovOgÅrsak.vurderingsbehov
+  );
 
-  const vurderingsbehov =
-    behandling.type === 'SUCCESS'
-      ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
-      : [];
   const erOvergangArbeid = vurderingsbehov.some((x) => x.type === 'OVERGANG_ARBEID');
   const erRevurderingStudent = vurderingsbehov.some((x) => x.type === 'REVURDER_STUDENT') && !stegData.readOnly;
 

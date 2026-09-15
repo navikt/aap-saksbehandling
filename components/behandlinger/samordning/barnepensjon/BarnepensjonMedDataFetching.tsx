@@ -1,5 +1,5 @@
 import { Barnepensjon } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
-import { StegData } from 'lib/utils/steg';
+import { StegData, skalViseStegIkkePeriodisertGrunnlag } from 'lib/utils/steg';
 import { hentBarnepensjonGrunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
@@ -15,6 +15,10 @@ export const BarnepensjonMedDataFetching = async ({ behandlingsreferanse, stegDa
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
+  }
+
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.historiskeVurderinger.length > 0)) {
+    return null;
   }
 
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;

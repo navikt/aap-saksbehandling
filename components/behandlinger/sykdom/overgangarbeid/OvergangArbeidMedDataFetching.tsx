@@ -5,7 +5,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { StegData } from 'lib/utils/steg';
+import { skalViseStegForPeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { OvergangArbeid } from 'components/behandlinger/sykdom/overgangarbeid/OvergangArbeid';
 
 interface Props {
@@ -20,7 +20,8 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !stegData.skalViseSteg;
+  const skalStegVurderes = skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data);
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !skalStegVurderes;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.OVERGANG_ARBEID,
@@ -34,7 +35,7 @@ export const OvergangArbeidMedDataFetching = async ({ behandlingsreferanse, steg
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      skalStegVurderes={stegData.skalViseSteg}
+      skalStegVurderes={skalStegVurderes}
     />
   );
 };
