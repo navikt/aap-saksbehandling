@@ -16,7 +16,7 @@ import { useState } from 'react';
 
 import { Alert } from 'components/alert/Alert';
 import { ValuePair } from 'components/form/FormField';
-import { SamordningYtelsestype } from 'lib/types/types';
+import { SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { medAutoSplitt, slåSammenSplittedeSykepengeperioder } from './beregnForhåndsvisning';
@@ -25,6 +25,7 @@ interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
   readOnly: boolean;
   fieldArray: UseFieldArrayReturn<SamordningGraderingFormfields, 'vurderteSamordninger'>;
+  grunnlag: SamordningGraderingGrunnlag;
 }
 
 export const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
@@ -73,7 +74,7 @@ function ytelseLabel(ytelseType: SamordningYtelsestype | undefined) {
 
 type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
-export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
+export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Props) => {
   const { fields, append, remove, replace } = fieldArray;
   const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
   const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
@@ -157,9 +158,6 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           <BodyShort size="small">
             100 % samordningsgrad vil gi stans av AAP i perioden etter § 11-27. Lavere prosent gir redusert ytelse.
           </BodyShort>
-          <BodyShort size="small">
-            Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.
-          </BodyShort>
         </VStack>
         <VStack gap={'space-8'}>
           <TableStyled aria-label="Perioder med samordning">
@@ -228,6 +226,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
       </VStack>
       {modalTilstand && (
         <FerieISykepengeperiodeModal
+          grunnlag={grunnlag}
           initialValues={modalTilstand.modus === 'rediger' ? rader[modalTilstand.index]?.periode : undefined}
           onLagre={lagreFerieRad}
           onLukk={() => setModalTilstand(null)}

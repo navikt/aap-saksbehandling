@@ -37,6 +37,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -142,7 +143,10 @@ export const SamordningGradering = ({
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
 
-      // TODO Midlertidig validering på grunn av prodfeil 16/09/2026, kan fjernes når prodsaker er fikset.
+      const erOverlappendePerioder = perioderSomOverlapper(data.vurderteSamordninger.map((x) => x.periode));
+
+      console.log(erOverlappendePerioder);
+
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>
           vurdertSamordning.ytelseType != null &&
@@ -278,7 +282,12 @@ export const SamordningGradering = ({
               readOnly={formReadOnly}
               onKopierYtelser={kopierYtelserTilVurdering}
             />
-            <Ytelsesvurderinger form={form} readOnly={formReadOnly} fieldArray={vurderteSamordningerFieldArray} />
+            <Ytelsesvurderinger
+              form={form}
+              readOnly={formReadOnly}
+              fieldArray={vurderteSamordningerFieldArray}
+              grunnlag={grunnlag}
+            />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>

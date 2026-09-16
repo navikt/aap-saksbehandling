@@ -1,10 +1,14 @@
-import { Button, Dialog, HStack } from '@navikt/ds-react';
+import { Button, Dialog, HStack, VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
 import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { useConfigForm } from 'components/form/FormHook';
+import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
+import { SamordningGraderingGrunnlag } from 'lib/types/types';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   initialValues?: FerieFormFields;
+  grunnlag: SamordningGraderingGrunnlag;
   onLagre: (verdier: FerieFormFields) => void;
   onLukk: () => void;
 }
@@ -18,7 +22,7 @@ export interface FerieFormFields {
  * Ferie i sykepengeperiode kan kun opprettes/redigeres gjennom denne modalen, siden lagring
  * trigger en omberegning (splitting) av sykepengeperiodene rundt ferieperioden.
  */
-export const FerieISykepengeperiodeModal = ({ initialValues, onLagre, onLukk }: Props) => {
+export const FerieISykepengeperiodeModal = ({ initialValues, onLagre, onLukk, grunnlag }: Props) => {
   const defaultValues = {
     fom: initialValues?.fom || '',
     tom: initialValues?.tom || '',
@@ -60,10 +64,16 @@ export const FerieISykepengeperiodeModal = ({ initialValues, onLagre, onLukk }: 
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>
-          <HStack gap={'space-12'} wrap={false} align={'start'}>
-            <FormField size={'medium'} form={form} formField={formFields.fom} />
-            <FormField size={'medium'} form={form} formField={formFields.tom} />
-          </HStack>
+          <VStack gap={'space-16'}>
+            <RelevantInformasjonSamordningGradering grunnlag={grunnlag} />
+            <HStack gap={'space-12'} align={'start'}>
+              <FormField form={form} formField={formFields.fom} />
+              <FormField form={form} formField={formFields.tom} />
+            </HStack>
+            <Alert variant={'info'}>
+              Ferie fra sykepenger splitter opp eventuell sykepengeperiode i samme tidsrom.
+            </Alert>
+          </VStack>
         </Dialog.Body>
         <Dialog.Footer>
           <Button type={'button'} onClick={form.handleSubmit(onLagre)}>
