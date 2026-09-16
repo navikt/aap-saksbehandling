@@ -180,7 +180,7 @@ describe('Samordning gradering', () => {
     expect(await screen.findByText('Fra og med dato kan ikke være etter til og med dato')).toBeVisible();
   });
 
-  test('gir feilmelding når perioder overlapper', async () => {
+  test('gir feilmelding når perioder overlapper, og fjerner den når overlappet er rettet', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
@@ -221,6 +221,13 @@ describe('Samordning gradering', () => {
     expect(
       await screen.findByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
     ).toBeVisible();
+
+    await user.clear(tomFelter[1]);
+    await user.type(tomFelter[1], '01.03.2025');
+
+    expect(
+      screen.queryByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).not.toBeInTheDocument();
   });
 
   test('viser feilmelding og åpner ikke ferie-modal dersom radene i tabellen ikke er gyldige', async () => {

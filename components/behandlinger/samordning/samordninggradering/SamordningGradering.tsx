@@ -20,7 +20,7 @@ import { Behovstype } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { isNullOrUndefined } from 'lib/utils/validering';
-import { SubmitEventHandler, useRef, useState } from 'react';
+import { SubmitEventHandler, useEffect, useRef, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
@@ -124,6 +124,17 @@ export const SamordningGradering = ({
     control: form.control,
     name: 'vurderteSamordninger',
   });
+
+  // Feilmeldingen som settes i handleSubmit skal ikke bli stående som "utdatert" etter at
+  // brukeren har rettet opp feilen. Vi nullstiller den derfor så snart noe endres i skjemaet,
+  // og en ny feilmelding vises kun dersom brukeren prøver å bekrefte på nytt.
+  useEffect(() => {
+    const { unsubscribe } = form.watch(() => {
+      setErrorMessage(undefined);
+    });
+
+    return () => unsubscribe();
+  }, [form]);
 
   const kopierYtelserTilVurdering = (ytelser: SamordningGraderingYtelse[]) => {
     vurderteSamordningerFieldArray.append(
