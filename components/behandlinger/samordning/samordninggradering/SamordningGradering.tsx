@@ -186,7 +186,6 @@ export const SamordningGradering = ({
     })(event);
   };
 
-  console.log(form.watch());
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
 
   const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => Number(verdi) === 100);
