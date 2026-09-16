@@ -74,8 +74,9 @@ describe('Samordning gradering', () => {
 
     expect(screen.getByText('Mottar bruker sykepenger: Ja')).toBeVisible();
     expect(
-      screen.getByText('Har bruker planer om ferie før de er ferdige med sykepenger: Ja, 01.06.2025 - 14.06.2025')
+      screen.getByText('Har bruker planer om ferie før de er ferdige med sykepenger: Ja', { exact: false })
     ).toBeVisible();
+    expect(screen.getByText('01.06.2025 - 14.06.2025')).toBeVisible();
   });
 
   test('viser ikke relevant informasjon fra søknaden når verdiene mangler', () => {
