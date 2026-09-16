@@ -117,8 +117,8 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
   function lagreFerieRad(verdier: FerieFormFields) {
     const rad: SamordnetYtelse = {
       periode: { fom: verdier.fom, tom: verdier.tom },
-      ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
-      gradering: 0,
+      gradering: verdier.gradering ? Number(verdier.gradering) : 0,
+      ytelseType: verdier.ytelseType,
       manuell: true,
     };
 
