@@ -270,6 +270,121 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(within(rader[3]).getByText('Foreldrepenger')).toBeVisible();
   });
 
+  test('kopiert periode får samordningsgrad lik graderingen fra kilden', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    // Ytelsen med indeks 0 (Sykepenger) har gradering 100 i grunnlaget
+    await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    const kopiertRad = rader[2];
+
+    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('100');
+  });
+
+  test('kopiert periode får samordningsgrad 0 når kilden mangler gradering', async () => {
+    const grunnlagMedYtelseUtenGraderingFraKilde: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [
+        {
+          gradering: undefined,
+          periode: { fom: '2025-03-01', tom: '2025-03-31' },
+          endringStatus: 'NY',
+          kilde: 'SP',
+          ytelseType: 'SYKEPENGER',
+        },
+      ],
+    };
+
+    render(
+      <SamordningGradering grunnlag={grunnlagMedYtelseUtenGraderingFraKilde} behandlingVersjon={1} readOnly={false} />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Kopier periode' }));
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    const kopiertRad = rader[1];
+
+    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('0');
+  });
+
+  test('kopiert periode får samordningsgrad 0 når kilden har gradering 0', async () => {
+    const grunnlagMedGraderingNull: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [
+        {
+          gradering: 0,
+          periode: { fom: '2025-03-01', tom: '2025-03-31' },
+          endringStatus: 'NY',
+          kilde: 'SP',
+          ytelseType: 'SYKEPENGER',
+        },
+      ],
+    };
+
+    render(<SamordningGradering grunnlag={grunnlagMedGraderingNull} behandlingVersjon={1} readOnly={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Kopier periode' }));
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    const kopiertRad = rader[1];
+
+    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('0');
+  });
+
+  test('kopiert periode formaterer fom/tom til norsk datoformat og beholder ytelsestype', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    // Ytelsen med indeks 1 (Foreldrepenger) har periode 2025-05-01 - 2025-05-31 i grunnlaget (ISO-format)
+    await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[1]);
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    const kopiertRad = rader[2];
+    const celler = within(kopiertRad).getAllByRole('cell');
+
+    expect(celler[0]).toHaveTextContent('01.05.2025 - 31.05.2025');
+    expect(celler[1]).toHaveTextContent('Foreldrepenger');
+  });
+
+  test('kopiert rad kan redigeres og slettes, siden den er markert som manuell', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    const kopiertRad = rader[2];
+
+    expect(within(kopiertRad).getByRole('button', { name: 'Rediger' })).toBeEnabled();
+    expect(within(kopiertRad).getByRole('button', { name: 'Slett' })).toBeEnabled();
+  });
+
+  test('kopiering av alle perioder setter samordningsgrad for hver rad basert på kildens gradering', async () => {
+    render(
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Kopier alle perioder' }));
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    // rader[1] er den eksisterende, manuelt vurderte perioden (Pleiepenger, gradering 20)
+    expect(within(rader[1]).getAllByRole('cell')[2]).toHaveTextContent('20');
+    // rader[2] er kopiert fra Sykepenger (gradering 100 i kilden)
+    expect(within(rader[2]).getAllByRole('cell')[2]).toHaveTextContent('100');
+    // rader[3] er kopiert fra Foreldrepenger (gradering 50 i kilden)
+    expect(within(rader[3]).getAllByRole('cell')[2]).toHaveTextContent('50');
+  });
+
   test('viser ikke kopier-knapper når oppslaget er tomt', () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
