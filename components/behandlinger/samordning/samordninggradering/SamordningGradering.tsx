@@ -141,8 +141,20 @@ export const SamordningGradering = ({
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
+
+      // TODO Midlertidig validering på grunn av prodfeil 16/09/2026, kan fjernes når prodsaker er fikset.
+      const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
+        (vurdertSamordning) =>
+          vurdertSamordning.ytelseType != null &&
+          !isNullOrUndefined(vurdertSamordning.gradering) &&
+          vurdertSamordning.periode?.fom != null &&
+          vurdertSamordning.periode?.tom != null
+      );
+
       if (grunnlag.ytelser.length > 0 && data.vurderteSamordninger.length === 0) {
         setErrorMessage('Du må gjøre en vurdering av periodene');
+      } else if (!erVurderteSamordningerGyldige) {
+        setErrorMessage('Alle felter må være fylt ut for hver vurdert periode');
       } else {
         løsAvklaringsbehov(
           {
