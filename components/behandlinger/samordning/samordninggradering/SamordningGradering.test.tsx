@@ -92,13 +92,13 @@ describe('Samordning gradering', () => {
       format(subWeeks(new Date(), 3), 'dd.MM.yyyy')
     );
     expect(screen.getByRole('textbox', { name: 'Til og med' })).toHaveValue(format(new Date(), 'dd.MM.yyyy'));
-    expect(screen.getByRole('textbox', { name: 'Utbetalingsgrad' })).toHaveValue('20');
+    expect(screen.getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('20');
   });
 
   test('lagrer endringer i tabellen direkte uten modal', async () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
-    const gradering = screen.getByRole('textbox', { name: 'Utbetalingsgrad' });
+    const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
     await user.clear(gradering);
     await user.type(gradering, '60');
 
@@ -313,7 +313,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[2];
 
-    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('100');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('100');
   });
 
   test('kopiert periode får samordningsgrad 0 når kilden mangler gradering', async () => {
@@ -341,7 +341,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[1];
 
-    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('0');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('0');
   });
 
   test('kopiert periode får samordningsgrad 0 når kilden har gradering 0', async () => {
@@ -367,7 +367,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[1];
 
-    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('0');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('0');
   });
 
   test('kopiert periode formaterer fom/tom til norsk datoformat og beholder ytelsestype', async () => {
@@ -380,10 +380,10 @@ describe('kopiering av perioder fra oppslag', () => {
 
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[2];
-    const celler = within(kopiertRad).getAllByRole('cell');
 
-    expect(celler[0]).toHaveTextContent('01.05.2025 - 31.05.2025');
-    expect(celler[1]).toHaveTextContent('Foreldrepenger');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.05.2025');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Til og med' })).toHaveValue('31.05.2025');
+    expect(within(kopiertRad).getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('FORELDREPENGER');
   });
 
   test('kopiert rad kan redigeres og slettes, siden den er markert som manuell', async () => {
@@ -396,7 +396,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[2];
 
-    expect(within(kopiertRad).getByRole('button', { name: 'Rediger' })).toBeEnabled();
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toBeEnabled();
     expect(within(kopiertRad).getByRole('button', { name: 'Slett' })).toBeEnabled();
   });
 
@@ -410,11 +410,11 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
     // rader[1] er den eksisterende, manuelt vurderte perioden (Pleiepenger, gradering 20)
-    expect(within(rader[1]).getAllByRole('cell')[2]).toHaveTextContent('20');
+    expect(within(rader[1]).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('20');
     // rader[2] er kopiert fra Sykepenger (gradering 100 i kilden)
-    expect(within(rader[2]).getAllByRole('cell')[2]).toHaveTextContent('100');
+    expect(within(rader[2]).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('100');
     // rader[3] er kopiert fra Foreldrepenger (gradering 50 i kilden)
-    expect(within(rader[3]).getAllByRole('cell')[2]).toHaveTextContent('50');
+    expect(within(rader[3]).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('50');
   });
 
   test('viser ikke kopier-knapper når oppslaget er tomt', () => {

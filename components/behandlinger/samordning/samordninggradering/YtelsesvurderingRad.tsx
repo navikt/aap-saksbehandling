@@ -76,24 +76,24 @@ export const YtelsesvurderingRad = ({ form, index, readOnly, ytelsesoptioner, on
     <Table.DataCell>
       <TextFieldWrapper
         name={`vurderteSamordninger.${index}.gradering`}
-        label={'Utbetalingsgrad'}
+        label={'Samordningsgrad'}
         hideLabel
         type={'text'}
         size={'small'}
-        className={styles.utbetalingsgrad}
+        className={styles.samordningsgrad}
         control={form.control}
         readOnly={readOnly}
         rules={{
-          required: 'Du må velge utbetalingsgrad',
+          required: 'Du må velge samordningsgrad',
           validate: (value) => {
             if (Number.isNaN(Number(value))) {
               return 'Prosent må angis med siffer';
             }
             if (Number(value) < 0) {
-              return 'Utbetalingsgrad kan ikke være mindre enn 0%';
+              return 'Samordningsgrad kan ikke være mindre enn 0%';
             }
             if (Number(value) > 100) {
-              return 'Utbetalingsgrad kan ikke være mer enn 100%';
+              return 'Samordningsgrad kan ikke være mer enn 100%';
             }
           },
         }}
