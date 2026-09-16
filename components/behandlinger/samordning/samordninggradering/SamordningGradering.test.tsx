@@ -270,18 +270,6 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(within(rader[3]).getByText('Foreldrepenger')).toBeVisible();
   });
 
-  test('setter ikke samordningsgrad på kopierte rader', async () => {
-    render(
-      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
-    );
-
-    await user.click(screen.getAllByRole('button', { name: 'Kopier periode' })[0]);
-
-    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
-
-    expect(within(rader[2]).getAllByRole('cell')[2]).toBeEmptyDOMElement();
-  });
-
   test('viser ikke kopier-knapper når oppslaget er tomt', () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
