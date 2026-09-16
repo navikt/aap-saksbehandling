@@ -112,7 +112,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const knapp = screen.getByRole('button', { name: 'Godkjenn og fullfør behandling' });
+    const knapp = screen.getByRole('button', { name: 'Send vedtak om avslag' });
     expect(knapp).toBeVisible();
   });
 
