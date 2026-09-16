@@ -180,6 +180,49 @@ describe('Samordning gradering', () => {
     expect(await screen.findByText('Fra og med dato kan ikke være etter til og med dato')).toBeVisible();
   });
 
+  test('gir feilmelding når perioder overlapper', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const etGrunnlag: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [],
+    };
+
+    render(<SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
+
+    await user.click(screen.getByRole('button', { name: 'Endre' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    const ytelsestypeFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    const graderingFelter = screen.getAllByRole('textbox', { name: 'Samordningsgrad' });
+
+    await user.type(fomFelter[0], '01.01.2025');
+    await user.type(tomFelter[0], '31.01.2025');
+    await user.selectOptions(ytelsestypeFelter[0], 'SYKEPENGER');
+    await user.type(graderingFelter[0], '50');
+
+    await user.type(fomFelter[1], '15.01.2025');
+    await user.type(tomFelter[1], '15.02.2025');
+    await user.selectOptions(ytelsestypeFelter[1], 'SYKEPENGER');
+    await user.type(graderingFelter[1], '50');
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(
+      await screen.findByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).toBeVisible();
+  });
+
   test('viser feilmelding og åpner ikke ferie-modal dersom radene i tabellen ikke er gyldige', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 

@@ -145,8 +145,6 @@ export const SamordningGradering = ({
 
       const erOverlappendePerioder = perioderSomOverlapper(data.vurderteSamordninger.map((x) => x.periode));
 
-      console.log(erOverlappendePerioder);
-
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>
           vurdertSamordning.ytelseType != null &&
@@ -159,6 +157,8 @@ export const SamordningGradering = ({
         setErrorMessage('Du må gjøre en vurdering av periodene');
       } else if (!erVurderteSamordningerGyldige) {
         setErrorMessage('Alle felter må være fylt ut for hver vurdert periode');
+      } else if (erOverlappendePerioder) {
+        setErrorMessage('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.');
       } else {
         løsAvklaringsbehov(
           {
