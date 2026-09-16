@@ -24,6 +24,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave.oppgavelisteTags.skjermingInfo);
   const ventStatusForTilbakekreving = useFeatureFlag('VentStatusForTilbakekreving');
   const [visUføreTag, settVisUføreTag] = useState(!!oppgave.oppgavelisteTags.uføreVedtak);
+  const visForespørselSendtTilBehandler = useFeatureFlag('ForesporselSendtTilBehandlerFrontend');
   return (
     <HStack gap={'space-4'}>
       {oppgave.oppgavelisteTags.påVentInfo &&
@@ -68,8 +69,10 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
           resultat={oppgave.oppgavelisteTags.uføreVedtak.resultat}
         />
       )}
-      {oppgave.oppgavelisteTags.forespørselTilBehandler && (
-        <DialogMedBehandlerInfoboks forespørsel={oppgave.oppgavelisteTags.forespørselTilBehandler} />
+      {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.forespørselSendtTilBehandler && (
+        <DialogMedBehandlerInfoboks
+          påminnelseDato={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseDato}
+        />
       )}
     </HStack>
   );

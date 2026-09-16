@@ -3,19 +3,19 @@
 import { FirstAidKitIcon } from '@navikt/aksel-icons';
 import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
-import { ForespørselTilBehandler } from 'lib/types/oppgaveTypes';
 import styles from './DialogMedBehandlerInfoboks.module.css';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
-  forespørsel: ForespørselTilBehandler;
+  påminnelseDato?: string | null;
 }
 
-export const DialogMedBehandlerInfoboks = ({ forespørsel }: Props) => {
+export const DialogMedBehandlerInfoboks = ({ påminnelseDato }: Props) => {
   return (
     <TagMedPopover
-      ikon={<FirstAidKitIcon title={mapTypeTilFullTekst(forespørsel.type)} />}
+      ikon={<FirstAidKitIcon title={'Forespørsel sendt til behandler'} />}
       dataColor={'meta-purple'}
-      tagContent={mapTypeTilTekst(forespørsel.type)}
+      tagContent={'Forespørsel sendt'}
       popoverContent={
         <VStack gap={'space-8'} className={styles.boks}>
           <Tag
@@ -26,39 +26,17 @@ export const DialogMedBehandlerInfoboks = ({ forespørsel }: Props) => {
             className={styles.tag}
           >
             <BodyShort size={'small'} weight={'semibold'}>
-              {mapTypeTilFullTekst(forespørsel.type)}
+              {'Forespørsel sendt til behandler'}
             </BodyShort>
           </Tag>
-          <VStack>
-            <Detail textColor="subtle">Påminnelse</Detail>
-            <div>Her kommer det dato for når påminnelsen blir sendt ut</div>
-          </VStack>
+          {påminnelseDato && (
+            <VStack>
+              <Detail textColor="subtle">Påminnelse</Detail>
+              <div>Sendes {formaterDatoForFrontend(påminnelseDato)}</div>
+            </VStack>
+          )}
         </VStack>
       }
     />
   );
-};
-
-// TODO: Påminnelse sendt
-const mapTypeTilTekst = (type: ForespørselTilBehandler['type']) => {
-  switch (type) {
-    case 'FORESPØRSEL_OPPRETTET':
-      return 'Forespørsel sendt';
-    case 'FORESPØRSEL_AVSLUTTET':
-      return 'Svar mottatt';
-    default:
-      return '';
-  }
-};
-
-// TODO: Påminnelse sendt
-const mapTypeTilFullTekst = (type: ForespørselTilBehandler['type']) => {
-  switch (type) {
-    case 'FORESPØRSEL_OPPRETTET':
-      return 'Forespørsel sendt til behandler';
-    case 'FORESPØRSEL_AVSLUTTET':
-      return 'Svar mottatt fra behandler';
-    default:
-      return '';
-  }
 };
