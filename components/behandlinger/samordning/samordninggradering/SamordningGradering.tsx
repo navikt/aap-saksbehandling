@@ -129,7 +129,7 @@ export const SamordningGradering = ({
       ytelser.map((ytelse) => ({
         manuell: true,
         ytelseType: ytelse.ytelseType,
-        gradering: undefined,
+        gradering: ytelse.gradering ? ytelse.gradering : 0,
         periode: {
           fom: formaterDatoForFrontend(ytelse.periode.fom),
           tom: formaterDatoForFrontend(ytelse.periode.tom),
