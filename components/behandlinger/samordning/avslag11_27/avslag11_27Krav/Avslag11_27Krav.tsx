@@ -155,7 +155,6 @@ export const Avslag11_27Krav = ({
               vurdering={{ ...vurderingFormField, behøverVurdering: false }}
               finnesFeil={false}
               onSlettVurdering={handleSlettNyVurdering}
-              index={vedtattVurdering ? 1 : 0}
               readonly={readonly}
               initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
               visStrekVedManglendeTilDato={false}
