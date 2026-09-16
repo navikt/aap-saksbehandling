@@ -10,7 +10,6 @@ import {
   Avslag11_27BrukersYtelse,
   Avslag11_27Grunnlag,
   MellomlagretVurdering,
-  TypeBehandling,
   VurderingFormMeta,
 } from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, getTrueFalseEllerUndefined, JaEllerNei } from 'lib/utils/form';
@@ -30,7 +29,6 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  typeBehandling: TypeBehandling;
 }
 
 export interface Avslag11_27FormFields {
@@ -54,13 +52,7 @@ export interface KravMedVurdering extends VurderingFormMeta {
 
 type DraftFormFields = Partial<Avslag11_27FormFields>;
 
-export const Avslag11_27 = ({
-  grunnlag,
-  readOnly,
-  behandlingVersjon,
-  initialMellomlagretVurdering,
-  typeBehandling,
-}: Props) => {
+export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =

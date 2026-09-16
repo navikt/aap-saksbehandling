@@ -126,7 +126,6 @@ describe('Avslag11_27 - krav vises', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -140,7 +139,6 @@ describe('Avslag11_27 - krav vises', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -155,7 +153,6 @@ describe('Avslag11_27 - krav vises', () => {
         grunnlag={grunnlagMedVedtattOgNyVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Revurdering"
       />
     );
 
@@ -171,7 +168,6 @@ describe('Avslag11_27 - skjema vises/skjules', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -184,7 +180,6 @@ describe('Avslag11_27 - skjema vises/skjules', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -197,7 +192,6 @@ describe('Avslag11_27 - skjema vises/skjules', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -212,7 +206,6 @@ describe('Avslag11_27 - skjema vises/skjules', () => {
         grunnlag={grunnlagMedVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -229,7 +222,6 @@ describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
           grunnlag={grunnlagMedVurdering}
           behandlingVersjon={1}
           readOnly={false}
-          typeBehandling="Førstegangsbehandling"
         />
       );
 
@@ -268,7 +260,6 @@ describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
         grunnlag={grunnlagMedVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
         initialMellomlagretVurdering={mellomlagring}
       />
     );
@@ -284,7 +275,6 @@ describe('Avslag11_27 - vedtatte vurderinger', () => {
         grunnlag={grunnlagMedVedtattOgNyVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Revurdering"
       />
     );
 
@@ -301,7 +291,6 @@ describe('Avslag11_27 - vedtatte vurderinger', () => {
         grunnlag={grunnlagMedVedtattOgNyVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Revurdering"
       />
     );
 
@@ -315,7 +304,6 @@ describe('Avslag11_27 - vedtatte vurderinger', () => {
         grunnlag={grunnlagMedVedtattOgNyVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Revurdering"
       />
     );
 
@@ -331,7 +319,6 @@ describe('Avslag11_27 - validering', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -347,7 +334,6 @@ describe('Avslag11_27 - validering', () => {
         grunnlag={grunnlagMedVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
@@ -363,7 +349,6 @@ describe('Avslag11_27 - validering', () => {
         grunnlag={grunnlagMedVedtattOgNyVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Revurdering"
       />
     );
 
@@ -406,7 +391,6 @@ describe('Avslag11_27 - mellomlagring', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
         initialMellomlagretVurdering={mellomlagring}
       />
     );
@@ -448,7 +432,6 @@ describe('Avslag11_27 - mellomlagring', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
         initialMellomlagretVurdering={mellomlagring}
       />
     );
@@ -467,7 +450,6 @@ describe('Avslag11_27 - slett og legg til vurdering igjen', () => {
         grunnlag={grunnlagUtenVurdering}
         behandlingVersjon={1}
         readOnly={false}
-        typeBehandling="Førstegangsbehandling"
       />
     );
 
