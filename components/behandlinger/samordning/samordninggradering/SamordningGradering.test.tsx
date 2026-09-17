@@ -106,8 +106,12 @@ describe('Samordning gradering', () => {
     expect(gradering).toHaveValue('60');
   });
 
-  test('ferie i sykepengeperiode kan ikke velges i den vanlige ytelsestype-velgeren', () => {
-    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+  test('ferie i sykepengeperiode kan ikke velges i den vanlige ytelsestype-velgeren når autoSplittSykepenger-toggelen er på', () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
 
     expect(
       within(screen.getByRole('combobox', { name: 'Ytelsestype' })).queryByRole('option', {
@@ -240,7 +244,11 @@ describe('Samordning gradering', () => {
       ytelser: [],
     };
 
-    render(<SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />
+      </FeatureFlagProvider>
+    );
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
     await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
@@ -493,9 +501,9 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
   });
 
-  test('kan legge til ferie i sykepengeperiode via egen modal også når autoSplittSykepenger-toggelen er av', async () => {
+  test('kan legge til ferie i sykepengeperiode via egen modal når autoSplittSykepenger-toggelen er på', async () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
         <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
       </FeatureFlagProvider>
     );
@@ -526,21 +534,12 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('30.01.2026');
   });
 
-  test('splitter sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er på', () => {
-    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
-
-    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
-
-    expect(rader).toHaveLength(4);
-    expect(within(rader[1]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2026');
-    expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('09.01.2026');
-    expect(within(rader[2]).getByText('10.01.2026 - 16.01.2026')).toBeVisible();
-    expect(within(rader[3]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('17.01.2026');
-    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('06.02.2026');
-  });
-
   test('flytter splitten når en ferieperiode innsnevres, uten å etterlate udekkede dager', async () => {
-    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
 
     const ferieRadFørRedigering = within(
       within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row')[2]

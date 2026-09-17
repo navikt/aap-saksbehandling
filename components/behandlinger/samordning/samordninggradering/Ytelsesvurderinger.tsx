@@ -173,7 +173,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
               {fields.map((field, index) => {
                 const erFerieISykepengeperiode = field?.ytelseType === 'FERIE_I_SYKEPENGEPERIODE';
 
-                if (erFerieISykepengeperiode) {
+                if (erFerieISykepengeperiode && autoSplittSykepengerToggleIsEnabled) {
                   return (
                     <FerieISykepengeperiodeRad
                       key={field.id}
