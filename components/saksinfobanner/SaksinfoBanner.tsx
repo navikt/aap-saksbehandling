@@ -24,6 +24,8 @@ import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/Utl
 import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { DialogMedBehandlerInfoboks } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
 
 interface Props {
   sak: SaksInfoType;
@@ -40,6 +42,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
   const visUforeTag = !uføreTagSkjult && !!oppgaveVisningsinfo?.uførevedtakinfo;
+  const visForespørselSendtTilBehandler = useFeatureFlag('ForesporselSendtTilBehandlerFrontend');
 
   const behandlingErAvsluttet = behandling?.status === 'AVSLUTTET';
 
@@ -187,6 +190,11 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
                 virkningsdato={oppgaveVisningsinfo.uførevedtakinfo.virkningsdato}
                 resultat={oppgaveVisningsinfo.uførevedtakinfo.resultat}
               />
+            </div>
+          )}
+          {visForespørselSendtTilBehandler && oppgaveVisningsinfo?.forespørselSendtTilBehandler && (
+            <div className={styles.oppgavestatus}>
+              <DialogMedBehandlerInfoboks />
             </div>
           )}
           {!behandlingErAvsluttet && (
