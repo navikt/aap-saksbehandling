@@ -351,7 +351,7 @@ export const SamordningGradering = ({
 function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
   const vurderteSamordninger = grunnlag.vurdering?.vurderinger.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
-    gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
+    gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : 0,
     manuell: ytelse.manuell || undefined,
     periode: {
       fom: format(new Date(ytelse.periode.fom), 'dd.MM.yyyy'),
