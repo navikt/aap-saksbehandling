@@ -15,17 +15,15 @@ import {
   SamordningYtelsestype,
   SamordningYtelseVurdering,
 } from 'lib/types/types';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { isNullOrUndefined } from 'lib/utils/validering';
-import { SubmitEventHandler, useRef, useState } from 'react';
+import { SubmitEventHandler, useEffect, useRef, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { medAutoSplitt } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
@@ -37,6 +35,7 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { perioderSomOverlapper } from 'components/behandlinger/sykdom/meldeplikt/Periodevalidering';
 
 interface Props {
   grunnlag: SamordningGraderingGrunnlag;
@@ -70,7 +69,6 @@ export const SamordningGradering = ({
   const sak = useSak();
   const { behandlingsreferanse } = useParamsMedType();
   const ref = useRef<HTMLDialogElement>(null);
-  const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
@@ -95,7 +93,7 @@ export const SamordningGradering = ({
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger);
+    : mapVurderingToDraftFormFields(grunnlag);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -124,6 +122,17 @@ export const SamordningGradering = ({
     name: 'vurderteSamordninger',
   });
 
+  // Feilmeldingen som settes i handleSubmit skal ikke bli stående som "utdatert" etter at
+  // brukeren har rettet opp feilen. Vi nullstiller den derfor så snart noe endres i skjemaet,
+  // og en ny feilmelding vises kun dersom brukeren prøver å bekrefte på nytt.
+  useEffect(() => {
+    const { unsubscribe } = form.watch(() => {
+      setErrorMessage(undefined);
+    });
+
+    return () => unsubscribe();
+  }, [form]);
+
   const kopierYtelserTilVurdering = (ytelser: SamordningGraderingYtelse[]) => {
     vurderteSamordningerFieldArray.append(
       ytelser.map((ytelse) => ({
@@ -142,7 +151,8 @@ export const SamordningGradering = ({
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
 
-      // TODO Midlertidig validering på grunn av prodfeil 16/09/2026, kan fjernes når prodsaker er fikset.
+      const erOverlappendePerioder = perioderSomOverlapper(data.vurderteSamordninger.map((x) => x.periode));
+
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>
           vurdertSamordning.ytelseType != null &&
@@ -155,6 +165,8 @@ export const SamordningGradering = ({
         setErrorMessage('Du må gjøre en vurdering av periodene');
       } else if (!erVurderteSamordningerGyldige) {
         setErrorMessage('Alle felter må være fylt ut for hver vurdert periode');
+      } else if (erOverlappendePerioder) {
+        setErrorMessage('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.');
       } else {
         løsAvklaringsbehov(
           {
@@ -233,11 +245,7 @@ export const SamordningGradering = ({
         vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
-            form.reset(
-              grunnlag.vurdering
-                ? mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger)
-                : emptyDraftFormFields()
-            )
+            form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
           );
         }}
         mellomlagretVurdering={mellomlagretVurdering}
@@ -278,7 +286,12 @@ export const SamordningGradering = ({
               readOnly={formReadOnly}
               onKopierYtelser={kopierYtelserTilVurdering}
             />
-            <Ytelsesvurderinger form={form} readOnly={formReadOnly} fieldArray={vurderteSamordningerFieldArray} />
+            <Ytelsesvurderinger
+              form={form}
+              readOnly={formReadOnly}
+              fieldArray={vurderteSamordningerFieldArray}
+              grunnlag={grunnlag}
+            />
             {(success || erAllereddeOppfølgningsOppgave) && (
               <Box maxWidth={'80ch'}>
                 <Alert variant="success">Oppfølgingsoppgave opprettet</Alert>
@@ -335,10 +348,7 @@ export const SamordningGradering = ({
   );
 };
 
-function mapVurderingToDraftFormFields(
-  grunnlag: SamordningGraderingGrunnlag,
-  autoSplittSykepenger: boolean
-): DraftFormFields {
+function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
   const vurderteSamordninger = grunnlag.vurdering?.vurderinger.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
     gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
@@ -351,7 +361,7 @@ function mapVurderingToDraftFormFields(
 
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    vurderteSamordninger: vurderteSamordninger && medAutoSplitt(vurderteSamordninger, autoSplittSykepenger),
+    vurderteSamordninger: vurderteSamordninger?.sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom)),
   };
 }
 

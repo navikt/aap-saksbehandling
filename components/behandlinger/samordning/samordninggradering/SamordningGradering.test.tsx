@@ -74,8 +74,9 @@ describe('Samordning gradering', () => {
 
     expect(screen.getByText('Mottar bruker sykepenger: Ja')).toBeVisible();
     expect(
-      screen.getByText('Har bruker planer om ferie før de er ferdige med sykepenger: Ja, 01.06.2025 - 14.06.2025')
+      screen.getByText('Har bruker planer om ferie før de er ferdige med sykepenger: Ja', { exact: false })
     ).toBeVisible();
+    expect(screen.getByText('01.06.2025 - 14.06.2025')).toBeVisible();
   });
 
   test('viser ikke relevant informasjon fra søknaden når verdiene mangler', () => {
@@ -84,10 +85,8 @@ describe('Samordning gradering', () => {
     expect(screen.queryByText('Relevant informasjon fra søknaden')).not.toBeInTheDocument();
   });
 
-  test('skal kunne redigere ytelse, periode og gradering for en manuell rad', async () => {
+  test('skal kunne redigere ytelse, periode og gradering direkte i tabellen for en manuell rad', () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
-
-    await user.click(screen.getByRole('button', { name: 'Rediger' }));
 
     expect(screen.getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('SYKEPENGER');
     expect(screen.getByRole('textbox', { name: 'Fra og med' })).toHaveValue(
@@ -97,18 +96,28 @@ describe('Samordning gradering', () => {
     expect(screen.getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('20');
   });
 
-  test('lagrer endringer fra redigeringsmodalen tilbake til tabellen', async () => {
+  test('lagrer endringer i tabellen direkte uten modal', async () => {
     render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
-
-    await user.click(screen.getByRole('button', { name: 'Rediger' }));
 
     const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
     await user.clear(gradering);
     await user.type(gradering, '60');
-    await user.click(screen.getByRole('button', { name: 'Lagre endringer' }));
 
-    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
-    expect(within(rader[1]).getByText('60')).toBeVisible();
+    expect(gradering).toHaveValue('60');
+  });
+
+  test('ferie i sykepengeperiode kan ikke velges i den vanlige ytelsestype-velgeren når autoSplittSykepenger-toggelen er på', () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    expect(
+      within(screen.getByRole('combobox', { name: 'Ytelsestype' })).queryByRole('option', {
+        name: 'Ferie i sykepengeperiode',
+      })
+    ).not.toBeInTheDocument();
   });
 
   test('kan slette en rad', () => {
@@ -163,7 +172,7 @@ describe('Samordning gradering', () => {
     const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
     await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
 
-    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
 
     const fom = screen.getByRole('textbox', { name: 'Fra og med' });
     await user.type(fom, '31.10.2025');
@@ -171,8 +180,86 @@ describe('Samordning gradering', () => {
     const tom = screen.getByRole('textbox', { name: 'Til og med' });
     await user.type(tom, '01.10.2025');
 
-    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
     expect(await screen.findByText('Fra og med dato kan ikke være etter til og med dato')).toBeVisible();
+  });
+
+  test('gir feilmelding når perioder overlapper, og fjerner den når overlappet er rettet', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const etGrunnlag: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [],
+    };
+
+    render(<SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
+
+    await user.click(screen.getByRole('button', { name: 'Endre' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
+
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
+
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    const ytelsestypeFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    const graderingFelter = screen.getAllByRole('textbox', { name: 'Samordningsgrad' });
+
+    await user.type(fomFelter[0], '01.01.2025');
+    await user.type(tomFelter[0], '31.01.2025');
+    await user.selectOptions(ytelsestypeFelter[0], 'SYKEPENGER');
+    await user.type(graderingFelter[0], '50');
+
+    await user.type(fomFelter[1], '15.01.2025');
+    await user.type(tomFelter[1], '15.02.2025');
+    await user.selectOptions(ytelsestypeFelter[1], 'SYKEPENGER');
+    await user.type(graderingFelter[1], '50');
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(
+      await screen.findByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).toBeVisible();
+
+    await user.clear(tomFelter[1]);
+    await user.type(tomFelter[1], '01.03.2025');
+
+    expect(
+      screen.queryByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).not.toBeInTheDocument();
+  });
+
+  test('viser feilmelding og åpner ikke ferie-modal dersom radene i tabellen ikke er gyldige', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const etGrunnlag: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [],
+    };
+
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />
+      </FeatureFlagProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Endre' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
+
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til ferie i sykepengeperiode' }));
+
+    expect(
+      await screen.findByText('Du må rette opp feilene i tabellen før du kan legge til ferie i sykepengeperioden.')
+    ).toBeVisible();
+    expect(screen.queryByRole('heading', { name: 'Legg til ferie i sykepengeperiode' })).not.toBeInTheDocument();
   });
 });
 
@@ -246,8 +333,9 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
     expect(rader).toHaveLength(3);
-    expect(within(rader[2]).getByText('01.03.2025 - 31.03.2025')).toBeVisible();
-    expect(within(rader[2]).getByText('Sykepenger')).toBeVisible();
+    expect(within(rader[2]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.03.2025');
+    expect(within(rader[2]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('31.03.2025');
+    expect(within(rader[2]).getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('SYKEPENGER');
   });
 
   test('kopierer alle perioder fra oppslaget uten å endre eksisterende rader', async () => {
@@ -260,14 +348,17 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
     expect(rader).toHaveLength(4);
-    expect(within(rader[1]).getByText('01.01.2025 - 31.01.2025')).toBeVisible();
-    expect(within(rader[1]).getByText('Pleiepenger')).toBeVisible();
+    expect(within(rader[1]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2025');
+    expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('31.01.2025');
+    expect(within(rader[1]).getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('PLEIEPENGER');
 
-    expect(within(rader[2]).getByText('01.03.2025 - 31.03.2025')).toBeVisible();
-    expect(within(rader[2]).getByText('Sykepenger')).toBeVisible();
+    expect(within(rader[2]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.03.2025');
+    expect(within(rader[2]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('31.03.2025');
+    expect(within(rader[2]).getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('SYKEPENGER');
 
-    expect(within(rader[3]).getByText('01.05.2025 - 31.05.2025')).toBeVisible();
-    expect(within(rader[3]).getByText('Foreldrepenger')).toBeVisible();
+    expect(within(rader[3]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.05.2025');
+    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('31.05.2025');
+    expect(within(rader[3]).getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('FORELDREPENGER');
   });
 
   test('kopiert periode får samordningsgrad lik graderingen fra kilden', async () => {
@@ -281,7 +372,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[2];
 
-    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('100');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('100');
   });
 
   test('kopiert periode får samordningsgrad 0 når kilden mangler gradering', async () => {
@@ -309,7 +400,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[1];
 
-    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('0');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('0');
   });
 
   test('kopiert periode får samordningsgrad 0 når kilden har gradering 0', async () => {
@@ -335,7 +426,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[1];
 
-    expect(within(kopiertRad).getAllByRole('cell')[2]).toHaveTextContent('0');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('0');
   });
 
   test('kopiert periode formaterer fom/tom til norsk datoformat og beholder ytelsestype', async () => {
@@ -348,10 +439,10 @@ describe('kopiering av perioder fra oppslag', () => {
 
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[2];
-    const celler = within(kopiertRad).getAllByRole('cell');
 
-    expect(celler[0]).toHaveTextContent('01.05.2025 - 31.05.2025');
-    expect(celler[1]).toHaveTextContent('Foreldrepenger');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.05.2025');
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Til og med' })).toHaveValue('31.05.2025');
+    expect(within(kopiertRad).getByRole('combobox', { name: 'Ytelsestype' })).toHaveValue('FORELDREPENGER');
   });
 
   test('kopiert rad kan redigeres og slettes, siden den er markert som manuell', async () => {
@@ -364,7 +455,7 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
     const kopiertRad = rader[2];
 
-    expect(within(kopiertRad).getByRole('button', { name: 'Rediger' })).toBeEnabled();
+    expect(within(kopiertRad).getByRole('textbox', { name: 'Samordningsgrad' })).toBeEnabled();
     expect(within(kopiertRad).getByRole('button', { name: 'Slett' })).toBeEnabled();
   });
 
@@ -378,11 +469,11 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
     // rader[1] er den eksisterende, manuelt vurderte perioden (Pleiepenger, gradering 20)
-    expect(within(rader[1]).getAllByRole('cell')[2]).toHaveTextContent('20');
+    expect(within(rader[1]).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('20');
     // rader[2] er kopiert fra Sykepenger (gradering 100 i kilden)
-    expect(within(rader[2]).getAllByRole('cell')[2]).toHaveTextContent('100');
+    expect(within(rader[2]).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('100');
     // rader[3] er kopiert fra Foreldrepenger (gradering 50 i kilden)
-    expect(within(rader[3]).getAllByRole('cell')[2]).toHaveTextContent('50');
+    expect(within(rader[3]).getByRole('textbox', { name: 'Samordningsgrad' })).toHaveValue('50');
   });
 
   test('viser ikke kopier-knapper når oppslaget er tomt', () => {
@@ -410,20 +501,23 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
   });
 
-  test('lar ferie i sykepengeperiode velges også når autoSplittSykepenger-toggelen er av', async () => {
+  test('kan legge til ferie i sykepengeperiode via egen modal når autoSplittSykepenger-toggelen er på', async () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
         <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
       </FeatureFlagProvider>
     );
 
-    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til ferie i sykepengeperiode' }));
 
-    expect(
-      within(screen.getByRole('combobox', { name: 'Ytelsestype' })).getByRole('option', {
-        name: 'Ferie i sykepengeperiode',
-      })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Legg til ferie i sykepengeperiode' })).toBeVisible();
+
+    await user.type(screen.getByRole('textbox', { name: 'Fra og med' }), '01.06.2025');
+    await user.type(screen.getByRole('textbox', { name: 'Til og med' }), '14.06.2025');
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+    expect(within(rader[rader.length - 1]).getByText('Ferie i sykepengeperiode')).toBeVisible();
   });
 
   test('splitter ikke sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er av', () => {
@@ -436,18 +530,57 @@ describe('kopiering av perioder fra oppslag', () => {
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
     expect(rader).toHaveLength(3);
-    expect(within(rader[1]).getByText('01.01.2026 - 30.01.2026')).toBeVisible();
+    expect(within(rader[1]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2026');
+    expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('30.01.2026');
   });
 
-  test('splitter sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er på', () => {
-    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
+  test('flytter splitten når en ferieperiode innsnevres, uten å etterlate udekkede dager', async () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    const ferieRadFørRedigering = within(
+      within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row')[2]
+    );
+    await user.click(ferieRadFørRedigering.getByRole('button', { name: 'Rediger' }));
+
+    const dialog = within(screen.getByRole('dialog'));
+
+    const fom = dialog.getByRole('textbox', { name: 'Fra og med' });
+    await user.clear(fom);
+    await user.type(fom, '12.01.2026');
+
+    const tom = dialog.getByRole('textbox', { name: 'Til og med' });
+    await user.clear(tom);
+    await user.type(tom, '14.01.2026');
+
+    await user.click(dialog.getByRole('button', { name: 'Lagre endringer' }));
 
     const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
 
     expect(rader).toHaveLength(4);
-    expect(within(rader[1]).getByText('01.01.2026 - 09.01.2026')).toBeVisible();
-    expect(within(rader[2]).getByText('10.01.2026 - 16.01.2026')).toBeVisible();
-    expect(within(rader[3]).getByText('17.01.2026 - 06.02.2026')).toBeVisible();
+    expect(within(rader[1]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2026');
+    expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('11.01.2026');
+    expect(within(rader[2]).getByText('12.01.2026 - 14.01.2026')).toBeVisible();
+    expect(within(rader[3]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('15.01.2026');
+    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('02.02.2026');
+  });
+
+  test('gjenoppretter én sammenhengende sykepengeperiode når ferien slettes', async () => {
+    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
+
+    const ferieRad = within(
+      within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row')[2]
+    );
+    await user.click(ferieRad.getByRole('button', { name: 'Slett' }));
+
+    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
+
+    expect(rader).toHaveLength(2);
+    expect(within(rader[1]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2026');
+    expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('30.01.2026');
   });
 });
 
