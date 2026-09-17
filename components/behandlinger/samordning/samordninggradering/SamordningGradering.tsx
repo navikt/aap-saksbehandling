@@ -15,7 +15,7 @@ import {
   SamordningYtelsestype,
   SamordningYtelseVurdering,
 } from 'lib/types/types';
-import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
@@ -24,8 +24,6 @@ import { SubmitEventHandler, useEffect, useRef, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { medAutoSplitt } from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
 import styles from 'components/behandlinger/samordning/samordninggradering/SamordningGradering.module.css';
 import { RelevantInformasjonSamordningGradering } from 'components/behandlinger/samordning/samordninggradering/RelevantInformasjonSamordningGradering';
 import { YtelseTabell } from 'components/behandlinger/samordning/samordninggradering/YtelseTabell';
@@ -71,7 +69,6 @@ export const SamordningGradering = ({
   const sak = useSak();
   const { behandlingsreferanse } = useParamsMedType();
   const ref = useRef<HTMLDialogElement>(null);
-  const autoSplittSykepenger = useFeatureFlag('autoSplittSykepenger');
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
@@ -96,7 +93,7 @@ export const SamordningGradering = ({
 
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
-    : mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger);
+    : mapVurderingToDraftFormFields(grunnlag);
 
   const { form, formFields } = useConfigForm<SamordningGraderingFormfields>(
     {
@@ -248,11 +245,7 @@ export const SamordningGradering = ({
         vurderingerMeta={grunnlag.vurdering?.vurderingerMeta}
         onDeleteMellomlagringClick={() => {
           slettMellomlagring(() =>
-            form.reset(
-              grunnlag.vurdering
-                ? mapVurderingToDraftFormFields(grunnlag, autoSplittSykepenger)
-                : emptyDraftFormFields()
-            )
+            form.reset(grunnlag.vurdering ? mapVurderingToDraftFormFields(grunnlag) : emptyDraftFormFields())
           );
         }}
         mellomlagretVurdering={mellomlagretVurdering}
@@ -355,10 +348,7 @@ export const SamordningGradering = ({
   );
 };
 
-function mapVurderingToDraftFormFields(
-  grunnlag: SamordningGraderingGrunnlag,
-  autoSplittSykepenger: boolean
-): DraftFormFields {
+function mapVurderingToDraftFormFields(grunnlag: SamordningGraderingGrunnlag): DraftFormFields {
   const vurderteSamordninger = grunnlag.vurdering?.vurderinger.map((ytelse) => ({
     ytelseType: ytelse.ytelseType,
     gradering: !isNullOrUndefined(ytelse.gradering) ? ytelse.gradering : undefined,
@@ -371,7 +361,7 @@ function mapVurderingToDraftFormFields(
 
   return {
     begrunnelse: grunnlag.vurdering?.begrunnelse || undefined,
-    vurderteSamordninger: vurderteSamordninger && medAutoSplitt(vurderteSamordninger, autoSplittSykepenger),
+    vurderteSamordninger: vurderteSamordninger?.sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom)),
   };
 }
 
