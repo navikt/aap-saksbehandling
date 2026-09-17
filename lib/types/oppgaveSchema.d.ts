@@ -1912,9 +1912,9 @@ export interface components {
        */
       reserverTil?: string | null;
       /** @description Key type: kotlin.String */
-      reserverTilPerAvklaringsbehov?: {
+      reserverTilPerAvklaringsbehov: {
         [key: string]: string;
-      } | null;
+      };
       saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
@@ -2174,6 +2174,13 @@ export interface components {
       saksnummer?: string | null;
       tilbakekrevingUrl?: string | null;
     };
+    'no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      'p\u00E5minnelseDato'?: string | null;
+    };
     'no.nav.aap.oppgave.ForrigeKvalitetssikrerDto': {
       forrigeKvalitetssikrerIdent: string;
       forrigeKvalitetssikrerNavn?: string | null;
@@ -2413,6 +2420,7 @@ export interface components {
       versjon: number;
     };
     'no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse': {
+      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
       harUlesteDokumenter: boolean;
       /** Format: int64 */
       id: number;
@@ -2448,13 +2456,6 @@ export interface components {
       'p\u00E5VentTil': string;
       'p\u00E5Vent\u00C5rsak'?: string | null;
       venteBegrunnelse?: string | null;
-    };
-    'no.nav.aap.oppgave.liste.Foresp\u00F8rselSendtTilBehandler': {
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      'p\u00E5minnelseDato'?: string | null;
     };
     'no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse': {
       avklaringsbehovKode: string;
@@ -2538,7 +2539,7 @@ export interface components {
         | null;
     };
     'no.nav.aap.oppgave.liste.OppgavelisteTagsResponse': {
-      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.liste.Foresp\u00F8rselSendtTilBehandler'];
+      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
       'forrigeP\u00E5VentInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       harUlesteDokumenter?: boolean | null;
