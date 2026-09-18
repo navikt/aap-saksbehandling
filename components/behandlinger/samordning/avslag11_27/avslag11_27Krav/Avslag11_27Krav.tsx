@@ -1,7 +1,7 @@
 'use client';
 
 import { TasklistIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, VStack } from '@navikt/ds-react';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Avslag11_27Grunnlag, Avslag11_27Vurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -14,13 +14,11 @@ import { Avslag11_27FormFields } from 'components/behandlinger/samordning/avslag
 import { Avslag11_27TidligereVurdering } from 'components/behandlinger/samordning/avslag11_27/avslag11_27tidligerevurdering/Avslag11_27TidligereVurdering';
 import { Avslag11_27Vurdering as Avslag11_27VurderingSkjema } from 'components/behandlinger/samordning/avslag11_27/avslag11_27vurdering/Avslag11_27Vurdering';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import {
-  NyVurderingExpandableCard,
-  skalVæreInitiellEkspandert,
-} from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
+import { skalVæreInitiellEkspandert } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 
-import styles from './Avslag11_27KravGruppe.module.css';
+import styles from 'components/behandlinger/samordning/avslag11_27/avslag11_27Krav/Avslag11_27Krav.module.css';
+import { NyVurderingKortMedSlett } from 'components/periodisering/nyvurderingkortmedslett/NyVurderingKortMedSlett';
 
 interface Props {
   form: UseFormReturn<Avslag11_27FormFields>;
@@ -31,12 +29,24 @@ interface Props {
   readonly: boolean;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
-  visLeggTilVurderingKnapp: boolean;
   brukersYtelseAlternativer: string[];
   nesteKravSøknadsdato?: string;
+  onSlettVurdering: (referanse: string) => void;
+  onLeggTilVurdering: (referanse: string) => void;
 }
 
-export const Avslag11_27KravGruppe = ({
+const kravTypeLabels: Record<string, string> = {
+  RELEVANT_KRAV: 'Nytt krav om AAP',
+  TRUKKET_SØKNAD: 'Trukket søknad',
+  KLAGE: 'Klage',
+  TILLEGGSOPPLYSNING: 'Tilleggsopplysning',
+};
+
+function formaterKravType(type: string): string {
+  return kravTypeLabels[type] ?? type;
+}
+
+export const Avslag11_27Krav = ({
   form,
   kravIndex,
   krav,
@@ -45,14 +55,15 @@ export const Avslag11_27KravGruppe = ({
   readonly,
   accordionsSignal,
   erAktivUtenAvbryt,
-  visLeggTilVurderingKnapp,
   brukersYtelseAlternativer,
   nesteKravSøknadsdato,
+  onSlettVurdering,
+  onLeggTilVurdering,
 }: Props) => {
   const vurderingFormField = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
 
-  // Vis skjema direkte hvis: ikke revurdering ELLER nåværende vurdering finnes
-  const [visNyVurdering, setVisNyVurdering] = useState(!visLeggTilVurderingKnapp || !!nåværendeVurdering);
+  // Vis skjema direkte kun hvis det allerede finnes en nåværende vurdering å redigere
+  const [visNyVurdering, setVisNyVurdering] = useState(!!nåværendeVurdering);
 
   const handleSlettNyVurdering = () => {
     form.setValue(`avslag11_27vurderinger.${kravIndex}.vurdering`, {
@@ -68,6 +79,7 @@ export const Avslag11_27KravGruppe = ({
       skalAvslås1127: undefined,
     });
     setVisNyVurdering(false);
+    onSlettVurdering(krav.referanse);
   };
 
   const vurderingStatusForNyVurdering = (() => {
@@ -87,14 +99,36 @@ export const Avslag11_27KravGruppe = ({
       className={styles.kravGruppe}
     >
       <Box background="neutral-soft" padding="space-12" className={styles.kravHeader}>
-        <HStack gap="space-16" align="center">
-          <TasklistIcon fontSize="1.5rem" aria-hidden />
-          <div>
-            <BodyShort className={styles.detailgray} size="small">
-              {krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}
+        <HStack gap="space-80" align="center" wrap>
+          <HStack gap="space-16" align="center">
+            <TasklistIcon fontSize="1.5rem" aria-hidden />
+            <VStack gap="space-4">
+              <BodyShort size="small" weight="semibold">
+                Krav
+              </BodyShort>
+              <BodyShort size="small">{krav.søknadsdokument}</BodyShort>
+            </VStack>
+          </HStack>
+          <VStack gap="space-4">
+            <BodyShort size="small" weight="semibold">
+              Type
             </BodyShort>
-            <Label size="medium">Vurder krav {krav.søknadsdokument}</Label>
-          </div>
+            <BodyShort size="small">{formaterKravType(krav.type)}</BodyShort>
+          </VStack>
+          <VStack gap="space-4">
+            <BodyShort size="small" weight="semibold">
+              Søknadsdato
+            </BodyShort>
+            <BodyShort size="small">{krav.søknadsdato ? formaterDatoForFrontend(krav.søknadsdato) : '-'}</BodyShort>
+          </VStack>
+          <VStack gap="space-4">
+            <BodyShort size="small" weight="semibold">
+              Mulig rett fra
+            </BodyShort>
+            <BodyShort size="small">
+              {krav.muligRettighetFra ? formaterDatoForFrontend(krav.muligRettighetFra) : '-'}
+            </BodyShort>
+          </VStack>
         </HStack>
       </Box>
       <Box padding="space-16">
@@ -112,19 +146,18 @@ export const Avslag11_27KravGruppe = ({
           )}
 
           {visNyVurdering && (
-            <NyVurderingExpandableCard
+            <NyVurderingKortMedSlett
               accordionsSignal={accordionsSignal}
               fraDato={new Date(krav.søknadsdato)}
               nestePeriodeFraDato={nesteKravSøknadsdato ? new Date(nesteKravSøknadsdato) : null}
               isLast={!nesteKravSøknadsdato}
               vurderingStatus={vurderingStatusForNyVurdering}
               vurdering={{ ...vurderingFormField, behøverVurdering: false }}
-              harTidligereVurderinger={!!vedtattVurdering}
               finnesFeil={false}
               onSlettVurdering={handleSlettNyVurdering}
-              index={vedtattVurdering ? 1 : 0}
               readonly={readonly}
               initiellEkspandert={skalVæreInitiellEkspandert(vurderingFormField?.erNyVurdering, erAktivUtenAvbryt)}
+              visStrekVedManglendeTilDato={false}
             >
               <Avslag11_27VurderingSkjema
                 form={form}
@@ -132,16 +165,19 @@ export const Avslag11_27KravGruppe = ({
                 readonly={readonly}
                 brukersYtelseAlternativer={brukersYtelseAlternativer}
               />
-            </NyVurderingExpandableCard>
+            </NyVurderingKortMedSlett>
           )}
 
-          {visLeggTilVurderingKnapp && !visNyVurdering && !readonly && (
+          {!visNyVurdering && !readonly && (
             <Button
               type="button"
               variant="secondary"
               size="small"
               className="fit-content"
-              onClick={() => setVisNyVurdering(true)}
+              onClick={() => {
+                setVisNyVurdering(true);
+                onLeggTilVurdering(krav.referanse);
+              }}
             >
               Legg til vurdering
             </Button>
