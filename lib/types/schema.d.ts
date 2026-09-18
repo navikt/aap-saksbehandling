@@ -5401,6 +5401,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/sak/{saksnummer}/tjenestepensjon-ytelser': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.SakTjenestePensjonYtelserDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/behandling/{referanse}/kjor-fra-steg': {
     parameters: {
       query?: never;
@@ -14319,6 +14357,7 @@ export interface components {
       /** @enum {string} */
       brevtype:
         | 'AVSLAG'
+        | 'AVSLAG_11_27'
         | 'AVSLAG_11_5'
         | 'AVSLAG_UNDER_17_AAR_9_MAANEDER'
         | 'BARNETILLEGG_SATS_REGULERING'
@@ -15100,13 +15139,13 @@ export interface components {
       )[];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagbarBehandlingDto': {
-      eksternSaksbehandlingUrl?: string | null;
+    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto': {
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
        */
       opprettetTidspunkt: string;
+      /** Format: uuid */
       referanse: string;
       saksnummer: string;
       /** @enum {string} */
@@ -15242,9 +15281,10 @@ export interface components {
       vedtaksdato: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingGrunnlagDto': {
-      behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagbarBehandlingDto'][];
+      behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.BehandlingMedVedtakDto'][];
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.P\u00E5klagetBehandlingVurderingDto'];
       'harTilgangTil\u00C5Saksbehandle': boolean;
+      tilbakekrevingsbehandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.TilbakekrevingsbehandlingDto'][];
       vedtatteKlagebehandlinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.KlagebehandlingDto'][];
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -15253,6 +15293,33 @@ export interface components {
       'p\u00E5klagetBehandling'?: string | null;
       /** @enum {string} */
       'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
+    };
+    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.TilbakekrevingsbehandlingDto': {
+      eksternSaksbehandlingUrl?: string | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettetTidspunkt: string;
+      referanse: string;
+      saksnummer: string;
+      /** @enum {string} */
+      status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
+      /** @enum {string} */
+      typeBehandling:
+        | 'Aktivitetsplikt'
+        | 'Aktivitetsplikt11_9'
+        | 'Førstegangsbehandling'
+        | 'Klage'
+        | 'OppfølgingsBehandling'
+        | 'Revurdering'
+        | 'SvarFraAndreinstans'
+        | 'Tilbakekreving';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.resultat.KabalKlageResultat': {
       svarFraAndreinstans: components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto'][];
@@ -16970,9 +17037,18 @@ export interface components {
       /** @enum {string} */
       status: 'AVSLUTTET' | 'LØPENDE' | 'OPPRETTET' | 'UTREDES';
     };
+    'no.nav.aap.behandlingsflyt.drift.SakTjenestePensjonYtelserDto': {
+      forhold: components['schemas']['no.nav.aap.behandlingsflyt.drift.TjenestePensjonForholdDto'][];
+      saksnummer: string;
+    };
     'no.nav.aap.behandlingsflyt.drift.SaksnummerOgRettighetsperiode': {
       rettighetsperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       saksnummer: string;
+    };
+    'no.nav.aap.behandlingsflyt.drift.TjenestePensjonForholdDto': {
+      navn: string;
+      orgNr: string;
+      tpNr: string;
     };
     'no.nav.aap.behandlingsflyt.drift.Vilk\u00E5rDriftsinfoDTO': {
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.drift.ForenkletVilk\u00E5rsperiode'][];
@@ -19318,6 +19394,7 @@ export interface components {
       'l\u00F8sesAv': (
         | 'BESLUTTER'
         | 'DRIFT'
+        | 'DRIFT_LES'
         | 'KVALITETSSIKRER'
         | 'LES'
         | 'PRODUKSJONSSTYRING'

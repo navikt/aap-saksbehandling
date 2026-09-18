@@ -56,6 +56,13 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   );
 
   const onSubmit = (data: FormFields) => {
+    const valgtBehandling = finnValgtPåklagetVedtak(grunnlag, data.vedtak);
+    if (!valgtBehandling) {
+      // Skal ikke kunne skje: radio-valgene bygges fra samme grunnlag.behandlinger,
+      // og vedtak-feltet er required. Kaster tydelig i stedet for å sende feil type til backend.
+      throw new Error(`Fant ikke valgt behandling (referanse=${data.vedtak}) i grunnlaget`);
+    }
+
     løsAvklaringsbehov(
       {
         behandlingVersjon: behandlingVersjon,
@@ -63,7 +70,7 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
         behov: {
           behovstype: Behovstype.FASTSETT_PÅKLAGET_BEHANDLING,
           påklagetBehandlingVurdering: {
-            påklagetVedtakType: 'KELVIN_BEHANDLING', // TODO: varier mellom KELVIN_BEHANDLING og TILBAKEKREVING
+            påklagetVedtakType: utledPåklagetVedtakType(valgtBehandling.typeBehandling),
             påklagetBehandling: data.vedtak,
           },
         },
@@ -117,6 +124,12 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   );
 };
 
+function utledPåklagetVedtakType(
+  typeBehandling: PåklagetBehandlingGrunnlag['behandlinger'][number]['typeBehandling']
+): 'KELVIN_BEHANDLING' | 'TILBAKEKREVING' {
+  return typeBehandling === 'Tilbakekreving' ? 'TILBAKEKREVING' : 'KELVIN_BEHANDLING';
+}
+
 function mapVurderingToDraftFormFields(vurdering: PåklagetBehandlingGrunnlag['gjeldendeVurdering']): DraftFormFields {
   return {
     vedtak: vurdering?.påklagetBehandling,
@@ -127,6 +140,45 @@ function emptyDraftFormFields(): DraftFormFields {
   return { vedtak: '' };
 }
 
+type ValgtPåklagetVedtak = {
+  referanse: string;
+  typeBehandling: PåklagetBehandlingGrunnlag['behandlinger'][number]['typeBehandling'];
+};
+
+function finnValgtPåklagetVedtak(
+  grunnlag: PåklagetBehandlingGrunnlag | undefined,
+  referanse: string | null | undefined
+): ValgtPåklagetVedtak | undefined {
+  if (!referanse || !grunnlag) {
+    return undefined;
+  }
+
+  const behandling = grunnlag.behandlinger.find((behandling) => behandling.referanse === referanse);
+  if (behandling) {
+    return behandling;
+  }
+
+  const klagebehandling = grunnlag.vedtatteKlagebehandlinger.find((behandling) => behandling.referanse === referanse);
+  if (klagebehandling) {
+    return {
+      referanse: klagebehandling.referanse,
+      typeBehandling: 'Klage',
+    };
+  }
+
+  const tilbakekrevingsbehandling = grunnlag.tilbakekrevingsbehandlinger.find(
+    (behandling) => behandling.referanse === referanse
+  );
+  if (tilbakekrevingsbehandling) {
+    return {
+      referanse: tilbakekrevingsbehandling.referanse,
+      typeBehandling: 'Tilbakekreving',
+    };
+  }
+
+  return undefined;
+}
+
 function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
   const ytelsesbehandlinger =
     grunnlag?.behandlinger.map((behandling) => ({
@@ -135,8 +187,6 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       vedtaksdato: new Date(behandling.vedtakstidspunkt),
       behandlingstype: behandling.typeBehandling,
       vurderingsbehov: behandling.vurderingsbehov.map(formaterVurderingsbehov),
-<<<<<<< HEAD
-      eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl,
     })) ?? [];
 
   const klagebehandlinger =
@@ -147,11 +197,18 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
       behandlingstype: 'Klage',
       vurderingsbehov: [],
     })) ?? [];
-  return [...ytelsesbehandlinger, ...klagebehandlinger].sort(
-    (a, b) => b.vedtaksdato.getTime() - a.vedtaksdato.getTime()
-=======
+
+  const tilbakekrevingsbehandlinger =
+    grunnlag?.tilbakekrevingsbehandlinger.map((behandling) => ({
+      saksnummer: behandling.saksnummer,
+      value: behandling.referanse,
+      vedtaksdato: behandling.vedtaksdato ? new Date(behandling.vedtaksdato) : new Date(behandling.opprettetTidspunkt),
+      behandlingstype: 'Tilbakekreving',
       eksternSaksbehandlingUrl: behandling.eksternSaksbehandlingUrl ?? undefined,
-    })) ?? []
->>>>>>> a8286e9b3 (Fiks null til undefined verdi oppdaget i lintsjekk)
+      vurderingsbehov: [],
+    })) ?? [];
+
+  return [...ytelsesbehandlinger, ...klagebehandlinger, ...tilbakekrevingsbehandlinger].sort(
+    (a, b) => b.vedtaksdato.getTime() - a.vedtaksdato.getTime()
   );
 }
