@@ -27,6 +27,7 @@ import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/inst
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { addDays } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -65,6 +66,7 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
 
   return (
     <Box
@@ -86,7 +88,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                 ? formatDatoMedMånedsnavn(opphold.avsluttetDato)
                 : 'Pågående'}
             </Label>
-            {opphold.delperioder.length > 1 && (
+            {visSammenhengendeOpphold && opphold.delperioder.length > 1 && (
               <VStack gap="space-2" className={styles.delperioder}>
                 {opphold.delperioder.map((delperiode, i) => (
                   <BodyShort key={delperiode.institusjonsnavn + i} size="small" className={styles.detailgray}>

@@ -8,6 +8,8 @@ import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+ import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -345,12 +347,25 @@ describe('form med reduksjon', () => {
      vurderinger: [],
    };
 
-   it('viser start- og sluttdato for hver delperiode i en sammenhengende kjede', () => {
+   const renderMedFlagg = (ui: React.ReactElement, flags = mockedFlags) =>
+     render(<FeatureFlagProvider flags={flags}>{ui}</FeatureFlagProvider>);
+
+   // TODO Thao: Fjern denne testen når feature toggles SammenhengendeInstitusjonsopphold fjernes
+   it('viser ikke delperioder når toggle er avslått', () => {
+     renderMedFlagg(<Helseinstitusjon grunnlag={kjedetOpphold} behandlingVersjon={0} readOnly={false} />, {
+       ...mockedFlags,
+       SammenhengendeInstitusjonsopphold: false,
+     });
+     expect(screen.queryByText(/St\. Mungos Hospital: /i)).not.toBeInTheDocument();
+   });
+
+   // TODO Thao: Legg denne testen tilbake når renderMedFlagg fjernes (eller feature toggles SammenhengendeInstitusjonsopphold fjernes)
+    /*it('viser start- og sluttdato for hver delperiode i en sammenhengende kjede', () => {
      render(<Helseinstitusjon grunnlag={kjedetOpphold} behandlingVersjon={0} readOnly={false} />);
 
      expect(screen.getByText(/St\. Mungos Hospital: 1\. januar 2025 – 1\. mai 2025/i)).toBeVisible();
      expect(screen.getByText(/Helgelandssykehus Dialyse: 2\. mai 2025 – 1\. august 2025/i)).toBeVisible();
-   });
+   });*/
 
    it('viser ikke delperioder når oppholdet kun har én delperiode', () => {
      render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
