@@ -191,7 +191,9 @@ function skalJustereVedtatteVurderinger(grunnlag: HelseinstitusjonGrunnlag, opph
   const harNyeVurderinger = grunnlag.vurderinger.some((v) => v.oppholdId === oppholdId);
   if (harNyeVurderinger) return false;
 
-  const vedtatteForOpphold = grunnlag.vedtatteVurderinger.find((v) => v.oppholdId === oppholdId)?.vurderinger;
+  const vedtatteForOpphold = grunnlag.vedtatteVurderinger
+    .filter((v) => v.oppholdId === opphold.oppholdId)
+    .flatMap((v) => v.vurderinger || []);
   if (!vedtatteForOpphold || vedtatteForOpphold.length === 0) return false;
 
   const sisteVedtatteTom = vedtatteForOpphold[vedtatteForOpphold.length - 1].periode.tom;
@@ -206,7 +208,9 @@ function mapVurderingToDraftFormFields(
 
   return {
     helseinstitusjonsvurderinger: opphold.map((opphold) => {
-      const vurderingerForOpphold = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId)?.vurderinger;
+      const vurderingerForOpphold = grunnlag.vurderinger
+        .filter((v) => v.oppholdId === opphold.oppholdId)
+        .flatMap((v) => v.vurderinger || []);
 
       const vedtatteVurderingerForOpphold = grunnlag.vedtatteVurderinger.find(
         (v) => v.oppholdId === opphold.oppholdId
@@ -250,7 +254,7 @@ function mapVurderingToDraftFormFields(
       }
 
       const harTidligereVurderingerOgIngenNåværendeVurderinger =
-        harTidligerevurderinger && !vurderingerForOpphold && !skalJustere;
+        harTidligerevurderinger && vurderingerForOpphold.length === 0 && !skalJustere;
 
       return {
         oppholdId: opphold.oppholdId || '',
