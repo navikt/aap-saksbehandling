@@ -10,7 +10,6 @@ export const FLAGS = [
   'Avslag11_27',
   'DialogMedBehandler',
   'kopierPerioder',
-  'autoSplittSykepenger',
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
 ] as const;
@@ -31,6 +30,5 @@ export const mockedFlags: Flags = {
   DialogMedBehandler: true,
   kopierPerioder: true,
   HoppOverBeslutterVedAvslagSykdom: true,
-  autoSplittSykepenger: true,
   KanVurdereRefusjonIRevurdering: true,
 };
