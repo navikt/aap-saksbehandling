@@ -120,8 +120,6 @@ export const SaksmenyDropdown = ({
 
   const korrigerSoknadsDatoFeatureFlagIsEnabled = useFeatureFlag('KorrigerSoknadsdato');
 
-  const visValgForKorrigerSøknadsdato = korrigerSoknadsDatoFeatureFlagIsEnabled;
-
   return (
     <div className={styles.saksmeny}>
       <Dropdown>
@@ -177,7 +175,7 @@ export const SaksmenyDropdown = ({
                 Vurder avslag § 11-27
               </Dropdown.Menu.GroupedList.Item>
             )}
-            {visValgForKorrigerSøknadsdato && (
+            {korrigerSoknadsDatoFeatureFlagIsEnabled && (
               <Dropdown.Menu.GroupedList.Item onClick={() => setKorrigerSøknadsdato(true)}>
                 Korriger søknadsdato (§ 22-13 femte ledd)
               </Dropdown.Menu.GroupedList.Item>
@@ -225,6 +223,13 @@ export const SaksmenyDropdown = ({
         saksnummer={saksnummer}
         behandling={behandling}
       />
+
+      <KorrigerSKnadsdatoDialog
+        isOpen={visKorrigerSøknadsdato}
+        onClose={() => setKorrigerSøknadsdato(false)}
+        saksnummer={saksnummer}
+      />
+
       {aktivMarkeringType && (
         <SettMarkeringForBehandlingModal
           referanse={behandling?.referanse}
@@ -239,14 +244,6 @@ export const SaksmenyDropdown = ({
           onClose={() => settVisAvslag1127Modal(false)}
           saksnummer={saksnummer}
           behandlingReferanse={behandling?.referanse}
-        />
-      )}
-
-      {visKorrigerSøknadsdato && (
-        <KorrigerSKnadsdatoDialog
-          isOpen={visKorrigerSøknadsdato}
-          onClose={() => setKorrigerSøknadsdato(false)}
-          saksnummer={saksnummer}
         />
       )}
     </div>
