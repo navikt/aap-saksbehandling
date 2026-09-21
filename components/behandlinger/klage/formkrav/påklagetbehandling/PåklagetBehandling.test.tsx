@@ -117,6 +117,29 @@ describe('Klage', () => {
     });
   });
 
+  it('Skal vise valideringsfeil i stedet for å kaste når mellomlagret vedtak ikke finnes i grunnlaget', async () => {
+    render(
+      <PåklagetBehandling
+        grunnlag={grunnlag}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        initialMellomlagretVurdering={{
+          avklaringsbehovkode: '5001',
+          behandlingId: { id: 0 },
+          data: JSON.stringify({ vedtak: 'uuid-finnes-ikke' }),
+          vurdertAv: 'Z999999',
+          vurdertDato: '2025-04-01T12:30:00',
+        }}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(await screen.findByText('Valgt vedtak finnes ikke lenger. Velg på nytt.')).toBeVisible();
+    expect(løsAvklaringsbehov).not.toHaveBeenCalled();
+  });
+
   it('Skal sende påklagetVedtakType=KELVIN_BEHANDLING når valgt behandling er en klagebehandling', async () => {
     render(<PåklagetBehandling grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
 
