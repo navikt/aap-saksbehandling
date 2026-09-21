@@ -58,9 +58,14 @@ export const PåklagetBehandling = ({ behandlingVersjon, grunnlag, readOnly, ini
   const onSubmit = (data: FormFields) => {
     const valgtBehandling = finnValgtPåklagetVedtak(grunnlag, data.vedtak);
     if (!valgtBehandling) {
-      // Skal ikke kunne skje: radio-valgene bygges fra samme grunnlag.behandlinger,
-      // og vedtak-feltet er required. Kaster tydelig i stedet for å sende feil type til backend.
-      throw new Error(`Fant ikke valgt behandling (referanse=${data.vedtak}) i grunnlaget`);
+      // Kan skje hvis en mellomlagret vurdering peker på en behandling som ikke lenger
+      // finnes i grunnlaget (f.eks. status endret siden mellomlagring). Vis som valideringsfeil
+      // i stedet for å sende feil/manglende type til backend eller kaste ukontrollert.
+      form.setError('vedtak', {
+        type: 'manual',
+        message: 'Valgt vedtak finnes ikke lenger. Velg på nytt.',
+      });
+      return;
     }
 
     løsAvklaringsbehov(
