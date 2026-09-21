@@ -237,7 +237,7 @@ export function clientBestillTestBrev(behandlingReferanse: string) {
 }
 
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {
-  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring`, 'POST', {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse`, 'POST', {
     dialogmeldingPurringUUID: dialogmeldingUUID,
     behandlingsReferanse: behandlingsreferanse,
   });
