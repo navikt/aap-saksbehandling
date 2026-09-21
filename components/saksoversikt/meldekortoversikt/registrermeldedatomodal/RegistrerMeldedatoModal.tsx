@@ -92,6 +92,7 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
                   setIsLoading(false);
                 } else {
                   refetchMeldekort();
+                  lukkOgNullstill();
                 }
               })}
             >
