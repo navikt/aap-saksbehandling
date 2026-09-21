@@ -5,7 +5,7 @@ import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-reac
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
 import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
-import { DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
+import { Arenastatus, DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -31,9 +31,10 @@ interface Props {
   oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
+  arenaStatus?: Arenastatus;
 }
 
-export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning }: Props) => {
+export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning, arenaStatus }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
@@ -145,7 +146,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               />
             </div>
           )}
-          {behandling.arenaStatus?.harArenaHistorikk && (
+          {arenaStatus?.harArenaHistorikk && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>
