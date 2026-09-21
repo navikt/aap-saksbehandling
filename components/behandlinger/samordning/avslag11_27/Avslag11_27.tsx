@@ -89,7 +89,7 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
     form
   );
 
-  const [ingenVurderingerValgtFeil, setIngenVurderingerValgtFeil] = useState<string | null>(null);
+  const [ingenVurderingerValgtFeil, setIngenVurderingerValgtFeil] = useState<boolean>(false);
 
   const [deletedReferanser, setDeletedReferanser] = useState<Set<string>>(new Set());
 
@@ -165,7 +165,7 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
 
   const validerVurderinger = (data: Avslag11_27FormFields): boolean => {
     const erGyldig = harMinstEnVurdering(data);
-    setIngenVurderingerValgtFeil(erGyldig ? null : 'Du må legge til minst én vurdering.');
+    setIngenVurderingerValgtFeil(!erGyldig);
     return erGyldig;
   };
 
@@ -219,15 +219,10 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
               }
         );
         setDeletedReferanser(new Set());
-        setIngenVurderingerValgtFeil(null);
+        setIngenVurderingerValgtFeil(false);
       }}
     >
       <VStack gap={'space-24'}>
-        {ingenVurderingerValgtFeil && (
-          <Alert variant="error" size="small">
-            {ingenVurderingerValgtFeil}
-          </Alert>
-        )}
         {kravFields.map((kravField, kravIndex) => {
           const faktiskKrav = grunnlag.krav.find((k) => k.referanse === kravField.vurdering.referanse);
           if (!faktiskKrav) return null;
@@ -257,12 +252,18 @@ export const Avslag11_27 = ({ grunnlag, readOnly, behandlingVersjon, initialMell
               nesteKravSøknadsdato={nesteKravSøknadsdato}
               onSlettVurdering={handleSlettVurdering}
               onLeggTilVurdering={handleLeggTilVurdering}
+              erEnesteKrav={grunnlag.krav.length === 1}
               brukersYtelseAlternativer={grunnlag.brukersYtelseAlternativer.filter(
                 (ytelse) => ytelse !== 'FERIE_I_SYKEPENGEPERIODE' && ytelse !== 'SVANGERSKAPSPENGER'
               )}
             />
           );
         })}
+        {ingenVurderingerValgtFeil && (
+          <Alert variant="error" size="small">
+            Du må legge til minst én vurdering.
+          </Alert>
+        )}
       </VStack>
     </VilkårskortMedFormOgMellomlagring>
   );

@@ -41,6 +41,29 @@ const grunnlagUtenVurdering: Avslag11_27Grunnlag = {
   vedtatteVurdering: null,
 };
 
+const grunnlagMedToKravUtenVurdering: Avslag11_27Grunnlag = {
+  brukersYtelseAlternativer: brukersYtelse,
+  harTilgangTilÅSaksbehandle: true,
+  krav: [
+    {
+      referanse: ref1,
+      søknadsdokument: 'JP-001',
+      type: 'RELEVANT_KRAV',
+      søknadsdato: '2026-01-15',
+      muligRettighetFra: '2026-02-01',
+    },
+    {
+      referanse: ref2,
+      søknadsdokument: 'JP-002',
+      type: 'RELEVANT_KRAV',
+      søknadsdato: '2026-03-01',
+      muligRettighetFra: '2026-03-15',
+    },
+  ],
+  vurderinger: null,
+  vedtatteVurdering: null,
+};
+
 const grunnlagMedVurdering: Avslag11_27Grunnlag = {
   brukersYtelseAlternativer: brukersYtelse,
   harTilgangTilÅSaksbehandle: true,
@@ -121,26 +144,14 @@ beforeEach(() => {
 
 describe('Avslag11_27 - krav vises', () => {
   it('viser alle krav fra grunnlaget', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(screen.getByText('JP-001')).toBeVisible();
     expect(screen.getByText('Nytt krav om AAP')).toBeVisible();
   });
 
   it('viser overskrift for steget', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(
       screen.getByText('§ 11-27 Brukeren har annen full trygdeytelse i en lengre periode etter AAP søknad')
@@ -148,13 +159,7 @@ describe('Avslag11_27 - krav vises', () => {
   });
 
   it('viser flere krav samtidig når grunnlaget inneholder flere', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVedtattOgNyVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVedtattOgNyVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(screen.getByText('JP-001')).toBeVisible();
     expect(screen.getByText('JP-002')).toBeVisible();
@@ -162,52 +167,34 @@ describe('Avslag11_27 - krav vises', () => {
 });
 
 describe('Avslag11_27 - skjema vises/skjules', () => {
-  it('viser ikke skjema automatisk når det ikke finnes en nåværende vurdering', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+  it('viser skjema automatisk når det kun finnes ett krav, selv uten eksisterende vurdering', () => {
+    render(<Avslag11_27 grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
+
+    expect(screen.getByText(/Ny vurdering/)).toBeVisible();
+  });
+
+  it('viser ikke skjema automatisk for krav uten nåværende vurdering når det finnes flere krav', () => {
+    render(<Avslag11_27 grunnlag={grunnlagMedToKravUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(screen.queryByText(/Ny vurdering/)).not.toBeInTheDocument();
   });
 
-  it('viser "Legg til vurdering"-knapp når det ikke finnes en vedtatt vurdering', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+  it('viser "Legg til vurdering"-knapp for hvert krav når det finnes flere krav uten vurdering', () => {
+    render(<Avslag11_27 grunnlag={grunnlagMedToKravUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
-    expect(screen.getByRole('button', { name: 'Legg til vurdering' })).toBeVisible();
+    expect(screen.getAllByRole('button', { name: 'Legg til vurdering' })).toHaveLength(2);
   });
 
   it('viser skjema etter klikk på "Legg til vurdering"', async () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedToKravUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
-    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+    await user.click(screen.getAllByRole('button', { name: 'Legg til vurdering' })[0]);
 
     expect(screen.getByText(/Ny vurdering/)).toBeVisible();
   });
 
   it('viser skjema automatisk for krav med eksisterende vurdering', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(screen.getByText(/Ny vurdering/)).toBeVisible();
   });
@@ -217,13 +204,7 @@ describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
   it.each([['Eksisterende begrunnelse'], ['30.06.2026']] as const)(
     'fyller inn verdi %s fra eksisterende vurdering',
     (forventetVerdi) => {
-      render(
-        <Avslag11_27
-          grunnlag={grunnlagMedVurdering}
-          behandlingVersjon={1}
-          readOnly={false}
-        />
-      );
+      render(<Avslag11_27 grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
       expect(screen.getByDisplayValue(forventetVerdi)).toBeInTheDocument();
     }
@@ -266,17 +247,64 @@ describe('Avslag11_27 - defaultverdier fra grunnlag', () => {
 
     expect(screen.getByDisplayValue('Mellomlagret begrunnelse')).toBeInTheDocument();
   });
+
+  it('viser skjema automatisk basert på mellomlagring selv om det finnes flere krav', () => {
+    const mellomlagring: MellomlagretVurdering = {
+      avklaringsbehovkode: Behovstype.VURDER_AVSLAG_11_27,
+      behandlingId: { id: 1 },
+      data: JSON.stringify({
+        avslag11_27vurderinger: [
+          {
+            vurdering: {
+              referanse: ref1,
+              begrunnelse: 'Mellomlagret begrunnelse',
+              behøverVurdering: true,
+              erNyVurdering: true,
+              harAnnenFullYtelse: 'Ja',
+              brukersYtelse: 'SYKEPENGER',
+              brukersYtelseTom: '30.06.2026',
+              harSykepengegrunnlagOver2G: 'Ja',
+              harArbeidsgiverSykepengerUtbetaling: 'Ja',
+              skalAvslås1127: 'Ja',
+            },
+          },
+          {
+            vurdering: {
+              referanse: ref2,
+              begrunnelse: '',
+              behøverVurdering: true,
+              erNyVurdering: true,
+              harAnnenFullYtelse: undefined,
+              brukersYtelse: undefined,
+              brukersYtelseTom: undefined,
+              harSykepengegrunnlagOver2G: undefined,
+              harArbeidsgiverSykepengerUtbetaling: undefined,
+              skalAvslås1127: undefined,
+            },
+          },
+        ],
+      }),
+      vurdertAv: 'Z123456',
+      vurdertDato: '2026-01-01T12:00:00',
+    };
+
+    render(
+      <Avslag11_27
+        grunnlag={grunnlagMedToKravUtenVurdering}
+        behandlingVersjon={1}
+        readOnly={false}
+        initialMellomlagretVurdering={mellomlagring}
+      />
+    );
+
+    expect(screen.getByDisplayValue('Mellomlagret begrunnelse')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Legg til vurdering' })).toBeVisible();
+  });
 });
 
 describe('Avslag11_27 - vedtatte vurderinger', () => {
   it('viser vedtatt vurdering for revurdering', async () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVedtattOgNyVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVedtattOgNyVurdering} behandlingVersjon={1} readOnly={false} />);
 
     // ref1 er vedtatt — kortet er kollaps, ekspander det
     const kortHeader = screen.getByText(/januar/i);
@@ -286,26 +314,14 @@ describe('Avslag11_27 - vedtatte vurderinger', () => {
   });
 
   it('viser "Legg til vurdering"-knapp for krav uten synlig skjema selv med vedtatt vurdering', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVedtattOgNyVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVedtattOgNyVurdering} behandlingVersjon={1} readOnly={false} />);
 
     // ref1 har vedtatt vurdering og ingen nåværende vurdering → skjema vises ikke automatisk
     expect(screen.getByRole('button', { name: 'Legg til vurdering' })).toBeVisible();
   });
 
   it('viser skjema direkte for krav med nåværende vurdering selv om det finnes vedtatt vurdering for et annet krav', () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVedtattOgNyVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVedtattOgNyVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(screen.getByText('JP-002')).toBeVisible();
     expect(screen.getByText(/Ny vurdering/)).toBeVisible();
@@ -314,13 +330,7 @@ describe('Avslag11_27 - vedtatte vurderinger', () => {
 
 describe('Avslag11_27 - validering', () => {
   it('viser feil ved innsending uten noen utfylt vurdering og uten eksisterende vurdering', async () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedToKravUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
     const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(lagreKnapp);
@@ -329,13 +339,7 @@ describe('Avslag11_27 - validering', () => {
   });
 
   it('validerer ikke når det allerede finnes en nåværende vurdering', async () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
     const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(lagreKnapp);
@@ -344,13 +348,7 @@ describe('Avslag11_27 - validering', () => {
   });
 
   it('validerer ikke når det finnes en vedtatt vurdering fra før', async () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagMedVedtattOgNyVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagMedVedtattOgNyVurdering} behandlingVersjon={1} readOnly={false} />);
 
     const lagreKnapp = screen.getByRole('button', { name: 'Bekreft' });
     await user.click(lagreKnapp);
@@ -445,15 +443,9 @@ describe('Avslag11_27 - mellomlagring', () => {
 
 describe('Avslag11_27 - slett og legg til vurdering igjen', () => {
   it('krever ny utfylt vurdering etter sletting dersom ingen annen vurdering eksisterer', async () => {
-    render(
-      <Avslag11_27
-        grunnlag={grunnlagUtenVurdering}
-        behandlingVersjon={1}
-        readOnly={false}
-      />
-    );
+    render(<Avslag11_27 grunnlag={grunnlagUtenVurdering} behandlingVersjon={1} readOnly={false} />);
 
-    await user.click(screen.getByRole('button', { name: 'Legg til vurdering' }));
+    // eneste krav → skjema vises automatisk uten å måtte klikke "Legg til vurdering"
     expect(screen.getByText(/Ny vurdering/)).toBeVisible();
 
     const slettKnapp = screen.getByRole('button', { name: 'Fjern vurdering' });

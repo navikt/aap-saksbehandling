@@ -33,6 +33,7 @@ interface Props {
   nesteKravSøknadsdato?: string;
   onSlettVurdering: (referanse: string) => void;
   onLeggTilVurdering: (referanse: string) => void;
+  erEnesteKrav: boolean;
 }
 
 const kravTypeLabels: Record<string, string> = {
@@ -59,11 +60,17 @@ export const Avslag11_27Krav = ({
   nesteKravSøknadsdato,
   onSlettVurdering,
   onLeggTilVurdering,
+  erEnesteKrav,
 }: Props) => {
   const vurderingFormField = form.watch(`avslag11_27vurderinger.${kravIndex}.vurdering`);
 
-  // Vis skjema direkte kun hvis det allerede finnes en nåværende vurdering å redigere
-  const [visNyVurdering, setVisNyVurdering] = useState(!!nåværendeVurdering);
+  const harMellomlagretVurdering =
+    vurderingFormField?.harAnnenFullYtelse !== undefined || !!vurderingFormField?.begrunnelse?.trim();
+
+  // Vis skjema direkte hvis det finnes en nåværende vurdering, eneste krav, eller mellomlagrede data
+  const [visNyVurdering, setVisNyVurdering] = useState(
+    !!nåværendeVurdering || erEnesteKrav || harMellomlagretVurdering
+  );
 
   const handleSlettNyVurdering = () => {
     form.setValue(`avslag11_27vurderinger.${kravIndex}.vurdering`, {

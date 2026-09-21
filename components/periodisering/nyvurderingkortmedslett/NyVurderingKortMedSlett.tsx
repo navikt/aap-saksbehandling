@@ -107,7 +107,3 @@ export const NyVurderingKortMedSlett = ({
     </CustomExpandableCard>
   );
 };
-
-export function skalVæreInitiellEkspandert(erNyVurdering: boolean | undefined, erAktiv: boolean): boolean {
-  return erNyVurdering === true || erAktiv;
-}
