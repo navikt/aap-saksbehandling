@@ -27,6 +27,7 @@ import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/inst
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { addDays } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -65,6 +66,7 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
 
   return (
     <Box
@@ -80,15 +82,22 @@ export const HelseinstitusjonOppholdGruppe = ({
         <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>
-            <BodyShort className={styles.detailgray}>
-              {opphold.kildeinstitusjon} - {opphold.oppholdstype}
-            </BodyShort>
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
               {!datoErUendeligSlutt(opphold.avsluttetDato)
                 ? formatDatoMedMånedsnavn(opphold.avsluttetDato)
                 : 'Pågående'}
             </Label>
+            {visSammenhengendeOpphold && opphold.delperioder.length > 1 && (
+              <VStack gap="space-2" className={styles.delperioder}>
+                {opphold.delperioder.map((delperiode, i) => (
+                  <BodyShort key={delperiode.institusjonsnavn + i} size="small" className={styles.detailgray}>
+                    {delperiode.institusjonsnavn}: {formatDatoMedMånedsnavn(delperiode.fom)} –{' '}
+                    {formatDatoMedMånedsnavn(delperiode.tom)}
+                  </BodyShort>
+                ))}
+              </VStack>
+            )}
           </div>
         </HStack>
       </Box>
@@ -136,7 +145,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               (vurderingIndex === 0 && !tidligereVurderinger?.length ? new Dato(opphold.oppholdFra).dato : null);
 
             return (
-              <div key={vurderingIndex} className={styles.vurderingRad}>
+              <div key={vurdering.oppholdId + vurderingIndex} className={styles.vurderingRad}>
                 <NyVurderingExpandableCard
                   key={vurdering.id || vurderingIndex}
                   accordionsSignal={accordionsSignal}
