@@ -681,6 +681,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
       'Dato på legeerklæring',
       'Henvist til behandling',
       'Uføretidspunkt',
+      '16 år som beregningstidspunkt',
       'Annet',
     ]);
   });
