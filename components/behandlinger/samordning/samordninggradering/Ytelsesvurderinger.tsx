@@ -1,24 +1,34 @@
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, HStack, Label, Table, VStack } from '@navikt/ds-react';
-import { SamordningGraderingFormfields } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
-import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { ValuePair } from 'components/form/FormField';
-import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
-import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
-import { SamordningYtelsestype } from 'lib/types/types';
-import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
+import {
+  SamordnetYtelse,
+  SamordningGraderingFormfields,
+} from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import {
+  FerieFormFields,
+  FerieISykepengeperiodeModal,
+} from 'components/behandlinger/samordning/samordninggradering/FerieISykepengeperiodeModal';
+import { FerieISykepengeperiodeRad } from 'components/behandlinger/samordning/samordninggradering/FerieISykepengeperiodeRad';
+import { YtelsesvurderingRad } from 'components/behandlinger/samordning/samordninggradering/YtelsesvurderingRad';
 import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { useState } from 'react';
 
-import styles from 'components/behandlinger/samordning/samordninggradering/YtelseTabell.module.css';
+import { Alert } from 'components/alert/Alert';
+import { ValuePair } from 'components/form/FormField';
+import { SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
+
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { medAutoSplitt, slåSammenSplittedeSykepengeperioder } from './beregnForhåndsvisning';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
   readOnly: boolean;
   fieldArray: UseFieldArrayReturn<SamordningGraderingFormfields, 'vurderteSamordninger'>;
+  grunnlag: SamordningGraderingGrunnlag;
 }
 
-const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
+export const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
   {
     value: undefined,
     label: 'Velg',
@@ -53,8 +63,24 @@ const ytelsesoptions: ValuePair<SamordningYtelsestype | undefined>[] = [
   },
 ];
 
-export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
-  const { fields, remove, append } = fieldArray;
+// "Ferie i sykepengeperiode" kan kun opprettes/redigeres via FerieISykepengeperiodeModal, siden
+// lagring der trigger en omberegning (splitting) av sykepengeperiodene. Denne skal derfor ikke
+// være valgbar i den vanlige, radvise ytelsestype-velgeren.
+const ytelsesoptionerUtenFerie = ytelsesoptions.filter((ytelse) => ytelse.value !== 'FERIE_I_SYKEPENGEPERIODE');
+
+function ytelseLabel(ytelseType: SamordningYtelsestype | undefined) {
+  return ytelsesoptions.find((ytelse) => ytelse.value === ytelseType)?.label ?? '';
+}
+
+type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
+
+export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Props) => {
+  const { fields, append, remove, replace } = fieldArray;
+  const autoSplittSykepengerToggleIsEnabled = useFeatureFlag('autoSplittSykepenger');
+  const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
+  const [ferieFeilmelding, setFerieFeilmelding] = useState<string>();
+
+  const rader = form.watch('vurderteSamordninger') ?? [];
 
   function leggTilRad() {
     append({
@@ -63,6 +89,61 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
       periode: { fom: '', tom: '' },
       gradering: undefined,
     });
+  }
+
+  async function åpneFerieModal() {
+    const erGyldig = await form.trigger('vurderteSamordninger');
+
+    if (!erGyldig) {
+      setFerieFeilmelding('Du må rette opp feilene i tabellen før du kan legge til ferie i sykepengeperioden.');
+      return;
+    }
+
+    setFerieFeilmelding(undefined);
+    setModalTilstand({ modus: 'ny' });
+  }
+
+  /**
+   * Når en ferieperiode legges til, redigeres eller slettes må sykepengeperiodene alltid
+   * rekonstrueres til sin opprinnelige, usplittede form (basert på ferieperiodene slik de var
+   * *før* endringen) før den nye/endrede ferien splittes inn på nytt. Uten dette steget vil
+   * f.eks. en innsnevret eller slettet ferieperiode etterlate et udekket "hull" i periodene,
+   * siden gapet mellom tidligere splittede sykepengerader ikke lenger dekkes fullt ut av den
+   * (nye, mindre) ferieperioden og dermed ikke slås sammen igjen.
+   */
+  function gjenopprettFørOmberegning(): SamordnetYtelse[] {
+    return autoSplittSykepengerToggleIsEnabled ? slåSammenSplittedeSykepengeperioder(rader) : rader;
+  }
+
+  function lagreFerieRad(verdier: FerieFormFields) {
+    const rad: SamordnetYtelse = {
+      periode: { fom: verdier.fom, tom: verdier.tom },
+      gradering: 0,
+      ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
+      manuell: true,
+    };
+
+    const eksisterendeFerieRad = modalTilstand?.modus === 'rediger' ? rader[modalTilstand.index] : undefined;
+    const gjenopprettetArray = gjenopprettFørOmberegning();
+
+    const oppdatertArray = eksisterendeFerieRad
+      ? gjenopprettetArray.map((eksisterende) => (eksisterende === eksisterendeFerieRad ? rad : eksisterende))
+      : [...gjenopprettetArray, rad];
+
+    const splittet = medAutoSplitt(oppdatertArray, autoSplittSykepengerToggleIsEnabled);
+
+    replace(splittet);
+    setModalTilstand(null);
+  }
+
+  function fjerneFerieRad(fjernetIndex: number) {
+    const fjernetRad = rader[fjernetIndex];
+    const gjenopprettetArray = gjenopprettFørOmberegning();
+    const utenSlettetElement = gjenopprettetArray.filter((rad) => rad !== fjernetRad);
+
+    const splittet = medAutoSplitt(utenSlettetElement, autoSplittSykepengerToggleIsEnabled);
+
+    replace(splittet);
   }
 
   return (
@@ -79,7 +160,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
           </BodyShort>
         </VStack>
         <VStack gap={'space-8'}>
-          <TableStyled>
+          <TableStyled aria-label="Perioder med samordning">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Periode</Table.HeaderCell>
@@ -89,102 +170,37 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {fields.map((field, index) => (
-                <Table.Row key={field.id}>
-                  <Table.DataCell>
-                    <HStack align={'center'} gap={'space-4'}>
-                      <DateInputWrapper
-                        label="Fra og med"
-                        control={form.control}
-                        name={`vurderteSamordninger.${index}.periode.fom`}
-                        hideLabel={true}
-                        rules={{
-                          required: 'Du må velge dato for periodestart',
-                          validate: {
-                            gyldigDato: (value) => validerDato(value as string),
-                            ikkeFoerStart: (value, formValues) =>
-                              value &&
-                              erDatoFoerDato(formValues.vurderteSamordninger[index].periode.tom, value as string)
-                                ? 'Fra og med dato kan ikke være etter til og med dato'
-                                : undefined,
-                          },
-                        }}
-                        readOnly={readOnly}
-                      />
-                      {'-'}
-                      <DateInputWrapper
-                        label="Til og med"
-                        control={form.control}
-                        name={`vurderteSamordninger.${index}.periode.tom`}
-                        hideLabel={true}
-                        rules={{
-                          required: 'Du må velge dato for periodeslutt',
-                          validate: (value) => {
-                            return validerDato(value as string);
-                          },
-                        }}
-                        readOnly={readOnly}
-                      />
-                    </HStack>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <SelectWrapper
-                      label="Ytelsestype"
-                      size={'small'}
-                      hideLabel
-                      control={form.control}
+              {fields.map((field, index) => {
+                const erFerieISykepengeperiode = field?.ytelseType === 'FERIE_I_SYKEPENGEPERIODE';
+
+                if (erFerieISykepengeperiode && autoSplittSykepengerToggleIsEnabled) {
+                  return (
+                    <FerieISykepengeperiodeRad
+                      key={field.id}
+                      rad={field}
+                      ytelseLabel={ytelseLabel(field.ytelseType)}
                       readOnly={readOnly}
-                      name={`vurderteSamordninger.${index}.ytelseType`}
-                      rules={{ required: 'Du må velge en ytelsetype' }}
-                    >
-                      {ytelsesoptions.map((ytelse, index) => (
-                        <option value={ytelse.value} key={index}>
-                          {ytelse.label}
-                        </option>
-                      ))}
-                    </SelectWrapper>
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <TextFieldWrapper
-                      name={`vurderteSamordninger.${index}.gradering`}
-                      label={'Utbetalingsgrad'}
-                      hideLabel
-                      type={'text'}
-                      size={'small'}
-                      className={styles.utbetalingsgrad}
-                      control={form.control}
-                      readOnly={readOnly}
-                      rules={{
-                        required: 'Du må velge utbetalingsgrad',
-                        validate: (value) => {
-                          if (Number.isNaN(Number(value))) {
-                            return 'Prosent må angis med siffer';
-                          }
-                          if (Number(value) < 0) {
-                            return 'Utbetalingsgrad kan ikke være mindre enn 0%';
-                          }
-                          if (Number(value) > 100) {
-                            return 'Utbetalingsgrad kan ikke være mer enn 100%';
-                          }
-                        },
-                      }}
+                      onRediger={() => setModalTilstand({ modus: 'rediger', index: index })}
+                      onSlett={() => fjerneFerieRad(index)}
                     />
-                  </Table.DataCell>
-                  <Table.DataCell>
-                    <Button
-                      size={'small'}
-                      icon={<TrashIcon title={'Slett'} />}
-                      variant={'tertiary'}
-                      type={'button'}
-                      onClick={() => remove(index)}
-                      disabled={readOnly}
-                    />
-                  </Table.DataCell>
-                </Table.Row>
-              ))}
+                  );
+                }
+
+                return (
+                  <YtelsesvurderingRad
+                    key={field.id}
+                    form={form}
+                    index={index}
+                    readOnly={readOnly}
+                    ytelsesoptioner={autoSplittSykepengerToggleIsEnabled ? ytelsesoptionerUtenFerie : ytelsesoptions}
+                    onSlett={() => remove(index)}
+                  />
+                );
+              })}
             </Table.Body>
           </TableStyled>
-          <HStack>
+          {ferieFeilmelding && <Alert variant={'error'}>{ferieFeilmelding}</Alert>}
+          <HStack gap={'space-8'}>
             <Button
               size={'small'}
               type={'button'}
@@ -193,11 +209,31 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray }: Props) => {
               onClick={leggTilRad}
               disabled={readOnly}
             >
-              Legg til
+              Legg til periode
             </Button>
+            {autoSplittSykepengerToggleIsEnabled && (
+              <Button
+                size={'small'}
+                type={'button'}
+                variant={'tertiary'}
+                icon={<PlusCircleIcon />}
+                onClick={åpneFerieModal}
+                disabled={readOnly}
+              >
+                Legg til ferie i sykepengeperiode
+              </Button>
+            )}
           </HStack>
         </VStack>
       </VStack>
+      {modalTilstand && (
+        <FerieISykepengeperiodeModal
+          grunnlag={grunnlag}
+          initialValues={modalTilstand.modus === 'rediger' ? rader[modalTilstand.index]?.periode : undefined}
+          onLagre={lagreFerieRad}
+          onLukk={() => setModalTilstand(null)}
+        />
+      )}
     </Box>
   );
 };

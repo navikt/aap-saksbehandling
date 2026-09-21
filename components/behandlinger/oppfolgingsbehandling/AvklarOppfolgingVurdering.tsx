@@ -67,7 +67,7 @@ export const AvklaroppfolgingVurdering = ({
     ? JSON.parse(initialMellomlagretVurdering.data)
     : mapVurderingToDraftFormFields(grunnlag.grunnlag);
 
-  const erKravEnabled = useFeatureFlag('KravSteg');
+  const erKravEnabled = useFeatureFlag('KravManuellVurdering');
 
   const { form, formFields } = useConfigForm<FormFields>(
     {

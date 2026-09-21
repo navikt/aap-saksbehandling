@@ -22,6 +22,18 @@ const grunnlagUtenVurdering: FatteVedtakGrunnlag = {
   historikk: [],
 };
 
+const grunnlagMedAlleGodkjent: FatteVedtakGrunnlag = {
+  harGjortVilkårsvurderingerPåBehandling: false,
+  harTilgangTilÅSaksbehandle: true,
+  vurderinger: [
+    {
+      definisjon: Behovstype.AVKLAR_SYKDOM_KODE,
+      godkjent: true,
+    },
+  ],
+  historikk: [],
+};
+
 describe('totrinnsvurderingform', () => {
   const user = userEvent.setup();
 
@@ -59,7 +71,21 @@ describe('totrinnsvurderingform', () => {
     expect(vurderPåNyttValg).toBeVisible();
   });
 
-  it('skal ha en knapp for å sende inn totrinnsvurderingene', () => {
+  it('skal ha en godkjenn-knapp når alle vurderinger er godkjent', () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={grunnlagMedAlleGodkjent}
+        erKvalitetssikring={false}
+        readOnly={false}
+      />
+    );
+
+    const knapp = screen.getByRole('button', { name: 'Godkjenn' });
+    expect(knapp).toBeVisible();
+  });
+
+  it('skal ha en returner-knapp når minst en vurdering er underkjent', async () => {
     render(
       <TotrinnsvurderingForm
         behandlingsversjon={1}
@@ -69,7 +95,24 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const knapp = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
+    await user.click(vurderPåNyttValg);
+
+    const knapp = screen.getByRole('button', { name: 'Returner' });
+    expect(knapp).toBeVisible();
+  });
+
+  it('knappetekst skal være godkjenn og fullfør behandling når kvalitetssikrer fatter vedtaket', async () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={{ ...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: true }}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+
+    const knapp = screen.getByRole('button', { name: 'Send vedtak om avslag' });
     expect(knapp).toBeVisible();
   });
 
@@ -116,7 +159,7 @@ describe('totrinnsvurderingform', () => {
     expect(annet).toBeVisible();
   });
 
-  it('skal ha riktige vlag i feltet for å velge grunner', async () => {
+  it('skal ha riktige valg i feltet for å velge grunner', async () => {
     render(
       <TotrinnsvurderingForm
         behandlingsversjon={1}
@@ -146,7 +189,7 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const knapp = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const knapp = screen.getByRole('button', { name: 'Returner' });
     await user.click(knapp);
 
     const errorMessage = screen.getByText('Du må gi en begrunnelse');
@@ -166,7 +209,7 @@ describe('totrinnsvurderingform', () => {
     const vurderPåNyttValg = screen.getByRole('radio', { name: /nei/i });
     await user.click(vurderPåNyttValg);
 
-    const knapp = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const knapp = screen.getByRole('button', { name: 'Returner' });
     await user.click(knapp);
 
     const errorMessage = await screen.getByText('Du må oppgi en årsak');
@@ -196,7 +239,7 @@ describe('totrinnsvurderingform', () => {
     await user.click(mangelfullBegrunnelse);
     expect(mangelfullBegrunnelse).not.toBeChecked();
 
-    await user.click(screen.getByRole('button', { name: 'Bekreft og send videre' }));
+    await user.click(screen.getByRole('button', { name: 'Returner' }));
     expect(screen.getByText('Du må oppgi en årsak')).toBeVisible();
   });
 
@@ -210,7 +253,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const sendInnButton = screen.getByRole('button', { name: 'Godkjenn' });
     expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
 
     await user.click(sendInnButton);
@@ -233,7 +276,7 @@ describe('totrinnsvurderingform', () => {
     const radioJa = screen.getAllByRole('radio', { name: /ja/i });
     await user.click(radioJa[0]);
 
-    const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const sendInnButton = screen.getByRole('button', { name: 'Godkjenn' });
     await user.click(sendInnButton);
 
     expect(
@@ -256,7 +299,7 @@ describe('totrinnsvurderingform', () => {
     const radioJa = screen.getAllByRole('radio', { name: /nei/i });
     await user.click(radioJa[0]);
 
-    const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+    const sendInnButton = screen.getByRole('button', { name: 'Returner' });
     await user.click(sendInnButton);
 
     expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
@@ -289,7 +332,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
   await user.click(radioJa[0]);
   await user.click(radioJa[1]);
 
-  const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+  const sendInnButton = screen.getByRole('button', { name: 'Godkjenn' });
   await user.click(sendInnButton);
 
   expect(screen.queryByText('Du må gjøre minst én vurdering.')).not.toBeInTheDocument();
@@ -320,7 +363,7 @@ it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert
   const radioJa = screen.getAllByRole('radio', { name: /ja/i });
   await user.click(radioJa[0]);
 
-  const sendInnButton = screen.getByRole('button', { name: 'Bekreft og send videre' });
+  const sendInnButton = screen.getByRole('button', { name: 'Godkjenn' });
   await user.click(sendInnButton);
 
   expect(
@@ -354,6 +397,7 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
       },
     ],
     historikk: [],
+    kvalitetssikrerFatterVedtak: false,
   };
 
   const grunnlagUtenEndringSidenSist: KvalitetssikringGrunnlag = {
@@ -366,6 +410,7 @@ describe('Totrinnsvurdering av vedtaksbrev', () => {
       },
     ],
     historikk: [],
+    kvalitetssikrerFatterVedtak: false,
   };
   it('har en egen beskrivelse for kvalitetssikring av vedtaksbrev', () => {
     render(

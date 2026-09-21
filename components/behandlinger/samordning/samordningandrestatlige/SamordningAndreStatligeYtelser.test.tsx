@@ -46,7 +46,9 @@ beforeEach(() => {
 
 describe('barnepensjon', () => {
   it('skal ikke krasje eller vise Barnepensjon som valg selv om lagret vurdering fra backend inneholder BARNEPENSJON', () => {
-    render(<SamordningAndreStatligeYtelser grunnlag={grunnlagMedBarnepensjon} readOnly={false} behandlingVersjon={0} />);
+    render(
+      <SamordningAndreStatligeYtelser grunnlag={grunnlagMedBarnepensjon} readOnly={false} behandlingVersjon={0} />
+    );
 
     const ytelseSelects = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
     expect(ytelseSelects).toHaveLength(2);
