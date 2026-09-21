@@ -29,6 +29,8 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
+  RegistrerMeldedatoRequest,
+  RegistrerMeldedatoResponse,
   RettighetsinfoDto,
   SakPersoninfo,
   SaksInfo,
@@ -309,6 +311,14 @@ export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortReq
     `${BASE_URL}/api/meldekort/${saksnummer}`,
     'POST',
     oppdaterMeldekortRequest
+  );
+}
+
+export function clientRegistrerMeldedato(saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) {
+  return clientFetch<RegistrerMeldedatoResponse>(
+    `${BASE_URL}/api/meldekort/${saksnummer}/registrer-meldedato`,
+    'POST',
+    registrerMeldedatoRequest
   );
 }
 
