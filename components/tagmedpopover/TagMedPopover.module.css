@@ -3,6 +3,7 @@
   border: none;
   padding: 0;
   display: inline-flex;
+  text-align: left;
 }
 
 .knapp:hover .triggerTag {
