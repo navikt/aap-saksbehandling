@@ -55,68 +55,34 @@ function mapTilPeriodisertVurdering(
   skalVurdereYrkesskade: boolean,
   erÅrsakssammenhengYrkesskade: boolean,
   førsteDatoSomKanVurderes: Date,
-  tilDato?: string,
-  skalViseAlleSykdomssteg?: boolean
+  tilDato?: string
 ): SykdomsvurderingLøsningDto {
   const harSkadeSykdomEllerLyte = data.harSkadeSykdomEllerLyte === JaEllerNei.Ja;
 
-  if (!skalViseAlleSykdomssteg) {
-    const kodeverk = harSkadeSykdomEllerLyte ? data?.kodeverk : undefined;
-    const hoveddiagnose = harSkadeSykdomEllerLyte ? data?.hoveddiagnose?.value : undefined;
-    const bidiagnoser = harSkadeSykdomEllerLyte ? data.bidiagnose?.map((diagnose) => diagnose.value) : undefined;
+  const erArbeidsevnenNedsatt = data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI';
 
-    const erArbeidsevnenNedsatt = harSkadeSykdomEllerLyte
-      ? data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI'
-      : undefined;
+  const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
+    ? mapArbeidsevneOgYrkesskade(
+        data,
+        skalVurdereYrkesskade,
+        erÅrsakssammenhengYrkesskade,
+        data.fraDato,
+        førsteDatoSomKanVurderes
+      )
+    : undefined;
 
-    const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
-      ? mapArbeidsevneOgYrkesskade(
-          data,
-          skalVurdereYrkesskade,
-          erÅrsakssammenhengYrkesskade,
-          data.fraDato,
-          førsteDatoSomKanVurderes
-        )
-      : undefined;
-
-    return {
-      ...nedsattArbeidsevneOgYrkesskade,
-      begrunnelse: data.begrunnelse,
-      fom: new Dato(data.fraDato).formaterForBackend(),
-      tom: tilDato,
-      harSkadeSykdomEllerLyte,
-      kodeverk,
-      hoveddiagnose,
-      bidiagnoser,
-      dokumenterBruktIVurdering: [],
-      harNedsattArbeidsevne: harSkadeSykdomEllerLyte ? data.harNedsattArbeidsevne : undefined,
-    };
-  } else {
-    const erArbeidsevnenNedsatt = data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI';
-
-    const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
-      ? mapArbeidsevneOgYrkesskade(
-          data,
-          skalVurdereYrkesskade,
-          erÅrsakssammenhengYrkesskade,
-          data.fraDato,
-          førsteDatoSomKanVurderes
-        )
-      : undefined;
-
-    return {
-      ...nedsattArbeidsevneOgYrkesskade,
-      begrunnelse: data.begrunnelse,
-      fom: new Dato(data.fraDato).formaterForBackend(),
-      tom: tilDato,
-      harSkadeSykdomEllerLyte,
-      kodeverk: data?.kodeverk,
-      hoveddiagnose: data?.hoveddiagnose?.value,
-      bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
-      dokumenterBruktIVurdering: [],
-      harNedsattArbeidsevne: data.harNedsattArbeidsevne,
-    };
-  }
+  return {
+    ...nedsattArbeidsevneOgYrkesskade,
+    begrunnelse: data.begrunnelse,
+    fom: new Dato(data.fraDato).formaterForBackend(),
+    tom: tilDato,
+    harSkadeSykdomEllerLyte,
+    kodeverk: data?.kodeverk,
+    hoveddiagnose: data?.hoveddiagnose?.value,
+    bidiagnoser: data.bidiagnose?.map((diagnose) => diagnose.value),
+    dokumenterBruktIVurdering: [],
+    harNedsattArbeidsevne: data.harNedsattArbeidsevne,
+  };
 }
 
 export default mapTilPeriodisertVurdering;

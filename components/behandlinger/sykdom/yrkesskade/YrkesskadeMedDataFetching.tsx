@@ -5,8 +5,9 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Yrkesskade } from 'components/behandlinger/sykdom/yrkesskade/Yrkesskade';
+import { OppgittYrkesskadeUtenRegistertreffInfo } from 'components/behandlinger/sykdom/yrkesskade/OppgittYrkesskadeUtenRegistertreffInfo';
 
 interface Props {
   behandlingsreferanse: string;
@@ -21,14 +22,18 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
   }
 
   const grunnlag = yrkesskadeVurderingGrunnlag.data;
-  const harTidligereVurdering = grunnlag.yrkesskadeVurdering != null;
+  const harVurdering = grunnlag.yrkesskadeVurdering != null;
   const harInnhentedeYrkesskader = (grunnlag.opplysninger?.innhentedeYrkesskader?.length ?? 0) > 0;
+  const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
 
-  if (!skalViseSteg(stegData, harTidligereVurdering) && !harInnhentedeYrkesskader) {
+  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, harVurdering) && !harInnhentedeYrkesskader) {
+    if (oppgittYrkesskadeISøknad) {
+      return <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={grunnlag} />;
+    }
     return null;
   }
 
-  const totalReadOnly = stegData.readOnly || !yrkesskadeVurderingGrunnlag.data.harTilgangTilÅSaksbehandle;
+  const totalReadOnly = stegData.readOnly || !grunnlag.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.YRKESSKADE_KODE,
@@ -38,7 +43,7 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
 
   return (
     <Yrkesskade
-      grunnlag={yrkesskadeVurderingGrunnlag.data}
+      grunnlag={grunnlag}
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       behandlingsreferanse={behandlingsreferanse}

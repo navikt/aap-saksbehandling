@@ -6,7 +6,7 @@ import {
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseSteg, StegData } from 'lib/utils/steg';
+import { skalViseStegForPeriodisertGrunnlag, StegData } from 'lib/utils/steg';
 import { Bistandsbehov } from 'components/behandlinger/sykdom/bistandsbehov/Bistandsbehov';
 
 interface Props {
@@ -20,14 +20,11 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     hentBehandling(behandlingsreferanse),
   ]);
 
-  if (isError(grunnlag)) {
-    return <ApiException apiResponses={[grunnlag]} />;
+  if (isError(grunnlag) || isError(behandling)) {
+    return <ApiException apiResponses={[grunnlag, behandling]} />;
   }
 
-  const harTidligereVurderinger =
-    grunnlag.data.sisteVedtatteVurderinger != null && grunnlag.data.sisteVedtatteVurderinger.length > 0;
-
-  if (!skalViseSteg(stegData, harTidligereVurderinger)) {
+  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
     return null;
   }
 
@@ -39,10 +36,10 @@ export const BistandsbehovMedDataFetching = async ({ behandlingsreferanse, stegD
     stegData.erIkkePåVent
   );
 
-  const vurderingsbehov =
-    behandling.type === 'SUCCESS'
-      ? behandling.data.vurderingsbehovOgÅrsaker.flatMap((behovOgÅrsak) => behovOgÅrsak.vurderingsbehov)
-      : [];
+  const vurderingsbehov = behandling.data.vurderingsbehovOgÅrsaker.flatMap(
+    (behovOgÅrsak) => behovOgÅrsak.vurderingsbehov
+  );
+
   const erRevurderingAvOvergangUføre = vurderingsbehov.some((behov) => behov.type === 'OVERGANG_UFORE');
 
   return (

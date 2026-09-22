@@ -13,6 +13,7 @@ import {
   PlukkOppgaveResponse,
   SakOgAvklaringsbehov,
   TildeltStatus,
+  UføreVedtak,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 
@@ -63,10 +64,8 @@ export function clientMottattDokumenterLest(behandlingsreferanse: string) {
   });
 }
 
-export function clientFjernUføreVedtakTag(behandlingsRef: string) {
-  return clientFetch(`/oppgave/api/oppgave/fjern-uførevedtak-ikon`, 'POST', {
-    behandlingsRef: behandlingsRef,
-  });
+export function clientFjernUføreVedtakTag(uføreVedtak: UføreVedtak) {
+  return clientFetch(`/oppgave/api/oppgave/fjern-uforevedtak-ikon`, 'POST', uføreVedtak);
 }
 
 export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {

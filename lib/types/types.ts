@@ -214,6 +214,10 @@ export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.beh
 
 export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
 
+export type MigrertKravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.MigrertKravDto'];
+
+export type KravVurderingForSøknad = Exclude<KravVurdering, MigrertKravVurdering>;
+
 export type RelevantKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.RelevantKravDto'];
 
 export type Tilleggsopplysning =
@@ -239,6 +243,9 @@ export type TilleggsopplysningKravLøsning =
 
 export type TrukketSøknadKravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketSøknadKravLøsningDto'];
+
+export type MigrertKravLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.MigrertKravLøsningDto'];
 
 export type SøknadUtenKrav = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'];
 
@@ -421,6 +428,12 @@ export type Periode = components['schemas']['no.nav.aap.komponenter.type.Periode
 
 export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingPersoninfo'];
 
+export type MeldingMedDokumenterDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto'];
+export type MeldingDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto'];
+export type DokumentInfoDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto'];
+
 export type AvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løser.vedtak.TotrinnsVurdering']['definisjon'];
 
@@ -493,6 +506,9 @@ export type ForeslåVedtakVedtakslengdeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
 
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
+
+export type VilkårsavslagDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VilkårsavslagDto'];
 
 export type AutomatiskLovvalgOgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
@@ -623,6 +639,12 @@ export const NyÅrsakTilBehandlingV0 = 'NyÅrsakTilBehandlingV0';
 export type NyÅrsakTilBehandlingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof NyÅrsakTilBehandlingV0}`] & {
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export const KorrigerSøknadsdatoV0 = 'KorrigerSøknadsdatoV0';
+export type KorrigerSøknadsdatoV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KorrigerSøknadsdatoV0}`] & {
+    meldingType: typeof KorrigerSøknadsdatoV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export type AvklarOppfolgingsoppgaveGrunnlagResponse =

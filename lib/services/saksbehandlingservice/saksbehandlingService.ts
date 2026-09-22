@@ -110,6 +110,7 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   YtelseoppslagRequest,
+  MeldingMedDokumenterDto,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -606,6 +607,11 @@ export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
   return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
 };
 
+export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`;
+  return await apiFetch<Array<MeldingMedDokumenterDto>>(url, saksbehandlingApiScope, 'GET');
+};
+
 export const hentFastlege = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/fastlege/${saksnummer}`;
   return await apiFetch<FastlegeResponse[]>(url, saksbehandlingApiScope, 'GET');
@@ -626,8 +632,8 @@ export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogm
   return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const purrPåLegeerklæring = async (requestBody: { dialogmeldingPurringUUID: string; saksnummer: string }) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/purring`;
+export const sendPåminnelsePåLegeerklæring = async (requestBody: { dialogmeldingPurringUUID: string; saksnummer: string }) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/send`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 

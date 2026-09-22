@@ -51,10 +51,6 @@ const ytelsesoptions: ValuePair<SamordningAndreStatligeYtelserYtelse | undefined
     value: 'DAGPENGER',
     label: 'Dagpenger',
   },
-  {
-    value: 'BARNEPENSJON',
-    label: 'Barnepensjon',
-  },
 ];
 export const AndreStatligeYtelserTabell = ({ form, readOnly }: Props) => {
   const [skalViseInfoMelding, setSkalViseInfoMelding] = useState(false);

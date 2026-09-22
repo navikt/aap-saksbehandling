@@ -37,6 +37,7 @@ export type TildelOppgaveResponse = components['schemas']['no.nav.aap.oppgave.ti
 export type TildeltStatus = components['schemas']['no.nav.aap.oppgave.tildel.TildeltStatusDto'];
 export type SakOgAvklaringsbehov = components['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 export type UføreVedtakStatus = components['schemas']['no.nav.aap.oppgave.UførevedtakRespons']['resultat'];
+export type UføreVedtak = components['schemas']['no.nav.aap.oppgave.uføreVedtak.UføreVedtak'];
 
 // Typer utledet direkte fra skjemaet (string unions)
 export type Behandlingstype =
@@ -58,3 +59,5 @@ export type MineOppgaverSortBy = NonNullable<NonNullable<MineOppgaverQueryParams
 export type MineOppgaverSortOrder = NonNullable<NonNullable<MineOppgaverQueryParams>['sortorder']>;
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
+
+export type OpprettMarkeringDto = components['schemas']['no.nav.aap.oppgave.markering.OpprettMarkeringDto'];

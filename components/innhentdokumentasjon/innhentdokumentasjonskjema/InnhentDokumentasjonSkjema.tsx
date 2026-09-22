@@ -26,7 +26,6 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { isError, isSuccess } from 'lib/utils/api';
 import { ExternalLinkIcon, InformationSquareIcon } from '@navikt/aksel-icons';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
 import useSWR from 'swr';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -74,10 +73,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
-  const skalHenteFastlege = useFeatureFlag('HentFastlege');
-
   const { data: fastlege, isLoading: fastlegeIsLoading } = useSWR(
-    skalHenteFastlege ? `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}` : null,
+    `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`,
     () => clientHentFastlege(saksnummer),
     {
       revalidateOnFocus: false,
@@ -180,7 +177,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   return (
     <div className={'flex-column'}>
       <Heading level={'3'} size={'small'}>
-        Be om opplysninger fra behandler
+        Send forespørsel til behandler
       </Heading>
       <Link
         href={

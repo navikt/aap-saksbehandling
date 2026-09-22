@@ -53,14 +53,18 @@ function innhold(rad: Rad) {
         <Label>Vilkårsvurdering</Label>
         <BodyShort>{rad.begrunnelse}</BodyShort>
       </div>
-      <div>
-        <Label>Har brukeren en gjenværende § 11-12 kvote å gjeninntre i?</Label>
-        <BodyShort>{getJaEllerNei(rad.harGjenværendeKvote)}</BodyShort>
-      </div>
-      <div>
-        <Label>Har brukeren hatt ordinær AAP innen 52 uker før datoen kravet skal vurderes for?</Label>
-        <BodyShort>{getJaEllerNei(rad.harHattOrdinærSiste52Uker)}</BodyShort>
-      </div>
+      {rad.relevantKravType.type !== 'MIGRERT_STØNADSPERIODE' && (
+        <>
+          <div>
+            <Label>Har brukeren en gjenværende § 11-12 kvote å gjeninntre i?</Label>
+            <BodyShort>{getJaEllerNei(rad.harGjenværendeKvote)}</BodyShort>
+          </div>
+          <div>
+            <Label>Har brukeren hatt ordinær AAP innen 52 uker før datoen kravet skal vurderes for?</Label>
+            <BodyShort>{getJaEllerNei(rad.harHattOrdinærSiste52Uker)}</BodyShort>
+          </div>
+        </>
+      )}
       <Startdato rad={rad} />
     </VStack>
   );
@@ -75,6 +79,13 @@ function Startdato({ rad }: { rad: Rad }) {
           <BodyShort textColor={'subtle'}>
             Dette er første mulige dato med rett etter tidligere stønadsperiode utløper
           </BodyShort>
+          <BodyShort>{formaterDatoForFrontend(rad.startDato)}</BodyShort>
+        </div>
+      )}
+      {rad.relevantKravType.type === 'MIGRERT_STØNADSPERIODE' && (
+        <div>
+          <Label>Migreringsdato</Label>
+          <BodyShort textColor={'subtle'}>Dette er datoen den migrerte saken trer i kraft i Kelvin</BodyShort>
           <BodyShort>{formaterDatoForFrontend(rad.startDato)}</BodyShort>
         </div>
       )}
@@ -99,6 +110,8 @@ function KravTag({ type }: { type: StønadsperiodeVurdering['relevantKravType'][
         return ['meta-purple', 'Gjenopptak etter stans'];
       case 'NY_STØNADSPERIODE':
         return ['success', 'Krav om ny stønadsperiode'];
+      case 'MIGRERT_STØNADSPERIODE':
+        return ['success', 'Migrert stønadsperiode'];
     }
   })();
 

@@ -4,7 +4,7 @@ import {
   hentLovvalgMedlemskapGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { getStegData, skalViseSteg } from 'lib/utils/steg';
+import { getStegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
@@ -42,7 +42,7 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) 
     vurderingAutomatisk.data.kanBehandlesAutomatisk &&
     (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
 
-  const visManuellVurdering = skalViseSteg(vurderLovvalgSteg, grunnlag.data.sisteVedtatteVurderinger.length > 0);
+  const visManuellVurdering = skalViseStegForPeriodisertGrunnlag(vurderLovvalgSteg.avklaringsbehov, grunnlag.data);
   const visOverstyrKnapp = kanViseOverstyrKnapp(
     vurderingAutomatisk.data.kanBehandlesAutomatisk,
     readOnly,

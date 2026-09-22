@@ -19,6 +19,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   MeldePerioderMedMEldekortResponse,
+  MeldingMedDokumenterDto,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnheterResponse,
@@ -38,9 +39,10 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
-import { MarkeringType, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
+import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
+
 const BASE_URL = '/saksbehandling';
 
 export async function clientFetch<ResponseBody>(
@@ -167,6 +169,13 @@ export function clientHentSakshistorikk(saksnummer: string) {
   return clientFetch<Array<BehandlingsHistorikk>>(`${BASE_URL}/api/sak/${saksnummer}/historikk`, 'GET');
 }
 
+export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
+  return clientFetch<Array<MeldingMedDokumenterDto>>(
+    `${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`,
+    'GET'
+  );
+}
+
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
@@ -204,7 +213,7 @@ export function clientBestillTestBrev(behandlingReferanse: string) {
 }
 
 export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {
-  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/purring`, 'POST', {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse`, 'POST', {
     dialogmeldingPurringUUID: dialogmeldingUUID,
     behandlingsReferanse: behandlingsreferanse,
   });
@@ -224,20 +233,7 @@ export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKod
   });
 }
 
-// TODO: hent fra aap-oppgave
-export enum MarkeringHendelseType {
-  OPPRETTET = 'OPPRETTET',
-  FJERNET = 'FJERNET',
-}
-
-// TODO: hent fra aap-oppgave
-export interface OpprettMarkeringHendelse {
-  markeringType: MarkeringType;
-  begrunnelse?: string;
-  hendelseType: MarkeringHendelseType;
-}
-
-export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringHendelse) {
+export function clientOpprettMarkeringHendelse(referanse: string, opprettMarkeringHendelse: OpprettMarkeringDto) {
   return clientFetch(
     `${BASE_URL}/api/behandling/${referanse}/opprett-markering-hendelse`,
     'POST',

@@ -52,7 +52,7 @@ export const DigitaliserDokument = ({
     });
   }
 
-  const erKravEnabled = useFeatureFlag('KravSteg');
+  const erKravEnabled = useFeatureFlag('KravManuellVurdering');
 
   return (
     <VStack gap={'space-16'}>

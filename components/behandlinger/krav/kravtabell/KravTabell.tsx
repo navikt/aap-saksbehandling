@@ -1,4 +1,4 @@
-import { Button, Table, Tag } from '@navikt/ds-react';
+import { Button, Heading, Table, Tag } from '@navikt/ds-react';
 import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -8,6 +8,7 @@ import {
   finnSøknadsdato,
   finnSøknadsdatoFraLøsning,
   formaterKravtype,
+  getKravVurderingerForSøknad,
   hentOriginaleFormFelter,
 } from 'components/behandlinger/krav/kravutils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
@@ -15,7 +16,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 
 interface Props {
-  grunnlag?: KravGrunnlag;
+  grunnlag: KravGrunnlag;
   readOnly: boolean;
 }
 
@@ -39,8 +40,12 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
     setValue('valgteKrav', nyeValgteKrav);
   };
 
+  const nyeVurderinger = getKravVurderingerForSøknad(grunnlag.nyeVurderinger);
+  const vedtatteVurderinger = getKravVurderingerForSøknad(grunnlag.vedtatteVurderinger);
+
   return (
     <>
+      <Heading size="xsmall">Søknader</Heading>
       <TableStyled size="small">
         <Table.Header>
           <Table.Row>
@@ -56,7 +61,7 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {grunnlag?.nyeVurderinger.map((vurdering) => {
+          {nyeVurderinger.map((vurdering) => {
             const journalpost = grunnlag.søknader.find(
               (søknad) => søknad.journalpostId.identifikator === vurdering.journalpostId.identifikator
             );
@@ -91,7 +96,7 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
             );
           })}
 
-          {grunnlag?.vedtatteVurderinger.map((vurdering) => {
+          {vedtatteVurderinger.map((vurdering) => {
             return (
               <Table.ExpandableRow content={vurdering.begrunnelse} key={vurdering.referanse}>
                 <Table.DataCell textSize={'small'}>{vurdering.journalpostId.identifikator}</Table.DataCell>
@@ -120,7 +125,7 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
             );
           })}
 
-          {grunnlag?.søknaderUtenKravvurdering.map((søknad) => {
+          {grunnlag.søknaderUtenKravvurdering.map((søknad) => {
             const referanse = søknad.journalpostId.identifikator;
 
             return (
