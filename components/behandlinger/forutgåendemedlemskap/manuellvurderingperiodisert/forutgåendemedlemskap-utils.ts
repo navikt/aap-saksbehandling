@@ -85,9 +85,9 @@ export function hentPeriodiserteVerdierFraMellomlagretVurdering(
 ) {
   const vurdering = JSON.parse(mellomlagretVurdering.data);
   if (vurdering.vurderinger) {
-    return vurdering as ForutgåendeMedlemskapVurderingForm;
+    return vurdering;
   } else {
-    const ikkePeriodisertVurdering = vurdering as ForutgåendeMedlemskapVurderingFormIkkePeriodisert;
+    const ikkePeriodisertVurdering: ForutgåendeMedlemskapVurderingFormIkkePeriodisert = vurdering;
     return {
       vurderinger: [
         {

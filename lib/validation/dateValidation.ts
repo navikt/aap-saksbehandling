@@ -3,8 +3,8 @@ import { parseDatoFraDatePicker } from 'lib/utils/date';
 
 export function gyldigDatoEllerNull(value?: string) {
   const inputDato = parseDatoFraDatePicker(value);
-  if (isValid(inputDato)) {
-    return inputDato as Date;
+  if (inputDato != null && isValid(inputDato)) {
+    return inputDato;
   }
   return null;
 }
