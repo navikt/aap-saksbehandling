@@ -6,6 +6,7 @@ import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   auditlog,
+  hentArenaStatus,
   hentBehandling,
   hentFlyt,
   hentKabalKlageresultat,
@@ -46,12 +47,13 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat] = await Promise.all([
+  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat, arenaStatus] = await Promise.all([
     hentOppgaveVisningsinfo(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
     hentSak(saksnummer),
     hentKabalKlageresultat(behandlingsreferanse),
     hentKlageresultat(behandlingsreferanse),
+    hentArenaStatus(saksnummer),
   ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgaveVisningsinfo)) {
@@ -90,6 +92,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               oppgaveVisningsinfo={oppgaveVisningsinfo.data}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
+              arenaStatus={isError(arenaStatus) ? undefined : arenaStatus.data}
             />
 
             <StegGruppeIndikatorAksel
