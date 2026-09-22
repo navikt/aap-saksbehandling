@@ -1,0 +1,4 @@
+.slettet {
+  text-decoration: line-through;
+  color: var(--ax-text-neutral-subtle);
+}

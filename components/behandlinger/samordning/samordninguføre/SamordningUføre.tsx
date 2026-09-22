@@ -18,6 +18,8 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
+import styles from './SamordningUføre.module.css';
+
 interface Props {
   grunnlag: SamordningUføreGrunnlag;
   behandlingVersjon: number;
@@ -135,7 +137,10 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
             </Table.Header>
             <Table.Body>
               {grunnlag.grunnlag.map((ytelse, index) => (
-                <Table.Row key={`${index}-rad`}>
+                <Table.Row
+                  key={`${index}-rad`}
+                  className={ytelse.endringStatus === 'SLETTET' ? styles.slettet : undefined}
+                >
                   <Table.DataCell textSize="small">
                     {ytelse.virkningstidspunkt && format(new Date(ytelse.virkningstidspunkt), 'dd.MM.yyyy')}
                   </Table.DataCell>

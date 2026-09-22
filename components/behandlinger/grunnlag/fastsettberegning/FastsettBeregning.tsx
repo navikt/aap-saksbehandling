@@ -62,12 +62,12 @@ const ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS: ValuePair<ÅrsakYtterligereNedsatt
   { label: 'Kravdato', value: 'KRAVDATO' },
   { label: 'Dato på legeerklæring', value: 'DATO_PAA_LEGEERKLÆRING' },
   { label: 'Henvist til behandling', value: 'HENVIST_TIL_BEHANDLING' },
+  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Annet', value: 'ANNET' },
 ];
 
 const ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS: ValuePair[] = [
   ...ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS,
-  { label: 'Uføretidspunkt', value: 'UFØRETIDSPUNKT' },
   { label: 'Ytterligere nedsatt', value: 'YTTERLIGERE_NEDSATT' },
   { label: 'Økt uføregrad', value: 'ØKT_UFØREGRAD' },
   { label: 'Ikke betydning / ikke relevant', value: 'IKKE_BETYDNING_IKKE_RELEVANT' },
