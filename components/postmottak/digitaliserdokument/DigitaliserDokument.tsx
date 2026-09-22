@@ -4,7 +4,11 @@ import { VStack } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
 import { Behovstype } from 'lib/postmottakForm';
-import { DigitaliseringsGrunnlag, KategoriserDokumentKategori } from 'lib/types/postmottakTypes';
+import {
+  DigitaliserDokumentLøsning,
+  DigitaliseringsGrunnlag,
+  KategoriserDokumentKategori,
+} from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
 import { useState } from 'react';
 
@@ -37,7 +41,8 @@ export const DigitaliserDokument = ({
   registrertDato,
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
+  const { løsBehovOgGåTilNesteSteg, status, isLoading } =
+    usePostmottakLøsBehovOgGåTilNesteSteg<DigitaliserDokumentLøsning>('DIGITALISER_DOKUMENT');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
     løsBehovOgGåTilNesteSteg({

@@ -3,7 +3,7 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { SubmitEventHandler, useEffect, useState } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
+import { AvklarTemaGrunnlag, AvklarTemaLøsning } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
@@ -35,7 +35,7 @@ const KLAGE_ETTERSENDELSE_BREVKODE = 'NAVe 90-00.08 K';
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
   const [config, setConfig] = useState<ClientConfig>();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
+    usePostmottakLøsBehovOgGåTilNesteSteg<AvklarTemaLøsning>('AVKLAR_TEMA');
   const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');

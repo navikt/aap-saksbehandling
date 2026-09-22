@@ -6,19 +6,19 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
+import { Losninger, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 
-export const usePostmottakLøsBehovOgGåTilNesteSteg = (
+export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Losninger>(
   steg: StegType
 ): {
   status: ServerSentEventStatus | undefined;
   resetStatus: () => void;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, sjekkTildeltStatus?: boolean) => void;
+  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling<B>, sjekkTildeltStatus?: boolean) => void;
   løsBehovOgGåTilNesteStegError?: ApiException;
 } => {
   const params = useParamsMedType();
@@ -31,11 +31,11 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
 
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
-    behov: LøsAvklaringsbehovPåBehandling;
+    behov: LøsAvklaringsbehovPåBehandling<B>;
   }>(null);
 
   const løsBehovOgGåTilNesteSteg = async (
-    behov: LøsAvklaringsbehovPåBehandling,
+    behov: LøsAvklaringsbehovPåBehandling<B>,
     sjekkTildeltStatus: boolean = true
   ) => {
     setIsLoading(true);

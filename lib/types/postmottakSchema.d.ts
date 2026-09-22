@@ -464,44 +464,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/behandling/{referanse}/endre-tema': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.tema.EndreTemaResponse'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/behandling/{referanse}/grunnlag/finnSak': {
     parameters: {
       query?: never;
@@ -1192,6 +1154,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/drift/person/journalposter/s\u00F8k': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.IdentDto'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.PersonS\u00F8kDriftsinfoDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/drift/journalpost/{referanse}/info': {
     parameters: {
       query?: never;
@@ -1224,6 +1225,43 @@ export interface paths {
     };
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/test/simulerJournalpostHendelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.postmottak.SimulerJournalpostHendelseRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
     delete?: never;
     options?: never;
     head?: never;
@@ -1293,6 +1331,8 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       'planlagtKj\u00F8retidspunkt': string;
+      /** Format: int32 */
+      prioritet?: number | null;
       /** @enum {string} */
       status: 'AVBRUTT' | 'FEILET' | 'FERDIG' | 'KLAR' | 'PLUKKET';
       tilleggsinfo?: components['schemas']['no.nav.aap.motor.JobbTilleggsinfo'];
@@ -1303,6 +1343,17 @@ export interface components {
     };
     'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`': {
       begrunnelse: string;
+    };
+    'no.nav.aap.postmottak.SimulerJournalpostHendelseRequest': {
+      fnr?: string | null;
+      hendelsesType: string;
+      /** Format: int64 */
+      journalpostId: number;
+      journalpostStatus: string;
+      /** @enum {string} */
+      scenario: 'DIGITAL_SØKNAD' | 'LEGEERKLÆRING' | 'PAPIRSØKNAD' | 'UTENLANDSK_ORGNR';
+      tema: string;
+      temaGammelt?: string | null;
     };
     'no.nav.aap.postmottak.api.drift.BehandlingDriftsinfo': {
       aktivtSteg: string;
@@ -1337,6 +1388,20 @@ export interface components {
         | 'VENTER_PÅ_SVAR_FRA_BRUKER'
         | 'VENTER_PÅ_VURDERING_AV_ROL'
         | null;
+    };
+    'no.nav.aap.postmottak.api.drift.IdentDto': {
+      ident: string;
+    };
+    'no.nav.aap.postmottak.api.drift.InnkommendeJournalpostDto': {
+      behandlingstema?: string | null;
+      brevkode?: string | null;
+      enhet?: string | null;
+      journalpostId: components['schemas']['no.nav.aap.postmottak.kontrakt.journalpost.JournalpostId'];
+      regelresultat?: components['schemas']['no.nav.aap.fordeler.Regelresultat'];
+      /** @enum {string} */
+      status: 'EVALUERT' | 'GOSYS_FDR' | 'GOSYS_JFR' | 'IGNORERT' | 'VIDERESENDT_TIL_ARENA' | 'VIDERSENDT_TIL_KELVIN';
+      /** @enum {string|null} */
+      '\u00E5rsakTilStatus'?: 'ALLEREDE_JOURNALFØRT' | 'MANGLER_IDENT' | 'ORGNR' | 'UTGÅTT' | null;
     };
     'no.nav.aap.postmottak.api.drift.JournalpostDriftsinfoDto': {
       behandlinger: components['schemas']['no.nav.aap.postmottak.api.drift.BehandlingDriftsinfo'][];
@@ -1398,6 +1463,9 @@ export interface components {
       saksnummer?: string | null;
       tema?: string | null;
     };
+    'no.nav.aap.postmottak.api.drift.PersonS\u00F8kDriftsinfoDto': {
+      journalposter: components['schemas']['no.nav.aap.postmottak.api.drift.InnkommendeJournalpostDto'][];
+    };
     'no.nav.aap.postmottak.api.faktagrunnlag.dokument.DokumentDto': {
       dokumentInfoId: string;
       tittel?: string | null;
@@ -1422,6 +1490,7 @@ export interface components {
       vurdering?: components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.overlevering.OverleveringVurderingDto'];
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.overlevering.OverleveringVurderingDto': {
+      begrunnelse?: string | null;
       skalOverleveres: boolean;
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.sak.AvklarSakGrunnlagDto': {
@@ -1490,6 +1559,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -1519,9 +1589,6 @@ export interface components {
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.AvklarTemaVurderingDto': {
       skalTilAap: boolean;
-    };
-    'no.nav.aap.postmottak.api.faktagrunnlag.tema.EndreTemaResponse': {
-      redirectUrl: string;
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.JournalpostMetadata': {
       brevkode?: string | null;
@@ -1715,6 +1782,7 @@ export interface components {
       valgtSystem: 'ARENA' | 'BEGGE' | 'KELVIN';
     };
     'no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning': {
+      begrunnelse?: string | null;
       behovstype: string;
       skalOverleveres: boolean;
     };
@@ -1752,6 +1820,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -1847,6 +1916,7 @@ export interface components {
       'l\u00F8sesAv': (
         | 'BESLUTTER'
         | 'DRIFT'
+        | 'DRIFT_LES'
         | 'KVALITETSSIKRER'
         | 'LES'
         | 'PRODUKSJONSSTYRING'
@@ -1871,6 +1941,8 @@ export interface components {
       type: 'MANUELT_FRIVILLIG' | 'MANUELT_PÅKREVD' | 'VENTEPUNKT';
       name: string;
     };
+    /** Format: int64 */
+    'no.nav.aap.postmottak.kontrakt.journalpost.JournalpostId': number;
   };
   responses: never;
   parameters: never;

@@ -11,8 +11,31 @@ export type StegGruppe = components['schemas']['no.nav.aap.postmottak.api.flyt.F
 
 export type StegType = components['schemas']['no.nav.aap.postmottak.api.flyt.FlytSteg']['stegType'];
 
-export type LøsAvklaringsbehovPåBehandling =
-  components['schemas']['no.nav.aap.postmottak.api.flyt.L\u00F8sAvklaringsbehovP\u00E5Behandling'];
+export type Losninger =
+  components['schemas']['no.nav.aap.postmottak.api.flyt.L\u00F8sAvklaringsbehovP\u00E5Behandling']['behov'];
+
+export type LøsAvklaringsbehovPåBehandling<B extends Losninger = Losninger> = Omit<
+  components['schemas']['no.nav.aap.postmottak.api.flyt.L\u00F8sAvklaringsbehovP\u00E5Behandling'],
+  'behov'
+> & { behov: B };
+
+export type AvklarFordelingLøsning =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarFordelingL\u00F8sning'];
+
+export type AvklarOverleveringLøsing =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning'];
+
+export type AvklarSaksnummerLøsning =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarSaksnummerL\u00F8sning'];
+
+export type AvklarTemaLøsning =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarTemaL\u00F8sning'];
+
+export type DigitaliserDokumentLøsning =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.DigitaliserDokumentL\u00F8sning'];
+
+export type SattPåVentLøsning =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.SattP\u00E5VentL\u00F8sning'];
 
 export type SettPåVentRequest = components['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest'];
 export type PostmottakSettPåVentÅrsaker =
