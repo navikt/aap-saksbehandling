@@ -5,7 +5,7 @@ import OpprettSakTest from 'components/opprettsak/OpprettSakTest';
 import { SimulerJournalpostHendelse } from 'components/opprettsak/SimulerJournalpostHendelse';
 import { Suspense } from 'react';
 import { PageBlock } from '@navikt/ds-react/Page';
-import { Link, Page } from '@navikt/ds-react';
+import { Page } from '@navikt/ds-react';
 import { redirect } from 'next/navigation';
 
 const SaksoversiktPage = async () => {
@@ -18,7 +18,6 @@ const SaksoversiktPage = async () => {
       <PageBlock width="2xl">
         {isLocal() && (
           <>
-            <Link href="/postmottak">Utviklerverktøy – Se postmottak-behandlinger</Link>
             <OpprettSakLocal />
             <SimulerJournalpostHendelse />
           </>
