@@ -1664,6 +1664,7 @@ export interface components {
       'l\u00F8sesAv': (
         | 'BESLUTTER'
         | 'DRIFT'
+        | 'DRIFT_LES'
         | 'KVALITETSSIKRER'
         | 'LES'
         | 'PRODUKSJONSSTYRING'
@@ -1911,9 +1912,9 @@ export interface components {
        */
       reserverTil?: string | null;
       /** @description Key type: kotlin.String */
-      reserverTilPerAvklaringsbehov?: {
+      reserverTilPerAvklaringsbehov: {
         [key: string]: string;
-      } | null;
+      };
       saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
@@ -2022,6 +2023,11 @@ export interface components {
     /** Format: uuid */
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.KabalHendelseId': string;
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.MottattDokumentDto': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      mottattTidspunkt: string;
       referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse'];
       /** @enum {string} */
       type:
@@ -2167,6 +2173,13 @@ export interface components {
       journalpostId?: number | null;
       saksnummer?: string | null;
       tilbakekrevingUrl?: string | null;
+    };
+    'no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      'p\u00E5minnelseDato'?: string | null;
     };
     'no.nav.aap.oppgave.ForrigeKvalitetssikrerDto': {
       forrigeKvalitetssikrerIdent: string;
@@ -2407,6 +2420,7 @@ export interface components {
       versjon: number;
     };
     'no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse': {
+      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
       harUlesteDokumenter: boolean;
       /** Format: int64 */
       id: number;
@@ -2525,6 +2539,7 @@ export interface components {
         | null;
     };
     'no.nav.aap.oppgave.liste.OppgavelisteTagsResponse': {
+      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
       'forrigeP\u00E5VentInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       harUlesteDokumenter?: boolean | null;
@@ -2698,6 +2713,7 @@ export interface components {
       'l\u00F8sesAv': (
         | 'BESLUTTER'
         | 'DRIFT'
+        | 'DRIFT_LES'
         | 'KVALITETSSIKRER'
         | 'LES'
         | 'PRODUKSJONSSTYRING'
