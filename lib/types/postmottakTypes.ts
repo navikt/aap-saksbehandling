@@ -14,7 +14,7 @@ export type StegType = components['schemas']['no.nav.aap.postmottak.api.flyt.Fly
 export type LøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.postmottak.api.flyt.L\u00F8sAvklaringsbehovP\u00E5Behandling'];
 
-export type AvklarOverleveringLøsing =
+export type AvklarOverleveringLøsning =
   components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning'];
 
 export type SettPåVentRequest = components['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest'];

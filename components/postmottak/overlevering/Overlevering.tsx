@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvklarOverleveringLøsing, OverleveringGrunnlag } from 'lib/types/postmottakTypes';
+import { AvklarOverleveringLøsning, OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { SubmitEventHandler } from 'react';
 import { VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
@@ -60,7 +60,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
           behovstype: Behovstype.AVKLAR_OVERLEVERING,
           skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
           ...(stoppAutomatikkForLegeerklaringVedAvslag ? { begrunnelse: data.begrunnelse } : {}),
-        } satisfies AvklarOverleveringLøsing,
+        } satisfies AvklarOverleveringLøsning,
         referanse: behandlingsreferanse,
       });
     })(event);
