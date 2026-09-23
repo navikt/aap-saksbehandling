@@ -177,7 +177,7 @@ export const SamordningGradering = ({
                 begrunnelse: data.begrunnelse,
                 vurderteSamordningerData: data.vurderteSamordninger?.map((vurdertSamordning) => ({
                   manuell: vurdertSamordning.manuell,
-                  gradering: vurdertSamordning.gradering,
+                  gradering: vurdertSamordning.gradering!,
                   periode: {
                     fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
                     tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
@@ -200,7 +200,7 @@ export const SamordningGradering = ({
 
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
 
-  const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => Number(verdi) === 100);
+  const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => verdi === 100);
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
