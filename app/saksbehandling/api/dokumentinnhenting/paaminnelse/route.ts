@@ -2,7 +2,7 @@ import { logError } from 'lib/serverutlis/logger';
 import { sendPåminnelsePåLegeerklæring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
-import { NextRequest, NextResponse } from 'node_modules/next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const lokalFakePåminnelseForDokumenter = isLocal();
 export async function POST(req: NextRequest) {

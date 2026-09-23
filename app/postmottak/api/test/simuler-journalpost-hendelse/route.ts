@@ -1,13 +1,15 @@
 import { logError } from 'lib/serverutlis/logger';
 import { simulerJournalpostHendelse } from 'lib/services/postmottakservice/postmottakservice';
 import { isServerError } from 'lib/utils/api';
-import { isLocal } from 'lib/utils/environment';
+import { erBackendLokal } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
+
+const postmottakApiBaseUrl = process.env.POSTMOTTAK_API_BASE_URL;
 
 export async function POST(req: NextRequest) {
   // Kun for lokal testing: skal ikke være tilgjengelig i andre miljøer, selv om noen
   // finner/gjetter URL-en direkte.
-  if (!isLocal()) {
+  if (!erBackendLokal(postmottakApiBaseUrl)) {
     return NextResponse.json({ message: 'Kun tilgjengelig lokalt' }, { status: 403 });
   }
 
