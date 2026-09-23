@@ -14,6 +14,7 @@ export const FLAGS = [
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
   'KorrigerSoknadsdato',
+  'ForesporselSendtTilBehandlerFrontend',
   'SammenhengendeInstitusjonsopphold',
 ] as const;
 
@@ -36,5 +37,6 @@ export const mockedFlags: Flags = {
   autoSplittSykepenger: true,
   KanVurdereRefusjonIRevurdering: true,
   KorrigerSoknadsdato: true,
+  ForesporselSendtTilBehandlerFrontend: true,
   SammenhengendeInstitusjonsopphold: true,
 };
