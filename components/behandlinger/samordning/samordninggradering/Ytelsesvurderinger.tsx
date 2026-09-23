@@ -87,7 +87,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
       manuell: true,
       ytelseType: undefined,
       periode: { fom: '', tom: '' },
-      gradering: undefined,
+      gradering: 0,
     });
   }
 

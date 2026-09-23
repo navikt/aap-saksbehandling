@@ -7,7 +7,7 @@ import { SamordningYtelsestype } from 'lib/types/types';
 
 interface Rad {
   ytelseType?: SamordningYtelsestype;
-  gradering?: number;
+  gradering: number;
   periode: { fom: string; tom: string };
 }
 
