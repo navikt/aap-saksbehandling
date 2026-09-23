@@ -16,10 +16,15 @@ const SaksoversiktPage = async () => {
   return (
     <Page>
       <PageBlock width="2xl">
-        {isLocal() && <Link href="/postmottak">Utviklerverktøy – Se postmottak-behandlinger</Link>}
-        {isLocal() && <OpprettSakLocal />}
+        {isLocal() && (
+          <>
+            <Link href="/postmottak">Utviklerverktøy – Se postmottak-behandlinger</Link>
+            <OpprettSakLocal />
+            <SimulerJournalpostHendelse />
+          </>
+        )}
+
         {isDev() && <OpprettSakTest />}
-        {isLocal() && <SimulerJournalpostHendelse />}
 
         {!isProd() && (
           <Suspense>
