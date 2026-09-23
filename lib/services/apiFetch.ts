@@ -83,8 +83,7 @@ const fetchWithRetry = async <ResponseType>(
       return { type: 'SUCCESS', status: response.status, data: responseText as ResponseType };
     }
 
-    const responseJson: ResponseType =
-      responseText === undefined ? await response.json() : JSON.parse(responseText);
+    const responseJson: ResponseType = responseText === undefined ? await response.json() : JSON.parse(responseText);
 
     return { type: 'SUCCESS', status: response.status, data: responseJson };
   } catch (error) {
