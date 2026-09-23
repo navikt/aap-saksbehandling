@@ -19,6 +19,7 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
     },
   },
   harTilgangTilÅSaksbehandle: true,
+  påklagetVedtakType: 'KELVIN_BEHANDLING',
 };
 const grunnlagNay: KlagebehandlingNayGrunnlag = {
   vurdering: {
@@ -36,6 +37,7 @@ const grunnlagNay: KlagebehandlingNayGrunnlag = {
     },
   },
   harTilgangTilÅSaksbehandle: true,
+  påklagetVedtakType: 'KELVIN_BEHANDLING',
 };
 describe('Klage - oppsummering', () => {
   it('Skal ha en overskrift', () => {

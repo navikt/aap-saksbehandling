@@ -49,12 +49,11 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       referanse: 'uuid-klage',
     },
   ],
-  tilbakekrevingsbehandlinger: [
+  avsluttaTilbakekrevingsbehandlinger: [
     {
       saksnummer: '1200',
       opprettetTidspunkt: '2024-01-02T00:00:00Z',
       referanse: 'uuid-tilbake',
-      status: 'AVSLUTTET',
       typeBehandling: 'Tilbakekreving',
       vedtaksdato: '2024-01-02',
       eksternSaksbehandlingUrl: 'http://ekstern-url',
@@ -120,12 +119,11 @@ describe('Klage', () => {
   it('Skal vise tilbakekrevingsrad med vedtaksdato basert på vedtaksdato-verdi over oprettetTidspunkt når begge er tilstede i grunnlag', async () => {
     const grunnlagUtenVedtaksdato: PåklagetBehandlingGrunnlag = {
       ...grunnlag,
-      tilbakekrevingsbehandlinger: [
+      avsluttaTilbakekrevingsbehandlinger: [
         {
           saksnummer: '1200',
           opprettetTidspunkt: '2026-09-10T00:00:00Z',
           referanse: 'uuid-tilbake-med-vedtaksdato',
-          status: 'UTREDES',
           typeBehandling: 'Tilbakekreving',
           vedtaksdato: '2026-09-20',
           eksternSaksbehandlingUrl: 'http://ekstern-url',
@@ -149,12 +147,11 @@ describe('Klage', () => {
   it('Skal vise tilbakekrevingsrad med vedtaksdato falt tilbake til opprettetTidspunkt når vedtaksdato mangler', async () => {
     const grunnlagUtenVedtaksdato: PåklagetBehandlingGrunnlag = {
       ...grunnlag,
-      tilbakekrevingsbehandlinger: [
+      avsluttaTilbakekrevingsbehandlinger: [
         {
           saksnummer: '1200',
           opprettetTidspunkt: '2024-01-02T00:00:00Z',
           referanse: 'uuid-tilbake-uten-vedtaksdato',
-          status: 'UTREDES',
           typeBehandling: 'Tilbakekreving',
           vedtaksdato: null,
           eksternSaksbehandlingUrl: 'http://ekstern-url',

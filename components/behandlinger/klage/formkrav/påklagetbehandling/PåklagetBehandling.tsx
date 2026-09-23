@@ -171,7 +171,7 @@ function finnValgtPåklagetVedtak(
     };
   }
 
-  const tilbakekrevingsbehandling = grunnlag.tilbakekrevingsbehandlinger.find(
+  const tilbakekrevingsbehandling = grunnlag.avsluttaTilbakekrevingsbehandlinger.find(
     (behandling) => behandling.referanse === referanse
   );
   if (tilbakekrevingsbehandling) {
@@ -204,7 +204,7 @@ function mapGrunnlagTilValg(grunnlag?: PåklagetBehandlingGrunnlag) {
     })) ?? [];
 
   const tilbakekrevingsbehandlinger =
-    grunnlag?.tilbakekrevingsbehandlinger.map((behandling) => ({
+    grunnlag?.avsluttaTilbakekrevingsbehandlinger.map((behandling) => ({
       saksnummer: behandling.saksnummer,
       value: behandling.referanse,
       vedtaksdato: behandling.vedtaksdato ? new Date(behandling.vedtaksdato) : new Date(behandling.opprettetTidspunkt),

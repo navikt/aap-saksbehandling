@@ -48,6 +48,7 @@ describe('Klage - vurdering kontor', () => {
             },
           },
           harTilgangTilÅSaksbehandle: true,
+          påklagetVedtakType: 'KELVIN_BEHANDLING',
         }}
       />
     );
@@ -116,6 +117,7 @@ describe('mellomlagring', () => {
 
   const grunnlagMedVurdering: KlagebehandlingKontorGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    påklagetVedtakType: 'KELVIN_BEHANDLING',
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       innstilling: 'OMGJØR',
