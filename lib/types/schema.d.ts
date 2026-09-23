@@ -4741,6 +4741,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/dokumentinnhenting/syfo/dialogmeldinger/{saksnummer}/v2': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingerResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/dokumentinnhenting/paaminnelse/send': {
     parameters: {
       query?: never;
@@ -15512,33 +15550,6 @@ export interface components {
       påklagetBehandling?: string | null;
       /** @enum {string} */
       påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
-    };
-    'no.nav.aap.behandlingsflyt.behandling.klage.p\u00E5klagetbehandling.TilbakekrevingsbehandlingDto': {
-      eksternSaksbehandlingUrl?: string | null;
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      opprettetTidspunkt: string;
-      referanse: string;
-      saksnummer: string;
-      /** @enum {string} */
-      status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
-      /** @enum {string} */
-      typeBehandling:
-        | 'Aktivitetsplikt'
-        | 'Aktivitetsplikt11_9'
-        | 'Førstegangsbehandling'
-        | 'Klage'
-        | 'OppfølgingsBehandling'
-        | 'Revurdering'
-        | 'SvarFraAndreinstans'
-        | 'Tilbakekreving';
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      vedtaksdato?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.resultat.KabalKlageResultat': {
       svarFraAndreinstans: components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto'][];

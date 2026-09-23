@@ -45,6 +45,7 @@ describe('Klage - vurdering nay', () => {
             },
           },
           harTilgangTilÅSaksbehandle: true,
+          påklagetVedtakType: 'KELVIN_BEHANDLING',
         }}
         readOnly={false}
         behandlingVersjon={0}
@@ -117,6 +118,7 @@ describe('mellomlagring', () => {
   const grunnlagMedVurdering: KlagebehandlingNayGrunnlag = {
     påklagetVedtakType: 'KELVIN_BEHANDLING',
     harTilgangTilÅSaksbehandle: true,
+    påklagetVedtakType: 'KELVIN_BEHANDLING',
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       innstilling: 'OMGJØR',
