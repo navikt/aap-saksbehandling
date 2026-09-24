@@ -78,6 +78,8 @@ export const MeldepliktPeriodisertFrontend = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
+  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
+
   const defaultValues = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
@@ -114,6 +116,11 @@ export const MeldepliktPeriodisertFrontend = ({
       tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
+      return;
+    }
+
+    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
+      visningActions.avbrytEndringClick();
       return;
     }
 

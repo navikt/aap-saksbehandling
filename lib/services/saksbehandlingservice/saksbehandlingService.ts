@@ -22,13 +22,13 @@ import {
   BehandlingPersoninfo,
   BehandlingsHistorikk,
   BekreftVurderingerOppfølgingGrunnlag,
-  BeregningTidspunktGrunnlag,
   BeregningsGrunnlag,
+  BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
   BistandsGrunnlag,
   Brev,
-  BrevGrunnlag,
   BrevdataDto,
+  BrevGrunnlag,
   DetaljertBehandling,
   EtableringEgenVirksomhetGrunnlagResponse,
   FastlegeResponse,
@@ -61,6 +61,7 @@ import {
   ManuellInntektGrunnlag,
   MeldekortProsesseringResponse,
   MeldeperiodeMedMeldekortDto,
+  MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
@@ -111,7 +112,6 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   YtelseoppslagRequest,
-  MeldingMedDokumenterDto,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -614,8 +614,8 @@ export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
 };
 
 export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`;
-  return await apiFetch<Array<MeldingMedDokumenterDto>>(url, saksbehandlingApiScope, 'GET');
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}/v2`;
+  return await apiFetch<Array<MeldingerResponse>>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentFastlege = async (saksnummer: string) => {
@@ -643,6 +643,22 @@ export const sendPåminnelsePåLegeerklæring = async (requestBody: {
   saksnummer: string;
 }) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/send`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+
+export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingPurringUUID: string;
+  behandlingsReferanse: string;
+}) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/avbryt-automatisk-paaminnelse`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+
+export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingPurringUUID: string;
+  behandlingsReferanse: string;
+}) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/gjenoppta-automatisk-paaminnelse`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 

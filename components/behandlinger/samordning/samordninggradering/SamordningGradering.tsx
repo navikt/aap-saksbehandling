@@ -14,6 +14,7 @@ import {
   SamordningGraderingYtelse,
   SamordningYtelsestype,
   SamordningYtelseVurdering,
+  SamordningYtelseVurderingElement,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -175,15 +176,18 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                vurderteSamordningerData: data.vurderteSamordninger?.map((vurdertSamordning) => ({
-                  manuell: vurdertSamordning.manuell,
-                  gradering: vurdertSamordning.gradering,
-                  periode: {
-                    fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
-                    tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
-                  },
-                  ytelseType: vurdertSamordning.ytelseType!,
-                })),
+                vurderteSamordningerData: data.vurderteSamordninger?.map(
+                  (vurdertSamordning) =>
+                    ({
+                      manuell: vurdertSamordning.manuell,
+                      gradering: vurdertSamordning.gradering!,
+                      periode: {
+                        fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                        tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
+                      },
+                      ytelseType: vurdertSamordning.ytelseType!,
+                    }) satisfies SamordningYtelseVurderingElement
+                ),
               },
             },
             referanse: behandlingsreferanse,
