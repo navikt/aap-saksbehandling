@@ -95,7 +95,7 @@ export const KommendeMeldinger = ({
                     <Label size={'small'}>Automatisk påminnelse</Label>
                     <BodyShort
                       size={'small'}
-                    >{`Sendes til behandler dersom svar ikke er mottatt innen ${formatDatoMedMånedsnavn(kommendeMelding.påminnelseDato ?? '')}`}</BodyShort>
+                    >{`Sendes til behandler dersom svar ikke er mottatt innen ${formatDatoMedMånedsnavn(kommendeMelding.påminnelseDato ?? '')}.`}</BodyShort>
                   </VStack>
                   <Box>
                     <HStack align={'center'} gap={'space-4'}>
