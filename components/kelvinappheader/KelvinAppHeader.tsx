@@ -97,7 +97,7 @@ export const KelvinAppHeader = () => {
 
   return (
     <>
-      <InternalHeader data-color={'neutral'}>
+      <InternalHeader data-color={'neutral'} className={styles.stickyHeader}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
         <HStack gap="space-16" marginInline="space-16">
