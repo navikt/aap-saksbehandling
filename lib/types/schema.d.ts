@@ -13835,6 +13835,7 @@ export interface components {
       saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.KommendeMeldingDto': {
+      behandlerNavn: string;
       /** Format: uuid */
       bestillingId: string;
       /**
