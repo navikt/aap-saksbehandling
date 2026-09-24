@@ -132,7 +132,7 @@ export const KlagebehandlingVurderingKontor = ({
 
   const innstilling = form.watch('innstilling');
 
-  const omgjøringStøttesIkkeForPåklagetVedtak =
+  const erOmgjøringValgtForTilbakekreving =
     grunnlag?.påklagetVedtakType === 'TILBAKEKREVING' && ['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling);
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export const KlagebehandlingVurderingKontor = ({
   }, [form, grunnlag?.påklagetVedtakType, innstilling]);
 
   const handleSubmit: SubmitEventHandler = (event) => {
-    if (omgjøringStøttesIkkeForPåklagetVedtak) {
+    if (erOmgjøringValgtForTilbakekreving) {
       event.preventDefault();
       return;
     }
@@ -194,18 +194,18 @@ export const KlagebehandlingVurderingKontor = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       knappTekst={'Send til kvalitetssikrer'}
-      skjulBekreftKnapp={omgjøringStøttesIkkeForPåklagetVedtak}
+      skjulBekreftKnapp={erOmgjøringValgtForTilbakekreving}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
-      {omgjøringStøttesIkkeForPåklagetVedtak && (
+      {erOmgjøringValgtForTilbakekreving && (
         <Alert variant="error">Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.</Alert>
       )}
-      {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && !omgjøringStøttesIkkeForPåklagetVedtak && (
+      {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
       )}
-      {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && !omgjøringStøttesIkkeForPåklagetVedtak && (
+      {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
     </VilkårskortMedFormOgMellomlagring>
