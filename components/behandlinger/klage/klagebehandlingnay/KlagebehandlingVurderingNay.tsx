@@ -199,7 +199,7 @@ export const KlagebehandlingVurderingNay = ({
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
       {erOmgjøringValgtForTilbakekreving && (
-        <Alert variant="error">Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.</Alert>
+        <Alert variant="error">Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.</Alert>
       )}
       {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
