@@ -15108,13 +15108,13 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingKontorGrunnlagDto': {
       harTilgangTilÅSaksbehandle: boolean;
       /** @enum {string} */
-      'påklagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
+      påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingKontorDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingNayGrunnlagDto': {
       harTilgangTilÅSaksbehandle: boolean;
       /** @enum {string} */
-      'påklagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
+      påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingNayDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingKontorDto': {
@@ -15449,7 +15449,7 @@ export interface components {
       /** Format: uuid */
       påklagetBehandling?: string | null;
       /** @enum {string} */
-      'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING';
+      'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.resultat.KabalKlageResultat': {
       svarFraAndreinstans: components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansDto'][];
@@ -17773,7 +17773,7 @@ export interface components {
       /** Format: uuid */
       påklagetBehandling?: string | null;
       /** @enum {string} */
-      'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING';
+      'p\u00E5klagetVedtakType': 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.klage.resultat.Avslått': {
       /** @enum {string} */
