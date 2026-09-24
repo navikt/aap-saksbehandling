@@ -56,6 +56,38 @@ describe('beregnForhåndsvisning', () => {
     ]);
   });
 
+  test('hopper over faste norske helligdager i tillegg til helg når resten av perioden skyves', () => {
+    const rader = [
+      rad('SYKEPENGER', '01.04.2025', '30.04.2025'),
+      rad('FERIE_I_SYKEPENGEPERIODE', '07.04.2025', '11.04.2025'),
+    ];
+
+    const resultat = beregnForhåndsvisning(rader);
+
+    // 1. mai 2025 er en torsdag og skal ikke telle som virkedag i forskyvningen.
+    expect(resultat.map((r) => r.periode)).toEqual([
+      { fom: '01.04.2025', tom: '06.04.2025' },
+      { fom: '07.04.2025', tom: '11.04.2025' },
+      { fom: '12.04.2025', tom: '08.05.2025' },
+    ]);
+  });
+
+  test('hopper over bevegelige helligdager (Kristi himmelfartsdag) når resten av perioden skyves', () => {
+    const rader = [
+      rad('SYKEPENGER', '01.05.2025', '23.05.2025'),
+      rad('FERIE_I_SYKEPENGEPERIODE', '05.05.2025', '09.05.2025'),
+    ];
+
+    const resultat = beregnForhåndsvisning(rader);
+
+    // Kristi himmelfartsdag 2025 er torsdag 29. mai og skal ikke telle som virkedag.
+    expect(resultat.map((r) => r.periode)).toEqual([
+      { fom: '01.05.2025', tom: '04.05.2025' },
+      { fom: '05.05.2025', tom: '09.05.2025' },
+      { fom: '10.05.2025', tom: '02.06.2025' },
+    ]);
+  });
+
   test('gir én rad når ferien starter før sykepengeperioden', () => {
     const rader = [
       rad('SYKEPENGER', '01.03.2025', '31.03.2025'),
@@ -79,7 +111,7 @@ describe('beregnForhåndsvisning', () => {
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '19.03.2025' },
       { fom: '20.03.2025', tom: '10.04.2025' },
-      { fom: '11.04.2025', tom: '22.04.2025' },
+      { fom: '11.04.2025', tom: '25.04.2025' },
     ]);
   });
 

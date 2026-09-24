@@ -1,5 +1,6 @@
-import { addBusinessDays, addDays, eachDayOfInterval, isWeekend, subDays } from 'date-fns';
+import { addDays, eachDayOfInterval, isWeekend, subDays } from 'date-fns';
 import { SamordnetYtelse } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { erNorskHelligdag } from 'lib/utils/helligdager';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 /**
@@ -168,13 +169,27 @@ function overlapper(en: Periode, annen: Periode): boolean {
   return en.fom <= annen.tom && annen.fom <= en.tom;
 }
 
+function erVirkedag(dato: Date): boolean {
+  return !isWeekend(dato) && !erNorskHelligdag(dato);
+}
+
 function antallVirkedagerMellom(fom: Date, tom: Date): number {
-  return eachDayOfInterval({ start: fom, end: tom }).filter((dato) => !isWeekend(dato)).length;
+  return eachDayOfInterval({ start: fom, end: tom }).filter(erVirkedag).length;
 }
 
 function leggTilVirkedager(fra: Date, virkedagerAntall: number): Date {
-  const antallStegFramover = isWeekend(fra) ? virkedagerAntall : virkedagerAntall - 1;
-  return addBusinessDays(fra, antallStegFramover);
+  let dato = fra;
+  let talteVirkedager = 0;
+  while (talteVirkedager < virkedagerAntall) {
+    if (erVirkedag(dato)) {
+      talteVirkedager++;
+      if (talteVirkedager === virkedagerAntall) {
+        return dato;
+      }
+    }
+    dato = addDays(dato, 1);
+  }
+  return dato;
 }
 
 function medPeriode(rad: SamordnetYtelse, fom: Date, tom: Date): SamordnetYtelse {
