@@ -126,7 +126,7 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     const omgjørRadio = screen.getByRole('radio', { name: 'Vedtak omgjøres' });
     await user.click(omgjørRadio);
 
-    expect(screen.getByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')).toBeVisible();
+    expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
 
     expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
     expect(screen.queryByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' })).not.toBeInTheDocument();
@@ -156,7 +156,7 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     const delvisOmgjørRadio = screen.getByRole('radio', { name: 'Delvis omgjøring' });
     await user.click(delvisOmgjørRadio);
 
-    expect(screen.getByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')).toBeVisible();
+    expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
 
     expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
     expect(screen.queryByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' })).not.toBeInTheDocument();
@@ -178,9 +178,7 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     const opprettholdRadio = screen.getByRole('radio', { name: 'Vedtak opprettholdes' });
     await user.click(opprettholdRadio);
 
-    expect(
-      screen.queryByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Send til klageinstans' })).toBeVisible();
     expect(screen.getByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })).toBeVisible();
   });
@@ -198,9 +196,7 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     const omgjørRadio = screen.getByRole('radio', { name: 'Vedtak omgjøres' });
     await user.click(omgjørRadio);
 
-    expect(
-      screen.queryByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Send til beslutter' })).toBeVisible();
   });
 
@@ -223,7 +219,7 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
       />
     );
 
-    expect(screen.getByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')).toBeVisible();
+    expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
   });
 });
