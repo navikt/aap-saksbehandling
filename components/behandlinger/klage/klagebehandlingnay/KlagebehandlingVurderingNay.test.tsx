@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { KlagebehandlingVurderingNay } from './KlagebehandlingVurderingNay';
-import { render, screen } from 'lib/test/CustomRender';
+import { fireEvent, render, screen } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { KlagebehandlingNayGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
@@ -100,6 +100,131 @@ describe('Klage - vurdering nay', () => {
 
     expect(screen.queryByText(/Det er ikke mulig å opprette revurdering på/)).not.toBeInTheDocument();
     expect(combobox).not.toHaveAttribute('aria-invalid');
+  });
+});
+
+describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
+  const grunnlagTilbakekreving: KlagebehandlingNayGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    påklagetVedtakType: 'TILBAKEKREVING',
+  };
+
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
+  it('Skal vise advarsel og ikke sende inn når innstilling er OMGJØR for tilbakekreving', async () => {
+    const { container } = render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+      />
+    );
+
+    const omgjørRadio = screen.getByRole('radio', { name: 'Vedtak omgjøres' });
+    await user.click(omgjørRadio);
+
+    expect(screen.getByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')).toBeVisible();
+
+    expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })
+    ).not.toBeInTheDocument();
+
+    const form = container.querySelector('form');
+    if (!form) {
+      throw new Error('Forventet å finne skjemaet for klagevurderingen');
+    }
+    fireEvent.submit(form);
+
+    expect(fetchMock.mock.calls).toHaveLength(0);
+  });
+
+  it('Skal vise advarsel og ikke sende inn når innstilling er DELVIS_OMGJØR for tilbakekreving', async () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+      />
+    );
+
+    const delvisOmgjørRadio = screen.getByRole('radio', { name: 'Delvis omgjøring' });
+    await user.click(delvisOmgjørRadio);
+
+    expect(screen.getByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')).toBeVisible();
+
+    expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('Skal ikke vise advarsel når innstilling er OPPRETTHOLD for tilbakekreving', async () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+      />
+    );
+
+    const opprettholdRadio = screen.getByRole('radio', { name: 'Vedtak opprettholdes' });
+    await user.click(opprettholdRadio);
+
+    expect(
+      screen.queryByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send til klageinstans' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })).toBeVisible();
+  });
+
+  it('Skal ikke vise advarsel når innstilling er OMGJØR og påklaget vedtak ikke er tilbakekreving', async () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
+
+    const omgjørRadio = screen.getByRole('radio', { name: 'Vedtak omgjøres' });
+    await user.click(omgjørRadio);
+
+    expect(
+      screen.queryByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send til beslutter' })).toBeVisible();
+  });
+
+  it('Skal vise advarsel igjen når komponenten lastes med en mellomlagret vurdering som har et ugyldig valg', () => {
+    const mellomlagringMedOmgjøring: MellomlagretVurderingResponse['mellomlagretVurdering'] = {
+      avklaringsbehovkode: Behovstype.VURDER_KLAGE_NAY,
+      behandlingId: { id: 1 },
+      data: '{"innstilling":"OMGJØR"}',
+      vurdertDato: '2025-08-21T12:00:00.000',
+      vurdertAv: 'Jan T. Loven',
+    };
+
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+        initialMellomlagretVurdering={mellomlagringMedOmgjøring}
+      />
+    );
+
+    expect(screen.getByText('Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.')).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
   });
 });
 

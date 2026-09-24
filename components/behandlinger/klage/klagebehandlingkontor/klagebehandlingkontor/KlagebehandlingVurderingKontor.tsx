@@ -136,12 +136,12 @@ export const KlagebehandlingVurderingKontor = ({
     grunnlag?.påklagetVedtakType === 'TILBAKEKREVING' && ['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling);
 
   useEffect(() => {
-    if (innstilling === 'OMGJØR' && grunnlag?.påklagetVedtakType === 'KELVIN_BEHANDLING') {
+    if (innstilling === 'OMGJØR') {
       form.setValue('vilkårSomSkalOpprettholdes', []);
     } else if (innstilling === 'OPPRETTHOLD') {
       form.setValue('vilkårSomSkalOmgjøres', []);
     }
-  }, [form, grunnlag?.påklagetVedtakType, innstilling]);
+  }, [form, innstilling]);
 
   const handleSubmit: SubmitEventHandler = (event) => {
     if (erOmgjøringValgtForTilbakekreving) {
