@@ -13835,6 +13835,7 @@ export interface components {
       saksnummer: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.KommendeMeldingDto': {
+      behandlerNavn: string;
       /** Format: uuid */
       bestillingId: string;
       /**
@@ -21065,6 +21066,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlinginfoDTO': {
       'eksternSaksbehandlingsl\u00F8sningUrl'?: string | null;
+      erGjeldende: boolean;
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00

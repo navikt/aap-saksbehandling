@@ -91,6 +91,7 @@ export const KommendeMeldinger = ({
               <Box className={styles.meldingboks}>
                 <VStack gap={'space-8'}>
                   <VStack>
+                    <Detail>{`Til ${kommendeMelding.behandlerNavn}`}</Detail>
                     <Label size={'small'}>Automatisk påminnelse</Label>
                     <BodyShort
                       size={'small'}
