@@ -96,8 +96,8 @@ export const KelvinAppHeader = () => {
   const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
 
   return (
-    <>
-      <InternalHeader data-color={'neutral'} className={styles.stickyHeader}>
+    <div className={styles.stickyHeader}>
+      <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
         <HStack gap="space-16" marginInline="space-16">
@@ -183,6 +183,6 @@ export const KelvinAppHeader = () => {
           </Box>
         </Theme>
       )}
-    </>
+    </div>
   );
 };

@@ -7,6 +7,9 @@
 .kelvinAppHeaderSearchResult {
   border-top: 1px solid var(--ax-neutral-100);
   padding-bottom: var(--ax-space-12);
+  position: sticky;
+  top: 3rem;
+  z-index: 11;
 }
 
 .kelvinOppgavesokForm {
