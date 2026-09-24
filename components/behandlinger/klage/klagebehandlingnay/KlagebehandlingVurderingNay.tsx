@@ -23,6 +23,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { Alert } from 'components/alert/Alert';
 
 interface Props {
   behandlingVersjon: number;
@@ -130,6 +131,9 @@ export const KlagebehandlingVurderingNay = ({
 
   const innstilling = form.watch('innstilling');
 
+  const erOmgjøringValgtForTilbakekreving =
+    grunnlag?.påklagetVedtakType === 'TILBAKEKREVING' && ['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling);
+
   useEffect(() => {
     if (innstilling === 'OMGJØR') {
       form.setValue('vilkårSomSkalOpprettholdes', []);
@@ -139,6 +143,11 @@ export const KlagebehandlingVurderingNay = ({
   }, [form, innstilling]);
 
   const handleSubmit = (event: SubmitEvent) => {
+    if (erOmgjøringValgtForTilbakekreving) {
+      event.preventDefault();
+      return;
+    }
+
     form.handleSubmit((data) => {
       løsAvklaringsbehov(
         {
@@ -184,14 +193,18 @@ export const KlagebehandlingVurderingNay = ({
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       knappTekst={innstilling === 'OPPRETTHOLD' ? 'Send til klageinstans' : 'Send til beslutter'}
+      skjulBekreftKnapp={erOmgjøringValgtForTilbakekreving}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
-      {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && (
+      {erOmgjøringValgtForTilbakekreving && (
+        <Alert variant="error">Omgjøring støttes ikke for tilbakekreving. Opprett manuell sak i Porten.</Alert>
+      )}
+      {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
       )}
-      {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && (
+      {['OPPRETTHOLD', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOpprettholdes} />
       )}
     </VilkårskortMedFormOgMellomlagring>
