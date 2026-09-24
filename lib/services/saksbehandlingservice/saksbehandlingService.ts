@@ -22,13 +22,13 @@ import {
   BehandlingPersoninfo,
   BehandlingsHistorikk,
   BekreftVurderingerOppfølgingGrunnlag,
-  BeregningTidspunktGrunnlag,
   BeregningsGrunnlag,
+  BeregningTidspunktGrunnlag,
   BestillLegeerklæring,
   BistandsGrunnlag,
   Brev,
-  BrevGrunnlag,
   BrevdataDto,
+  BrevGrunnlag,
   DetaljertBehandling,
   EtableringEgenVirksomhetGrunnlagResponse,
   FastlegeResponse,
@@ -61,6 +61,7 @@ import {
   ManuellInntektGrunnlag,
   MeldekortProsesseringResponse,
   MeldeperiodeMedMeldekortDto,
+  MeldingMedDokumenterDto,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
@@ -111,7 +112,6 @@ import {
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
   YtelseoppslagRequest,
-  MeldingMedDokumenterDto,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -842,6 +842,20 @@ export const oppdaterMeldekort = async (saksnummer: string, oppdaterMeldekortReq
     saksbehandlingApiScope,
     'POST',
     oppdaterMeldekortRequest
+  );
+};
+
+export interface RegistrerMeldedatoRequest {
+  begrunnelse: string;
+  meldeDato: string;
+}
+
+export const registrerMeldedato = async (saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) => {
+  return apiFetch(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/registrer-meldedato`, // TODO Fake endepunkt, legg til korrekt path når backend er klar
+    saksbehandlingApiScope,
+    'POST',
+    registrerMeldedatoRequest
   );
 };
 
