@@ -59,8 +59,8 @@ export const SakMedBehandlinger = ({
   const [feilmelding, setFeilmelding] = useState<string | undefined>(undefined);
 
   const behandlinger = visMeldekortbehandlinger
-    ? sak.behandlinger || []
-    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
+    ? sak.behandlinger
+    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT' || b.erGjeldende);
 
   const postmottakBehandlinger: BehandlingsflytEllerPostmottakBehandling[] = usePostmottakBehandlinger(sak.ident);
 
