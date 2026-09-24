@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, HGrid } from '@navikt/ds-react';
+import { Button, HGrid, InfoCard } from '@navikt/ds-react';
 import { postmottakSimulerJournalpostHendelseClient } from 'lib/postmottakClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
-import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 
@@ -19,7 +18,7 @@ interface SimulerJournalpostHendelseFormFields {
   scenario: string;
 }
 
-export const SimulerJournalpostHendelse = () => {
+export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
 
@@ -40,6 +39,7 @@ export const SimulerJournalpostHendelse = () => {
     fnr: {
       type: 'text',
       label: 'Fødselsnummer (valgfritt, ny testperson opprettes hvis tomt)',
+      defaultValue: defaultFnr,
       rules: {
         validate: (value: string | boolean) => {
           if (!value) {
@@ -110,7 +110,13 @@ export const SimulerJournalpostHendelse = () => {
   };
 
   return (
-    <DevtoolWrapper title="Utviklerverktøy – Simuler journalpost-hendelse (Kafka)">
+    <>
+      <InfoCard data-color="info">
+        <InfoCard.Header>
+          <InfoCard.Title>Postmottak må kjøre</InfoCard.Title>
+        </InfoCard.Header>
+        <InfoCard.Content>Kjør TestApp i postmottak for å kunne simulere journalposter.</InfoCard.Content>
+      </InfoCard>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <HGrid columns={2} gap="space-16">
           <FormField form={form} formField={formFields.journalpostId} />
@@ -128,6 +134,6 @@ export const SimulerJournalpostHendelse = () => {
           Simuler journalpost-hendelse
         </Button>
       </form>
-    </DevtoolWrapper>
+    </>
   );
 };
