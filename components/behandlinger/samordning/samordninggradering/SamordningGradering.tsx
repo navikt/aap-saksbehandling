@@ -204,7 +204,7 @@ export const SamordningGradering = ({
 
   const samordninger = form.watch('vurderteSamordninger')?.map((vurdering) => vurdering.gradering);
 
-  const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => verdi === 100);
+  const visRevurderVirkningstidspunkt = samordninger?.some((verdi) => Number(verdi) === 100);
 
   const historiskeVurderinger = grunnlag.historiskeVurderinger;
 
