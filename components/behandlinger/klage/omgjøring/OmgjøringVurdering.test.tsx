@@ -19,7 +19,7 @@ describe('Klage - omgjøring', () => {
               typeBehandling: 'Førstegangsbehandling',
               status: 'AVSLUTTET',
               vurderingsbehov: ['MOTTATT_SØKNAD'],
-              erGjeldende: true
+              erGjeldende: true,
             },
           ],
           ident: 'ident',
@@ -53,7 +53,7 @@ describe('Klage - omgjøring', () => {
               typeBehandling: 'Førstegangsbehandling',
               status: 'AVSLUTTET',
               vurderingsbehov: ['MOTTATT_SØKNAD'],
-              erGjeldende: true
+              erGjeldende: true,
             },
           ],
           ident: 'ident',

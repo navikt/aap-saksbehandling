@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Chips, HStack, Heading, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Chips, HStack, Heading, Table, Tag, VStack } from '@navikt/ds-react';
 import { useHentOppgaverForSak } from 'hooks/oppgave/OppgaverPåSakHook';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { Dato } from 'lib/types/Dato';
@@ -176,7 +176,14 @@ export const SakMedBehandlinger = ({
             {åpne.concat(avsluttede).map((behandling) => (
               <Table.Row key={behandling.behandling.referanse}>
                 <Table.DataCell>{formaterDatoMedTidspunktForFrontend(behandling.behandling.opprettet)}</Table.DataCell>
-                <Table.DataCell>{mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}</Table.DataCell>
+                <Table.DataCell>
+                  {mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}{' '}
+                  {behandling.kilde == 'BEHANDLINGSFLYT' && behandling.behandling.erGjeldende && (
+                    <Tag variant="moderate" data-color="success" size="small">
+                      Gjeldende
+                    </Tag>
+                  )}
+                </Table.DataCell>
                 <Table.DataCell>
                   {behandling.kilde === 'BEHANDLINGSFLYT'
                     ? formatterÅrsakTilOpprettelseTilTekst(behandling.behandling.årsakTilOpprettelse)
