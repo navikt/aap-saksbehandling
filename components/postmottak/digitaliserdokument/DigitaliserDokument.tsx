@@ -37,7 +37,12 @@ export const DigitaliserDokument = ({
   registrertDato,
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
-  const { løsBehovOgGåTilNesteSteg, status, isLoading } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
+  const {
+    løsBehovOgGåTilNesteSteg,
+    status,
+    isLoading,
+    løsBehovOgGåTilNesteStegError,
+  } = usePostmottakLøsBehovOgGåTilNesteSteg('DIGITALISER_DOKUMENT');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
     løsBehovOgGåTilNesteSteg({
@@ -62,6 +67,7 @@ export const DigitaliserDokument = ({
         readOnly={readOnly}
         onKategoriChange={setKategori}
         status={status}
+        løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError}
       />
       {kategori === 'SØKNAD' && (
         <DigitaliserSøknad
