@@ -23,7 +23,7 @@ export async function getDefaultOptionsForDiagnosesystem(defaultValue?: Diagnose
 
   defaultValue?.forEach((value) => {
     if (value.type === 'HOVEDDIAGNOSE') {
-      const options = diagnoseSøker(value.kodeverk as DiagnoseSystem, value.diagnose);
+      const options = diagnoseSøker(value.kodeverk, value.diagnose);
       if (value.kodeverk === 'ICPC2') {
         icpc2HoveddiagnoserOptions.push(...options);
       } else {
@@ -33,7 +33,7 @@ export async function getDefaultOptionsForDiagnosesystem(defaultValue?: Diagnose
 
     if (value.type === 'BIDIAGNOSE') {
       value.diagnose.forEach((biDiagnose) => {
-        const options = diagnoseSøker(value.kodeverk as DiagnoseSystem, biDiagnose);
+        const options = diagnoseSøker(value.kodeverk, biDiagnose);
         if (value.kodeverk === 'ICPC2') {
           icpc2BidiagnoserOptions.push(...options);
         } else {
@@ -75,13 +75,13 @@ export function hentSisteLagredeVurdering(typeBehandling: TypeBehandling, grunnl
 export interface HovedDiagnoser {
   type: 'HOVEDDIAGNOSE';
   diagnose: string;
-  kodeverk: string;
+  kodeverk: DiagnoseSystem;
 }
 
 export interface BiDiagnoser {
   type: 'BIDIAGNOSE';
   diagnose: string[];
-  kodeverk: string;
+  kodeverk: DiagnoseSystem;
 }
 
 export type Diagnoser = HovedDiagnoser | BiDiagnoser;
