@@ -80,6 +80,16 @@ export const Helseinstitusjonsvurdering = ({
         rules={{ required: 'Du må svare på om brukeren får fri kost og losji' }}
         readOnly={readonly}
         horisontal
+        onChangeCustom={(event) => {
+          if (
+            'value' in event.currentTarget &&
+            event.currentTarget.value === JaEllerNei.Nei &&
+            vurderingIndex === 0 &&
+            !finnesTidligereVurderinger
+          ) {
+            form.setValue(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`, '');
+          }
+        }}
       >
         <Radio value={JaEllerNei.Ja}>Ja</Radio>
         <Radio value={JaEllerNei.Nei}>Nei</Radio>
