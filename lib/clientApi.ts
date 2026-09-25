@@ -22,6 +22,7 @@ import {
   MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
+  Mottaker,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterMeldekortRequest,
@@ -241,6 +242,13 @@ export function clientOppdaterBrevdata(brevbestillingReferanse: string, brevdata
 
 export function clientOppdaterBrevmal(brevbestillingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevmal`, 'PUT');
+}
+
+export function clientOppdaterMottakere(brevbestillingReferanse: string, mottaker: Mottaker, kopimottaker?: Mottaker) {
+  return clientFetch<void>(`${BASE_URL}/api/brev/${brevbestillingReferanse}/mottakere`, 'PUT', {
+    mottaker,
+    kopimottaker,
+  });
 }
 
 export function clientBestillTestBrev(behandlingReferanse: string) {

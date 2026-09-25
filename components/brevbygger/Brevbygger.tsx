@@ -4,7 +4,7 @@ import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navi
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
-import { BrevdataDto, BrevGrunnlagBrev, BrevMottaker, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
+import { BrevdataDto, BrevGrunnlagBrev, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useRouter } from 'next/navigation';
@@ -30,12 +30,12 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 interface BrevbyggerProps {
   referanse: string;
   behovstype: Behovstype;
-  mottaker: BrevMottaker;
   behandlingVersjon: number;
   readOnly: boolean;
   visAvbryt?: boolean;
-  fullmektigMottaker?: Mottaker;
-  brukerMottaker?: Mottaker;
+  mottaker: Mottaker;
+  kopimottaker?: Mottaker;
+  fullmektig?: Mottaker;
   brevmal?: string | null;
   brevdata?: BrevdataDto;
   refusjonskravgrunnlag?: RefusjonskravGrunnlag;
@@ -53,8 +53,8 @@ export const Brevbygger = ({
   brevdata,
   behovstype,
   mottaker,
-  fullmektigMottaker,
-  brukerMottaker,
+  kopimottaker,
+  fullmektig,
   behandlingVersjon,
   readOnly,
   visAvbryt = true,
@@ -156,17 +156,16 @@ export const Brevbygger = ({
   return (
     <>
       <Box>
-        {fullmektigMottaker && brukerMottaker && (
+        <VStack gap="space-16">
           <VelgeMottakere
+            bestillingsreferanse={referanse}
             setMottakere={setMottakere}
             readOnly={readOnly}
-            brukerNavn={mottaker.navn}
-            bruker={brukerMottaker}
-            fullmektig={fullmektigMottaker}
+            mottaker={mottaker}
+            kopimottaker={kopimottaker}
+            fullmektig={fullmektig}
           />
-        )}
 
-        <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
           {/* Antall kolonner som returneres fra Delmal må matche antallet kolonner her. Ønsker at kolonnene skal være like brede på tvers, dermed er grid definert her */}
           <HGrid columns={'1fr 2fr'} gap={'space-12 space-24'}>
@@ -203,7 +202,6 @@ export const Brevbygger = ({
             valgteMottakere={valgteMottakere}
             distribusjonssjekkFeil={distribusjonssjekkFeil}
             setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
-            brukerMottaker={brukerMottaker}
           />
           <HStack gap={'space-8'}>
             {visAvbryt && (

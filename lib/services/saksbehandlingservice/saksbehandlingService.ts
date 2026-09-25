@@ -64,6 +64,7 @@ import {
   MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
+  Mottaker,
   NavEnhetRequest,
   OppdaterMeldekortRequest,
   OppdaterMeldekortResponse,
@@ -557,6 +558,15 @@ export const oppdaterBrevdata = async (brevbestillingReferanse: string, brevdata
 export const oppdaterBrevmal = async (brevbestillingReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater-brevmal`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT');
+};
+
+export const oppdaterMottakere = async (
+  brevbestillingReferanse: string,
+  mottaker: Mottaker,
+  kopimottaker?: Mottaker
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/mottakere`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', { mottaker, kopimottaker });
 };
 
 export const opprettDummySakDev = async (sak: OpprettTestcase) => {

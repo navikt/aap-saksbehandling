@@ -92,6 +92,7 @@ export const SkriveBrevMedDataFetching = async ({
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
   const { bruker, fullmektig } = mapGrunnlagTilMottakere(brev.mottaker, fullmektigGrunnlag.data.vurdering);
+
   return (
     <div className={styles.flex}>
       {!brukNyBrevbygger && (
@@ -110,7 +111,8 @@ export const SkriveBrevMedDataFetching = async ({
           referanse={brev.brevbestillingReferanse}
           behovstype={behovstype}
           mottaker={brev.mottaker}
-          brukerMottaker={bruker}
+          kopimottaker={brev.kopimottaker}
+          fullmektig={fullmektig}
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnlyBrev}
           refusjonskravgrunnlag={refusjonGrunnlag.data}
