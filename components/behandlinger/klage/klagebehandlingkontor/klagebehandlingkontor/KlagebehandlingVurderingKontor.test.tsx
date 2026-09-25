@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '../../../../../lib/test/CustomRender';
+import { fireEvent, render, screen } from 'lib/test/CustomRender';
 import { KlagebehandlingVurderingKontor } from './KlagebehandlingVurderingKontor';
 import { userEvent } from '@testing-library/user-event';
 import { KlagebehandlingKontorGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
@@ -48,6 +48,7 @@ describe('Klage - vurdering kontor', () => {
             },
           },
           harTilgangTilÅSaksbehandle: true,
+          påklagetVedtakType: 'KELVIN_BEHANDLING',
         }}
       />
     );
@@ -103,6 +104,127 @@ describe('Klage - vurdering kontor', () => {
   });
 });
 
+describe('Klage - vurdering kontor ved klage på tilbakekreving', () => {
+  const grunnlagTilbakekreving: KlagebehandlingKontorGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    påklagetVedtakType: 'TILBAKEKREVING',
+  };
+
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  });
+
+  it('Skal vise advarsel og ikke sende inn når innstilling er OMGJØR for tilbakekreving', async () => {
+    const { container } = render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+      />
+    );
+
+    const omgjørRadio = screen.getByRole('radio', { name: 'Vedtak omgjøres' });
+    await user.click(omgjørRadio);
+
+    expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
+
+    expect(screen.queryByRole('button', { name: 'Send til kvalitetssikrer' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })
+    ).not.toBeInTheDocument();
+
+    const form = container.querySelector('form');
+    if (!form) {
+      throw new Error('Forventet å finne skjemaet for klagevurderingen');
+    }
+    fireEvent.submit(form);
+
+    expect(fetchMock.mock.calls).toHaveLength(0);
+  });
+
+  it('Skal vise advarsel og ikke sende inn når innstilling er DELVIS_OMGJØR for tilbakekreving', async () => {
+    render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+      />
+    );
+
+    const delvisOmgjørRadio = screen.getByRole('radio', { name: 'Delvis omgjøring' });
+    await user.click(delvisOmgjørRadio);
+
+    expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
+
+    expect(screen.queryByRole('button', { name: 'Send til kvalitetssikrer' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('Skal ikke vise advarsel når innstilling er OPPRETTHOLD for tilbakekreving', async () => {
+    render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+      />
+    );
+
+    const opprettholdRadio = screen.getByRole('radio', { name: 'Vedtak opprettholdes' });
+    await user.click(opprettholdRadio);
+
+    expect(screen.queryByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send til kvalitetssikrer' })).toBeVisible();
+    expect(screen.getByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' })).toBeVisible();
+  });
+
+  it('Skal ikke vise advarsel når innstilling er OMGJØR og påklaget vedtak ikke er tilbakekreving', async () => {
+    render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
+
+    const omgjørRadio = screen.getByRole('radio', { name: 'Vedtak omgjøres' });
+    await user.click(omgjørRadio);
+
+    expect(screen.queryByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send til kvalitetssikrer' })).toBeVisible();
+  });
+
+  it('Skal vise advarsel igjen når komponenten lastes med en mellomlagret vurdering som har et ugyldig valg', () => {
+    const mellomlagringMedOmgjøring: MellomlagretVurderingResponse['mellomlagretVurdering'] = {
+      avklaringsbehovkode: Behovstype.VURDER_KLAGE_KONTOR,
+      behandlingId: { id: 1 },
+      data: '{"innstilling":"OMGJØR"}',
+      vurdertDato: '2025-08-21T12:00:00.000',
+      vurdertAv: 'Jan T. Loven',
+    };
+
+    render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagTilbakekreving}
+        initialMellomlagretVurdering={mellomlagringMedOmgjøring}
+      />
+    );
+
+    expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Send til kvalitetssikrer' })).not.toBeInTheDocument();
+  });
+});
+
 describe('mellomlagring', () => {
   const mellomlagring: MellomlagretVurderingResponse = {
     mellomlagretVurdering: {
@@ -116,6 +238,7 @@ describe('mellomlagring', () => {
 
   const grunnlagMedVurdering: KlagebehandlingKontorGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    påklagetVedtakType: 'KELVIN_BEHANDLING',
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       innstilling: 'OMGJØR',

@@ -43,6 +43,7 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_21_3: '§ 21-3',
   FOLKETRYGDLOVEN_21_7: '§ 21-7',
   FOLKETRYGDLOVEN_22_13: '§ 22-13',
+  FOLKETRYGDLOVEN_22_15: '§ 22-15',
   FOLKETRYGDLOVEN_22_17: '§ 22-17',
   ANDRE_TRYGDEAVTALER: 'Andre bilaterale avtaler (lovvalg / medlemskap)',
 };
