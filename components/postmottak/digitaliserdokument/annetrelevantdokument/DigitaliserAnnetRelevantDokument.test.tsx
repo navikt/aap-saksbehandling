@@ -4,6 +4,9 @@ import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { ReactNode } from 'react';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   klagebehandlinger: [],
@@ -14,6 +17,12 @@ const grunnlag: DigitaliseringsGrunnlag = {
   },
 };
 
+const Wrapper = ({ children }: { children: ReactNode }) => (
+  <FeatureFlagProvider flags={{ ...mockedFlags, StoppAutomatikkForLegeerklaringVedAvslag: false }}>
+    {children}
+  </FeatureFlagProvider>
+);
+
 describe('DigitaliserAnnetDokument', () => {
   const user = userEvent.setup();
 
@@ -21,13 +30,15 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        erKravEnabled={true}
-      />
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
     );
 
     const årsaker = screen.getByRole('combobox', { name: /Hvilke opplysninger/ });
@@ -61,13 +72,15 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        erKravEnabled={true}
-      />
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
     );
 
     await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
@@ -90,13 +103,15 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        erKravEnabled={true}
-      />
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
     );
 
     // Select a category, then deselect it to get empty string
