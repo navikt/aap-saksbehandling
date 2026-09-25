@@ -25,8 +25,13 @@ export const YrkesskadeMedDataFetching = async ({ behandlingsreferanse, stegData
   const harVurdering = grunnlag.yrkesskadeVurdering != null;
   const harInnhentedeYrkesskader = (grunnlag.opplysninger?.innhentedeYrkesskader?.length ?? 0) > 0;
   const oppgittYrkesskadeISøknad = grunnlag.opplysninger.oppgittYrkesskadeISøknad;
+  const erRevurdering = stegData.typeBehandling === 'Revurdering';
 
-  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, harVurdering) && !harInnhentedeYrkesskader) {
+  if (
+    !erRevurdering &&
+    !skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, harVurdering) &&
+    !harInnhentedeYrkesskader
+  ) {
     if (oppgittYrkesskadeISøknad) {
       return <OppgittYrkesskadeUtenRegistertreffInfo grunnlag={grunnlag} />;
     }

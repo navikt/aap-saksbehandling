@@ -10,12 +10,15 @@ vi.mock('server-only', () => {
   return {};
 });
 
-const lagStegData = (avklaringsbehov: Avklaringsbehov[] = []): StegData => ({
+const lagStegData = (
+  avklaringsbehov: Avklaringsbehov[] = [],
+  typeBehandling: StegData['typeBehandling'] = 'Førstegangsbehandling'
+): StegData => ({
   stegType: 'VURDER_YRKESSKADE',
   skalViseSteg: true,
   readOnly: false,
   behandlingVersjon: 1,
-  typeBehandling: 'Førstegangsbehandling',
+  typeBehandling,
   avklaringsbehov,
   erIkkePåVent: true,
 });
@@ -73,6 +76,17 @@ describe('YrkesskadeMedDataFetching', () => {
     const result = await YrkesskadeMedDataFetching({
       behandlingsreferanse: 'test-ref',
       stegData: lagStegData(),
+    });
+
+    expect(result?.type).toBe(Yrkesskade);
+  });
+
+  it('viser Yrkesskade i revurdering uten tidligere vurdering eller registertreff', async () => {
+    mockGrunnlag(lagGrunnlag({ oppgittYrkesskadeISøknad: false }));
+
+    const result = await YrkesskadeMedDataFetching({
+      behandlingsreferanse: 'test-ref',
+      stegData: lagStegData([], 'Revurdering'),
     });
 
     expect(result?.type).toBe(Yrkesskade);
