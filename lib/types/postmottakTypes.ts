@@ -37,6 +37,9 @@ export type DigitaliserDokumentLøsning =
 export type SattPåVentLøsning =
   components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.SattP\u00E5VentL\u00F8sning'];
 
+export type AvklarOverleveringLøsning =
+  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning'];
+
 export type SettPåVentRequest = components['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest'];
 export type PostmottakSettPåVentÅrsaker =
   components['schemas']['no.nav.aap.postmottak.api.flyt.SettP\u00E5VentRequest']['grunn'];

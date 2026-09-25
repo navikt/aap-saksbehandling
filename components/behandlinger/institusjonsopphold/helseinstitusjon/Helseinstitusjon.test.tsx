@@ -589,6 +589,23 @@ describe('handleSubmit - periode beregning', () => {
     expect(vurderinger[0].periode.fom).toBe('2025-01-01');
   });
 
+  it('fjerner reduksjonsdato når bruker ikke får fri kost og losji', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await svarReduksjon(0);
+
+    const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+    await user.clear(datoFelt);
+    await user.type(datoFelt, '01.01.2099');
+
+    await svarIkkeReduksjon(0);
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), 'Ingen reduksjon');
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger[0].periode.fom).toBe('2025-01-01');
+  });
+
   it('sender riktige perioder for to opphold med én vurdering hver', async () => {
     const grunnlagToOpphold: HelseinstitusjonGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
