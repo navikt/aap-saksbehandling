@@ -6,7 +6,6 @@ import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppga
 import { ApiException, isError } from 'lib/utils/api';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
-import { isLocal } from 'lib/utils/environment';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useTildelingssjekk } from 'hooks/saksbehandling/løsavklaringsbehov/useTildelingssjekk';
 import { løsAvklaringsbehovMedRetry } from 'hooks/saksbehandling/løsavklaringsbehov/løsAvklaringsbehovConflictRetry';
@@ -50,12 +49,10 @@ export function useLøsAvklaringsbehov(steg: StegType): {
      * Det første vi må gjøre er å sjekke om behandlingen er tildelt en annen saksbehandler.
      * I så tilfelle må saksbehandler manuelt bekrefte overstyring av den gamle tildelingen.
      */
-    if (!isLocal()) {
-      const skalOverstyreTildelingHvisKonflikt = await sjekkTildeling();
-      if (!skalOverstyreTildelingHvisKonflikt) {
-        setIsLoading(false);
-        return;
-      }
+    const skalOverstyreTildelingHvisKonflikt = await sjekkTildeling();
+    if (!skalOverstyreTildelingHvisKonflikt) {
+      setIsLoading(false);
+      return;
     }
 
     /**

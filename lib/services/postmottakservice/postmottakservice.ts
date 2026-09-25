@@ -11,6 +11,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   OverleveringGrunnlag,
   SettPåVentRequest,
+  SimulerJournalpostHendelseRequest,
   UbehandletJournalpost,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
@@ -111,6 +112,15 @@ export const auditlog = async (journalpostId: number) => {
 export const opprettBehandlingForJournalpost = async (body: { journalpostId: number }) => {
   const url = `${postmottakApiBaseUrl}/api/behandling`;
   return await apiFetch<{ referanse: number }>(url, postmottakApiScope, 'POST', body);
+};
+
+/**
+ * Kun for lokal testing: simulerer en journalføringshendelse fra Kafka mot postmottak sin
+ * TestApp, se aap-postmottak-backend sin SimulerJournalpostHendelseRoute.kt.
+ */
+export const simulerJournalpostHendelse = async (body: SimulerJournalpostHendelseRequest) => {
+  const url = `${postmottakApiBaseUrl}/test/simulerJournalpostHendelse`;
+  return await apiFetch<void>(url, postmottakApiScope, 'POST', body);
 };
 
 async function ventTilProsesseringErFerdig(

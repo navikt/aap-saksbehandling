@@ -47,3 +47,6 @@ export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][n
 export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];
 
 export type UbehandletJournalpost = components['schemas']['no.nav.aap.postmottak.joarkavstemmer.UavstemtJournalpost'];
+
+export type SimulerJournalpostHendelseRequest =
+  components['schemas']['no.nav.aap.postmottak.SimulerJournalpostHendelseRequest'];

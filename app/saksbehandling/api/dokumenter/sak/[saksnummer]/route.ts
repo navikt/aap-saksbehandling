@@ -1,11 +1,11 @@
 import { hentAlleDokumenterPåSak } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
-import { isLocal } from 'lib/utils/environment';
+import { skalMockeBackend } from 'lib/utils/environment';
 import { mockResponseDokumenter } from 'lib/test/local/mockResponseDokumenter';
 
 export async function GET(_: NextApiRequest, props: { params: Promise<{ saksnummer: string }> }) {
-  if (isLocal()) {
+  if (skalMockeBackend(process.env.DOKUMENTINNHENTING_API_BASE_URL)) {
     return NextResponse.json(mockResponseDokumenter, { status: 200 });
   }
 

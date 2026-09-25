@@ -6,6 +6,7 @@ import {
   SettPåVentRequest,
   BehandlingFlytOgTilstand,
   FinnBehandlingerRespons,
+  SimulerJournalpostHendelseRequest,
 } from 'lib/types/postmottakTypes';
 
 // TODO: Test-endepunkt - skal fjernes
@@ -13,6 +14,13 @@ export function postmottakOpprettBehandlingClient(journalpostId: number) {
   return clientFetch<{ referanse: number }>('/postmottak/api/test/behandling/opprett/', 'POST', {
     referanse: journalpostId,
   });
+}
+
+/**
+ * Kun for lokal testing: simulerer en journalføringshendelse fra Kafka mot postmottak sin TestApp.
+ */
+export function postmottakSimulerJournalpostHendelseClient(body: SimulerJournalpostHendelseRequest) {
+  return clientFetch<void>('/postmottak/api/test/simuler-journalpost-hendelse/', 'POST', body);
 }
 
 export function postmottakSettPåVentClient(behandlingsreferanse: string, body: SettPåVentRequest) {

@@ -1,6 +1,6 @@
 import { Behandler } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
-import { isLocal } from 'lib/utils/environment';
+import { skalMockeBackend } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 import { FetchResponse } from 'lib/utils/api';
 
@@ -47,7 +47,7 @@ const testdata: Behandler[] = [
   },
 ];
 
-const lokaltKallMotBehandler = isLocal();
+const lokaltKallMotBehandler = skalMockeBackend(process.env.DOKUMENTINNHENTING_API_BASE_URL);
 export async function POST(req: NextRequest) {
   if (lokaltKallMotBehandler) {
     const response: FetchResponse<Behandler[]> = {

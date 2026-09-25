@@ -216,6 +216,7 @@ export const SakMedBehandlinger = ({
         {isLocal() && (
           <SakDevTools
             saksnummer={sak.saksnummer}
+            ident={sak.ident}
             behandlinger={sak.behandlinger.map((e) => ({ referanse: e.referanse, type: e.typeBehandling }))}
           />
         )}
