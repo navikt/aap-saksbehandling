@@ -118,7 +118,9 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
   function lagreFerieRad(verdier: FerieFormFields) {
     const rad: SamordnetYtelse = {
       periode: { fom: verdier.fom, tom: verdier.tom },
-      gradering: 0,
+      // Ferie i sykepengeperioden skal samordnes som 100 % sykepenger, siden sykepengeretten
+      // fortsatt løper (og dermed gi avslag på AAP etter § 11-27, jf. samordningsregelverket).
+      gradering: 100,
       ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
       manuell: true,
     };
