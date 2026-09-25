@@ -5,19 +5,29 @@ import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMelding
 import { Melding } from 'components/dialogmedbehandler/Melding';
 
 import styles from './DialogMedBehandler.module.css';
-import { useMeldingerFraDialog } from 'hooks/saksbehandling/SakMeldingerFraDialogHook';
-import { useParamsMedType } from '../../hooks/saksbehandling/BehandlingHook';
 import { Alert } from '../alert/Alert';
+import { KommendeMeldingDto, MeldingMedDokumenterDto } from '../../lib/types/types';
 
-export const DialogMedBehandler = () => {
-  const { meldingerMedDokumentliste, kommendeMeldinger, isLoading, error, refetchDialogmeldingerClient } =
-    useMeldingerFraDialog();
-  const params = useParamsMedType();
+interface Props {
+  behandlingsreferanse: string;
+  meldingerMedDokumentliste: MeldingMedDokumenterDto[] | undefined;
+  kommendeMeldinger: KommendeMeldingDto[] | undefined;
+  isLoading: boolean;
+  error: string | undefined;
+  refetchDialogmeldingerClient: () => Promise<unknown>;
+}
 
+export const DialogMedBehandler = ({
+  behandlingsreferanse,
+  meldingerMedDokumentliste,
+  kommendeMeldinger,
+  isLoading,
+  error,
+  refetchDialogmeldingerClient,
+}: Props) => {
   if (error) {
     return <Alert variant="error">{error}</Alert>;
   }
-
   return (
     <section>
       <VStack>
@@ -60,7 +70,7 @@ export const DialogMedBehandler = () => {
       {kommendeMeldinger && kommendeMeldinger.length > 0 && (
         <KommendeMeldinger
           kommendeMeldinger={kommendeMeldinger}
-          behandlingsreferanse={params.behandlingsreferanse}
+          behandlingsreferanse={behandlingsreferanse}
           refetchDialogmeldinger={refetchDialogmeldingerClient}
         />
       )}

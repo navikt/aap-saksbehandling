@@ -21,7 +21,7 @@ import { FetchResponse, isError } from 'lib/utils/api';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { DialogMedBehandler } from 'components/dialogmedbehandler/DialogMedBehandler';
+import { BeOmOpplysninger } from '../dialogmedbehandler/BeOmOpplysninger';
 
 enum Tab {
   KLAGEBEHANDLINGINFO = 'KLAGEBEHANDLINGINFO',
@@ -142,8 +142,8 @@ export const Saksbehandlingsoversikt = ({
               <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
             )}
             {toggleGroupValue === Tab.SAKSDOKUMENTER && <Saksdokumenter />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && featureDialogMedBehandler && <DialogMedBehandler />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <InnhentDokumentasjon />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && featureDialogMedBehandler && <BeOmOpplysninger />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && !featureDialogMedBehandler && <InnhentDokumentasjon />}
             {toggleGroupValue === Tab.HISTORIKK && <SaksHistorikk />}
           </div>
         </>
