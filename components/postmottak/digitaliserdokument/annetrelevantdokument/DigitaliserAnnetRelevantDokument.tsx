@@ -49,12 +49,12 @@ const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkate
   { label: 'Meldekort', value: 'MELDEKORT' },
 ];
 
-function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
+function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields, inkluderBegrunnelse: boolean) {
   const dokument = {
     meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker,
     // Brukes ikke lenger, fylles inn i neste steg (fagsystem-steg)
-    begrunnelse: data.begrunnelse || '',
+    begrunnelse: inkluderBegrunnelse ? data.begrunnelse || '' : '',
     underkategori: data.underkategori || undefined,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
@@ -87,8 +87,8 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
       begrunnelse: {
         type: 'textarea',
         label: 'Begrunnelse',
-        defaultValue: '',
-        rules: { required: 'Du må oppgi begrunnelse.' },
+        defaultValue: annetRelevantDokumentGrunnlag.begrunnelse || '',
+        rules: stoppAutomatikkForLegeerklaringVedAvslag ? {} : { required: 'Du må oppgi begrunnelse.' },
       },
       underkategori: {
         type: 'select',
@@ -102,9 +102,13 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
   );
 
   const handleSubmit: SubmitEventHandler = (event) => {
-    form.handleSubmit((data) => submit('ANNET_RELEVANT_DOKUMENT', mapTilAnnetRelevantDokumentKontrakt(data), null))(
-      event
-    );
+    form.handleSubmit((data) =>
+      submit(
+        'ANNET_RELEVANT_DOKUMENT',
+        mapTilAnnetRelevantDokumentKontrakt(data, !stoppAutomatikkForLegeerklaringVedAvslag),
+        null
+      )
+    )(event);
   };
 
   return (

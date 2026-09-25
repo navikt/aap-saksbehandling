@@ -314,7 +314,7 @@ export const SamordningGradering = ({
                     </BodyLong>
                     <BodyLong size="small">
                       Hvis det er andre årsaker til at virkningstidspunktet bør vurderes igjen, så kan du opprette en
-                      oppfølgingsoppgave
+                      oppfølgingsoppgave.
                     </BodyLong>
 
                     <Button
