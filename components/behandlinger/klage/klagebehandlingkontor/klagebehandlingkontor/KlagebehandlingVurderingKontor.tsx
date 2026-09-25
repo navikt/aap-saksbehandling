@@ -200,7 +200,11 @@ export const KlagebehandlingVurderingKontor = ({
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
       {erOmgjøringValgtForTilbakekreving && (
-        <LocalAlert status="error">Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.</LocalAlert>
+        <LocalAlert status="error">
+          <LocalAlert.Header>
+            <LocalAlert.Title>Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.</LocalAlert.Title>
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
       {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
