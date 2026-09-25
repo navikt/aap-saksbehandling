@@ -16,7 +16,6 @@ import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
 import { hasProperty } from '@vitest/expect';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<FormFieldsFilter>;
@@ -46,7 +45,6 @@ export const AlleOppgaverFiltrering = ({
   const { visModal, setOppgaveIder } = useTildelOppgaver();
 
   const aktiveFilter = aktiveFiltreringer(form.watch());
-  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
 
   useEffect(() => {
     if (sattBehandlingstyperFilter?.length) {
@@ -179,17 +177,15 @@ export const AlleOppgaverFiltrering = ({
               <BoxWrapper>
                 <SaksbehandlerFilterSøk form={form} enheter={aktiveEnheter} />
               </BoxWrapper>
-              {tilbakekrevingBelopFilter && (
-                <BoxWrapper>
-                  <VStack gap={'space-16'}>
-                    <BodyShort size={'small'} weight={'semibold'}>
-                      Tilbakekrevingsbeløp
-                    </BodyShort>
-                    <FormField form={form} formField={formFields.tilbakekrevingBeløpFom} />
-                    <FormField form={form} formField={formFields.tilbakekrevingBeløpTom} />
-                  </VStack>
-                </BoxWrapper>
-              )}
+              <BoxWrapper>
+                <VStack gap={'space-16'}>
+                  <BodyShort size={'small'} weight={'semibold'}>
+                    Tilbakekrevingsbeløp
+                  </BodyShort>
+                  <FormField form={form} formField={formFields.tilbakekrevingBeløpFom} />
+                  <FormField form={form} formField={formFields.tilbakekrevingBeløpTom} />
+                </VStack>
+              </BoxWrapper>
             </HGrid>
             <HStack gap={'space-8'}>
               <Button
