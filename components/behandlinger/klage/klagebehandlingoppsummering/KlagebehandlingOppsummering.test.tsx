@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { screen, render } from '../../../../lib/test/CustomRender';
+import { screen, render } from 'lib/test/CustomRender';
 import { KlagebehandlingOppsummering } from 'components/behandlinger/klage/klagebehandlingoppsummering/KlagebehandlingOppsummering';
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag } from 'lib/types/types';
 

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '../../../../../lib/test/CustomRender';
+import { fireEvent, render, screen } from 'lib/test/CustomRender';
 import { KlagebehandlingVurderingKontor } from './KlagebehandlingVurderingKontor';
 import { userEvent } from '@testing-library/user-event';
 import { KlagebehandlingKontorGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
