@@ -27,11 +27,11 @@ describe('beregnForhåndsvisning', () => {
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '09.03.2025' },
       { fom: '10.03.2025', tom: '14.03.2025' },
-      { fom: '15.03.2025', tom: '05.04.2025' },
+      { fom: '15.03.2025', tom: '07.04.2025' },
     ]);
   });
 
-  test('bevarer antall sykepengedager', () => {
+  test('bevarer antall sykepengedager (virkedager)', () => {
     const rader = [
       rad('SYKEPENGER', '01.03.2025', '31.03.2025'),
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
@@ -39,7 +39,7 @@ describe('beregnForhåndsvisning', () => {
 
     const sykepengerader = beregnForhåndsvisning(rader).filter((r) => r.ytelseType === 'SYKEPENGER');
 
-    expect(antallDager(sykepengerader)).toBe(31);
+    expect(antallVirkedager(sykepengerader)).toBe(21);
   });
 
   test('flytter hele perioden til etter ferien når ferien dekker alt', () => {
@@ -52,7 +52,39 @@ describe('beregnForhåndsvisning', () => {
 
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '31.03.2025' },
-      { fom: '01.04.2025', tom: '05.04.2025' },
+      { fom: '01.04.2025', tom: '07.04.2025' },
+    ]);
+  });
+
+  test('hopper over faste norske helligdager i tillegg til helg når resten av perioden skyves', () => {
+    const rader = [
+      rad('SYKEPENGER', '01.04.2025', '30.04.2025'),
+      rad('FERIE_I_SYKEPENGEPERIODE', '07.04.2025', '11.04.2025'),
+    ];
+
+    const resultat = beregnForhåndsvisning(rader);
+
+    // 1. mai 2025 er en torsdag og skal ikke telle som virkedag i forskyvningen.
+    expect(resultat.map((r) => r.periode)).toEqual([
+      { fom: '01.04.2025', tom: '06.04.2025' },
+      { fom: '07.04.2025', tom: '11.04.2025' },
+      { fom: '12.04.2025', tom: '08.05.2025' },
+    ]);
+  });
+
+  test('hopper over bevegelige helligdager (Kristi himmelfartsdag) når resten av perioden skyves', () => {
+    const rader = [
+      rad('SYKEPENGER', '01.05.2025', '23.05.2025'),
+      rad('FERIE_I_SYKEPENGEPERIODE', '05.05.2025', '09.05.2025'),
+    ];
+
+    const resultat = beregnForhåndsvisning(rader);
+
+    // Kristi himmelfartsdag 2025 er torsdag 29. mai og skal ikke telle som virkedag.
+    expect(resultat.map((r) => r.periode)).toEqual([
+      { fom: '01.05.2025', tom: '04.05.2025' },
+      { fom: '05.05.2025', tom: '09.05.2025' },
+      { fom: '10.05.2025', tom: '02.06.2025' },
     ]);
   });
 
@@ -65,7 +97,7 @@ describe('beregnForhåndsvisning', () => {
     const resultat = beregnForhåndsvisning(rader);
     const sykepengerad = resultat.find((r) => r.ytelseType === 'SYKEPENGER');
 
-    expect(sykepengerad?.periode).toEqual({ fom: '06.03.2025', tom: '05.04.2025' });
+    expect(sykepengerad?.periode).toEqual({ fom: '06.03.2025', tom: '03.04.2025' });
   });
 
   test('skyver de resterende dagene når ferien varer ut over sykepengeperioden', () => {
@@ -79,7 +111,7 @@ describe('beregnForhåndsvisning', () => {
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '19.03.2025' },
       { fom: '20.03.2025', tom: '10.04.2025' },
-      { fom: '11.04.2025', tom: '22.04.2025' },
+      { fom: '11.04.2025', tom: '25.04.2025' },
     ]);
   });
 
@@ -107,8 +139,8 @@ describe('beregnForhåndsvisning', () => {
         { fom: '01.03.2025', tom: '09.03.2025' },
         { fom: '05.03.2025', tom: '09.03.2025' },
         { fom: '10.03.2025', tom: '14.03.2025' },
-        { fom: '15.03.2025', tom: '05.04.2025' },
-        { fom: '15.03.2025', tom: '25.03.2025' },
+        { fom: '15.03.2025', tom: '07.04.2025' },
+        { fom: '15.03.2025', tom: '27.03.2025' },
       ])
     );
   });
@@ -194,7 +226,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '20.01.2026', '21.01.2026'),
       rad('SYKEPENGER', '22.01.2026', '01.02.2026'),
       rad('FERIE_I_SYKEPENGEPERIODE', '02.02.2026', '03.02.2026'),
-      rad('SYKEPENGER', '04.02.2026', '10.02.2026'),
+      rad('SYKEPENGER', '04.02.2026', '12.02.2026'),
     ];
 
     const skjemarader = slåSammenSplittedeSykepengeperioder(lagredeRader);
@@ -207,8 +239,9 @@ describe('beregnForhåndsvisning', () => {
       { ytelseType: 'FERIE_I_SYKEPENGEPERIODE', periode: { fom: '20.01.2026', tom: '21.01.2026' } },
       { ytelseType: 'SYKEPENGER', periode: { fom: '22.01.2026', tom: '01.02.2026' } },
       { ytelseType: 'FERIE_I_SYKEPENGEPERIODE', periode: { fom: '02.02.2026', tom: '03.02.2026' } },
+      { ytelseType: 'SYKEPENGER', periode: { fom: '04.02.2026', tom: '05.02.2026' } },
     ]);
-    expect(antallDager(resultat.filter((r) => r.ytelseType === 'SYKEPENGER'))).toBe(30);
+    expect(antallVirkedager(resultat.filter((r) => r.ytelseType === 'SYKEPENGER'))).toBe(22);
   });
 
   test('rekonstruerer den opprinnelige sykepengeperioden fra rader som allerede er splittet', () => {
@@ -219,7 +252,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '20.01.2026', '21.01.2026'),
       rad('SYKEPENGER', '22.01.2026', '01.02.2026'),
       rad('FERIE_I_SYKEPENGEPERIODE', '02.02.2026', '03.02.2026'),
-      rad('SYKEPENGER', '04.02.2026', '10.02.2026'),
+      rad('SYKEPENGER', '04.02.2026', '12.02.2026'),
     ];
 
     const sykepenger = slåSammenSplittedeSykepengeperioder(splittedeRader).filter((r) => r.ytelseType === 'SYKEPENGER');
@@ -252,12 +285,20 @@ describe('beregnForhåndsvisning', () => {
   });
 });
 
-function antallDager(rader: Rad[]): number {
+function antallVirkedager(rader: Rad[]): number {
   return rader.reduce((sum, r) => {
     const [fomDag, fomMåned, fomÅr] = r.periode.fom.split('.').map(Number);
     const [tomDag, tomMåned, tomÅr] = r.periode.tom.split('.').map(Number);
-    const fom = new Date(fomÅr, fomMåned - 1, fomDag);
+    let dato = new Date(fomÅr, fomMåned - 1, fomDag);
     const tom = new Date(tomÅr, tomMåned - 1, tomDag);
-    return sum + Math.round((tom.getTime() - fom.getTime()) / 86400000) + 1;
+    let antall = 0;
+    while (dato <= tom) {
+      const ukedag = dato.getDay();
+      if (ukedag !== 0 && ukedag !== 6) {
+        antall++;
+      }
+      dato = new Date(dato.getFullYear(), dato.getMonth(), dato.getDate() + 1);
+    }
+    return sum + antall;
   }, 0);
 }

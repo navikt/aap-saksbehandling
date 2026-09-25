@@ -1,5 +1,6 @@
-import { addDays, differenceInCalendarDays, subDays } from 'date-fns';
+import { addDays, eachDayOfInterval, isWeekend, subDays } from 'date-fns';
 import { SamordnetYtelse } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { erNorskHelligdag } from 'lib/utils/helligdager';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 
 /**
@@ -38,12 +39,12 @@ export function slåSammenSplittedeSykepengeperioder(rader: SamordnetYtelse[]): 
     }
 
     const start = tilPeriode(kjede[0])!.fom;
-    const antallDager = kjede.reduce((sum, rad) => {
+    const totaltAntallVirkedager = kjede.reduce((sum, rad) => {
       const periode = tilPeriode(rad)!;
-      return sum + antallDagerMellom(periode.fom, periode.tom);
+      return sum + antallVirkedagerMellom(periode.fom, periode.tom);
     }, 0);
 
-    resultat.push(medPeriode(kjede[0], start, addDays(start, antallDager - 1)));
+    resultat.push(medPeriode(kjede[0], start, leggTilVirkedager(start, totaltAntallVirkedager)));
     kjede = [];
   }
 
@@ -126,20 +127,23 @@ function splittForEnFerie(rader: SamordnetYtelse[], ferieRad: SamordnetYtelse): 
 }
 
 function forskyvSykepenger(rad: SamordnetYtelse, sykepenger: Periode, ferie: Periode): SamordnetYtelse[] {
-  const antallDager = antallDagerMellom(sykepenger.fom, sykepenger.tom);
   const resultat: SamordnetYtelse[] = [];
 
-  const dagerFørFerien = ferie.fom > sykepenger.fom ? antallDagerMellom(sykepenger.fom, subDays(ferie.fom, 1)) : 0;
+  const finnesDagerFørFerien = ferie.fom > sykepenger.fom;
 
-  if (dagerFørFerien > 0) {
+  if (finnesDagerFørFerien) {
     resultat.push(medPeriode(rad, sykepenger.fom, subDays(ferie.fom, 1)));
   }
 
-  const dagerIgjen = antallDager - dagerFørFerien;
+  const totaltAntallVirkedager = antallVirkedagerMellom(sykepenger.fom, sykepenger.tom);
+  const virkedagerFørFerien = finnesDagerFørFerien
+    ? antallVirkedagerMellom(sykepenger.fom, subDays(ferie.fom, 1))
+    : 0;
+  const virkedagerIgjen = totaltAntallVirkedager - virkedagerFørFerien;
 
-  if (dagerIgjen > 0) {
+  if (virkedagerIgjen > 0) {
     const fom = addDays(ferie.tom, 1);
-    resultat.push(medPeriode(rad, fom, addDays(fom, dagerIgjen - 1)));
+    resultat.push(medPeriode(rad, fom, leggTilVirkedager(fom, virkedagerIgjen)));
   }
 
   return resultat;
@@ -165,8 +169,27 @@ function overlapper(en: Periode, annen: Periode): boolean {
   return en.fom <= annen.tom && annen.fom <= en.tom;
 }
 
-function antallDagerMellom(fom: Date, tom: Date): number {
-  return differenceInCalendarDays(tom, fom) + 1;
+function erVirkedag(dato: Date): boolean {
+  return !isWeekend(dato) && !erNorskHelligdag(dato);
+}
+
+function antallVirkedagerMellom(fom: Date, tom: Date): number {
+  return eachDayOfInterval({ start: fom, end: tom }).filter(erVirkedag).length;
+}
+
+function leggTilVirkedager(fra: Date, virkedagerAntall: number): Date {
+  let dato = fra;
+  let talteVirkedager = 0;
+  while (talteVirkedager < virkedagerAntall) {
+    if (erVirkedag(dato)) {
+      talteVirkedager++;
+      if (talteVirkedager === virkedagerAntall) {
+        return dato;
+      }
+    }
+    dato = addDays(dato, 1);
+  }
+  return dato;
 }
 
 function medPeriode(rad: SamordnetYtelse, fom: Date, tom: Date): SamordnetYtelse {

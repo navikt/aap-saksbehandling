@@ -565,7 +565,7 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('11.01.2026');
     expect(within(rader[2]).getByText('12.01.2026 - 14.01.2026')).toBeVisible();
     expect(within(rader[3]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('15.01.2026');
-    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('02.02.2026');
+    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('04.02.2026');
   });
 
   test('gjenoppretter én sammenhengende sykepengeperiode når ferien slettes', async () => {
