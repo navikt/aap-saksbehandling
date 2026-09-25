@@ -66,6 +66,10 @@ export const SkriveBrevMedDataFetching = async ({
   const sendteBrev = brevGrunnlag.data.brevGrunnlag.filter(
     (x) => x.status === 'FULLFØRT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
+
+  const automatiskBrev = brevGrunnlag.data.brevGrunnlag.find(
+    (x) => x.status === 'FULLFØRT' && x.avklaringsbehovKode === '5050' && x.brevtype === 'AVSLAG_11_5'
+  );
   const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
@@ -73,7 +77,13 @@ export const SkriveBrevMedDataFetching = async ({
   const brukNyBrevbygger = !!brev?.brevmal && !!brev?.brevdata;
 
   if (!brev?.brev && !brukNyBrevbygger) {
-    return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
+    return (
+      <BrevOppsummering
+        sendteBrev={sendteBrev}
+        avbrutteBrev={avbrytteBrev}
+        automatiskBrevSendtDato={automatiskBrev?.oppdatert}
+      />
+    );
   }
 
   //Featuretoggle er allerede gjort i backend, hvis brevmal og brevdata er satt skal vi bruke ny brevbygger
