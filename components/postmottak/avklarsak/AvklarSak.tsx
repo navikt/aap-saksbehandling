@@ -122,6 +122,10 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_SAK');
 
   const valgtIdType = form.watch('avsenderMottaker.idType');
+  const valgtSaksnummer = form.watch('knyttTilSak');
+  const valgtSakErTrukket = grunnlag.saksinfo.some(
+    (sak) => sak.saksnummer === valgtSaksnummer && sak.resultat === 'TRUKKET'
+  );
 
   return (
     <PostmottakVilkårskort
@@ -161,6 +165,14 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
 
           <Radio value={GENERELL}>Journalfør på generell sak</Radio>
         </RadioGroupWrapper>
+
+        {valgtSakErTrukket && (
+          <Alert variant="warning">
+            Det er ikke mulig å opprette ny behandling/revurdering ved journalføring på en trukket sak. <br />
+            Velg Opprett ny sak eller en annen sak dersom det er ønskelig at journalposten skal påvirke
+            saksbehandlingen.
+          </Alert>
+        )}
 
         <div>
           <TextFieldToggle
