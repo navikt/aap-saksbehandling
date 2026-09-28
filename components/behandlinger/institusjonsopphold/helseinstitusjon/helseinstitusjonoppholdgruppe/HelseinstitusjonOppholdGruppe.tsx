@@ -18,7 +18,6 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { Dato } from 'lib/types/Dato';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
@@ -28,6 +27,8 @@ import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpa
 import { addDays } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { TidligereVurderingKortMedGap } from 'components/periodisering/tidligerevurderingkortmedgap/TidligereVurderingKortMedGap';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -88,11 +89,14 @@ export const HelseinstitusjonOppholdGruppe = ({
                 ? formatDatoMedMånedsnavn(opphold.avsluttetDato)
                 : 'Pågående'}
             </Label>
+            {opphold.delperioder.length === 1 && (
+              <BodyShort className={styles.detailgray}>{storForbokstavIHvertOrd(opphold.kildeinstitusjon)}</BodyShort>
+            )}
             {visSammenhengendeOpphold && opphold.delperioder.length > 1 && (
               <VStack gap="space-2" className={styles.delperioder}>
                 {opphold.delperioder.map((delperiode, i) => (
                   <BodyShort key={delperiode.institusjonsnavn + i} size="small" className={styles.detailgray}>
-                    {delperiode.institusjonsnavn}: {formatDatoMedMånedsnavn(delperiode.fom)} –{' '}
+                    {storForbokstavIHvertOrd(delperiode.institusjonsnavn)}: {formatDatoMedMånedsnavn(delperiode.fom)} –{' '}
                     {formatDatoMedMånedsnavn(delperiode.tom)}
                   </BodyShort>
                 ))}
@@ -113,12 +117,11 @@ export const HelseinstitusjonOppholdGruppe = ({
             .sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
             .map((vurdering, index, alle) => {
               const erSiste = index === alle.length - 1;
-
               const justertTomDato =
                 erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
 
               return (
-                <TidligereVurderingExpandableCard
+                <TidligereVurderingKortMedGap
                   key={vurdering.periode.fom}
                   fom={new Dato(vurdering.periode.fom).dato}
                   tom={justertTomDato}
@@ -127,7 +130,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   vurderingerMeta={vurdering.vurderingerMeta}
                 >
                   <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-                </TidligereVurderingExpandableCard>
+                </TidligereVurderingKortMedGap>
               );
             })}
 
