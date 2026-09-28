@@ -201,6 +201,7 @@ describe('Helseinstitusjonsvurdering med flere opphold', () => {
     avsluttetDato: '2026-12-01',
     kildeinstitusjon: 'Hello Pello sykehus',
     delperioder: [{ institusjonsnavn: 'Hello Pello sykehus', fom: '2026-06-15', tom: '2026-12-01' }],
+    tidligsteReduksjonsdato: '2026-06-15', // signaliserer 1-månedsregelen (innen 3 mnd, backend setter lik oppholdFra)
   };
 
   const grunnlagMedToOpphold = {
