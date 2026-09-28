@@ -2,7 +2,12 @@
 
 import { SubmitEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo } from 'lib/types/postmottakTypes';
+import {
+  AvklarSaksnummerLøsning,
+  AvsenderMottakerIdType,
+  FinnSakGrunnlag,
+  JournalpostInfo,
+} from 'lib/types/postmottakTypes';
 import { Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -94,7 +99,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     status,
     isLoading,
     løsBehovOgGåTilNesteStegError: error,
-  } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
+  } = usePostmottakLøsBehovOgGåTilNesteSteg<AvklarSaksnummerLøsning>('AVKLAR_SAK');
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
