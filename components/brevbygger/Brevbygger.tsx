@@ -157,18 +157,17 @@ export const Brevbygger = ({
     <>
       <Box>
         <VStack gap="space-16">
-          <VelgeMottakere
-            bestillingsreferanse={referanse}
-            setMottakere={setMottakere}
-            readOnly={readOnly}
-            mottaker={mottaker}
-            kopimottaker={kopimottaker}
-            fullmektig={fullmektig}
-          />
-
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
           {/* Antall kolonner som returneres fra Delmal må matche antallet kolonner her. Ønsker at kolonnene skal være like brede på tvers, dermed er grid definert her */}
           <HGrid columns={'1fr 2fr'} gap={'space-12 space-24'}>
+            <VelgeMottakere
+              bestillingsreferanse={referanse}
+              setMottakere={setMottakere}
+              readOnly={readOnly}
+              mottaker={mottaker}
+              kopimottaker={kopimottaker}
+              fullmektig={fullmektig}
+            />
             <StandardtekstBoks />
             <div
               className={styles.brevheader}
