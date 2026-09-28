@@ -40,10 +40,10 @@ export interface MeldekortFormFields {
 export const ukestartSisteHalvår = (): ValuePair[] => {
   const iDag = new Date();
   const sisteValgbareUke = addWeeks(iDag, 1);
-  const seksMndSiden = subMonths(iDag, 6);
+  const tolvMndSiden = subMonths(iDag, 12);
 
   let ukestarter: Date[] = [];
-  let gjeldendeUke = seksMndSiden;
+  let gjeldendeUke = tolvMndSiden;
   while (isBefore(gjeldendeUke, sisteValgbareUke)) {
     ukestarter.push(startOfWeek(gjeldendeUke, { weekStartsOn: 1 }));
     gjeldendeUke = addWeeks(gjeldendeUke, 1);

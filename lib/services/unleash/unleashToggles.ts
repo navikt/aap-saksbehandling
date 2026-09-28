@@ -15,6 +15,7 @@ export const FLAGS = [
   'KanVurdereRefusjonIRevurdering',
   'KorrigerSoknadsdato',
   'ForesporselSendtTilBehandlerFrontend',
+  'StoppAutomatikkForLegeerklaringVedAvslag',
   'SammenhengendeInstitusjonsopphold',
 ] as const;
 
@@ -38,5 +39,6 @@ export const mockedFlags: Flags = {
   KanVurdereRefusjonIRevurdering: true,
   KorrigerSoknadsdato: true,
   ForesporselSendtTilBehandlerFrontend: true,
+  StoppAutomatikkForLegeerklaringVedAvslag: true,
   SammenhengendeInstitusjonsopphold: true,
 };

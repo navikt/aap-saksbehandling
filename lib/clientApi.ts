@@ -19,7 +19,7 @@ import {
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   MeldePerioderMedMEldekortResponse,
-  MeldingMedDokumenterDto,
+  MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnheterResponse,
@@ -171,10 +171,21 @@ export function clientHentSakshistorikk(saksnummer: string) {
 }
 
 export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
-  return clientFetch<Array<MeldingMedDokumenterDto>>(
-    `${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`,
-    'GET'
-  );
+  return clientFetch<MeldingerResponse>(`${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`, 'GET');
+}
+
+export function clientAvbrytPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/avbryt`, 'POST', {
+    dialogmeldingPurringUUID: dialogmeldingId,
+    behandlingsReferanse: behandlingsreferanse,
+  });
+}
+
+export function clientGjenopptaPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/gjenoppta`, 'POST', {
+    dialogmeldingPurringUUID: dialogmeldingId,
+    behandlingsReferanse: behandlingsreferanse,
+  });
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
