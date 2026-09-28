@@ -1154,6 +1154,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+
   '/api/drift/person/journalposter/søk': {
     parameters: {
       query?: never;
