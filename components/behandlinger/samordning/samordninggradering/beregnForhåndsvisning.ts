@@ -173,7 +173,7 @@ function erVirkedag(dato: Date): boolean {
   return !isWeekend(dato) && !erNorskHelligdag(dato);
 }
 
-function antallVirkedagerMellom(fom: Date, tom: Date): number {
+export function antallVirkedagerMellom(fom: Date, tom: Date): number {
   return eachDayOfInterval({ start: fom, end: tom }).filter(erVirkedag).length;
 }
 

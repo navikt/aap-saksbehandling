@@ -1,4 +1,4 @@
-import { addDays, isSameDay } from 'date-fns';
+import { addDays, isSameDay, subDays } from 'date-fns';
 import { beregnPåskedag } from 'lib/utils/paaske';
 
 // Faste (ikke-flyttbare) norske helligdager.
@@ -18,8 +18,8 @@ function bevegeligeHelligdager(år: number): Date[] {
   const påskedag = beregnPåskedag(år);
 
   return [
-    addDays(påskedag, -3), // skjærtorsdag
-    addDays(påskedag, -2), // langfredag
+    subDays(påskedag, 3), // skjærtorsdag
+    subDays(påskedag, 2), // langfredag
     addDays(påskedag, 1), // 2. påskedag
     addDays(påskedag, 39), // Kristi himmelfartsdag
     addDays(påskedag, 50), // 2. pinsedag
