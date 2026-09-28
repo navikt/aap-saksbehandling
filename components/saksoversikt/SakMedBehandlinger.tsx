@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Chips, HStack, Heading, Table, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Chips, HStack, Heading, Table, Tag, Tooltip, VStack } from '@navikt/ds-react';
 import { useHentOppgaverForSak } from 'hooks/oppgave/OppgaverPåSakHook';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { Dato } from 'lib/types/Dato';
@@ -179,9 +179,11 @@ export const SakMedBehandlinger = ({
                 <Table.DataCell>
                   {mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}{' '}
                   {behandling.kilde == 'BEHANDLINGSFLYT' && behandling.behandling.erGjeldende && (
-                    <Tag variant="moderate" data-color="success" size="small">
-                      Gjeldende
-                    </Tag>
+                    <Tooltip content="Gjeldene behandling er det siste fattede vedtaket på saken.">
+                      <Tag variant="moderate" data-color="success" size="small">
+                        Gjeldende vedtak
+                      </Tag>
+                    </Tooltip>
                   )}
                 </Table.DataCell>
                 <Table.DataCell>
