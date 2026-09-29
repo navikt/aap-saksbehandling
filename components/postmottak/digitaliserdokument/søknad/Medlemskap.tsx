@@ -1,4 +1,4 @@
-import { Button, HStack, Label, VStack } from '@navikt/ds-react';
+import { Button, Label, VStack } from '@navikt/ds-react';
 import { PlusCircleFillIcon } from '@navikt/aksel-icons';
 import { FieldPath, useFieldArray, useFormContext } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
@@ -20,6 +20,11 @@ export const Medlemskap = ({ formFields, readOnly }: Props) => {
   const harArbeidetINorgeSiste5År = form.watch('harArbeidetINorgeSiste5År');
   const iTilleggArbeidUtenforNorge = form.watch('iTilleggArbeidUtenforNorge');
 
+  const skalViseUtenlandsopphold =
+    iTilleggArbeidUtenforNorge === JaEllerNei.Ja ||
+    arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja ||
+    harArbeidetINorgeSiste5År === JaEllerNei.Nei;
+
   return (
     <VStack gap={'space-12'}>
       <FormField form={form} formField={formFields.harBoddINorgeSiste5År} />
@@ -32,26 +37,23 @@ export const Medlemskap = ({ formFields, readOnly }: Props) => {
       {harBoddINorgeSiste5År === JaEllerNei.Nei && harArbeidetINorgeSiste5År === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.iTilleggArbeidUtenforNorge} />
       )}
-      {(iTilleggArbeidUtenforNorge === JaEllerNei.Ja ||
-        arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja ||
-        harArbeidetINorgeSiste5År === JaEllerNei.Nei) && (
+      {skalViseUtenlandsopphold && (
         <VStack gap={'space-8'}>
           <Label size={'small'}>Utenlandsopphold</Label>
           {fields.map((field, index) => (
             <LeggTilUtenlandsOpphold key={field.id} index={index} form={form} readOnly={readOnly} remove={remove} />
           ))}
-          <HStack>
-            <Button
-              variant={'secondary'}
-              icon={<PlusCircleFillIcon title={'Legg til utenlandsopphold'} />}
-              disabled={readOnly}
-              size={'small'}
-              type={'button'}
-              onClick={() => append({ land: '', fraDato: '', tilDato: '', iArbeid: JaEllerNei.Ja })}
-            >
-              Legg til utenlandsopphold
-            </Button>
-          </HStack>
+          <Button
+            variant={'secondary'}
+            icon={<PlusCircleFillIcon title={'Legg til utenlandsopphold'} />}
+            disabled={readOnly}
+            size={'small'}
+            type={'button'}
+            className={'fit-content'}
+            onClick={() => append({ land: '', fraDato: '', tilDato: '', iArbeid: JaEllerNei.Ja })}
+          >
+            Legg til utenlandsopphold
+          </Button>
         </VStack>
       )}
     </VStack>
