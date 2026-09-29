@@ -14,6 +14,10 @@ const grunnlag: DigitaliseringsGrunnlag = {
 };
 describe('DigitaliserSøknad', () => {
   const user = userEvent.setup();
+  const velgSvar = async (spørsmål: string, svar: string) => {
+    const radiogruppe = screen.getByRole('radiogroup', { name: spørsmål });
+    await user.click(within(radiogruppe).getByText(svar));
+  };
 
   it('yrkesskade vises', () => {
     render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
@@ -72,56 +76,62 @@ describe('DigitaliserSøknad', () => {
     expect(screen.getByText('Fødselsnummer eller D-nummer')).toBeVisible();
   });
 
-  it('viser medlemskapsspørsmål basert på om brukeren har bodd i Norge', async () => {
+  it('spør om arbeid utenfor Norge når brukeren har bodd i Norge', async () => {
     render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
-    const harBoddGruppe = screen.getByRole('radiogroup', {
-      name: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
-    });
-    await user.click(within(harBoddGruppe).getByText('Ja'));
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Ja');
 
-    const arbeidetUtenforGruppe = screen.getByRole('radiogroup', {
-      name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
-    });
-    expect(arbeidetUtenforGruppe).toBeVisible();
+    expect(
+      screen.getByRole('radiogroup', { name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?' })
+    ).toBeVisible();
     expect(
       screen.queryByRole('radiogroup', {
         name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
       })
     ).not.toBeInTheDocument();
+  });
 
-    await user.click(within(arbeidetUtenforGruppe).getByText('Nei'));
-    expect(screen.queryByText('Utenlandsopphold')).not.toBeInTheDocument();
-    await user.click(within(arbeidetUtenforGruppe).getByText('Ja'));
-    expect(screen.getByText('Utenlandsopphold')).toBeVisible();
+  it('spør om arbeid i Norge når brukeren ikke har bodd i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
-    await user.click(within(harBoddGruppe).getByText('Nei'));
-    const harArbeidetGruppe = screen.getByRole('radiogroup', {
-      name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
-    });
-    expect(harArbeidetGruppe).toBeVisible();
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+
     expect(
-      screen.queryByRole('radiogroup', {
-        name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
+      screen.getByRole('radiogroup', {
+        name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
       })
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('radiogroup', { name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?' })
     ).not.toBeInTheDocument();
+  });
 
-    await user.click(within(harArbeidetGruppe).getByText('Ja'));
-    const iTilleggGruppe = screen.getByRole('radiogroup', {
-      name: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?',
-    });
-    expect(iTilleggGruppe).toBeVisible();
-    expect(screen.queryByText('Utenlandsopphold')).not.toBeInTheDocument();
+  it('spør om arbeid utenfor Norge i tillegg når brukeren har arbeidet i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
-    await user.click(within(iTilleggGruppe).getByText('Ja'));
-    expect(screen.getByText('Utenlandsopphold')).toBeVisible();
-    await user.click(within(iTilleggGruppe).getByText('Nei'));
-    expect(screen.queryByText('Utenlandsopphold')).not.toBeInTheDocument();
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har søker i tillegg jobbet utenfor Norge i de siste fem årene?', 'Ja');
 
-    await user.click(within(harArbeidetGruppe).getByText('Nei'));
-    expect(screen.queryByRole('radiogroup', { name: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?' }))
-      .not.toBeInTheDocument();
-    expect(screen.getByText('Utenlandsopphold')).toBeVisible();
+    expect(screen.getByRole('button', { name: /Legg til utenlandsopphold/i })).toBeVisible();
+  });
+
+  it('viser utenlandsopphold når arbeid utenfor Norge er oppgitt', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?', 'Ja');
+
+    expect(screen.getByRole('button', { name: /Legg til utenlandsopphold/i })).toBeVisible();
+  });
+
+  it('viser utenlandsopphold når brukeren ikke har arbeidet sammenhengende i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?', 'Nei');
+
+    expect(screen.getByRole('button', { name: /Legg til utenlandsopphold/i })).toBeVisible();
   });
 
   it('legg til barn og sjekk at det kan slettes igjen', async () => {
@@ -197,44 +207,13 @@ describe('DigitaliserSøknad', () => {
     render(<DigitaliserSøknad submit={submitMock} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
     await user.type(screen.getByRole('textbox', { name: /søknadsdato/i }), '01.01.2024');
-    await user.click(
-      within(
-        screen.getByRole('radiogroup', {
-          name: 'Har brukeren oppgitt at de har en relevant yrkesskade?',
-        })
-      ).getByText('Nei')
-    );
-
-    const harBoddGruppe = screen.getByRole('radiogroup', {
-      name: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
-    });
-    await user.click(within(harBoddGruppe).getByText('Nei'));
-    await user.click(
-      within(
-        screen.getByRole('radiogroup', {
-          name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
-        })
-      ).getByText('Ja')
-    );
-    await user.click(
-      within(
-        screen.getByRole('radiogroup', {
-          name: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?',
-        })
-      ).getByText('Ja')
-    );
-
-    await user.click(within(harBoddGruppe).getByText('Ja'));
-    await user.click(
-      within(
-        screen.getByRole('radiogroup', {
-          name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
-        })
-      ).getByText('Nei')
-    );
-    await user.click(
-      within(screen.getByRole('radiogroup', { name: 'Har brukeren oppgitt at de er student?' })).getByText('Nei')
-    );
+    await velgSvar('Har brukeren oppgitt at de har en relevant yrkesskade?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har søker i tillegg jobbet utenfor Norge i de siste fem årene?', 'Ja');
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de er student?', 'Nei');
     await user.click(screen.getByRole('button', { name: 'Neste' }));
 
     expect(submitMock).toHaveBeenCalledOnce();
