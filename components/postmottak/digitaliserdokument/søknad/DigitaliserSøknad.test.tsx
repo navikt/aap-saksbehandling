@@ -1,8 +1,8 @@
 import { describe, expect, it, vi, vitest } from 'vitest';
 import { DigitaliserSøknad } from './DigitaliserSøknad';
-import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
+import { render, screen, within } from 'lib/test/CustomRender';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   erPapir: false,
