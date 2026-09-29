@@ -13,7 +13,6 @@ import {
   stringToJaNeiVetikke,
 } from 'lib/postmottakForm';
 import { Barnetillegg } from './Barnetillegg';
-import { Medlemskap } from './Medlemskap';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { Student } from './Student';
 import { Button, VStack } from '@navikt/ds-react';
@@ -27,8 +26,7 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { FormProvider } from 'react-hook-form';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { MedlemskapV2 } from './MedlemskapV2';
+import { Medlemskap } from 'components/postmottak/digitaliserdokument/søknad/Medlemskap';
 
 export type Utenlandsopphold = {
   land: string;
@@ -219,8 +217,6 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
     )(event);
   };
 
-  const ErDigitaliserSoknadMedlemskapEndreVisningEnabled = useFeatureFlag('DigitaliserSoknadMedlemskapEndreVisning');
-
   return (
     <VilkårsKort heading={'Søknad'}>
       <FormProvider {...form}>
@@ -234,11 +230,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
               <FormField form={form} formField={formFields.yrkesSkade} />
             </div>
             <Barnetillegg readOnly={readOnly} />
-            {ErDigitaliserSoknadMedlemskapEndreVisningEnabled ? (
-              <MedlemskapV2 formFields={formFields} readOnly={readOnly} />
-            ) : (
-              <Medlemskap form={form} formFields={formFields} readOnly={readOnly} />
-            )}
+            <Medlemskap formFields={formFields} readOnly={readOnly} />
             <Student formFields={formFields} />
             {!readOnly && (
               <Button loading={isLoading} className={'fit-content'}>
