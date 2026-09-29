@@ -2,7 +2,7 @@
 
 import { BrevGrunnlagBrev } from 'lib/types/types';
 import styles from './brevoppsummering.module.css';
-import { Button, Heading, HStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useRouter } from 'next/navigation';
 import { useFeatureFlag } from '../../../../context/UnleashContext';
@@ -15,25 +15,29 @@ type BrevOppsummeringProps = {
 
 export const BrevOppsummering = ({ sendteBrev, avbrutteBrev, automatiskBrevSendtDato }: BrevOppsummeringProps) => {
   const router = useRouter();
-  const skalViseAutomatiskBrevSendt = useFeatureFlag('HoppOverBeslutterVedAvslagSykdom') && automatiskBrevSendtDato
+  const skalViseAutomatiskBrevSendt = useFeatureFlag('HoppOverBeslutterVedAvslagSykdom') && automatiskBrevSendtDato;
 
   return (
     <section>
       {skalViseAutomatiskBrevSendt && (
         <div className={styles.card}>
           <Heading size="small" level="2">
-            Vedtaksbrevet ble sendt automatisk
+            Vedtak sendt til bruker
           </Heading>
-          {`Behandlingen er nå avsluttet. Brevet ble sendt ${formaterDatoForFrontend(automatiskBrevSendtDato)}`}
+          <VStack gap={'space-8'}>
+            <BodyShort>{`Vedtaksbrev om avslag på § 11-5 ble sendt til bruker ${formaterDatoForFrontend(automatiskBrevSendtDato)}.`}</BodyShort>
+            <BodyShort>Last inn siden på nytt for å se brevet under saksdokumentene.</BodyShort>
+          </VStack>
           <HStack>
             <Button
-              variant={'primary'}
+              variant={'secondary'}
               type={'button'}
               onClick={() => {
                 router.push('/oppgave');
               }}
+              size={'small'}
             >
-              Tilbake til oppgavelisten
+              Gå til oppgavelisten
             </Button>
           </HStack>
         </div>
