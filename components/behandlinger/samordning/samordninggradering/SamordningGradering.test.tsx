@@ -299,9 +299,7 @@ describe('Samordning gradering', () => {
     };
 
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
-        <SamordningGradering grunnlag={grunnlagMedOverlappendeFerieOgSykepenger} readOnly={false} behandlingVersjon={0} />
-      </FeatureFlagProvider>
+      <SamordningGradering grunnlag={grunnlagMedOverlappendeFerieOgSykepenger} readOnly={false} behandlingVersjon={0} />
     );
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
