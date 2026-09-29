@@ -72,6 +72,58 @@ describe('DigitaliserSøknad', () => {
     expect(screen.getByText('Fødselsnummer eller D-nummer')).toBeVisible();
   });
 
+  it('viser medlemskapsspørsmål basert på om brukeren har bodd i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    const harBoddGruppe = screen.getByRole('radiogroup', {
+      name: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
+    });
+    await user.click(within(harBoddGruppe).getByText('Ja'));
+
+    const arbeidetUtenforGruppe = screen.getByRole('radiogroup', {
+      name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
+    });
+    expect(arbeidetUtenforGruppe).toBeVisible();
+    expect(
+      screen.queryByRole('radiogroup', {
+        name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
+      })
+    ).not.toBeInTheDocument();
+
+    await user.click(within(arbeidetUtenforGruppe).getByText('Nei'));
+    expect(screen.queryByText('Utenlandsopphold')).not.toBeInTheDocument();
+    await user.click(within(arbeidetUtenforGruppe).getByText('Ja'));
+    expect(screen.getByText('Utenlandsopphold')).toBeVisible();
+
+    await user.click(within(harBoddGruppe).getByText('Nei'));
+    const harArbeidetGruppe = screen.getByRole('radiogroup', {
+      name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
+    });
+    expect(harArbeidetGruppe).toBeVisible();
+    expect(
+      screen.queryByRole('radiogroup', {
+        name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
+      })
+    ).not.toBeInTheDocument();
+
+    await user.click(within(harArbeidetGruppe).getByText('Ja'));
+    const iTilleggGruppe = screen.getByRole('radiogroup', {
+      name: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?',
+    });
+    expect(iTilleggGruppe).toBeVisible();
+    expect(screen.queryByText('Utenlandsopphold')).not.toBeInTheDocument();
+
+    await user.click(within(iTilleggGruppe).getByText('Ja'));
+    expect(screen.getByText('Utenlandsopphold')).toBeVisible();
+    await user.click(within(iTilleggGruppe).getByText('Nei'));
+    expect(screen.queryByText('Utenlandsopphold')).not.toBeInTheDocument();
+
+    await user.click(within(harArbeidetGruppe).getByText('Nei'));
+    expect(screen.queryByRole('radiogroup', { name: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?' }))
+      .not.toBeInTheDocument();
+    expect(screen.getByText('Utenlandsopphold')).toBeVisible();
+  });
+
   it('legg til barn og sjekk at det kan slettes igjen', async () => {
     render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
@@ -95,18 +147,12 @@ describe('DigitaliserSøknad', () => {
     });
     await user.click(within(yrkesSkadeGruppe).getByText('Nei'));
 
-    // harBoddINorgeSiste5År = Ja → viser harArbeidetINorgeSiste5År og arbeidetUtenforNorgeFørSykdom
+    // Har bodd i Norge → spør om arbeid utenfor Norge.
     const harBoddGruppe = screen.getByRole('radiogroup', {
       name: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
     });
     await user.click(within(harBoddGruppe).getByText('Ja'));
 
-    const harArbeidetGruppe = screen.getByRole('radiogroup', {
-      name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
-    });
-    await user.click(within(harArbeidetGruppe).getByText('Nei'));
-
-    // arbeidetUtenforNorgeFørSykdom = Ja → viser "Legg til utenlandsopphold"
     const arbeidetUtenforGruppe = screen.getByRole('radiogroup', {
       name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
     });
@@ -144,5 +190,58 @@ describe('DigitaliserSøknad', () => {
     const opphold = submitted.medlemskap.utenlandsOpphold[0];
     expect(opphold.fraDatoLocalDate).toBe('2020-01-01');
     expect(opphold.tilDatoLocalDate).toBe('2020-12-31');
+  });
+
+  it('sender ikke svar fra medlemskapsspørsmål som er skjult etter endring av svar', async () => {
+    const submitMock = vi.fn();
+    render(<DigitaliserSøknad submit={submitMock} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await user.type(screen.getByRole('textbox', { name: /søknadsdato/i }), '01.01.2024');
+    await user.click(
+      within(
+        screen.getByRole('radiogroup', {
+          name: 'Har brukeren oppgitt at de har en relevant yrkesskade?',
+        })
+      ).getByText('Nei')
+    );
+
+    const harBoddGruppe = screen.getByRole('radiogroup', {
+      name: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
+    });
+    await user.click(within(harBoddGruppe).getByText('Nei'));
+    await user.click(
+      within(
+        screen.getByRole('radiogroup', {
+          name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
+        })
+      ).getByText('Ja')
+    );
+    await user.click(
+      within(
+        screen.getByRole('radiogroup', {
+          name: 'Har søker i tillegg jobbet utenfor Norge i de siste fem årene?',
+        })
+      ).getByText('Ja')
+    );
+
+    await user.click(within(harBoddGruppe).getByText('Ja'));
+    await user.click(
+      within(
+        screen.getByRole('radiogroup', {
+          name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
+        })
+      ).getByText('Nei')
+    );
+    await user.click(
+      within(screen.getByRole('radiogroup', { name: 'Har brukeren oppgitt at de er student?' })).getByText('Nei')
+    );
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
+
+    expect(submitMock).toHaveBeenCalledOnce();
+    const submitted = JSON.parse(submitMock.mock.calls[0][1]);
+    expect(submitted.medlemskap.harBoddINorgeSiste5År).toBe('ja');
+    expect(submitted.medlemskap.arbeidetUtenforNorgeFørSykdom).toBe('nei');
+    expect(submitted.medlemskap).not.toHaveProperty('harArbeidetINorgeSiste5År');
+    expect(submitted.medlemskap).not.toHaveProperty('iTilleggArbeidUtenforNorge');
   });
 });

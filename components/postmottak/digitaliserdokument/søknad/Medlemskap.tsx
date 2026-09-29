@@ -1,6 +1,6 @@
 import { Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { PlusCircleFillIcon } from '@navikt/aksel-icons';
-import { FieldPath, useFieldArray, UseFormReturn } from 'react-hook-form';
+import { FieldPath, useFieldArray, useFormContext } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
 import { JaEllerNei } from 'lib/postmottakForm';
 import { FormFields } from 'components/form/FormHook';
@@ -8,12 +8,12 @@ import { FormField } from 'components/form/FormField';
 import { LeggTilUtenlandsOpphold } from './LeggTilUtenlandsOpphold';
 
 interface Props {
-  form: UseFormReturn<SøknadFormFields>;
   formFields: FormFields<FieldPath<SøknadFormFields>, SøknadFormFields>;
   readOnly: boolean;
 }
 
-export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
+export const Medlemskap = ({ formFields, readOnly }: Props) => {
+  const form = useFormContext<SøknadFormFields>();
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'utenlandsOpphold' });
   const harBoddINorgeSiste5År = form.watch('harBoddINorgeSiste5År');
   const arbeidetUtenforNorgeFørSykdom = form.watch('arbeidetUtenforNorgeFørSykdom');
@@ -24,17 +24,17 @@ export const Medlemskap = ({ form, formFields, readOnly }: Props) => {
     <VStack gap={'space-12'}>
       <FormField form={form} formField={formFields.harBoddINorgeSiste5År} />
       {harBoddINorgeSiste5År === JaEllerNei.Ja && (
-        <>
-          <FormField form={form} formField={formFields.harArbeidetINorgeSiste5År} />
-          <FormField form={form} formField={formFields.arbeidetUtenforNorgeFørSykdom} />
-        </>
+        <FormField form={form} formField={formFields.arbeidetUtenforNorgeFørSykdom} />
+      )}
+      {harBoddINorgeSiste5År === JaEllerNei.Nei && (
+        <FormField form={form} formField={formFields.harArbeidetINorgeSiste5År} />
       )}
       {harBoddINorgeSiste5År === JaEllerNei.Nei && harArbeidetINorgeSiste5År === JaEllerNei.Ja && (
         <FormField form={form} formField={formFields.iTilleggArbeidUtenforNorge} />
       )}
       {(iTilleggArbeidUtenforNorge === JaEllerNei.Ja ||
-        harArbeidetINorgeSiste5År === JaEllerNei.Ja ||
-        arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja) && (
+        arbeidetUtenforNorgeFørSykdom === JaEllerNei.Ja ||
+        harArbeidetINorgeSiste5År === JaEllerNei.Nei) && (
         <VStack gap={'space-8'}>
           <Label size={'small'}>Utenlandsopphold</Label>
           {fields.map((field, index) => (

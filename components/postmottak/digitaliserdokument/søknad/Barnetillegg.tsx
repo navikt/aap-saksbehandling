@@ -1,14 +1,15 @@
 import { Button, HStack, Label, VStack } from '@navikt/ds-react';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { SøknadFormFields } from './DigitaliserSøknad';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { PlusCircleFillIcon } from '@navikt/aksel-icons';
 import { LeggTilBarn } from 'components/postmottak/digitaliserdokument/søknad/LeggTilBarn';
+import { SøknadFormFields } from 'components/postmottak/digitaliserdokument/søknad/DigitaliserSøknad';
 
 interface Props {
-  form: UseFormReturn<SøknadFormFields>;
   readOnly: boolean;
 }
-export const Barnetillegg = ({ form, readOnly }: Props) => {
+
+export const Barnetillegg = ({ readOnly }: Props) => {
+  const form = useFormContext<SøknadFormFields>();
   const { fields, append, remove } = useFieldArray({ control: form.control, name: 'oppgitteBarn' });
 
   return (
