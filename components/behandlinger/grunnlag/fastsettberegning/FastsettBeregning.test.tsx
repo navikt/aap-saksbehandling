@@ -559,6 +559,28 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
     expect(screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).toBeVisible();
   });
 
+  it('skal tilby Sykemeldingsdato, Kravdato, Dato på legeerklæring, Henvist til behandling, Uføretidspunkt og Annet for årsak til ytterligere nedsatt tidspunkt', () => {
+    render(
+      <FastsettBeregning
+        readOnly={false}
+        behandlingVersjon={0}
+        visAarsakDropdowns={true}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+    const dropdown = screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' });
+    const optionLabels = Array.from(dropdown.querySelectorAll('option')).map((option) => option.textContent);
+    expect(optionLabels).toEqual([
+      '',
+      'Sykemeldingsdato',
+      'Kravdato',
+      'Dato på legeerklæring',
+      'Henvist til behandling',
+      'Uføretidspunkt',
+      'Annet',
+    ]);
+  });
+
   it('skal ikke vise dropdown for årsak til ytterligere nedsatt tidspunkt når toggle er av', () => {
     render(
       <FastsettBeregning

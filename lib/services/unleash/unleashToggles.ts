@@ -12,6 +12,9 @@ export const FLAGS = [
   'kopierPerioder',
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
+  'KorrigerSoknadsdato',
+  'ForesporselSendtTilBehandlerFrontend',
+  'StoppAutomatikkForLegeerklaringVedAvslag',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -31,4 +34,7 @@ export const mockedFlags: Flags = {
   kopierPerioder: true,
   HoppOverBeslutterVedAvslagSykdom: true,
   KanVurdereRefusjonIRevurdering: true,
+  KorrigerSoknadsdato: true,
+  ForesporselSendtTilBehandlerFrontend: true,
+  StoppAutomatikkForLegeerklaringVedAvslag: true,
 };

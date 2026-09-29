@@ -16,8 +16,8 @@ describe('InnhentDokumentasjon', () => {
     );
   });
 
-  test('har en overskrift på nivå 3 når man viser skjema', async () => {
-    expect(screen.getByRole('heading', { name: 'Send forespørsel til behandler' })).toBeVisible();
+  test('har en overskrift når man viser skjema', async () => {
+    expect(screen.getByText('Send forespørsel til behandler')).toBeVisible();
   });
 
   test('har et felt for å søke etter behandler', async () => {

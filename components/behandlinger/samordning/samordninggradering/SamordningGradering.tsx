@@ -14,6 +14,7 @@ import {
   SamordningGraderingYtelse,
   SamordningYtelsestype,
   SamordningYtelseVurdering,
+  SamordningYtelseVurderingElement,
 } from 'lib/types/types';
 import { formaterDatoForBackend, formaterDatoForFrontend, sorterEtterEldsteDato } from 'lib/utils/date';
 import { Behovstype } from 'lib/utils/form';
@@ -151,7 +152,19 @@ export const SamordningGradering = ({
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
 
-      const erOverlappendePerioder = perioderSomOverlapper(data.vurderteSamordninger.map((x) => x.periode));
+      const erOverlappendePerioder = data.vurderteSamordninger.some((vurdertSamordning, index) =>
+        data.vurderteSamordninger
+          .slice(index + 1) // Sjekk bare periodene etter denne, så vi ikke sjekker samme par to ganger.
+          .some(
+            (annenSamordning) =>
+              (vurdertSamordning.ytelseType === annenSamordning.ytelseType ||
+                (vurdertSamordning.ytelseType === 'SYKEPENGER' &&
+                  annenSamordning.ytelseType === 'FERIE_I_SYKEPENGEPERIODE') ||
+                (vurdertSamordning.ytelseType === 'FERIE_I_SYKEPENGEPERIODE' &&
+                  annenSamordning.ytelseType === 'SYKEPENGER')) &&
+              perioderSomOverlapper([vurdertSamordning.periode, annenSamordning.periode])
+          )
+      );
 
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>
@@ -175,15 +188,18 @@ export const SamordningGradering = ({
               behovstype: Behovstype.AVKLAR_SAMORDNING_GRADERING,
               vurderingerForSamordning: {
                 begrunnelse: data.begrunnelse,
-                vurderteSamordningerData: data.vurderteSamordninger?.map((vurdertSamordning) => ({
-                  manuell: vurdertSamordning.manuell,
-                  gradering: vurdertSamordning.gradering,
-                  periode: {
-                    fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
-                    tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
-                  },
-                  ytelseType: vurdertSamordning.ytelseType!,
-                })),
+                vurderteSamordningerData: data.vurderteSamordninger?.map(
+                  (vurdertSamordning) =>
+                    ({
+                      manuell: vurdertSamordning.manuell,
+                      gradering: vurdertSamordning.gradering!,
+                      periode: {
+                        fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
+                        tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
+                      },
+                      ytelseType: vurdertSamordning.ytelseType!,
+                    }) satisfies SamordningYtelseVurderingElement
+                ),
               },
             },
             referanse: behandlingsreferanse,
@@ -310,7 +326,7 @@ export const SamordningGradering = ({
                     </BodyLong>
                     <BodyLong size="small">
                       Hvis det er andre årsaker til at virkningstidspunktet bør vurderes igjen, så kan du opprette en
-                      oppfølgingsoppgave
+                      oppfølgingsoppgave.
                     </BodyLong>
 
                     <Button

@@ -2,7 +2,7 @@
 
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { OverleveringGrunnlag } from 'lib/types/postmottakTypes';
+import { AvklarOverleveringLøsning, OverleveringGrunnlag } from 'lib/types/postmottakTypes';
 import { SubmitEventHandler } from 'react';
 import { VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
@@ -10,6 +10,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingsVersjon: number;
@@ -20,9 +21,12 @@ interface Props {
 
 interface FormFields {
   skalOverleveres: JaEllerNei;
+  begrunnelse: string;
 }
 
 export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+  const stoppAutomatikkForLegeerklaringVedAvslag = useFeatureFlag('StoppAutomatikkForLegeerklaringVedAvslag');
+
   const { formFields, form } = useConfigForm<FormFields>(
     {
       skalOverleveres: {
@@ -32,6 +36,12 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
         rules: { required: 'Du må svare på om dokumentet skal overleveres til fagsystem' },
         defaultValue: getJaNeiEllerUndefined(grunnlag.vurdering?.skalOverleveres),
         options: JaEllerNeiOptions,
+      },
+      begrunnelse: {
+        type: 'textarea',
+        label: 'Begrunnelse',
+        defaultValue: grunnlag.vurdering?.begrunnelse || '',
+        rules: stoppAutomatikkForLegeerklaringVedAvslag ? { required: 'Du må oppgi begrunnelse.' } : {},
       },
     },
     { readOnly }
@@ -49,7 +59,8 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
         behov: {
           behovstype: Behovstype.AVKLAR_OVERLEVERING,
           skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
-        },
+          ...(stoppAutomatikkForLegeerklaringVedAvslag ? { begrunnelse: data.begrunnelse } : {}),
+        } satisfies AvklarOverleveringLøsning,
         referanse: behandlingsreferanse,
       });
     })(event);
@@ -71,6 +82,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
       <VStack gap={'space-24'}>
         <ServerSentEventStatusAlert status={status} />
         <FormField form={form} formField={formFields.skalOverleveres} />
+        {stoppAutomatikkForLegeerklaringVedAvslag && <FormField form={form} formField={formFields.begrunnelse} />}
       </VStack>
     </PostmottakVilkårskort>
   );

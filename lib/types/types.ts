@@ -173,6 +173,8 @@ export type SamordningGraderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingGrunnlagDTO'];
 export type SamordningYtelseVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO'];
+export type SamordningYtelseVurderingElement =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.samordning.SamordningVurderingData'];
 export type SamordningGraderingYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO'];
 export type SamordningYtelsestype =
@@ -430,6 +432,10 @@ export type BehandlingPersoninfo = components['schemas']['no.nav.aap.behandlings
 
 export type MeldingMedDokumenterDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto'];
+export type MeldingerResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingerResponse'];
+export type KommendeMeldingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.KommendeMeldingDto'];
 export type MeldingDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto'];
 export type DokumentInfoDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.DokumentInfoDto'];
@@ -506,6 +512,9 @@ export type ForeslåVedtakVedtakslengdeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons'];
 
 export type UnderveisAvslagsÅrsak = NonNullable<UnderveisGrunnlag['avslagsårsak']>;
+
+export type VilkårsavslagDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VilkårsavslagDto'];
 
 export type AutomatiskLovvalgOgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
@@ -636,6 +645,12 @@ export const NyÅrsakTilBehandlingV0 = 'NyÅrsakTilBehandlingV0';
 export type NyÅrsakTilBehandlingV0 =
   components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof NyÅrsakTilBehandlingV0}`] & {
     meldingType: typeof NyÅrsakTilBehandlingV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
+  };
+
+export const KorrigerSøknadsdatoV0 = 'KorrigerSøknadsdatoV0';
+export type KorrigerSøknadsdatoV0 =
+  components['schemas'][`no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.${typeof KorrigerSøknadsdatoV0}`] & {
+    meldingType: typeof KorrigerSøknadsdatoV0 /* Hadde vært fint om dette kom med i kontrakten ... */;
   };
 
 export type AvklarOppfolgingsoppgaveGrunnlagResponse =
