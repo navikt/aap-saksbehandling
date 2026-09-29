@@ -274,6 +274,48 @@ describe('Samordning gradering', () => {
     ).not.toBeInTheDocument();
   });
 
+  test('gir feilmelding når ferie i sykepengeperioden overlapper med sykepenger', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const grunnlagMedOverlappendeFerieOgSykepenger: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [],
+      vurdering: {
+        begrunnelse: 'Min vurdering',
+        vurderinger: [
+          {
+            ytelseType: 'SYKEPENGER',
+            gradering: 100,
+            manuell: true,
+            periode: { fom: '2025-01-01', tom: '2025-01-31' },
+          },
+          {
+            ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
+            gradering: 100,
+            manuell: true,
+            periode: { fom: '2025-01-15', tom: '2025-01-20' },
+          },
+        ],
+        vurderingerMeta: {},
+      },
+    };
+
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
+        <SamordningGradering grunnlag={grunnlagMedOverlappendeFerieOgSykepenger} readOnly={false} behandlingVersjon={0} />
+      </FeatureFlagProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Endre' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(
+      await screen.findByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).toBeVisible();
+  });
+
   test('viser feilmelding og åpner ikke ferie-modal dersom radene i tabellen ikke er gyldige', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
