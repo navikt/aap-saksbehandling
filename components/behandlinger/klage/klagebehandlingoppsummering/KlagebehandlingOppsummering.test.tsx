@@ -4,6 +4,7 @@ import { KlagebehandlingOppsummering } from 'components/behandlinger/klage/klage
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag } from 'lib/types/types';
 
 const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
+  påklagetVedtakType: 'KELVIN_BEHANDLING',
   vurdering: {
     begrunnelse: '',
     innstilling: 'DELVIS_OMGJØR',
@@ -18,9 +19,10 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
       },
     },
   },
-  harTilgangTilÅSaksbehandle: true,
+  harTilgangTilÅSaksbehandle: true
 };
 const grunnlagNay: KlagebehandlingNayGrunnlag = {
+  påklagetVedtakType: 'KELVIN_BEHANDLING',
   vurdering: {
     begrunnelse: '',
     innstilling: 'OMGJØR',
@@ -35,7 +37,7 @@ const grunnlagNay: KlagebehandlingNayGrunnlag = {
       },
     },
   },
-  harTilgangTilÅSaksbehandle: true,
+  harTilgangTilÅSaksbehandle: true
 };
 describe('Klage - oppsummering', () => {
   it('Skal ha en overskrift', () => {

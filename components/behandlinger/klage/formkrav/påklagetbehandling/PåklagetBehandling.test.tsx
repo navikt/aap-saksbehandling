@@ -5,6 +5,7 @@ import { PåklagetBehandlingGrunnlag } from 'lib/types/types';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 const grunnlag: PåklagetBehandlingGrunnlag = {
+  avsluttaTilbakekrevingsbehandlinger: [],
   harTilgangTilÅSaksbehandle: true,
   behandlinger: [
     {
@@ -35,7 +36,7 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       referanse: 'uuid-3',
     },
   ],
-  vurderingerMeta: {},
+  vurderingerMeta: {}
 };
 
 beforeEach(() => {
