@@ -29,6 +29,7 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
+  RegistrerMeldedatoRequest,
   RettighetsinfoDto,
   SakPersoninfo,
   SaksInfo,
@@ -43,7 +44,6 @@ import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } f
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
-import { RegistrerMeldedatoRequest } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 
 const BASE_URL = '/saksbehandling';
 
@@ -325,11 +325,7 @@ export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortReq
 }
 
 export function clientRegistrerMeldedato(saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) {
-  return clientFetch(
-    `${BASE_URL}/api/meldekort/${saksnummer}/registrer-meldedato`,
-    'POST',
-    registrerMeldedatoRequest
-  );
+  return clientFetch(`${BASE_URL}/api/meldekort/${saksnummer}/registrer-meldedato`, 'POST', registrerMeldedatoRequest);
 }
 
 export function clientHentAInntektRedirectUrl(saksnummer: string) {
