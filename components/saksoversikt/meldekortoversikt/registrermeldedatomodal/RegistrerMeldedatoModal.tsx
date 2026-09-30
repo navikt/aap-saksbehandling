@@ -5,11 +5,13 @@ import { clientRegistrerMeldedato } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
-import { erDatoIFremtiden } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Alert } from 'components/alert/Alert';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { useMeldekortProsessering } from 'hooks/saksbehandling/MeldekortProsesseringHook';
+import { useSak } from 'hooks/SakHook';
 
 interface Props {
   isOpen: boolean;
@@ -28,6 +30,8 @@ const defaultValues: RegistrerMeldedatoFormFields = {
 
 export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
   const { saksnummer } = useParamsMedType();
+  const { sak } = useSak();
+
   const { refetchMeldekort } = useMeldekort();
 
   const [error, setError] = useState<string>();
@@ -50,6 +54,11 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
           validerIkkeIFremtiden: (value) => {
             if (erDatoIFremtiden(value)) {
               return 'Meldedato kan ikke være i fremtiden.';
+            }
+          },
+          validerIkkeFørVirkningstidspunkt: (value) => {
+            if (sak.virkningsTidspunkt && erDatoFoerDato(value, formaterDatoForFrontend(sak.virkningsTidspunkt))) {
+              return `Meldedato kan ikke være før virkningstidspunktet (${formaterDatoForFrontend(sak.virkningsTidspunkt)}).`;
             }
           },
         },
