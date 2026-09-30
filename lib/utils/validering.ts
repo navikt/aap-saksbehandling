@@ -120,6 +120,8 @@ export function validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
     const ikkeRelevantFra = startOfDay(new Dato(periode.fom).dato);
     const ikkeRelevantTil = startOfDay(new Dato(periode.tom).dato);
 
+    console.log(periode);
+
     nyeVurderinger.forEach((vurdering, index) => {
       const vurderingFra = startOfDay(new Dato(vurdering.fraDato!).dato);
       if (

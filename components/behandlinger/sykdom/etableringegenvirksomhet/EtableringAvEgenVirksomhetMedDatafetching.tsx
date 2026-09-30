@@ -32,6 +32,7 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
     stegData.erIkkePåVent
   );
 
+
   return (
     <EtableringAvEgenVirksomhet
       grunnlag={grunnlag.data}

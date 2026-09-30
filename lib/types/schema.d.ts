@@ -14402,22 +14402,26 @@ export interface components {
       begrunnelse: string;
       /** @enum {string|null} */
       brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
+      'erRegistrertIN\u00F8dvendigeOffentligeRegister'?: boolean | null;
+      /** @enum {string|null} */
+      fase?: 'OPPSTART' | 'UTVIKLING' | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom: string;
       foreliggerFagligVurdering: boolean;
+      jobberBrukerAktivMedVirksomheten?: boolean | null;
       'kanF\u00F8reTilSelvfors\u00F8rget'?: boolean | null;
       oppfylt: boolean;
-      oppstartsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      oppstartsPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       orgNr?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       tom?: string | null;
-      utviklingsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      utviklingsPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
@@ -17993,21 +17997,33 @@ export interface components {
       begrunnelse: string;
       /** @enum {string|null} */
       brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
+      'erRegistrertIN\u00F8dvendigeOffentligeRegister'?: boolean | null;
+      /** @enum {string|null} */
+      fase?: 'OPPSTART' | 'UTVIKLING' | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom: string;
       foreliggerFagligVurdering: boolean;
+      jobberBrukerAktivMedVirksomheten?: boolean | null;
       'kanF\u00F8reTilSelvfors\u00F8rget'?: boolean | null;
-      oppstartsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /**
+       * @deprecated
+       * @description Bruk fase + fom. Fjernes etter frontend mignering
+       */
+      oppstartsPerioder?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       orgNr?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       tom?: string | null;
-      utviklingsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /**
+       * @deprecated
+       * @description Bruk fase + fom. Fjernes etter frontend mignering
+       */
+      utviklingsPerioder?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
     };
