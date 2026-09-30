@@ -5,7 +5,7 @@ import styles from './brevoppsummering.module.css';
 import { BodyShort, Button, Heading, HStack, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { useRouter } from 'next/navigation';
-import { useFeatureFlag } from '../../../../context/UnleashContext';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 type BrevOppsummeringProps = {
   sendteBrev: BrevGrunnlagBrev[];

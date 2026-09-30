@@ -61,17 +61,17 @@ export const SkriveBrevMedDataFetching = async ({
       />
     );
   }
-
+  const skrivBrevAvklaringsbehovKode = '5050'
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
   const sendteBrev = brevGrunnlag.data.brevGrunnlag.filter(
-    (x) => x.status === 'FULLFØRT' && x.brev != null && x.avklaringsbehovKode === '5050'
+    (x) => x.status === 'FULLFØRT' && x.brev != null && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode
   );
 
   const automatiskBrev = brevGrunnlag.data.brevGrunnlag.find(
-    (x) => x.status === 'FULLFØRT' && x.avklaringsbehovKode === '5050' && x.brevtype === 'AVSLAG_11_5'
+    (x) => x.status === 'FULLFØRT' && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode && x.brevtype === 'AVSLAG_11_5'
   );
   const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
-    (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
+    (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode
   );
 
   const brukNyBrevbygger = !!brev?.brevmal && !!brev?.brevdata;
