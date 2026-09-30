@@ -23,6 +23,7 @@ export interface VilkårsKortMedFormOgMellomlagringProps {
   status: LøsBehovOgGåTilNesteStegStatus;
   løsBehovOgGåTilNesteStegError: ApiException | undefined;
   knappTekst?: string;
+  skjulBekreftKnapp?: boolean;
   defaultOpen?: boolean;
   vilkårTilhørerNavKontor: boolean;
   vurderingerMeta?: VurderingerMeta;
@@ -43,6 +44,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
   løsBehovOgGåTilNesteStegError,
   vilkårTilhørerNavKontor,
   knappTekst = 'Bekreft',
+  skjulBekreftKnapp = false,
   defaultOpen = true,
   vurderingerMeta,
   onDeleteMellomlagringClick,
@@ -96,7 +98,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
                 <VStack gap="space-16">
                   <HStack gap="space-16">
                     {/* Modus-styrte knapper */}
-                    {visningModus === 'AKTIV_UTEN_AVBRYT' && (
+                    {visningModus === 'AKTIV_UTEN_AVBRYT' && !skjulBekreftKnapp && (
                       <>
                         <Button loading={isLoading}>{knappTekst}</Button>
                       </>
@@ -104,7 +106,7 @@ export const VilkårskortMedFormOgMellomlagring = ({
 
                     {visningModus === 'AKTIV_MED_AVBRYT' && (
                       <>
-                        <Button loading={isLoading}>{knappTekst}</Button>
+                        {!skjulBekreftKnapp && <Button loading={isLoading}>{knappTekst}</Button>}
                         {visningActions && (
                           <Button
                             type="button"
