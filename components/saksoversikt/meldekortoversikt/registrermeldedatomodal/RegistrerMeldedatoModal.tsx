@@ -9,6 +9,7 @@ import { erDatoIFremtiden } from 'lib/validation/dateValidation';
 import { Alert } from 'components/alert/Alert';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
+import { useMeldekortProsessering } from 'hooks/saksbehandling/MeldekortProsesseringHook';
 
 interface Props {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+  const { ventPåMeldekortProsessering } = useMeldekortProsessering();
 
   const { formFields, form } = useConfigForm<RegistrerMeldedatoFormFields>({
     begrunnelse: {
@@ -91,8 +93,20 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
                   setError('Noe gikk galt ved innsending: ' + registrerMeldedatoResponse.apiException.message);
                   setIsLoading(false);
                 } else {
-                  refetchMeldekort();
-                  lukkOgNullstill();
+                  ventPåMeldekortProsessering({
+                    onSuccess: () => {
+                      refetchMeldekort();
+                      lukkOgNullstill();
+                    },
+                    onTimeout: (timeoutError) => {
+                      setError(timeoutError);
+                      setIsLoading(false);
+                    },
+                    onError: (processingError) => {
+                      setError(processingError);
+                      setIsLoading(false);
+                    },
+                  });
                 }
               })}
             >
