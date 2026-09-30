@@ -42,6 +42,6 @@ describe('Innhent dokumentasjon', () => {
         <InnhentDokumentasjon />
       </FeatureFlagProvider>
     );
-    expect(screen.getByRole('button', { name: 'Send forespørsel til behandler' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Be om opplysninger fra behandler' })).toBeVisible();
   });
 });

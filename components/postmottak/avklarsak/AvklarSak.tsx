@@ -2,8 +2,13 @@
 
 import { SubmitEventHandler } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvsenderMottakerIdType, FinnSakGrunnlag, JournalpostInfo } from 'lib/types/postmottakTypes';
-import { Detail, Label, Radio, VStack } from '@navikt/ds-react';
+import {
+  AvklarSaksnummerLøsning,
+  AvsenderMottakerIdType,
+  FinnSakGrunnlag,
+  JournalpostInfo,
+} from 'lib/types/postmottakTypes';
+import { BodyShort, Detail, Label, Radio, VStack } from '@navikt/ds-react';
 import { ServerSentEventStatusAlert } from 'components/postmottak/serversenteventstatusalert/ServerSentEventStatusAlert';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { TextFieldToggle } from 'components/form/TextFieldToggle';
@@ -94,7 +99,7 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     status,
     isLoading,
     løsBehovOgGåTilNesteStegError: error,
-  } = usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK');
+  } = usePostmottakLøsBehovOgGåTilNesteSteg<AvklarSaksnummerLøsning>('AVKLAR_SAK');
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       løsBehovOgGåTilNesteSteg({
@@ -122,6 +127,10 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_SAK');
 
   const valgtIdType = form.watch('avsenderMottaker.idType');
+  const valgtSaksnummer = form.watch('knyttTilSak');
+  const valgtSakErTrukket = grunnlag.saksinfo.some(
+    (sak) => sak.saksnummer === valgtSaksnummer && sak.resultat === 'TRUKKET'
+  );
 
   return (
     <PostmottakVilkårskort
@@ -161,6 +170,18 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
 
           <Radio value={GENERELL}>Journalfør på generell sak</Radio>
         </RadioGroupWrapper>
+
+        {valgtSakErTrukket && (
+          <Alert variant="warning">
+            <BodyShort size="small">
+              Det er ikke mulig å opprette ny behandling/revurdering ved journalføring på en trukket sak.{' '}
+            </BodyShort>
+            <BodyShort size="small">
+              Velg Opprett ny sak eller en annen sak dersom det er ønskelig at journalposten skal påvirke
+              saksbehandlingen.
+            </BodyShort>
+          </Alert>
+        )}
 
         <div>
           <TextFieldToggle

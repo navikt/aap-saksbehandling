@@ -5,7 +5,7 @@ import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-reac
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
 import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
-import { DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
+import { Arenastatus, DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -24,6 +24,8 @@ import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/Utl
 import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { DialogMedBehandlerInfoboks } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
 
 interface Props {
   sak: SaksInfoType;
@@ -31,15 +33,17 @@ interface Props {
   oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
+  arenaStatus?: Arenastatus;
 }
 
-export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning }: Props) => {
+export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning, arenaStatus }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
   const visUforeTag = !uføreTagSkjult && !!oppgaveVisningsinfo?.uførevedtakinfo;
+  const visForespørselSendtTilBehandler = useFeatureFlag('ForesporselSendtTilBehandlerFrontend');
 
   const behandlingErAvsluttet = behandling?.status === 'AVSLUTTET';
 
@@ -145,7 +149,7 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               />
             </div>
           )}
-          {behandling.arenaStatus?.harArenaHistorikk && (
+          {arenaStatus?.harArenaHistorikk && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>
@@ -187,6 +191,11 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
                 virkningsdato={oppgaveVisningsinfo.uførevedtakinfo.virkningsdato}
                 resultat={oppgaveVisningsinfo.uførevedtakinfo.resultat}
               />
+            </div>
+          )}
+          {visForespørselSendtTilBehandler && oppgaveVisningsinfo?.forespørselSendtTilBehandler && (
+            <div className={styles.oppgavestatus}>
+              <DialogMedBehandlerInfoboks />
             </div>
           )}
           {!behandlingErAvsluttet && (
