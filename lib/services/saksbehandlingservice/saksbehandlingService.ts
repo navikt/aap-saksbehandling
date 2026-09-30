@@ -62,7 +62,6 @@ import {
   MeldekortProsesseringResponse,
   MeldeperiodeMedMeldekortDto,
   MeldingerResponse,
-  MeldingMedDokumenterDto,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
   NavEnhetRequest,
@@ -80,6 +79,7 @@ import {
   PeriodisertLovvalgMedlemskapGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
+  RegistrerMeldedatoRequest,
   RettighetsinfoDto,
   RettighetsperiodeGrunnlag,
   SakPersoninfo,
@@ -862,14 +862,9 @@ export const oppdaterMeldekort = async (saksnummer: string, oppdaterMeldekortReq
   );
 };
 
-export interface RegistrerMeldedatoRequest {
-  begrunnelse: string;
-  meldeDato: string;
-}
-
 export const registrerMeldedato = async (saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) => {
   return apiFetch(
-    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/registrer-meldedato`, // TODO Fake endepunkt, legg til korrekt path når backend er klar
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/registrer-meldedato`,
     saksbehandlingApiScope,
     'POST',
     registrerMeldedatoRequest

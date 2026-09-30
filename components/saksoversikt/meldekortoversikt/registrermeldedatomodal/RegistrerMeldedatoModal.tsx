@@ -29,14 +29,13 @@ const defaultValues: RegistrerMeldedatoFormFields = {
 };
 
 export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
-  const { saksnummer } = useParamsMedType();
   const { sak } = useSak();
-
+  const { saksnummer } = useParamsMedType();
   const { refetchMeldekort } = useMeldekort();
+  const { ventPåMeldekortProsessering } = useMeldekortProsessering();
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
-  const { ventPåMeldekortProsessering } = useMeldekortProsessering();
 
   const { formFields, form } = useConfigForm<RegistrerMeldedatoFormFields>({
     begrunnelse: {
@@ -66,12 +65,12 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
     },
   });
 
-  const lukkOgNullstill = () => {
+  function lukkOgNullstill() {
     setIsOpen(false);
     setIsLoading(false);
     setError(undefined);
     form.reset(defaultValues);
-  };
+  }
 
   return (
     <Dialog
@@ -125,7 +124,7 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
                 <Alert variant={'warning'}>
                   Du skal kun legge inn faktisk dato brukeren har meldt seg. Hvis det skal vurderes om det er rimelig
                   grunn til at brukeren ikke har meldt seg, så må du opprette revurdering på § 11-10 Overstyr perioder
-                  uten oppfylt meldeplikt. Meldt dato kan ikke angres etter bekreftelse
+                  uten oppfylt meldeplikt. Meldt dato kan ikke angres etter bekreftelse.
                 </Alert>
                 {error && <Alert variant={'error'}>{error}</Alert>}
               </VStack>
