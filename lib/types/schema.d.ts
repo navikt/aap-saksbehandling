@@ -4275,7 +4275,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/brev/{brevbestillingReferanse}/mottakere': {
+  '/api/brev/{brevbestillingReferanse}/oppdater-mottakere': {
     parameters: {
       query?: never;
       header?: never;
@@ -4298,6 +4298,44 @@ export interface paths {
           'application/json': components['schemas']['no.nav.aap.brev.kontrakt.OppdaterMottakereRequest'];
         };
       };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': string;
+          };
+        };
+      };
+    };
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/brev/{brevbestillingReferanse}/fjern-kopimottaker': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
       responses: {
         /** @description OK */
         200: {
@@ -4543,6 +4581,48 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/{brevbestillingReferanse}/v2/kan-distribuere-brev': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description brevbestillingReferanse */
+          brevbestillingReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevV2Request'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': boolean;
           };
         };
       };
@@ -14545,6 +14625,7 @@ export interface components {
         | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_4'
         | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_MEDLEMSKAP'
         | 'VEDTAK_UTVID_VEDTAKSLENGDE';
+      bruker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.IdentOgNavn'];
       harTilgangTilÅSendeBrev: boolean;
       kopimottaker?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
       mottaker: components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
@@ -14564,8 +14645,14 @@ export interface components {
       /** @enum {string} */
       status: 'AVBRUTT' | 'FORHÅNDSVISNING_KLAR' | 'FULLFØRT' | 'SENDT';
     };
+    'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.IdentOgNavn': {
+      ident: string;
+      navn: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker': {
       ident: string;
+      /** @enum {string|null} */
+      identType?: 'FNR' | 'HPRNR' | 'ORGNR' | 'UTL_ORG' | null;
       navn: string;
       navnOgAdresse?: components['schemas']['no.nav.aap.brev.kontrakt.NavnOgAdresse'];
     };
@@ -21599,6 +21686,9 @@ export interface components {
     'no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest': {
       brukerIdent: string;
       mottakerIdentListe: string[];
+    };
+    'no.nav.aap.brev.kontrakt.KanDistribuereBrevV2Request': {
+      mottakerId: string;
     };
     'no.nav.aap.brev.kontrakt.MottakerDistStatus': {
       kanDistribuere: boolean;

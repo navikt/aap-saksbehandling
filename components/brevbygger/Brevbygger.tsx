@@ -4,7 +4,7 @@ import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navi
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
-import { BrevdataDto, BrevGrunnlagBrev, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
+import { BrevdataDto, BrevGrunnlagBrev, IdentOgNavn, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useRouter } from 'next/navigation';
@@ -12,12 +12,11 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
-import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
 import { Delmal } from 'components/brevbygger/Delmal';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
 import { RefusjonskravVisning } from 'components/brevbygger/RefusjonskravVisning';
 import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
-import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
+import { VelgMottakere } from 'components/brevbygger/mottaker/VelgMottakere';
 import { BrevmalType } from 'components/brevbygger/brevmodellTypes';
 import { initialiserFormVerdier } from 'components/brevbygger/formUtils';
 import { BrevFormVerdier } from 'components/brevbygger/types';
@@ -26,10 +25,14 @@ import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggå
 
 import styles from './Brevbygger.module.css';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
+import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 
 interface BrevbyggerProps {
   referanse: string;
   behovstype: Behovstype;
+  bruker: IdentOgNavn;
   behandlingVersjon: number;
   readOnly: boolean;
   visAvbryt?: boolean;
@@ -52,6 +55,7 @@ export const Brevbygger = ({
   brevmal,
   brevdata,
   behovstype,
+  bruker,
   mottaker,
   kopimottaker,
   fullmektig,
@@ -61,6 +65,8 @@ export const Brevbygger = ({
   refusjonskravgrunnlag,
   brevtype,
 }: BrevbyggerProps) => {
+  const redigerMottakerBrevbygger = useFeatureFlag('RedigerMottakerBrevbygger');
+
   const { parsedBrevmal, parsingFeilmelding } = useMemo<ParsingResultat>(() => {
     try {
       return {
@@ -125,7 +131,7 @@ export const Brevbygger = ({
         behov: {
           behovstype,
           brevbestillingReferanse: referanse,
-          mottakere: valgteMottakere,
+          mottakere: redigerMottakerBrevbygger ? [] : valgteMottakere,
           handling: 'FERDIGSTILL',
         },
         referanse: behandlingsreferanse,
@@ -156,18 +162,29 @@ export const Brevbygger = ({
   return (
     <>
       <Box>
+        {!redigerMottakerBrevbygger && fullmektig && mottaker && (
+          <VelgeMottakere
+            setMottakere={setMottakere}
+            readOnly={readOnly}
+            brukerNavn={bruker.navn}
+            bruker={mottaker}
+            fullmektig={fullmektig}
+          />
+        )}
         <VStack gap="space-16">
           <RefusjonskravVisning refusjonskravgrunnlag={refusjonskravgrunnlag} />
           {/* Antall kolonner som returneres fra Delmal må matche antallet kolonner her. Ønsker at kolonnene skal være like brede på tvers, dermed er grid definert her */}
           <HGrid columns={'1fr 2fr'} gap={'space-12 space-24'}>
-            <VelgeMottakere
-              bestillingsreferanse={referanse}
-              setMottakere={setMottakere}
-              readOnly={readOnly}
-              mottaker={mottaker}
-              kopimottaker={kopimottaker}
-              fullmektig={fullmektig}
-            />
+            {redigerMottakerBrevbygger && (
+              <VelgMottakere
+                bestillingsreferanse={referanse}
+                readOnly={readOnly}
+                bruker={bruker}
+                initellMottaker={mottaker}
+                initiellKopimottaker={kopimottaker}
+                fullmektig={fullmektig}
+              />
+            )}
             <StandardtekstBoks />
             <div
               className={styles.brevheader}
@@ -195,13 +212,15 @@ export const Brevbygger = ({
         </Box>
 
         <HStack gap="space-8" justify="space-between" marginBlock="space-24">
-          <Distribusjonssjekk
-            readOnly={readOnly}
-            referanse={referanse}
-            valgteMottakere={valgteMottakere}
-            distribusjonssjekkFeil={distribusjonssjekkFeil}
-            setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
-          />
+          {!redigerMottakerBrevbygger && (
+            <Distribusjonssjekk
+              readOnly={readOnly}
+              referanse={referanse}
+              valgteMottakere={valgteMottakere}
+              distribusjonssjekkFeil={distribusjonssjekkFeil}
+              setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
+            />
+          )}
           <HStack gap={'space-8'}>
             {visAvbryt && (
               <Button
