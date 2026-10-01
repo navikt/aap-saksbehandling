@@ -57,13 +57,6 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string, oppholdTi
   const énMånedEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 1));
   const fireMånederEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 4));
 
-  console.log('oppholdTilDato', oppholdTilDato);
-  console.log('fireMånederEtterInnleggelsesmåned', fireMånederEtterInnleggelsesmåned);
-  console.log(
-    'isAfter(oppholdTilDato, fireMånederEtterInnleggelsesmåned)',
-    isAfter(oppholdTilDato, fireMånederEtterInnleggelsesmåned)
-  );
-
   const visFireMånederRegel =
     isAfter(oppholdTilDato, fireMånederEtterInnleggelsesmåned) ||
     isEqual(oppholdTilDato, fireMånederEtterInnleggelsesmåned);
