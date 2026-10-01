@@ -16,6 +16,7 @@ export const FLAGS = [
   'KorrigerSoknadsdato',
   'ForesporselSendtTilBehandlerFrontend',
   'StoppAutomatikkForLegeerklaringVedAvslag',
+  'DigitaliserSoknadMedlemskapEndreVisning',
   'SammenhengendeInstitusjonsopphold',
 ] as const;
 
@@ -40,5 +41,6 @@ export const mockedFlags: Flags = {
   KorrigerSoknadsdato: true,
   ForesporselSendtTilBehandlerFrontend: true,
   StoppAutomatikkForLegeerklaringVedAvslag: true,
+  DigitaliserSoknadMedlemskapEndreVisning: true,
   SammenhengendeInstitusjonsopphold: true,
 };

@@ -28,6 +28,7 @@ describe('Klage - vurdering nay', () => {
     render(
       <KlagebehandlingVurderingNay
         grunnlag={{
+          påklagetVedtakType: 'KELVIN_BEHANDLING',
           vurdering: {
             begrunnelse: 'Min begrunnelse',
             notat: 'Test notat',
@@ -114,6 +115,7 @@ describe('mellomlagring', () => {
   };
 
   const grunnlagMedVurdering: KlagebehandlingNayGrunnlag = {
+    påklagetVedtakType: 'KELVIN_BEHANDLING',
     harTilgangTilÅSaksbehandle: true,
     vurdering: {
       begrunnelse: 'Dette er min vurdering som er bekreftet',

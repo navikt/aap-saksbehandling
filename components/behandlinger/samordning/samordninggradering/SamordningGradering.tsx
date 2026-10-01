@@ -152,7 +152,19 @@ export const SamordningGradering = ({
     form.handleSubmit(async (data) => {
       setErrorMessage(undefined);
 
-      const erOverlappendePerioder = perioderSomOverlapper(data.vurderteSamordninger.map((x) => x.periode));
+      const erOverlappendePerioder = data.vurderteSamordninger.some((vurdertSamordning, index) =>
+        data.vurderteSamordninger
+          .slice(index + 1) // Sjekk bare periodene etter denne, så vi ikke sjekker samme par to ganger.
+          .some(
+            (annenSamordning) =>
+              (vurdertSamordning.ytelseType === annenSamordning.ytelseType ||
+                (vurdertSamordning.ytelseType === 'SYKEPENGER' &&
+                  annenSamordning.ytelseType === 'FERIE_I_SYKEPENGEPERIODE') ||
+                (vurdertSamordning.ytelseType === 'FERIE_I_SYKEPENGEPERIODE' &&
+                  annenSamordning.ytelseType === 'SYKEPENGER')) &&
+              perioderSomOverlapper([vurdertSamordning.periode, annenSamordning.periode])
+          )
+      );
 
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>

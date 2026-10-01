@@ -26,6 +26,9 @@ import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { FormProvider } from 'react-hook-form';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { MedlemskapV2 } from './MedlemskapV2';
 
 export type Utenlandsopphold = {
   land: string;
@@ -207,7 +210,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
         type: 'fieldArray',
       },
     },
-    { readOnly }
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const handleSubmit: SubmitEventHandler = (event) => {
@@ -215,27 +218,36 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       submit('SØKNAD', mapTilSøknadKontrakt(data), parseDatoFraDatePicker(data.søknadsDato)!)
     )(event);
   };
+
+  const ErDigitaliserSoknadMedlemskapEndreVisningEnabled = useFeatureFlag('DigitaliserSoknadMedlemskapEndreVisning');
+
   return (
     <VilkårsKort heading={'Søknad'}>
-      <form onSubmit={handleSubmit}>
-        <VStack gap={'space-24'}>
-          <VStack gap={'space-12'}>
-            {grunnlag.erPapir && <p>Papirsøknader skal justeres for postgang</p>}
-            <FormField form={form} formField={formFields.søknadsDato} />
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit}>
+          <VStack gap={'space-24'}>
+            <VStack gap={'space-12'}>
+              {grunnlag.erPapir && <p>Papirsøknader skal justeres for postgang</p>}
+              <FormField form={form} formField={formFields.søknadsDato} />
+            </VStack>
+            <div>
+              <FormField form={form} formField={formFields.yrkesSkade} />
+            </div>
+            <Barnetillegg readOnly={readOnly} />
+            {ErDigitaliserSoknadMedlemskapEndreVisningEnabled ? (
+              <MedlemskapV2 formFields={formFields} readOnly={readOnly} />
+            ) : (
+              <Medlemskap form={form} formFields={formFields} readOnly={readOnly} />
+            )}
+            <Student formFields={formFields} />
+            {!readOnly && (
+              <Button loading={isLoading} className={'fit-content'}>
+                Neste
+              </Button>
+            )}
           </VStack>
-          <div>
-            <FormField form={form} formField={formFields.yrkesSkade} />
-          </div>
-          <Barnetillegg form={form} readOnly={readOnly} />
-          <Medlemskap form={form} formFields={formFields} readOnly={readOnly} />
-          <Student form={form} formFields={formFields} />
-          {!readOnly && (
-            <Button loading={isLoading} className={'fit-content'}>
-              Neste
-            </Button>
-          )}
-        </VStack>
-      </form>
+        </form>
+      </FormProvider>
     </VilkårsKort>
   );
 };
