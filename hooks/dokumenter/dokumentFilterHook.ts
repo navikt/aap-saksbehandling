@@ -33,7 +33,7 @@ export function useLagretDokumentFilter(): {
 
   const hentFilter = useCallback((): DokumentFilterFormFields | undefined => {
     try {
-      const obj = JSON.parse(localStorage[KEY]) as LagretDokumentFilterData;
+      const obj: LagretDokumentFilterData = JSON.parse(localStorage[KEY]);
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         return obj.data;
       } else {

@@ -22,10 +22,10 @@ export function useBackendSortering<T>(scope: string): {
 
   useEffect(() => {
     lagreSortering(bruker?.NAVident, sort, scope);
-  }, [sort, bruker?.NAVident]);
+  }, [sort, bruker?.NAVident, scope]);
 
   function settSortering(sortKey: ScopedBackendSortState<T>['orderBy']) {
-    const sortering =
+    const sortering: ScopedBackendSortState<T> | undefined =
       sort && sortKey === sort.orderBy && sort.direction === 'descending'
         ? undefined
         : {
@@ -33,7 +33,7 @@ export function useBackendSortering<T>(scope: string): {
             direction: sort && sortKey === sort.orderBy && sort.direction === 'ascending' ? 'descending' : 'ascending',
           };
 
-    setSort(sortering as ScopedBackendSortState<T>);
+    setSort(sortering);
   }
 
   return { sort, setSort: settSortering };

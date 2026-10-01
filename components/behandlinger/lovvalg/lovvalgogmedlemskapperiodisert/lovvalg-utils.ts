@@ -107,9 +107,9 @@ export function hentPeriodiserteVerdierFraMellomlagretVurdering(
 ) {
   const vurdering = JSON.parse(mellomlagretVurdering.data);
   if (vurdering.vurderinger) {
-    return vurdering as LovOgMedlemskapVurderingForm;
+    return vurdering;
   } else {
-    const ikkePeriodisertVurdering = vurdering as LovOgMedlemskapVurderingFormIkkePeriodisert;
+    const ikkePeriodisertVurdering: LovOgMedlemskapVurderingFormIkkePeriodisert = vurdering;
     return {
       vurderinger: [
         {

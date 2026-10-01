@@ -15,7 +15,7 @@ export function parseOgMigrerMellomlagretData(data: string, foersteFraDato: stri
   if (isNewSchema(parsedData)) {
     return parsedData;
   }
-  return mapFromOldFormToNewForm(parsedData as BistandFormOld, foersteFraDato);
+  return mapFromOldFormToNewForm(parsedData, foersteFraDato);
 }
 
 function mapFromOldFormToNewForm(oldData: BistandFormOld, foersteFraDato: string | undefined): BistandForm {

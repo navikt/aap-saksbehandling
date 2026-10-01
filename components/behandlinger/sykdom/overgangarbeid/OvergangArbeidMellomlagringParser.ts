@@ -8,7 +8,7 @@ export function parseOgMigrerMellomlagretData(data: string): OvergangArbeidForm 
   if (isNewSchema(parsedData)) {
     return parsedData;
   }
-  return mapFromOldFormToNewForm(parsedData as OvergangArbeidFormOld);
+  return mapFromOldFormToNewForm(parsedData);
 }
 
 function mapFromOldFormToNewForm(oldData: OvergangArbeidFormOld): OvergangArbeidForm {
