@@ -5,7 +5,7 @@ import { BodyShort, Box, Button, Heading, HGrid, HStack, Tag, VStack } from '@na
 import { IdentOgNavn, Mottaker } from 'lib/types/types';
 import { useState } from 'react';
 
-import { clientFjernKopimottaker, clientOppdaterMottakere } from 'lib/clientApi';
+import { clientOppdaterMottakere } from 'lib/clientApi';
 import { MottakerInfoCard } from 'components/brevbygger/mottaker/MottakerInfoCard';
 import { RedigerMottakerDialog } from 'components/brevbygger/mottaker/RedigerMottakerDialog';
 import { isSuccess } from 'lib/utils/api';
@@ -96,9 +96,7 @@ export function VelgMottakere({
   };
 
   const fjernKopimottaker = () => {
-    clientFjernKopimottaker(bestillingsreferanse).then((res) => {
-      if (isSuccess(res)) setKopimottaker(undefined);
-    });
+    oppdaterMottakere(hovedmottaker, undefined);
   };
 
   const lagreRedigertMottaker = (type: MottakerType, redigertMottaker: Mottaker) => {

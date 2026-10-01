@@ -570,11 +570,6 @@ export const oppdaterMottakere = async (
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', { mottaker, kopimottaker });
 };
 
-export const fjernKopimottaker = async (brevbestillingReferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/fjern-kopimottaker`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT');
-};
-
 export const opprettDummySakDev = async (sak: OpprettTestcase) => {
   const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);

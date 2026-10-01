@@ -256,10 +256,6 @@ export function clientOppdaterMottakere(brevbestillingReferanse: string, mottake
   });
 }
 
-export function clientFjernKopimottaker(brevbestillingReferanse: string) {
-  return clientFetch<FetchResponse<void>>(`${BASE_URL}/api/brev/${brevbestillingReferanse}/fjern-kopimottaker`, 'PUT');
-}
-
 export function clientBestillTestBrev(behandlingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
 }

@@ -24,7 +24,7 @@ export type FlagNames = (typeof FLAGS)[number];
 export type Flags = Record<FlagNames, boolean>;
 
 export const mockedFlags: Flags = {
-  RedigerMottakerBrevbygger: true,
+  RedigerMottakerBrevbygger: false,
   TilbakekrevingBelopFilter: true,
   ArenasakerLenkeTilVisninsklient: true,
   OppgavelisteMedBelopISaksbehandling: true,
