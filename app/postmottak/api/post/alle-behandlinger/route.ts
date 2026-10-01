@@ -1,11 +1,11 @@
 import { logError } from 'lib/serverutlis/logger';
 import { alleBehandlinger } from 'lib/services/postmottakservice/postmottakservice';
 import { isServerError } from 'lib/utils/api';
-import { isLocal } from 'lib/utils/environment';
+import { skalMockeBackend } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  if (isLocal()) {
+  if (skalMockeBackend(process.env.POSTMOTTAK_API_BASE_URL)) {
     return NextResponse.json([], { status: 200 });
   }
 
