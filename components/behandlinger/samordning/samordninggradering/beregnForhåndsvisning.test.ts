@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import {
-  beregnForhåndsvisning,
+  beregnSplittingAvSykepengeperiode,
   slåSammenSplittedeSykepengeperioder,
-} from 'components/behandlinger/samordning/samordninggradering/beregnForhåndsvisning';
+} from 'components/behandlinger/samordning/samordninggradering/beregnSplittingAvSykepengeperiode';
 import { SamordningYtelsestype } from 'lib/types/types';
 
 interface Rad {
@@ -22,7 +22,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
 
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '09.03.2025' },
@@ -37,7 +37,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
     ];
 
-    const sykepengerader = beregnForhåndsvisning(rader).filter((r) => r.ytelseType === 'SYKEPENGER');
+    const sykepengerader = beregnSplittingAvSykepengeperiode(rader).filter((r) => r.ytelseType === 'SYKEPENGER');
 
     expect(antallDager(sykepengerader)).toBe(31);
   });
@@ -48,7 +48,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '01.03.2025', '31.03.2025'),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
 
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '31.03.2025' },
@@ -62,7 +62,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '20.02.2025', '05.03.2025'),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
     const sykepengerad = resultat.find((r) => r.ytelseType === 'SYKEPENGER');
 
     expect(sykepengerad?.periode).toEqual({ fom: '06.03.2025', tom: '05.04.2025' });
@@ -74,7 +74,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '20.03.2025', '10.04.2025'),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
 
     expect(resultat.map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '19.03.2025' },
@@ -89,7 +89,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '01.05.2025', '10.05.2025'),
     ];
 
-    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+    expect(beregnSplittingAvSykepengeperiode(rader)).toEqual(rader);
   });
 
   test('splitter alle overlappende sykepengeperioder', () => {
@@ -99,7 +99,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
 
     expect(resultat).toHaveLength(5);
     expect(resultat.map((r) => r.periode)).toEqual(
@@ -118,8 +118,8 @@ describe('beregnForhåndsvisning', () => {
     const ferieA = rad('FERIE_I_SYKEPENGEPERIODE', '10.01.2025', '12.01.2025');
     const ferieB = rad('FERIE_I_SYKEPENGEPERIODE', '20.01.2025', '22.01.2025');
 
-    const medAførst = beregnForhåndsvisning([enSykepengeperiode, ferieA, ferieB]);
-    const medBførst = beregnForhåndsvisning([enSykepengeperiode, ferieB, ferieA]);
+    const medAførst = beregnSplittingAvSykepengeperiode([enSykepengeperiode, ferieA, ferieB]);
+    const medBførst = beregnSplittingAvSykepengeperiode([enSykepengeperiode, ferieB, ferieA]);
 
     const forventet = [
       { fom: '01.01.2025', tom: '09.01.2025' },
@@ -139,19 +139,19 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
     ];
 
-    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+    expect(beregnSplittingAvSykepengeperiode(rader)).toEqual(rader);
   });
 
   test('gjør ingenting når ferieraden mangler gyldige datoer', () => {
     const rader = [rad('SYKEPENGER', '01.03.2025', '31.03.2025'), rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '')];
 
-    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+    expect(beregnSplittingAvSykepengeperiode(rader)).toEqual(rader);
   });
 
   test('gjør ingenting når ingen av radene er ferie', () => {
     const rader = [rad('SYKEPENGER', '01.03.2025', '31.03.2025'), rad('PLEIEPENGER', '10.03.2025', '14.03.2025')];
 
-    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+    expect(beregnSplittingAvSykepengeperiode(rader)).toEqual(rader);
   });
 
   test('beholder samordningsgrad på de splittede radene', () => {
@@ -160,7 +160,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
     ];
 
-    const sykepengerader = beregnForhåndsvisning(rader).filter((r) => r.ytelseType === 'SYKEPENGER');
+    const sykepengerader = beregnSplittingAvSykepengeperiode(rader).filter((r) => r.ytelseType === 'SYKEPENGER');
 
     expect(sykepengerader).toHaveLength(2);
     sykepengerader.forEach((r) => expect(r.gradering).toBe(60));
@@ -178,8 +178,8 @@ describe('beregnForhåndsvisning', () => {
 
     // Forhåndsvisningen beregnes hver gang direkte fra de faktiske radene i skjemaet,
     // så det finnes ingen "forrige splitt" å regne seg tilbake fra.
-    expect(beregnForhåndsvisning(opprinneligeRader)).not.toEqual(beregnForhåndsvisning(medRettetFerie));
-    expect(beregnForhåndsvisning(medRettetFerie).map((r) => r.periode)).toEqual([
+    expect(beregnSplittingAvSykepengeperiode(opprinneligeRader)).not.toEqual(beregnSplittingAvSykepengeperiode(medRettetFerie));
+    expect(beregnSplittingAvSykepengeperiode(medRettetFerie).map((r) => r.periode)).toEqual([
       { fom: '01.03.2025', tom: '19.03.2025' },
       { fom: '20.03.2025', tom: '21.03.2025' },
       { fom: '22.03.2025', tom: '02.04.2025' },
@@ -200,7 +200,7 @@ describe('beregnForhåndsvisning', () => {
     const skjemarader = slåSammenSplittedeSykepengeperioder(lagredeRader);
     const utenFørsteFerie = skjemarader.filter((r) => r.periode.fom !== '10.01.2026');
 
-    const resultat = beregnForhåndsvisning(utenFørsteFerie);
+    const resultat = beregnSplittingAvSykepengeperiode(utenFørsteFerie);
 
     expect(resultat.map((r) => ({ ytelseType: r.ytelseType, periode: r.periode }))).toEqual([
       { ytelseType: 'SYKEPENGER', periode: { fom: '01.01.2026', tom: '19.01.2026' } },
@@ -230,13 +230,13 @@ describe('beregnForhåndsvisning', () => {
   test('slår ikke sammen sykepengeperioder som overlapper hverandre', () => {
     const rader = [rad('SYKEPENGER', '01.03.2025', '31.03.2025'), rad('SYKEPENGER', '05.03.2025', '20.03.2025')];
 
-    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+    expect(beregnSplittingAvSykepengeperiode(rader)).toEqual(rader);
   });
 
   test('slår ikke sammen sykepengeperioder når mellomrommet ikke er dekket av ferie', () => {
     const rader = [rad('SYKEPENGER', '01.03.2025', '10.03.2025'), rad('SYKEPENGER', '01.09.2025', '30.09.2025')];
 
-    expect(beregnForhåndsvisning(rader)).toEqual(rader);
+    expect(beregnSplittingAvSykepengeperiode(rader)).toEqual(rader);
   });
 
   test('gir samme resultat om forhåndsvisningen beregnes på nytt fra sitt eget resultat (idempotent)', () => {
@@ -245,8 +245,8 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', '10.03.2025', '14.03.2025'),
     ];
 
-    const førsteGang = beregnForhåndsvisning(rader);
-    const andreGang = beregnForhåndsvisning(førsteGang);
+    const førsteGang = beregnSplittingAvSykepengeperiode(rader);
+    const andreGang = beregnSplittingAvSykepengeperiode(førsteGang);
 
     expect(andreGang).toEqual(førsteGang);
   });

@@ -11,7 +11,6 @@ import {
 import { FerieISykepengeperiodeRad } from 'components/behandlinger/samordning/samordninggradering/FerieISykepengeperiodeRad';
 import { YtelsesvurderingRad } from 'components/behandlinger/samordning/samordninggradering/YtelsesvurderingRad';
 import { UseFieldArrayReturn, UseFormReturn } from 'react-hook-form';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useState } from 'react';
 
 import { Alert } from 'components/alert/Alert';
@@ -19,7 +18,7 @@ import { ValuePair } from 'components/form/FormField';
 import { SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { medAutoSplitt, slåSammenSplittedeSykepengeperioder } from './beregnForhåndsvisning';
+import { beregnSplittingAvSykepengeperiode, slåSammenSplittedeSykepengeperioder } from 'components/behandlinger/samordning/samordninggradering/beregnSplittingAvSykepengeperiode';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -76,7 +75,6 @@ type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Props) => {
   const { fields, append, remove, replace } = fieldArray;
-  const autoSplittSykepengerToggleIsEnabled = useFeatureFlag('autoSplittSykepenger');
   const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
   const [ferieFeilmelding, setFerieFeilmelding] = useState<string>();
 
@@ -112,7 +110,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
    * (nye, mindre) ferieperioden og dermed ikke slås sammen igjen.
    */
   function gjenopprettFørOmberegning(): SamordnetYtelse[] {
-    return autoSplittSykepengerToggleIsEnabled ? slåSammenSplittedeSykepengeperioder(rader) : rader;
+    return slåSammenSplittedeSykepengeperioder(rader);
   }
 
   function lagreFerieRad(verdier: FerieFormFields) {
@@ -130,7 +128,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
       ? gjenopprettetArray.map((eksisterende) => (eksisterende === eksisterendeFerieRad ? rad : eksisterende))
       : [...gjenopprettetArray, rad];
 
-    const splittet = medAutoSplitt(oppdatertArray, autoSplittSykepengerToggleIsEnabled);
+    const splittet = beregnSplittingAvSykepengeperiode(oppdatertArray);
 
     replace(splittet);
     setModalTilstand(null);
@@ -141,7 +139,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
     const gjenopprettetArray = gjenopprettFørOmberegning();
     const utenSlettetElement = gjenopprettetArray.filter((rad) => rad !== fjernetRad);
 
-    const splittet = medAutoSplitt(utenSlettetElement, autoSplittSykepengerToggleIsEnabled);
+    const splittet = beregnSplittingAvSykepengeperiode(utenSlettetElement);
 
     replace(splittet);
   }
@@ -173,7 +171,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
               {fields.map((field, index) => {
                 const erFerieISykepengeperiode = field?.ytelseType === 'FERIE_I_SYKEPENGEPERIODE';
 
-                if (erFerieISykepengeperiode && autoSplittSykepengerToggleIsEnabled) {
+                if (erFerieISykepengeperiode) {
                   return (
                     <FerieISykepengeperiodeRad
                       key={field.id}
@@ -192,7 +190,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
                     form={form}
                     index={index}
                     readOnly={readOnly}
-                    ytelsesoptioner={autoSplittSykepengerToggleIsEnabled ? ytelsesoptionerUtenFerie : ytelsesoptions}
+                    ytelsesoptioner={ytelsesoptionerUtenFerie}
                     onSlett={() => remove(index)}
                   />
                 );
@@ -211,18 +209,16 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
             >
               Legg til periode
             </Button>
-            {autoSplittSykepengerToggleIsEnabled && (
-              <Button
-                size={'small'}
-                type={'button'}
-                variant={'tertiary'}
-                icon={<PlusCircleIcon />}
-                onClick={åpneFerieModal}
-                disabled={readOnly}
-              >
-                Legg til ferie i sykepengeperiode
-              </Button>
-            )}
+            <Button
+              size={'small'}
+              type={'button'}
+              variant={'tertiary'}
+              icon={<PlusCircleIcon />}
+              onClick={åpneFerieModal}
+              disabled={readOnly}
+            >
+              Legg til ferie i sykepengeperiode
+            </Button>
           </HStack>
         </VStack>
       </VStack>
