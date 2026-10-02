@@ -116,21 +116,6 @@ export type TilkjentYtelseGrunnlagMedDiff = Omit<TilkjentYtelseGrunnlagMedDiffFr
   perioder: Diff<TilkjentYtelsePeriode>[];
 };
 
-// Type guards for Diff-utledning
-export function erDiffUendret<T>(d: Diff<T>): d is DiffUendret<T> {
-  return d.diff === 'Uendret';
-}
-export function erDiffEndret<T>(d: Diff<T>): d is DiffEndret<T> {
-  return d.diff === 'Endret';
-}
-export function erDiffFjernet<T>(d: Diff<T>): d is DiffFjernet<T> {
-  return d.diff === 'Fjernet';
-}
-
-export function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
-  return d.diff === 'LagtTil';
-}
-
 export type KvalitetssikringGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagResponse'];
 

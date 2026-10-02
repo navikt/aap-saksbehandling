@@ -19,6 +19,10 @@ export const lenkerPerSteg: Partial<Record<StegType, EksternLenkeIVilkårskort[]
       lenkeTekst: 'Metode for vurdering §§ 11-5 og 11-6 (Navet) ',
       url: 'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-vilk%C3%A5rsvurdering-%C2%A7-11-5.aspx',
     },
+    {
+      lenkeTekst: 'Kunnskapsbank trygdemedisin (Navet)',
+      url: 'https://navno.sharepoint.com/sites/fag-og-ytelser-Kunnskapsbank-trygdemedisin',
+    },
   ],
   VURDER_BISTANDSBEHOV: [
     {
@@ -96,8 +100,8 @@ export const lenkerPerSteg: Partial<Record<StegType, EksternLenkeIVilkårskort[]
   ],
   SYKDOMSVURDERING_BREV: [
     {
-      lenkeTekst: 'Hvordan skrive individuelle begrunnelsen (Navet)',
-      url: 'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/S%C3%A5nn.aspx',
+      lenkeTekst: 'Metode for vurdering §§ 11-5 og 11-6 (Navet)',
+      url: 'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-vilk%C3%A5rsvurdering-%C2%A7-11-5.aspx',
     },
   ],
 };
