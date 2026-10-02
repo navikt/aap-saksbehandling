@@ -37,9 +37,11 @@ export const MottakerInfoCard = ({
             {tittel} {bruker.ident === mottaker.ident && '(bruker)'}
           </Heading>
 
-          {mottaker.ident === bruker.ident && !mottaker.navnOgAdresse?.adresse
-            ? brukerInfo(bruker)
-            : mottakerInfo(mottaker)}
+          {mottaker.ident === bruker.ident && !mottaker.navnOgAdresse?.adresse ? (
+            <BrukerInfo bruker={bruker} />
+          ) : (
+            <MottakerInfo mottaker={mottaker} />
+          )}
         </VStack>
 
         <VStack gap="space-8">
@@ -99,66 +101,68 @@ export const MottakerInfoCard = ({
   );
 };
 
-const mottakerInfo = (mottaker: Mottaker) => {
+const MottakerInfo = ({ mottaker }: { mottaker: Mottaker }) => (
+  <HGrid columns={'1fr 4fr'} gap="space-8">
+    {mottaker.navnOgAdresse ? (
+      <NavnOgAdresse mottaker={mottaker} />
+    ) : mottaker.ident ? (
+      <>
+        <Label size="small">Ident</Label>
+        <BodyShort size="small">{mottaker.ident}</BodyShort>
+      </>
+    ) : (
+      <>
+        <Label size="small">Navn</Label>
+        <BodyShort size="small">Mangler navn</BodyShort>
+
+        <Label size="small">Adresse</Label>
+        <BodyShort size="small">Mangler adresse</BodyShort>
+      </>
+    )}
+  </HGrid>
+);
+
+const BrukerInfo = ({ bruker }: { bruker: IdentOgNavn }) => (
+  <HGrid columns={'1fr 4fr'} gap="space-8">
+    <Label size="small">Ident</Label>
+    <BodyShort size="small">{bruker.ident}</BodyShort>
+
+    <Label size="small">Navn</Label>
+    <BodyShort size="small">{bruker.navn}</BodyShort>
+  </HGrid>
+);
+
+const NavnOgAdresse = ({ mottaker }: { mottaker: Mottaker }) => {
   const adresse = mottaker.navnOgAdresse?.adresse;
 
   return (
-    <HGrid columns={'1fr 4fr'} gap="space-8">
-      {mottaker.navnOgAdresse ? (
-        <>
-          {mottaker.ident && (
-            <>
-              <Label size="small">Ident</Label>
-              <BodyShort size="small">{mottaker.ident}</BodyShort>
-            </>
-          )}
-
-          <Label size="small">Navn</Label>
-          <BodyShort size="small">{mottaker.navnOgAdresse?.navn || 'Mangler navn'}</BodyShort>
-
-          <Label size="small">Adresse</Label>
-          <div>
-            <BodyShort size="small">{adresse?.adresselinje1}</BodyShort>
-            <BodyShort size="small">{adresse?.adresselinje2}</BodyShort>
-            <BodyShort size="small">{adresse?.adresselinje3}</BodyShort>
-            <BodyShort size="small">
-              {adresse?.postnummer} {adresse?.poststed}
-            </BodyShort>
-          </div>
-
-          {adresse?.landkode !== 'NO' && (
-            <>
-              <Label size="small">Landkode</Label>
-              <BodyShort size="small">{adresse?.landkode}</BodyShort>
-            </>
-          )}
-        </>
-      ) : mottaker.ident ? (
+    <>
+      {mottaker.ident && (
         <>
           <Label size="small">Ident</Label>
           <BodyShort size="small">{mottaker.ident}</BodyShort>
         </>
-      ) : (
-        <>
-          <Label size="small">Navn</Label>
-          <BodyShort size="small">Mangler navn</BodyShort>
-
-          <Label size="small">Adresse</Label>
-          <BodyShort size="small">Mangler adresse</BodyShort>
-        </>
       )}
-    </HGrid>
-  );
-};
-
-const brukerInfo = (bruker: IdentOgNavn) => {
-  return (
-    <HGrid columns={'1fr 4fr'} gap="space-8">
-      <Label size="small">Ident</Label>
-      <BodyShort size="small">{bruker.ident}</BodyShort>
 
       <Label size="small">Navn</Label>
-      <BodyShort size="small">{bruker.navn}</BodyShort>
-    </HGrid>
+      <BodyShort size="small">{mottaker.navnOgAdresse?.navn || 'Mangler navn'}</BodyShort>
+
+      <Label size="small">Adresse</Label>
+      <div>
+        <BodyShort size="small">{adresse?.adresselinje1}</BodyShort>
+        <BodyShort size="small">{adresse?.adresselinje2}</BodyShort>
+        <BodyShort size="small">{adresse?.adresselinje3}</BodyShort>
+        <BodyShort size="small">
+          {adresse?.postnummer} {adresse?.poststed}
+        </BodyShort>
+      </div>
+
+      {adresse?.landkode !== 'NO' && (
+        <>
+          <Label size="small">Landkode</Label>
+          <BodyShort size="small">{adresse?.landkode}</BodyShort>
+        </>
+      )}
+    </>
   );
 };
