@@ -49,6 +49,7 @@ import {
   KabalKlageResultat,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
+  KanDistribuereBrevV2Request,
   KlagebehandlingKontorGrunnlag,
   KlagebehandlingNayGrunnlag,
   Klageresultat,
@@ -64,6 +65,7 @@ import {
   MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
+  Mottaker,
   NavEnhetRequest,
   OppdaterMeldekortRequest,
   OppdaterMeldekortResponse,
@@ -559,6 +561,15 @@ export const oppdaterBrevmal = async (brevbestillingReferanse: string) => {
   return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT');
 };
 
+export const oppdaterMottakere = async (
+  brevbestillingReferanse: string,
+  mottaker: Mottaker,
+  kopimottaker?: Mottaker
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/oppdater-mottakere`;
+  return await apiFetch<void>(url, saksbehandlingApiScope, 'PUT', { mottaker, kopimottaker });
+};
+
 export const opprettDummySakDev = async (sak: OpprettTestcase) => {
   const url = `${saksbehandlingApiBaseUrl}/test/opprett`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', sak);
@@ -642,6 +653,13 @@ export const bestillDialogmelding = async (requestBody: BestillLegeerklæring) =
 export const kanDistribuereBrev = async (brevbestillingReferanse: string, requestBody: KanDistribuereBrevRequest) => {
   const url = `${saksbehandlingApiBaseUrl}/api/${brevbestillingReferanse}/kan-distribuere-brev`;
   return await apiFetch<KanDistribuereBrevResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
+};
+export const kanDistribuereBrevV2 = async (
+  brevbestillingReferanse: string,
+  requestBody: KanDistribuereBrevV2Request
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/${brevbestillingReferanse}/v2/kan-distribuere-brev`;
+  return await apiFetch<Boolean>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {

@@ -14,6 +14,7 @@ import {
   HarRegistrertTimerResponse,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
+  KanDistribuereBrevV2Request,
   KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
@@ -22,6 +23,7 @@ import {
   MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
+  Mottaker,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterMeldekortRequest,
@@ -124,6 +126,10 @@ export function clientKanDistribuereBrev(brevbestillingReferanse: string, reques
     'POST',
     request
   );
+}
+
+export function clientKanDistribuereBrevV2(brevbestillingReferanse: string, request: KanDistribuereBrevV2Request) {
+  return clientFetch<Boolean>(`${BASE_URL}/api/${brevbestillingReferanse}/v2/kan-distribuere-brev`, 'POST', request);
 }
 
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {
@@ -241,6 +247,13 @@ export function clientOppdaterBrevdata(brevbestillingReferanse: string, brevdata
 
 export function clientOppdaterBrevmal(brevbestillingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevmal`, 'PUT');
+}
+
+export function clientOppdaterMottakere(brevbestillingReferanse: string, mottaker: Mottaker, kopimottaker?: Mottaker) {
+  return clientFetch<FetchResponse<void>>(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-mottakere`, 'PUT', {
+    mottaker,
+    kopimottaker,
+  });
 }
 
 export function clientBestillTestBrev(behandlingReferanse: string) {
