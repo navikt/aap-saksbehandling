@@ -29,7 +29,6 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
-  RettighetsinfoDto,
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
@@ -190,10 +189,6 @@ export function clientGjenopptaPåminnelsePåLegeerklæring(dialogmeldingId: str
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
-}
-
-export function clientHentRettighetsinfo(saksnummer: string) {
-  return clientFetch<RettighetsinfoDto>(`${BASE_URL}/api/sak/${saksnummer}/rettighetsinfo`, 'GET');
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
