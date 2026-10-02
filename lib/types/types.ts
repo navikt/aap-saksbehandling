@@ -755,6 +755,8 @@ export type MeldekortProsesseringResponse =
 export type MeldekortProsesseringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse']['meldekortProsesseringStatus'];
 
+export type RegistrerMeldedatoRequest = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.RegistrerMeldedatoRequest'];
+
 export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
 
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];

@@ -6,6 +6,6 @@ export function useSak() {
   if (sak) {
     return sak;
   } else {
-    throw new Error('useSak kan bare brukes på behandlingsiden');
+    throw new Error('useSak kan bare brukes på saksiden og behandlingsiden.');
   }
 }
