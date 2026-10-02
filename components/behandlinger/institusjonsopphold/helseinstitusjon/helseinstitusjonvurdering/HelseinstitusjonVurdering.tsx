@@ -7,8 +7,7 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import {
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonUtIFraFormFields,
-  lagReduksjonBeskrivelseNyttOpphold,
-  lagReduksjonsBeskrivelse,
+  lagReduksjonsBeskrivelseUtFraRegel,
   validerDatoErInnenforOpphold,
   validerDatoForStoppAvReduksjon,
   validerErIKronologiskRekkeFølge,
@@ -56,12 +55,8 @@ export const Helseinstitusjonsvurdering = ({
     oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
 
   const reduksjonsBeskrivelse = useMemo(() => {
-    if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
-      return lagReduksjonBeskrivelseNyttOpphold(opphold.oppholdFra);
-    } else {
-      return lagReduksjonsBeskrivelse(opphold.oppholdFra, opphold.tidligsteReduksjonsdato);
-    }
-  }, [opphold.oppholdFra, forrigeOppholdTom, opphold.tidligsteReduksjonsdato]);
+    return lagReduksjonsBeskrivelseUtFraRegel(opphold.oppholdFra, opphold.avsluttetDato, opphold.tidligsteReduksjonsdato);
+  }, [opphold.oppholdFra, opphold.avsluttetDato, opphold.tidligsteReduksjonsdato]);
 
   return (
     <VStack gap={'space-16'}>
