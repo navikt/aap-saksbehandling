@@ -2186,6 +2186,10 @@ export interface components {
       forrigeKvalitetssikrerIdent: string;
       forrigeKvalitetssikrerNavn?: string | null;
     };
+    'no.nav.aap.oppgave.HarMottattDokument': {
+      /** @enum {string} */
+      dokumentType: 'DIALOGMELDING' | 'LEGEERKLÆRING';
+    };
     'no.nav.aap.oppgave.OppgaveId': {
       /** Format: int64 */
       id: number;
@@ -2422,12 +2426,13 @@ export interface components {
     };
     'no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse': {
       forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
-      harUlesteDokumenter: boolean;
+      harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];
       /**
-       * Format: int64
        * @deprecated
-       * @description Brukes ikke av frontend
+       * @description Bruk harMottattDokument når denne er implementert i frontend
        */
+      harUlesteDokumenter: boolean;
+      /** Format: int64 */
       id: number;
       markeringer: components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'][];
       påVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
@@ -2439,11 +2444,7 @@ export interface components {
       tilhørerUtlandEnhet: boolean;
       uførevedtakinfo?: components['schemas']['no.nav.aap.oppgave.UførevedtakRespons'];
       utløptVenteInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
-      /**
-       * Format: int64
-       * @deprecated
-       * @description Brukes ikke av frontend
-       */
+      /** Format: int64 */
       versjon: number;
     };
     'no.nav.aap.oppgave.hent.OppgaverPåSakResponse': {
@@ -2551,6 +2552,11 @@ export interface components {
       forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
       forrigePåVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];
+      /**
+       * @deprecated
+       * @description Bruk harMottattDokument når denne er implementert i frontend
+       */
       harUlesteDokumenter?: boolean | null;
       markeringer: components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'][];
       påVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];

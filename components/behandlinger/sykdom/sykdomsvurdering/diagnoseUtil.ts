@@ -1,4 +1,4 @@
-import { StudentGrunnlag, SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
+import { SykdomsGrunnlag, TypeBehandling } from 'lib/types/types';
 import { DiagnoseSystem, diagnoseSøker } from 'lib/diagnosesøker/DiagnoseSøker';
 import { uniqBy } from 'lodash';
 import { ValuePair } from 'components/form/FormField';
@@ -88,30 +88,6 @@ export type Diagnoser = HovedDiagnoser | BiDiagnoser;
 
 export function finnDiagnoseGrunnlagForSykdom(grunnlag: SykdomsGrunnlag): Diagnoser[] {
   return [...grunnlag.sisteVedtatteVurderinger, ...grunnlag.nyeVurderinger].flatMap((vurdering) => {
-    const result: Diagnoser[] = [];
-
-    if (vurdering.hoveddiagnose && vurdering.kodeverk) {
-      result.push({
-        type: 'HOVEDDIAGNOSE',
-        diagnose: vurdering.hoveddiagnose,
-        kodeverk: vurdering.kodeverk,
-      });
-    }
-
-    if (vurdering.bidiagnoser && vurdering.kodeverk) {
-      result.push({
-        type: 'BIDIAGNOSE',
-        diagnose: vurdering.bidiagnoser,
-        kodeverk: vurdering.kodeverk,
-      });
-    }
-
-    return result;
-  });
-}
-
-export function finnDiagnoseGrunnlagForStudent(grunnlag: StudentGrunnlag): Diagnoser[] {
-  return grunnlag.nyeVurderinger.flatMap((vurdering) => {
     const result: Diagnoser[] = [];
 
     if (vurdering.hoveddiagnose && vurdering.kodeverk) {

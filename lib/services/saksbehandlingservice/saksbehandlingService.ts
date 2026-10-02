@@ -100,11 +100,9 @@ import {
   SykepengeperiodeDTO,
   SykestipendGrunnlag,
   SøkPåSakInfo,
-  TilkjentYtelseGrunnlag,
   TilkjentYtelseGrunnlagMedDiff,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
-  UnderveisGrunnlag,
   UnderveisGrunnlagMedDiff,
   UtbetalingOgSimuleringGrunnlag,
   VedtakslengdeGrunnlag,
@@ -405,11 +403,6 @@ export const hentSoningsvurdering = async (behandlingsreferanse: string) => {
   return apiFetch<Soningsgrunnlag>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentTilkjentYtelse = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjentV2/${behandlingsreferanse}`;
-  return await apiFetch<TilkjentYtelseGrunnlag>(url, saksbehandlingApiScope, 'GET');
-};
-
 export const hentTilkjentYtelseMedDiff = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/tilkjent-med-diff/${behandlingsreferanse}`;
   return await apiFetch<TilkjentYtelseGrunnlagMedDiff>(url, saksbehandlingApiScope, 'GET');
@@ -671,11 +664,6 @@ export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
 }) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/gjenoppta-automatisk-paaminnelse`;
   return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
-export const hentUnderveisGrunnlag = async (behandlingsreferanse: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis/${behandlingsreferanse}`;
-  return await apiFetch<UnderveisGrunnlag[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentUnderveisGrunnlagMedDiff = async (behandlingsreferanse: string) => {

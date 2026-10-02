@@ -43,7 +43,10 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
             begrunnelse={oppgave.oppgavelisteTags.forrigePåVentInfo.venteBegrunnelse}
           />
         )}
-      {oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
+      {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.harMottattDokument?.dokumentType && (
+        <SvarFraBehandler dokumentType={oppgave.oppgavelisteTags.harMottattDokument.dokumentType} />
+      )}
+      {!visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
       {oppgave.oppgavelisteTags.returInformasjon && (
         <Returboks
           returInformasjon={oppgave.oppgavelisteTags.returInformasjon}
