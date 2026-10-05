@@ -32,7 +32,6 @@ describe('Klage - vurdering kontor', () => {
         behandlingVersjon={0}
         typeBehandling={'Klage'}
         grunnlag={{
-          påklagetVedtakType: 'KELVIN_BEHANDLING',
           vurdering: {
             begrunnelse: 'Min begrunnelse',
             notat: 'Test notat',
@@ -238,7 +237,6 @@ describe('mellomlagring', () => {
   };
 
   const grunnlagMedVurdering: KlagebehandlingKontorGrunnlag = {
-    påklagetVedtakType: 'KELVIN_BEHANDLING',
     harTilgangTilÅSaksbehandle: true,
     påklagetVedtakType: 'KELVIN_BEHANDLING',
     vurdering: {

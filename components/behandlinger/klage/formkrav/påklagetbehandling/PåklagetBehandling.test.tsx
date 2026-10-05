@@ -19,7 +19,6 @@ vi.mock('hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov', () =>
 const user = userEvent.setup();
 
 const grunnlag: PåklagetBehandlingGrunnlag = {
-  avsluttaTilbakekrevingsbehandlinger: [],
   harTilgangTilÅSaksbehandle: true,
   behandlinger: [
     {
@@ -60,7 +59,7 @@ const grunnlag: PåklagetBehandlingGrunnlag = {
       eksternSaksbehandlingUrl: 'http://ekstern-url',
     },
   ],
-  vurderingerMeta: {}
+  vurderingerMeta: {},
 };
 
 beforeEach(() => {
