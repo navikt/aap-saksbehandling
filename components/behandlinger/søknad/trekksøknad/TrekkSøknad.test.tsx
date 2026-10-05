@@ -19,17 +19,38 @@ beforeEach(() => {
 describe('Trekk søknad', () => {
   describe('Generelt', () => {
     it('har en overskrift', () => {
-      render(<TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} />);
+      render(
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          viseVentendeLEToggle={false}
+        />
+      );
       expect(screen.getByRole('heading', { name: 'Trekk søknad', level: 3 })).toBeVisible();
     });
 
     it('har et felt for å begrunne hvorfor søknaden skal trekkes', () => {
-      render(<TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} />);
+      render(
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          viseVentendeLEToggle={false}
+        />
+      );
       expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
     });
 
     it('viser en feilmelding dersom man forsøker å bekrefte uten å ha skrevet en begrunnelse', async () => {
-      render(<TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} />);
+      render(
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          viseVentendeLEToggle={false}
+        />
+      );
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(await screen.findByText('Du må begrunne hvorfor søknaden skal trekkes')).toBeVisible();
     });
@@ -53,7 +74,14 @@ describe('Trekk søknad', () => {
         ],
       };
 
-      render(<TrekkSøknad readOnly={false} behandlingVersjon={0} grunnlag={trukketSøknadGrunnlagMedVurdering} />);
+      render(
+        <TrekkSøknad
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={trukketSøknadGrunnlagMedVurdering}
+          viseVentendeLEToggle={false}
+        />
+      );
 
       const tekst = screen.getByText('Trukket av Kjell T. Ringen, 21.08.2025');
       expect(tekst).toBeVisible();
@@ -100,6 +128,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          viseVentendeLEToggle={false}
         />
       );
       const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -113,6 +142,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -134,6 +164,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -145,7 +176,14 @@ describe('Trekk søknad', () => {
     });
 
     it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-      render(<TrekkSøknad readOnly={false} behandlingVersjon={0} grunnlag={trukketSøknadGrunnlagMedVurdering} />);
+      render(
+        <TrekkSøknad
+          readOnly={false}
+          behandlingVersjon={0}
+          grunnlag={trukketSøknadGrunnlagMedVurdering}
+          viseVentendeLEToggle={false}
+        />
+      );
 
       const begrunnelseFelt = screen.getByRole('textbox', {
         name: /begrunnelse/i,
@@ -161,6 +199,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -184,6 +223,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -209,6 +249,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
+          viseVentendeLEToggle={false}
         />
       );
 
