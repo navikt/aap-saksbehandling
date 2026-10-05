@@ -122,7 +122,7 @@ export const VelgPåklagetVedtakRadioTable = ({
                       {option.behandlingstype}
                     </Link>
                   ) : (
-                    <span className="disabled-link">{option.behandlingstype}</span>
+                    <span>{option.behandlingstype}</span>
                   )}
                 </Table.DataCell>
 
