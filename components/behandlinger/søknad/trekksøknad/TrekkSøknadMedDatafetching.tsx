@@ -3,6 +3,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { hentMellomlagring, hentTrukketSøknad } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,6 +18,8 @@ export const TrekkSøknadMedDatafetching = async ({
   behandlingVersjon,
   erIkkePåVent,
 }: Props) => {
+  const viseVentendeLEToggle = unleashService.isEnabled('VisInfoTrekkSoknadForesporselOmLe');
+
   const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
 
   if (isError(trukketSøknadGrunnlag)) {
@@ -36,6 +39,7 @@ export const TrekkSøknadMedDatafetching = async ({
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      viseVentendeLEToggle={viseVentendeLEToggle}
     />
   );
 };
