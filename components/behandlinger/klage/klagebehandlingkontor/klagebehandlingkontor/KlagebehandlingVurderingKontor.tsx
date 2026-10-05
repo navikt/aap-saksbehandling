@@ -23,7 +23,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
-import { LocalAlert } from '@navikt/ds-react';
+import { Alert } from 'components/alert/Alert';
 import { VisningModus } from 'lib/types/visningTypes';
 
 interface Props {
@@ -200,11 +200,7 @@ export const KlagebehandlingVurderingKontor = ({
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
       {erOmgjøringValgtForTilbakekreving && (
-        <LocalAlert status="error">
-          <LocalAlert.Header>
-            <LocalAlert.Title>Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.</LocalAlert.Title>
-          </LocalAlert.Header>
-        </LocalAlert>
+        <Alert variant="error">Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.</Alert>
       )}
       {['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling) && !erOmgjøringValgtForTilbakekreving && (
         <FormField form={form} formField={formFields.vilkårSomSkalOmgjøres} />
