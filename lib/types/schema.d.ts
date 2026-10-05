@@ -6316,7 +6316,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse'];
+            'application/json': components['schemas']['no.nav.aap.overgangarbeid.OvergangArbeidGrunnlagResponse'];
           };
         };
       };
@@ -14125,30 +14125,6 @@ export interface components {
       tom?: string | null;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse': {
-      behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
-      harTilgangTilÅSaksbehandle: boolean;
-      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
-      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse': {
-      begrunnelse: string;
-      brukerRettPåAAP: boolean;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom?: string | null;
-      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
-    };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreGrunnlagResponse': {
       behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
@@ -21763,6 +21739,30 @@ export interface components {
     };
     'no.nav.aap.motor.api.`MotorApiKt$motorApi$1$7$AvbrytJobbRequest`': {
       begrunnelse: string;
+    };
+    'no.nav.aap.overgangarbeid.OvergangArbeidGrunnlagResponse': {
+      behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      gjeldendeSykdsomsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'][];
+      harTilgangTilÅSaksbehandle: boolean;
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.overgangarbeid.OvergangArbeidVurderingResponse'][];
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.overgangarbeid.OvergangArbeidVurderingResponse'][];
+    };
+    'no.nav.aap.overgangarbeid.OvergangArbeidVurderingResponse': {
+      begrunnelse: string;
+      brukerRettPåAAP: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.utbetal.simulering.SimuleringDto': {
       perioder: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringsperiodeDto'][];
