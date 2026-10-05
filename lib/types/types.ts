@@ -40,7 +40,7 @@ export type OvergangUforeLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reL\u00F8sningDto'];
 
 export type OvergangArbeidGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse'];
+  components['schemas']['no.nav.aap.overgangarbeid.OvergangArbeidGrunnlagResponse'];
 
 export type FritakMeldepliktGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
@@ -573,7 +573,7 @@ export type OvergangUføreVedtakResultat =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse']['brukerHarFåttVedtakOmUføretrygd'];
 
 export type OvergangArbeidVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'];
+  components['schemas']['no.nav.aap.overgangarbeid.OvergangArbeidVurderingResponse'];
 
 export type OvergangArbeidLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingLøsningDto'];
