@@ -79,6 +79,7 @@ import {
   PeriodisertLovvalgMedlemskapGrunnlag,
   PåklagetBehandlingGrunnlag,
   RefusjonskravGrunnlag,
+  RegistrerMeldedatoRequest,
   RettighetsinfoDto,
   RettighetsperiodeGrunnlag,
   SakPersoninfo,
@@ -846,6 +847,15 @@ export const oppdaterMeldekort = async (saksnummer: string, oppdaterMeldekortReq
     saksbehandlingApiScope,
     'POST',
     oppdaterMeldekortRequest
+  );
+};
+
+export const registrerMeldedato = async (saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) => {
+  return apiFetch(
+    `${saksbehandlingApiBaseUrl}/api/meldekort/${saksnummer}/registrer-meldedato`,
+    saksbehandlingApiScope,
+    'POST',
+    registrerMeldedatoRequest
   );
 };
 
