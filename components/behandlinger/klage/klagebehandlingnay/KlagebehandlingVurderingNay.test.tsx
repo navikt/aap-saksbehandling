@@ -1,12 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { KlagebehandlingVurderingNay } from './KlagebehandlingVurderingNay';
-import { fireEvent, render, screen } from 'lib/test/CustomRender';
+import { act, fireEvent, render, screen, waitFor } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { KlagebehandlingNayGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import * as løsAvklaringsbehovHook from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -14,6 +15,10 @@ const user = userEvent.setup();
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'KLAGEBEHANDLING_NAY' });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 describe('Klage - vurdering nay', () => {
@@ -113,6 +118,79 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     fetchMock.resetMocks();
   });
 
+  it.each(['OMGJØR', 'DELVIS_OMGJØR'])(
+    'Skal blokkere %s under redigering og kunne sende inn etter valg av opprettholdelse',
+    async (innstilling) => {
+      setMockFlytResponse(defaultFlytResponse);
+      const løsAvklaringsbehov = vi.fn();
+      vi.spyOn(løsAvklaringsbehovHook, 'useLøsAvklaringsbehov').mockReturnValue({
+        løsAvklaringsbehov,
+        løsPeriodisertAvklaringsbehov: vi.fn(),
+        løsAvklaringsbehovIsLoading: false,
+        løsAvklaringsbehovStatus: undefined,
+      });
+      const { container } = render(
+        <KlagebehandlingVurderingNay
+          readOnly={false}
+          behandlingVersjon={0}
+          typeBehandling={'Klage'}
+          grunnlag={grunnlagTilbakekreving}
+          initialMellomlagretVurdering={{
+            avklaringsbehovkode: Behovstype.VURDER_KLAGE_NAY,
+            behandlingId: { id: 1 },
+            data: JSON.stringify({
+              innstilling,
+              vurdering: 'Min vurdering',
+              vilkårSomSkalOmgjøres: ['FOLKETRYGDLOVEN_11_5'],
+              vilkårSomSkalOpprettholdes: ['FOLKETRYGDLOVEN_11_5'],
+            }),
+            vurdertDato: '2025-08-21T12:00:00.000',
+            vurdertAv: 'Test',
+          }}
+        />
+      );
+      expect(screen.getByRole('textbox', { name: 'Vurder klage' })).not.toHaveAttribute('readonly');
+      expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Avbryt' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Slett utkast' })).not.toBeInTheDocument();
+      expect(screen.queryByText(/Utkast lagret/)).not.toBeInTheDocument();
+      const form = container.querySelector('form');
+      if (!form) {
+        throw new Error('Forventet å finne skjemaet for klagevurderingen');
+      }
+      await act(async () => {
+        fireEvent.submit(form);
+      });
+      expect(løsAvklaringsbehov).not.toHaveBeenCalled();
+      expect(container.querySelector('[aria-invalid="true"]')).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole('radio', { name: 'Vedtak opprettholdes' }));
+
+      expect(
+        screen.queryByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')
+      ).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
+      expect(screen.getByRole('button', { name: 'Slett utkast' })).toBeVisible();
+      const combobox = screen.getByRole('combobox', { name: 'Hvilke vilkår er blitt vurdert til å opprettholdes?' });
+      if (innstilling === 'OMGJØR') {
+        await user.click(combobox);
+        await user.click(screen.getByRole('option', { name: '§ 11-5' }));
+      }
+      await user.click(screen.getByRole('button', { name: 'Send til klageinstans' }));
+
+      await waitFor(() =>
+        expect(løsAvklaringsbehov).toHaveBeenCalledWith(
+          expect.objectContaining({
+            behov: expect.objectContaining({
+              klagevurderingNay: expect.objectContaining({ innstilling: 'OPPRETTHOLD' }),
+            }),
+          }),
+          expect.any(Function)
+        )
+      );
+    }
+  );
+
   it('Skal vise advarsel og ikke sende inn når innstilling er OMGJØR for tilbakekreving', async () => {
     const { container } = render(
       <KlagebehandlingVurderingNay
@@ -200,7 +278,12 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     expect(screen.getByRole('button', { name: 'Send til beslutter' })).toBeVisible();
   });
 
-  it('Skal vise advarsel igjen når komponenten lastes med en mellomlagret vurdering som har et ugyldig valg', () => {
+  it.each([false, true])('Skal vise låst utkast ved blokkert valg når visVentekort er %s', (visVentekort) => {
+    setMockFlytResponse({
+      ...defaultFlytResponse,
+      aktivtSteg: 'KLAGEBEHANDLING_NAY',
+      visning: { ...defaultFlytResponse.visning, visVentekort },
+    });
     const mellomlagringMedOmgjøring: MellomlagretVurderingResponse['mellomlagretVurdering'] = {
       avklaringsbehovkode: Behovstype.VURDER_KLAGE_NAY,
       behandlingId: { id: 1 },
@@ -221,6 +304,14 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
 
     expect(screen.getByText('Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.')).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Send til beslutter' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Slett utkast' })).not.toBeInTheDocument();
+    if (visVentekort) {
+      expect(screen.getByText('Utkast')).toBeVisible();
+      expect(screen.getByText(/Utkast lagret/)).toBeVisible();
+    } else {
+      expect(screen.queryByText('Utkast')).not.toBeInTheDocument();
+      expect(screen.queryByText(/Utkast lagret/)).not.toBeInTheDocument();
+    }
   });
 });
 

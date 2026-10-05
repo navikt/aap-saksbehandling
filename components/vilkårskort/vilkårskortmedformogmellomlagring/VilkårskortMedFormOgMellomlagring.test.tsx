@@ -1,10 +1,11 @@
 import { describe, expect, it, vitest } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import {
   VilkårskortMedFormOgMellomlagring,
   VilkårsKortMedFormOgMellomlagringProps,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VisningModus } from 'lib/types/visningTypes';
+import { SubmitEventHandler } from 'react';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {
@@ -225,17 +226,23 @@ describe('Vilkårskort med form', () => {
     expect(avbrytKnapp).not.toBeInTheDocument();
   });
 
-  it('Skal skjule bekreftknappen når handlingen er blokkert', () => {
-    renderComponentNyVisning(VisningModus.AKTIV_UTEN_AVBRYT, true);
+  it('Skal videresende submit til mottatt handler også når visningsmodus er låst', () => {
+    const onSubmit = vitest.fn<SubmitEventHandler>((event) => event.preventDefault());
+    const { container } = render(
+      <VilkårskortMedFormOgMellomlagring
+        {...defaultProps}
+        visningModus={VisningModus.LÅST_UTEN_ENDRE}
+        onSubmit={onSubmit}
+      />
+    );
+    const form = container.querySelector('form');
+    if (!form) {
+      throw new Error('Forventet å finne skjemaet');
+    }
 
-    expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
-  });
+    fireEvent.submit(form);
 
-  it('Skal beholde avbrytknappen når bekreft-handlingen er blokkert under redigering', () => {
-    renderComponentNyVisning(VisningModus.AKTIV_MED_AVBRYT, true);
-
-    expect(screen.queryByRole('button', { name: 'Bekreft' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
+    expect(onSubmit).toHaveBeenCalledOnce();
   });
 
   it('Skal ha knapp for å endre vurdering når visningsModus er LÅST_MED_ENDRE', () => {
@@ -289,12 +296,11 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   visningModus: VisningModus.AKTIV_UTEN_AVBRYT,
 };
 
-function renderComponentNyVisning(visningModus: VisningModus, skjulBekreftKnapp = false) {
+function renderComponentNyVisning(visningModus: VisningModus) {
   render(
     <VilkårskortMedFormOgMellomlagring
       {...defaultProps}
       visningModus={visningModus}
-      skjulBekreftKnapp={skjulBekreftKnapp}
       visningActions={{
         onBekreftClick: vitest.fn,
         onEndreClick: vitest.fn,

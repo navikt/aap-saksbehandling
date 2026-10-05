@@ -24,6 +24,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { LocalAlert } from '@navikt/ds-react';
+import { VisningModus } from 'lib/types/visningTypes';
 
 interface Props {
   behandlingVersjon: number;
@@ -190,11 +191,10 @@ export const KlagebehandlingVurderingKontor = ({
           form.reset(grunnlag?.vurdering ? mapVurderingToDraftFormFields(grunnlag.vurdering) : emptyDraftFormFields())
         )
       }
-      visningModus={visningModus}
+      visningModus={erOmgjøringValgtForTilbakekreving ? VisningModus.LÅST_UTEN_ENDRE : visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
       knappTekst={'Send til kvalitetssikrer'}
-      skjulBekreftKnapp={erOmgjøringValgtForTilbakekreving}
     >
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
