@@ -7,6 +7,8 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { Behovstype } from 'lib/utils/form';
+import { EtableringAvEgenVirksomhetNy } from './EtableringAvEgenVirksomhetNy';
+import { unleashService } from '../../../../lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -32,6 +34,18 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
     stegData.erIkkePåVent
   );
 
+  const skalViseNyFlyt = unleashService.isEnabled('NyFlytEtablerEgenVirksomhet');
+  console.log('skalViseNyFlyt', skalViseNyFlyt);
+  if (skalViseNyFlyt) {
+    return (
+      <EtableringAvEgenVirksomhetNy
+        grunnlag={grunnlag.data}
+        readOnly={totalReadOnly}
+        behandlingVersjon={stegData.behandlingVersjon}
+        initialMellomlagretVurdering={initalMellomlagretVurdering}
+      />
+    )
+  }
 
   return (
     <EtableringAvEgenVirksomhet

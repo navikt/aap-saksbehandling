@@ -1,12 +1,12 @@
 'use client';
 
-import { BodyShort, InfoCard, Radio, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
-import { UseFormReturn } from 'react-hook-form';
+import { useFieldArray, UseFormReturn, useWatch } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
 import { JaEllerNei } from 'lib/utils/form';
@@ -15,10 +15,10 @@ import {
   EtableringEierBrukerVirksomheten,
   lagEnumObjektFraUnionType,
 } from 'lib/types/types';
+import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useEffect } from 'react';
-import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { addMonths } from 'date-fns';
-import { formaterDatoForFrontend, stringToDate } from 'lib/utils/date';
+import { nyVurderingErOppfylt } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils';
+import { Alert } from 'components/alert/Alert';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -33,26 +33,22 @@ type Props = {
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse;
 };
 export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, grunnlag }: Props) => {
+  const utviklingsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.utviklingsperioder` });
+  const oppstartsperioder = useFieldArray({ control: form.control, name: `vurderinger.${index}.oppstartsperioder` });
+
+  const utviklingperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.utviklingsperioder`,
+  });
+
+  const oppstartsperiodeList = useWatch({
+    control: form.control,
+    name: `vurderinger.${index}.oppstartsperioder`,
+  });
 
   useEffect(() => {
     form.clearErrors(`vurderinger`);
-  }, [form]);
-
-  const maksVarighetDato = (antMåneder: number, fraDato: string) => {
-    const dato = stringToDate(fraDato, 'dd.MM.yyyy');
-    dato?.setDate(dato.getDate() - 1);
-
-    let maksDato = dato ? formaterDatoForFrontend(addMonths(dato, antMåneder)) : '';
-
-    // grunnlag.ikkeRelevantePerioder.forEach((periode) => {
-    //   const ikkeRelevantTil = stringToDate(periode.tom, 'yyyy-MM-dd');
-    //   if (ikkeRelevantTil?.getFullYear() === 2999) {
-    //     maksDato = formaterDatoForFrontend(periode.fom);
-    //   }
-    // });
-
-    return maksDato;
-  };
+  }, [utviklingperiodeList, oppstartsperiodeList, form]);
 
   return (
     <VStack gap={'space-16'}>
@@ -77,23 +73,13 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
         readOnly={readOnly}
       />
       <RadioGroupJaNei
-        name={`vurderinger.${index}.jobberBrukerAktivMedVirksomheten`}
+        name={`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`}
         control={form.control}
-        label={'Jobber bruker aktivt med å etablere virksomheten?'}
+        label={'Foreligger det en næringsfaglig vurdering?'}
         horisontal={true}
-        rules={{ required: 'Du må svare på om bruker jobber aktivt med å etablere virksomheten' }}
+        rules={{ required: 'Du må svare på om det foreligger en næringsfaglig vurdering' }}
         readOnly={readOnly}
       />
-      {form.watch(`vurderinger.${index}.jobberBrukerAktivMedVirksomheten`) === JaEllerNei.Ja && (
-        <RadioGroupJaNei
-          name={`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`}
-          control={form.control}
-          label={'Foreligger det en næringsfaglig vurdering?'}
-          horisontal={true}
-          rules={{ required: 'Du må svare på om det foreligger en næringsfaglig vurdering' }}
-          readOnly={readOnly}
-        />
-      )}
       {form.watch(`vurderinger.${index}.foreliggerEnNæringsfagligVurdering`) === JaEllerNei.Ja && (
         <RadioGroupJaNei
           name={`vurderinger.${index}.erVirksomhetenNy`}
@@ -131,62 +117,200 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
           readOnly={readOnly}
         />
       )}
-
-      {form.watch(`vurderinger.${index}.antasDetAtEtableringenFørerTilSelvforsørgelse`) === JaEllerNei.Ja && (
-        <RadioGroupWrapper
-          name={`vurderinger.${index}.fase`}
-          control={form.control}
-          label={'Hvilken fase er virksomheten i?'}
-          rules={{ required: 'Virksomheten må enten være i utviklings- eller oppstartsfase' }}
-          readOnly={readOnly}
-        >
-          <Radio value={'UTVIKLING'}>Utviklingsfase</Radio>
-          <Radio value={'OPPSTART'}>Oppstartsfase</Radio>
-        </RadioGroupWrapper>
-      )}
-
-      {form.watch(`vurderinger.${index}.fase`) === 'UTVIKLING' && (
-        <>
-          <BodyShort size={'small'} weight={'semibold'}>
-            Maks varighet i utviklingsfasen
-          </BodyShort>
-          <BodyShort size={'small'}>{maksVarighetDato(6, form.watch(`vurderinger.${index}.fraDato`))}</BodyShort>
-        </>
-      )}
-
-      {form.watch(`vurderinger.${index}.fase`) === 'OPPSTART' && (
-        <RadioGroupJaNei
-          name={`vurderinger.${index}.erRegistrertINødvendigeOffentligeRegister`}
-          control={form.control}
-          label={'Er det dokumentert at virksomheten er registrert i de nødvendige offentlige registrene'}
-          horisontal={true}
-          rules={{ required: 'Du må svare på om virksomheten er registrert i offentlige registre' }}
-          readOnly={readOnly}
-        />
-      )}
-
-      {form.watch(`vurderinger.${index}.fase`) === 'OPPSTART' && (
-        <>
-          <BodyShort size={'small'} weight={'semibold'}>
-            Maks varighet i oppstartsfasen
-          </BodyShort>
-          <BodyShort size={'small'}>{maksVarighetDato(3, form.watch(`vurderinger.${index}.fraDato`))}</BodyShort>
-        </>
-      )}
-
-      <InfoCard data-color="info" aria-label={'info alert'} size={'small'}>
-        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-          <InfoCard.Title>Har du husket: </InfoCard.Title>
-        </InfoCard.Header>
-        <InfoCard.Content>
-          <VStack>
-            <ul>
-              <li>{'at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}</li>
-              <li>{'å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</li>
-            </ul>
+      {nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)) && (
+        <VStack gap={'space-16'} paddingBlock={'space-16 space-0'}>
+          <Heading level={'2'} size={'small'}>
+            Etableringsplan
+          </Heading>
+          <VStack gap={'space-16'}>
+            <VStack>
+              <Label size={'small'}>Utviklingsfase</Label>
+              <VStack gap={'space-4'}>
+                <BodyShort textColor={'subtle'} size={'small'}>
+                  Kan gis for inntil 6 måneder
+                </BodyShort>
+                {grunnlag.bruktUtviklingsDager && grunnlag.bruktUtviklingsDager > 0 ? (
+                  <BodyShort
+                    textColor={'subtle'}
+                    size={'small'}
+                  >{`Brukt: ${grunnlag.bruktUtviklingsDager} arbeidsdager`}</BodyShort>
+                ) : null}
+              </VStack>
+            </VStack>
+            {form.formState.errors.vurderinger?.[index]?.utviklingsperioder?.message && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].utviklingsperioder.message}</Alert>
+            )}
+            <VStack gap={'space-16'}>
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col" textSize={'small'}>
+                      <BodyShort textColor={'subtle'} size={'small'}>
+                        Periode
+                      </BodyShort>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {utviklingsperioder.fields.map(({ id }, i) => {
+                    return (
+                      <Table.Row key={id}>
+                        <Table.DataCell>
+                          <HStack gap={'space-8'} align={'center'} wrap={false}>
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.utviklingsperioder.${i}.fom`}
+                              control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder fra',
+                                validate: (value) => validerDato(value as string),
+                              }}
+                            />
+                            {'-'}
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.utviklingsperioder.${i}.tom`}
+                              control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder til',
+                                validate: (value) => validerDato(value as string),
+                              }}
+                            />
+                          </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                          <Button
+                            disabled={readOnly}
+                            size={'small'}
+                            variant={'secondary'}
+                            type={'button'}
+                            icon={<TrashIcon />}
+                            onClick={() => utviklingsperioder.remove(i)}
+                          />
+                        </Table.DataCell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+              <HStack>
+                <Button
+                  disabled={readOnly}
+                  size={'small'}
+                  variant={'secondary'}
+                  type={'button'}
+                  icon={<PlusCircleIcon />}
+                  onClick={() => {
+                    form.clearErrors();
+                    utviklingsperioder.append({ fom: '', tom: '' });
+                  }}
+                >
+                  Legg til ny periode
+                </Button>
+              </HStack>
+            </VStack>
           </VStack>
-        </InfoCard.Content>
-      </InfoCard>
+          <VStack gap={'space-16'}>
+            <VStack>
+              <Label size={'small'}>Oppstartsfase</Label>
+              <VStack gap={'space-4'}>
+                <BodyShort textColor={'subtle'} size={'small'}>
+                  Kan gis for inntil 3 måneder.
+                </BodyShort>
+                {grunnlag.bruktOppstartsdager && grunnlag.bruktOppstartsdager > 0 ? (
+                  <BodyShort
+                    textColor={'subtle'}
+                    size={'small'}
+                  >{`Brukt: ${grunnlag.bruktOppstartsdager} arbeidsdager`}</BodyShort>
+                ) : null}
+              </VStack>
+            </VStack>
+            {form.formState.errors.vurderinger?.[index]?.oppstartsperioder?.message && (
+              <Alert variant={'error'}>{form.formState.errors.vurderinger[index].oppstartsperioder.message}</Alert>
+            )}
+            <VStack gap={'space-16'}>
+              <Table size="small">
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell scope="col" textSize={'small'}>
+                      <BodyShort textColor={'subtle'} size={'small'}>
+                        Periode
+                      </BodyShort>
+                    </Table.HeaderCell>
+                    <Table.HeaderCell />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {oppstartsperioder.fields.map(({ id }, i) => {
+                    return (
+                      <Table.Row key={id}>
+                        <Table.DataCell>
+                          <HStack gap={'space-8'} align={'center'}>
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
+                              control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder til',
+                                validate: (value) => validerDato(value as string),
+                              }}
+                            />
+                            {'-'}
+                            <DateInputWrapper
+                              readOnly={readOnly}
+                              name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
+                              control={form.control}
+                              rules={{
+                                required: 'Du må velge en dato vurderingen gjelder fra',
+                                validate: (value) => validerDato(value as string),
+                              }}
+                            />
+                          </HStack>
+                        </Table.DataCell>
+                        <Table.DataCell>
+                          <Button
+                            disabled={readOnly}
+                            size={'small'}
+                            variant={'secondary'}
+                            type={'button'}
+                            icon={<TrashIcon />}
+                            onClick={() => oppstartsperioder.remove(i)}
+                          />
+                        </Table.DataCell>
+                      </Table.Row>
+                    );
+                  })}
+                </Table.Body>
+              </Table>
+              <HStack>
+                <Button
+                  disabled={readOnly}
+                  size={'small'}
+                  variant={'secondary'}
+                  type={'button'}
+                  icon={<PlusCircleIcon />}
+                  onClick={() => {
+                    form.clearErrors();
+                    oppstartsperioder.append({ fom: '', tom: '' });
+                  }}
+                >
+                  Legg til ny periode
+                </Button>
+              </HStack>
+            </VStack>
+          </VStack>
+          <Alert variant={'info'}>
+            <VStack>
+              <BodyShort>{'Har du husket'}</BodyShort>
+              <BodyShort>
+                {'- at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}
+              </BodyShort>
+              <BodyShort>{'- å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</BodyShort>
+            </VStack>
+          </Alert>
+        </VStack>
+      )}
     </VStack>
   );
 };
