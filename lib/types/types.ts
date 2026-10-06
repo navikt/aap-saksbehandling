@@ -1,5 +1,15 @@
 import { components, paths } from './schema';
 
+type response<
+  Url extends keyof paths,
+  Method extends ("post" | "get") & keyof paths[Url]
+> = Extract<
+    paths[Url][Method],
+  { responses: { 200: { content: { 'application/json': unknown } } } }
+>["responses"][200]["content"]["application/json"];
+
+type GetResponse<Url extends keyof paths> = response<Url, 'get'>
+
 // Grunnlag
 export type StønadsperiodeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.stønadsperiode.StønadsperiodeGrunnlagResponse'];
@@ -28,10 +38,9 @@ export type SykdomsvurderingLøsningDto =
 
 export type SykepengeerstatningVurderingGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse']['grunn'];
-export type BistandsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandGrunnlagResponse'];
-export type BistandVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
+
+export type BistandsGrunnlag = GetResponse<'/api/behandling/{referanse}/grunnlag/bistand'>
+export type BistandVurderingResponse = BistandsGrunnlag["nyeVurderinger"][0]
 
 export type OvergangUforeGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse'];
@@ -560,11 +569,8 @@ export type VurdertAvAnsatt =
 export type ArbeidsevneNedsattValg =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['harNedsattArbeidsevne'];
 
-export type BistandsbehovVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
-
 export type BistandsbehovLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandL\u00F8sningDto'];
+  components['schemas']['no.nav.aap.bistandsbehov.BistandL\u00F8sningDto'];
 
 export type OvergangUføreVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse'];
