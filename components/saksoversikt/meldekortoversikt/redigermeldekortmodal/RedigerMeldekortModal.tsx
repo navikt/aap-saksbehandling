@@ -14,7 +14,7 @@ import { isError } from 'lib/utils/api';
 import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
 import { useMeldekortProsessering } from 'hooks/saksbehandling/MeldekortProsesseringHook';
-import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Alert } from 'components/alert/Alert';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -170,6 +170,9 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                       rules={{
                         required: 'Du må legge til en meldedato for meldekortet.',
                         validate: {
+                          validerDato: (value) => {
+                            return validerDato(value as string);
+                          },
                           validerIkkeIFremtiden: (value) => {
                             if (erDatoIFremtiden(value as string)) {
                               return 'Meldedato kan ikke være i fremtiden.';
