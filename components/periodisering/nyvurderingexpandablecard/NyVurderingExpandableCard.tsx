@@ -12,6 +12,7 @@ import { SlettVurderingModal } from 'components/periodisering/slettvurderingmoda
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Alert } from 'components/alert/Alert';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -44,7 +45,9 @@ export const NyVurderingExpandableCard = ({
   index,
   accordionsSignal,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert);
+  const { flyt } = useFlyt();
+  const erBeslutterSteg = flyt?.aktivtSteg === 'FATTE_VEDTAK';
+  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert || erBeslutterSteg);
 
   const sisteAccordionSignalVersion = useRef(accordionsSignal.version);
 
