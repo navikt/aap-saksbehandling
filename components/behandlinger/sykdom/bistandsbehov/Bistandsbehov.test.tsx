@@ -30,7 +30,7 @@ describe('Generelt', () => {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       erBehovForAktivBehandling: true,
       erBehovForArbeidsrettetTiltak: true,
-      vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' } },
+      vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24', kilde: 'SAKSBEHANDLER' as const } },
       fom: '2025-03-24',
     },
   ];
@@ -40,7 +40,7 @@ describe('Generelt', () => {
       begrunnelse: 'En begrunnelse',
       erBehovForArbeidsrettetTiltak: true,
       erBehovForAktivBehandling: false,
-      vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24' } },
+      vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-03-24', kilde: 'SAKSBEHANDLER' as const } },
       fom: '2025-03-24',
     },
   ];
@@ -123,7 +123,7 @@ describe('mellomlagring i bistandsbehov', () => {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       erBehovForAktivBehandling: true,
       erBehovForArbeidsrettetTiltak: true,
-      vurderingerMeta: { vurdertAv: { ident: 'TESTER', dato: '2025-08-19' } },
+      vurderingerMeta: { vurdertAv: { ident: 'TESTER', dato: '2025-08-19', kilde: 'SAKSBEHANDLER' as const } },
       fom: '2025-08-19',
     },
   ];

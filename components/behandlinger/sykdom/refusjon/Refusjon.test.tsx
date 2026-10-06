@@ -22,7 +22,13 @@ const grunnlagMedVurdering: RefusjonskravGrunnlag = {
       tom: null,
       harKrav: true,
       vurderingerMeta: {
-        vurdertAv: { ansattnavn: 'Saksbehandler1', dato: '01.01.2026', enhetsnavn: 'Nav Løten', ident: '124567' },
+        vurdertAv: {
+          ansattnavn: 'Saksbehandler1',
+          dato: '01.01.2026',
+          enhetsnavn: 'Nav Løten',
+          ident: '124567',
+          kilde: 'SAKSBEHANDLER',
+        },
       },
     },
   ],

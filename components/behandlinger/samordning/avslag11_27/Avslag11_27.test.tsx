@@ -132,7 +132,7 @@ const grunnlagMedVedtattOgNyVurdering: Avslag11_27Grunnlag = {
       harArbeidsgiverSykepengerUtbetaling: true,
       skalAvslås1127: true,
       vurderingerMeta: {
-        vurdertAv: { ident: 'Z123456', dato: '2025-12-01' },
+        vurdertAv: { ident: 'Z123456', dato: '2025-12-01', kilde: 'SAKSBEHANDLER' },
       },
     },
   ],

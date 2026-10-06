@@ -120,8 +120,8 @@ const defaultProps: VilkårsKortMedFormProps = {
   isLoading: false,
   status: 'DONE',
   vilkårTilhørerNavKontor: true,
-  vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
-  kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
+  vurdertAvAnsatt: { ident: 'Lokalsaksbehandler', dato: '2025-04-25', kilde: 'SAKSBEHANDLER' },
+  kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', kilde: 'SAKSBEHANDLER' },
   children: undefined,
   løsBehovOgGåTilNesteStegError: undefined,
   visningActions: {

@@ -722,6 +722,7 @@ describe('mellomlagring', () => {
         dato: '2025-09-02',
         ansattnavn: 'KVALITETSSIKRER',
         enhetsnavn: 'Lokalenhetsnavn',
+        kilde: 'SAKSBEHANDLER',
       },
     },
     barnSomTrengerVurdering: [],

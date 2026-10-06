@@ -55,6 +55,7 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
         vurdertAv: {
           dato: '2025-10-31T09:44:54.793',
           ident: 'Z123456',
+          kilde: 'SAKSBEHANDLER',
         },
       },
     },
@@ -1032,7 +1033,7 @@ describe('mellomlagring i sykdom', () => {
     fom: '2025-01-01',
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     harSkadeSykdomEllerLyte: false,
-    vurderingerMeta: { vurdertAv: { ident: '1234', dato: '2025-01-01' } },
+    vurderingerMeta: { vurdertAv: { ident: '1234', dato: '2025-01-01', kilde: 'SAKSBEHANDLER' } },
   };
 
   const sykdomsGrunnlagMedVurdering: SykdomsGrunnlag = {

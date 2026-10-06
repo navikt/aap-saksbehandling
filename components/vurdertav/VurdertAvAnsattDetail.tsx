@@ -12,10 +12,11 @@ interface Props {
 export const VurdertAvAnsattDetail = ({ vurdertAv, variant }: Props) => {
   if (!vurdertAv) return null;
 
-  if (vurdertAv.ident === 'Kelvin') {
+  if (vurdertAv.kilde === 'AUTOMATISK' || vurdertAv.kilde === 'MIGRERT_FRA_ARENA') {
+    const tekst = vurdertAv.kilde === 'MIGRERT_FRA_ARENA' ? 'Migrert fra Arena' : 'Vurdert automatisk';
     return (
       <VStack align="end">
-        <Detail>{`Vurdert automatisk, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}</Detail>
+        <Detail>{`${tekst}, ${vurdertAv?.dato ? formaterDatoForFrontend(vurdertAv.dato) : ''}`}</Detail>
       </VStack>
     );
   }

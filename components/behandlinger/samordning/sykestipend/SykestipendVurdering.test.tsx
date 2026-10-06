@@ -14,6 +14,7 @@ const grunnlagMedVurdering: SykestipendGrunnlag = {
       vurdertAv: {
         dato: '2024-02-01',
         ident: 'Saksbehandler',
+        kilde: 'SAKSBEHANDLER',
       },
     },
   },
