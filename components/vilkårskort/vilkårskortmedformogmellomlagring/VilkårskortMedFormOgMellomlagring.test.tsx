@@ -1,10 +1,11 @@
 import { describe, expect, it, vitest } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import {
   VilkårskortMedFormOgMellomlagring,
   VilkårsKortMedFormOgMellomlagringProps,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VisningModus } from 'lib/types/visningTypes';
+import { SubmitEventHandler } from 'react';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {
@@ -223,6 +224,25 @@ describe('Vilkårskort med form', () => {
 
     expect(bekreftKnapp).toBeVisible();
     expect(avbrytKnapp).not.toBeInTheDocument();
+  });
+
+  it('Skal videresende submit til mottatt handler også når visningsmodus er låst', () => {
+    const onSubmit = vitest.fn<SubmitEventHandler>((event) => event.preventDefault());
+    const { container } = render(
+      <VilkårskortMedFormOgMellomlagring
+        {...defaultProps}
+        visningModus={VisningModus.LÅST_UTEN_ENDRE}
+        onSubmit={onSubmit}
+      />
+    );
+    const form = container.querySelector('form');
+    if (!form) {
+      throw new Error('Forventet å finne skjemaet');
+    }
+
+    fireEvent.submit(form);
+
+    expect(onSubmit).toHaveBeenCalledOnce();
   });
 
   it('Skal ha knapp for å endre vurdering når visningsModus er LÅST_MED_ENDRE', () => {
