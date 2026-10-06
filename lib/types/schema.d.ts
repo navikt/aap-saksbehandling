@@ -16973,6 +16973,8 @@ export interface components {
       enhetsnavn?: string | null;
       erRetur?: boolean | null;
       ident: string;
+      /** @enum {string} */
+      kilde: 'AUTOMATISK' | 'MIGRERT_FRA_ARENA' | 'SAKSBEHANDLER';
     };
     'no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo': {
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.drift.ForenkletAvklaringsbehov'][];

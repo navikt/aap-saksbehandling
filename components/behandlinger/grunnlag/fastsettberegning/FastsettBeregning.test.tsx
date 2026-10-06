@@ -29,6 +29,7 @@ const grunnlagMedTidligereVurdering: BeregningTidspunktGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'Saksbehandler',
+        kilde: 'SAKSBEHANDLER',
         dato: '2022-07-01',
       },
     },
@@ -47,6 +48,7 @@ const grunnlagMedÅrsak: BeregningTidspunktGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'Saksbehandler',
+        kilde: 'SAKSBEHANDLER',
         dato: '2022-07-01',
       },
     },
@@ -65,6 +67,7 @@ const grunnlagMedHistorikk: BeregningTidspunktGrunnlag = {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
           dato: '2021-06-06',
         },
       },
@@ -376,6 +379,7 @@ describe('mellomlagring', () => {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
           dato: '2025-08-21',
         },
       },

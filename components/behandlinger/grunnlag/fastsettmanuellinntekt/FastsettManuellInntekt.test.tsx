@@ -26,6 +26,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
         vurdertAv: {
           dato: '2025-11-27',
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
         },
       },
     },
@@ -48,6 +49,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
         vurdertAv: {
           dato: '2025-11-27',
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
         },
       },
     },
@@ -179,7 +181,7 @@ describe('Manglende pensjonsgivende inntekt / EØS-beregnet inntekt', () => {
           { år: 2024, beløp: 300000 },
         ],
         begrunnelse: 'Dette er en begrunnelse',
-        vurderingerMeta: { vurdertAv: { dato: '2025-11-27', ident: 'Saksbehandler' } },
+        vurderingerMeta: { vurdertAv: { dato: '2025-11-27', ident: 'Saksbehandler', kilde: 'SAKSBEHANDLER' } },
       },
       registrerteInntekterSisteRelevanteAr: [{ år: 2022, beløp: 100000 }],
     };

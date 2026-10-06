@@ -38,6 +38,7 @@ describe('Klage - vurdering nay', () => {
             vurderingerMeta: {
               vurdertAv: {
                 ident: 'ident',
+                kilde: 'SAKSBEHANDLER',
                 dato: '2025-01-01',
                 ansattnavn: 'Ine',
                 enhetsnavn: 'Kontor',
