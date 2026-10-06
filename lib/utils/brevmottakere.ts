@@ -34,3 +34,29 @@ export function mapGrunnlagTilMottakere(
       : undefined,
   };
 }
+
+export function mapFullmektigTilMottaker(fullmektigVurdering?: FullmektigVurdering): Mottaker | undefined {
+  if (!fullmektigVurdering?.harFullmektig) return undefined;
+
+  const fullmektigIdentMedType = fullmektigVurdering?.fullmektigIdentMedType;
+  const fullmektigIdent = fullmektigIdentMedType?.type === 'FNR_DNR' ? 'FNR' : fullmektigIdentMedType?.type;
+  const fullmektigNavnOgAdresse = fullmektigVurdering?.fullmektigNavnOgAdresse;
+
+  return {
+    ident: fullmektigIdentMedType?.ident,
+    identType: fullmektigIdent,
+    ...(fullmektigNavnOgAdresse && {
+      navnOgAdresse: {
+        navn: fullmektigNavnOgAdresse?.navn,
+        adresse: {
+          adresselinje1: fullmektigNavnOgAdresse?.adresse?.adresselinje1,
+          adresselinje2: fullmektigNavnOgAdresse?.adresse?.adresselinje2,
+          adresselinje3: fullmektigNavnOgAdresse?.adresse?.adresselinje3,
+          postnummer: fullmektigNavnOgAdresse?.adresse?.postnummer,
+          poststed: fullmektigNavnOgAdresse?.adresse?.poststed,
+          landkode: fullmektigNavnOgAdresse?.adresse?.landkode,
+        },
+      },
+    }),
+  };
+}
