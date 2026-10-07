@@ -8,6 +8,33 @@ import { JaEllerNei } from 'lib/utils/form';
 import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 /**
+ * Avgjør hvilken regel backend brukte for å beregne tidligsteReduksjonsdato for et opphold,
+ * basert på oppholdets egen oppholdFra og den faktiske tidligsteReduksjonsdato fra backend.
+ * Trenger ingen kjennskap til forrige opphold.
+ */
+export function lagReduksjonsBeskrivelseUtFraRegel(
+  oppholdFra: string,
+  oppholdTil: string,
+  tidligsteReduksjonsdato?: string | null
+): string {
+  if (!tidligsteReduksjonsdato) {
+    return lagReduksjonsBeskrivelse(oppholdFra, tidligsteReduksjonsdato);
+  }
+
+  const oppholdDato = new Dato(oppholdFra).dato;
+  const reduksjonDato = new Dato(tidligsteReduksjonsdato).dato;
+
+  // tidligsteReduksjonsdato er satt til lik oppholdFra dato fra backend for å myke opp validering. Beskrivelse skal da vise at det er 1 måned regel som gjelder.
+  const erÉnMånedsRegel = isEqual(reduksjonDato, oppholdDato);
+
+  if (erÉnMånedsRegel) {
+    return lagReduksjonBeskrivelseNyttOpphold(oppholdFra, oppholdTil);
+  }
+
+  return lagReduksjonsBeskrivelse(oppholdFra, tidligsteReduksjonsdato);
+}
+
+/**
  * Formatterer beskrivelse av reduksjonsperioden
  */
 export function lagReduksjonsBeskrivelse(oppholdFra: string, tidligsteReduksjonsdato?: string | null): string {
@@ -21,7 +48,29 @@ export function lagReduksjonsBeskrivelse(oppholdFra: string, tidligsteReduksjons
   return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${tidligsteReduksjon}`;
 }
 
-export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
+export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string, oppholdTil: string): string {
+  const oppholdDato = new Dato(oppholdFra).dato;
+  const oppholdTilDato = new Dato(oppholdTil).dato;
+
+  const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });
+
+  const énMånedEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 1));
+  const fireMånederEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 4));
+
+  const visFireMånederRegel =
+    isAfter(oppholdTilDato, fireMånederEtterInnleggelsesmåned) ||
+    isEqual(oppholdTilDato, fireMånederEtterInnleggelsesmåned);
+
+  const fireMånederTekst = visFireMånederRegel
+    ? `, ellers ${formatDatoMedMånedsnavn(fireMånederEtterInnleggelsesmåned)}`
+    : '';
+
+  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjonen bør som regel starte ${formatDatoMedMånedsnavn(
+    énMånedEtterInnleggelsesmåned
+  )} ved reduksjon i forrige opphold${fireMånederTekst}. Det finnes likevel unntak.`;
+}
+
+export function lagReduksjonBeskrivelseNyttOppholdGammel(oppholdFra: string): string {
   const oppholdDato = new Dato(oppholdFra).dato;
 
   const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });

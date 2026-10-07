@@ -18,7 +18,6 @@ import {
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { Dato } from 'lib/types/Dato';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
@@ -27,6 +26,10 @@ import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/inst
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { addDays } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { TidligereVurderingKortMedGap } from 'components/periodisering/tidligerevurderingkortmedgap/TidligereVurderingKortMedGap';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -65,6 +68,7 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
+  const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
 
   return (
     <Box
@@ -80,15 +84,30 @@ export const HelseinstitusjonOppholdGruppe = ({
         <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>
-            <BodyShort className={styles.detailgray}>
-              {opphold.kildeinstitusjon} - {opphold.oppholdstype}
-            </BodyShort>
+            {!visSammenhengendeOpphold && (
+              <BodyShort className={styles.detailgray}>
+                {opphold.kildeinstitusjon} - {opphold.oppholdstype}
+              </BodyShort>
+            )}
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
               {!datoErUendeligSlutt(opphold.avsluttetDato)
                 ? formatDatoMedMånedsnavn(opphold.avsluttetDato)
                 : 'Pågående'}
             </Label>
+            {opphold.delperioder.length === 1 && (
+              <BodyShort className={styles.detailgray}>{storForbokstavIHvertOrd(opphold.kildeinstitusjon)}</BodyShort>
+            )}
+            {visSammenhengendeOpphold && opphold.delperioder.length > 1 && (
+              <VStack gap="space-2" className={styles.delperioder}>
+                {opphold.delperioder.map((delperiode, i) => (
+                  <BodyShort key={delperiode.institusjonsnavn + i} size="small" className={styles.detailgray}>
+                    {storForbokstavIHvertOrd(delperiode.institusjonsnavn)}: {formatDatoMedMånedsnavn(delperiode.fom)} –{' '}
+                    {formatDatoMedMånedsnavn(delperiode.tom)}
+                  </BodyShort>
+                ))}
+              </VStack>
+            )}
           </div>
         </HStack>
       </Box>
@@ -104,9 +123,25 @@ export const HelseinstitusjonOppholdGruppe = ({
             .sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
             .map((vurdering, index, alle) => {
               const erSiste = index === alle.length - 1;
-
               const justertTomDato =
                 erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
+
+              if (visSammenhengendeOpphold) {
+                return (
+                  <TidligereVurderingKortMedGap
+                    key={vurdering.periode.fom}
+                    fom={new Dato(vurdering.periode.fom).dato}
+                    tom={justertTomDato}
+                    førsteNyePeriodeFraDato={
+                      foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
+                    }
+                    vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
+                    vurderingerMeta={vurdering.vurderingerMeta}
+                  >
+                    <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
+                  </TidligereVurderingKortMedGap>
+                );
+              }
 
               return (
                 <TidligereVurderingExpandableCard
@@ -136,7 +171,7 @@ export const HelseinstitusjonOppholdGruppe = ({
               (vurderingIndex === 0 && !tidligereVurderinger?.length ? new Dato(opphold.oppholdFra).dato : null);
 
             return (
-              <div key={vurderingIndex} className={styles.vurderingRad}>
+              <div key={vurdering.oppholdId + vurderingIndex} className={styles.vurderingRad}>
                 <NyVurderingExpandableCard
                   key={vurdering.id || vurderingIndex}
                   accordionsSignal={accordionsSignal}

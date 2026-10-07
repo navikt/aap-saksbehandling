@@ -23,6 +23,7 @@ const grunnlagUtenVurdering: Soningsgrunnlag = {
       oppholdFra: '2022-10-23',
       avsluttetDato: '2025-10-23',
       kildeinstitusjon: 'Azkaban',
+      delperioder: [],
     },
   ],
   vurderinger: [
@@ -45,6 +46,7 @@ const grunnlagMedVurdering: Soningsgrunnlag = {
       oppholdFra: '2022-10-23',
       avsluttetDato: '2025-10-23',
       kildeinstitusjon: 'Azkaban',
+      delperioder: [],
     },
   ],
   vurderinger: [

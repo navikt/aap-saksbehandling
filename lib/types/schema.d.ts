@@ -14999,6 +14999,7 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseoppholdDto': {
+      delperioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDelperiodeDto'][];
       oppholdId?: string | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
@@ -15007,12 +15008,26 @@ export interface components {
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'][]
         | null;
     };
+    'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDelperiodeDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      institusjonsnavn: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto': {
       /**
        * Format: date
        * @example 2025-04-01
        */
       avsluttetDato: string;
+      delperioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDelperiodeDto'][];
       institusjonstype: string;
       kildeinstitusjon: string;
       /**

@@ -16,6 +16,7 @@ export const FLAGS = [
   'ForesporselSendtTilBehandlerFrontend',
   'StoppAutomatikkForLegeerklaringVedAvslag',
   'RegistrerMeldedato',
+  'SammenhengendeInstitusjonsopphold',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -39,4 +40,5 @@ export const mockedFlags: Flags = {
   ForesporselSendtTilBehandlerFrontend: true,
   StoppAutomatikkForLegeerklaringVedAvslag: true,
   RegistrerMeldedato: true,
+  SammenhengendeInstitusjonsopphold: true,
 };
