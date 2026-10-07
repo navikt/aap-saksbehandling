@@ -21,6 +21,8 @@ const brevdata: BrevdataDto = {
   delmaler: [],
   fritekster: [],
   valg: [],
+  automatiskValgteDelmalIder: [],
+  automatiskValgteValg: [],
 };
 
 const user = userEvent.setup();
@@ -203,6 +205,28 @@ describe('Delmalvelger', () => {
       expect(kort).not.toBeNull();
     }
   });
+
+  test('forhåndsvalgte delmaler er markert med "Forhåndsvalgt"', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{
+          ...brevdata,
+          delmaler: [{ id: valgfriDelmal.delmal._id }],
+          automatiskValgteDelmalIder: [valgfriDelmal.delmal._id],
+        }}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        behandlingVersjon={1}
+        readOnly={false}
+        brevtype={'INNVILGELSE'}
+      />
+    );
+    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel }).closest('div');
+    expect(kort).not.toBeNull();
+    expect(within(kort!).getByText('Forhåndsvalgt')).toBeVisible();
+  });
 });
 
 describe('Delmaler med valg', () => {
@@ -367,6 +391,12 @@ describe('Delmaler med valg', () => {
               key: 'alt1-key',
             },
           ],
+          automatiskValgteValg: [
+            {
+              id: 'valgref-1',
+              key: 'alt1-key',
+            },
+          ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
         mottaker={{ ident: '1234', navn: 'Navn' }}
@@ -378,7 +408,9 @@ describe('Delmaler med valg', () => {
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
-    expect((screen.getByRole('option', { name: 'Alternativ 1' }) as HTMLOptionElement).selected).toBe(true);
+    expect((screen.getByRole('option', { name: 'Alternativ 1 (Forhåndsvalgt)' }) as HTMLOptionElement).selected).toBe(
+      true
+    );
   });
 
   test('fritekst er valgt når det kommer som input til brevbyggeren', () => {

@@ -14486,6 +14486,7 @@ export interface components {
         | 'VEDTAK_11_7'
         | 'VEDTAK_11_9'
         | 'VEDTAK_ENDRING'
+        | 'VEDTAK_ENDRING_DODSFALL'
         | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_12'
         | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_26'
         | 'VEDTAK_FORLENGELSE_UNDER_ETT_ÅR_11_27'
@@ -21590,6 +21591,8 @@ export interface components {
       tekstbolker: components['schemas']['no.nav.aap.brev.kontrakt.Tekstbolk'][];
     };
     'no.nav.aap.brev.kontrakt.BrevdataDto': {
+      automatiskValgteDelmalIder: string[];
+      automatiskValgteValg: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'][];
       betingetTekst: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.BetingetTekst'][];
       delmaler: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'][];
       fritekster: components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'][];
