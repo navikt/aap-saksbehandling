@@ -7,6 +7,8 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 import {
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonUtIFraFormFields,
+  lagReduksjonBeskrivelseNyttOppholdGammel,
+  lagReduksjonsBeskrivelse,
   lagReduksjonsBeskrivelseUtFraRegel,
   validerDatoErInnenforOpphold,
   validerDatoForStoppAvReduksjon,
@@ -16,6 +18,7 @@ import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -54,9 +57,29 @@ export const Helseinstitusjonsvurdering = ({
   const forrigeOppholdTom =
     oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
 
+  const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+
   const reduksjonsBeskrivelse = useMemo(() => {
-    return lagReduksjonsBeskrivelseUtFraRegel(opphold.oppholdFra, opphold.avsluttetDato, opphold.tidligsteReduksjonsdato);
-  }, [opphold.oppholdFra, opphold.avsluttetDato, opphold.tidligsteReduksjonsdato]);
+    if (sammenhengendeOppholdEnabled) {
+      return lagReduksjonsBeskrivelseUtFraRegel(
+        opphold.oppholdFra,
+        opphold.avsluttetDato,
+        opphold.tidligsteReduksjonsdato
+      );
+    }
+
+    if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
+      return lagReduksjonBeskrivelseNyttOppholdGammel(opphold.oppholdFra);
+    }
+
+    return lagReduksjonsBeskrivelse(opphold.oppholdFra, opphold.tidligsteReduksjonsdato);
+  }, [
+    sammenhengendeOppholdEnabled,
+    opphold.oppholdFra,
+    opphold.avsluttetDato,
+    opphold.tidligsteReduksjonsdato,
+    forrigeOppholdTom,
+  ]);
 
   return (
     <VStack gap={'space-16'}>

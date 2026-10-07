@@ -29,6 +29,7 @@ import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { TidligereVurderingKortMedGap } from 'components/periodisering/tidligerevurderingkortmedgap/TidligereVurderingKortMedGap';
+import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -83,6 +84,11 @@ export const HelseinstitusjonOppholdGruppe = ({
         <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>
+            {!visSammenhengendeOpphold && (
+              <BodyShort className={styles.detailgray}>
+                {opphold.kildeinstitusjon} - {opphold.oppholdstype}
+              </BodyShort>
+            )}
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
               {!datoErUendeligSlutt(opphold.avsluttetDato)
@@ -120,8 +126,25 @@ export const HelseinstitusjonOppholdGruppe = ({
               const justertTomDato =
                 erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
 
+              if (visSammenhengendeOpphold) {
+                return (
+                  <TidligereVurderingKortMedGap
+                    key={vurdering.periode.fom}
+                    fom={new Dato(vurdering.periode.fom).dato}
+                    tom={justertTomDato}
+                    førsteNyePeriodeFraDato={
+                      foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
+                    }
+                    vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
+                    vurderingerMeta={vurdering.vurderingerMeta}
+                  >
+                    <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
+                  </TidligereVurderingKortMedGap>
+                );
+              }
+
               return (
-                <TidligereVurderingKortMedGap
+                <TidligereVurderingExpandableCard
                   key={vurdering.periode.fom}
                   fom={new Dato(vurdering.periode.fom).dato}
                   tom={justertTomDato}
@@ -130,7 +153,7 @@ export const HelseinstitusjonOppholdGruppe = ({
                   vurderingerMeta={vurdering.vurderingerMeta}
                 >
                   <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-                </TidligereVurderingKortMedGap>
+                </TidligereVurderingExpandableCard>
               );
             })}
 

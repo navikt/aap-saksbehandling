@@ -20,6 +20,7 @@ import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusj
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -86,6 +87,8 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     form
   );
 
+  const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+
   const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
       const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
@@ -121,6 +124,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         const førsteNyeFom = nyeVurderinger.at(0)?.periode.fom;
 
         const finnesGap =
+          sammenhengendeOppholdEnabled &&
           sisteVedtatteVurdering &&
           sisteVedtatteTom &&
           førsteNyeFom &&
