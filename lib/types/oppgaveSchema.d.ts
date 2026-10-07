@@ -115,6 +115,43 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/oppdater-paaminnelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.oppgave.OppdaterPåminnelseRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/plukk-oppgave': {
     parameters: {
       query?: never;
@@ -1935,6 +1972,7 @@ export interface components {
         | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
         | 'MIGRERING_FRA_ARENA'
@@ -1963,6 +2001,8 @@ export interface components {
        * @example 2025-04-01
        */
       frist?: string | null;
+      /** @enum {string|null} */
+      gradBehov?: 'FRIVILLIG' | 'PÅKREVD' | null;
       /** @enum {string} */
       status:
         | 'AVBRUTT'
@@ -2039,6 +2079,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -2180,7 +2221,8 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       påminnelseDato?: string | null;
-      påminnelseStatus?: string | null;
+      /** @enum {string|null} */
+      påminnelseStatus?: 'AVBRUTT' | 'PLANLAGT' | 'SENDT' | null;
     };
     'no.nav.aap.oppgave.ForrigeKvalitetssikrerDto': {
       forrigeKvalitetssikrerIdent: string;
@@ -2189,6 +2231,17 @@ export interface components {
     'no.nav.aap.oppgave.HarMottattDokument': {
       /** @enum {string} */
       dokumentType: 'DIALOGMELDING' | 'LEGEERKLÆRING';
+    };
+    'no.nav.aap.oppgave.OppdaterPåminnelseRequest': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      påminnelseDato?: string | null;
+      /** @enum {string|null} */
+      påminnelseStatus?: 'AVBRUTT' | 'PLANLAGT' | 'SENDT' | null;
+      /** Format: uuid */
+      referanse: string;
     };
     'no.nav.aap.oppgave.OppgaveId': {
       /** Format: int64 */
@@ -2549,7 +2602,7 @@ export interface components {
         | null;
     };
     'no.nav.aap.oppgave.liste.OppgavelisteTagsResponse': {
-      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
+      forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
       forrigePåVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];
