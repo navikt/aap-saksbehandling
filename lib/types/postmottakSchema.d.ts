@@ -1590,6 +1590,7 @@ export interface components {
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.AvklarTemaVurderingDto': {
       skalTilAap: boolean;
+      tema?: string | null;
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.JournalpostMetadata': {
       brevkode?: string | null;
@@ -1799,6 +1800,7 @@ export interface components {
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarTemaLøsning': {
       behovstype: string;
       skalTilAap: boolean;
+      tema?: string | null;
     };
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklaringsbehovLøsning':
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarFordelingLøsning']

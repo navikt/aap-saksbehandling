@@ -17,6 +17,7 @@ export const FLAGS = [
   'ForesporselSendtTilBehandlerFrontend',
   'StoppAutomatikkForLegeerklaringVedAvslag',
   'DigitaliserSoknadMedlemskapEndreVisning',
+  'PostmottakVelgTema',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -41,4 +42,5 @@ export const mockedFlags: Flags = {
   ForesporselSendtTilBehandlerFrontend: true,
   StoppAutomatikkForLegeerklaringVedAvslag: true,
   DigitaliserSoknadMedlemskapEndreVisning: true,
+  PostmottakVelgTema: false,
 };
