@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { addDays, subDays } from 'date-fns';
 import { KravVurderingForSøknad, RelevantKrav, SøknadUtenKrav } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
-import { byggInitielleVurderinger } from 'components/behandlinger/krav/kravutils';
+import { byggInitielleVurderinger } from 'components/behandlinger/krav/utils/vurderkravutils';
 import { KravBoks, KravBoksInnhold } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
 import { formaterDatoForFrontend } from 'lib/utils/date';

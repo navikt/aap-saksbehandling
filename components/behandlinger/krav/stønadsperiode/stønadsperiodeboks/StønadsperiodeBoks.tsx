@@ -16,7 +16,7 @@ export const StønadsperiodeBoks = ({ vurdering, onLukk }: Props) => {
           <HStack align="center" gap="space-12">
             <TasklistIcon aria-hidden fontSize="2rem" />
             <VStack>
-              <Detail>Vurderes fra: {formaterDatoForFrontend(vurdering.startDato)}</Detail>
+              <Detail>Søknadsdato: {formaterDatoForFrontend(vurdering.startDato)}</Detail>
               <BodyShort weight="semibold" size="small">
                 Vurder krav {vurdering.referanse}
               </BodyShort>

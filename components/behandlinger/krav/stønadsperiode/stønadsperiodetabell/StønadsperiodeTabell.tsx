@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Table } from '@navikt/ds-react';
+import { Button, Heading, Table, VStack } from '@navikt/ds-react';
 import { StønadsperiodeGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -20,10 +20,11 @@ export const StønadsperiodeTabell = ({ grunnlag, readOnly, valgteKrav, onToggle
     ...grunnlag.nyeVurderinger.map((ny) => ({ status: 'Ny', ...ny })),
   ];
 
-  console.log(readOnly) // Denne må taes i bruk før prod
+  console.log(readOnly); // Denne må taes i bruk før prod
 
   return (
-    <>
+    <VStack gap={'space-16'}>
+      <Heading size={'xsmall'}>Brukerens krav om AAP</Heading>
       <TableStyled>
         <Table.Header>
           <Table.Row>
@@ -57,6 +58,6 @@ export const StønadsperiodeTabell = ({ grunnlag, readOnly, valgteKrav, onToggle
           ))}
         </Table.Body>
       </TableStyled>
-    </>
+    </VStack>
   );
 };
