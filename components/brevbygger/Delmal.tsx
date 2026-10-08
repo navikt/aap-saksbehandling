@@ -52,14 +52,14 @@ export const Delmal = ({
             paddingBlock="space-8"
             paddingInline="space-16"
             borderRadius={erValgt ? '12 12 0 0' : '12'}
-            background={forhåndsvalgt && !obligatorisk ? 'brand-beige-soft' : 'default'}
+            background={forhåndsvalgt && !obligatorisk ? 'neutral-soft' : 'default'}
           >
             <HStack justify="space-between">
               <Heading level="2" size="small">
                 {delmal.brevbyggerTittel ?? delmal.beskrivelse}
               </Heading>
               {forhåndsvalgt && !obligatorisk && (
-                <Tag variant={'outline'} data-color="brand-beige" size="small">
+                <Tag variant={'outline'} data-color="neutral" size="small">
                   Forhåndsvalgt
                 </Tag>
               )}
