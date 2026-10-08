@@ -1,4 +1,4 @@
-import { Box, Heading, HStack, Loader, Switch, VStack } from '@navikt/ds-react';
+import { Box, Heading, HStack, Loader, Switch, Tag, VStack } from '@navikt/ds-react';
 import { Control, Controller, useWatch } from 'react-hook-form';
 import { DelmalReferanse, FritekstType, ValgRef } from 'components/brevbygger/brevmodellTypes';
 import { BrevFormVerdier } from 'components/brevbygger/types';
@@ -7,15 +7,25 @@ import { DelmalFritekst } from 'components/brevbygger/Fritekst';
 
 import styles from './Delmal.module.css';
 import { StandardtekstBoks } from 'components/brevbygger/StandardtekstBoks';
+import { ValgDto } from 'lib/types/types';
 
 interface Props {
   delmalRef: DelmalReferanse;
   control: Control<BrevFormVerdier>;
   delmalInnhold: string | undefined;
   isLoading: boolean;
+  automatiskValgteValg?: ValgDto[];
+  forhåndsvalgt?: boolean;
 }
 
-export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) => {
+export const Delmal = ({
+  delmalRef,
+  control,
+  delmalInnhold,
+  isLoading,
+  automatiskValgteValg,
+  forhåndsvalgt = false,
+}: Props) => {
   const { delmal, obligatorisk } = delmalRef;
 
   const valgOgFritekst = delmal.teksteditor.filter(
@@ -37,41 +47,53 @@ export const Delmal = ({ delmalRef, control, delmalInnhold, isLoading }: Props) 
     <>
       {!visDelmalKomponent && <StandardtekstBoks />}
       {visDelmalKomponent && (
-        <Box
-          borderWidth="1"
-          borderRadius="12"
-          paddingInline="space-16"
-          paddingBlock="space-8"
-          borderColor="neutral-subtle"
-          background="default"
-          id={delmalRef._key}
-        >
-          <HStack justify="space-between">
-            <Heading level="2" size="small">
-              {delmal.brevbyggerTittel ?? delmal.beskrivelse}
-            </Heading>
-
-            {!obligatorisk && (
-              <Controller
-                name={`delmaler.${delmal._id}`}
-                control={control}
-                render={({ field }) => (
-                  <Switch onChange={field.onChange} checked={field.value} hideLabel size="small" position="right">
-                    Inkluder i brev
-                  </Switch>
-                )}
-              />
-            )}
-          </HStack>
+        <Box borderWidth="1" borderRadius="12" borderColor="neutral-subtle" background="default" id={delmalRef._key}>
+          <Box
+            paddingBlock="space-8"
+            paddingInline="space-16"
+            borderRadius={erValgt ? '12 12 0 0' : '12'}
+            background={forhåndsvalgt && !obligatorisk ? 'neutral-soft' : 'default'}
+          >
+            <HStack justify="space-between">
+              <Heading level="2" size="small">
+                {delmal.brevbyggerTittel ?? delmal.beskrivelse}
+              </Heading>
+              {forhåndsvalgt && !obligatorisk && (
+                <Tag variant={'outline'} data-color="neutral" size="small">
+                  Forhåndsvalgt
+                </Tag>
+              )}
+              {!obligatorisk && (
+                <Controller
+                  name={`delmaler.${delmal._id}`}
+                  control={control}
+                  render={({ field }) => (
+                    <Switch onChange={field.onChange} checked={field.value} hideLabel size="small" position="right">
+                      Inkluder i brev
+                    </Switch>
+                  )}
+                />
+              )}
+            </HStack>
+          </Box>
           {erValgt && (
-            <VStack gap="space-16" marginBlock="space-8">
-              {valgOgFritekst.map((node) => {
-                if (node._type === 'fritekst') {
-                  return <DelmalFritekst key={node._key} node={node} control={control} delmalId={delmal._id} />;
-                }
-                return <Valg key={node._key} valgRef={node} control={control} />;
-              })}
-            </VStack>
+            <Box paddingBlock="space-8" paddingInline="space-16" borderRadius="0 0 12 12" background="default">
+              <VStack gap="space-16" marginBlock="space-8">
+                {valgOgFritekst.map((node) => {
+                  if (node._type === 'fritekst') {
+                    return <DelmalFritekst key={node._key} node={node} control={control} delmalId={delmal._id} />;
+                  }
+                  return (
+                    <Valg
+                      key={node._key}
+                      valgRef={node}
+                      control={control}
+                      automatiskValgteValg={automatiskValgteValg}
+                    />
+                  );
+                })}
+              </VStack>
+            </Box>
           )}
         </Box>
       )}

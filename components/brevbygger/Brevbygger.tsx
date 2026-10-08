@@ -183,6 +183,8 @@ export const Brevbygger = ({
                 delmalInnhold={
                   brevPreview?.delmaler.find((innholdNode) => innholdNode.sanityNoekkel === delmalRef._key)?.htmlString
                 }
+                forhåndsvalgt={brevdata?.automatiskValgteDelmalIder.includes(delmalRef.delmal._id)}
+                automatiskValgteValg={brevdata?.automatiskValgteValg}
                 isLoading={lasterBrevdata}
               />
             ))}

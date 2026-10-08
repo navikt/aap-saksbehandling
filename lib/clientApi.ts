@@ -29,7 +29,7 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
-  RettighetsinfoDto,
+  RegistrerMeldedatoRequest,
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
@@ -192,10 +192,6 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
-export function clientHentRettighetsinfo(saksnummer: string) {
-  return clientFetch<RettighetsinfoDto>(`${BASE_URL}/api/sak/${saksnummer}/rettighetsinfo`, 'GET');
-}
-
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
   return clientFetch<ForhåndsvisDialogmeldingResponse>(
     `${BASE_URL}/api/dokumentinnhenting/forhaandsvis`,
@@ -321,6 +317,10 @@ export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortReq
     'POST',
     oppdaterMeldekortRequest
   );
+}
+
+export function clientRegistrerMeldedato(saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) {
+  return clientFetch(`${BASE_URL}/api/meldekort/${saksnummer}/registrer-meldedato`, 'POST', registrerMeldedatoRequest);
 }
 
 export function clientHentAInntektRedirectUrl(saksnummer: string) {

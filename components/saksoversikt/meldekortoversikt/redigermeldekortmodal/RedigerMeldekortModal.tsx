@@ -11,10 +11,10 @@ import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date'
 import { clientKorrigerMeldekort } from 'lib/clientApi';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError } from 'lib/utils/api';
-import { MeldekortProsesseringServerSentEvent } from 'app/saksbehandling/api/meldekort/[saksnummer]/prosessering/route';
 import { addDays, differenceInDays } from 'date-fns';
 import { useMeldekort } from 'hooks/saksbehandling/MeldekortHook';
-import { erDatoFoerDato, erDatoIFremtiden } from 'lib/validation/dateValidation';
+import { useMeldekortProsessering } from 'hooks/saksbehandling/MeldekortProsesseringHook';
+import { erDatoFoerDato, erDatoIFremtiden, validerDato } from 'lib/validation/dateValidation';
 import { Alert } from 'components/alert/Alert';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
@@ -55,33 +55,7 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
 
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
-
-  const ventPåMeldekortProsessering = () => {
-    const eventSource = new EventSource(`/saksbehandling/api/meldekort/${saksnummer}/prosessering/`, {
-      withCredentials: true,
-    });
-
-    eventSource.onmessage = async (event: MessageEvent) => {
-      const eventData: MeldekortProsesseringServerSentEvent = JSON.parse(event.data);
-
-      if (eventData.status === 'KLAR') {
-        eventSource.close();
-        refetchMeldekort();
-        setIsOpen(false);
-        setIsLoading(false);
-      } else {
-        eventSource.close();
-        setError('Meldekort ble sendt inn, men prosesseringen tok for lang tid. Prøv å laste siden på nytt.');
-        setIsLoading(false);
-      }
-    };
-
-    eventSource.onerror = () => {
-      eventSource.close();
-      setError('Noe gikk galt under prosessering av meldekort.');
-      setIsLoading(false);
-    };
-  };
+  const { ventPåMeldekortProsessering } = useMeldekortProsessering();
 
   const form = useForm({ defaultValues: getDefaultValuesForForm(meldekort) });
 
@@ -144,7 +118,21 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                     setError('Noe gikk galt ved innsending: ' + oppdaterMeldekortResponse.apiException.message);
                     setIsLoading(false);
                   } else {
-                    ventPåMeldekortProsessering();
+                    ventPåMeldekortProsessering({
+                      onSuccess: () => {
+                        refetchMeldekort();
+                        setIsOpen(false);
+                        setIsLoading(false);
+                      },
+                      onTimeout: (timeoutError) => {
+                        setError(timeoutError);
+                        setIsLoading(false);
+                      },
+                      onError: (processingError) => {
+                        setError(processingError);
+                        setIsLoading(false);
+                      },
+                    });
                   }
                 })}
               >
@@ -182,6 +170,9 @@ export const RedigerMeldekortModal = ({ isOpen, setIsOpen, meldekort }: Props) =
                       rules={{
                         required: 'Du må legge til en meldedato for meldekortet.',
                         validate: {
+                          validerDato: (value) => {
+                            return validerDato(value as string);
+                          },
                           validerIkkeIFremtiden: (value) => {
                             if (erDatoIFremtiden(value as string)) {
                               return 'Meldedato kan ikke være i fremtiden.';

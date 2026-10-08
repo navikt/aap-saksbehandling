@@ -72,6 +72,7 @@ describe('FastsettArbeidsevne', () => {
             vurderingerMeta: {
               vurdertAv: {
                 ident: 'Saksbehandler',
+                kilde: 'SAKSBEHANDLER',
                 dato: '2025-08-21',
               },
             },
@@ -227,6 +228,7 @@ describe('FastsettArbeidsevne', () => {
             vurderingerMeta: {
               vurdertAv: {
                 ident: 'Saksbehandler',
+                kilde: 'SAKSBEHANDLER',
                 dato: '2025-08-21',
               },
             },

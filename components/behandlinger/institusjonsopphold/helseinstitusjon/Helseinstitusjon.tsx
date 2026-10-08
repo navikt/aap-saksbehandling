@@ -1,7 +1,7 @@
 'use client';
 
 import { VStack } from '@navikt/ds-react';
-import { format, parse, subDays } from 'date-fns';
+import { addDays, format, isAfter, parse, subDays } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -20,6 +20,7 @@ import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusj
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -86,12 +87,20 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     form
   );
 
+  const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+
   const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
       const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
 
       const vurderinger = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        return opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
+        const vedtatteForOpphold = grunnlag.vedtatteVurderinger
+          .filter((v) => v.oppholdId === opphold.oppholdId)
+          .flatMap((v) => v.vurderinger || []);
+        const sisteVedtatteVurdering = vedtatteForOpphold.at(-1);
+        const sisteVedtatteTom = sisteVedtatteVurdering?.periode.tom ?? null;
+
+        const nyeVurderinger = opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
           const nesteVurdering = filtrerteVurderinger.at(index + 1);
 
           const fom = vurdering.periode?.fom
@@ -111,6 +120,33 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             periode: { fom, tom },
           };
         });
+
+        const førsteNyeFom = nyeVurderinger.at(0)?.periode.fom;
+
+        const finnesGap =
+          sammenhengendeOppholdEnabled &&
+          sisteVedtatteVurdering &&
+          sisteVedtatteTom &&
+          førsteNyeFom &&
+          isAfter(new Dato(førsteNyeFom).dato, addDays(new Dato(sisteVedtatteTom).dato, 1));
+
+        const gapVurdering = finnesGap
+          ? [
+              {
+                oppholdId: sisteVedtatteVurdering.oppholdId,
+                begrunnelse: sisteVedtatteVurdering.begrunnelse,
+                faarFriKostOgLosji: sisteVedtatteVurdering.faarFriKostOgLosji,
+                forsoergerEktefelle: sisteVedtatteVurdering.forsoergerEktefelle,
+                harFasteUtgifter: sisteVedtatteVurdering.harFasteUtgifter,
+                periode: {
+                  fom: formaterDatoForBackend(addDays(new Dato(sisteVedtatteTom).dato, 1)),
+                  tom: formaterDatoForBackend(subDays(new Dato(førsteNyeFom).dato, 1)),
+                },
+              },
+            ]
+          : [];
+
+        return [...gapVurdering, ...nyeVurderinger];
       });
 
       løsAvklaringsbehov(
@@ -191,7 +227,9 @@ function skalJustereVedtatteVurderinger(grunnlag: HelseinstitusjonGrunnlag, opph
   const harNyeVurderinger = grunnlag.vurderinger.some((v) => v.oppholdId === oppholdId);
   if (harNyeVurderinger) return false;
 
-  const vedtatteForOpphold = grunnlag.vedtatteVurderinger.find((v) => v.oppholdId === oppholdId)?.vurderinger;
+  const vedtatteForOpphold = grunnlag.vedtatteVurderinger
+    .filter((v) => v.oppholdId === opphold.oppholdId)
+    .flatMap((v) => v.vurderinger || []);
   if (!vedtatteForOpphold || vedtatteForOpphold.length === 0) return false;
 
   const sisteVedtatteTom = vedtatteForOpphold[vedtatteForOpphold.length - 1].periode.tom;
@@ -206,7 +244,9 @@ function mapVurderingToDraftFormFields(
 
   return {
     helseinstitusjonsvurderinger: opphold.map((opphold) => {
-      const vurderingerForOpphold = grunnlag.vurderinger.find((v) => v.oppholdId === opphold.oppholdId)?.vurderinger;
+      const vurderingerForOpphold = grunnlag.vurderinger
+        .filter((v) => v.oppholdId === opphold.oppholdId)
+        .flatMap((v) => v.vurderinger || []);
 
       const vedtatteVurderingerForOpphold = grunnlag.vedtatteVurderinger.find(
         (v) => v.oppholdId === opphold.oppholdId
@@ -250,7 +290,7 @@ function mapVurderingToDraftFormFields(
       }
 
       const harTidligereVurderingerOgIngenNåværendeVurderinger =
-        harTidligerevurderinger && !vurderingerForOpphold && !skalJustere;
+        harTidligerevurderinger && vurderingerForOpphold.length === 0 && !skalJustere;
 
       return {
         oppholdId: opphold.oppholdId || '',
