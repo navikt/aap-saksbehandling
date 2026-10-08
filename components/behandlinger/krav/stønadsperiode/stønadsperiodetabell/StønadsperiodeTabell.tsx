@@ -7,11 +7,20 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { KravTag } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/KravTag';
 
-export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeGrunnlag }) => {
+interface Props {
+  grunnlag: StønadsperiodeGrunnlag;
+  readOnly: boolean;
+  valgteKrav: string[];
+  onToggleValgtKrav: (referanse: string) => void;
+}
+
+export const StønadsperiodeTabell = ({ grunnlag, readOnly, valgteKrav, onToggleValgtKrav }: Props) => {
   const rader = [
     ...grunnlag.vedtatteVurderinger.map((vedtatt) => ({ status: 'Vedtatt', ...vedtatt })),
     ...grunnlag.nyeVurderinger.map((ny) => ({ status: 'Ny', ...ny })),
   ];
+
+  console.log(readOnly) // Denne må taes i bruk før prod
 
   return (
     <>
@@ -35,8 +44,13 @@ export const StønadsperiodeTabell = ({ grunnlag }: { grunnlag: StønadsperiodeG
               <Table.DataCell>{formaterDatoForFrontend(rad.startDato)}</Table.DataCell>
               <Table.DataCell>{`${rad.vurdertAv} (${formaterDatoForFrontend(rad.opprettet)})`}</Table.DataCell>
               <Table.DataCell>
-                <Button size={'small'} variant={'secondary'}>
-                  Endre
+                <Button
+                  type="button"
+                  size="small"
+                  variant={valgteKrav.includes(rad.referanse) ? 'primary' : 'secondary'}
+                  onClick={() => onToggleValgtKrav(rad.referanse)}
+                >
+                  {valgteKrav.includes(rad.referanse) ? 'Avbryt' : 'Endre'}
                 </Button>
               </Table.DataCell>
             </Table.Row>
