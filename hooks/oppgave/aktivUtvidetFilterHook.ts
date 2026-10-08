@@ -35,7 +35,7 @@ export function useLagreAktivUtvidetFilter(): {
       const raw = localStorage.getItem(KEY);
       if (!raw) return undefined;
 
-      const obj = JSON.parse(raw) as LagretAktivUtvidetFilterData;
+      const obj: LagretAktivUtvidetFilterData = JSON.parse(raw);
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         return {
           ...obj.feltData,
