@@ -5,7 +5,13 @@ import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { StønadsperiodeTabell } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/StønadsperiodeTabell';
 import { StønadsperiodeBoks } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodeboks/StønadsperiodeBoks';
 import { VStack } from '@navikt/ds-react';
-import { useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import {
+  byggInitielleStønadsperiodeVurderinger,
+  finnStønadsperiodeVurderingByReferanse,
+  hentOriginaleStønadsperiodeFormFelter,
+  StønadsperiodeFormFields,
+} from 'components/behandlinger/krav/utils/stønadsperiodeutils';
 
 interface Props {
   behandlingVersjon: number;
@@ -14,17 +20,32 @@ interface Props {
 }
 
 export const Stønadsperiode = ({ grunnlag, readOnly }: Props) => {
-  const [valgteKrav, setValgteKrav] = useState<string[]>([]);
-  const vurderinger = [...grunnlag.nyeVurderinger, ...grunnlag.vedtatteVurderinger];
+  const form = useForm<StønadsperiodeFormFields>({
+    defaultValues: {
+      valgteKrav: [],
+      vurderinger: byggInitielleStønadsperiodeVurderinger(grunnlag),
+    },
+  });
+  const { control, setValue, getValues } = form;
+  const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
 
   const lukkKrav = (referanse: string) => {
-    setValgteKrav((gjeldende) => gjeldende.filter((valgt) => valgt !== referanse));
+    const originaleFelter = hentOriginaleStønadsperiodeFormFelter(grunnlag, referanse);
+    if (originaleFelter) {
+      setValue(`vurderinger.${referanse}`, originaleFelter);
+    }
+    setValue(
+      'valgteKrav',
+      (getValues('valgteKrav') ?? []).filter((valgt) => valgt !== referanse)
+    );
   };
 
   const toggleValgtKrav = (referanse: string) => {
-    setValgteKrav((gjeldende) =>
-      gjeldende.includes(referanse) ? gjeldende.filter((valgt) => valgt !== referanse) : [...gjeldende, referanse]
-    );
+    if (valgteKrav.includes(referanse)) {
+      lukkKrav(referanse);
+    } else {
+      setValue('valgteKrav', [...(getValues('valgteKrav') ?? []), referanse]);
+    }
   };
 
   return (
@@ -38,9 +59,16 @@ export const Stønadsperiode = ({ grunnlag, readOnly }: Props) => {
         />
 
         {valgteKrav.map((referanse) => {
-          const vurdering = vurderinger.find((vurdering) => vurdering.referanse === referanse);
+          const vurdering = finnStønadsperiodeVurderingByReferanse(grunnlag, referanse);
           return (
-            vurdering && <StønadsperiodeBoks key={referanse} vurdering={vurdering} onLukk={() => lukkKrav(referanse)} />
+            vurdering && (
+              <StønadsperiodeBoks
+                key={referanse}
+                vurdering={vurdering}
+                form={form}
+                onLukk={() => lukkKrav(referanse)}
+              />
+            )
           );
         })}
       </VStack>

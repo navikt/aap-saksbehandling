@@ -14,13 +14,11 @@ interface Props {
   onToggleValgtKrav: (referanse: string) => void;
 }
 
-export const StønadsperiodeTabell = ({ grunnlag, readOnly, valgteKrav, onToggleValgtKrav }: Props) => {
+export const StønadsperiodeTabell = ({ grunnlag, valgteKrav, onToggleValgtKrav }: Props) => {
   const rader = [
     ...grunnlag.vedtatteVurderinger.map((vedtatt) => ({ status: 'Vedtatt', ...vedtatt })),
     ...grunnlag.nyeVurderinger.map((ny) => ({ status: 'Ny', ...ny })),
   ];
-
-  console.log(readOnly); // Denne må taes i bruk før prod
 
   return (
     <VStack gap={'space-16'}>
