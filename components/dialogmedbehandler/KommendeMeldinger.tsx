@@ -7,6 +7,7 @@ import { clientAvbrytPåminnelsePåLegeerklæring, clientGjenopptaPåminnelsePå
 import { useState } from 'react';
 import { Alert } from '../alert/Alert';
 import { isError } from '../../lib/utils/api';
+import { clientOppdaterPåminnelseForForepørsel } from 'lib/oppgaveClientApi';
 
 export const KommendeMeldinger = ({
   kommendeMeldinger,
@@ -20,12 +21,24 @@ export const KommendeMeldinger = ({
   const [loading, setLoading] = useState<string | null>(null);
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
-  const avbrytPåminnelse = async (bestillingId: string) => {
-    setLoading(bestillingId);
+  const avbrytPåminnelse = async (kommendeMelding: KommendeMeldingDto) => {
+    setLoading(kommendeMelding.bestillingId);
     try {
-      const res = await clientAvbrytPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
+      const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
+        return;
+      }
+      /**
+       * Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
+       */
+      const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
+        referanse: behandlingsreferanse,
+        påminnelseDato: kommendeMelding.påminnelseDato,
+        påminnelseAvbrutt: true,
+      });
+      if (isError(oppdaterPåminnelseResponse)) {
+        setFeilmelding(oppdaterPåminnelseResponse.apiException.message);
         return;
       }
       setFeilmelding(null);
@@ -104,7 +117,7 @@ export const KommendeMeldinger = ({
                         variant={'tertiary'}
                         icon={<XMarkOctagonIcon fontSize="1.2rem" aria-hidden />}
                         onClick={async () => {
-                          await avbrytPåminnelse(kommendeMelding.bestillingId);
+                          await avbrytPåminnelse(kommendeMelding);
                         }}
                       >
                         <BodyShort size={'small'}>Avbryt påminnelse</BodyShort>
