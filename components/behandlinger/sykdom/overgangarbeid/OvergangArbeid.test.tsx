@@ -238,10 +238,10 @@ describe('Førstegangsbehandling', () => {
     expect(begrunnelse).toBeVisible();
   });
 
-  it('Skal ha felt for om brukeren har rett på AAP', () => {
+  it('Skal ha felt for om brukeren har rett til AAP', () => {
     render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} skalStegVurderes={true} />);
     const felt = screen.getByRole('radiogroup', {
-      name: 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?',
+      name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
     });
     expect(felt).toBeVisible();
   });

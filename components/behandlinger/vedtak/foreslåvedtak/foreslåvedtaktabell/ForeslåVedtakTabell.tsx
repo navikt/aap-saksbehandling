@@ -80,7 +80,7 @@ function mapUtfallTilTekst(utfall: string) {
     case 'OPPFYLT':
       return 'AAP innvilget';
     case 'IKKE_OPPFYLT':
-      return 'Ikke rett på AAP';
+      return 'Ikke rett til AAP';
   }
 }
 

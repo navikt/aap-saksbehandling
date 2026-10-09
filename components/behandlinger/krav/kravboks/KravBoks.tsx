@@ -250,7 +250,7 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
                   control={form.control}
                   name={`vurderinger.${referanse}.muligRettFraTilbakedateres`}
                   size="small"
-                  label="Skal brukerens rett på ytelse tilbakedateres før søknadstidspunktet?"
+                  label="Skal brukerens rett til ytelse tilbakedateres før søknadstidspunktet?"
                   rules={{ required: 'Du må svare på om retten på ytelse skal tilbakedateres.' }}
                 >
                   {MuligRettFraTilbakedateresOptions.map((option) => (
@@ -265,9 +265,9 @@ export const KravBoks = ({ innhold, onLukk }: Props) => {
                     <DateInputWrapper
                       name={`vurderinger.${referanse}.overstyrDato`}
                       control={form.control}
-                      label="Brukeren har tidligst rett på AAP fra"
+                      label="Brukeren har tidligst rett til AAP fra"
                       size={'small'}
-                      rules={{ required: 'Du må fylle inn dato bruker har tidligst rett på AAP fra.' }}
+                      rules={{ required: 'Du må fylle inn dato bruker har tidligst rett til AAP fra.' }}
                     />
                     <Alert variant="warning">
                       Det er ikke støtte for beregning av renter i Kelvin ennå. Følg samme rutine som brukes på

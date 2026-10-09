@@ -50,7 +50,7 @@ export const SykepengeerstatningFormInput = ({ readOnly, index, form }: Props) =
         control={control}
         label="Har brukeren krav på sykepengeerstatning?"
         horisontal={true}
-        rules={{ required: 'Du må ta stilling til om brukeren har rett på AAP som sykepengeerstatning.' }}
+        rules={{ required: 'Du må ta stilling til om brukeren har rett til AAP som sykepengeerstatning.' }}
         readOnly={readOnly}
       />
       {watch(`vurderinger.${index}.erOppfylt`) === JaEllerNei.Ja && (
