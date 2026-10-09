@@ -20,7 +20,7 @@ import {
   KravVurderingFormFields,
   MigrertKravFormFields,
   migrertKravTilFormFields,
-} from 'components/behandlinger/krav/kravutils';
+} from 'components/behandlinger/krav/utils/vurderkravutils';
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { MigrertKravBoks } from 'components/behandlinger/krav/migrertkravboks/MigrertKravBoks';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';

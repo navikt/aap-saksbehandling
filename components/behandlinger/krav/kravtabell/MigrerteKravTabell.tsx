@@ -2,7 +2,7 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 import { MigrertKravVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
-import { formaterKravtype } from 'components/behandlinger/krav/kravutils';
+import { formaterKravtype } from 'components/behandlinger/krav/utils/vurderkravutils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {

@@ -19,7 +19,7 @@ import {
   KravVurderingFormFields,
   migrertKravTilFormFields,
   søknadUtenKravTilFormFields,
-} from 'components/behandlinger/krav/kravutils';
+} from 'components/behandlinger/krav/utils/vurderkravutils';
 import { JaEllerNei, MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
 
 const bruker = 'Z000000';

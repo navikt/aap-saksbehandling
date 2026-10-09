@@ -10,7 +10,7 @@ import {
   formaterKravtype,
   getKravVurderingerForSøknad,
   hentOriginaleFormFelter,
-} from 'components/behandlinger/krav/kravutils';
+} from 'components/behandlinger/krav/utils/vurderkravutils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
