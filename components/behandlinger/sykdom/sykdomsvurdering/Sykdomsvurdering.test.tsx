@@ -133,7 +133,7 @@ describe('generelt', () => {
     await user.click(within(harBrukerNedsattArbeidsevneFelt).getByRole('radio', { name: 'Nei' }));
 
     const informasjonsvarsling = screen.getByText(
-      'Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.'
+      'Brukeren vil få vedtak om at de ikke har rett til arbeidsavklaringspenger.'
     );
 
     expect(informasjonsvarsling).toBeVisible();
