@@ -55,7 +55,7 @@ export const SykestipendVurdering = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har rett på sykestipend',
+        label: 'Vurder om brukeren har rett til sykestipend',
         rules: { required: 'Du må skrive en begrunnelse' },
         defaultValue: defaultValue.begrunnelse,
       },

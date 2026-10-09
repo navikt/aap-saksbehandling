@@ -78,7 +78,7 @@ export const VurderRettighetsperiodeModal = ({
   return (
     <Modal
       header={{
-        heading: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett på ytelse ',
+        heading: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett til ytelse ',
       }}
       open={isOpen}
       onClose={onClose}
@@ -88,7 +88,7 @@ export const VurderRettighetsperiodeModal = ({
         <Modal.Body>
           <VStack gap="space-16">
             <BodyLong size="medium">
-              Dersom søker kan ha rett på AAP før søknadstidspunktet kan første mulige dato med rett på ytelse
+              Dersom søker kan ha rett til AAP før søknadstidspunktet kan første mulige dato med rett til ytelse
               overstyres. NAY får en oppgave for å vurdere riktig dato etter § 22-13 syvende ledd.
             </BodyLong>
             <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak.</BodyLong>

@@ -32,7 +32,7 @@ export const OvergangUforeTidligereVurdering = ({
       {brukerRettPåAAP === true ||
         (brukerRettPåAAP === false && (
           <SpørsmålOgSvar
-            spørsmål="Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?"
+            spørsmål="Har brukeren rett til AAP under behandling av krav om uføretrygd etter § 11-18?"
             svar={brukerRettPåAAP ? 'Ja' : 'Nei'}
           />
         ))}

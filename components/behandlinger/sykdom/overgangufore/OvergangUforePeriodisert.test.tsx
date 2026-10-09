@@ -250,7 +250,7 @@ describe('Førstegangsbehandling', () => {
     expect(finnGruppeForVedtakOmUforetrygd()).toBeVisible();
   });
 
-  it('Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?', async () => {
+  it('Har brukeren rett til AAP under behandling av krav om uføretrygd etter § 11-18?', async () => {
     render(
       <OvergangUforePeriodisert
         grunnlag={overganguforeGrunnlag}
@@ -367,7 +367,7 @@ describe('Førstegangsbehandling', () => {
 
   const finnGruppeForRettPåAAP = () =>
     screen.getByRole('radiogroup', {
-      name: 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?',
+      name: 'Har brukeren rett til AAP under behandling av krav om uføretrygd etter § 11-18?',
     });
 
   const velgJa = async (group: HTMLElement) => {

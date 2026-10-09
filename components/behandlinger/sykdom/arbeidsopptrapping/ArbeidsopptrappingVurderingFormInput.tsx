@@ -72,9 +72,9 @@ export const ArbeidsopptrappingVurderingFormInput = ({ index, readonly, form, ik
       <RadioGroupJaNei
         name={`vurderinger.${index}.rettPaaAAPIOpptrapping`}
         control={form.control}
-        label="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
+        label="Har brukeren rett til AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
         horisontal={true}
-        rules={{ required: 'Du må ta stilling til om brukeren har rett på AAP i arbeidsopptrapping' }}
+        rules={{ required: 'Du må ta stilling til om brukeren har rett til AAP i arbeidsopptrapping' }}
         readOnly={readonly}
       />
       {rettPåAAPIOpptrapping === JaEllerNei.Ja && (

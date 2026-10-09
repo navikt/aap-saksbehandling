@@ -24,7 +24,7 @@ export const OvergangUforeVurderingFormInput = ({ index, form, readonly, søknad
   const vilkårsvurderingLabel = 'Vilkårsvurdering';
   const brukerSøktUføretrygdLabel = 'Har brukeren søkt om uføretrygd?';
   const brukerHarFaattVedtakOmUføretrygdLabel = 'Har brukeren fått vedtak på søknaden om uføretrygd?';
-  const brukerrettPaaAAPLabel = 'Har brukeren rett på AAP under behandling av krav om uføretrygd etter § 11-18?';
+  const brukerrettPaaAAPLabel = 'Har brukeren rett til AAP under behandling av krav om uføretrygd etter § 11-18?';
   const virkningsdatoLabel = 'Vurderingen gjelder fra';
 
   const brukerHarSoktOmUforetrygd = form.watch(`vurderinger.${index}.brukerHarSøktUføretrygd`) === JaEllerNei.Ja;

@@ -144,7 +144,7 @@ describe('FastsettArbeidsevne', () => {
       await klikkPåNyVurdering();
       expect(
         screen.getByText(
-          'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+          'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett til full ytelse.'
         )
       ).toBeVisible();
     });

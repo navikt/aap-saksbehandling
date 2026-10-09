@@ -77,7 +77,7 @@ describe('Soningsvurdering', () => {
     render(<Soningsvurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingsversjon={0} />);
     expect(
       screen.getByText(
-        'Under opphold i fengsel har ikke brukeren rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP'
+        'Under opphold i fengsel har ikke brukeren rett til AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett til AAP'
       )
     ).toBeVisible();
   });
@@ -91,7 +91,7 @@ describe('Soningsvurdering', () => {
     render(<Soningsvurdering grunnlag={grunnlagUtenVurdering} readOnly={false} behandlingsversjon={0} />);
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       })
     ).toBeVisible();
   });
@@ -176,7 +176,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+      name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -186,7 +186,7 @@ describe('mellomlagring', () => {
     render(<Soningsvurdering behandlingsversjon={1} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+      name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -204,14 +204,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -221,7 +221,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       })
     ).toHaveValue('');
   });
@@ -238,14 +238,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -255,7 +255,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning',
+        name: 'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning',
       })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });

@@ -41,7 +41,7 @@ describe('Foreslå vedtak', () => {
     const innvilget = screen.getByText('AAP innvilget');
     expect(innvilget).toBeVisible();
 
-    const avslått = screen.getByText('Ikke rett på AAP');
+    const avslått = screen.getByText('Ikke rett til AAP');
     expect(avslått).toBeVisible();
   });
 
@@ -55,7 +55,7 @@ describe('Foreslå vedtak', () => {
         }}
       />
     );
-    const avslåttPeriode = screen.getByText('Ikke rett på AAP');
+    const avslåttPeriode = screen.getByText('Ikke rett til AAP');
     expect(avslåttPeriode).toBeVisible();
   });
 

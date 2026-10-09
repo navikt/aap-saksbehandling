@@ -74,7 +74,7 @@ export const OppgitteFolkeregisterBarnVurderingFelter = ({
   return (
     <div className={'flex-column'}>
       <TextAreaWrapper
-        label={'Vurder om brukeren har rett på barnetillegg for dette barnet'}
+        label={'Vurder om brukeren har rett til barnetillegg for dette barnet'}
         control={form.control}
         name={`folkeregistrerteBarnVurderinger.${barneTilleggIndex}.vurderinger.${vurderingIndex}.begrunnelse`}
         readOnly={readOnly}
