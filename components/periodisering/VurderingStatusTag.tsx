@@ -9,6 +9,7 @@ export enum VurderingStatus {
   Overskrevet = 'Overskrevet',
   Reduksjon = 'Reduksjon',
   IkkeReduksjon = 'Ikke reduksjon',
+  HistoriskUtenReduksjonsberegning = 'Historisk – ingen reduksjonsberegning',
   VedtaksperiodeAutomatisk = 'Automatisk satt vedtaksperiode',
   VedtaksperiodeManuell = 'Manuell forlengelse',
 }
@@ -43,6 +44,8 @@ function getTagVariant(status: VurderingStatus): TagProps['variant'] {
       return 'strong';
     case VurderingStatus.IkkeReduksjon:
       return 'strong';
+    case VurderingStatus.HistoriskUtenReduksjonsberegning:
+      return 'moderate';
     case VurderingStatus.VedtaksperiodeAutomatisk:
       return 'strong';
     case VurderingStatus.VedtaksperiodeManuell:
@@ -64,6 +67,8 @@ function getDataColor(status: VurderingStatus): TagProps['data-color'] {
       return 'warning';
     case VurderingStatus.IkkeReduksjon:
       return 'success';
+    case VurderingStatus.HistoriskUtenReduksjonsberegning:
+      return 'neutral';
     case VurderingStatus.VedtaksperiodeAutomatisk:
       return 'success';
     case VurderingStatus.VedtaksperiodeManuell:
@@ -77,6 +82,8 @@ function mapVurderingStatusToVurderingTekst(status: VurderingStatus): string {
       return 'Reduksjon';
     case VurderingStatus.IkkeReduksjon:
       return 'Ikke reduksjon';
+    case VurderingStatus.HistoriskUtenReduksjonsberegning:
+      return 'Historikk (ingen reduksjonsberegning)';
     case VurderingStatus.Oppfylt:
       return 'Oppfylt';
     case VurderingStatus.OppfyltVedÅrsakssammenheng:
@@ -100,6 +107,20 @@ export function getErReduksjonEllerIkke(
   }
 
   return erReduksjon ? VurderingStatus.Reduksjon : VurderingStatus.IkkeReduksjon;
+}
+
+export function getReduksjonsstatus(
+  erReduksjon: boolean,
+  erHistoriskUtenReduksjonsberegning: boolean
+):
+  | VurderingStatus.Reduksjon
+  | VurderingStatus.IkkeReduksjon
+  | VurderingStatus.HistoriskUtenReduksjonsberegning
+  | undefined {
+  if (erHistoriskUtenReduksjonsberegning) {
+    return VurderingStatus.HistoriskUtenReduksjonsberegning;
+  }
+  return getErReduksjonEllerIkke(erReduksjon);
 }
 
 export function getErOppfyltEllerIkkeStatus(
