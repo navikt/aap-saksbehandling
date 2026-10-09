@@ -1,42 +1,71 @@
 'use client';
 
-import { StønadsperiodeGrunnlag } from 'lib/types/types';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { MellomlagretVurdering, StønadsperiodeGrunnlag } from 'lib/types/types';
 import { StønadsperiodeTabell } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/StønadsperiodeTabell';
 import { StønadsperiodeBoks } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodeboks/StønadsperiodeBoks';
 import { VStack } from '@navikt/ds-react';
-import { useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { Behovstype } from 'lib/utils/form';
 import {
   byggInitielleStønadsperiodeVurderinger,
   finnStønadsperiodeVurderingByReferanse,
   hentOriginaleStønadsperiodeFormFelter,
   StønadsperiodeFormFields,
 } from 'components/behandlinger/krav/utils/stønadsperiodeutils';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { SubmitEventHandler } from 'react';
 
 interface Props {
   behandlingVersjon: number;
   grunnlag: StønadsperiodeGrunnlag;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const Stønadsperiode = ({ grunnlag, readOnly }: Props) => {
-  const form = useForm<StønadsperiodeFormFields>({
-    defaultValues: {
-      valgteKrav: [],
-      vurderinger: byggInitielleStønadsperiodeVurderinger(grunnlag),
-    },
-  });
-  const { control, setValue, getValues } = form;
-  const valgteKrav = useWatch({ control, name: 'valgteKrav' }) ?? [];
+export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+  // const { behandlingsreferanse } = useParamsMedType();
+
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+    readOnly,
+    'AVKLAR_STØNADSPERIODE',
+    initialMellomlagretVurdering
+  );
+
+  const defaultValues: StønadsperiodeFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : {
+        valgteKrav: [],
+        vurderinger: byggInitielleStønadsperiodeVurderinger(grunnlag),
+      };
+
+  const form = useForm<StønadsperiodeFormFields>({ defaultValues });
+
+  const { mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_STØNADSPERIODE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
+
+  console.log('mellomlagretVurdering', mellomlagretVurdering);
+  console.log('initialMellomlagretVurdering', initialMellomlagretVurdering);
+
+  const { løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+    useLøsAvklaringsbehov('AVKLAR_STØNADSPERIODE');
+
+  const valgteKrav = useWatch({ control: form.control, name: 'valgteKrav' }) ?? [];
 
   const lukkKrav = (referanse: string) => {
     const originaleFelter = hentOriginaleStønadsperiodeFormFelter(grunnlag, referanse);
     if (originaleFelter) {
-      setValue(`vurderinger.${referanse}`, originaleFelter);
+      form.setValue(`vurderinger.${referanse}`, originaleFelter, { shouldDirty: true });
     }
-    setValue(
+    form.setValue(
       'valgteKrav',
-      (getValues('valgteKrav') ?? []).filter((valgt) => valgt !== referanse)
+      (form.getValues('valgteKrav') ?? []).filter((valgt) => valgt !== referanse),
+      { shouldDirty: true }
     );
   };
 
@@ -44,34 +73,54 @@ export const Stønadsperiode = ({ grunnlag, readOnly }: Props) => {
     if (valgteKrav.includes(referanse)) {
       lukkKrav(referanse);
     } else {
-      setValue('valgteKrav', [...(getValues('valgteKrav') ?? []), referanse]);
+      form.setValue('valgteKrav', [...(form.getValues('valgteKrav') ?? []), referanse], { shouldDirty: true });
     }
   };
 
-  return (
-    <VilkårsKort heading={'Forskrift om AAP § 12. Ny stønadsperiode'} steg={'AVKLAR_STØNADSPERIODE'}>
-      <VStack gap="space-16">
-        <StønadsperiodeTabell
-          grunnlag={grunnlag}
-          readOnly={readOnly}
-          valgteKrav={valgteKrav}
-          onToggleValgtKrav={toggleValgtKrav}
-        />
+  const handleSubmit: SubmitEventHandler = (event) => {
+    form.handleSubmit((data) => {
+      console.log(data);
+    })(event);
+  };
 
-        {valgteKrav.map((referanse) => {
-          const vurdering = finnStønadsperiodeVurderingByReferanse(grunnlag, referanse);
-          return (
-            vurdering && (
-              <StønadsperiodeBoks
-                key={referanse}
-                vurdering={vurdering}
-                form={form}
-                onLukk={() => lukkKrav(referanse)}
-              />
-            )
-          );
-        })}
+  return (
+    <VilkårskortMedFormOgMellomlagring
+      heading={'Forskrift om AAP § 12. Ny stønadsperiode'}
+      steg={'AVKLAR_STØNADSPERIODE'}
+      onSubmit={handleSubmit}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() => {
+          form.reset();
+        })
+      }
+      mellomlagretVurdering={mellomlagretVurdering}
+      formReset={() => form.reset()}
+      vilkårTilhørerNavKontor={false}
+    >
+      <VStack gap="space-16">
+        <FormProvider {...form}>
+          <StønadsperiodeTabell
+            grunnlag={grunnlag}
+            readOnly={formReadOnly}
+            valgteKrav={valgteKrav}
+            onToggleValgtKrav={toggleValgtKrav}
+          />
+
+          {valgteKrav.map((referanse) => {
+            const vurdering = finnStønadsperiodeVurderingByReferanse(grunnlag, referanse);
+            return (
+              vurdering && (
+                <StønadsperiodeBoks key={referanse} vurdering={vurdering} onLukk={() => lukkKrav(referanse)} />
+              )
+            );
+          })}
+        </FormProvider>
       </VStack>
-    </VilkårsKort>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };

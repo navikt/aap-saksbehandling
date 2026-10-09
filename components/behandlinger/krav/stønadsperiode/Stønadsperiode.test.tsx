@@ -1,9 +1,20 @@
-import { describe, expect, it } from 'vitest';
-import { screen, within } from 'lib/test/CustomRender';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, screen, within } from 'lib/test/CustomRender';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { StønadsperiodeGrunnlag, StønadsperiodeVurdering } from 'lib/types/types';
+import { MellomlagretVurdering, StønadsperiodeGrunnlag, StønadsperiodeVurdering } from 'lib/types/types';
 import { Stønadsperiode } from './Stønadsperiode';
+import { byggInitielleStønadsperiodeVurderinger, StønadsperiodeFormFields } from '../utils/stønadsperiodeutils';
+import { Behovstype } from 'lib/utils/form';
+import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+
+const { refetchBekreftVurderingerGrunnlagClient } = vi.hoisted(() => ({
+  refetchBekreftVurderingerGrunnlagClient: vi.fn(),
+}));
+
+vi.mock('hooks/saksbehandling/BekrefteVurderingerHook', () => ({
+  useBekreftVurderingerGrunnlag: () => ({ refetchBekreftVurderingerGrunnlagClient }),
+}));
 
 function vurdering(referanse: string): StønadsperiodeVurdering {
   return {
@@ -52,7 +63,7 @@ describe('Stønadsperiode - endre krav', () => {
           name: 'Nei',
         }
       )
-    ).toBeChecked();
+    ).not.toBeChecked();
     expect(
       within(screen.getByRole('radiogroup', { name: 'Har brukeren gjenværende kvote?' })).getByRole('radio', {
         name: 'Ja',
@@ -102,24 +113,24 @@ describe('Stønadsperiode - endre krav', () => {
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('skjuler endre-knappene i lesemodus, men beholder tabellinnholdet', () => {
+  it('beholder dagens endre-knapper i lesemodus', () => {
     render(<Stønadsperiode grunnlag={grunnlag} behandlingVersjon={0} readOnly />);
 
     expect(screen.getByRole('row', { name: /vedtatt-krav/ })).toBeVisible();
     expect(screen.getByRole('row', { name: /nytt-krav/ })).toBeVisible();
-    expect(screen.queryByRole('button', { name: 'Endre' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Endre' })).toHaveLength(2);
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('skjuler også en allerede åpen boks når komponenten går over i lesemodus', async () => {
+  it('beholder en allerede åpen boks når komponenten går over i lesemodus', async () => {
     const user = userEvent.setup();
     const { rerender } = render(<Stønadsperiode grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
     await user.click(screen.getAllByRole('button', { name: 'Endre' })[0]);
     expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
 
     rerender(<Stønadsperiode grunnlag={grunnlag} behandlingVersjon={0} readOnly />);
-    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Avbryt' })).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Avbryt' })).toBeVisible();
   });
 
   it('holder alle fire felter isolert per krav og bevarer endringer ved rerender og åpning av andre bokser', async () => {
@@ -155,7 +166,7 @@ describe('Stønadsperiode - endre krav', () => {
           name: 'Nei',
         }
       )
-    ).toBeChecked();
+    ).not.toBeChecked();
     expect(
       within(nyBoks.getByRole('radiogroup', { name: 'Har brukeren gjenværende kvote?' })).getByRole('radio', {
         name: 'Ja',
@@ -214,7 +225,7 @@ describe('Stønadsperiode - endre krav', () => {
         'radio',
         { name: 'Nei' }
       )
-    ).toBeChecked();
+    ).not.toBeChecked();
     expect(
       within(gjenåpnet.getByRole('radiogroup', { name: 'Har brukeren gjenværende kvote?' })).getByRole('radio', {
         name: 'Ja',
@@ -223,17 +234,180 @@ describe('Stønadsperiode - endre krav', () => {
     expect(gjenåpnet.queryByText('Du må skrive en begrunnelse.')).not.toBeInTheDocument();
     expect(gjenåpnet.queryByText('Du må sette en dato kravet skal vurderes fra.')).not.toBeInTheDocument();
   });
+});
 
-  it('viser feil for ugyldig dato og fjerner den når datoen rettes', async () => {
-    const user = userEvent.setup();
+describe('Stønadsperiode - mellomlagring', () => {
+  const innlastedeVerdier: StønadsperiodeFormFields = {
+    valgteKrav: ['nytt-krav'],
+    vurderinger: {
+      ...byggInitielleStønadsperiodeVurderinger(grunnlag),
+      'nytt-krav': {
+        begrunnelse: 'Mellomlagret begrunnelse',
+        brukerenHarHattOrdinærAAPInnen52Uker: 'ja',
+        harGjenværendeKvote: 'nei',
+        datoKravetSkalVurderesFra: '20.05.2025',
+      },
+    },
+  };
+  const utkast: MellomlagretVurdering = {
+    avklaringsbehovkode: Behovstype.AVKLAR_STØNADSPERIODE_KODE,
+    behandlingId: { id: 1 },
+    data: JSON.stringify(innlastedeVerdier),
+    vurdertDato: '2025-08-21T12:00:00.000',
+    vurdertAv: 'Z000000',
+  };
+  const fetchMock = vi.fn<typeof fetch>();
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.stubGlobal('fetch', fetchMock);
+    fetchMock.mockReset();
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          type: 'SUCCESS',
+          data: { mellomlagretVurdering: utkast },
+        })
+      )
+    );
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  async function autosave() {
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3000);
+    });
+  }
+
+  function lagretRequest(): StønadsperiodeFormFields {
+    const request = fetchMock.mock.lastCall?.[1];
+    expect(fetchMock.mock.lastCall?.[0]).toBe('/saksbehandling/api/mellomlagring');
+    expect(request?.method).toBe('POST');
+    const body = JSON.parse(String(request?.body));
+    expect(body.avklaringsbehovkode).toBe('5039');
+    expect(body.behandlingsReferanse).toBe('456');
+    return JSON.parse(body.data);
+  }
+
+  it('gjenoppretter åpne bokser og alle feltene uten å lagre uendret utkast', async () => {
+    render(
+      <Stønadsperiode
+        grunnlag={grunnlag}
+        behandlingVersjon={0}
+        readOnly={false}
+        initialMellomlagretVurdering={utkast}
+      />
+    );
+    expect(screen.getByRole('group', { name: 'Vurder krav nytt-krav' })).toBeVisible();
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('Mellomlagret begrunnelse');
+    expect(screen.getByRole('textbox', { name: 'Dato kravet skal vurderes fra' })).toHaveValue('20.05.2025');
+    expect(
+      within(screen.getByRole('radiogroup', { name: 'Har brukeren hatt ordinær AAP innen 52 uker?' })).getByRole(
+        'radio',
+        { name: 'Ja' }
+      )
+    ).toBeChecked();
+    expect(
+      within(screen.getByRole('radiogroup', { name: 'Har brukeren gjenværende kvote?' })).getByRole('radio', {
+        name: 'Nei',
+      })
+    ).toBeChecked();
+    expect(screen.getByText(/Utkast lagret.*Z000000/)).toBeVisible();
+    await autosave();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('mellomlagrer åpning alene og viser utkastinfo etter faktisk autosave', async () => {
     render(<Stønadsperiode grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
-    await user.click(screen.getAllByRole('button', { name: 'Endre' })[0]);
-    const dato = screen.getByRole('textbox', { name: 'Dato kravet skal vurderes fra' });
-    await user.clear(dato);
-    await user.type(dato, '32.13.2025');
-    expect(await screen.findByText('Datoen er ikke gyldig')).toBeVisible();
-    await user.clear(dato);
-    await user.type(dato, '20.05.2025');
-    expect(screen.queryByText('Datoen er ikke gyldig')).not.toBeInTheDocument();
+    fireEvent.click(within(screen.getByRole('row', { name: /nytt-krav/ })).getByRole('button', { name: 'Endre' }));
+    expect(fetchMock).not.toHaveBeenCalled();
+    await autosave();
+    expect(lagretRequest()).toEqual({
+      valgteKrav: ['nytt-krav'],
+      vurderinger: JSON.parse(JSON.stringify(byggInitielleStønadsperiodeVurderinger(grunnlag))),
+    });
+    expect(screen.getByText(/Utkast lagret.*Z000000/)).toBeVisible();
+  });
+
+  it.each(['Avbryt', 'Lukk'])('mellomlagrer isolerte endringer og nullstilling ved %s', async (knapp) => {
+    render(
+      <Stønadsperiode
+        grunnlag={grunnlag}
+        behandlingVersjon={0}
+        readOnly={false}
+        initialMellomlagretVurdering={utkast}
+      />
+    );
+    fireEvent.click(within(screen.getByRole('row', { name: /vedtatt-krav/ })).getByRole('button', { name: 'Endre' }));
+    const vedtatt = within(screen.getByRole('group', { name: 'Vurder krav vedtatt-krav' }));
+    const ny = within(screen.getByRole('group', { name: 'Vurder krav nytt-krav' }));
+    fireEvent.change(vedtatt.getByRole('textbox', { name: 'Begrunnelse' }), { target: { value: 'Endret vedtatt' } });
+    fireEvent.change(ny.getByRole('textbox', { name: 'Begrunnelse' }), { target: { value: 'Endret ny' } });
+    await autosave();
+    expect(lagretRequest().vurderinger['vedtatt-krav'].begrunnelse).toBe('Endret vedtatt');
+    expect(lagretRequest().vurderinger['nytt-krav'].begrunnelse).toBe('Endret ny');
+    fireEvent.click(
+      (knapp === 'Lukk' ? vedtatt : within(screen.getByRole('row', { name: /vedtatt-krav/ }))).getByRole('button', {
+        name: knapp,
+      })
+    );
+    await autosave();
+    expect(lagretRequest()).toEqual({
+      valgteKrav: ['nytt-krav'],
+      vurderinger: {
+        ...JSON.parse(JSON.stringify(byggInitielleStønadsperiodeVurderinger(grunnlag))),
+        'nytt-krav': { ...innlastedeVerdier.vurderinger['nytt-krav'], begrunnelse: 'Endret ny' },
+      },
+    });
+  });
+
+  it('sletter utkast, resetter til innlastede verdier og avbryter ventende autosave', async () => {
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ type: 'SUCCESS', data: null })));
+    render(
+      <Stønadsperiode
+        grunnlag={grunnlag}
+        behandlingVersjon={0}
+        readOnly={false}
+        initialMellomlagretVurdering={utkast}
+      />
+    );
+    fireEvent.change(screen.getByRole('textbox', { name: 'Begrunnelse' }), { target: { value: 'Ikke lagret ennå' } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Slett utkast' }));
+    });
+    expect(fetchMock).toHaveBeenCalledWith('/saksbehandling/api/mellomlagring', {
+      method: 'DELETE',
+      body: JSON.stringify({ behandlingsreferanse: '456', behovstype: '5039' }),
+    });
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toHaveValue('Mellomlagret begrunnelse');
+    expect(screen.queryByText(/Utkast lagret/)).not.toBeInTheDocument();
+    await autosave();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('resetter til grunnlaget og lukker bokser ved sletting uten innlastet utkast', async () => {
+    render(<Stønadsperiode grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
+    fireEvent.click(screen.getAllByRole('button', { name: 'Endre' })[0]);
+    await autosave();
+    fetchMock.mockResolvedValue(new Response(JSON.stringify({ type: 'SUCCESS', data: null })));
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Slett utkast' }));
+    });
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Utkast lagret/)).not.toBeInTheDocument();
+    await autosave();
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('viser utkastinfo på vent i readOnly uten slett-knapp, men beholder dagens redigering', () => {
+    setMockFlytResponse({ ...defaultFlytResponse, visning: { ...defaultFlytResponse.visning, visVentekort: true } });
+    render(<Stønadsperiode grunnlag={grunnlag} behandlingVersjon={0} readOnly initialMellomlagretVurdering={utkast} />);
+    expect(screen.getByText(/Utkast lagret/)).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Slett utkast' })).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).not.toHaveAttribute('readonly');
   });
 });

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { StønadsperiodeFormFields } from 'components/behandlinger/krav/utils/stønadsperiodeutils';
 import { StønadsperiodeVurdering } from 'lib/types/types';
 import { StønadsperiodeBoks } from './StønadsperiodeBoks';
@@ -34,12 +34,12 @@ function TestForm() {
     mode: 'onChange',
   });
   return (
-    <>
-      <StønadsperiodeBoks vurdering={vurdering} form={form} onLukk={vi.fn()} />
+    <FormProvider {...form}>
+      <StønadsperiodeBoks vurdering={vurdering} onLukk={vi.fn()} />
       <button type="button" onClick={() => void form.trigger()}>
         Valider
       </button>
-    </>
+    </FormProvider>
   );
 }
 

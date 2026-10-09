@@ -2,7 +2,7 @@ import { TasklistIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Detail, HStack, Radio, VStack } from '@navikt/ds-react';
 import { StønadsperiodeVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { UseFormReturn } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { StønadsperiodeFormFields } from 'components/behandlinger/krav/utils/stønadsperiodeutils';
 import { JaEllerNeiOptions } from 'lib/utils/form';
 import { validerDato } from 'lib/validation/dateValidation';
@@ -13,10 +13,11 @@ import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrap
 interface Props {
   vurdering: StønadsperiodeVurdering;
   onLukk: () => void;
-  form: UseFormReturn<StønadsperiodeFormFields>;
 }
 
-export const StønadsperiodeBoks = ({ vurdering, onLukk, form }: Props) => {
+export const StønadsperiodeBoks = ({ vurdering, onLukk }: Props) => {
+  const form = useFormContext<StønadsperiodeFormFields>();
+
   return (
     <Box
       role="group"
