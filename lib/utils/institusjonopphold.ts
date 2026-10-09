@@ -46,7 +46,7 @@ export function forrigeOppholdHarIngenReduksjonLengre(
   // reduksjon sin startdato. I så fall har det faktisk vært reduksjon en periode, og 1-månedsregelen
   // skal fortsatt gjelde for neste opphold.
   const vedtattReduksjon = forrigeOppholdVedtatteVurderinger?.find((v) => erReduksjonUtIFraVurdering(v));
-  if (!vedtattReduksjon) return true;
+  if (!vedtattReduksjon) return false;
 
   const tidligsteLiveFom = forrigeOppholdVurderinger
     .map((v) => v.periode?.fom)
