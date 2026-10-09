@@ -1,7 +1,7 @@
 'use client';
 
 import { VStack } from '@navikt/ds-react';
-import { addDays, format, isAfter, parse, subDays } from 'date-fns';
+import { addDays, addMonths, format, isAfter, isBefore, parse, startOfMonth, subDays } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -21,6 +21,14 @@ import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { useFeatureFlag } from 'context/UnleashContext';
+import {
+  beregnStandardTidligsteReduksjonsdato,
+  erNyttOppholdInnenfor3MaanederEtterSistOpphold,
+  erReduksjonMuligForOpphold,
+  erReduksjonUtIFraFormFields,
+  forrigeOppholdHarIngenReduksjonLengre,
+  manglerKorrigertReduksjonsdato,
+} from 'lib/utils/institusjonopphold';
 
 interface Props {
   grunnlag: HelseinstitusjonGrunnlag;
@@ -47,6 +55,7 @@ export interface OppholdVurdering extends VurderingFormMeta {
   harFasteUtgifter?: JaEllerNei;
   forsoergerEktefelle?: JaEllerNei;
   faarFriKostOgLosji?: JaEllerNei;
+  erHistoriskUtenReduksjonsberegning?: boolean;
 }
 
 type DraftFormFields = Partial<HelseinstitusjonsFormFields>;
@@ -89,65 +98,169 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
   const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
 
+  const validerManglendeKorrigeringAvReduksjonsdato = (data: HelseinstitusjonsFormFields): boolean => {
+    let harValideringsfeil = false;
+
+    data.helseinstitusjonsvurderinger.forEach((opphold, oppholdIndex) => {
+      const forrigeOpphold = oppholdIndex > 0 ? data.helseinstitusjonsvurderinger[oppholdIndex - 1] : undefined;
+      const forrigeOppholdVedtatteVurderinger = forrigeOpphold
+        ? grunnlag.vedtatteVurderinger
+            .filter((v) => v.oppholdId === forrigeOpphold.oppholdId)
+            .flatMap((v) => v.vurderinger || [])
+        : undefined;
+
+      const manglerKorrigering = manglerKorrigertReduksjonsdato(
+        opphold.periode.fom,
+        opphold.vurderinger,
+        forrigeOpphold?.vurderinger,
+        forrigeOppholdVedtatteVurderinger
+      );
+
+      if (manglerKorrigering) {
+        harValideringsfeil = true;
+        form.setError(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`, {
+          type: 'manual',
+          message:
+            'Reduksjonen i forrige opphold er fjernet for hele perioden. Legg til en ny vurdering med korrigert reduksjonsdato før du bekrefter.',
+        });
+      }
+    });
+
+    return harValideringsfeil;
+  };
+
+  const byggVurderingerForInnsending = (data: HelseinstitusjonsFormFields) => {
+    const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
+
+    return data.helseinstitusjonsvurderinger.flatMap((opphold, oppholdIndex) => {
+      const vedtatteForOpphold = grunnlag.vedtatteVurderinger
+        .filter((v) => v.oppholdId === opphold.oppholdId)
+        .flatMap((v) => v.vurderinger || []);
+      const sisteVedtatteVurdering = vedtatteForOpphold.at(-1);
+      const sisteVedtatteTom = sisteVedtatteVurdering?.periode.tom ?? null;
+
+      // Finn forrige opphold sitt faktiske grunnlag (for avsluttetDato) og om saksbehandler
+      // nå (live i skjemaet) har gitt reduksjon der - avgjør om 1-månedsregelen gjelder her.
+      const forrigeOpphold = oppholdIndex > 0 ? data.helseinstitusjonsvurderinger[oppholdIndex - 1] : undefined;
+      const forrigeOppholdFaktisk = forrigeOpphold
+        ? grunnlag.opphold.find((o) => o.oppholdId === forrigeOpphold.oppholdId)
+        : undefined;
+      const forrigeOppholdVedtatteVurderinger = forrigeOpphold
+        ? grunnlag.vedtatteVurderinger
+            .filter((v) => v.oppholdId === forrigeOpphold.oppholdId)
+            .flatMap((v) => v.vurderinger || [])
+        : undefined;
+
+      const forrigeGaReduksjonNå = forrigeOpphold?.vurderinger.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
+      const innenforTreMåneder =
+        !!forrigeOppholdFaktisk?.avsluttetDato &&
+        erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdFaktisk.avsluttetDato, opphold.periode.fom);
+      const bruker1Månedsregelen = (forrigeGaReduksjonNå && innenforTreMåneder) satisfies boolean;
+
+      let effektivTidligsteReduksjonsdato = opphold.tidligsteReduksjonsdato;
+      if (bruker1Månedsregelen) {
+        effektivTidligsteReduksjonsdato = format(
+          startOfMonth(addMonths(new Dato(opphold.periode.fom).dato, 1)),
+          'yyyy-MM-dd'
+        );
+      } else if (
+        forrigeOppholdHarIngenReduksjonLengre(forrigeOpphold?.vurderinger, forrigeOppholdVedtatteVurderinger)
+      ) {
+        effektivTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.periode.fom);
+      }
+
+      const nyeVurderinger = opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
+        const nesteVurdering = filtrerteVurderinger.at(index + 1);
+        const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
+        const erHistoriskUtenReduksjonsberegning =
+          erReduksjon && !erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato);
+
+        // Segmentets reelle start: enten den brukerinntastede datoen, eller - for historiske
+        // vurderinger der datoen ligger utenfor oppholdet - starten på segmentet (forrige
+        // vurderings slutt, eller oppholdets start for første segment). Dette sikrer at hele
+        // oppholdets periode dekkes og overskriver gammel/vedtatt tidslinje korrekt.
+        const segmentStart = index === 0 ? opphold.periode.fom : filtrerteVurderinger[index - 1]?.periode.fom;
+
+        const fom = vurdering.periode?.fom
+          ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
+          : formaterDatoForBackend(parseDato(opphold.periode.fom));
+
+        const beregnetTom = nesteVurdering
+          ? formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1))
+          : formaterDatoForBackend(parseDato(opphold.periode.tom));
+
+        /*// Periode krever tom >= fom. Ved historisk vurdering kan fom (saksbehandlers reduksjonsdato)
+        // ligge etter oppholdets/beregnet tom -> juster tom opp til fom i så fall, siden perioden
+        // uansett ikke brukes til reduksjonsberegning for historiske vurderinger.
+        const tom =
+          erHistoriskUtenReduksjonsberegning && isAfter(new Dato(fom).dato, new Dato(beregnetTom).dato)
+            ? fom
+            : beregnetTom;*/ // TODO Thao: Fjerne denne?
+
+        let periodeFom = fom;
+        let tom = beregnetTom;
+
+        if (erHistoriskUtenReduksjonsberegning) {
+          // Datoen saksbehandler har oppgitt ligger utenfor oppholdet (reduksjon rekker aldri å
+          // inntreffe). Segmentet som faktisk sendes til backend må likevel dekke oppholdets
+          // reelle periode fra forrige grense til oppholdets slutt, slik at det overskriver
+          // eventuell gammel/vedtatt reduksjon i denne perioden.
+          periodeFom = segmentStart
+            ? formaterDatoForBackend(parseDato(segmentStart))
+            : formaterDatoForBackend(parseDato(opphold.periode.fom));
+          tom = formaterDatoForBackend(parseDato(opphold.periode.tom));
+        }
+
+        return {
+          oppholdId: vurdering.oppholdId,
+          begrunnelse: vurdering.begrunnelse,
+          faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
+          forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
+          harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
+          periode: { fom: periodeFom, tom },
+          erHistoriskUtenReduksjonsberegning,
+        };
+      });
+
+      const førsteNyeFom = nyeVurderinger.at(0)?.periode.fom;
+
+      const finnesGap =
+        sammenhengendeOppholdEnabled &&
+        sisteVedtatteVurdering &&
+        sisteVedtatteTom &&
+        førsteNyeFom &&
+        isBefore(new Dato(sisteVedtatteTom).dato, new Dato(opphold.periode.tom).dato) &&
+        isAfter(new Dato(førsteNyeFom).dato, addDays(new Dato(sisteVedtatteTom).dato, 1));
+
+      const gapVurdering = finnesGap
+        ? [
+            {
+              oppholdId: sisteVedtatteVurdering.oppholdId,
+              begrunnelse: sisteVedtatteVurdering.begrunnelse,
+              faarFriKostOgLosji: sisteVedtatteVurdering.faarFriKostOgLosji,
+              forsoergerEktefelle: sisteVedtatteVurdering.forsoergerEktefelle,
+              harFasteUtgifter: sisteVedtatteVurdering.harFasteUtgifter,
+              periode: {
+                fom: formaterDatoForBackend(addDays(new Dato(sisteVedtatteTom).dato, 1)),
+                tom: formaterDatoForBackend(subDays(new Dato(førsteNyeFom).dato, 1)),
+              },
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ]
+        : [];
+
+      return [...gapVurdering, ...nyeVurderinger];
+    });
+  };
+
   const handleSubmit = (event: SubmitEvent) => {
     form.handleSubmit((data) => {
-      const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
+      const harValideringsfeil = validerManglendeKorrigeringAvReduksjonsdato(data);
+      if (harValideringsfeil) {
+        return;
+      }
 
-      const vurderinger = data.helseinstitusjonsvurderinger.flatMap((opphold) => {
-        const vedtatteForOpphold = grunnlag.vedtatteVurderinger
-          .filter((v) => v.oppholdId === opphold.oppholdId)
-          .flatMap((v) => v.vurderinger || []);
-        const sisteVedtatteVurdering = vedtatteForOpphold.at(-1);
-        const sisteVedtatteTom = sisteVedtatteVurdering?.periode.tom ?? null;
-
-        const nyeVurderinger = opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
-          const nesteVurdering = filtrerteVurderinger.at(index + 1);
-
-          const fom = vurdering.periode?.fom
-            ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
-            : formaterDatoForBackend(parseDato(opphold.periode.fom));
-
-          const tom = nesteVurdering
-            ? formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1))
-            : formaterDatoForBackend(parseDato(opphold.periode.tom));
-
-          return {
-            oppholdId: vurdering.oppholdId,
-            begrunnelse: vurdering.begrunnelse,
-            faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
-            forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
-            harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-            periode: { fom, tom },
-          };
-        });
-
-        const førsteNyeFom = nyeVurderinger.at(0)?.periode.fom;
-
-        const finnesGap =
-          sammenhengendeOppholdEnabled &&
-          sisteVedtatteVurdering &&
-          sisteVedtatteTom &&
-          førsteNyeFom &&
-          isAfter(new Dato(førsteNyeFom).dato, addDays(new Dato(sisteVedtatteTom).dato, 1));
-
-        const gapVurdering = finnesGap
-          ? [
-              {
-                oppholdId: sisteVedtatteVurdering.oppholdId,
-                begrunnelse: sisteVedtatteVurdering.begrunnelse,
-                faarFriKostOgLosji: sisteVedtatteVurdering.faarFriKostOgLosji,
-                forsoergerEktefelle: sisteVedtatteVurdering.forsoergerEktefelle,
-                harFasteUtgifter: sisteVedtatteVurdering.harFasteUtgifter,
-                periode: {
-                  fom: formaterDatoForBackend(addDays(new Dato(sisteVedtatteTom).dato, 1)),
-                  tom: formaterDatoForBackend(subDays(new Dato(førsteNyeFom).dato, 1)),
-                },
-              },
-            ]
-          : [];
-
-        return [...gapVurdering, ...nyeVurderinger];
-      });
+      const vurderinger = byggVurderingerForInnsending(data);
 
       løsAvklaringsbehov(
         {
@@ -199,11 +312,24 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             .filter((v) => v.oppholdId === oppholdField.oppholdId)
             .flatMap((v) => v.vurderinger || []);
 
+          const forrigeOppholdField = oppholdIndex > 0 ? oppholdFields[oppholdIndex - 1] : undefined;
+          const forrigeOppholdFaktisk = forrigeOppholdField
+            ? grunnlag.opphold.find((o) => o.oppholdId === forrigeOppholdField.oppholdId)
+            : undefined;
+
+          const forrigeOppholdVedtatteVurderinger = forrigeOppholdField
+            ? grunnlag.vedtatteVurderinger
+                .filter((v) => v.oppholdId === forrigeOppholdField.oppholdId)
+                .flatMap((v) => v.vurderinger || [])
+            : undefined;
+
           return (
             <HelseinstitusjonOppholdGruppe
               key={oppholdField.id}
               opphold={faktiskOpphold}
               tidligereVurderinger={tidligereVurderinger}
+              forrigeOppholdAvsluttetDato={forrigeOppholdFaktisk?.avsluttetDato}
+              forrigeOppholdVedtatteVurderinger={forrigeOppholdVedtatteVurderinger}
               accordionsSignal={accordionsSignal}
               oppholdIndex={oppholdIndex}
               form={form}
@@ -271,6 +397,10 @@ function mapVurderingToDraftFormFields(
           vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,
           behøverVurdering: false,
+          // Behold lagret status fra backend - skal IKKE regnes på nytt ved render,
+          // siden tidligsteReduksjonsdato-beregningen kan endre seg (f.eks. pga. 1-månedsregel
+          // basert på hva som skjer med forrige opphold i samme skjema).
+          erHistoriskUtenReduksjonsberegning: vurdering.erHistoriskUtenReduksjonsberegning,
         }));
       } else if (skalJustere && vedtatteVurderingerForOpphold) {
         vurderinger = [];
