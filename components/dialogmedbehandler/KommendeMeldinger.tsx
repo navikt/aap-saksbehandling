@@ -30,12 +30,12 @@ export const KommendeMeldinger = ({
         return;
       }
       /**
-       * Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesstatus i oppgavelisten
+       * Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
        */
       const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
         referanse: behandlingsreferanse,
         påminnelseDato: kommendeMelding.påminnelseDato,
-        påminnelseStatus: 'AVBRUTT',
+        påminnelseAvbrutt: true,
       });
       if (isError(oppdaterPåminnelseResponse)) {
         setFeilmelding(oppdaterPåminnelseResponse.apiException.message);

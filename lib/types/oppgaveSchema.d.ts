@@ -2216,13 +2216,12 @@ export interface components {
       tilbakekrevingUrl?: string | null;
     };
     'no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto': {
+      påminnelseAvbrutt?: boolean | null;
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
        */
       påminnelseDato?: string | null;
-      /** @enum {string|null} */
-      påminnelseStatus?: 'AVBRUTT' | 'PLANLAGT' | 'SENDT' | null;
     };
     'no.nav.aap.oppgave.ForrigeKvalitetssikrerDto': {
       forrigeKvalitetssikrerIdent: string;
@@ -2233,13 +2232,12 @@ export interface components {
       dokumentType: 'DIALOGMELDING' | 'LEGEERKLÆRING';
     };
     'no.nav.aap.oppgave.OppdaterPåminnelseRequest': {
+      påminnelseAvbrutt?: boolean | null;
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
        */
       påminnelseDato?: string | null;
-      /** @enum {string|null} */
-      påminnelseStatus?: 'AVBRUTT' | 'PLANLAGT' | 'SENDT' | null;
       /** Format: uuid */
       referanse: string;
     };
