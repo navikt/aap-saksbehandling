@@ -92,7 +92,8 @@ export const SkriveBrevMedDataFetching = async ({
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
-  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brev.mottaker, fullmektigGrunnlag.data.vurdering);
+  const brukerMottaker = { ident: brev.mottaker.ident || '', navn: brev.mottaker.navn || '' }; // Midlertidig
+  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
 
   return (
     <div className={styles.flex}>

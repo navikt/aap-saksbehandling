@@ -14641,10 +14641,10 @@ export interface components {
       navn: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker': {
-      ident: string;
+      ident?: string | null;
       /** @enum {string|null} */
       identType?: 'FNR' | 'HPRNR' | 'ORGNR' | 'UTL_ORG' | null;
-      navn: string;
+      navn?: string | null;
       navnOgAdresse?: components['schemas']['no.nav.aap.brev.kontrakt.NavnOgAdresse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevDto': {

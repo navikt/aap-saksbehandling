@@ -129,8 +129,7 @@ export type KanDistribuereBrevRequest = components['schemas']['no.nav.aap.brev.k
 export type KanDistribuereBrevV2Request = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevV2Request'];
 export type KanDistribuereBrevResponse = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
-export type Mottaker =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivVedtaksbrevLøsning']['mottakere'][number];
+export type Mottaker = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type SamordningTjenestePensjonGrunnlag =
   ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning/tjenestepensjon'>;
 export type SamordningGraderingGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning'>;

@@ -225,6 +225,7 @@ describe('Delmalvelger', () => {
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
         mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
