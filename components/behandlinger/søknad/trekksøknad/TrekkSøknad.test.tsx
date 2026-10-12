@@ -24,7 +24,7 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
       expect(screen.getByRole('heading', { name: 'Trekk søknad', level: 3 })).toBeVisible();
@@ -36,7 +36,7 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
       expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
@@ -48,11 +48,29 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(await screen.findByText('Du må begrunne hvorfor søknaden skal trekkes')).toBeVisible();
+    });
+
+    it('viser en beskjed dersom det finnes en eller flere ubesvarte forespørsler om legeerklæring', async () => {
+      render(
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          skalViseVentendeLegeerklæringBeskjed={true}
+        />
+      );
+      await user.click(screen.getAllByRole('radio', { name: /ja/i })[0]);
+      expect(
+        await screen.findByText(
+          'Behandlingen venter på legeerklæring. Hvis det ikke er behov for denne, send en melding til behandler ' +
+            'før du trekker saken.'
+        )
+      ).toBeVisible();
     });
 
     it('viser hvem som har trukket søknaden', async () => {
@@ -79,7 +97,7 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 
@@ -128,7 +146,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
       const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -142,7 +160,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 
@@ -164,7 +182,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 
@@ -181,7 +199,7 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 
@@ -199,7 +217,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 
@@ -223,7 +241,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 
@@ -249,7 +267,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          viseVentendeLEToggle={false}
+          skalViseVentendeLegeerklæringBeskjed={false}
         />
       );
 

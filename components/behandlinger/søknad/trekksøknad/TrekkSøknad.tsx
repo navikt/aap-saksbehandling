@@ -22,7 +22,7 @@ interface Props {
   readOnly: boolean;
   behandlingVersjon: number;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  viseVentendeLEToggle: boolean;
+  skalViseVentendeLegeerklæringBeskjed: boolean;
 }
 
 type TrukketSøknadÅrsak = TrukketSøknadVurdering['aarsak'];
@@ -40,7 +40,7 @@ export const TrekkSøknad = ({
   readOnly,
   behandlingVersjon,
   initialMellomlagretVurdering,
-  viseVentendeLEToggle,
+  skalViseVentendeLegeerklæringBeskjed,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
@@ -91,8 +91,6 @@ export const TrekkSøknad = ({
   );
 
   const harValgtAtSoknadTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
-  // TODO: Implementer!
-  const venterPåLegeerklæring = true;
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
@@ -147,7 +145,7 @@ export const TrekkSøknad = ({
         <>
           <FormField form={form} formField={formFields.aarsak} />
 
-          {viseVentendeLEToggle && venterPåLegeerklæring && (
+          {skalViseVentendeLegeerklæringBeskjed && (
             <InfoCard data-color="meta-purple" size="small">
               <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
                 Behandlingen venter på legeerklæring. Hvis det ikke er behov for denne, send en melding til behandler
