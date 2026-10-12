@@ -409,14 +409,3 @@ export function mapStatusTilTekst(
       return 'Avslag § 11-5';
   }
 }
-
-export function mapReturFraStatusTilTekst(status: string): string {
-  switch (status) {
-    case 'SENDT_TILBAKE_FRA_BESLUTTER':
-      return 'Sendt tilbake fra beslutter';
-    case 'SENDT_TILBAKE_FRA_KVALITETSSIKRER':
-      return 'Sendt tilbake fra kvalitetssikrer';
-    default:
-      return status;
-  }
-}

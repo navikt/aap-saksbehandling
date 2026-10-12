@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { screen, render } from '../../../../lib/test/CustomRender';
+import { screen, render } from 'lib/test/CustomRender';
 import { KlagebehandlingOppsummering } from 'components/behandlinger/klage/klagebehandlingoppsummering/KlagebehandlingOppsummering';
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag } from 'lib/types/types';
 
 const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
+  påklagetVedtakType: 'KELVIN_BEHANDLING',
   vurdering: {
     begrunnelse: '',
     innstilling: 'DELVIS_OMGJØR',
@@ -12,6 +13,7 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'ident',
+        kilde: 'SAKSBEHANDLER',
         dato: '2025-01-01',
         ansattnavn: 'Ine',
         enhetsnavn: 'Kontor',
@@ -21,6 +23,7 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
 };
 const grunnlagNay: KlagebehandlingNayGrunnlag = {
+  påklagetVedtakType: 'KELVIN_BEHANDLING',
   vurdering: {
     begrunnelse: '',
     innstilling: 'OMGJØR',
@@ -29,6 +32,7 @@ const grunnlagNay: KlagebehandlingNayGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'ident',
+        kilde: 'SAKSBEHANDLER',
         dato: '2025-01-01',
         ansattnavn: 'Ine',
         enhetsnavn: 'Kontor',

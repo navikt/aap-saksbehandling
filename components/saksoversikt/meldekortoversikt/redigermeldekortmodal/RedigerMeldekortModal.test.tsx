@@ -408,6 +408,17 @@ describe('RedigerMeldekortModal', () => {
     });
   });
 
+  describe('Meldedato', () => {
+    it('meldedato må ha gyldig format', async () => {
+      customRender(<RedigerMeldekortModal isOpen={true} setIsOpen={vi.fn()} meldekort={meldekort} />);
+      await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Begrunnelse for endring');
+      await user.selectOptions(screen.getByRole('combobox', { name: /årsak/i }), 'Lever/endre meldekort for bruker');
+      await user.type(screen.getByLabelText('Dato brukeren meldte opplysningene'), '3.8.26');
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+      expect(screen.getAllByText('Datoformatet er ikke gyldig. Dato må være på formatet dd.mm.åååå')[0]).toBeVisible();
+    });
+  });
+
   // TODO Ta inn denne igjen når valget er tilbake AAP-2320
   describe.skip('Meldedato validering', () => {
     const fyllUtOgSubmit = async (meldedato: string) => {

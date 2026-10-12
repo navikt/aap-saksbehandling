@@ -122,7 +122,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
     >
       <InstitusjonsoppholdTabell
         label="Brukeren har følgende soningsforhold"
-        beskrivelse="Under opphold i fengsel har ikke brukeren rett på AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett på AAP"
+        beskrivelse="Under opphold i fengsel har ikke brukeren rett til AAP. Om man soner utenfor fengsel eller arbeider utenfor anstalt har man likevel rett til AAP"
         instutisjonsopphold={grunnlag.soningsforhold}
       />
       {fields.map((field, index) => {
@@ -133,7 +133,7 @@ export const Soningsvurdering = ({ grunnlag, readOnly, behandlingsversjon, initi
               name={`soningsvurderinger.${index}.begrunnelse`}
               control={form.control}
               label={
-                'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett på AAP under soning'
+                'Vurder om brukeren soner i frihet eller jobber for en arbeidsgiver utenfor anstalten, og dermed har rett til AAP under soning'
               }
               rules={{ required: 'Du må gi en begrunnelse' }}
               readOnly={formReadOnly}

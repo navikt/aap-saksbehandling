@@ -58,16 +58,22 @@ describe('OppgaveInformasjon', () => {
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
-  it('Skal vise ikon for mottat svar fra behandler dersom oppgave er markert med harUlesteDokumenter', () => {
+  it('Skal vise ikon for mottatt svar fra behandler dersom oppgave har mottatt dokument', () => {
     renderWithFlags(
       <OppgaveInformasjon
-        oppgave={{ ...oppgave, oppgavelisteTags: { ...oppgave.oppgavelisteTags, harUlesteDokumenter: true } }}
+        oppgave={{
+          ...oppgave,
+          oppgavelisteTags: {
+            ...oppgave.oppgavelisteTags,
+            harMottattDokument: { dokumentType: 'LEGEERKLÆRING' },
+          },
+        }}
       />
     );
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
-  it('Skal vise både på vent ikon og mottat svar fra behandler ikon dersom saken er på vent og mottat svar', () => {
+  it('Skal vise både på vent ikon og mottatt svar fra behandler ikon dersom saken er på vent og har mottatt dokument', () => {
     renderWithFlags(
       <OppgaveInformasjon
         oppgave={{
@@ -75,13 +81,35 @@ describe('OppgaveInformasjon', () => {
           oppgavelisteTags: {
             ...oppgave.oppgavelisteTags,
             påVentInfo: { påVentTil: addDays(new Date(), 1).toDateString() },
-            harUlesteDokumenter: true,
+            harMottattDokument: { dokumentType: 'LEGEERKLÆRING' },
           },
         }}
       />
     );
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
+  });
+
+  it('skal vise sendt forespørsel med påminnelsesdato', async () => {
+    renderWithFlags(
+      <OppgaveInformasjon
+        oppgave={{
+          ...oppgave,
+          oppgavelisteTags: {
+            ...oppgave.oppgavelisteTags,
+            forespørselSendtTilBehandler: { påminnelseDato: '2026-10-05' },
+          },
+        }}
+      />
+    );
+
+    const icon = screen.getByRole('img', { name: 'Forespørsel sendt til behandler' });
+    expect(icon).toBeVisible();
+
+    await user.click(icon);
+
+    expect(screen.getByText('Påminnelse')).toBeVisible();
+    expect(screen.getByText('Sendes 05.10.2026')).toBeVisible();
   });
 
   it('skal vise ikon for returinformasjon om oppgaven er returnert', () => {
