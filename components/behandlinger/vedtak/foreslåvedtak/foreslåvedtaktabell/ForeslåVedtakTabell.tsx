@@ -111,10 +111,7 @@ function mapUnderveisÅrsakTilHjemmel(underveisAvslag: UnderveisAvslagsÅrsak) {
   }
 }
 
-function mapAvslagsÅrsakTilTekst(
-  vilkårAvslag: VilkårsavslagDto[],
-  underveisAvslag?: UnderveisAvslagsÅrsak | null
-) {
+function mapAvslagsÅrsakTilTekst(vilkårAvslag: VilkårsavslagDto[], underveisAvslag?: UnderveisAvslagsÅrsak | null) {
   const hjemler = vilkårAvslag.map((avslag) => avslag.vilkår);
   if (underveisAvslag && underveisAvslag != 'IKKE_GRUNNLEGGENDE_RETT') {
     hjemler.push(mapUnderveisÅrsakTilHjemmel(underveisAvslag));

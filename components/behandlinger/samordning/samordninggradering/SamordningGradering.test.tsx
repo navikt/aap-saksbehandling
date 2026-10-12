@@ -304,7 +304,11 @@ describe('Samordning gradering', () => {
 
     render(
       <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
-        <SamordningGradering grunnlag={grunnlagMedOverlappendeFerieOgSykepenger} readOnly={false} behandlingVersjon={0} />
+        <SamordningGradering
+          grunnlag={grunnlagMedOverlappendeFerieOgSykepenger}
+          readOnly={false}
+          behandlingVersjon={0}
+        />
       </FeatureFlagProvider>
     );
 

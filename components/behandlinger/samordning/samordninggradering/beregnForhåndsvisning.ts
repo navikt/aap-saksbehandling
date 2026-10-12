@@ -136,9 +136,7 @@ function forskyvSykepenger(rad: SamordnetYtelse, sykepenger: Periode, ferie: Per
   }
 
   const totaltAntallVirkedager = antallVirkedagerMellom(sykepenger.fom, sykepenger.tom);
-  const virkedagerFørFerien = finnesDagerFørFerien
-    ? antallVirkedagerMellom(sykepenger.fom, subDays(ferie.fom, 1))
-    : 0;
+  const virkedagerFørFerien = finnesDagerFørFerien ? antallVirkedagerMellom(sykepenger.fom, subDays(ferie.fom, 1)) : 0;
   const virkedagerIgjen = totaltAntallVirkedager - virkedagerFørFerien;
 
   if (virkedagerIgjen > 0) {
