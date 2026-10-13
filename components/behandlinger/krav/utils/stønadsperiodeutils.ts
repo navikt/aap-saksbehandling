@@ -1,6 +1,6 @@
 import { StønadsperiodeGrunnlag, StønadsperiodeVurdering, StønadsperiodeVurderingLøsning } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { getJaEllerNei, JaEllerNei } from 'lib/utils/form';
+import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
 export interface StønadsperiodeKravFormFields {
   begrunnelse: string;
@@ -35,10 +35,8 @@ export function hentOriginaleStønadsperiodeFormFelter(
 export function stønadsperiodeVurderingTilFormFields(vurdering: StønadsperiodeVurdering): StønadsperiodeKravFormFields {
   return {
     begrunnelse: vurdering?.begrunnelse || '',
-    brukerenHarHattOrdinærAAPInnen52Uker: vurdering.harHattOrdinærSiste52Uker
-      ? getJaEllerNei(vurdering.harHattOrdinærSiste52Uker)
-      : undefined,
-    harGjenværendeKvote: vurdering.harGjenværendeKvote ? getJaEllerNei(vurdering.harGjenværendeKvote) : undefined,
+    brukerenHarHattOrdinærAAPInnen52Uker: getJaNeiEllerUndefined(vurdering.harHattOrdinærSiste52Uker),
+    harGjenværendeKvote: getJaNeiEllerUndefined(vurdering.harGjenværendeKvote),
     datoKravetSkalVurderesFra: vurdering.startDato ? formaterDatoForFrontend(vurdering.startDato) : '',
   };
 }
