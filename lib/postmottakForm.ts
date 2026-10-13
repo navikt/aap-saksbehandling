@@ -17,16 +17,6 @@ export const JaNeiEllerIkkeOppgittOptions: ValuePair[] = [
   { label: 'Ikke oppgitt', value: JaNeiIkkeOppgitt.IKKE_OPPGITT },
 ];
 
-export function stringToJaNeiIkkeOppgitt(value: string) {
-  switch (value) {
-    case 'Ja':
-      return JaNeiIkkeOppgitt.JA;
-    case 'Nei':
-      return JaNeiIkkeOppgitt.NEI;
-    case 'Ikke oppgitt':
-      return JaNeiIkkeOppgitt.IKKE_OPPGITT;
-  }
-}
 export enum JaNeiVetIkke {
   JA = 'Ja',
   NEI = 'Nei',

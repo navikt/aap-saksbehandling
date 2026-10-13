@@ -25,8 +25,8 @@ export const SykestipendPeriodeTabell = ({ form, readOnly }: Props) => {
     <VStack gap={'space-8'}>
       <Label size={'small'}>Legg til periode med sykestipend</Label>
       <VStack gap={'space-0'}>
-        <BodyLong size={'small'}>Legg til perioder der brukeren har rett på sykestipend.</BodyLong>
-        <BodyLong size={'small'}>Perioder med sykestipend gir ikke rett på AAP.</BodyLong>
+        <BodyLong size={'small'}>Legg til perioder der brukeren har rett til sykestipend.</BodyLong>
+        <BodyLong size={'small'}>Perioder med sykestipend gir ikke rett til AAP.</BodyLong>
       </VStack>
       <TableStyled>
         <Table.Header>

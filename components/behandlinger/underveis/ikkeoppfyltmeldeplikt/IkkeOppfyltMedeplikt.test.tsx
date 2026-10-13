@@ -17,7 +17,7 @@ describe('IkkeOppfyltMeldeplikt', () => {
         vurdertIBehandling: '123',
         meldepliktOverstyringStatus: 'RIMELIG_GRUNN',
         vurderingsTidspunkt: '2024-08-10',
-        vurderingerMeta: { vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' } },
+        vurderingerMeta: { vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10', kilde: 'SAKSBEHANDLER' } },
       },
     ],
   };
@@ -55,7 +55,7 @@ describe('IkkeOppfyltMeldeplikt', () => {
           vurdertIBehandling: '123',
           meldepliktOverstyringStatus: 'RIMELIG_GRUNN',
           vurderingsTidspunkt: '2024-08-10',
-          vurderingerMeta: { vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10' } },
+          vurderingerMeta: { vurdertAv: { ident: 'saksbehandler', dato: '2024-08-10', kilde: 'SAKSBEHANDLER' } },
         },
       ],
       gjeldendeVedtatteOversyringsvurderinger: [],

@@ -118,7 +118,7 @@ export const SaksmenyDropdown = ({
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     !harAlleredeValgtAvslag1127;
 
-  const korrigerSoknadsDatoFeatureFlagIsEnabled = useFeatureFlag('KorrigerSoknadsdato');
+  const kanKorrigereSøknadsdato = useFeatureFlag('KravManuellVurdering');
 
   return (
     <div className={styles.saksmeny}>
@@ -175,7 +175,7 @@ export const SaksmenyDropdown = ({
                 Vurder avslag § 11-27
               </Dropdown.Menu.GroupedList.Item>
             )}
-            {korrigerSoknadsDatoFeatureFlagIsEnabled && (
+            {kanKorrigereSøknadsdato && (
               <Dropdown.Menu.GroupedList.Item onClick={() => setKorrigerSøknadsdato(true)}>
                 Korriger søknadsdato (§ 22-13 femte ledd)
               </Dropdown.Menu.GroupedList.Item>

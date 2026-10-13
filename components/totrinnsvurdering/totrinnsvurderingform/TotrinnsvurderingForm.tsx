@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Detail, HStack, InfoCard, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, HStack, InfoCard, Link, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -30,7 +30,6 @@ import {
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useFieldArray } from 'react-hook-form';
-
 import { Alert } from 'components/alert/Alert';
 import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -40,7 +39,7 @@ import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsv
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { EnvelopeClosedIcon } from '@navikt/aksel-icons';
+import { EnvelopeClosedIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -262,8 +261,21 @@ export const TotrinnsvurderingForm = ({
             <InfoCard.Title>Send vedtak om avslag</InfoCard.Title>
           </InfoCard.Header>
           <InfoCard.Content>
-            Når du godkjenner vilkårene, fatter du vedtaket. Brevet sendes direkte til brukeren med teksten fra den
-            individuelle begrunnelsen.
+            <BodyShort>
+              Når du godkjenner vilkårene, fatter du vedtaket. Brevet sendes direkte til brukeren med teksten fra den
+              individuelle begrunnelsen.
+            </BodyShort>
+
+            <Link
+              inlineText={true}
+              href={
+                'https://navno.sharepoint.com/:b:/r/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/Delte%20dokumenter/Oppl%C3%A6ringsmateriell,%20Kelvin/Brevmal%20avslag%2011-5.pdf?d=w3a576e3104044632acf51e02bd3f7227&csf=1&web=1&e=UOakL4'
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Se eksempel på vedtaksbrev for avslag etter § 11-5 (Navet) <ExternalLinkIcon />
+            </Link>
           </InfoCard.Content>
         </InfoCard>
       )}

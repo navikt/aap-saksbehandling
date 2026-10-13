@@ -139,6 +139,24 @@ describe('mapTilPeriodisertVurdering', () => {
       });
     });
 
+    describe('harNedsattArbeidsevne = NEI_MEN_STUDENT', () => {
+      const data: Sykdomsvurdering = { ...baseSykdomsvurdering, harNedsattArbeidsevne: 'NEI_MEN_STUDENT' };
+
+      it('skal sette erArbeidsevnenNedsatt til false', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart);
+        expect(result.harNedsattArbeidsevne).toBe('NEI_MEN_STUDENT');
+      });
+
+      it('skal nullstille alle arbeidsevne- og yrkesskade-felt', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart);
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.yrkesskadeBegrunnelse).toBeUndefined();
+      });
+    });
+
     describe('harNedsattArbeidsevne = NEI', () => {
       const data: Sykdomsvurdering = {
         ...baseSykdomsvurdering,

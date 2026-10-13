@@ -14,6 +14,7 @@ import {
   HarRegistrertTimerResponse,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
+  KanDistribuereBrevV2Request,
   KvalitetssikringTilgang,
   LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
@@ -22,6 +23,7 @@ import {
   MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
+  Mottaker,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterMeldekortRequest,
@@ -29,7 +31,7 @@ import {
   OpprettAktivitetspliktBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
-  RettighetsinfoDto,
+  RegistrerMeldedatoRequest,
   SakPersoninfo,
   SaksInfo,
   SettPåVent,
@@ -126,6 +128,10 @@ export function clientKanDistribuereBrev(brevbestillingReferanse: string, reques
   );
 }
 
+export function clientKanDistribuereBrevV2(brevbestillingReferanse: string, request: KanDistribuereBrevV2Request) {
+  return clientFetch<Boolean>(`${BASE_URL}/api/${brevbestillingReferanse}/v2/kan-distribuere-brev`, 'POST', request);
+}
+
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {
   return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`, 'POST', data);
 }
@@ -192,10 +198,6 @@ export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
 }
 
-export function clientHentRettighetsinfo(saksnummer: string) {
-  return clientFetch<RettighetsinfoDto>(`${BASE_URL}/api/sak/${saksnummer}/rettighetsinfo`, 'GET');
-}
-
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
   return clientFetch<ForhåndsvisDialogmeldingResponse>(
     `${BASE_URL}/api/dokumentinnhenting/forhaandsvis`,
@@ -241,6 +243,13 @@ export function clientOppdaterBrevdata(brevbestillingReferanse: string, brevdata
 
 export function clientOppdaterBrevmal(brevbestillingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevmal`, 'PUT');
+}
+
+export function clientOppdaterMottakere(brevbestillingReferanse: string, mottaker: Mottaker, kopimottaker?: Mottaker) {
+  return clientFetch<FetchResponse<void>>(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-mottakere`, 'PUT', {
+    mottaker,
+    kopimottaker,
+  });
 }
 
 export function clientBestillTestBrev(behandlingReferanse: string) {
@@ -321,6 +330,10 @@ export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortReq
     'POST',
     oppdaterMeldekortRequest
   );
+}
+
+export function clientRegistrerMeldedato(saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) {
+  return clientFetch(`${BASE_URL}/api/meldekort/${saksnummer}/registrer-meldedato`, 'POST', registrerMeldedatoRequest);
 }
 
 export function clientHentAInntektRedirectUrl(saksnummer: string) {

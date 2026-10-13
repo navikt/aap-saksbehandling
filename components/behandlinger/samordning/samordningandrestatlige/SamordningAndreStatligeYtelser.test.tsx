@@ -18,7 +18,7 @@ const grunnlagMedVurdering: SamordningAndreStatligeYtelserGrunnlag = {
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [],
-    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' } },
+    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01', kilde: 'SAKSBEHANDLER' } },
   },
 };
 
@@ -36,7 +36,7 @@ const grunnlagMedBarnepensjon: SamordningAndreStatligeYtelserGrunnlag = {
       { ytelse: 'BARNEPENSJON', periode: { fom: '2025-01-01', tom: '2025-02-01' } },
       { ytelse: 'DAGPENGER', periode: { fom: '2025-03-01', tom: '2025-04-01' } },
     ],
-    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01' } },
+    vurderingerMeta: { vurdertAv: { ident: 'Saksbehandler', dato: '2025-08-01', kilde: 'SAKSBEHANDLER' } },
   },
 };
 

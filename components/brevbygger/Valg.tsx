@@ -4,10 +4,12 @@ import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { BrevFormVerdier } from 'components/brevbygger/types';
 import { Checkbox, CheckboxGroup } from 'components/DsClient';
+import { ValgDto } from 'lib/types/types';
 
 interface ValgProps {
   valgRef: ValgRef;
   control: Control<BrevFormVerdier>;
+  automatiskValgteValg?: ValgDto[];
 }
 
 const handleMouseEnter = (id: string) => {
@@ -24,7 +26,7 @@ const handleMouseLeave = (id: string) => {
   }
 };
 
-export const Valg = ({ valgRef, control }: ValgProps) => {
+export const Valg = ({ valgRef, control, automatiskValgteValg }: ValgProps) => {
   const valgId = valgRef.valg._id;
 
   const valgtAlternativKey = useWatch({ control, name: `valg.${valgId}` });
@@ -33,6 +35,10 @@ export const Valg = ({ valgRef, control }: ValgProps) => {
   const erFritekstValgt = valgtAlternativ?._type === 'fritekst';
 
   const antallValg = valgRef.valg.alternativer.length;
+
+  function erForhåndsvalgt(nøkkel: string) {
+    return automatiskValgteValg?.find((v) => v.id === valgId && v.key === nøkkel);
+  }
 
   return (
     <div onMouseEnter={() => handleMouseEnter(valgId)} onMouseLeave={() => handleMouseLeave(valgId)}>
@@ -61,6 +67,7 @@ export const Valg = ({ valgRef, control }: ValgProps) => {
                   }}
                 >
                   {alternativ._type === 'fritekst' ? 'Fritekst' : alternativ.tekst.beskrivelse}
+                  {erForhåndsvalgt(alternativ._key) && ' (Forhåndsvalgt)'}
                 </Checkbox>
               </CheckboxGroup>
             );
@@ -79,6 +86,7 @@ export const Valg = ({ valgRef, control }: ValgProps) => {
           {valgRef.valg.alternativer.map((alternativ) => (
             <option key={alternativ._key} value={alternativ._key}>
               {alternativ._type === 'fritekst' ? 'Fritekst' : alternativ.tekst.beskrivelse}
+              {erForhåndsvalgt(alternativ._key) && ' (Forhåndsvalgt)'}
             </option>
           ))}
         </SelectWrapper>

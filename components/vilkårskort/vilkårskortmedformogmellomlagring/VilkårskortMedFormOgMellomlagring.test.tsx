@@ -1,10 +1,11 @@
 import { describe, expect, it, vitest } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import {
   VilkårskortMedFormOgMellomlagring,
   VilkårsKortMedFormOgMellomlagringProps,
 } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VisningModus } from 'lib/types/visningTypes';
+import { SubmitEventHandler } from 'react';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {
@@ -52,7 +53,7 @@ describe('Vilkårskort med form', () => {
       ...defaultProps,
       vurderingerMeta: {
         ...defaultProps.vurderingerMeta,
-        kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', erRetur: true },
+        kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', erRetur: true, kilde: 'SAKSBEHANDLER' },
       },
     };
 
@@ -80,7 +81,7 @@ describe('Vilkårskort med form', () => {
       ...defaultProps,
       vurderingerMeta: {
         ...defaultProps.vurderingerMeta,
-        besluttetAv: { ident: 'Beslutter', dato: '2025-04-26', erRetur: true },
+        besluttetAv: { ident: 'Beslutter', dato: '2025-04-26', erRetur: true, kilde: 'SAKSBEHANDLER' },
       },
     };
 
@@ -225,6 +226,25 @@ describe('Vilkårskort med form', () => {
     expect(avbrytKnapp).not.toBeInTheDocument();
   });
 
+  it('Skal videresende submit til mottatt handler også når visningsmodus er låst', () => {
+    const onSubmit = vitest.fn<SubmitEventHandler>((event) => event.preventDefault());
+    const { container } = render(
+      <VilkårskortMedFormOgMellomlagring
+        {...defaultProps}
+        visningModus={VisningModus.LÅST_UTEN_ENDRE}
+        onSubmit={onSubmit}
+      />
+    );
+    const form = container.querySelector('form');
+    if (!form) {
+      throw new Error('Forventet å finne skjemaet');
+    }
+
+    fireEvent.submit(form);
+
+    expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
   it('Skal ha knapp for å endre vurdering når visningsModus er LÅST_MED_ENDRE', () => {
     renderComponentNyVisning(VisningModus.LÅST_MED_ENDRE);
 
@@ -260,9 +280,9 @@ const defaultProps: VilkårsKortMedFormOgMellomlagringProps = {
   status: 'DONE',
   vilkårTilhørerNavKontor: true,
   vurderingerMeta: {
-    vurdertAv: { ident: 'Lokalsaksbehandler', dato: '2025-04-25' },
-    kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26' },
-    besluttetAv: { ident: 'Beslutter', dato: '2025-04-27' },
+    vurdertAv: { ident: 'Lokalsaksbehandler', dato: '2025-04-25', kilde: 'SAKSBEHANDLER' },
+    kvalitetssikretAv: { ident: 'Kvalitetssikrer', dato: '2025-04-26', kilde: 'SAKSBEHANDLER' },
+    besluttetAv: { ident: 'Beslutter', dato: '2025-04-27', kilde: 'SAKSBEHANDLER' },
   },
   children: undefined,
   onDeleteMellomlagringClick: vitest.fn,

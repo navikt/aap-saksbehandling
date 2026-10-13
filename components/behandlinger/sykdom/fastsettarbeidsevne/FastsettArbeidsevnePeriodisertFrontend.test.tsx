@@ -72,6 +72,7 @@ describe('FastsettArbeidsevne', () => {
             vurderingerMeta: {
               vurdertAv: {
                 ident: 'Saksbehandler',
+                kilde: 'SAKSBEHANDLER',
                 dato: '2025-08-21',
               },
             },
@@ -143,7 +144,7 @@ describe('FastsettArbeidsevne', () => {
       await klikkPåNyVurdering();
       expect(
         screen.getByText(
-          'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+          'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett til full ytelse.'
         )
       ).toBeVisible();
     });
@@ -227,6 +228,7 @@ describe('FastsettArbeidsevne', () => {
             vurderingerMeta: {
               vurdertAv: {
                 ident: 'Saksbehandler',
+                kilde: 'SAKSBEHANDLER',
                 dato: '2025-08-21',
               },
             },

@@ -1,4 +1,3 @@
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -28,7 +27,6 @@ interface Props {
 }
 
 export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
-  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
   const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
     const filtrerOppgave = (oppgave: OppgaveMedKontekst) => {
@@ -65,19 +63,17 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
         return false;
       }
 
-      if (tilbakekrevingBelopFilter) {
-        if (tilbakekrevingBeløpFom) {
-          const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
-          if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
-            return false;
-          }
+      if (tilbakekrevingBeløpFom) {
+        const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
+        if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
+          return false;
         }
+      }
 
-        if (tilbakekrevingBeløpTom) {
-          const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
-          if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
-            return false;
-          }
+      if (tilbakekrevingBeløpTom) {
+        const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
+        if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
+          return false;
         }
       }
 
@@ -87,5 +83,5 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
     };
 
     return oppgaver.filter(filtrerOppgave);
-  }, [oppgaver, debouncedFilters, tilbakekrevingBelopFilter]);
+  }, [oppgaver, debouncedFilters]);
 };

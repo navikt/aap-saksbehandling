@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentSak, hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { SakPersoninformasjonContextProvider } from 'context/saksbehandling/SakPersoninformasjonContext';
-import { logError } from 'lib/serverutlis/logger';
+import { SakContextProvider } from 'context/saksbehandling/SakContext';
 
 interface Props {
   children: ReactNode;
@@ -10,18 +10,25 @@ interface Props {
 
 const Layout = async (props: Props) => {
   const params = await props.params;
-  let sakPersoninformasjon;
-  try {
-    sakPersoninformasjon = await hentSakPersoninfo(params.saksnummer);
-  } catch (err) {
-    logError(`Feil ved henting av personinfo i layout for sak ${params.saksnummer}`, err);
-    throw err;
-  }
+  const [sakPersoninformasjon, sak] = await Promise.all([
+    hentSakPersoninfo(params.saksnummer),
+    hentSak(params.saksnummer),
+  ]);
 
   return (
-    <SakPersoninformasjonContextProvider SakPersonInfo={sakPersoninformasjon}>
-      {props.children}
-    </SakPersoninformasjonContextProvider>
+    <SakContextProvider
+      sak={{
+        ident: sak.ident,
+        opprettetTidspunkt: sak.opprettetTidspunkt,
+        periode: sak.periode,
+        saksnummer: sak.saksnummer,
+        virkningsTidspunkt: sak.virkningstidspunkt,
+      }}
+    >
+      <SakPersoninformasjonContextProvider SakPersonInfo={sakPersoninformasjon}>
+        {props.children}
+      </SakPersoninformasjonContextProvider>
+    </SakContextProvider>
   );
 };
 

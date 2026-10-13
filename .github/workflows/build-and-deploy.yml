@@ -11,7 +11,7 @@ on:
 
 jobs:
   buildDev:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@bb3280552f7e445fffa11e0cbf41087feac4047d # main
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@0968ded01ca23f7b053a356f5f6b78df919d56fb # main
     permissions:
       contents: read
       id-token: write
@@ -23,7 +23,7 @@ jobs:
       playwright: false
       cdn: true
   buildProd:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@bb3280552f7e445fffa11e0cbf41087feac4047d # main
+    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@0968ded01ca23f7b053a356f5f6b78df919d56fb # main
     permissions:
       contents: read
       id-token: write
@@ -38,7 +38,7 @@ jobs:
 
   deployDev:
     needs: buildDev
-    uses: navikt/aap-workflows/.github/workflows/deploy.yml@bb3280552f7e445fffa11e0cbf41087feac4047d # main
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@0968ded01ca23f7b053a356f5f6b78df919d56fb # main
     permissions:
       contents: read
       id-token: write
@@ -50,7 +50,7 @@ jobs:
 
   deployProd:
     needs: [buildProd, deployDev]
-    uses: navikt/aap-workflows/.github/workflows/deploy.yml@bb3280552f7e445fffa11e0cbf41087feac4047d # main
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@0968ded01ca23f7b053a356f5f6b78df919d56fb # main
     permissions:
       contents: read
       id-token: write
