@@ -299,11 +299,7 @@ describe('Samordning gradering', () => {
     };
 
     render(
-      <SamordningGradering
-          grunnlag={grunnlagMedOverlappendeFerieOgSykepenger}
-          readOnly={false}
-          behandlingVersjon={0}
-        />
+      <SamordningGradering grunnlag={grunnlagMedOverlappendeFerieOgSykepenger} readOnly={false} behandlingVersjon={0} />
     );
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
