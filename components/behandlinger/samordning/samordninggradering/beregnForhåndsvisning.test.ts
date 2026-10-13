@@ -71,7 +71,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', feriePeriodeFom, feriePeriodeTom),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
 
     expect(resultat.map((r) => r.periode)).toEqual([forventetFeriePeriode, forventetSykepengedelEtterFerie]);
   });
@@ -113,7 +113,7 @@ describe('beregnForhåndsvisning', () => {
       rad('FERIE_I_SYKEPENGEPERIODE', feriePeriodeFom, feriePeriodeTom),
     ];
 
-    const resultat = beregnForhåndsvisning(rader);
+    const resultat = beregnSplittingAvSykepengeperiode(rader);
 
     expect(resultat.map((r) => r.periode)).toEqual([
       forventetSykepengedelFørFerie,
