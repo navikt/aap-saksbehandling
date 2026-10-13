@@ -1,6 +1,6 @@
-import { StønadsperiodeGrunnlag, StønadsperiodeVurdering } from 'lib/types/types';
+import { StønadsperiodeGrunnlag, StønadsperiodeVurdering, StønadsperiodeVurderingLøsning } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { getJaEllerNei } from 'lib/utils/form';
+import { getJaEllerNei, JaEllerNei } from 'lib/utils/form';
 
 export interface StønadsperiodeKravFormFields {
   begrunnelse: string;
@@ -14,7 +14,7 @@ export interface StønadsperiodeFormFields {
   vurderinger: Record<string, StønadsperiodeKravFormFields>;
 }
 
-export function finnStønadsperiodeVurderingByReferanse(
+export function finnStønadsperiodeVurderingFraReferanse(
   grunnlag: StønadsperiodeGrunnlag,
   referanse: string
 ): StønadsperiodeVurdering | undefined {
@@ -28,7 +28,7 @@ export function hentOriginaleStønadsperiodeFormFelter(
   grunnlag: StønadsperiodeGrunnlag,
   referanse: string
 ): StønadsperiodeKravFormFields | undefined {
-  const vurdering = finnStønadsperiodeVurderingByReferanse(grunnlag, referanse);
+  const vurdering = finnStønadsperiodeVurderingFraReferanse(grunnlag, referanse);
   return vurdering ? stønadsperiodeVurderingTilFormFields(vurdering) : undefined;
 }
 
@@ -53,5 +53,41 @@ export function byggInitielleStønadsperiodeVurderinger(
 
   return Object.fromEntries(
     unikeVurderinger.map((vurdering) => [vurdering.referanse, stønadsperiodeVurderingTilFormFields(vurdering)])
+  );
+}
+
+export function byggVurderingerFraSKjema(
+  grunnlag: StønadsperiodeGrunnlag,
+  vurderinger: Record<string, StønadsperiodeKravFormFields>
+): StønadsperiodeVurderingLøsning[] {
+  const endredeVurderinger = Object.entries(vurderinger).filter(([referanse, felt]) => {
+    const original = hentOriginaleStønadsperiodeFormFelter(grunnlag, referanse);
+    if (!original) return false;
+    return erFelterEndret(original, felt);
+  });
+
+  return endredeVurderinger.map(([referanse, felter]) => feltTilLøsning(felter, referanse));
+}
+
+function feltTilLøsning(felter: StønadsperiodeKravFormFields, referanse: string): StønadsperiodeVurderingLøsning {
+  const relevantKravType = { type: 'NY_STØNADSPERIODE' }; // TODO her må vi utlede hvilken type det er
+
+  return {
+    // @ts-expect-error Her må vi fikse typene
+    relevantKravType: relevantKravType,
+    referanse: { verdi: referanse },
+    begrunnelse: felter.begrunnelse,
+    harGjenværendeKvote: felter.harGjenværendeKvote === JaEllerNei.Ja,
+    harHattOrdinærSiste52Uker: felter.brukerenHarHattOrdinærAAPInnen52Uker === JaEllerNei.Ja,
+    startDato: felter.datoKravetSkalVurderesFra,
+  };
+}
+
+function erFelterEndret(original: StønadsperiodeKravFormFields, gjeldende: StønadsperiodeKravFormFields): boolean {
+  return (
+    original.begrunnelse !== gjeldende.begrunnelse ||
+    original.brukerenHarHattOrdinærAAPInnen52Uker !== gjeldende.brukerenHarHattOrdinærAAPInnen52Uker ||
+    original.datoKravetSkalVurderesFra !== gjeldende.datoKravetSkalVurderesFra ||
+    original.harGjenværendeKvote !== gjeldende.harGjenværendeKvote
   );
 }

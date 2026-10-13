@@ -3,13 +3,14 @@
 import { MellomlagretVurdering, StønadsperiodeGrunnlag } from 'lib/types/types';
 import { StønadsperiodeTabell } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/StønadsperiodeTabell';
 import { StønadsperiodeBoks } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodeboks/StønadsperiodeBoks';
-import { VStack } from '@navikt/ds-react';
+import { Button, VStack } from '@navikt/ds-react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import {
   byggInitielleStønadsperiodeVurderinger,
-  finnStønadsperiodeVurderingByReferanse,
+  byggVurderingerFraSKjema,
+  finnStønadsperiodeVurderingFraReferanse,
   hentOriginaleStønadsperiodeFormFelter,
   StønadsperiodeFormFields,
 } from 'components/behandlinger/krav/utils/stønadsperiodeutils';
@@ -17,6 +18,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { SubmitEventHandler } from 'react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 interface Props {
   behandlingVersjon: number;
@@ -25,8 +27,8 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
-  // const { behandlingsreferanse } = useParamsMedType();
+export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurdering, behandlingVersjon }: Props) => {
+  const { behandlingsreferanse } = useParamsMedType();
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -49,10 +51,7 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
     form
   );
 
-  console.log('mellomlagretVurdering', mellomlagretVurdering);
-  console.log('initialMellomlagretVurdering', initialMellomlagretVurdering);
-
-  const { løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
     useLøsAvklaringsbehov('AVKLAR_STØNADSPERIODE');
 
   const valgteKrav = useWatch({ control: form.control, name: 'valgteKrav' }) ?? [];
@@ -79,7 +78,20 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      console.log(data);
+      løsAvklaringsbehov(
+        {
+          behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.AVKLAR_STØNADSPERIODE_KODE,
+            stønadsperiodeVurderinger: byggVurderingerFraSKjema(grunnlag, data.vurderinger),
+          },
+        },
+        () => {
+          visningActions.onBekreftClick();
+          slettMellomlagring();
+        }
+      );
     })(event);
   };
 
@@ -112,13 +124,14 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
           />
 
           {valgteKrav.map((referanse) => {
-            const vurdering = finnStønadsperiodeVurderingByReferanse(grunnlag, referanse);
+            const vurdering = finnStønadsperiodeVurderingFraReferanse(grunnlag, referanse);
             return (
               vurdering && (
                 <StønadsperiodeBoks key={referanse} vurdering={vurdering} onLukk={() => lukkKrav(referanse)} />
               )
             );
           })}
+          <Button onSubmit={handleSubmit}>Hehe</Button>
         </FormProvider>
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

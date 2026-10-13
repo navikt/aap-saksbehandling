@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { StønadsperiodeVurdering } from 'lib/types/types';
 import {
   byggInitielleStønadsperiodeVurderinger,
-  finnStønadsperiodeVurderingByReferanse,
+  finnStønadsperiodeVurderingFraReferanse,
   hentOriginaleStønadsperiodeFormFelter,
   stønadsperiodeVurderingTilFormFields,
 } from './stønadsperiodeutils';
@@ -29,15 +29,15 @@ describe('stønadsperiodeutils', () => {
       vedtatteVurderinger: [vurdering, vedtattVurdering],
     };
 
-    expect(finnStønadsperiodeVurderingByReferanse(grunnlag, 'krav-1')).toBe(nyVurdering);
+    expect(finnStønadsperiodeVurderingFraReferanse(grunnlag, 'krav-1')).toBe(nyVurdering);
     expect(hentOriginaleStønadsperiodeFormFelter(grunnlag, 'krav-1')).toEqual(
       stønadsperiodeVurderingTilFormFields(nyVurdering)
     );
-    expect(finnStønadsperiodeVurderingByReferanse(grunnlag, 'krav-2')).toBe(vedtattVurdering);
+    expect(finnStønadsperiodeVurderingFraReferanse(grunnlag, 'krav-2')).toBe(vedtattVurdering);
     expect(hentOriginaleStønadsperiodeFormFelter(grunnlag, 'krav-2')).toEqual(
       stønadsperiodeVurderingTilFormFields(vedtattVurdering)
     );
-    expect(finnStønadsperiodeVurderingByReferanse(grunnlag, 'ukjent')).toBeUndefined();
+    expect(finnStønadsperiodeVurderingFraReferanse(grunnlag, 'ukjent')).toBeUndefined();
     expect(hentOriginaleStønadsperiodeFormFelter(grunnlag, 'ukjent')).toBeUndefined();
   });
 
