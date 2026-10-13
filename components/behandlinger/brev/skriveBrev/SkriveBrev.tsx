@@ -111,7 +111,7 @@ export const SkriveBrev = ({
         <VelgeMottakere
           setMottakere={setMottakere}
           readOnly={readOnly}
-          brukerNavn={mottaker.navn}
+          brukerNavn={mottaker.navn || 'Mangler'}
           bruker={brukerMottaker}
           fullmektig={fullmektigMottaker}
         />
@@ -181,7 +181,7 @@ export const SkriveBrev = ({
           </LocalAlert>
           <BrevbyggerBeta
             brevmal={brev}
-            mottaker={mottaker}
+            mottaker={{ ident: mottaker.ident || 'Mangler', navn: mottaker.navn || 'Mangler' }}
             saksnummer={saksnummer}
             onBrevChange={onChange}
             logo={NavLogo}

@@ -43,7 +43,7 @@ export const OvergangArbeidFormInput = ({ readOnly, index, form }: Props) => {
       <RadioGroupJaNei
         name={`vurderinger.${index}.brukerRettPåAAP`}
         control={control}
-        label="Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?"
+        label="Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?"
         horisontal={true}
         rules={{ required: 'Du må svare på om brukeren har krav på AAP i perioden som arbeidssøker etter § 11-17' }}
         readOnly={readOnly}

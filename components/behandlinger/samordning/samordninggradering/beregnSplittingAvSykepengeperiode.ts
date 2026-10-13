@@ -8,7 +8,7 @@ import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date'
  * Antall sykepengedager bevares: dagene før ferien blir stående, og de resterende dagene
  * legges som en egen rad rett etter ferieslutt.
  */
-export function beregnForhåndsvisning(rader: SamordnetYtelse[]): SamordnetYtelse[] {
+export function beregnSplittingAvSykepengeperiode(rader: SamordnetYtelse[]): SamordnetYtelse[] {
   const ferieRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'));
   let resultat = slåSammenSplittedeSykepengeperioder(rader).filter((n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE');
 
@@ -17,10 +17,6 @@ export function beregnForhåndsvisning(rader: SamordnetYtelse[]): SamordnetYtels
   });
 
   return sorterEtterFom([...resultat, ...ferieRader]);
-}
-
-export function medAutoSplitt(rader: SamordnetYtelse[], autoSplittSykepenger: boolean): SamordnetYtelse[] {
-  return autoSplittSykepenger ? beregnForhåndsvisning(rader) : rader;
 }
 
 export function slåSammenSplittedeSykepengeperioder(rader: SamordnetYtelse[]): SamordnetYtelse[] {
@@ -136,9 +132,7 @@ function forskyvSykepenger(rad: SamordnetYtelse, sykepenger: Periode, ferie: Per
   }
 
   const totaltAntallVirkedager = antallVirkedagerMellom(sykepenger.fom, sykepenger.tom);
-  const virkedagerFørFerien = finnesDagerFørFerien
-    ? antallVirkedagerMellom(sykepenger.fom, subDays(ferie.fom, 1))
-    : 0;
+  const virkedagerFørFerien = finnesDagerFørFerien ? antallVirkedagerMellom(sykepenger.fom, subDays(ferie.fom, 1)) : 0;
   const virkedagerIgjen = totaltAntallVirkedager - virkedagerFørFerien;
 
   if (virkedagerIgjen > 0) {

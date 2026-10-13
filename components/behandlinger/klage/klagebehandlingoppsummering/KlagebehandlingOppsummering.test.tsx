@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { screen, render } from '../../../../lib/test/CustomRender';
+import { screen, render } from 'lib/test/CustomRender';
 import { KlagebehandlingOppsummering } from 'components/behandlinger/klage/klagebehandlingoppsummering/KlagebehandlingOppsummering';
 import { KlagebehandlingKontorGrunnlag, KlagebehandlingNayGrunnlag } from 'lib/types/types';
 
@@ -13,13 +13,14 @@ const grunnlagKontor: KlagebehandlingKontorGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'ident',
+        kilde: 'SAKSBEHANDLER',
         dato: '2025-01-01',
         ansattnavn: 'Ine',
         enhetsnavn: 'Kontor',
       },
     },
   },
-  harTilgangTilÅSaksbehandle: true
+  harTilgangTilÅSaksbehandle: true,
 };
 const grunnlagNay: KlagebehandlingNayGrunnlag = {
   påklagetVedtakType: 'KELVIN_BEHANDLING',
@@ -31,13 +32,14 @@ const grunnlagNay: KlagebehandlingNayGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'ident',
+        kilde: 'SAKSBEHANDLER',
         dato: '2025-01-01',
         ansattnavn: 'Ine',
         enhetsnavn: 'Kontor',
       },
     },
   },
-  harTilgangTilÅSaksbehandle: true
+  harTilgangTilÅSaksbehandle: true,
 };
 describe('Klage - oppsummering', () => {
   it('Skal ha en overskrift', () => {

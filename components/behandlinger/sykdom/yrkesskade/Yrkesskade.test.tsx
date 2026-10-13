@@ -36,6 +36,7 @@ const grunnelagMedTidligereVurdering: YrkesskadeVurderingGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'hello pello',
+        kilde: 'SAKSBEHANDLER',
         dato: '2025-10-08',
       },
     },
@@ -201,6 +202,7 @@ describe('Yrkesskade', () => {
         vurderingerMeta: {
           vurdertAv: {
             ident: 'hello pello',
+            kilde: 'SAKSBEHANDLER',
             dato: '2025-10-08',
           },
         },

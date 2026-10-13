@@ -12,6 +12,7 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
     vurderingerMeta: {
       vurdertAv: {
         ident: 'SAKSBEHANDLER',
+        kilde: 'SAKSBEHANDLER',
         dato: '2026-03-12',
         ansattnavn: 'Test Testesen',
         enhetsnavn: 'Lokalenhetsnavn',
@@ -31,6 +32,7 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
     vurderingerMeta: {
       vurdertAv: {
         ident: 'SAKSBEHANDLER',
+        kilde: 'SAKSBEHANDLER',
         dato: '2026-03-12',
         ansattnavn: 'Test Testesen',
         enhetsnavn: 'Lokalenhetsnavn',
@@ -50,6 +52,7 @@ const sisteVedtatteVurderinger: SykdomsvurderingResponse[] = [
     vurderingerMeta: {
       vurdertAv: {
         ident: 'SAKSBEHANDLER',
+        kilde: 'SAKSBEHANDLER',
         dato: '2026-03-12',
         ansattnavn: 'Test Testesen',
         enhetsnavn: 'Lokalenhetsnavn',
@@ -69,6 +72,7 @@ const nyeVurderinger: SykdomsvurderingResponse[] = [
     vurderingerMeta: {
       vurdertAv: {
         ident: 'SAKSBEHANDLER',
+        kilde: 'SAKSBEHANDLER',
         dato: '2026-03-12',
         ansattnavn: 'Test Testesen',
         enhetsnavn: 'Lokalenhetsnavn',

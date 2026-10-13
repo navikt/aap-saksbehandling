@@ -39,6 +39,8 @@ describe('formUtils', () => {
         betingetTekst: [],
         delmaler: [{ id: 'delmal-1' }],
         valg: [],
+        automatiskValgteValg: [],
+        automatiskValgteDelmalIder: [],
         fritekster: [
           {
             fritekst: JSON.stringify({ tekst: 'Tekst fra delmal 1' }),
@@ -105,6 +107,8 @@ describe('formUtils', () => {
         betingetTekst: [],
         delmaler: [{ id: 'delmal-1' }, { id: 'delmal-2' }],
         valg: [],
+        automatiskValgteValg: [],
+        automatiskValgteDelmalIder: [],
         fritekster: [
           {
             fritekst: JSON.stringify({ tekst: 'Tekst fra delmal 1' }),
@@ -170,6 +174,8 @@ describe('formUtils', () => {
         betingetTekst: [],
         delmaler: [],
         valg: [],
+        automatiskValgteValg: [],
+        automatiskValgteDelmalIder: [],
         fritekster: [
           {
             fritekst: JSON.stringify({ tekst: 'Fritekst fra valg' }),

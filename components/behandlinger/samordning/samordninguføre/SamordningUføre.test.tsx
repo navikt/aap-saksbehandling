@@ -29,6 +29,7 @@ const grunnlagMedVurdering: SamordningUføreGrunnlag = {
       vurdertAv: {
         dato: '2025-08-01',
         ident: 'Saksbehandler',
+        kilde: 'SAKSBEHANDLER',
       },
     },
   },

@@ -2549,7 +2549,7 @@ export interface components {
         | null;
     };
     'no.nav.aap.oppgave.liste.OppgavelisteTagsResponse': {
-      forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
+      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
       forrigePåVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];

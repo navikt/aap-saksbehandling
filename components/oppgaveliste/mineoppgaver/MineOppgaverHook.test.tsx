@@ -1,8 +1,5 @@
 import { act, renderHook } from '@testing-library/react';
-import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
-import { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useFiltrerteOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaverHook';
@@ -56,14 +53,6 @@ const lagOppgaveUtenBeløp = (id: number): OppgaveMedKontekst => ({
   },
 });
 
-const wrapper = ({ children }: { children: ReactNode }) => (
-  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: true }}>{children}</FeatureFlagProvider>
-);
-
-const wrapperUtenFeatureFlag = ({ children }: { children: ReactNode }) => (
-  <FeatureFlagProvider flags={{ ...mockedFlags, TilbakekrevingBelopFilter: false }}>{children}</FeatureFlagProvider>
-);
-
 describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -81,7 +70,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   ];
 
   it('returnerer alle oppgaver når ingen beløpsfiltre er satt', () => {
-    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: {} }), { wrapper });
+    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: {} }));
 
     act(() => {
       vi.advanceTimersByTime(300);
@@ -91,10 +80,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   });
 
   it('filtrerer bort oppgaver med beløp under tilbakekrevingBeløpFom', () => {
-    const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000' } }),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000' } }));
 
     act(() => {
       vi.advanceTimersByTime(300);
@@ -107,10 +93,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   });
 
   it('filtrerer bort oppgaver med beløp over tilbakekrevingBeløpTom', () => {
-    const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpTom: '5000' } }),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpTom: '5000' } }));
 
     act(() => {
       vi.advanceTimersByTime(300);
@@ -123,10 +106,8 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   });
 
   it('filtrerer med både fom og tom satt', () => {
-    const { result } = renderHook(
-      () =>
-        useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000', tilbakekrevingBeløpTom: '5000' } }),
-      { wrapper }
+    const { result } = renderHook(() =>
+      useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000', tilbakekrevingBeløpTom: '5000' } })
     );
 
     act(() => {
@@ -138,9 +119,7 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
   });
 
   it('ekskluderer oppgaver uten tilbakekrevingsbeløp når beløpsfilter er satt', () => {
-    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '100' } }), {
-      wrapper,
-    });
+    const { result } = renderHook(() => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '100' } }));
 
     act(() => {
       vi.advanceTimersByTime(300);
@@ -148,18 +127,5 @@ describe('useFiltrerteOppgaver — tilbakekrevingBeløp-filter', () => {
 
     const ids = result.current.map((o) => o.oppgaveMetadata.id);
     expect(ids).not.toContain(4);
-  });
-
-  it('ignorerer beløpsfilter når feature-flagget er av', () => {
-    const { result } = renderHook(
-      () => useFiltrerteOppgaver({ oppgaver, filter: { tilbakekrevingBeløpFom: '1000' } }),
-      { wrapper: wrapperUtenFeatureFlag }
-    );
-
-    act(() => {
-      vi.advanceTimersByTime(300);
-    });
-
-    expect(result.current).toHaveLength(4);
   });
 });

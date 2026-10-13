@@ -42,7 +42,8 @@ export const BrevKortMedDataFetching = async ({
   const readOnly = aktivtSteg === 'BREV' && !grunnlag.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
   const brevtekst = mapBehovskodeTilBehovstype(behovstype);
-  const { bruker, fullmektig } = mapGrunnlagTilMottakere(mottaker, fullmektigGrunnlag.data.vurdering);
+  const brukerMottaker = { ident: mottaker.ident || '', navn: mottaker.navn || '' }; // Midlertidig
+  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
 
   return (
     <VilkårsKort heading={brevtekst} steg="BREV" defaultOpen={true} aktivMarkering={!readOnly}>
