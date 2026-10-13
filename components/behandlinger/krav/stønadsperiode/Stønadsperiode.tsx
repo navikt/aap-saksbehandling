@@ -59,12 +59,11 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
   const lukkKrav = (referanse: string) => {
     const originaleFelter = hentOriginaleStønadsperiodeFormFelter(grunnlag, referanse);
     if (originaleFelter) {
-      form.setValue(`vurderinger.${referanse}`, originaleFelter, { shouldDirty: true });
+      form.setValue(`vurderinger.${referanse}`, originaleFelter);
     }
     form.setValue(
       'valgteKrav',
-      (form.getValues('valgteKrav') ?? []).filter((valgt) => valgt !== referanse),
-      { shouldDirty: true }
+      (form.getValues('valgteKrav') ?? []).filter((valgt) => valgt !== referanse)
     );
   };
 
@@ -72,7 +71,7 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
     if (valgteKrav.includes(referanse)) {
       lukkKrav(referanse);
     } else {
-      form.setValue('valgteKrav', [...(form.getValues('valgteKrav') ?? []), referanse], { shouldDirty: true });
+      form.setValue('valgteKrav', [...(form.getValues('valgteKrav') ?? []), referanse]);
     }
   };
 
@@ -94,6 +93,8 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
       );
     })(event);
   };
+
+  console.log(grunnlag)
 
   return (
     <VilkårskortMedFormOgMellomlagring
