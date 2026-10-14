@@ -27,7 +27,9 @@ function bevegeligeHelligdager(år: number): Date[] {
 }
 
 export function erNorskHelligdag(dato: Date): boolean {
-  const erFastHelligdag = FASTE_HELLIGDAGER.some(({ måned, dag }) => dato.getMonth() === måned && dato.getDate() === dag);
+  const erFastHelligdag = FASTE_HELLIGDAGER.some(
+    ({ måned, dag }) => dato.getMonth() === måned && dato.getDate() === dag
+  );
 
   if (erFastHelligdag) {
     return true;

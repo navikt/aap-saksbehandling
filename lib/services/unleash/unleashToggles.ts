@@ -1,4 +1,5 @@
 export const FLAGS = [
+  'RedigerMottakerBrevbygger',
   'ArenasakerLenkeTilVisninsklient',
   'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
@@ -9,7 +10,6 @@ export const FLAGS = [
   'Avslag11_27',
   'DialogMedBehandler',
   'kopierPerioder',
-  'autoSplittSykepenger',
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
   'ForesporselSendtTilBehandlerFrontend',
@@ -22,6 +22,7 @@ export type FlagNames = (typeof FLAGS)[number];
 export type Flags = Record<FlagNames, boolean>;
 
 export const mockedFlags: Flags = {
+  RedigerMottakerBrevbygger: false,
   ArenasakerLenkeTilVisninsklient: true,
   OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
@@ -33,7 +34,6 @@ export const mockedFlags: Flags = {
   DialogMedBehandler: true,
   kopierPerioder: true,
   HoppOverBeslutterVedAvslagSykdom: true,
-  autoSplittSykepenger: true,
   KanVurdereRefusjonIRevurdering: true,
   ForesporselSendtTilBehandlerFrontend: true,
   StoppAutomatikkForLegeerklaringVedAvslag: true,

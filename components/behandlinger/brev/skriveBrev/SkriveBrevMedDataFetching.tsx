@@ -61,14 +61,15 @@ export const SkriveBrevMedDataFetching = async ({
       />
     );
   }
-  const skrivBrevAvklaringsbehovKode = '5050'
+  const skrivBrevAvklaringsbehovKode = '5050';
   const brev = brevGrunnlag.data.brevGrunnlag.find((x) => x.status === 'FORHÅNDSVISNING_KLAR');
   const sendteBrev = brevGrunnlag.data.brevGrunnlag.filter(
     (x) => x.status === 'FULLFØRT' && x.brev != null && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode
   );
 
   const automatiskBrev = brevGrunnlag.data.brevGrunnlag.find(
-    (x) => x.status === 'FULLFØRT' && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode && x.brevtype === 'AVSLAG_11_5'
+    (x) =>
+      x.status === 'FULLFØRT' && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode && x.brevtype === 'AVSLAG_11_5'
   );
   const avbrytteBrev = brevGrunnlag.data.brevGrunnlag.filter(
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === skrivBrevAvklaringsbehovKode
@@ -91,7 +92,9 @@ export const SkriveBrevMedDataFetching = async ({
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
-  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brev.mottaker, fullmektigGrunnlag.data.vurdering);
+  const brukerMottaker = { ident: brev.mottaker.ident || '', navn: brev.mottaker.navn || '' }; // Midlertidig
+  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
+
   return (
     <div className={styles.flex}>
       {!brukNyBrevbygger && (
@@ -109,8 +112,10 @@ export const SkriveBrevMedDataFetching = async ({
           brevdata={brev.brevdata}
           referanse={brev.brevbestillingReferanse}
           behovstype={behovstype}
+          bruker={brev.bruker}
           mottaker={brev.mottaker}
-          brukerMottaker={bruker}
+          kopimottaker={brev.kopimottaker}
+          fullmektig={fullmektig}
           behandlingVersjon={behandlingVersjon}
           readOnly={readOnlyBrev}
           refusjonskravgrunnlag={refusjonGrunnlag.data}

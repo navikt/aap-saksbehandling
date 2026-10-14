@@ -27,7 +27,9 @@ export function useMeldekortProsessering(): {
           options?.onSuccess?.();
         } else {
           eventSource.close();
-          options?.onTimeout?.('Meldekort ble sendt inn, men prosesseringen tok for lang tid. Prøv å laste siden på nytt.');
+          options?.onTimeout?.(
+            'Meldekort ble sendt inn, men prosesseringen tok for lang tid. Prøv å laste siden på nytt.'
+          );
         }
       };
 
