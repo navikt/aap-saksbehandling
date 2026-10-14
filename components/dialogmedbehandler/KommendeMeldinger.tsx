@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { Alert } from '../alert/Alert';
 import { isError } from '../../lib/utils/api';
 import { clientOppdaterPåminnelseForForepørsel } from 'lib/oppgaveClientApi';
+import React from 'react';
 
 export const KommendeMeldinger = ({
   kommendeMeldinger,
@@ -72,7 +73,7 @@ export const KommendeMeldinger = ({
       </HStack>
 
       {kommendeMeldinger.map((kommendeMelding, index) => (
-        <>
+        <React.Fragment key={index}>
           {kommendeMelding.påminnelseErAvbrutt ? (
             <VStack key={index} gap={'space-4'} align={'end'} className={styles.meldingboksWrapper}>
               <Box className={styles.meldingboks}>
@@ -129,7 +130,7 @@ export const KommendeMeldinger = ({
             </VStack>
           )}
           {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
-        </>
+        </React.Fragment>
       ))}
     </VStack>
   );

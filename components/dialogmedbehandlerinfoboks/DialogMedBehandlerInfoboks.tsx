@@ -15,7 +15,7 @@ const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler[
 export const DialogMedBehandlerInfoboks = ({ påminnelseDato, påminnelseAvbrutt }: ForespørselSendtTilBehandler) => {
   if (!påminnelseDato) return null;
 
-  const erPåminnelseSendt = erPåminnelsenIFortiden(påminnelseDato);
+  const erPåminnelseSendt = erPåminnelsenIFortiden(påminnelseDato) && !påminnelseAvbrutt;
 
   return (
     <TagMedPopover
