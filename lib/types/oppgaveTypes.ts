@@ -38,6 +38,8 @@ export type TildeltStatus = components['schemas']['no.nav.aap.oppgave.tildel.Til
 export type SakOgAvklaringsbehov = components['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 export type UføreVedtakStatus = components['schemas']['no.nav.aap.oppgave.UførevedtakRespons']['resultat'];
 export type UføreVedtak = components['schemas']['no.nav.aap.oppgave.uføreVedtak.UføreVedtak'];
+export type OppdaterPåminnelseRequest = components['schemas']['no.nav.aap.oppgave.OppdaterPåminnelseRequest'];
+export type ForespørselSendtTilBehandler = components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
 
 // Typer utledet direkte fra skjemaet (string unions)
 export type Behandlingstype =

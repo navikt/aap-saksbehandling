@@ -22,6 +22,7 @@ import {
   TildelOppgaveResponse,
   TildeltStatus,
   UføreVedtak,
+  OppdaterPåminnelseRequest,
 } from 'lib/types/oppgaveTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
@@ -217,5 +218,10 @@ export const opprettMarkeringHendelse = async (referanse: string, body: object) 
   }
 
   const url = `${oppgaveApiBaseURL}/${referanse}/opprett-markering-hendelse`;
+  return await apiFetch(url, oppgaveApiScope, 'POST', body);
+};
+
+export const oppdaterPåminnelse = async (body: OppdaterPåminnelseRequest) => {
+  const url = `${oppgaveApiBaseURL}/oppdater-paaminnelse`;
   return await apiFetch(url, oppgaveApiScope, 'POST', body);
 };
