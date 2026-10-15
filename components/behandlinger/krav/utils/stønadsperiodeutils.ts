@@ -7,8 +7,8 @@ export interface StønadsperiodeKravFormFields {
   harHattOrdinærSiste52Uker?: string;
   harGjenværendeKvote?: string;
   datoKravetSkalVurderesFra: string;
-  stansOpphørType?: 'STANS' | 'OPPHØR';
-  stansÅrsaker?: string[];
+  stansOpphørType?: NonNullable<StønadsperiodeVurderingLøsning['stansOpphør']>['type'];
+  stansÅrsaker?: NonNullable<StønadsperiodeVurderingLøsning['stansOpphør']>['årsaker'];
 }
 
 export interface StønadsperiodeFormFields {
@@ -60,30 +60,34 @@ export function byggVurderingerFraSKjema(
   grunnlag: StønadsperiodeGrunnlag,
   vurderinger: Record<string, StønadsperiodeKravFormFields>
 ): StønadsperiodeVurderingLøsning[] {
-  const endredeVurderinger = Object.entries(vurderinger).filter(([referanse, felt]) => {
-    const original = hentOriginaleStønadsperiodeFormFelter(grunnlag, referanse);
-    if (!original) return false;
-    return erFelterEndret(original, felt);
+  const endredeVurderinger = Object.entries(vurderinger).flatMap(([referanse, felter]) => {
+    const originalVurdering = finnStønadsperiodeVurderingFraReferanse(grunnlag, referanse);
+    if (!originalVurdering) return [];
+
+    const originalFelter = stønadsperiodeVurderingTilFormFields(originalVurdering);
+    return erFelterEndret(originalFelter, felter) ? [{ originalVurdering, felter }] : [];
   });
 
-  return endredeVurderinger.map(([referanse, felter]) => feltTilLøsning(felter, referanse));
+  return endredeVurderinger.map(({ originalVurdering, felter }) => feltTilLøsning(felter, originalVurdering));
 }
 
-function feltTilLøsning(felter: StønadsperiodeKravFormFields, referanse: string): StønadsperiodeVurderingLøsning {
-  const relevantKravType = { type: 'NY_STØNADSPERIODE' }; // TODO her må vi utlede hvilken type det er
-
+function feltTilLøsning(
+  felter: StønadsperiodeKravFormFields,
+  originalVurdering: StønadsperiodeVurdering
+): StønadsperiodeVurderingLøsning {
   return {
-    // @ts-expect-error Her må vi fikse typene
-    relevantKravType: relevantKravType,
-    referanse: { verdi: referanse },
+    relevantKravType: originalVurdering.relevantKravType,
+    referanse: { verdi: originalVurdering.referanse },
     begrunnelse: felter.begrunnelse,
     harGjenværendeKvote: felter.harGjenværendeKvote === JaEllerNei.Ja,
     harHattOrdinærSiste52Uker: felter.harHattOrdinærSiste52Uker === JaEllerNei.Ja,
     startDato: felter.datoKravetSkalVurderesFra,
-    stansOpphør: {
-      type: 'STANS',
-      årsaker: ['IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'],
-    },
+    ...(felter.stansOpphørType && {
+      stansOpphør: {
+        type: felter.stansOpphørType,
+        årsaker: felter.stansOpphørType === 'STANS' ? (felter.stansÅrsaker ?? []) : [],
+      },
+    }),
   };
 }
 

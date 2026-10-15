@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { StønadsperiodeVurdering } from 'lib/types/types';
+import { StønadsperiodeGrunnlag, StønadsperiodeVurdering } from 'lib/types/types';
 import {
   byggInitielleStønadsperiodeVurderinger,
+  byggVurderingerFraSKjema,
   finnStønadsperiodeVurderingFraReferanse,
   hentOriginaleStønadsperiodeFormFelter,
+  StønadsperiodeKravFormFields,
   stønadsperiodeVurderingTilFormFields,
 } from './stønadsperiodeutils';
 
@@ -80,5 +82,45 @@ describe('stønadsperiodeutils', () => {
         vedtatteVurderinger: [],
       })
     ).toEqual({});
+  });
+
+  it('bygger payload med kravtypen fra grunnlaget og valgte stansårsaker', () => {
+    const grunnlag: StønadsperiodeGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      nyeVurderinger: [{ ...vurdering, relevantKravType: { type: 'AVSLAG' } }],
+      vedtatteVurderinger: [],
+    };
+    const felter: StønadsperiodeKravFormFields = {
+      ...stønadsperiodeVurderingTilFormFields(vurdering),
+      begrunnelse: 'Oppdatert begrunnelse',
+      stansOpphørType: 'STANS',
+      stansÅrsaker: ['BRUKER_UNDER_18'],
+    };
+
+    expect(byggVurderingerFraSKjema(grunnlag, { 'krav-1': felter })).toMatchObject([
+      {
+        relevantKravType: { type: 'AVSLAG' },
+        referanse: { verdi: 'krav-1' },
+        stansOpphør: { type: 'STANS', årsaker: ['BRUKER_UNDER_18'] },
+      },
+    ]);
+  });
+
+  it('sender Opphør med tom årsaksliste', () => {
+    const grunnlag: StønadsperiodeGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      nyeVurderinger: [vurdering],
+      vedtatteVurderinger: [],
+    };
+    const felter: StønadsperiodeKravFormFields = {
+      ...stønadsperiodeVurderingTilFormFields(vurdering),
+      begrunnelse: 'Oppdatert begrunnelse',
+      stansOpphørType: 'OPPHØR',
+    };
+
+    expect(byggVurderingerFraSKjema(grunnlag, { 'krav-1': felter })[0].stansOpphør).toEqual({
+      type: 'OPPHØR',
+      årsaker: [],
+    });
   });
 });

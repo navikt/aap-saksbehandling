@@ -101,6 +101,7 @@ export const StønadsperiodeBoks = ({ vurdering, onLukk }: Props) => {
               name={`vurderinger.${vurdering.referanse}.stansOpphørType`}
               control={form.control}
               label={'Er det stans eller opphør?'}
+              rules={{ required: 'Du må velge stans eller opphør.' }}
             >
               <Radio value={'STANS'}>Stans</Radio>
               <Radio value={'OPPHØR'}>Opphør</Radio>
@@ -112,6 +113,7 @@ export const StønadsperiodeBoks = ({ vurdering, onLukk }: Props) => {
               name={`vurderinger.${vurdering.referanse}.stansÅrsaker`}
               control={form.control}
               label={'Stansårsak'}
+              rules={{ required: 'Du må velge minst én stansårsak.' }}
               options={stansÅrsaker.map((årsak) => {
                 return { value: årsak, label: mapStansÅrsakerTilTekst(årsak) };
               })}
