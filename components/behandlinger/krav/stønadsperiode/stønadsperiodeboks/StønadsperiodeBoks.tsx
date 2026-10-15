@@ -21,7 +21,7 @@ export const StønadsperiodeBoks = ({ vurdering, onLukk }: Props) => {
   const form = useFormContext<StønadsperiodeFormFields>();
 
   const brukerenHarHattOrdinærAAPInnen52UkerValue = form.watch(
-    `vurderinger.${vurdering.referanse}.brukerenHarHattOrdinærAAPInnen52Uker`
+    `vurderinger.${vurdering.referanse}.harHattOrdinærSiste52Uker`
   );
 
   const harGjenværendeKvoteValue = form.watch(`vurderinger.${vurdering.referanse}.harGjenværendeKvote`);
@@ -67,7 +67,7 @@ export const StønadsperiodeBoks = ({ vurdering, onLukk }: Props) => {
             rules={{ required: 'Du må skrive en begrunnelse.' }}
           />
           <RadioGroupWrapper
-            name={`vurderinger.${vurdering.referanse}.brukerenHarHattOrdinærAAPInnen52Uker`}
+            name={`vurderinger.${vurdering.referanse}.harHattOrdinærSiste52Uker`}
             control={form.control}
             size={'small'}
             label={'Har brukeren hatt ordinær AAP innen 52 uker?'}

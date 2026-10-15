@@ -4,7 +4,7 @@ import { getJaNeiEllerUndefined, JaEllerNei } from 'lib/utils/form';
 
 export interface StønadsperiodeKravFormFields {
   begrunnelse: string;
-  brukerenHarHattOrdinærAAPInnen52Uker?: string;
+  harHattOrdinærSiste52Uker?: string;
   harGjenværendeKvote?: string;
   datoKravetSkalVurderesFra: string;
   stansOpphørType?: 'STANS' | 'OPPHØR';
@@ -37,7 +37,7 @@ export function hentOriginaleStønadsperiodeFormFelter(
 export function stønadsperiodeVurderingTilFormFields(vurdering: StønadsperiodeVurdering): StønadsperiodeKravFormFields {
   return {
     begrunnelse: vurdering?.begrunnelse || '',
-    brukerenHarHattOrdinærAAPInnen52Uker: getJaNeiEllerUndefined(vurdering.harHattOrdinærSiste52Uker),
+    harHattOrdinærSiste52Uker: getJaNeiEllerUndefined(vurdering.harHattOrdinærSiste52Uker),
     harGjenværendeKvote: getJaNeiEllerUndefined(vurdering.harGjenværendeKvote),
     datoKravetSkalVurderesFra: vurdering.startDato ? formaterDatoForFrontend(vurdering.startDato) : '',
   };
@@ -78,7 +78,7 @@ function feltTilLøsning(felter: StønadsperiodeKravFormFields, referanse: strin
     referanse: { verdi: referanse },
     begrunnelse: felter.begrunnelse,
     harGjenværendeKvote: felter.harGjenværendeKvote === JaEllerNei.Ja,
-    harHattOrdinærSiste52Uker: felter.brukerenHarHattOrdinærAAPInnen52Uker === JaEllerNei.Ja,
+    harHattOrdinærSiste52Uker: felter.harHattOrdinærSiste52Uker === JaEllerNei.Ja,
     startDato: felter.datoKravetSkalVurderesFra,
     stansOpphør: {
       type: 'STANS',
@@ -90,8 +90,20 @@ function feltTilLøsning(felter: StønadsperiodeKravFormFields, referanse: strin
 function erFelterEndret(original: StønadsperiodeKravFormFields, gjeldende: StønadsperiodeKravFormFields): boolean {
   return (
     original.begrunnelse !== gjeldende.begrunnelse ||
-    original.brukerenHarHattOrdinærAAPInnen52Uker !== gjeldende.brukerenHarHattOrdinærAAPInnen52Uker ||
+    original.harHattOrdinærSiste52Uker !== gjeldende.harHattOrdinærSiste52Uker ||
     original.datoKravetSkalVurderesFra !== gjeldende.datoKravetSkalVurderesFra ||
-    original.harGjenværendeKvote !== gjeldende.harGjenværendeKvote
+    original.harGjenværendeKvote !== gjeldende.harGjenværendeKvote ||
+    original.stansOpphørType !== gjeldende.stansOpphørType ||
+    erArraysForskjellige(original.stansÅrsaker, gjeldende.stansÅrsaker)
+  );
+}
+
+function erArraysForskjellige(original: string[] | undefined, gjeldende: string[] | undefined): boolean {
+  const originaleÅrsaker = original ?? [];
+  const gjeldendeÅrsaker = gjeldende ?? [];
+
+  return (
+    originaleÅrsaker.length !== gjeldendeÅrsaker.length ||
+    originaleÅrsaker.some((årsak) => !gjeldendeÅrsaker.includes(årsak))
   );
 }

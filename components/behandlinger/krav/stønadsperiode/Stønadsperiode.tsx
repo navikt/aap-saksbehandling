@@ -19,6 +19,7 @@ import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { SubmitEventHandler } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
@@ -27,11 +28,12 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon }: Props) => {
+export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon, readOnly }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
+  const stonadsperiodeVurderingFeatureFlagIsEnabled = useFeatureFlag('StonadsperiodeVurdering');
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
-    true, // TODO Når vi skrur på funksjonalitet for å gjøre vurderinger så bruk readonly fra props
+    stonadsperiodeVurderingFeatureFlagIsEnabled ? readOnly : true,
     'AVKLAR_STØNADSPERIODE',
     initialMellomlagretVurdering
   );
@@ -122,14 +124,15 @@ export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behand
             onToggleValgtKrav={toggleValgtKrav}
           />
 
-          {valgteKrav.map((referanse) => {
-            const vurdering = finnStønadsperiodeVurderingFraReferanse(grunnlag, referanse);
-            return (
-              vurdering && (
-                <StønadsperiodeBoks key={referanse} vurdering={vurdering} onLukk={() => lukkKrav(referanse)} />
-              )
-            );
-          })}
+          {stonadsperiodeVurderingFeatureFlagIsEnabled &&
+            valgteKrav.map((referanse) => {
+              const vurdering = finnStønadsperiodeVurderingFraReferanse(grunnlag, referanse);
+              return (
+                vurdering && (
+                  <StønadsperiodeBoks key={referanse} vurdering={vurdering} onLukk={() => lukkKrav(referanse)} />
+                )
+              );
+            })}
         </FormProvider>
       </VStack>
     </VilkårskortMedFormOgMellomlagring>
