@@ -34,9 +34,10 @@ export const TrekkSøknadMedDatafetching = async ({
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
   }
 
-  const ubesvarteForespørsler = isError(ubesvarteForespørslerResponse)
-    ? undefined
-    : ubesvarteForespørslerResponse?.data?.forespørsler;
+  const ubesvarteForespørsler =
+    ubesvarteForespørslerResponse !== undefined && isError(ubesvarteForespørslerResponse)
+      ? undefined
+      : (ubesvarteForespørslerResponse?.data?.forespørsler ?? []);
 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -52,6 +53,7 @@ export const TrekkSøknadMedDatafetching = async ({
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       ubesvarteForespørsler={ubesvarteForespørsler}
+      viseVentendeLEToggle={viseVentendeLEToggle}
     />
   );
 };

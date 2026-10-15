@@ -20,21 +20,39 @@ describe('Trekk søknad', () => {
   describe('Generelt', () => {
     it('har en overskrift', () => {
       render(
-        <TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} ubesvarteForespørsler={[]} />
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
+        />
       );
       expect(screen.getByRole('heading', { name: 'Trekk søknad', level: 3 })).toBeVisible();
     });
 
     it('har et felt for å begrunne hvorfor søknaden skal trekkes', () => {
       render(
-        <TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} ubesvarteForespørsler={[]} />
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
+        />
       );
       expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
     });
 
     it('viser en feilmelding dersom man forsøker å bekrefte uten å ha skrevet en begrunnelse', async () => {
       render(
-        <TrekkSøknad grunnlag={{ vurderinger: [] }} readOnly={false} behandlingVersjon={1} ubesvarteForespørsler={[]} />
+        <TrekkSøknad
+          grunnlag={{ vurderinger: [] }}
+          readOnly={false}
+          behandlingVersjon={1}
+          ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
+        />
       );
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
       expect(await screen.findByText('Du må begrunne hvorfor søknaden skal trekkes')).toBeVisible();
@@ -60,6 +78,7 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={1}
           ubesvarteForespørsler={ubesvarteForespørsler}
+          viseVentendeLEToggle={true}
         />
       );
       await user.click(screen.getAllByRole('radio', { name: /ja/i })[0]);
@@ -96,6 +115,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -145,6 +165,7 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
       const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -159,6 +180,7 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -181,6 +203,7 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -198,6 +221,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -216,6 +240,7 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -240,6 +265,7 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
@@ -266,6 +292,7 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørsler={[]}
+          viseVentendeLEToggle={false}
         />
       );
 
