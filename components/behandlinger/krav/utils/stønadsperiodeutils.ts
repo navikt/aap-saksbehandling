@@ -7,6 +7,8 @@ export interface StønadsperiodeKravFormFields {
   brukerenHarHattOrdinærAAPInnen52Uker?: string;
   harGjenværendeKvote?: string;
   datoKravetSkalVurderesFra: string;
+  stansOpphørType?: 'STANS' | 'OPPHØR';
+  stansÅrsaker?: string[]; // TODO Hent disse fra backend
 }
 
 export interface StønadsperiodeFormFields {
@@ -78,6 +80,10 @@ function feltTilLøsning(felter: StønadsperiodeKravFormFields, referanse: strin
     harGjenværendeKvote: felter.harGjenværendeKvote === JaEllerNei.Ja,
     harHattOrdinærSiste52Uker: felter.brukerenHarHattOrdinærAAPInnen52Uker === JaEllerNei.Ja,
     startDato: felter.datoKravetSkalVurderesFra,
+    stansOpphør: {
+      type: 'STANS',
+      årsaker: ['IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER'],
+    },
   };
 }
 

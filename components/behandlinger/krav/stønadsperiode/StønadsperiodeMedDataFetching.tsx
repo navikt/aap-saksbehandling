@@ -21,15 +21,6 @@ export const StønadsperiodeMedDataFetching = async ({ behandlingsreferanse, ste
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  // TODO Trenger vi denne?
-  // const harTidligereVurderinger =
-  //   grunnlag.data.vedtatteVurderinger != null && grunnlag.data.vedtatteVurderinger.length > 0;
-  // const harNyeVurderinger = grunnlag.data.nyeVurderinger != null && grunnlag.data.nyeVurderinger.length > 0;
-  //
-  // if (!harTidligereVurderinger && !harNyeVurderinger) {
-  //   return null;
-  // }
-
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,

@@ -3,7 +3,7 @@
 import { MellomlagretVurdering, StønadsperiodeGrunnlag } from 'lib/types/types';
 import { StønadsperiodeTabell } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/StønadsperiodeTabell';
 import { StønadsperiodeBoks } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodeboks/StønadsperiodeBoks';
-import { Button, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
@@ -27,11 +27,11 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurdering, behandlingVersjon }: Props) => {
+export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
-    readOnly,
+    false, // TODO Denne må komme fra readOnly props
     'AVKLAR_STØNADSPERIODE',
     initialMellomlagretVurdering
   );
@@ -94,8 +94,6 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
     })(event);
   };
 
-  console.log(grunnlag)
-
   return (
     <VilkårskortMedFormOgMellomlagring
       heading={'Forskrift om AAP § 12. Ny stønadsperiode'}
@@ -132,7 +130,6 @@ export const Stønadsperiode = ({ grunnlag, readOnly, initialMellomlagretVurderi
               )
             );
           })}
-          <Button onSubmit={handleSubmit}>Hehe</Button>
         </FormProvider>
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

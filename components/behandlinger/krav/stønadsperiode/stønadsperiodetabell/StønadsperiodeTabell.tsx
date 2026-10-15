@@ -23,7 +23,7 @@ export const StønadsperiodeTabell = ({ grunnlag, valgteKrav, onToggleValgtKrav 
   return (
     <VStack gap={'space-16'}>
       <Heading size={'xsmall'}>Brukerens krav om AAP</Heading>
-      <TableStyled>
+      <TableStyled size={'small'}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Relevant krav</Table.HeaderCell>
