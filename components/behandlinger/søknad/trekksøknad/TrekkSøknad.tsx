@@ -3,7 +3,13 @@
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurderingerMeta } from 'lib/types/types';
+import {
+  MeldingDto,
+  MellomlagretVurdering,
+  TrukketSøknadGrunnlag,
+  TrukketSøknadVurdering,
+  VurderingerMeta,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
@@ -14,7 +20,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 import { Alert } from 'components/alert/Alert';
-import { InfoCard } from '@navikt/ds-react';
+import { BodyShort, InfoCard } from '@navikt/ds-react';
 import { LightBulbIcon } from '@navikt/aksel-icons';
 
 interface Props {
@@ -22,7 +28,7 @@ interface Props {
   readOnly: boolean;
   behandlingVersjon: number;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  skalViseVentendeLegeerklæringBeskjed: boolean;
+  ubesvarteForespørsler: MeldingDto[] | undefined;
 }
 
 type TrukketSøknadÅrsak = TrukketSøknadVurdering['aarsak'];
@@ -40,7 +46,7 @@ export const TrekkSøknad = ({
   readOnly,
   behandlingVersjon,
   initialMellomlagretVurdering,
-  skalViseVentendeLegeerklæringBeskjed,
+  ubesvarteForespørsler,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
@@ -91,6 +97,8 @@ export const TrekkSøknad = ({
   );
 
   const harValgtAtSoknadTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
+  const skalViseVentendeLegeerklæringFeilmelding = ubesvarteForespørsler === undefined;
+  const skalViseVentendeLegeerklæringBeskjed = ubesvarteForespørsler !== undefined && ubesvarteForespørsler.length > 0;
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
@@ -144,7 +152,6 @@ export const TrekkSøknad = ({
       {harValgtAtSoknadTrekkes && (
         <>
           <FormField form={form} formField={formFields.aarsak} />
-
           {skalViseVentendeLegeerklæringBeskjed && (
             <InfoCard data-color="meta-purple" size="small">
               <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
@@ -153,7 +160,17 @@ export const TrekkSøknad = ({
               </InfoCard.Message>
             </InfoCard>
           )}
-
+          {skalViseVentendeLegeerklæringFeilmelding && (
+            <Alert variant={'error'}>
+              <>
+                <BodyShort size={'small'}>500</BodyShort>
+                <BodyShort size={'small'}>Internfeil</BodyShort>
+              </>
+              <BodyShort size={'small'}>
+                Klarte ikke å hente liste over ubesvarte forespørsler om legeerklæring!
+              </BodyShort>
+            </Alert>
+          )}
           <Alert variant={'info'}>
             Husk at trekk av søknad skal være brukers eget ønske, og at dialogen med bruker må journalføres. Informer
             bruker om at saken avsluttes, og at ny søknad må sendes dersom bruker ombestemmer seg. Alle vurderinger som
