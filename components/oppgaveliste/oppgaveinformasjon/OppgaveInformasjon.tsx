@@ -75,6 +75,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
       {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.forespørselSendtTilBehandler && (
         <DialogMedBehandlerInfoboks
           påminnelseDato={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseDato}
+          påminnelseAvbrutt={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseAvbrutt}
         />
       )}
     </HStack>

@@ -6,6 +6,7 @@ import {
   Kø,
   MineOppgaverQueryParams,
   MineOppgaverSortBy,
+  OppdaterPåminnelseRequest,
   OppgavelisteRequest,
   OppgavelisteResponse,
   OppgaverPåSak,
@@ -76,4 +77,8 @@ export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
 
 export async function clientHentMineSisteOppgaver() {
   return await clientFetch<SakOgAvklaringsbehov[]>('/oppgave/api/oppgave/mine-siste-oppgaver', 'GET');
+}
+
+export async function clientOppdaterPåminnelseForForepørsel(påminnelse: OppdaterPåminnelseRequest) {
+  return await clientFetch<OppdaterPåminnelseRequest>('/oppgave/api/oppgave/oppdater-paaminnelse', 'POST', påminnelse);
 }

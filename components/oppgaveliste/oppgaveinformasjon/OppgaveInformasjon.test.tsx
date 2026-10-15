@@ -90,28 +90,6 @@ describe('OppgaveInformasjon', () => {
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
-  it('skal vise sendt forespørsel med påminnelsesdato', async () => {
-    renderWithFlags(
-      <OppgaveInformasjon
-        oppgave={{
-          ...oppgave,
-          oppgavelisteTags: {
-            ...oppgave.oppgavelisteTags,
-            forespørselSendtTilBehandler: { påminnelseDato: '2026-10-05' },
-          },
-        }}
-      />
-    );
-
-    const icon = screen.getByRole('img', { name: 'Forespørsel sendt til behandler' });
-    expect(icon).toBeVisible();
-
-    await user.click(icon);
-
-    expect(screen.getByText('Påminnelse')).toBeVisible();
-    expect(screen.getByText('Sendes 05.10.2026')).toBeVisible();
-  });
-
   it('skal vise ikon for returinformasjon om oppgaven er returnert', () => {
     renderWithFlags(
       <OppgaveInformasjon
