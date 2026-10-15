@@ -26,7 +26,7 @@ export const TrekkSøknadMedDatafetching = async ({
 
   const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
 
-  const ubesvarteForespørsler = viseVentendeLEToggle
+  const ubesvarteForespørslerResponse = viseVentendeLEToggle
     ? await hentUbesvarteForespørslerLegeerklæring(behandlingsreferanse)
     : undefined;
 
@@ -34,14 +34,9 @@ export const TrekkSøknadMedDatafetching = async ({
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
   }
 
-  if (isError(ubesvarteForespørsler)) {
-    return <ApiException apiResponses={[ubesvarteForespørsler]} />;
-  }
-
-  const skalViseVentendeLegeerklæringBeskjed =
-    viseVentendeLEToggle &&
-    ubesvarteForespørsler?.data?.forespørsler?.length !== undefined &&
-    ubesvarteForespørsler?.data?.forespørsler?.length > 0;
+  const ubesvarteForespørsler = isError(ubesvarteForespørslerResponse)
+    ? undefined
+    : ubesvarteForespørslerResponse?.data?.forespørsler;
 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -56,7 +51,7 @@ export const TrekkSøknadMedDatafetching = async ({
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      skalViseVentendeLegeerklæringBeskjed={skalViseVentendeLegeerklæringBeskjed}
+      ubesvarteForespørsler={ubesvarteForespørsler}
     />
   );
 };
