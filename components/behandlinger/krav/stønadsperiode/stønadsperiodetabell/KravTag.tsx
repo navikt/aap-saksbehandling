@@ -1,6 +1,6 @@
 import { StønadsperiodeVurdering } from 'lib/types/types';
 import type { AkselColorRole } from '@navikt/ds-tokens/types';
-import { Tag } from '@navikt/ds-react';
+import { BodyShort, Tag } from '@navikt/ds-react';
 
 type KravType = StønadsperiodeVurdering['relevantKravType']['type'];
 
@@ -25,8 +25,8 @@ export const KravTag = ({ type }: Props) => {
   })();
 
   return (
-    <Tag size="small" variant={'strong'} data-color={farge}>
-      {tekst}
+    <Tag size="xsmall" variant={'strong'} data-color={farge}>
+      <BodyShort size={'small'}>{tekst}</BodyShort>
     </Tag>
   );
 };

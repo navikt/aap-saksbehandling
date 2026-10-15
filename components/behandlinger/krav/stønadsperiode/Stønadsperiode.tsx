@@ -27,11 +27,11 @@ interface Props {
   initialMellomlagretVurdering?: MellomlagretVurdering;
 }
 
-export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon }: Props) => {
+export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon, readOnly }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
-    false, // TODO Denne må komme fra readOnly props
+    readOnly,
     'AVKLAR_STØNADSPERIODE',
     initialMellomlagretVurdering
   );
