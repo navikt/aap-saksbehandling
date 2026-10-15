@@ -8,7 +8,7 @@ export interface StønadsperiodeKravFormFields {
   harGjenværendeKvote?: string;
   datoKravetSkalVurderesFra: string;
   stansOpphørType?: 'STANS' | 'OPPHØR';
-  stansÅrsaker?: string[]; // TODO Hent disse fra backend
+  stansÅrsaker?: string[];
 }
 
 export interface StønadsperiodeFormFields {
