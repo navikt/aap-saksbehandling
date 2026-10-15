@@ -8,7 +8,7 @@ import { StønadsperiodeBoks } from './StønadsperiodeBoks';
 
 const initialFelter = {
   begrunnelse: '',
-  brukerenHarHattOrdinærAAPInnen52Uker: '',
+  harHattOrdinærSiste52Uker: '',
   harGjenværendeKvote: '',
   datoKravetSkalVurderesFra: '',
 };
@@ -115,7 +115,7 @@ describe('StønadsperiodeBoks', () => {
       <TestForm
         initialFelter={{
           ...initialFelter,
-          brukerenHarHattOrdinærAAPInnen52Uker: 'ja',
+          harHattOrdinærSiste52Uker: 'ja',
           harGjenværendeKvote: 'ja',
         }}
       />
@@ -135,7 +135,6 @@ describe('StønadsperiodeBoks', () => {
     const user = userEvent.setup();
     const onLukk = vi.fn();
     render(<TestForm onLukk={onLukk} />);
-    await user.type(screen.getByRole('textbox', { name: 'Begrunnelse' }), 'Vurdering for krav 1');
     const begrunnelse = screen.getByRole('textbox', { name: 'Begrunnelse' });
     fireEvent.change(begrunnelse, { target: { value: 'Vurdering for krav 1' } });
     expect(begrunnelse).toHaveAttribute('name', 'vurderinger.krav-1.begrunnelse');

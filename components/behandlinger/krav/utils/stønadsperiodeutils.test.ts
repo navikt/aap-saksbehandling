@@ -44,7 +44,7 @@ describe('stønadsperiodeutils', () => {
   it('mapper begrunnelse, boolske verdier og dato til formfelter', () => {
     expect(stønadsperiodeVurderingTilFormFields(vurdering)).toEqual({
       begrunnelse: 'Eksisterende begrunnelse',
-      brukerenHarHattOrdinærAAPInnen52Uker: 'nei',
+      harHattOrdinærSiste52Uker: 'nei',
       harGjenværendeKvote: 'ja',
       datoKravetSkalVurderesFra: '15.04.2025',
     });
@@ -55,7 +55,7 @@ describe('stønadsperiodeutils', () => {
         harGjenværendeKvote: false,
       })
     ).toMatchObject({
-      brukerenHarHattOrdinærAAPInnen52Uker: 'ja',
+      harHattOrdinærSiste52Uker: 'ja',
       harGjenværendeKvote: 'nei',
     });
   });
