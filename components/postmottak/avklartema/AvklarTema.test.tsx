@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { screen, waitFor, act } from '@testing-library/react';
 import { AvklarTema } from './AvklarTema';
 import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
+import userEvent from '@testing-library/user-event';
 import { render } from 'lib/test/CustomRender';
 import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
@@ -19,6 +20,7 @@ vi.mock('lib/clientApi', () => ({
 }));
 
 describe('AvklarTema', () => {
+  const user = userEvent.setup();
   const grunnlag: AvklarTemaGrunnlag = {
     vurdering: { skalTilAap: true },
     dokumenter: [],
@@ -53,9 +55,9 @@ describe('AvklarTema', () => {
 
   it('beholder Gosys-flyten uten temafelt når toggle er av', async () => {
     visTema(false);
-    fireEvent.click(screen.getByRole('radio', { name: 'Nei' }));
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
-    fireEvent.submit(screen.getByRole('radio', { name: 'Nei' }).closest('form')!);
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(gosysBehov).toHaveBeenCalledWith({
         behandlingVersjon: 1,
@@ -69,17 +71,16 @@ describe('AvklarTema', () => {
   it('krever tema for Nei og sender valgt kode uten Gosys-modal', async () => {
     visTema(true);
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('radio', { name: 'Nei' }));
+    await user.click(screen.getByRole('radio', { name: 'Nei' }));
     expect(screen.queryByText(/Tema endres på journalposten/)).not.toBeInTheDocument();
     const select = screen.getByRole('combobox', { name: 'Velg tema' });
     expect(select.querySelectorAll('option')).toHaveLength(27);
-    const form = select.closest('form')!;
-    fireEvent.submit(form);
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
     expect(await screen.findByText('Du må velge tema')).toBeVisible();
     expect(løsBehov).not.toHaveBeenCalled();
-    fireEvent.change(select, { target: { value: 'BAR' } });
+    await user.selectOptions(select, 'BAR');
     expect(screen.getByText(/Tema endres på journalposten/)).toBeVisible();
-    fireEvent.submit(form);
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith({
         behandlingVersjon: 1,
@@ -96,7 +97,7 @@ describe('AvklarTema', () => {
     const select = screen.getByRole('combobox', { name: 'Velg tema' });
     expect(select).toHaveValue('UKJENT');
     expect(screen.getByText(/Dokumentet sendes til Gosys for avklaring/)).toBeVisible();
-    fireEvent.submit(select.closest('form')!);
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith(
         expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: false, tema: 'UKJENT' } })
@@ -106,9 +107,9 @@ describe('AvklarTema', () => {
 
   it('sender ikke tidligere valgt tema når svaret endres til Ja', async () => {
     visTema(true, { ...grunnlag, vurdering: { skalTilAap: false, tema: 'BAR' } });
-    fireEvent.click(screen.getByRole('radio', { name: 'Ja' }));
+    await user.click(screen.getByRole('radio', { name: 'Ja' }));
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
-    fireEvent.submit(screen.getByRole('radio', { name: 'Ja' }).closest('form')!);
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith(
         expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: true } })
