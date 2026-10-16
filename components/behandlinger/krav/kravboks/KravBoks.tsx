@@ -4,7 +4,7 @@ import {
   formaterKravtype,
   kravVurderingTilFormFields,
   søknadUtenKravTilFormFields,
-} from 'components/behandlinger/krav/kravutils';
+} from 'components/behandlinger/krav/utils/vurderkravutils';
 import { BodyShort, Box, Button, Detail, HStack, Label, Radio, Tag, VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { erDatoIFremtiden } from 'lib/validation/dateValidation';

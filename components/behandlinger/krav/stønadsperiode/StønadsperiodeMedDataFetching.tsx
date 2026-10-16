@@ -1,4 +1,8 @@
-import { hentStønadsperiodeGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentStønadsperiodeGrunnlag,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { Behovstype } from 'lib/utils/form';
 import { isError } from 'lib/utils/api';
 import { StegData } from 'lib/utils/steg';
 
@@ -17,17 +21,20 @@ export const StønadsperiodeMedDataFetching = async ({ behandlingsreferanse, ste
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const harTidligereVurderinger =
-    grunnlag.data.vedtatteVurderinger != null && grunnlag.data.vedtatteVurderinger.length > 0;
-  const harNyeVurderinger = grunnlag.data.nyeVurderinger != null && grunnlag.data.nyeVurderinger.length > 0;
-
-  if (!harTidligereVurderinger && !harNyeVurderinger) {
-    return null;
-  }
-
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const initialMellomlagretVurdering = await hentMellomlagring(
+    behandlingsreferanse,
+    Behovstype.AVKLAR_STØNADSPERIODE_KODE,
+    totalReadOnly,
+    stegData.erIkkePåVent
+  );
 
   return (
-    <Stønadsperiode grunnlag={grunnlag.data} readOnly={totalReadOnly} behandlingVersjon={stegData.behandlingVersjon} />
+    <Stønadsperiode
+      grunnlag={grunnlag.data}
+      readOnly={totalReadOnly}
+      behandlingVersjon={stegData.behandlingVersjon}
+      initialMellomlagretVurdering={initialMellomlagretVurdering}
+    />
   );
 };
