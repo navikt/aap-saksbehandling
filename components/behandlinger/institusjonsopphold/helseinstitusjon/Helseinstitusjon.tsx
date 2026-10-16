@@ -136,7 +136,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       const vedtatteForOpphold = grunnlag.vedtatteVurderinger
         .filter((v) => v.oppholdId === opphold.oppholdId)
         .flatMap((v) => v.vurderinger || []);
-      const sisteVedtatteVurdering = vedtatteForOpphold.at(-1);
+      const sisteVedtatteVurdering = vedtatteForOpphold.findLast((v) => !v.erHistoriskUtenReduksjonsberegning);
       const sisteVedtatteTom = sisteVedtatteVurdering?.periode.tom ?? null;
 
       // Finn forrige opphold sitt faktiske grunnlag (for avsluttetDato) og om saksbehandler
@@ -169,47 +169,29 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         effektivTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.periode.fom);
       }
 
-      const nyeVurderinger = opphold.vurderinger.map((vurdering, index, filtrerteVurderinger) => {
-        const nesteVurdering = filtrerteVurderinger.at(index + 1);
-        const erReduksjon = erReduksjonUtIFraFormFields(vurdering);
-        const erHistoriskUtenReduksjonsberegning =
-          erReduksjon && !erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato);
+      const vurderingerMedStatus = opphold.vurderinger.map((vurdering) => ({
+        vurdering,
+        erHistorisk:
+          erReduksjonUtIFraFormFields(vurdering) &&
+          !erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato),
+      }));
 
-        // Segmentets reelle start: enten den brukerinntastede datoen, eller - for historiske
-        // vurderinger der datoen ligger utenfor oppholdet - starten på segmentet (forrige
-        // vurderings slutt, eller oppholdets start for første segment). Dette sikrer at hele
-        // oppholdets periode dekkes og overskriver gammel/vedtatt tidslinje korrekt.
-        const segmentStart = index === 0 ? opphold.periode.fom : filtrerteVurderinger[index - 1]?.periode.fom;
+      const nyeVurderinger = vurderingerMedStatus.map(({ vurdering, erHistorisk }, index) => {
+        const nestePeriodiserte = vurderingerMedStatus.slice(index + 1).find((v) => !v.erHistorisk)?.vurdering;
 
         const fom = vurdering.periode?.fom
           ? formaterDatoForBackend(parseDato(vurdering.periode.fom))
           : formaterDatoForBackend(parseDato(opphold.periode.fom));
 
-        const beregnetTom = nesteVurdering
-          ? formaterDatoForBackend(subDays(new Dato(nesteVurdering.periode.fom).dato, 1))
-          : formaterDatoForBackend(parseDato(opphold.periode.tom));
+        const beregnetTom =
+          !erHistorisk && nestePeriodiserte
+            ? formaterDatoForBackend(subDays(new Dato(nestePeriodiserte.periode.fom).dato, 1))
+            : formaterDatoForBackend(parseDato(opphold.periode.tom));
 
-        /*// Periode krever tom >= fom. Ved historisk vurdering kan fom (saksbehandlers reduksjonsdato)
-        // ligge etter oppholdets/beregnet tom -> juster tom opp til fom i så fall, siden perioden
+        // Periode krever tom >= fom. Ved historisk vurdering kan fom (saksbehandlers reduksjonsdato)
+        // ligge etter oppholdets/beregnet tom - juster tom opp til fom i så fall, siden perioden
         // uansett ikke brukes til reduksjonsberegning for historiske vurderinger.
-        const tom =
-          erHistoriskUtenReduksjonsberegning && isAfter(new Dato(fom).dato, new Dato(beregnetTom).dato)
-            ? fom
-            : beregnetTom;*/ // TODO Thao: Fjerne denne?
-
-        let periodeFom = fom;
-        let tom = beregnetTom;
-
-        if (erHistoriskUtenReduksjonsberegning) {
-          // Datoen saksbehandler har oppgitt ligger utenfor oppholdet (reduksjon rekker aldri å
-          // inntreffe). Segmentet som faktisk sendes til backend må likevel dekke oppholdets
-          // reelle periode fra forrige grense til oppholdets slutt, slik at det overskriver
-          // eventuell gammel/vedtatt reduksjon i denne perioden.
-          periodeFom = segmentStart
-            ? formaterDatoForBackend(parseDato(segmentStart))
-            : formaterDatoForBackend(parseDato(opphold.periode.fom));
-          tom = formaterDatoForBackend(parseDato(opphold.periode.tom));
-        }
+        const tom = erHistorisk && isAfter(new Dato(fom).dato, new Dato(beregnetTom).dato) ? fom : beregnetTom;
 
         return {
           oppholdId: vurdering.oppholdId,
@@ -217,12 +199,12 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           faarFriKostOgLosji: vurdering.faarFriKostOgLosji === JaEllerNei.Ja,
           forsoergerEktefelle: vurdering.forsoergerEktefelle === JaEllerNei.Ja,
           harFasteUtgifter: vurdering.harFasteUtgifter === JaEllerNei.Ja,
-          periode: { fom: periodeFom, tom },
-          erHistoriskUtenReduksjonsberegning,
+          periode: { fom, tom },
+          erHistoriskUtenReduksjonsberegning: erHistorisk,
         };
       });
 
-      const førsteNyeFom = nyeVurderinger.at(0)?.periode.fom;
+      const førsteNyeFom = nyeVurderinger.find((v) => !v.erHistoriskUtenReduksjonsberegning)?.periode.fom;
 
       const finnesGap =
         sammenhengendeOppholdEnabled &&

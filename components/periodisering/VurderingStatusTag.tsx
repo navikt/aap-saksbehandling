@@ -9,7 +9,7 @@ export enum VurderingStatus {
   Overskrevet = 'Overskrevet',
   Reduksjon = 'Reduksjon',
   IkkeReduksjon = 'Ikke reduksjon',
-  HistoriskUtenReduksjonsberegning = 'Historisk – ingen reduksjonsberegning',
+  HistoriskUtenReduksjonsberegning = 'Ikke reduksjon (historikk)',
   VedtaksperiodeAutomatisk = 'Automatisk satt vedtaksperiode',
   VedtaksperiodeManuell = 'Manuell forlengelse',
 }
@@ -45,7 +45,7 @@ function getTagVariant(status: VurderingStatus): TagProps['variant'] {
     case VurderingStatus.IkkeReduksjon:
       return 'strong';
     case VurderingStatus.HistoriskUtenReduksjonsberegning:
-      return 'moderate';
+      return 'strong';
     case VurderingStatus.VedtaksperiodeAutomatisk:
       return 'strong';
     case VurderingStatus.VedtaksperiodeManuell:
@@ -68,7 +68,7 @@ function getDataColor(status: VurderingStatus): TagProps['data-color'] {
     case VurderingStatus.IkkeReduksjon:
       return 'success';
     case VurderingStatus.HistoriskUtenReduksjonsberegning:
-      return 'neutral';
+      return 'success';
     case VurderingStatus.VedtaksperiodeAutomatisk:
       return 'success';
     case VurderingStatus.VedtaksperiodeManuell:
@@ -83,7 +83,7 @@ function mapVurderingStatusToVurderingTekst(status: VurderingStatus): string {
     case VurderingStatus.IkkeReduksjon:
       return 'Ikke reduksjon';
     case VurderingStatus.HistoriskUtenReduksjonsberegning:
-      return 'Historikk (ingen reduksjonsberegning)';
+      return 'Ikke reduksjon (historikk)';
     case VurderingStatus.Oppfylt:
       return 'Oppfylt';
     case VurderingStatus.OppfyltVedÅrsakssammenheng:
