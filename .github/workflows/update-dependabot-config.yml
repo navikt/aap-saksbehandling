@@ -7,7 +7,7 @@ on:
 
 jobs:
   checkForConfigUpdate:
-    uses: navikt/aap-workflows/.github/workflows/dependabot-frontend-next-config-updater.yml@0968ded01ca23f7b053a356f5f6b78df919d56fb # main
+    uses: navikt/aap-workflows/.github/workflows/dependabot-frontend-next-config-updater.yml@848e942ab051c813412787e94817e589cda06d17 # main
     permissions:
       contents: write
       id-token: write
