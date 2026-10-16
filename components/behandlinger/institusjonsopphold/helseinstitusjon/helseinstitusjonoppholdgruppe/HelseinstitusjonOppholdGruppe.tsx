@@ -78,6 +78,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
   const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
 
   const { reduksjonErMulig } = useEffektivTidligsteReduksjonsdato(
     form,
@@ -137,6 +138,7 @@ const foersteNyePeriodeFraDatoForVisning = foersteNyeErHistorisk
     .at(-1);
 
   const visOppdateringsvarsel =
+    enManedsregelEnabled &&
     !!sisteTidligereVurdering &&
     erReduksjonUtIFraVurdering(sisteTidligereVurdering) &&
     forrigeHarIngenReduksjonLengre &&

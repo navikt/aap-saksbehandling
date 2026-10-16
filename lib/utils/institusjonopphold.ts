@@ -112,17 +112,6 @@ export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string, oppholdTi
   )} ved reduksjon i forrige opphold${fireMånederTekst}. Det finnes likevel unntak.`;
 }
 
-export function lagReduksjonBeskrivelseNyttOppholdGammel(oppholdFra: string): string {
-  const oppholdDato = new Dato(oppholdFra).dato;
-
-  const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });
-
-  const énMånedEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 1));
-  const fireMånederEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 4));
-
-  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjonen bør som regel starte ${formatDatoMedMånedsnavn(énMånedEtterInnleggelsesmåned)} ved reduksjon i forrige opphold, ellers ${formatDatoMedMånedsnavn(fireMånederEtterInnleggelsesmåned)}. Det finnes likevel unntak.`;
-}
-
 /**
  * Sjekker om reduksjon i det hele tatt er mulig for oppholdet, gitt tidligste reduksjonsdato.
  * Hvis tidligste reduksjonsdato er etter oppholdets sluttdato, rekker oppholdet aldri å bli redusert.

@@ -10,6 +10,7 @@ import {
   erReduksjonUtIFraFormFields,
   forrigeOppholdHarIngenReduksjonLengre,
 } from 'lib/utils/institusjonopphold';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export function useEffektivTidligsteReduksjonsdato(
   form: UseFormReturn<HelseinstitusjonsFormFields>,
@@ -18,6 +19,7 @@ export function useEffektivTidligsteReduksjonsdato(
   forrigeOppholdAvsluttetDato?: string | null,
   forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null
 ) {
+  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
   const forrigeOppholdVurderinger =
     oppholdIndex > 0 ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.vurderinger`) : undefined;
 
@@ -27,7 +29,7 @@ export function useEffektivTidligsteReduksjonsdato(
     !!forrigeOppholdAvsluttetDato &&
     erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdAvsluttetDato, opphold.oppholdFra);
 
-  const bruker1Månedsregelen = (forrigeGaReduksjonNå && innenforTreMåneder) satisfies boolean;
+  const bruker1Månedsregelen = enManedsregelEnabled ? forrigeGaReduksjonNå && innenforTreMåneder : innenforTreMåneder;
 
   let effektivTidligsteReduksjonsdato: string | null | undefined;
 
@@ -41,13 +43,17 @@ export function useEffektivTidligsteReduksjonsdato(
     // det ikke lenger gir reduksjon noe sted, er backend-verdien utdatert (kan fortsatt reflektere
     // 1-månedsregelen fra forrige behandling). I så fall må vi regne ut standard 3/4-månedersregel
     // selv, i stedet for å stole på backend.
-  } else if (forrigeOppholdHarIngenReduksjonLengre(forrigeOppholdVurderinger, forrigeOppholdVedtatteVurderinger)) {
+  } else if (
+    enManedsregelEnabled &&
+    forrigeOppholdHarIngenReduksjonLengre(forrigeOppholdVurderinger, forrigeOppholdVedtatteVurderinger)
+  ) {
     effektivTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.oppholdFra);
   } else {
     effektivTidligsteReduksjonsdato = opphold.tidligsteReduksjonsdato;
   }
 
-  const reduksjonErMulig = erReduksjonMuligForOpphold(opphold.avsluttetDato, effektivTidligsteReduksjonsdato);
+  const reduksjonErMulig =
+    !enManedsregelEnabled || erReduksjonMuligForOpphold(opphold.avsluttetDato, effektivTidligsteReduksjonsdato);
 
   return { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig };
 }

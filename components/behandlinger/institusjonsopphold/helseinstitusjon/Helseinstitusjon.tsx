@@ -97,8 +97,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   );
 
   const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
 
   const validerManglendeKorrigeringAvReduksjonsdato = (data: HelseinstitusjonsFormFields): boolean => {
+    if (!enManedsregelEnabled) return false;
     let harValideringsfeil = false;
 
     data.helseinstitusjonsvurderinger.forEach((opphold, oppholdIndex) => {
@@ -155,7 +157,9 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       const innenforTreMåneder =
         !!forrigeOppholdFaktisk?.avsluttetDato &&
         erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdFaktisk.avsluttetDato, opphold.periode.fom);
-      const bruker1Månedsregelen = (forrigeGaReduksjonNå && innenforTreMåneder) satisfies boolean;
+      const bruker1Månedsregelen = enManedsregelEnabled
+        ? forrigeGaReduksjonNå && innenforTreMåneder
+        : innenforTreMåneder;
 
       let effektivTidligsteReduksjonsdato = opphold.tidligsteReduksjonsdato;
       if (bruker1Månedsregelen) {
@@ -164,6 +168,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           'yyyy-MM-dd'
         );
       } else if (
+        enManedsregelEnabled &&
         forrigeOppholdHarIngenReduksjonLengre(forrigeOpphold?.vurderinger, forrigeOppholdVedtatteVurderinger)
       ) {
         effektivTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.periode.fom);
@@ -173,6 +178,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         vurdering,
         erHistorisk:
           erReduksjonUtIFraFormFields(vurdering) &&
+          enManedsregelEnabled &&
           !erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato),
       }));
 
@@ -211,7 +217,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
         sisteVedtatteVurdering &&
         sisteVedtatteTom &&
         førsteNyeFom &&
-        isBefore(new Dato(sisteVedtatteTom).dato, new Dato(opphold.periode.tom).dato) &&
+        (!enManedsregelEnabled || isBefore(new Dato(sisteVedtatteTom).dato, new Dato(opphold.periode.tom).dato)) &&
         isAfter(new Dato(førsteNyeFom).dato, addDays(new Dato(sisteVedtatteTom).dato, 1));
 
       const gapVurdering = finnesGap

@@ -16,6 +16,7 @@ export const FLAGS = [
   'StoppAutomatikkForLegeerklaringVedAvslag',
   'RegistrerMeldedato',
   'SammenhengendeInstitusjonsopphold',
+  'Helseinstitusjon1Manedsregel',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -39,4 +40,5 @@ export const mockedFlags: Flags = {
   StoppAutomatikkForLegeerklaringVedAvslag: true,
   RegistrerMeldedato: true,
   SammenhengendeInstitusjonsopphold: true,
+  Helseinstitusjon1Manedsregel: true,
 };
