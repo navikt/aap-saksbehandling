@@ -1084,7 +1084,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
+            'application/json': components['schemas']['no.nav.aap.meldeplikt.FritakMeldepliktGrunnlagResponse'];
           };
         };
       };
@@ -1122,7 +1122,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringGrunnlagResponse'];
+            'application/json': components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringGrunnlagResponse'];
           };
         };
       };
@@ -4359,44 +4359,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/brev/{brevbestillingReferanse}/fjern-kopimottaker': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description brevbestillingReferanse */
-          brevbestillingReferanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': string;
-          };
-        };
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/brev/{brevbestillingReferanse}/oppdater-brevdata': {
     parameters: {
       query?: never;
@@ -4893,6 +4855,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingerResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/dokumentinnhenting/syfo/dialogmeldinger/legeerklaering/{behandlingsReferanse}/ubesvarte-foresporsler': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description behandlingsReferanse */
+          behandlingsReferanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.UbesvarteForespørslerLegeerklæringResponse'];
           };
         };
       };
@@ -11269,7 +11269,7 @@ export interface components {
         | '9004'
         | '9082'
         | '9083';
-      meldepliktOverstyringVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringLøsningDto'];
+      meldepliktOverstyringVurdering: components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringLøsningDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.PeriodisertAvklarSykepengerErstatningLøsning': {
       /** @enum {string} */
@@ -11550,7 +11550,7 @@ export interface components {
         | '9004'
         | '9082'
         | '9083';
-      løsningerForPerioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto'][];
+      løsningerForPerioder: components['schemas']['no.nav.aap.meldeplikt.PeriodisertFritaksvurderingDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.RefusjonkravLøsning': {
       /** @enum {string} */
@@ -14047,6 +14047,9 @@ export interface components {
       /** Format: uuid */
       dialogmeldingPurringUUID: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.UbesvarteForespørslerLegeerklæringResponse': {
+      forespørsler: components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingDto'][];
+    };
     'no.nav.aap.behandlingsflyt.behandling.bekreftvurderingeroppfølging.BekreftVurderingerOppfølgingDto': {
       mellomlagredeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.mellomlagring.MellomlagretVurdering'][];
     };
@@ -14159,29 +14162,6 @@ export interface components {
        * @example 2025-04-01
        */
       vurdertDato?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse': {
-      behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      harTilgangTilÅSaksbehandle: boolean;
-      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.PeriodisertFritakMeldepliktVurderingResponse'][];
-      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.PeriodisertFritakMeldepliktVurderingResponse'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.PeriodisertFritakMeldepliktVurderingResponse': {
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      harFritak: boolean;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom?: string | null;
-      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterRequest': {
       navn: string;
@@ -14679,12 +14659,16 @@ export interface components {
       begrunnelse: string;
       /** @enum {string|null} */
       brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
+      erRegistrertINødvendigeOffentligeRegister?: boolean | null;
+      /** @enum {string|null} */
+      fase?: 'OPPSTART' | 'UTVIKLING' | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom: string;
       foreliggerFagligVurdering: boolean;
+      jobberBrukerAktivMedVirksomheten?: boolean | null;
       kanFøreTilSelvforsørget?: boolean | null;
       oppfylt: boolean;
       oppstartsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -16747,34 +16731,6 @@ export interface components {
        */
       grenseverdi: number;
     };
-    'no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringGrunnlagResponse': {
-      gjeldendeVedtatteOversyringsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringVurderingResponse'][];
-      harTilgangTilÅSaksbehandle: boolean;
-      overstyringsvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringVurderingResponse'][];
-      perioderIkkeMeldt: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringVurderingResponse': {
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fraDato: string;
-      /** @enum {string} */
-      meldepliktOverstyringStatus: 'HAR_MELDT_SEG' | 'IKKE_MELDT_SEG' | 'RIMELIG_GRUNN';
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tilDato: string;
-      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      vurderingsTidspunkt: string;
-      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
-    };
     'no.nav.aap.behandlingsflyt.behandling.underveis.RettighetsTypeDto': {
       hjemmel: string;
       /** @enum {string} */
@@ -17198,6 +17154,8 @@ export interface components {
        * @example 2025-04-01
        */
       fristSettPåVent?: string | null;
+      /** @enum {string|null} */
+      gradBehov?: 'FRIVILLIG' | 'PÅKREVD' | null;
       perioderKreverVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       perioderUgyldigVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       /** @enum {string} */
@@ -18405,12 +18363,16 @@ export interface components {
       begrunnelse: string;
       /** @enum {string|null} */
       brukerEierVirksomheten?: 'EIER_MINST_50_PROSENT' | 'EIER_MINST_50_PROSENT_MED_FLER' | 'NEI' | null;
+      erRegistrertINødvendigeOffentligeRegister?: boolean | null;
+      /** @enum {string|null} */
+      fase?: 'OPPSTART' | 'UTVIKLING' | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom: string;
       foreliggerFagligVurdering: boolean;
+      jobberBrukerAktivMedVirksomheten?: boolean | null;
       kanFøreTilSelvforsørget?: boolean | null;
       oppstartsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       orgNr?: string | null;
@@ -18530,38 +18492,6 @@ export interface components {
       referanse?: string | null;
       /** @enum {string} */
       kravType: 'KLAGE' | 'MIGRERT_KRAV' | 'RELEVANT_KRAV' | 'TILLEGGSOPPLYSNING' | 'TRUKKET_SØKNAD';
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.OverstyringMeldepliktVurderingPeriode': {
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      /** @enum {string} */
-      meldepliktOverstyringStatus: 'HAR_MELDT_SEG' | 'IKKE_MELDT_SEG' | 'RIMELIG_GRUNN';
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom: string;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringLøsningDto': {
-      perioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.OverstyringMeldepliktVurderingPeriode'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto': {
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      harFritak: boolean;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom?: string | null;
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingLøsningDto': {
       begrunnelse: string;
@@ -21850,6 +21780,89 @@ export interface components {
     'no.nav.aap.komponenter.verdityper.Dagsatser': {
       /** Format: int32 */
       antall: number;
+    };
+    'no.nav.aap.meldeplikt.FritakMeldepliktGrunnlagResponse': {
+      behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      harTilgangTilÅSaksbehandle: boolean;
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.meldeplikt.PeriodisertFritakMeldepliktVurderingResponse'][];
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.meldeplikt.PeriodisertFritakMeldepliktVurderingResponse'][];
+    };
+    'no.nav.aap.meldeplikt.MeldepliktOverstyringGrunnlagResponse': {
+      gjeldendeVedtatteOversyringsvurderinger: components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringVurderingResponse'][];
+      harTilgangTilÅSaksbehandle: boolean;
+      overstyringsvurderinger: components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringVurderingResponse'][];
+      perioderIkkeMeldt: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+    };
+    'no.nav.aap.meldeplikt.MeldepliktOverstyringLøsningDto': {
+      perioder: components['schemas']['no.nav.aap.meldeplikt.OverstyringMeldepliktVurderingPeriode'][];
+    };
+    'no.nav.aap.meldeplikt.MeldepliktOverstyringVurderingResponse': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      /** @enum {string} */
+      meldepliktOverstyringStatus: 'HAR_MELDT_SEG' | 'IKKE_MELDT_SEG' | 'RIMELIG_GRUNN';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tilDato: string;
+      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      vurderingsTidspunkt: string;
+      vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
+    };
+    'no.nav.aap.meldeplikt.OverstyringMeldepliktVurderingPeriode': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /** @enum {string} */
+      meldepliktOverstyringStatus: 'HAR_MELDT_SEG' | 'IKKE_MELDT_SEG' | 'RIMELIG_GRUNN';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+    };
+    'no.nav.aap.meldeplikt.PeriodisertFritakMeldepliktVurderingResponse': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      harFritak: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+    };
+    'no.nav.aap.meldeplikt.PeriodisertFritaksvurderingDto': {
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      harFritak: boolean;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
     };
     'no.nav.aap.motor.JobbTilleggsinfo': {
       kommentarer: components['schemas']['no.nav.aap.motor.Kommentar'][];
