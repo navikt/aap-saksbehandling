@@ -36,14 +36,14 @@ export type OvergangArbeidGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/
 export type FritakMeldepliktGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/fritak-meldeplikt'>;
 
 export type PeriodisertFritaksvurderingDto =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto'];
+  components['schemas']['no.nav.aap.meldeplikt.PeriodisertFritaksvurderingDto'];
 
 export type OverstyringMeldepliktGrunnlag =
   ResponseOfGet<'/api/behandling/{referanse}/grunnlag/meldeplikt-overstyring'>;
 export type MeldepliktOverstyringLøsningDto =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringL\u00F8sningDto'];
+  components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringL\u00F8sningDto'];
 export type OverstyringMeldepliktGrunnlagVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringVurderingResponse'];
+  components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringVurderingResponse'];
 export type MeldepliktOverstyringStatus = 'RIMELIG_GRUNN' | 'IKKE_MELDT_SEG' | 'HAR_MELDT_SEG';
 export type ArbeidsevneGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/arbeidsevne'>;
 
@@ -229,6 +229,9 @@ export type TrukketSøknadGrunnlag =
 
 export type TrukketSøknadVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto'];
+
+export type UbesvarteForespørslerLegeerklæringResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.UbesvarteForespørslerLegeerklæringResponse'];
 
 export type AvbrytRevurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];

@@ -1,8 +1,13 @@
 import { TrekkSøknad } from 'components/behandlinger/søknad/trekksøknad/TrekkSøknad';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentMellomlagring, hentTrukketSøknad } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentTrukketSøknad,
+  hentUbesvarteForespørslerLegeerklæring,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,11 +22,22 @@ export const TrekkSøknadMedDatafetching = async ({
   behandlingVersjon,
   erIkkePåVent,
 }: Props) => {
+  const viseVentendeLEToggle = unleashService.isEnabled('VisInfoTrekkSoknadForesporselOmLe');
+
   const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
+
+  const ubesvarteForespørslerResponse = viseVentendeLEToggle
+    ? await hentUbesvarteForespørslerLegeerklæring(behandlingsreferanse)
+    : undefined;
 
   if (isError(trukketSøknadGrunnlag)) {
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
   }
+
+  const ubesvarteForespørsler =
+    ubesvarteForespørslerResponse !== undefined && isError(ubesvarteForespørslerResponse)
+      ? undefined
+      : (ubesvarteForespørslerResponse?.data?.forespørsler ?? []);
 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -36,6 +52,8 @@ export const TrekkSøknadMedDatafetching = async ({
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      ubesvarteForespørsler={ubesvarteForespørsler}
+      viseVentendeLEToggle={viseVentendeLEToggle}
     />
   );
 };
