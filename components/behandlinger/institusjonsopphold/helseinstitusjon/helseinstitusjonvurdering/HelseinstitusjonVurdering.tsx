@@ -1,24 +1,23 @@
 import { UseFormReturn } from 'react-hook-form';
 import { Radio, ReadMore, VStack } from '@navikt/ds-react';
 import { JaEllerNei } from 'lib/utils/form';
+import { Alert } from 'components/alert/Alert';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import {
-  erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonUtIFraFormFields,
-  lagReduksjonBeskrivelseNyttOppholdGammel,
+  lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
-  lagReduksjonsBeskrivelseUtFraRegel,
   validerDatoErInnenforOpphold,
   validerDatoForStoppAvReduksjon,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
-import { HelseinstitusjonGrunnlag } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { useEffektivTidligsteReduksjonsdato } from 'lib/utils/useEffektivTidligsteReduksjonsdato';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -26,8 +25,9 @@ interface Props {
   vurderingIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
-  minFomDato?: string;
   finnesTidligereVurderinger: boolean;
+  forrigeOppholdAvsluttetDato?: string | null;
+  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
 }
 
 export const Helseinstitusjonsvurdering = ({
@@ -37,6 +37,8 @@ export const Helseinstitusjonsvurdering = ({
   readonly,
   opphold,
   finnesTidligereVurderinger,
+  forrigeOppholdAvsluttetDato,
+  forrigeOppholdVedtatteVurderinger,
 }: Props) => {
   const vurdering = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`);
   const visHarFasteUtgifterSpørsmål = vurdering.faarFriKostOgLosji === JaEllerNei.Ja;
@@ -50,36 +52,27 @@ export const Helseinstitusjonsvurdering = ({
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
 
+  const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig } =
+    useEffektivTidligsteReduksjonsdato(
+      form,
+      oppholdIndex,
+      opphold,
+      forrigeOppholdAvsluttetDato,
+      forrigeOppholdVedtatteVurderinger
+    );
+
   const erFørsteVurdering = vurderingIndex === 0;
+  const forrigeErHistorisk = forrigeVurdering?.erHistoriskUtenReduksjonsberegning === true;
 
-  const skalViseDatoFeltForStoppAvReduksjon = !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering);
-
-  const forrigeOppholdTom =
-    oppholdIndex > 0 ? form.getValues(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.periode.tom`) : undefined;
-
-  const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+  const skalViseDatoFeltForStoppAvReduksjon =
+    !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering) && !forrigeErHistorisk;
 
   const reduksjonsBeskrivelse = useMemo(() => {
-    if (sammenhengendeOppholdEnabled) {
-      return lagReduksjonsBeskrivelseUtFraRegel(
-        opphold.oppholdFra,
-        opphold.avsluttetDato,
-        opphold.tidligsteReduksjonsdato
-      );
+    if (bruker1Månedsregelen) {
+      return lagReduksjonBeskrivelseNyttOpphold(opphold.oppholdFra, opphold.avsluttetDato);
     }
-
-    if (forrigeOppholdTom && erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)) {
-      return lagReduksjonBeskrivelseNyttOppholdGammel(opphold.oppholdFra);
-    }
-
-    return lagReduksjonsBeskrivelse(opphold.oppholdFra, opphold.tidligsteReduksjonsdato);
-  }, [
-    sammenhengendeOppholdEnabled,
-    opphold.oppholdFra,
-    opphold.avsluttetDato,
-    opphold.tidligsteReduksjonsdato,
-    forrigeOppholdTom,
-  ]);
+    return lagReduksjonsBeskrivelse(opphold.oppholdFra, effektivTidligsteReduksjonsdato);
+  }, [bruker1Månedsregelen, opphold.oppholdFra, opphold.avsluttetDato, effektivTidligsteReduksjonsdato]);
 
   return (
     <VStack gap={'space-16'}>
@@ -143,6 +136,13 @@ export const Helseinstitusjonsvurdering = ({
       )}
       {erReduksjon && (
         <>
+          {!reduksjonErMulig && (
+            <Alert variant="warning" className="fit-content">
+              Dette oppholdet er for kort til at det rekker å bli reduksjon. Tidligste mulige reduksjonsdato (
+              {effektivTidligsteReduksjonsdato}) er etter at oppholdet er avsluttet ({opphold.avsluttetDato}). Oppgi en
+              dato likevel - den lagres kun som historikk og påvirker ikke beregningen av AAP.
+            </Alert>
+          )}
           <DateInputWrapper
             name={`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`}
             control={form.control}
@@ -153,27 +153,27 @@ export const Helseinstitusjonsvurdering = ({
               validate: {
                 gyldigDato: (value) => validerDato(value as string),
                 validerInnenforOpphold: (value) =>
-                  validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato),
+                  reduksjonErMulig
+                    ? validerDatoErInnenforOpphold(value as string, opphold.oppholdFra, opphold.avsluttetDato)
+                    : true,
                 validerKronologiskRekkefølge: (value) =>
                   validerErIKronologiskRekkeFølge(value as string, forrigeVurdering?.periode.fom),
                 validerReduksjonsdato: (value) => {
-                  if (
-                    !forrigeOppholdTom ||
-                    !erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdTom, opphold.oppholdFra)
-                  ) {
-                    return validerDatoForStoppAvReduksjon(value as string, opphold.tidligsteReduksjonsdato);
-                  }
+                  if (bruker1Månedsregelen) return true;
+                  return validerDatoForStoppAvReduksjon(value as string, effektivTidligsteReduksjonsdato);
                 },
               },
             }}
             readOnly={readonly}
           />
-          <ReadMore header="Når skal AAP reduseres fra?" size="small">
-            AAP skal ikke reduseres før tre måneder etter innleggelsesmåneden. Deretter blir ytelsen redusert med 50
-            prosent inntil institusjonsoppholdet avsluttes. Hvis brukeren innen tre måneder etter utskrivelse på nytt
-            kommer i institusjon, og det var reduksjon i det første oppholdet, gis det reduksjon igjen fra og med
-            måneden etter at det nye oppholdet starter.
-          </ReadMore>
+          {reduksjonErMulig && (
+            <ReadMore header="Når skal AAP reduseres fra?" size="small">
+              AAP skal ikke reduseres før tre måneder etter innleggelsesmåneden. Deretter blir ytelsen redusert med 50
+              prosent inntil institusjonsoppholdet avsluttes. Hvis brukeren innen tre måneder etter utskrivelse på nytt
+              kommer i institusjon, og det var reduksjon i det første oppholdet, gis det reduksjon igjen fra og med
+              måneden etter at det nye oppholdet starter.
+            </ReadMore>
+          )}
         </>
       )}
       {skalViseDatoFeltForStoppAvReduksjon && (

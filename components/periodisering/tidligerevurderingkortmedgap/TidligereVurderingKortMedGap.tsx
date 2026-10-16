@@ -18,6 +18,7 @@ interface Props {
   vurderingerMeta: VurderingerMeta;
   children: ReactNode;
   defaultCollapsed?: boolean;
+  visKunFomDato?: boolean;
 }
 
 export const TidligereVurderingKortMedGap = ({
@@ -28,6 +29,7 @@ export const TidligereVurderingKortMedGap = ({
   vurderingerMeta,
   children,
   defaultCollapsed = false,
+  visKunFomDato = false,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(defaultCollapsed);
 
@@ -49,11 +51,16 @@ export const TidligereVurderingKortMedGap = ({
       heading={
         <HStack justify={'space-between'} padding={'space-8'}>
           <BodyShort size={'small'} className={strekUtHele ? styles.streketUtTekst : ''}>
-            {formatDatoMedMånedsnavn(fom)} –{' '}
-            {tom != null && (
-              <span className={nySluttdato ? styles.streketUtTekst : ''}>{formatDatoMedMånedsnavn(tom)}</span>
+            {formatDatoMedMånedsnavn(fom)}
+            {!visKunFomDato && (
+              <>
+                {' – '}
+                {tom != null && (
+                  <span className={nySluttdato ? styles.streketUtTekst : ''}>{formatDatoMedMånedsnavn(tom)}</span>
+                )}
+                {nySluttdato && visningsTom && <span> {formatDatoMedMånedsnavn(visningsTom)}</span>}
+              </>
             )}
-            {nySluttdato && visningsTom && <span> {formatDatoMedMånedsnavn(visningsTom)}</span>}
           </BodyShort>
           <VurderingStatusTag status={vurderingStatus} />
         </HStack>

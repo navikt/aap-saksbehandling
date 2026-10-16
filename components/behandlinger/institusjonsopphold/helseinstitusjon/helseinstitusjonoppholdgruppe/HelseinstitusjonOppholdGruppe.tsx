@@ -17,19 +17,24 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
-import { getErReduksjonEllerIkke } from 'components/periodisering/VurderingStatusTag';
+import { getReduksjonsstatus } from 'components/periodisering/VurderingStatusTag';
 import { Dato } from 'lib/types/Dato';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
-import { erReduksjonUtIFraFormFields, erReduksjonUtIFraVurdering } from 'lib/utils/institusjonopphold';
+import {
+  beregnStandardTidligsteReduksjonsdato,
+  erReduksjonUtIFraFormFields,
+  erReduksjonUtIFraVurdering,
+  forrigeOppholdHarIngenReduksjonLengre,
+} from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
-import { addDays } from 'date-fns';
+import { addDays, isBefore } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { TidligereVurderingKortMedGap } from 'components/periodisering/tidligerevurderingkortmedgap/TidligereVurderingKortMedGap';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
+import { useEffektivTidligsteReduksjonsdato } from 'lib/utils/useEffektivTidligsteReduksjonsdato';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -37,6 +42,8 @@ interface Props {
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
+  forrigeOppholdAvsluttetDato?: string | null;
+  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
   skalJustereVedtatteVurderinger: boolean;
@@ -46,6 +53,8 @@ export const HelseinstitusjonOppholdGruppe = ({
   form,
   oppholdIndex,
   tidligereVurderinger,
+  forrigeOppholdAvsluttetDato,
+  forrigeOppholdVedtatteVurderinger,
   accordionsSignal,
   readonly: formReadOnly,
   opphold,
@@ -69,6 +78,73 @@ export const HelseinstitusjonOppholdGruppe = ({
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
   const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
+  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
+
+  const { reduksjonErMulig } = useEffektivTidligsteReduksjonsdato(
+    form,
+    oppholdIndex,
+    opphold,
+    forrigeOppholdAvsluttetDato,
+    forrigeOppholdVedtatteVurderinger
+  );
+
+  const foersteNyeVurdering =
+    vurderinger.length > 0 ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.0`) : null;
+
+  const foersteNyeErHistorisk =
+    !!foersteNyeVurdering && erReduksjonUtIFraFormFields(foersteNyeVurdering) && !reduksjonErMulig;
+
+  // Når ny vurdering er historisk (reduksjon rekker ikke innenfor oppholdet), lagres den av
+  // backend som gjeldende for HELE oppholdets periode - ikke kun fra den inntastede datoen.
+  // Bruk derfor oppholdFra som visningsgrense, slik at gammel vurdering vises som fullstendig
+  // overskrevet i stedet for delvis "strukket" fram til en dato langt utenfor oppholdet.
+  const parsedFoersteNyePeriode =
+  foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode);
+
+const foersteNyePeriodeFraDatoForVisning = foersteNyeErHistorisk
+  ? new Dato(opphold.oppholdFra).dato
+  : parsedFoersteNyePeriode;
+
+  const forrigeOppholdVurderinger =
+    oppholdIndex > 0 ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex - 1}.vurderinger`) : undefined;
+
+  const forrigeHarIngenReduksjonLengre = forrigeOppholdHarIngenReduksjonLengre(
+    forrigeOppholdVurderinger,
+    forrigeOppholdVedtatteVurderinger
+  );
+
+  const standardTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.oppholdFra);
+  const liveVurderinger = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
+  const erHistoriskVurdering = (v: (typeof liveVurderinger)[number]) =>
+    v.erNyVurdering
+      ? erReduksjonUtIFraFormFields(v) && !reduksjonErMulig
+      : (v.erHistoriskUtenReduksjonsberegning ?? false);
+
+  const harKorrigertEgenVurdering = liveVurderinger?.some((v) => {
+    if (!erReduksjonUtIFraFormFields(v)) return false;
+    const fom = v.periode?.fom;
+    if (!fom || !/^\d{2}\.\d{2}\.\d{4}$/.test(fom)) return false;
+    return !isBefore(new Dato(fom).dato, new Dato(standardTidligsteReduksjonsdato).dato);
+  });
+
+  const sisteTidligereVurdering = tidligereVurderinger
+    ?.filter((v) => {
+      if (v.erHistoriskUtenReduksjonsberegning) return true;
+      const starterFørOppholdSlutt = v.periode.fom <= opphold.avsluttetDato;
+      const slutterEtterOppholdStart = v.periode.tom >= opphold.oppholdFra;
+      return starterFørOppholdSlutt && slutterEtterOppholdStart;
+    })
+    .sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
+    .at(-1);
+
+  const visOppdateringsvarsel =
+    enManedsregelEnabled &&
+    !!sisteTidligereVurdering &&
+    erReduksjonUtIFraVurdering(sisteTidligereVurdering) &&
+    forrigeHarIngenReduksjonLengre &&
+    !harKorrigertEgenVurdering;
+
+  const innsendingsfeil = form.formState.errors.helseinstitusjonsvurderinger?.[oppholdIndex]?.vurderinger?.message;
 
   return (
     <Box
@@ -84,11 +160,6 @@ export const HelseinstitusjonOppholdGruppe = ({
         <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>
-            {!visSammenhengendeOpphold && (
-              <BodyShort className={styles.detailgray}>
-                {opphold.kildeinstitusjon} - {opphold.oppholdstype}
-              </BodyShort>
-            )}
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
               {!datoErUendeligSlutt(opphold.avsluttetDato)
@@ -116,6 +187,7 @@ export const HelseinstitusjonOppholdGruppe = ({
         <VStack gap="space-0">
           {tidligereVurderinger
             ?.filter((v) => {
+              if (v.erHistoriskUtenReduksjonsberegning) return true;
               const starterFørOppholdSlutt = v.periode.fom <= opphold.avsluttetDato;
               const slutterEtterOppholdStart = v.periode.tom >= opphold.oppholdFra;
               return starterFørOppholdSlutt && slutterEtterOppholdStart;
@@ -123,37 +195,27 @@ export const HelseinstitusjonOppholdGruppe = ({
             .sort((a, b) => sorterEtterEldsteDato(a.periode.fom, b.periode.fom))
             .map((vurdering, index, alle) => {
               const erSiste = index === alle.length - 1;
+              const erHistorisk = vurdering.erHistoriskUtenReduksjonsberegning;
               const justertTomDato =
-                erSiste && skalJustereVedtatteVurderinger ? oppholdAvsluttetDato : new Dato(vurdering.periode.tom).dato;
-
-              if (visSammenhengendeOpphold) {
-                return (
-                  <TidligereVurderingKortMedGap
-                    key={vurdering.periode.fom}
-                    fom={new Dato(vurdering.periode.fom).dato}
-                    tom={justertTomDato}
-                    førsteNyePeriodeFraDato={
-                      foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)
-                    }
-                    vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
-                    vurderingerMeta={vurdering.vurderingerMeta}
-                  >
-                    <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-                  </TidligereVurderingKortMedGap>
-                );
-              }
+                !erHistorisk && erSiste && skalJustereVedtatteVurderinger
+                  ? oppholdAvsluttetDato
+                  : new Dato(vurdering.periode.tom).dato;
 
               return (
-                <TidligereVurderingExpandableCard
+                <TidligereVurderingKortMedGap
                   key={vurdering.periode.fom}
                   fom={new Dato(vurdering.periode.fom).dato}
                   tom={justertTomDato}
-                  førsteNyePeriodeFraDato={foersteNyePeriode == null ? null : parseDatoFraDatePicker(foersteNyePeriode)}
-                  vurderingStatus={getErReduksjonEllerIkke(erReduksjonUtIFraVurdering(vurdering))}
+                  førsteNyePeriodeFraDato={erHistorisk ? null : foersteNyePeriodeFraDatoForVisning}
+                  visKunFomDato={erHistorisk}
+                  vurderingStatus={getReduksjonsstatus(
+                    erReduksjonUtIFraVurdering(vurdering),
+                    vurdering.erHistoriskUtenReduksjonsberegning
+                  )}
                   vurderingerMeta={vurdering.vurderingerMeta}
                 >
                   <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-                </TidligereVurderingExpandableCard>
+                </TidligereVurderingKortMedGap>
               );
             })}
 
@@ -161,6 +223,13 @@ export const HelseinstitusjonOppholdGruppe = ({
             const reduksjon = erReduksjonUtIFraFormFields(
               form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`)
             );
+
+            // Eksisterende (allerede lagrede) vurderinger beholder status fra lagring.
+            // Kun nye vurderinger (lagt til nå i skjemaet) får status beregnet live,
+            // siden disse ikke har noen persistert erHistoriskUtenReduksjonsberegning ennå.
+            const erHistoriskUtenReduksjonsberegning = vurdering.erNyVurdering
+              ? reduksjon && !reduksjonErMulig
+              : (vurdering.erHistoriskUtenReduksjonsberegning ?? false);
 
             const vurderingFom = form.watch(
               `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`
@@ -170,19 +239,27 @@ export const HelseinstitusjonOppholdGruppe = ({
               gyldigDatoEllerNull(vurderingFom) ??
               (vurderingIndex === 0 && !tidligereVurderinger?.length ? new Dato(opphold.oppholdFra).dato : null);
 
+            const nestePeriodiserte = liveVurderinger?.slice(vurderingIndex + 1).find((v) => !erHistoriskVurdering(v));
+
+            // Historisk vurdering har sin egen uavhengige periode (en enkelt dato langt utenfor
+            // oppholdet, satt av saksbehandler). Den er IKKE en del av den sammenhengende kjeden
+            // av periodiserte vurderinger, og skal derfor aldri få sin periode justert/strukket
+            // basert på hvor neste (eller forrige) vurdering starter/slutter.
+            const nestePeriodeFraDato = erHistoriskUtenReduksjonsberegning
+              ? null
+              : gyldigDatoEllerNull(nestePeriodiserte?.periode?.fom);
+
+            const erSisteVurdering = erHistoriskUtenReduksjonsberegning || !nestePeriodiserte;
+
             return (
               <div key={vurdering.oppholdId + vurderingIndex} className={styles.vurderingRad}>
                 <NyVurderingExpandableCard
                   key={vurdering.id || vurderingIndex}
                   accordionsSignal={accordionsSignal}
                   fraDato={fraDato}
-                  nestePeriodeFraDato={gyldigDatoEllerNull(
-                    form.watch(
-                      `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex + 1}.periode.fom`
-                    )
-                  )}
-                  isLast={vurderingIndex === vurderinger.length - 1}
-                  vurderingStatus={getErReduksjonEllerIkke(reduksjon)}
+                  nestePeriodeFraDato={nestePeriodeFraDato}
+                  isLast={erSisteVurdering}
+                  vurderingStatus={getReduksjonsstatus(reduksjon, erHistoriskUtenReduksjonsberegning)}
                   vurdering={vurdering}
                   harTidligereVurderinger={!!(tidligereVurderinger && tidligereVurderinger.length > 0)}
                   finnesFeil={false}
@@ -198,6 +275,8 @@ export const HelseinstitusjonOppholdGruppe = ({
                     readonly={formReadOnly}
                     opphold={opphold}
                     finnesTidligereVurderinger={Array.isArray(tidligereVurderinger) && tidligereVurderinger.length > 0}
+                    forrigeOppholdAvsluttetDato={forrigeOppholdAvsluttetDato}
+                    forrigeOppholdVedtatteVurderinger={forrigeOppholdVedtatteVurderinger}
                   />
                 </NyVurderingExpandableCard>
               </div>
@@ -235,7 +314,9 @@ export const HelseinstitusjonOppholdGruppe = ({
             className="fit-content"
             variant="secondary"
             size="small"
-            onClick={() =>
+            onClick={() => {
+              form.clearErrors(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
+
               append({
                 oppholdId: opphold.oppholdId || '', // TODO Gjør om oppholdId til required i backend når ny helseinstitusjon er ute i prod
                 begrunnelse: '',
@@ -248,12 +329,29 @@ export const HelseinstitusjonOppholdGruppe = ({
                 },
                 erNyVurdering: true,
                 behøverVurdering: false,
-              })
-            }
+              });
+            }}
           >
             Legg til ny vurdering
           </Button>
         </Box>
+      )}
+      {(innsendingsfeil || visOppdateringsvarsel) && (
+        <VStack gap="space-12" paddingInline="space-16" paddingBlock="space-0 space-12">
+          {innsendingsfeil && (
+            <Alert variant="error" className="fit-content">
+              {innsendingsfeil}
+            </Alert>
+          )}
+          {visOppdateringsvarsel && (
+            <Alert variant="warning" className="fit-content">
+              Reduksjonen i forrige opphold er fjernet for hele perioden. Denne reduksjonsdatoen kan være satt basert på
+              1-månedsregelen, som ikke lenger gjelder. Normal regel tilsier tidligst{' '}
+              {formatDatoMedMånedsnavn(new Dato(standardTidligsteReduksjonsdato).dato)}. Vurder å legge til en ny
+              vurdering med korrigert dato.
+            </Alert>
+          )}
+        </VStack>
       )}
     </Box>
   );
