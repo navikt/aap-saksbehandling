@@ -3,12 +3,21 @@ import { describe, expect, it } from 'vitest';
 import { Dato } from 'lib/types/Dato';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 import {
+  beregnEffektivTidligsteReduksjonsdatoFraSkjema,
+  beregnStandardTidligsteReduksjonsdato,
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
+  erReduksjonMuligForOpphold,
   erReduksjonUtIFraVurdering,
+  forrigeOppholdHarIngenReduksjonLengre,
   lagReduksjonBeskrivelseNyttOpphold,
+  lagReduksjonsBeskrivelse,
+  manglerKorrigertReduksjonsdato,
   validerDatoErInnenforOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
+import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import { JaEllerNei } from 'lib/utils/form';
+import { getReduksjonsstatus, VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 
 describe('validerDatoErInnenforOppholdReduksjon', () => {
   const oppholdFra = new Dato('2025-01-01').formaterForFrontend();
@@ -152,5 +161,203 @@ describe('lagReduksjonBeskrivelseNyttOpphold', () => {
     expect(resultat).toBe(
       'Innleggelsesmåned: juli 2026. Reduksjonen bør som regel starte 1. august 2026 ved reduksjon i forrige opphold, ellers 1. november 2026. Det finnes likevel unntak.'
     );
+  });
+
+  it('utelater fire-månedersdato når oppholdet slutter før den', () => {
+    expect(lagReduksjonBeskrivelseNyttOpphold('01.11.2025', '01.02.2026')).toBe(
+      'Innleggelsesmåned: november 2025. Reduksjonen bør som regel starte 1. desember 2025 ved reduksjon i forrige opphold. Det finnes likevel unntak.'
+    );
+  });
+
+  it('tar med fire-månedersdato når oppholdet slutter samme dag eller etter', () => {
+    expect(lagReduksjonBeskrivelseNyttOpphold('01.11.2025', '01.03.2026')).toBe(
+      'Innleggelsesmåned: november 2025. Reduksjonen bør som regel starte 1. desember 2025 ved reduksjon i forrige opphold, ellers 1. mars 2026. Det finnes likevel unntak.'
+    );
+  });
+});
+
+const lagFormVurdering = (overrides: Partial<OppholdVurdering> = {}): OppholdVurdering => ({
+  oppholdId: 'kysthaven',
+  begrunnelse: 'begrunnelse',
+  periode: { fom: '', tom: '' },
+  erNyVurdering: true,
+  behøverVurdering: false,
+  ...overrides,
+});
+
+const reduksjon = (fom = ''): OppholdVurdering =>
+  lagFormVurdering({
+    faarFriKostOgLosji: JaEllerNei.Ja,
+    forsoergerEktefelle: JaEllerNei.Nei,
+    harFasteUtgifter: JaEllerNei.Nei,
+    periode: { fom, tom: '' },
+  });
+
+const ikkeReduksjon = (fom = ''): OppholdVurdering =>
+  lagFormVurdering({ faarFriKostOgLosji: JaEllerNei.Nei, periode: { fom, tom: '' } });
+
+const vedtattReduksjon: HelseInstiusjonVurdering = {
+  oppholdId: 'kysthaven',
+  begrunnelse: 'vedtatt',
+  faarFriKostOgLosji: true,
+  forsoergerEktefelle: false,
+  harFasteUtgifter: false,
+  periode: { fom: '2025-08-01', tom: '2025-10-01' },
+  vurderingerMeta: {},
+  erHistoriskUtenReduksjonsberegning: false,
+};
+
+describe('beregnStandardTidligsteReduksjonsdato', () => {
+  it('returnerer første dag i måneden fire måneder etter innleggelse', () => {
+    expect(beregnStandardTidligsteReduksjonsdato('2025-11-01')).toBe('2026-03-01');
+    expect(beregnStandardTidligsteReduksjonsdato('2025-12-15')).toBe('2026-04-01');
+  });
+});
+
+describe('erReduksjonMuligForOpphold', () => {
+  it('returnerer false når tidligste reduksjonsdato er etter oppholdets slutt', () => {
+    expect(erReduksjonMuligForOpphold('2026-02-01', '2026-04-01')).toBe(false);
+  });
+
+  it('returnerer true når tidligste reduksjonsdato er samme dag som oppholdets slutt', () => {
+    expect(erReduksjonMuligForOpphold('2026-04-01', '2026-04-01')).toBe(true);
+  });
+
+  it('returnerer true når tidligste reduksjonsdato er før oppholdets slutt', () => {
+    expect(erReduksjonMuligForOpphold('2026-06-01', '2026-04-01')).toBe(true);
+  });
+
+  it('returnerer true når tidligste reduksjonsdato mangler', () => {
+    expect(erReduksjonMuligForOpphold('2026-06-01', undefined)).toBe(true);
+    expect(erReduksjonMuligForOpphold('2026-06-01', null)).toBe(true);
+  });
+});
+
+describe('forrigeOppholdHarIngenReduksjonLengre', () => {
+  it('returnerer false uten vurderinger', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre(undefined, [vedtattReduksjon])).toBe(false);
+    expect(forrigeOppholdHarIngenReduksjonLengre([], [vedtattReduksjon])).toBe(false);
+  });
+
+  it('returnerer false når forrige opphold ikke er besvart', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre([lagFormVurdering()], [vedtattReduksjon])).toBe(false);
+  });
+
+  it('returnerer false når en live vurdering fortsatt gir reduksjon', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre([reduksjon('01.08.2025')], [vedtattReduksjon])).toBe(false);
+  });
+
+  it('returnerer false når det ikke finnes vedtatt reduksjon', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre([ikkeReduksjon('01.08.2025')], [])).toBe(false);
+    expect(forrigeOppholdHarIngenReduksjonLengre([ikkeReduksjon('01.08.2025')], null)).toBe(false);
+  });
+
+  it('returnerer false når ingen dato er fylt ut ennå', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre([ikkeReduksjon('')], [vedtattReduksjon])).toBe(false);
+  });
+
+  it('returnerer true når reduksjonen stoppes samme dag som vedtatt reduksjon startet', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre([ikkeReduksjon('01.08.2025')], [vedtattReduksjon])).toBe(true);
+  });
+
+  it('returnerer false når reduksjonen stoppes etter at vedtatt reduksjon startet', () => {
+    expect(forrigeOppholdHarIngenReduksjonLengre([ikkeReduksjon('01.09.2025')], [vedtattReduksjon])).toBe(false);
+  });
+});
+
+describe('manglerKorrigertReduksjonsdato', () => {
+  const forrigeUtenReduksjon = [ikkeReduksjon('01.08.2025')];
+
+  it('returnerer false når forrige opphold fortsatt har reduksjon', () => {
+    expect(
+      manglerKorrigertReduksjonsdato(
+        '01.12.2025',
+        [reduksjon('01.01.2026')],
+        [reduksjon('01.08.2025')],
+        [vedtattReduksjon]
+      )
+    ).toBe(false);
+  });
+
+  it('returnerer true når oppholdet ikke har noen egen reduksjonsvurdering', () => {
+    expect(
+      manglerKorrigertReduksjonsdato('01.12.2025', [ikkeReduksjon('')], forrigeUtenReduksjon, [vedtattReduksjon])
+    ).toBe(true);
+  });
+
+  it('returnerer true når reduksjonsdato er før standard tidligste dato', () => {
+    expect(
+      manglerKorrigertReduksjonsdato('01.12.2025', [reduksjon('01.03.2026')], forrigeUtenReduksjon, [vedtattReduksjon])
+    ).toBe(true);
+  });
+
+  it('returnerer false når reduksjonsdato er lik standard tidligste dato', () => {
+    expect(
+      manglerKorrigertReduksjonsdato('01.12.2025', [reduksjon('01.04.2026')], forrigeUtenReduksjon, [vedtattReduksjon])
+    ).toBe(false);
+  });
+});
+
+describe('lagReduksjonsBeskrivelse', () => {
+  it('viser tidligste reduksjonsdato', () => {
+    expect(lagReduksjonsBeskrivelse('2025-11-01', '2026-03-01')).toBe(
+      'Innleggelsesmåned: november 2025. Reduksjon kan tidligst starte: 1. mars 2026'
+    );
+  });
+});
+
+describe('getReduksjonsstatus', () => {
+  it('prioriterer historikk over reduksjon', () => {
+    expect(getReduksjonsstatus(true, true)).toBe(VurderingStatus.HistoriskUtenReduksjonsberegning);
+  });
+
+  it('faller tilbake til reduksjon / ikke reduksjon', () => {
+    expect(getReduksjonsstatus(true, false)).toBe(VurderingStatus.Reduksjon);
+    expect(getReduksjonsstatus(false, false)).toBe(VurderingStatus.IkkeReduksjon);
+  });
+});
+
+describe('beregnEffektivTidligsteReduksjonsdatoFraSkjema', () => {
+  const base = {
+    oppholdFra: '2025-11-01',
+    tidligsteReduksjonsdato: '2026-03-01',
+    forrigeOppholdAvsluttetDato: '2025-09-01',
+  };
+
+  it('toggle av: bruker 1-månedsregel når oppholdet er innen 3 måneder, uavhengig av reduksjon', () => {
+    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      ...base,
+      forrigeOppholdVurderinger: [ikkeReduksjon('01.08.2025')],
+      enManedsregelEnabled: false,
+    });
+    expect(res).toEqual({ bruker1Månedsregelen: true, effektivTidligsteReduksjonsdato: '2025-12-01' });
+  });
+
+  it('toggle på: bruker 1-månedsregel når forrige opphold gir reduksjon', () => {
+    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      ...base,
+      forrigeOppholdVurderinger: [reduksjon('01.08.2025')],
+      enManedsregelEnabled: true,
+    });
+    expect(res).toEqual({ bruker1Månedsregelen: true, effektivTidligsteReduksjonsdato: '2025-12-01' });
+  });
+
+  it('toggle på: bruker standard dato når forrige opphold har mistet reduksjon', () => {
+    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      ...base,
+      forrigeOppholdVurderinger: [ikkeReduksjon('01.08.2025')],
+      forrigeOppholdVedtatteVurderinger: [vedtattReduksjon],
+      enManedsregelEnabled: true,
+    });
+    expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
+  });
+
+  it('bruker backend-dato når ingen regel slår inn', () => {
+    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      ...base,
+      forrigeOppholdAvsluttetDato: '2025-01-01',
+      enManedsregelEnabled: true,
+    });
+    expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
   });
 });

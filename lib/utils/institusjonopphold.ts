@@ -149,26 +149,52 @@ export const validerDatoErInnenforOpphold = (
   return true;
 };
 
-export function beregnEffektivTidligsteReduksjonsdato(
-  opphold: { oppholdFra: string; tidligsteReduksjonsdato?: string | null },
-  forrigeOppholdAvsluttetDato?: string | null,
-  tidligereVurderingerForrigeOpphold?: HelseInstiusjonVurdering[] | null
-): { effektivTidligsteReduksjonsdato: string | null | undefined; bruker1Månedsregelen: boolean } {
-  const forrigeGaReduksjon = tidligereVurderingerForrigeOpphold?.some(
-    (v) => erReduksjonUtIFraVurdering(v) && !v.erHistoriskUtenReduksjonsberegning
-  );
+export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+  oppholdFra,
+  tidligsteReduksjonsdato,
+  forrigeOppholdAvsluttetDato,
+  forrigeOppholdVurderinger,
+  forrigeOppholdVedtatteVurderinger,
+  enManedsregelEnabled,
+}: {
+  oppholdFra: string;
+  tidligsteReduksjonsdato?: string | null;
+  forrigeOppholdAvsluttetDato?: string | null;
+  forrigeOppholdVurderinger?: OppholdVurdering[];
+  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
+  enManedsregelEnabled: boolean;
+}): { effektivTidligsteReduksjonsdato: string | null | undefined; bruker1Månedsregelen: boolean } {
+  const forrigeGaReduksjonNå = forrigeOppholdVurderinger?.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
 
   const innenforTreMåneder =
     !!forrigeOppholdAvsluttetDato &&
-    erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdAvsluttetDato, opphold.oppholdFra);
+    erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdAvsluttetDato, oppholdFra);
 
-  const bruker1Månedsregelen = Boolean(forrigeGaReduksjon && innenforTreMåneder);
+  const bruker1Månedsregelen = enManedsregelEnabled ? forrigeGaReduksjonNå && innenforTreMåneder : innenforTreMåneder;
 
-  const effektivTidligsteReduksjonsdato = bruker1Månedsregelen
-    ? format(startOfMonth(addMonths(new Dato(opphold.oppholdFra).dato, 1)), 'yyyy-MM-dd')
-    : opphold.tidligsteReduksjonsdato;
+  if (bruker1Månedsregelen) {
+    return {
+      bruker1Månedsregelen,
+      effektivTidligsteReduksjonsdato: format(startOfMonth(addMonths(new Dato(oppholdFra).dato, 1)), 'yyyy-MM-dd'),
+    };
+  }
 
-  return { bruker1Månedsregelen, effektivTidligsteReduksjonsdato };
+  // Backend sin opphold.tidligsteReduksjonsdato er beregnet ut fra VEDTATTE vurderinger på
+  // forrige opphold. Hvis saksbehandler nå (live i skjemaet) har endret forrige opphold slik at
+  // det ikke lenger gir reduksjon noe sted, er backend-verdien utdatert (kan fortsatt reflektere
+  // 1-månedsregelen fra forrige behandling). I så fall må vi regne ut standard 3/4-månedersregel
+  // selv, i stedet for å stole på backend.
+  if (
+    enManedsregelEnabled &&
+    forrigeOppholdHarIngenReduksjonLengre(forrigeOppholdVurderinger, forrigeOppholdVedtatteVurderinger)
+  ) {
+    return {
+      bruker1Månedsregelen,
+      effektivTidligsteReduksjonsdato: beregnStandardTidligsteReduksjonsdato(oppholdFra),
+    };
+  }
+
+  return { bruker1Månedsregelen, effektivTidligsteReduksjonsdato: tidligsteReduksjonsdato };
 }
 
 export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, tidligsteReduksjonsdato?: string | null) => {
@@ -218,4 +244,14 @@ export function erNyttOppholdInnenfor3MaanederEtterSistOpphold(utskrevetDato: st
   const treMndEtterUtskrivelse = addMonths(utskrevet, 3);
 
   return nyttOpphold <= treMndEtterUtskrivelse;
+}
+
+export function erVurderingHistorisk(
+  vurdering: OppholdVurdering,
+  reduksjonErMulig: boolean,
+  enManedsregelEnabled: boolean
+): boolean {
+  if (!enManedsregelEnabled) return false;
+  if (vurdering.erNyVurdering) return erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
+  return vurdering.erHistoriskUtenReduksjonsberegning ?? false;
 }

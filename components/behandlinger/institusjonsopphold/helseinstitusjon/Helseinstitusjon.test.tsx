@@ -645,6 +645,173 @@ describe('handleSubmit - historiske vurderinger og gap', () => {
   });
 });
 
+describe('Helseinstitusjon1Manedsregel - toggle', () => {
+  const kysthaven: HelseinstitusjonGrunnlag['opphold'][0] = {
+    oppholdId: 'kysthaven',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2025-02-01',
+    avsluttetDato: '2025-09-01',
+    tidligsteReduksjonsdato: '2025-06-01',
+    kildeinstitusjon: 'Kysthaven Helseinstitusjon',
+    delperioder: [],
+  };
+
+  const solglott: HelseinstitusjonGrunnlag['opphold'][0] = {
+    oppholdId: 'solglott',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2025-11-01',
+    avsluttetDato: '2026-02-01',
+    tidligsteReduksjonsdato: '2026-03-01',
+    kildeinstitusjon: 'Solgløtt Rehabiliteringssenter',
+    delperioder: [],
+  };
+
+  const grunnlag: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    opphold: [kysthaven, solglott],
+    vurderinger: [],
+    vedtatteVurderinger: [],
+  };
+
+  const enManedsTekst =
+    'Innleggelsesmåned: november 2025. Reduksjonen bør som regel starte 1. desember 2025 ved reduksjon i forrige opphold. Det finnes likevel unntak.';
+
+  const renderMedToggle = (aktiv: boolean) =>
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, Helseinstitusjon1Manedsregel: aktiv }}>
+        <Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+  async function svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon() {
+    await svarPåSpørsmålOmFriKostOgLosji(true, 1);
+    await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
+    await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, 0);
+  }
+
+  it('toggle av: foreslår 1-månedsregel selv om forrige opphold ikke har reduksjon', async () => {
+    renderMedToggle(false);
+
+    await svarIkkeReduksjon(0);
+    await svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon();
+
+    expect(screen.getByText(enManedsTekst)).toBeVisible();
+    expect(screen.queryByText(/for kort til at det rekker å bli reduksjon/)).not.toBeInTheDocument();
+  });
+
+  it('toggle på: gir samme forslag når forrige opphold har reduksjon', async () => {
+    renderMedToggle(true);
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    expect(screen.getByText(enManedsTekst)).toBeVisible();
+    expect(screen.queryByText(/for kort til at det rekker å bli reduksjon/)).not.toBeInTheDocument();
+  });
+
+  it('toggle på: bruker standard dato og varsler om for kort opphold når forrige opphold ikke har reduksjon', async () => {
+    renderMedToggle(true);
+
+    await svarIkkeReduksjon(0);
+    await svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon();
+
+    expect(
+      screen.getByText('Innleggelsesmåned: november 2025. Reduksjon kan tidligst starte: 1. mars 2026')
+    ).toBeVisible();
+    expect(screen.getByText(/for kort til at det rekker å bli reduksjon/)).toBeVisible();
+    expect(screen.queryByText(enManedsTekst)).not.toBeInTheDocument();
+  });
+});
+
+describe('handleSubmit - gap mellom vedtatt og ny vurdering', () => {
+  let capturedRequest: unknown = null;
+
+  beforeEach(() => {
+    capturedRequest = null;
+    vi.stubGlobal(
+      'EventSource',
+      vi.fn().mockImplementation(function () {
+        return { close: vi.fn(), addEventListener: vi.fn(), onmessage: null, onerror: null };
+      })
+    );
+    fetchMock.mockResponse(async (req) => {
+      if (req.method === 'POST') {
+        try {
+          const body = JSON.parse(await req.text());
+          if (body?.behov?.behovstype) capturedRequest = body;
+        } catch {
+          // ignore
+        }
+      }
+      return JSON.stringify({ type: 'SUCCESS', status: 200, data: {} });
+    });
+  });
+
+  const grunnlagMedVedtattDelperiode: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [],
+    opphold: [
+      {
+        oppholdId: 'solglott',
+        institusjonstype: 'Helseinstitusjon',
+        oppholdstype: 'Heldøgnpasient',
+        status: 'AKTIV',
+        oppholdFra: '2025-12-01',
+        avsluttetDato: '2026-02-01',
+        tidligsteReduksjonsdato: '2026-04-01',
+        kildeinstitusjon: 'Solgløtt',
+        delperioder: [],
+      },
+    ],
+    vedtatteVurderinger: [
+      {
+        oppholdId: 'solglott',
+        status: 'UAVKLART',
+        periode: { fom: '2025-12-01', tom: '2026-01-15' },
+        delperioder: [],
+        vurderinger: [
+          {
+            oppholdId: 'solglott',
+            begrunnelse: 'vedtatt',
+            periode: { fom: '2025-12-01', tom: '2026-01-15' },
+            faarFriKostOgLosji: false,
+            vurderingerMeta: {},
+            erHistoriskUtenReduksjonsberegning: false,
+          },
+        ],
+      },
+    ],
+  };
+
+  it('fyller gap mellom vedtatt tom og ny vurdering med siste vedtatte vurdering', async () => {
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, Helseinstitusjon1Manedsregel: true }}>
+        <Helseinstitusjon grunnlag={grunnlagMedVedtattDelperiode} behandlingVersjon={0} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
+    await svarIkkeReduksjon(0);
+
+    const stoppDato = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+    await user.clear(stoppDato);
+    await user.type(stoppDato, '25.01.2026');
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), 'Ny vurdering');
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger).toHaveLength(2);
+    expect(vurderinger[0].periode).toEqual({ fom: '2026-01-16', tom: '2026-01-24' });
+    expect(vurderinger[0].begrunnelse).toBe('vedtatt');
+    expect(vurderinger[0].erHistoriskUtenReduksjonsberegning).toBe(false);
+    expect(vurderinger[1].periode).toEqual({ fom: '2026-01-25', tom: '2026-02-01' });
+  });
+});
+
 async function svarPåSpørsmålOmFriKostOgLosji(value: boolean, index: number) {
   const gruppe = screen.getAllByRole('radiogroup', {
     name: 'Får brukeren fri kost og losji?',

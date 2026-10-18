@@ -7,6 +7,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import {
   erReduksjonUtIFraFormFields,
+  erVurderingHistorisk,
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
@@ -18,6 +19,8 @@ import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { useEffektivTidligsteReduksjonsdato } from 'lib/utils/useEffektivTidligsteReduksjonsdato';
+import { Dato } from 'lib/types/Dato';
+import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -52,7 +55,7 @@ export const Helseinstitusjonsvurdering = ({
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
 
-  const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig } =
+  const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig, enManedsregelEnabled } =
     useEffektivTidligsteReduksjonsdato(
       form,
       oppholdIndex,
@@ -62,7 +65,8 @@ export const Helseinstitusjonsvurdering = ({
     );
 
   const erFørsteVurdering = vurderingIndex === 0;
-  const forrigeErHistorisk = forrigeVurdering?.erHistoriskUtenReduksjonsberegning === true;
+  const forrigeErHistorisk =
+    !!forrigeVurdering && erVurderingHistorisk(forrigeVurdering, reduksjonErMulig, enManedsregelEnabled);
 
   const skalViseDatoFeltForStoppAvReduksjon =
     !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering) && !forrigeErHistorisk;
@@ -139,8 +143,10 @@ export const Helseinstitusjonsvurdering = ({
           {!reduksjonErMulig && (
             <Alert variant="warning" className="fit-content">
               Dette oppholdet er for kort til at det rekker å bli reduksjon. Tidligste mulige reduksjonsdato (
-              {effektivTidligsteReduksjonsdato}) er etter at oppholdet er avsluttet ({opphold.avsluttetDato}). Oppgi en
-              dato likevel - den lagres kun som historikk og påvirker ikke beregningen av AAP.
+              {effektivTidligsteReduksjonsdato &&
+                formatDatoMedMånedsnavn(new Dato(effektivTidligsteReduksjonsdato).dato)}
+              ) er etter at oppholdet er avsluttet ({formatDatoMedMånedsnavn(new Dato(opphold.avsluttetDato).dato)}).
+              Oppgi en dato likevel - den lagres kun som historikk og påvirker ikke beregningen av AAP.
             </Alert>
           )}
           <DateInputWrapper

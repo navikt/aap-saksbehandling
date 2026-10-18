@@ -1,7 +1,7 @@
 'use client';
 
 import { VStack } from '@navikt/ds-react';
-import { addDays, addMonths, format, isAfter, isBefore, parse, startOfMonth, subDays } from 'date-fns';
+import { addDays, format, isAfter, isBefore, parse, subDays } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -22,11 +22,9 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { useFeatureFlag } from 'context/UnleashContext';
 import {
-  beregnStandardTidligsteReduksjonsdato,
-  erNyttOppholdInnenfor3MaanederEtterSistOpphold,
+  beregnEffektivTidligsteReduksjonsdatoFraSkjema,
   erReduksjonMuligForOpphold,
-  erReduksjonUtIFraFormFields,
-  forrigeOppholdHarIngenReduksjonLengre,
+  erVurderingHistorisk,
   manglerKorrigertReduksjonsdato,
 } from 'lib/utils/institusjonopphold';
 
@@ -125,6 +123,8 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
           message:
             'Reduksjonen i forrige opphold er fjernet for hele perioden. Legg til en ny vurdering med korrigert reduksjonsdato før du bekrefter.',
         });
+      } else {
+        form.clearErrors(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
       }
     });
 
@@ -153,33 +153,20 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             .flatMap((v) => v.vurderinger || [])
         : undefined;
 
-      const forrigeGaReduksjonNå = forrigeOpphold?.vurderinger.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
-      const innenforTreMåneder =
-        !!forrigeOppholdFaktisk?.avsluttetDato &&
-        erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdFaktisk.avsluttetDato, opphold.periode.fom);
-      const bruker1Månedsregelen = enManedsregelEnabled
-        ? forrigeGaReduksjonNå && innenforTreMåneder
-        : innenforTreMåneder;
+      const { effektivTidligsteReduksjonsdato } = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+        oppholdFra: opphold.periode.fom,
+        tidligsteReduksjonsdato: opphold.tidligsteReduksjonsdato,
+        forrigeOppholdAvsluttetDato: forrigeOppholdFaktisk?.avsluttetDato,
+        forrigeOppholdVurderinger: forrigeOpphold?.vurderinger,
+        forrigeOppholdVedtatteVurderinger,
+        enManedsregelEnabled,
+      });
 
-      let effektivTidligsteReduksjonsdato = opphold.tidligsteReduksjonsdato;
-      if (bruker1Månedsregelen) {
-        effektivTidligsteReduksjonsdato = format(
-          startOfMonth(addMonths(new Dato(opphold.periode.fom).dato, 1)),
-          'yyyy-MM-dd'
-        );
-      } else if (
-        enManedsregelEnabled &&
-        forrigeOppholdHarIngenReduksjonLengre(forrigeOpphold?.vurderinger, forrigeOppholdVedtatteVurderinger)
-      ) {
-        effektivTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.periode.fom);
-      }
+      const reduksjonErMulig = erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato);
 
       const vurderingerMedStatus = opphold.vurderinger.map((vurdering) => ({
         vurdering,
-        erHistorisk:
-          erReduksjonUtIFraFormFields(vurdering) &&
-          enManedsregelEnabled &&
-          !erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato),
+        erHistorisk: erVurderingHistorisk(vurdering, reduksjonErMulig, enManedsregelEnabled),
       }));
 
       const nyeVurderinger = vurderingerMedStatus.map(({ vurdering, erHistorisk }, index) => {
