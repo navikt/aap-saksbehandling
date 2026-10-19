@@ -16,7 +16,6 @@ import { formaterDatoForBackend } from 'lib/utils/date';
 import { JaEllerNei, JaEllerNeiOptions, getTrueFalseEllerUndefined } from 'lib/utils/form';
 import { mutate } from 'swr';
 
-import { DevtoolWrapper } from 'components/devtools/DevtoolWrapper';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { OpprettSakBarn } from 'components/opprettsak/barn/OpprettSakBarn';
@@ -389,86 +388,84 @@ export const OpprettSakLocal = () => {
 
   return (
     <form autoComplete={'off'}>
-      <DevtoolWrapper title="Utviklerverktøy – Opprett sak">
-        <HGrid columns={2} gap="space-16">
-          <VStack gap="space-16">
-            <FormField form={form} formField={formFields.søknadsdato} />
-            <HStack gap="space-8" align="end">
-              <FormField form={form} formField={formFields.fødselsdato} />
-              <BodyShort>{differenceInCalendarYears(new Date(), form.watch('fødselsdato'))} år</BodyShort>
-            </HStack>
-            <OpprettYrkesskade form={form} />
-            <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio={true} />
-            {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
-              <FormField
-                form={form}
-                formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten}
-                horizontalRadio={true}
-              />
-            )}
-            <FormField form={form} formField={formFields.student} horizontalRadio={true} />
-            <FormField form={form} formField={formFields.medlemskap} horizontalRadio={true} />
-            <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
-            <FormField form={form} formField={formFields.institusjon} />
-            <FormField form={form} formField={formFields.uføre} />
-            <FormField form={form} formField={formFields.uføretidspunkt} />
-            <FormField form={form} formField={formFields.afp} />
-            <FormField form={form} formField={formFields.lønn} />
-            <FormField form={form} formField={formFields.stønad} />
-          </VStack>
-          <VStack gap="space-16">
-            <OpprettSakBarn form={form} />
-            <OpprettInntekter form={form} />
-            <OpprettSamordning form={form} />
-            <OpprettKravVurdering form={form} />
-          </VStack>
-        </HGrid>
+      <HGrid columns={2} gap="space-16">
+        <VStack gap="space-16">
+          <FormField form={form} formField={formFields.søknadsdato} />
+          <HStack gap="space-8" align="end">
+            <FormField form={form} formField={formFields.fødselsdato} />
+            <BodyShort>{differenceInCalendarYears(new Date(), form.watch('fødselsdato'))} år</BodyShort>
+          </HStack>
+          <OpprettYrkesskade form={form} />
+          <FormField form={form} formField={formFields.erArbeidsevnenNedsatt} horizontalRadio={true} />
+          {form.watch('erArbeidsevnenNedsatt') === JaEllerNei.Ja && (
+            <FormField
+              form={form}
+              formField={formFields.erNedsettelseIArbeidsevneMerEnnHalvparten}
+              horizontalRadio={true}
+            />
+          )}
+          <FormField form={form} formField={formFields.student} horizontalRadio={true} />
+          <FormField form={form} formField={formFields.medlemskap} horizontalRadio={true} />
+          <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
+          <FormField form={form} formField={formFields.institusjon} />
+          <FormField form={form} formField={formFields.uføre} />
+          <FormField form={form} formField={formFields.uføretidspunkt} />
+          <FormField form={form} formField={formFields.afp} />
+          <FormField form={form} formField={formFields.lønn} />
+          <FormField form={form} formField={formFields.stønad} />
+        </VStack>
+        <VStack gap="space-16">
+          <OpprettSakBarn form={form} />
+          <OpprettInntekter form={form} />
+          <OpprettSamordning form={form} />
+          <OpprettKravVurdering form={form} />
+        </VStack>
+      </HGrid>
 
-        <HGrid columns={3} gap="space-16">
-          <Box
-            padding="space-16"
-            marginBlock="space-16"
-            background="info-soft"
-            borderWidth="1"
-            borderColor="neutral-subtle"
-            borderRadius="4"
-          >
-            <Button type="button" size="small" loading={isLoading} onClick={() => opprett('START_BEHANDLING')}>
+      <HGrid columns={3} gap="space-16">
+        <Box
+          padding="space-16"
+          marginBlock="space-16"
+          background="info-soft"
+          borderWidth="1"
+          borderColor="neutral-subtle"
+          borderRadius="4"
+        >
+          <Button type="button" size="small" loading={isLoading} onClick={() => opprett('START_BEHANDLING')}>
+            Opprett
+          </Button>
+        </Box>
+
+        <Box
+          padding="space-16"
+          marginBlock="space-16"
+          background="success-soft"
+          borderWidth="1"
+          borderColor="neutral-subtle"
+          borderRadius="4"
+        >
+          <Button type="button" size="small" loading={isLoading} onClick={() => opprett()}>
+            Opprett og iverksett
+          </Button>
+        </Box>
+
+        <Box
+          padding="space-16"
+          marginBlock="space-16"
+          background="meta-purple-soft"
+          borderWidth="1"
+          borderColor="neutral-subtle"
+          borderRadius="4"
+        >
+          <HStack gap="space-16" align="end" wrap={false}>
+            <FormField form={form} formField={formFields.steg} />
+
+            <Button type="button" size="small" loading={isLoading} onClick={() => opprett(form.getValues().steg)}>
               Opprett
             </Button>
-          </Box>
-
-          <Box
-            padding="space-16"
-            marginBlock="space-16"
-            background="success-soft"
-            borderWidth="1"
-            borderColor="neutral-subtle"
-            borderRadius="4"
-          >
-            <Button type="button" size="small" loading={isLoading} onClick={() => opprett()}>
-              Opprett og iverksett
-            </Button>
-          </Box>
-
-          <Box
-            padding="space-16"
-            marginBlock="space-16"
-            background="meta-purple-soft"
-            borderWidth="1"
-            borderColor="neutral-subtle"
-            borderRadius="4"
-          >
-            <HStack gap="space-16" align="end" wrap={false}>
-              <FormField form={form} formField={formFields.steg} />
-
-              <Button type="button" size="small" loading={isLoading} onClick={() => opprett(form.getValues().steg)}>
-                Opprett
-              </Button>
-            </HStack>
-          </Box>
-        </HGrid>
-      </DevtoolWrapper>
+          </HStack>
+        </Box>
+      </HGrid>
     </form>
   );
 };

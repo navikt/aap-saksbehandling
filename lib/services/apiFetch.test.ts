@@ -96,6 +96,19 @@ describe('apiFetch', () => {
     expect(result).toEqual({ type: 'SUCCESS', status: 204, data: undefined });
   });
 
+  it('should handle successful empty responses', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      headers: new Headers({ 'content-type': 'application/json' }),
+      text: async () => '',
+    } as Response);
+
+    const result = await apiFetch(mockUrl, mockScope);
+
+    expect(result).toEqual({ type: 'SUCCESS', status: 200, data: undefined });
+  });
+
   it('should handle POST with request body', async () => {
     const requestBody = { name: 'New Item' };
     const mockResponse = { id: 2, name: 'New Item' };

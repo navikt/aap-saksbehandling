@@ -5,14 +5,10 @@ export async function hentLocalToken(scope: string) {
   const cookieStore = await cookies();
   const ident = cookieStore.get('bruker');
 
-  if (!ident) {
-    cookieStore.set({ name: 'bruker', value: 'VEILEDER' });
-  }
-
   try {
     const params = new URLSearchParams({
       aud: scope,
-      NAVident: ident?.value || '',
+      NAVident: ident?.value || 'VEILEDER',
       groups: ['saksbehandler-rolle', 'veileder-rolle', 'kvalitetssikrer-rolle', 'beslutter-rolle'].join(','),
     });
 
