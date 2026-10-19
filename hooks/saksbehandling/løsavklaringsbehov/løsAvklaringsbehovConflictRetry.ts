@@ -2,28 +2,33 @@ import { clientHentFlyt, clientLøsBehov, clientLøsPeriodisertBehov } from 'lib
 import { isError, isSuccess, FetchResponse } from 'lib/utils/api';
 import { LøsAvklaringsbehovPåBehandling, LøsPeriodisertBehovPåBehandling } from 'lib/types/types';
 
+export type LøsAvklaringsbehovRequest =
+  | { erPeriodisert: true; avklaringsbehov: LøsPeriodisertBehovPåBehandling }
+  | { erPeriodisert: false; avklaringsbehov: LøsAvklaringsbehovPåBehandling };
+
 export const løsAvklaringsbehovMedRetry = async (
-  avklaringsbehov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling,
-  erPeriodisert: boolean,
+  request: LøsAvklaringsbehovRequest,
   behandlingsreferanse: string
 ): Promise<FetchResponse<unknown>> => {
-  const res = erPeriodisert
-    ? await clientLøsPeriodisertBehov(avklaringsbehov as LøsPeriodisertBehovPåBehandling)
-    : await clientLøsBehov(avklaringsbehov);
+  const res = request.erPeriodisert
+    ? await clientLøsPeriodisertBehov(request.avklaringsbehov)
+    : await clientLøsBehov(request.avklaringsbehov);
 
   if (isError(res) && res.status === 409) {
     const flytResponse = await clientHentFlyt(behandlingsreferanse);
 
     if (isSuccess(flytResponse)) {
-      return erPeriodisert
-        ? await clientLøsPeriodisertBehov({
-            ...(avklaringsbehov as LøsPeriodisertBehovPåBehandling),
-            behandlingVersjon: flytResponse.data.behandlingVersjon,
-          })
-        : await clientLøsBehov({
-            ...avklaringsbehov,
-            behandlingVersjon: flytResponse.data.behandlingVersjon,
-          });
+      if (request.erPeriodisert) {
+        return await clientLøsPeriodisertBehov({
+          ...request.avklaringsbehov,
+          behandlingVersjon: flytResponse.data.behandlingVersjon,
+        });
+      }
+
+      return await clientLøsBehov({
+        ...request.avklaringsbehov,
+        behandlingVersjon: flytResponse.data.behandlingVersjon,
+      });
     }
   }
 

@@ -1,6 +1,6 @@
 import { ToTrinnsVurdering } from 'lib/types/types';
 import { BodyShort, Label, Link as AkselLink, VStack } from '@navikt/ds-react';
-import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
+import { mapBehovskodeTilBehovstype } from 'lib/utils/form';
 import Link from 'next/link';
 
 import styles from './Oppsummering.module.css';
@@ -26,9 +26,9 @@ export const Oppsummering = ({ vurderinger, erKvalitetssikrer }: Props) => {
             <AkselLink
               as={Link}
               prefetch={false}
-              href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.definisjon as Behovstype)}
+              href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.definisjon)}
             >
-              <BodyShort size={'small'}>{mapBehovskodeTilBehovstype(vurdering.definisjon as Behovstype)}</BodyShort>
+              <BodyShort size={'small'}>{mapBehovskodeTilBehovstype(vurdering.definisjon)}</BodyShort>
             </AkselLink>
           </VStack>
 

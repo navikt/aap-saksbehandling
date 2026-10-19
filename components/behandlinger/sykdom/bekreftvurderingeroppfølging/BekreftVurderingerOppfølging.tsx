@@ -39,11 +39,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                 {grunnlag?.mellomlagredeVurderinger.map((vurdering) => (
                   <ErrorSummary.Item
                     key={vurdering.avklaringsbehovKode}
-                    href={byggVilkårskortLenke(
-                      saksnummer,
-                      behandlingsreferanse,
-                      vurdering.avklaringsbehovKode as Behovstype
-                    )}
+                    href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.avklaringsbehovKode)}
                   >
                     {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
                   </ErrorSummary.Item>
