@@ -8,6 +8,7 @@ import {
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonMuligForOpphold,
   erReduksjonUtIFraVurdering,
+  erVurderingHistorisk,
   forrigeOppholdHarIngenReduksjonLengre,
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
@@ -359,5 +360,33 @@ describe('beregnEffektivTidligsteReduksjonsdatoFraSkjema', () => {
       enManedsregelEnabled: true,
     });
     expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
+  });
+});
+
+describe('erVurderingHistorisk', () => {
+  const lagret = (overrides: Partial<OppholdVurdering> = {}): OppholdVurdering => ({
+    ...reduksjon('01.04.2026'),
+    erNyVurdering: false,
+    ...overrides,
+  });
+
+  it('returnerer false når toggle er av', () => {
+    expect(erVurderingHistorisk(reduksjon('01.04.2026'), false, false)).toBe(false);
+  });
+
+  it('returnerer true for ny reduksjon når reduksjon ikke er mulig', () => {
+    expect(erVurderingHistorisk(reduksjon('01.04.2026'), false, true)).toBe(true);
+  });
+
+  it('returnerer true for lagret reduksjon når reduksjon ikke er mulig', () => {
+    expect(erVurderingHistorisk(lagret(), false, true)).toBe(true);
+  });
+
+  it('returnerer false for lagret historisk vurdering når reduksjon blir mulig igjen', () => {
+    expect(erVurderingHistorisk(lagret({ erHistoriskUtenReduksjonsberegning: true }), true, true)).toBe(false);
+  });
+
+  it('returnerer false for vurdering uten reduksjon', () => {
+    expect(erVurderingHistorisk(ikkeReduksjon('01.04.2026'), false, true)).toBe(false);
   });
 });

@@ -251,7 +251,5 @@ export function erVurderingHistorisk(
   reduksjonErMulig: boolean,
   enManedsregelEnabled: boolean
 ): boolean {
-  if (!enManedsregelEnabled) return false;
-  if (vurdering.erNyVurdering) return erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
-  return vurdering.erHistoriskUtenReduksjonsberegning ?? false;
+  return enManedsregelEnabled && erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
 }

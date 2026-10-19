@@ -372,9 +372,6 @@ function mapVurderingToDraftFormFields(
           vurderingerMeta: vurdering.vurderingerMeta,
           erNyVurdering: false,
           behøverVurdering: false,
-          // Behold lagret status fra backend - skal IKKE regnes på nytt ved render,
-          // siden tidligsteReduksjonsdato-beregningen kan endre seg (f.eks. pga. 1-månedsregel
-          // basert på hva som skjer med forrige opphold i samme skjema).
           erHistoriskUtenReduksjonsberegning: vurdering.erHistoriskUtenReduksjonsberegning,
         }));
       } else if (skalJustere && vedtatteVurderingerForOpphold) {

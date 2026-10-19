@@ -254,9 +254,6 @@ export const HelseinstitusjonOppholdGruppe = ({
             );
             const reduksjon = erReduksjonUtIFraFormFields(liveVurdering);
 
-            // Eksisterende (allerede lagrede) vurderinger beholder status fra lagring.
-            // Kun nye vurderinger (lagt til nå i skjemaet) får status beregnet live,
-            // siden disse ikke har noen persistert erHistoriskUtenReduksjonsberegning ennå.
             const erHistoriskUtenReduksjonsberegning = erVurderingHistorisk(
               liveVurdering,
               reduksjonErMulig,
