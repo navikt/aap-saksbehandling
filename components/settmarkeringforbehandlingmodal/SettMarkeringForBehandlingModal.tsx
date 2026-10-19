@@ -43,7 +43,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
         { label: '', value: '' },
         'Brukeren har ikke statlig livsoppholdsytelse',
         'Vedtak er omgjort etter klage',
-        'Avtalt med leder',
+        'Avtalt mellom ledere',
       ],
       rules: { required: 'Du må velge en årsak' },
     },
