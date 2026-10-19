@@ -22,9 +22,9 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilk
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { useFeatureFlag } from 'context/UnleashContext';
 import {
-  beregnEffektivTidligsteReduksjonsdatoFraSkjema,
-  erReduksjonMuligForOpphold,
+  beregnReduksjonskjede,
   erVurderingHistorisk,
+  grupperVedtattePerOppholdId,
   manglerKorrigertReduksjonsdato,
 } from 'lib/utils/institusjonopphold';
 
@@ -134,6 +134,13 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
   const byggVurderingerForInnsending = (data: HelseinstitusjonsFormFields) => {
     const parseDato = (dato: string) => parse(dato, 'dd.MM.yyyy', new Date());
 
+    const kjede = beregnReduksjonskjede(
+      data.helseinstitusjonsvurderinger,
+      grupperVedtattePerOppholdId(grunnlag.vedtatteVurderinger),
+      enManedsregelEnabled,
+      data.helseinstitusjonsvurderinger.length - 1
+    );
+
     return data.helseinstitusjonsvurderinger.flatMap((opphold, oppholdIndex) => {
       const vedtatteForOpphold = grunnlag.vedtatteVurderinger
         .filter((v) => v.oppholdId === opphold.oppholdId)
@@ -141,28 +148,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       const sisteVedtatteVurdering = vedtatteForOpphold.findLast((v) => !v.erHistoriskUtenReduksjonsberegning);
       const sisteVedtatteTom = sisteVedtatteVurdering?.periode.tom ?? null;
 
-      // Finn forrige opphold sitt faktiske grunnlag (for avsluttetDato) og om saksbehandler
-      // nå (live i skjemaet) har gitt reduksjon der - avgjør om 1-månedsregelen gjelder her.
-      const forrigeOpphold = oppholdIndex > 0 ? data.helseinstitusjonsvurderinger[oppholdIndex - 1] : undefined;
-      const forrigeOppholdFaktisk = forrigeOpphold
-        ? grunnlag.opphold.find((o) => o.oppholdId === forrigeOpphold.oppholdId)
-        : undefined;
-      const forrigeOppholdVedtatteVurderinger = forrigeOpphold
-        ? grunnlag.vedtatteVurderinger
-            .filter((v) => v.oppholdId === forrigeOpphold.oppholdId)
-            .flatMap((v) => v.vurderinger || [])
-        : undefined;
-
-      const { effektivTidligsteReduksjonsdato } = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
-        oppholdFra: opphold.periode.fom,
-        tidligsteReduksjonsdato: opphold.tidligsteReduksjonsdato,
-        forrigeOppholdAvsluttetDato: forrigeOppholdFaktisk?.avsluttetDato,
-        forrigeOppholdVurderinger: forrigeOpphold?.vurderinger,
-        forrigeOppholdVedtatteVurderinger,
-        enManedsregelEnabled,
-      });
-
-      const reduksjonErMulig = erReduksjonMuligForOpphold(opphold.periode.tom, effektivTidligsteReduksjonsdato);
+      const { reduksjonErMulig } = kjede[oppholdIndex];
 
       const vurderingerMedStatus = opphold.vurderinger.map((vurdering) => ({
         vurdering,
@@ -302,6 +288,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             <HelseinstitusjonOppholdGruppe
               key={oppholdField.id}
               opphold={faktiskOpphold}
+              vedtatteVurderinger={grunnlag.vedtatteVurderinger}
               tidligereVurderinger={tidligereVurderinger}
               forrigeOppholdAvsluttetDato={forrigeOppholdFaktisk?.avsluttetDato}
               forrigeOppholdVedtatteVurderinger={forrigeOppholdVedtatteVurderinger}

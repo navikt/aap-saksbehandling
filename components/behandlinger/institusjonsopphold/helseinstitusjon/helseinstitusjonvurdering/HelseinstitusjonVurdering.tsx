@@ -14,7 +14,7 @@ import {
   validerDatoForStoppAvReduksjon,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
-import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
@@ -24,24 +24,22 @@ import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
+  vedtatteVurderinger: HelseinstitusjonGrunnlag['vedtatteVurderinger'];
   oppholdIndex: number;
   vurderingIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   finnesTidligereVurderinger: boolean;
-  forrigeOppholdAvsluttetDato?: string | null;
-  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
 }
 
 export const Helseinstitusjonsvurdering = ({
   form,
+  vedtatteVurderinger,
   oppholdIndex,
   vurderingIndex,
   readonly,
   opphold,
   finnesTidligereVurderinger,
-  forrigeOppholdAvsluttetDato,
-  forrigeOppholdVedtatteVurderinger,
 }: Props) => {
   const vurdering = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}`);
   const visHarFasteUtgifterSpørsmål = vurdering.faarFriKostOgLosji === JaEllerNei.Ja;
@@ -56,13 +54,7 @@ export const Helseinstitusjonsvurdering = ({
       : undefined;
 
   const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig, enManedsregelEnabled } =
-    useEffektivTidligsteReduksjonsdato(
-      form,
-      oppholdIndex,
-      opphold,
-      forrigeOppholdAvsluttetDato,
-      forrigeOppholdVedtatteVurderinger
-    );
+    useEffektivTidligsteReduksjonsdato(form, oppholdIndex, vedtatteVurderinger);
 
   const erFørsteVurdering = vurderingIndex === 0;
   const forrigeErHistorisk =

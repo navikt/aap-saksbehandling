@@ -353,13 +353,34 @@ describe('beregnEffektivTidligsteReduksjonsdatoFraSkjema', () => {
     expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
   });
 
-  it('bruker backend-dato når ingen regel slår inn', () => {
+  it('toggle på: bruker standard dato i stedet for backend-dato når 1-månedsregel ikke gjelder', () => {
     const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
       ...base,
       forrigeOppholdAvsluttetDato: '2025-01-01',
       enManedsregelEnabled: true,
     });
     expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
+  });
+
+  it('toggle på: ignorerer utdatert backend-dato', () => {
+    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      oppholdFra: '2026-02-01',
+      tidligsteReduksjonsdato: '2026-03-01',
+      forrigeOppholdAvsluttetDato: '2026-01-15',
+      forrigeGirReduksjon: false,
+      enManedsregelEnabled: true,
+    });
+    expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-06-01' });
+  });
+
+  it('toggle av: bruker backend-dato', () => {
+    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      oppholdFra: '2026-02-01',
+      tidligsteReduksjonsdato: '2026-03-01',
+      forrigeOppholdAvsluttetDato: '2025-01-01',
+      enManedsregelEnabled: false,
+    });
+    expect(res.effektivTidligsteReduksjonsdato).toBe('2026-03-01');
   });
 });
 

@@ -2,10 +2,13 @@ import { addMonths, format, isAfter, isBefore, isEqual, startOfMonth } from 'dat
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
-import { HelseInstiusjonVurdering } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 
 import { JaEllerNei } from 'lib/utils/form';
-import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import {
+  OppholdMedVurderinger,
+  OppholdVurdering,
+} from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 /**
  * Formatterer beskrivelse av reduksjonsperioden
@@ -154,7 +157,7 @@ export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
   tidligsteReduksjonsdato,
   forrigeOppholdAvsluttetDato,
   forrigeOppholdVurderinger,
-  forrigeOppholdVedtatteVurderinger,
+  forrigeGirReduksjon,
   enManedsregelEnabled,
 }: {
   oppholdFra: string;
@@ -162,9 +165,11 @@ export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
   forrigeOppholdAvsluttetDato?: string | null;
   forrigeOppholdVurderinger?: OppholdVurdering[];
   forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
+  forrigeGirReduksjon?: boolean;
   enManedsregelEnabled: boolean;
 }): { effektivTidligsteReduksjonsdato: string | null | undefined; bruker1Månedsregelen: boolean } {
-  const forrigeGaReduksjonNå = forrigeOppholdVurderinger?.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
+  const forrigeGaReduksjonNå =
+    forrigeGirReduksjon ?? forrigeOppholdVurderinger?.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
 
   const innenforTreMåneder =
     !!forrigeOppholdAvsluttetDato &&
@@ -179,15 +184,7 @@ export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
     };
   }
 
-  // Backend sin opphold.tidligsteReduksjonsdato er beregnet ut fra VEDTATTE vurderinger på
-  // forrige opphold. Hvis saksbehandler nå (live i skjemaet) har endret forrige opphold slik at
-  // det ikke lenger gir reduksjon noe sted, er backend-verdien utdatert (kan fortsatt reflektere
-  // 1-månedsregelen fra forrige behandling). I så fall må vi regne ut standard 3/4-månedersregel
-  // selv, i stedet for å stole på backend.
-  if (
-    enManedsregelEnabled &&
-    forrigeOppholdHarIngenReduksjonLengre(forrigeOppholdVurderinger, forrigeOppholdVedtatteVurderinger)
-  ) {
+  if (enManedsregelEnabled) {
     return {
       bruker1Månedsregelen,
       effektivTidligsteReduksjonsdato: beregnStandardTidligsteReduksjonsdato(oppholdFra),
@@ -252,4 +249,55 @@ export function erVurderingHistorisk(
   enManedsregelEnabled: boolean
 ): boolean {
   return enManedsregelEnabled && erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
+}
+
+export function grupperVedtattePerOppholdId(
+  vedtatte: HelseinstitusjonGrunnlag['vedtatteVurderinger']
+): Record<string, HelseInstiusjonVurdering[]> {
+  return vedtatte.reduce<Record<string, HelseInstiusjonVurdering[]>>((acc, v) => {
+    const id = v.oppholdId ?? '';
+    acc[id] = [...(acc[id] ?? []), ...(v.vurderinger ?? [])];
+    return acc;
+  }, {});
+}
+
+export interface OppholdReduksjonsstatus {
+  effektivTidligsteReduksjonsdato: string | null | undefined;
+  bruker1Månedsregelen: boolean;
+  reduksjonErMulig: boolean;
+  girReduksjon: boolean;
+}
+
+export function beregnReduksjonskjede(
+  opphold: OppholdMedVurderinger[],
+  vedtattePerOppholdId: Record<string, HelseInstiusjonVurdering[]>,
+  enManedsregelEnabled: boolean,
+  tilOgMedIndex: number
+): OppholdReduksjonsstatus[] {
+  const resultat: OppholdReduksjonsstatus[] = [];
+
+  opphold.slice(0, tilOgMedIndex + 1).forEach((o, i) => {
+    const forrige = i > 0 ? opphold[i - 1] : undefined;
+
+    const { effektivTidligsteReduksjonsdato, bruker1Månedsregelen } = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      oppholdFra: o.periode.fom,
+      tidligsteReduksjonsdato: o.tidligsteReduksjonsdato,
+      forrigeOppholdAvsluttetDato: forrige?.periode.tom,
+      forrigeOppholdVurderinger: forrige?.vurderinger,
+      forrigeOppholdVedtatteVurderinger: forrige ? vedtattePerOppholdId[forrige.oppholdId] : undefined,
+      forrigeGirReduksjon: i > 0 ? resultat[i - 1].girReduksjon : undefined,
+      enManedsregelEnabled,
+    });
+
+    const reduksjonErMulig =
+      !enManedsregelEnabled || erReduksjonMuligForOpphold(o.periode.tom, effektivTidligsteReduksjonsdato);
+
+    const girReduksjon = o.vurderinger.some(
+      (v) => erReduksjonUtIFraFormFields(v) && !erVurderingHistorisk(v, reduksjonErMulig, enManedsregelEnabled)
+    );
+
+    resultat.push({ effektivTidligsteReduksjonsdato, bruker1Månedsregelen, reduksjonErMulig, girReduksjon });
+  });
+
+  return resultat;
 }

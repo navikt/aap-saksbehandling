@@ -53,6 +53,7 @@ interface Props {
   oppholdIndex: number;
   readonly: boolean;
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
+  vedtatteVurderinger: HelseinstitusjonGrunnlag['vedtatteVurderinger'];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
   forrigeOppholdAvsluttetDato?: string | null;
   forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
@@ -67,6 +68,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   tidligereVurderinger,
   forrigeOppholdAvsluttetDato,
   forrigeOppholdVedtatteVurderinger,
+  vedtatteVurderinger,
   accordionsSignal,
   readonly: formReadOnly,
   opphold,
@@ -92,13 +94,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
   const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
 
-  const { reduksjonErMulig } = useEffektivTidligsteReduksjonsdato(
-    form,
-    oppholdIndex,
-    opphold,
-    forrigeOppholdAvsluttetDato,
-    forrigeOppholdVedtatteVurderinger
-  );
+  const { reduksjonErMulig } = useEffektivTidligsteReduksjonsdato(form, oppholdIndex, vedtatteVurderinger);
 
   const erLagretHistorisk = (v: HelseInstiusjonVurdering) =>
     enManedsregelEnabled && v.erHistoriskUtenReduksjonsberegning;
@@ -299,13 +295,12 @@ export const HelseinstitusjonOppholdGruppe = ({
                 >
                   <Helseinstitusjonsvurdering
                     form={form}
+                    vedtatteVurderinger={vedtatteVurderinger}
                     oppholdIndex={oppholdIndex}
                     vurderingIndex={vurderingIndex}
                     readonly={formReadOnly}
                     opphold={opphold}
                     finnesTidligereVurderinger={Array.isArray(tidligereVurderinger) && tidligereVurderinger.length > 0}
-                    forrigeOppholdAvsluttetDato={forrigeOppholdAvsluttetDato}
-                    forrigeOppholdVedtatteVurderinger={forrigeOppholdVedtatteVurderinger}
                   />
                 </NyVurderingExpandableCard>
               </div>
