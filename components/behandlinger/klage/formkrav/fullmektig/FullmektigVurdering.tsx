@@ -140,13 +140,19 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
       postnummer: {
         type: 'text',
         label: 'Postnummer',
-        rules: { required: 'Du må skrive inn postnummer' },
+        rules: {
+          required: 'Du må skrive inn postnummer',
+          pattern: { value: /^\d+$/, message: 'Skriv inn et gyldig postnummer (kun tall)' },
+        },
         defaultValue: defaultValue.postnummer,
       },
       poststed: {
         type: 'text',
         label: 'Poststed',
-        rules: { required: 'Du må skrive inn poststed' },
+        rules: {
+          required: 'Du må skrive inn poststed',
+          pattern: { value: /^[A-ZÆØÅa-zæøå]+$/, message: 'Skriv inn et gyldig poststed (kun bokstaver)' },
+        },
         defaultValue: defaultValue.poststed,
       },
       land: {
