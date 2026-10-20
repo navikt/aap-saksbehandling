@@ -5640,44 +5640,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/drift/sak/{saksnummer}/tjenestepensjon-ytelser': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description saksnummer */
-          saksnummer: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.SakTjenestePensjonYtelserDto'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/drift/behandling/{referanse}/kjor-fra-steg': {
     parameters: {
       query?: never;
@@ -5825,44 +5787,6 @@ export interface paths {
             [name: string]: unknown;
           };
           content?: never;
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/drift/behandling/{referanse}/krav': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description referanse */
-          referanse: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.KravOgSt\u00F8nadsperiodeDto'];
-          };
         };
       };
     };
@@ -12615,7 +12539,11 @@ export interface components {
       foreliggerFagligVurdering: boolean;
       jobberBrukerAktivMedVirksomheten?: boolean | null;
       kanFøreTilSelvforsørget?: boolean | null;
-      oppstartsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /**
+       * @deprecated
+       * @description Bruk fase + fom. Fjernes etter frontend mignering
+       */
+      oppstartsPerioder?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       orgNr?: string | null;
       /**
        * Format: date
@@ -15723,8 +15651,6 @@ export interface components {
         | 'TRUKKET'
         | null;
       saksnummer: string;
-      /** Format: uuid */
-      sisteBehandlingReferanse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SøkDto': {
       søketekst: string;
