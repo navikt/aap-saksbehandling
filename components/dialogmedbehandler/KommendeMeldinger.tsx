@@ -9,6 +9,7 @@ import { Alert } from '../alert/Alert';
 import { isError } from '../../lib/utils/api';
 import { clientOppdaterPåminnelseForForepørsel } from 'lib/oppgaveClientApi';
 import React from 'react';
+import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 
 export const KommendeMeldinger = ({
   kommendeMeldinger,
@@ -23,6 +24,7 @@ export const KommendeMeldinger = ({
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
   const avbrytPåminnelse = async (kommendeMelding: KommendeMeldingDto) => {
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE_KLIKK');
     setLoading(kommendeMelding.bestillingId);
     try {
       const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
@@ -50,6 +52,7 @@ export const KommendeMeldinger = ({
   };
 
   const gjenopptaPåminnelse = async (bestillingId: string) => {
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE_KLIKK');
     setLoading(bestillingId);
     try {
       const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);

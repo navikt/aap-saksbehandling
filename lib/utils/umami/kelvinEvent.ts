@@ -3,6 +3,7 @@ import type { UmamiLenkeKlikkEvent } from 'lib/utils/umami/lenkeKlikk';
 import type { UmamiNavigeringEvent } from 'lib/utils/umami/navigering';
 import type { UmamiVarighetEvent } from 'lib/utils/umami/varighet';
 import { UmamiSykdomsvurderingEvent } from 'lib/utils/umami/sykdomsvurdering';
+import type { UmamiBehandlerdialogEvent } from 'lib/utils/umami/behandlerdialog';
 
 /**
  * `UmamiKelvinEvent` er en diskriminert union på `type`-feltet — hver variant har kun de feltene
@@ -16,4 +17,5 @@ export type UmamiKelvinEvent =
   | UmamiHendelserVarighetEvent
   | UmamiLenkeKlikkEvent
   | UmamiNavigeringEvent
-  | UmamiSykdomsvurderingEvent;
+  | UmamiSykdomsvurderingEvent
+  | UmamiBehandlerdialogEvent;

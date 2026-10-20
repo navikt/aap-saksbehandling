@@ -33,6 +33,8 @@ export async function POST(req: Request) {
 
 function buildEventData(payload: UmamiKelvinEvent): UmamiEventData {
   switch (payload.type) {
+    case 'BEHANDLERDIALOG':
+      return {};
     case 'VARIGHET':
       return {
         varighet_sekunder: payload.varighet_sekunder,
