@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import {
   KravGrunnlag,
   KravVurdering,
@@ -14,14 +15,12 @@ import {
   finnKravVurderingByReferanse,
   finnSøknadUtenKravByReferanse,
   hentOriginaleFormFelter,
-  KravVurderingFormFields,
   kravVurderingTilFormFields,
+  KravVurderingFormFields,
   migrertKravTilFormFields,
   søknadUtenKravTilFormFields,
-} from './vurderKravUtils';
-import { describe, expect, it } from 'vitest';
-import { JaEllerNei } from 'lib/postmottakForm';
-import { MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
+} from 'components/behandlinger/krav/vurderKravUtils';
+import { JaEllerNei, MuligRettFraTilbakedateresValg, SøknadsdatoEndresValg } from 'lib/utils/form';
 
 const bruker = 'Z000000';
 const behandlingId = { id: 1 };
