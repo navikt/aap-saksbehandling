@@ -86,6 +86,7 @@ import {
   RettighetsperiodeGrunnlag,
   SakPersoninfo,
   SaksInfo,
+  SaksinfoDTO,
   SamordningAndreStatligeYtelserGrunnlag,
   SamordningArbeidsgiverGrunnlag,
   SamordningGraderingGrunnlag,
@@ -210,7 +211,7 @@ export const migrerArenasak = async (saksnummerArena: string, ident: string) => 
 
 export const hentSiste = async (antall: number) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/siste/${antall}`;
-  return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'GET');
+  return await apiFetch<SaksinfoDTO[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleNavEnheter = async (behandlingsreferanse: string, input: NavEnhetRequest) => {
