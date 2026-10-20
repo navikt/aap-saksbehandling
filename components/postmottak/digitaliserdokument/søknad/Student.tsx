@@ -1,4 +1,4 @@
-import { FieldPath, UseFormReturn } from 'react-hook-form';
+import { FieldPath, useFormContext } from 'react-hook-form';
 import { SøknadFormFields } from './DigitaliserSøknad';
 import { JaNeiAvbruttIkkeOppgitt } from 'lib/postmottakForm';
 import { VStack } from '@navikt/ds-react';
@@ -6,11 +6,11 @@ import { FormFields } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 
 interface Props {
-  form: UseFormReturn<SøknadFormFields>;
   formFields: FormFields<FieldPath<SøknadFormFields>, SøknadFormFields>;
 }
 
-export const Student = ({ form, formFields }: Props) => {
+export const Student = ({ formFields }: Props) => {
+  const form = useFormContext<SøknadFormFields>();
   const erStudent = form.watch('erStudent');
   return (
     <VStack gap={'space-12'}>

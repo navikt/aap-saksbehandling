@@ -2,6 +2,7 @@ import { BodyShort, Table, VStack } from '@navikt/ds-react';
 import { Institusjonsopphold } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { storForbokstav, storForbokstavIHvertOrd } from 'lib/utils/string';
 
 interface Props {
   label: string;
@@ -45,13 +46,13 @@ export const InstitusjonsoppholdTabell = ({ label, beskrivelse, instutisjonsopph
           {instutisjonsopphold.map((opphold, index) => (
             <Table.Row key={index}>
               <Table.DataCell textSize={'small'}>{opphold.institusjonstype}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{opphold.oppholdstype}</Table.DataCell>
-              <Table.DataCell textSize={'small'}>{opphold.status}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{storForbokstavIHvertOrd(opphold.oppholdstype)}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{storForbokstav(opphold.status)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(opphold.oppholdFra)}</Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {opphold.avsluttetDato && formaterDatoForFrontend(opphold.avsluttetDato)}
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>{opphold.kildeinstitusjon}</Table.DataCell>
+              <Table.DataCell textSize={'small'}>{storForbokstavIHvertOrd(opphold.kildeinstitusjon)}</Table.DataCell>
             </Table.Row>
           ))}
         </Table.Body>

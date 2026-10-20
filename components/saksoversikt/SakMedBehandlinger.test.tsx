@@ -5,13 +5,14 @@ import { describe, expect, it } from 'vitest';
 import { SakMedBehandlinger } from './SakMedBehandlinger';
 
 export const lagBehandling = (
-  overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse'>
+  overrides: Partial<BehandlingInfo> & Pick<BehandlingInfo, 'status' | 'referanse' | 'erGjeldende'>
 ): BehandlingInfo => ({
   opprettet: '2026-01-01T12:00:00',
   typeBehandling: 'Førstegangsbehandling',
   vurderingsbehov: [],
   årsakTilOpprettelse: 'SØKNAD',
   ...overrides,
+  erGjeldende: true
 });
 
 export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo => ({
@@ -26,10 +27,20 @@ export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo => ({
 describe('SakMedBehandlinger', () => {
   it('viser åpne behandlinger før avsluttede', () => {
     const sak = lagSak([
-      lagBehandling({ status: 'AVSLUTTET', referanse: 'avsluttet-1', opprettet: '2026-01-01T10:00:00' }),
-      lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' }),
-      lagBehandling({ status: 'IVERKSETTES', referanse: 'avsluttet-2', opprettet: '2026-01-03T10:00:00' }),
-      lagBehandling({ status: 'UTREDES', referanse: 'åpen-2', opprettet: '2026-01-04T10:00:00' }),
+      lagBehandling({
+        status: 'AVSLUTTET',
+        referanse: 'avsluttet-1',
+        opprettet: '2026-01-01T10:00:00',
+        erGjeldende: true,
+      }),
+      lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00', erGjeldende: true }),
+      lagBehandling({
+        status: 'IVERKSETTES',
+        referanse: 'avsluttet-2',
+        opprettet: '2026-01-03T10:00:00',
+        erGjeldende: true,
+      }),
+      lagBehandling({ status: 'UTREDES', referanse: 'åpen-2', opprettet: '2026-01-04T10:00:00', erGjeldende: true }),
     ]);
 
     render(<SakMedBehandlinger sak={sak} rettighetsinfo={null} />);

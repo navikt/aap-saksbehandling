@@ -10,6 +10,7 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface AnnetRelevantDokumentFormFields {
   årsaker: DokumentÅrsakTilBehandling[];
@@ -48,11 +49,12 @@ const underkategoriOptions: ValuePair<NonNullable<AnnetRelevantDokumentUnderkate
   { label: 'Meldekort', value: 'MELDEKORT' },
 ];
 
-function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields) {
+function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFields, inkluderBegrunnelse: boolean) {
   const dokument = {
     meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker,
-    begrunnelse: data.begrunnelse,
+    // Brukes ikke lenger, fylles inn i neste steg (fagsystem-steg)
+    begrunnelse: inkluderBegrunnelse ? data.begrunnelse || '' : '',
     underkategori: data.underkategori || undefined,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
@@ -62,6 +64,8 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
   const annetRelevantDokumentGrunnlag: AnnetRelevantDokument = grunnlag.vurdering?.strukturertDokumentJson
     ? JSON.parse(grunnlag.vurdering?.strukturertDokumentJson)
     : {};
+
+  const stoppAutomatikkForLegeerklaringVedAvslag = useFeatureFlag('StoppAutomatikkForLegeerklaringVedAvslag');
 
   const vurderingsbehov = vurderingsbehovOptions(erKravEnabled, undefined, true);
   const defaultÅrsakOptions: string[] = (annetRelevantDokumentGrunnlag.årsakerTilBehandling || [])
@@ -84,7 +88,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         type: 'textarea',
         label: 'Begrunnelse',
         defaultValue: annetRelevantDokumentGrunnlag.begrunnelse || '',
-        rules: { required: 'Du må oppgi begrunnelse.' },
+        rules: stoppAutomatikkForLegeerklaringVedAvslag ? {} : { required: 'Du må oppgi begrunnelse.' },
       },
       underkategori: {
         type: 'select',
@@ -98,9 +102,13 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
   );
 
   const handleSubmit: SubmitEventHandler = (event) => {
-    form.handleSubmit((data) => submit('ANNET_RELEVANT_DOKUMENT', mapTilAnnetRelevantDokumentKontrakt(data), null))(
-      event
-    );
+    form.handleSubmit((data) =>
+      submit(
+        'ANNET_RELEVANT_DOKUMENT',
+        mapTilAnnetRelevantDokumentKontrakt(data, !stoppAutomatikkForLegeerklaringVedAvslag),
+        null
+      )
+    )(event);
   };
 
   return (
@@ -109,7 +117,7 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         <VStack gap={'space-24'}>
           <FormField form={form} formField={formFields.underkategori} />
           <FormField form={form} formField={formFields.årsaker} />
-          <FormField form={form} formField={formFields.begrunnelse} />
+          {!stoppAutomatikkForLegeerklaringVedAvslag && <FormField form={form} formField={formFields.begrunnelse} />}
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>
               Neste

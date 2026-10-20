@@ -46,7 +46,7 @@ export const Melding = ({
   return (
     <VStack gap={'space-4'} align={visningType === 'INNKOMMENDE' ? 'start' : 'end'}>
       <Detail>
-        <b>{meldingFraNavn}</b> {formatDatoMedMånedsnavn(opprettetTidspunkt)}
+        <b>{visningType === 'INNKOMMENDE' ? meldingFraNavn : 'Nav'}</b> {formatDatoMedMånedsnavn(opprettetTidspunkt)}
       </Detail>
       <Box
         className={
@@ -57,6 +57,7 @@ export const Melding = ({
       >
         <VStack gap={'space-8'}>
           <VStack>
+            {visningType === 'UTGÅENDE' && <Detail>{`Til ${meldingFraNavn}`}</Detail>}
             <Label size={'small'}>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</Label>
             <BodyShort size={'small'}>{children}</BodyShort>
           </VStack>

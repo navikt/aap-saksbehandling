@@ -127,6 +127,7 @@ export const SykdomsvurderingBrev = ({
     >
       <VStack gap={'space-16'}>
         <>
+          <EksterneLenkerIVilkårskort steg={'SYKDOMSVURDERING_BREV'} />
           <BodyShort size={'small'}>
             Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
             Resultatet kan endre seg videre i behandlingen.
@@ -149,9 +150,6 @@ export const SykdomsvurderingBrev = ({
           header={'Hva skal være med i teksten?'}
           tekst={
             <Box>
-              <Box marginBlock="space-16">
-                <EksterneLenkerIVilkårskort steg={'SYKDOMSVURDERING_BREV'} />
-              </Box>
               <BodyLong size={'small'}>Melding om innvilgelse skal innholde en beskrivelse av</BodyLong>
               <Box marginBlock="space-16" asChild>
                 <List size={'small'}>

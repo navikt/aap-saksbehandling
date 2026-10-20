@@ -8,7 +8,9 @@ import { BehandlingsflytEllerPostmottakBehandling } from 'components/saksoversik
 
 describe('BehandlingButtons', () => {
   it('skal kun vise behandle-knapp når oppgave er reservert til innlogget bruker', () => {
-    const sak = lagSak([lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' })]);
+    const sak = lagSak([
+      lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00', erGjeldende: true }),
+    ]);
 
     const behandling: BehandlingsflytEllerPostmottakBehandling = {
       behandling: sak.behandlinger[0],
@@ -37,7 +39,9 @@ describe('BehandlingButtons', () => {
   });
 
   it('skal kun vise åpne-knapp når oppgave er reservert til noen andre', () => {
-    const sak = lagSak([lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' })]);
+    const sak = lagSak([
+      lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00', erGjeldende: true }),
+    ]);
 
     const behandling: BehandlingsflytEllerPostmottakBehandling = {
       behandling: sak.behandlinger[0],
@@ -69,7 +73,9 @@ describe('BehandlingButtons', () => {
   });
 
   it('skal vise både åpne-knapp og behandle-knapp når behandling er ledig', () => {
-    const sak = lagSak([lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' })]);
+    const sak = lagSak([
+      lagBehandling({ status: 'OPPRETTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00', erGjeldende: true }),
+    ]);
 
     const behandling: BehandlingsflytEllerPostmottakBehandling = {
       behandling: sak.behandlinger[0],
@@ -101,7 +107,9 @@ describe('BehandlingButtons', () => {
   });
 
   it('skal bare vise vis-knapp når behandling er avsluttet', () => {
-    const sak = lagSak([lagBehandling({ status: 'AVSLUTTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' })]);
+    const sak = lagSak([
+      lagBehandling({ status: 'AVSLUTTET', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00', erGjeldende: true }),
+    ]);
 
     const behandling: BehandlingsflytEllerPostmottakBehandling = {
       behandling: sak.behandlinger[0],
@@ -122,7 +130,9 @@ describe('BehandlingButtons', () => {
   });
 
   it('ikke vis behandle-knapp når henting av oppgave feilet', () => {
-    const sak = lagSak([lagBehandling({ status: 'UTREDES', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00' })]);
+    const sak = lagSak([
+      lagBehandling({ status: 'UTREDES', referanse: 'åpen-1', opprettet: '2026-01-02T10:00:00', erGjeldende: true }),
+    ]);
 
     const behandling: BehandlingsflytEllerPostmottakBehandling = {
       behandling: sak.behandlinger[0],

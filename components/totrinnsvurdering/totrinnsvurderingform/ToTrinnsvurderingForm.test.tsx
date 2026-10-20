@@ -112,7 +112,7 @@ describe('totrinnsvurderingform', () => {
       />
     );
 
-    const knapp = screen.getByRole('button', { name: 'Godkjenn og fullfør behandling' });
+    const knapp = screen.getByRole('button', { name: 'Send vedtak om avslag' });
     expect(knapp).toBeVisible();
   });
 
@@ -320,7 +320,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
       erKvalitetssikring={true}
       readOnly={false}
       hastemarkering={{
-        begrunnelse: 'Avtalt med leder',
+        begrunnelse: 'Avtalt mellom ledere',
         markeringType: 'HASTER',
         opprettetAv: null,
         opprettetAvNavn: null,
@@ -352,7 +352,7 @@ it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert
       erKvalitetssikring={true}
       readOnly={false}
       hastemarkering={{
-        begrunnelse: 'Avtalt med leder',
+        begrunnelse: 'Avtalt mellom ledere',
         markeringType: 'HASTER',
         opprettetAv: null,
         opprettetAvNavn: null,

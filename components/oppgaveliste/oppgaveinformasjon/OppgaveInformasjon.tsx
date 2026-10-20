@@ -14,6 +14,7 @@ import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefrist
 import { Returboks } from '../returboks/Returboks';
 import { UførevedtakInfoBoks } from '../uførevedtakBoks/UførevedtakInfoBoks';
 import { useState } from 'react';
+import { DialogMedBehandlerInfoboks } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
 
 interface Props {
   oppgave: OppgaveMedKontekst;
@@ -23,6 +24,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave.oppgavelisteTags.skjermingInfo);
   const ventStatusForTilbakekreving = useFeatureFlag('VentStatusForTilbakekreving');
   const [visUføreTag, settVisUføreTag] = useState(!!oppgave.oppgavelisteTags.uføreVedtak);
+  const visForespørselSendtTilBehandler = useFeatureFlag('ForesporselSendtTilBehandlerFrontend');
   return (
     <HStack gap={'space-4'}>
       {oppgave.oppgavelisteTags.påVentInfo &&
@@ -41,7 +43,10 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
             begrunnelse={oppgave.oppgavelisteTags.forrigePåVentInfo.venteBegrunnelse}
           />
         )}
-      {oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
+      {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.harMottattDokument?.dokumentType && (
+        <SvarFraBehandler dokumentType={oppgave.oppgavelisteTags.harMottattDokument.dokumentType} />
+      )}
+      {!visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
       {oppgave.oppgavelisteTags.returInformasjon && (
         <Returboks
           returInformasjon={oppgave.oppgavelisteTags.returInformasjon}
@@ -65,6 +70,12 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
           virkningsdato={oppgave.oppgavelisteTags.uføreVedtak.virkningsdato}
           behandlingsReferanse={oppgave.behandlingskontekst.behandlingsreferanse}
           resultat={oppgave.oppgavelisteTags.uføreVedtak.resultat}
+        />
+      )}
+      {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.forespørselSendtTilBehandler && (
+        <DialogMedBehandlerInfoboks
+          påminnelseDato={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseDato}
+          påminnelseAvbrutt={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseAvbrutt}
         />
       )}
     </HStack>

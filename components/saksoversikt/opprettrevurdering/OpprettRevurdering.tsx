@@ -71,7 +71,7 @@ export const OpprettRevurdering = ({
   }
 
   const variant = erFørstegangsbehandling ? 'vurdering' : 'revurdering';
-  const erKravEnabled = useFeatureFlag('KravSteg');
+  const erKravEnabled = useFeatureFlag('KravManuellVurdering');
   const avslag11_27Enable = useFeatureFlag('Avslag11_27');
   const skalInkludereRefusjonkrav = useFeatureFlag('KanVurdereRefusjonIRevurdering') || erFørstegangsbehandling;
 

@@ -112,6 +112,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
     if (!erPerioderGyldige) {
       return;
     }
+
     const losning: LøsningerForPerioder = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
@@ -187,7 +188,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
                 svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
               />
               <SpørsmålOgSvar
-                spørsmål="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
+                spørsmål="Har brukeren rett til AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
                 svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
               />
             </VStack>

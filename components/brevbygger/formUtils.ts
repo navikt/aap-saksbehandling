@@ -84,5 +84,7 @@ export function byggBrevdataPayload(
     valg: valgteValg,
     fritekster,
     betingetTekst: brevdata?.betingetTekst ?? [],
+    automatiskValgteDelmalIder: brevdata?.automatiskValgteDelmalIder ?? [],
+    automatiskValgteValg: brevdata?.automatiskValgteValg ?? [],
   };
 }

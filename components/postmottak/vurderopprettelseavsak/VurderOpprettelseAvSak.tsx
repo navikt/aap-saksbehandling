@@ -7,7 +7,7 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 import { Behovstype, HvorSkalSøknadenBehandles } from 'lib/postmottakForm';
 import { ManuellFordelingsgrunnlagResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
-import { StegType } from 'lib/types/postmottakTypes';
+import { AvklarFordelingLøsning, StegType } from 'lib/types/postmottakTypes';
 import { ForeldrepengeperiodeDTO, SykepengeperiodeDTO } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { SubmitEventHandler } from 'react';
@@ -113,7 +113,7 @@ export const VurderOpprettelseAvSak = ({
   );
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    usePostmottakLøsBehovOgGåTilNesteSteg(STEG);
+    usePostmottakLøsBehovOgGåTilNesteSteg<AvklarFordelingLøsning>(STEG);
   const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, STEG);
 
   const valgtHvorBehandles = form.watch('hvorBehandles');

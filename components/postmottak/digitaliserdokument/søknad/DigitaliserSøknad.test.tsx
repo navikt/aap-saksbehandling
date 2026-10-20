@@ -1,8 +1,8 @@
 import { describe, expect, it, vi, vitest } from 'vitest';
 import { DigitaliserSøknad } from './DigitaliserSøknad';
-import { render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
+import { render, screen, within } from 'lib/test/CustomRender';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   erPapir: false,
@@ -14,6 +14,10 @@ const grunnlag: DigitaliseringsGrunnlag = {
 };
 describe('DigitaliserSøknad', () => {
   const user = userEvent.setup();
+  const velgSvar = async (spørsmål: string, svar: string) => {
+    const radiogruppe = screen.getByRole('radiogroup', { name: spørsmål });
+    await user.click(within(radiogruppe).getByText(svar));
+  };
 
   it('yrkesskade vises', () => {
     render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
@@ -72,6 +76,64 @@ describe('DigitaliserSøknad', () => {
     expect(screen.getByText('Fødselsnummer eller D-nummer')).toBeVisible();
   });
 
+  it('spør om arbeid utenfor Norge når brukeren har bodd i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Ja');
+
+    expect(
+      screen.getByRole('radiogroup', { name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?' })
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('radiogroup', {
+        name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
+      })
+    ).not.toBeInTheDocument();
+  });
+
+  it('spør om arbeid i Norge når brukeren ikke har bodd i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+
+    expect(
+      screen.getByRole('radiogroup', {
+        name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
+      })
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('radiogroup', { name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('spør om arbeid utenfor Norge i tillegg når brukeren har arbeidet i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har søker i tillegg jobbet utenfor Norge i de siste fem årene?', 'Ja');
+
+    expect(screen.getByRole('button', { name: /Legg til utenlandsopphold/i })).toBeVisible();
+  });
+
+  it('viser utenlandsopphold når arbeid utenfor Norge er oppgitt', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?', 'Ja');
+
+    expect(screen.getByRole('button', { name: /Legg til utenlandsopphold/i })).toBeVisible();
+  });
+
+  it('viser utenlandsopphold når brukeren ikke har arbeidet sammenhengende i Norge', async () => {
+    render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?', 'Nei');
+
+    expect(screen.getByRole('button', { name: /Legg til utenlandsopphold/i })).toBeVisible();
+  });
+
   it('legg til barn og sjekk at det kan slettes igjen', async () => {
     render(<DigitaliserSøknad submit={vitest.fn()} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
@@ -95,18 +157,12 @@ describe('DigitaliserSøknad', () => {
     });
     await user.click(within(yrkesSkadeGruppe).getByText('Nei'));
 
-    // harBoddINorgeSiste5År = Ja → viser harArbeidetINorgeSiste5År og arbeidetUtenforNorgeFørSykdom
+    // Har bodd i Norge → spør om arbeid utenfor Norge.
     const harBoddGruppe = screen.getByRole('radiogroup', {
       name: 'Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?',
     });
     await user.click(within(harBoddGruppe).getByText('Ja'));
 
-    const harArbeidetGruppe = screen.getByRole('radiogroup', {
-      name: 'Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?',
-    });
-    await user.click(within(harArbeidetGruppe).getByText('Nei'));
-
-    // arbeidetUtenforNorgeFørSykdom = Ja → viser "Legg til utenlandsopphold"
     const arbeidetUtenforGruppe = screen.getByRole('radiogroup', {
       name: 'Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?',
     });
@@ -144,5 +200,27 @@ describe('DigitaliserSøknad', () => {
     const opphold = submitted.medlemskap.utenlandsOpphold[0];
     expect(opphold.fraDatoLocalDate).toBe('2020-01-01');
     expect(opphold.tilDatoLocalDate).toBe('2020-12-31');
+  });
+
+  it('sender ikke svar fra medlemskapsspørsmål som er skjult etter endring av svar', async () => {
+    const submitMock = vi.fn();
+    render(<DigitaliserSøknad submit={submitMock} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
+
+    await user.type(screen.getByRole('textbox', { name: /søknadsdato/i }), '01.01.2024');
+    await velgSvar('Har brukeren oppgitt at de har en relevant yrkesskade?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har søker i tillegg jobbet utenfor Norge i de siste fem årene?', 'Ja');
+    await velgSvar('Har brukeren oppgitt at de har bodd sammenhengende i Norge siste 5 år?', 'Ja');
+    await velgSvar('Har brukeren oppgitt at de har arbeidet utenfor Norge siste 5 år?', 'Nei');
+    await velgSvar('Har brukeren oppgitt at de er student?', 'Nei');
+    await user.click(screen.getByRole('button', { name: 'Neste' }));
+
+    expect(submitMock).toHaveBeenCalledOnce();
+    const submitted = JSON.parse(submitMock.mock.calls[0][1]);
+    expect(submitted.medlemskap.harBoddINorgeSiste5År).toBe('ja');
+    expect(submitted.medlemskap.arbeidetUtenforNorgeFørSykdom).toBe('nei');
+    expect(submitted.medlemskap).not.toHaveProperty('harArbeidetINorgeSiste5År');
+    expect(submitted.medlemskap).not.toHaveProperty('iTilleggArbeidUtenforNorge');
   });
 });

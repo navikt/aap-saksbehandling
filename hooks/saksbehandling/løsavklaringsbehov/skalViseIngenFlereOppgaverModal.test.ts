@@ -24,7 +24,7 @@ describe('ved godkjent / underkjent vurdering', () => {
   });
 
   test('skal returnere false for vanlig behovstype', () => {
-    const behov = lagBehov({ behovstype: '5001' });
+    const behov = lagBehov({ behovstype: '9001' });
     expect(harUnderkjentVurdering(behov)).toBe(false);
   });
 

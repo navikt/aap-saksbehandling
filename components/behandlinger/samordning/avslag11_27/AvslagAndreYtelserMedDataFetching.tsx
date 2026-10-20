@@ -3,14 +3,13 @@ import { isError } from 'lib/utils/api';
 import { hentAvslag11_27Grunnlag, hentMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
 import { Avslag11_27 } from 'components/behandlinger/samordning/avslag11_27/Avslag11_27';
-import { Avklaringsbehov, TypeBehandling } from 'lib/types/types';
+import { Avklaringsbehov } from 'lib/types/types';
 import { skalViseStegIkkePeriodisertGrunnlag } from 'lib/utils/steg';
 
 interface Props {
   behandlingsreferanse: string;
   behandlingVersjon: number;
   readOnly: boolean;
-  typeBehandling: TypeBehandling;
   erIkkePåVent: boolean;
   avklaringsbehov: Array<Avklaringsbehov>;
 }
@@ -19,7 +18,6 @@ export const AvslagAndreYtelserMedDataFetching = async ({
   behandlingsreferanse,
   readOnly,
   behandlingVersjon,
-  typeBehandling,
   erIkkePåVent,
   avklaringsbehov,
 }: Props) => {
@@ -52,7 +50,6 @@ export const AvslagAndreYtelserMedDataFetching = async ({
       readOnly={totalReadOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      typeBehandling={typeBehandling}
     />
   );
 };

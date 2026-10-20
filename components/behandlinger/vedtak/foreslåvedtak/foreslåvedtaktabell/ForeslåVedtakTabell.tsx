@@ -1,4 +1,4 @@
-import { ForeslåVedtakGrunnlag, UnderveisAvslagsÅrsak } from 'lib/types/types';
+import { ForeslåVedtakGrunnlag, UnderveisAvslagsÅrsak, VilkårsavslagDto } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { HStack, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -80,7 +80,7 @@ function mapUtfallTilTekst(utfall: string) {
     case 'OPPFYLT':
       return 'AAP innvilget';
     case 'IKKE_OPPFYLT':
-      return 'Ikke rett på AAP';
+      return 'Ikke rett til AAP';
   }
 }
 
@@ -111,9 +111,10 @@ function mapUnderveisÅrsakTilHjemmel(underveisAvslag: UnderveisAvslagsÅrsak) {
   }
 }
 
-function mapAvslagsÅrsakTilTekst(vilkårAvslag: string[], underveisAvslag?: UnderveisAvslagsÅrsak | null) {
+function mapAvslagsÅrsakTilTekst(vilkårAvslag: VilkårsavslagDto[], underveisAvslag?: UnderveisAvslagsÅrsak | null) {
+  const hjemler = vilkårAvslag.map((avslag) => avslag.vilkår);
   if (underveisAvslag && underveisAvslag != 'IKKE_GRUNNLEGGENDE_RETT') {
-    vilkårAvslag.push(mapUnderveisÅrsakTilHjemmel(underveisAvslag));
+    hjemler.push(mapUnderveisÅrsakTilHjemmel(underveisAvslag));
   }
-  return [...new Set(vilkårAvslag)].join(', ');
+  return [...new Set(hjemler)].join(', ');
 }

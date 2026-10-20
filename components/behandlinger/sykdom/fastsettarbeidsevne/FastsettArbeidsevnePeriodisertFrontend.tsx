@@ -234,7 +234,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             <TextAreaWrapper
               label={'Vilkårsvurdering'}
               description={
-                'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+                'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett til full ytelse.'
               }
               control={form.control}
               name={`vurderinger.${index}.begrunnelse`}
@@ -259,6 +259,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
                         const valueAsNumber = Number(value);
                         if (isNaN(valueAsNumber)) {
                           return 'Prosent må være et tall';
+                        } else if (!/^\d+$/.test(String(value))) {
+                          return 'Prosent kan bare være et heltall.';
                         } else if (!erProsent(valueAsNumber)) {
                           return 'Prosent kan bare være mellom 0 og 100.';
                         }

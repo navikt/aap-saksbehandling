@@ -15,11 +15,8 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { Alert } from 'components/alert/Alert';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export const InnhentDokumentasjon = () => {
-  const featureDialogMedBehandler = useFeatureFlag('DialogMedBehandler');
-
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
   const {
     data: dialogmeldinger,
@@ -39,7 +36,7 @@ export const InnhentDokumentasjon = () => {
   };
   return (
     <section>
-      {!visSkjema && !featureDialogMedBehandler && (
+      {!visSkjema && (
         <VStack gap={'space-16'}>
           <div>
             <Button type="button" variant={'secondary'} size={'small'} onClick={() => oppdaterVisSkjema(true)}>
@@ -57,15 +54,6 @@ export const InnhentDokumentasjon = () => {
           ) : (
             <Dialogmeldinger dialogmeldinger={dialogmeldinger?.data} />
           )}
-        </VStack>
-      )}
-      {!visSkjema && featureDialogMedBehandler && (
-        <VStack gap={'space-16'} align={'end'}>
-          <div>
-            <Button type="button" variant={'secondary'} onClick={() => oppdaterVisSkjema(true)}>
-              Send forespørsel til behandler
-            </Button>
-          </div>
         </VStack>
       )}
       {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}

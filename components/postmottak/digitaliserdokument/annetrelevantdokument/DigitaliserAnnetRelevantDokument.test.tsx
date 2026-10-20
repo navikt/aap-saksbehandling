@@ -4,6 +4,9 @@ import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { describe, expect, it, vi } from 'vitest';
 
 import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDokument';
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
+import { ReactNode } from 'react';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   klagebehandlinger: [],
@@ -14,6 +17,14 @@ const grunnlag: DigitaliseringsGrunnlag = {
   },
 };
 
+const Wrapper = ({ children, stoppAutomatikk }: { children: ReactNode; stoppAutomatikk?: boolean }) => (
+  <FeatureFlagProvider
+    flags={{ ...mockedFlags, StoppAutomatikkForLegeerklaringVedAvslag: stoppAutomatikk ?? false }}
+  >
+    {children}
+  </FeatureFlagProvider>
+);
+
 describe('DigitaliserAnnetDokument', () => {
   const user = userEvent.setup();
 
@@ -21,13 +32,15 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        erKravEnabled={true}
-      />
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
     );
 
     const årsaker = screen.getByRole('combobox', { name: /Hvilke opplysninger/ });
@@ -61,13 +74,15 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        erKravEnabled={true}
-      />
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
     );
 
     await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
@@ -90,13 +105,15 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <DigitaliserAnnetRelevantDokument
-        submit={submit}
-        grunnlag={grunnlag}
-        readOnly={false}
-        isLoading={false}
-        erKravEnabled={true}
-      />
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
     );
 
     // Select a category, then deselect it to get empty string
@@ -113,6 +130,70 @@ describe('DigitaliserAnnetDokument', () => {
     expect(submit).toHaveBeenCalledExactlyOnceWith(
       'ANNET_RELEVANT_DOKUMENT',
       '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"begrunnelse uten underkategori"}',
+      null
+    );
+  });
+
+  it('bevarer lagret begrunnelse når flagget er av', async () => {
+    const submit = vi.fn(() => {});
+    const grunnlagMedBegrunnelse: DigitaliseringsGrunnlag = {
+      ...grunnlag,
+      vurdering: {
+        kategori: 'ANNET_RELEVANT_DOKUMENT',
+        strukturertDokumentJson: JSON.stringify({
+          meldingType: 'AnnetRelevantDokumentV1',
+          årsakerTilBehandling: ['REVURDER_YRKESSKADE'],
+          begrunnelse: 'lagret begrunnelse',
+        }),
+      },
+    };
+
+    render(
+      <Wrapper>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlagMedBegrunnelse}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
+    );
+
+    await user.click(screen.getByRole('button', { name: /Neste/ }));
+
+    expect(submit).toHaveBeenCalledExactlyOnceWith(
+      'ANNET_RELEVANT_DOKUMENT',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"lagret begrunnelse"}',
+      null
+    );
+  });
+
+  it('skjuler begrunnelse når flagget er på og sender tom begrunnelse med valgt metadata', async () => {
+    const submit = vi.fn(() => {});
+
+    render(
+      <Wrapper stoppAutomatikk>
+        <DigitaliserAnnetRelevantDokument
+          submit={submit}
+          grunnlag={grunnlag}
+          readOnly={false}
+          isLoading={false}
+          erKravEnabled={true}
+        />
+      </Wrapper>
+    );
+
+    expect(screen.queryByLabelText('Begrunnelse')).not.toBeInTheDocument();
+
+    await user.selectOptions(screen.getByLabelText('Underkategori'), 'YRKESSKADE');
+    await user.click(screen.getByRole('combobox', { name: /Hvilke opplysninger/ }));
+    await user.click(within(screen.getByRole('listbox')).getByText(/Yrkesskade/));
+    await user.click(screen.getByRole('button', { name: /Neste/ }));
+
+    expect(submit).toHaveBeenCalledExactlyOnceWith(
+      'ANNET_RELEVANT_DOKUMENT',
+      '{"meldingType":"AnnetRelevantDokumentV1","årsakerTilBehandling":["REVURDER_YRKESSKADE"],"begrunnelse":"","underkategori":"YRKESSKADE"}',
       null
     );
   });

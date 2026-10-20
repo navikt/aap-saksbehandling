@@ -8,12 +8,15 @@ import { VilkårsKort } from 'components/postmottak/vilkårskort/VilkårsKort';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { Button } from '@navikt/ds-react';
+import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
+import { ApiException } from 'lib/utils/api';
 
 interface Props extends Submittable {
   kategori?: KategoriserDokumentKategori;
   readOnly: boolean;
   onKategoriChange: (kategori: KategoriserDokumentKategori) => void;
   status: ServerSentEventStatus | undefined;
+  løsBehovOgGåTilNesteStegError?: ApiException;
 }
 
 interface FormFields {
@@ -50,7 +53,14 @@ const kategorierSomSkalDigitaliseres: KategoriserDokumentKategori[] = [
   'ANNET_RELEVANT_DOKUMENT',
 ];
 
-export const Kategoriser = ({ kategori, readOnly, submit, onKategoriChange, status }: Props) => {
+export const Kategoriser = ({
+  kategori,
+  readOnly,
+  submit,
+  onKategoriChange,
+  status,
+  løsBehovOgGåTilNesteStegError,
+}: Props) => {
   const { formFields, form } = useConfigForm<FormFields>(
     {
       kategori: {
@@ -71,6 +81,7 @@ export const Kategoriser = ({ kategori, readOnly, submit, onKategoriChange, stat
     <VilkårsKort heading={'Kategoriser'}>
       <form onSubmit={form.handleSubmit((data) => submit(data.kategori, null, null))}>
         <ServerSentEventStatusAlert status={status} />
+        <LøsBehovOgGåTilNesteStegStatusAlert løsBehovOgGåTilNesteStegError={løsBehovOgGåTilNesteStegError} />
         <FormField form={form} formField={formFields.kategori} />
         {kategori && !kategorierSomSkalDigitaliseres.includes(kategori) && (
           <Button className={'fit-content'}>Neste</Button>

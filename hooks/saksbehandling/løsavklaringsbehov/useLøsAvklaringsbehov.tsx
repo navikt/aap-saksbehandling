@@ -1,7 +1,7 @@
 import { useState, useTransition } from 'react';
 import { ServerSentEventStatus } from 'app/saksbehandling/api/behandling/hent/[referanse]/[gruppe]/[steg]/nesteSteg/route';
 import { useRouter } from 'next/navigation';
-import { LøsAvklaringsbehovPåBehandling, LøsPeriodisertBehovPåBehandling, StegType } from 'lib/types/types';
+import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/types';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
 import { ApiException, isError } from 'lib/utils/api';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
@@ -9,7 +9,10 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { isLocal } from 'lib/utils/environment';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useTildelingssjekk } from 'hooks/saksbehandling/løsavklaringsbehov/useTildelingssjekk';
-import { løsAvklaringsbehovMedRetry } from 'hooks/saksbehandling/løsavklaringsbehov/løsAvklaringsbehovConflictRetry';
+import {
+  LøsAvklaringsbehovRequest,
+  løsAvklaringsbehovMedRetry,
+} from 'hooks/saksbehandling/løsavklaringsbehov/løsAvklaringsbehovConflictRetry';
 import { listenSSE } from 'hooks/saksbehandling/løsavklaringsbehov/listenSSE';
 import {
   harUnderkjentVurdering,
@@ -37,11 +40,8 @@ export function useLøsAvklaringsbehov(steg: StegType): {
 
   const { sjekkTildeling } = useTildelingssjekk(params.behandlingsreferanse);
 
-  const løsAvklaringsbehov = async (
-    avklaringsbehov: LøsAvklaringsbehovPåBehandling | LøsPeriodisertBehovPåBehandling,
-    erPeriodisert: boolean,
-    callback?: () => void
-  ) => {
+  const løsAvklaringsbehov = async (request: LøsAvklaringsbehovRequest, callback?: () => void) => {
+    const { avklaringsbehov } = request;
     setIsLoading(true);
     setStatus(undefined);
     setError(undefined);
@@ -63,11 +63,7 @@ export function useLøsAvklaringsbehov(steg: StegType): {
      * Dersom vi får 409 Conflict fra backend ligger vi på feil behandlingsversjon og vi må hente
      * inn siste versjon og prøve på nytt.
      */
-    const løsAvklaringsbehov = await løsAvklaringsbehovMedRetry(
-      avklaringsbehov,
-      erPeriodisert,
-      params.behandlingsreferanse
-    );
+    const løsAvklaringsbehov = await løsAvklaringsbehovMedRetry(request, params.behandlingsreferanse);
     if (isError(løsAvklaringsbehov)) {
       setError(løsAvklaringsbehov.apiException);
       setIsLoading(false);
@@ -127,8 +123,10 @@ export function useLøsAvklaringsbehov(steg: StegType): {
   return {
     løsAvklaringsbehovIsLoading: isLoading || isPending,
     løsAvklaringsbehovStatus: status,
-    løsAvklaringsbehov: (avklaringsbehov, callback) => løsAvklaringsbehov(avklaringsbehov, false, callback),
-    løsPeriodisertAvklaringsbehov: (avklaringsbehov, callback) => løsAvklaringsbehov(avklaringsbehov, true, callback),
+    løsAvklaringsbehov: (avklaringsbehov, callback) =>
+      løsAvklaringsbehov({ erPeriodisert: false, avklaringsbehov }, callback),
+    løsPeriodisertAvklaringsbehov: (avklaringsbehov, callback) =>
+      løsAvklaringsbehov({ erPeriodisert: true, avklaringsbehov }, callback),
     løsAvklaringsbehovError: error,
   };
 }

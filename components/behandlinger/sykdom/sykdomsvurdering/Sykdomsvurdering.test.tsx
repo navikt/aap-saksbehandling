@@ -55,6 +55,7 @@ const grunnlagMedTidligereVurdering: SykdomsGrunnlag = {
         vurdertAv: {
           dato: '2025-10-31T09:44:54.793',
           ident: 'Z123456',
+          kilde: 'SAKSBEHANDLER',
         },
       },
     },
@@ -104,7 +105,6 @@ describe('generelt', () => {
         erOvergangArbeid={false}
         erRevurderingStudent={false}
         studentgrunnlag={studentgrunnlag}
-        skalViseAlleSykdomSteg={false}
       />
     );
     const heading = screen.getByRole('heading', { name: '§ 11-5 Nedsatt arbeidsevne og krav til årsakssammenheng' });
@@ -133,7 +133,7 @@ describe('generelt', () => {
     await user.click(within(harBrukerNedsattArbeidsevneFelt).getByRole('radio', { name: 'Nei' }));
 
     const informasjonsvarsling = screen.getByText(
-      'Brukeren vil få vedtak om at de ikke har rett på AAP. De kvalifiserer ikke for sykepengeerstatning.'
+      'Brukeren vil få vedtak om at de ikke har rett til arbeidsavklaringspenger.'
     );
 
     expect(informasjonsvarsling).toBeVisible();
@@ -856,45 +856,6 @@ describe('vurderinger uten viss varighet', () => {
       screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
       'Her har jeg begynt å skrive en vurdering..'
     );
-    const neiValg = within(
-      screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
-    ).getByRole('radio', {
-      name: 'Nei',
-    });
-    await user.click(neiValg);
-
-    await velgBekreft();
-
-    const feilmeldinger = screen.getAllByText(
-      /Datoen som er satt er tidligere enn perioden som skal vurderes. Vurderingen kan tidligst gjelde fra/i
-    );
-    await expect(feilmeldinger.length).toBe(2);
-    await expect(feilmeldinger[0]).toBeVisible();
-  });
-
-  it('viser feilmelding dersom dato for når vurderingen gjelder fra er før søknadstidspunkt, versjon med visning av alle sykdomssteg', async () => {
-    const today = format(new Date(), 'yyyy-MM-dd');
-    customRenderWithSøknadstidspunkt(
-      <Sykdomsvurdering
-        diagnoseDefaultOptions={diagnoserDefaultOptions}
-        grunnlag={grunnlagMedYrkesskade}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Førstegangsbehandling'}
-        initialMellomlagretVurdering={undefined}
-        erOvergangArbeid={false}
-        erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
-        skalViseAlleSykdomSteg={true}
-      />,
-      today
-    );
-    const vurderingFraDato = format(subDays(new Date(), 7), 'dd.MM.yyyy');
-    await skrivInnDatoForNårVurderingenGjelderFra(vurderingFraDato);
-    await user.type(
-      screen.getByRole('textbox', { name: 'Vilkårsvurdering' }),
-      'Her har jeg begynt å skrive en vurdering..'
-    );
     const skadeSykdomLyteNeiValg = within(
       screen.getByRole('radiogroup', { name: 'Har brukeren sykdom, skade eller lyte?' })
     ).getByRole('radio', {
@@ -1072,7 +1033,7 @@ describe('mellomlagring i sykdom', () => {
     fom: '2025-01-01',
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     harSkadeSykdomEllerLyte: false,
-    vurderingerMeta: { vurdertAv: { ident: '1234', dato: '2025-01-01' } },
+    vurderingerMeta: { vurdertAv: { ident: '1234', dato: '2025-01-01', kilde: 'SAKSBEHANDLER' } },
   };
 
   const sykdomsGrunnlagMedVurdering: SykdomsGrunnlag = {

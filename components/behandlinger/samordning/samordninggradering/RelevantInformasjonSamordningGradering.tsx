@@ -1,4 +1,4 @@
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, List, VStack } from '@navikt/ds-react';
 import { Periode, SamordningGraderingGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -22,17 +22,23 @@ export const RelevantInformasjonSamordningGradering = ({ grunnlag }: Props) => {
         <BodyShort size={'small'}>Mottar bruker sykepenger: {mottarSykepenger ? 'Ja' : 'Nei'}</BodyShort>
       )}
       {visFerie && (
-        <BodyShort size={'small'}>
-          Har bruker planer om ferie før de er ferdige med sykepenger:{' '}
-          {feriePerioder.length > 0 ? `Ja, ${formaterFeriePerioder(feriePerioder)}` : `Ja, ${ferieDager} dager`}
-        </BodyShort>
+        <VStack gap={'space-8'}>
+          <BodyShort size={'small'}>
+            Har bruker planer om ferie før de er ferdige med sykepenger:{' '}
+            {feriePerioder.length > 0 ? 'Ja' : `Ja, ${ferieDager} dager`}
+          </BodyShort>
+
+          <List size={'small'}>
+            {feriePerioder.map((periode, index) => (
+              <List.Item key={index}>{formaterFeriePerioder(periode)}</List.Item>
+            ))}
+          </List>
+        </VStack>
       )}
     </VStack>
   );
 };
 
-function formaterFeriePerioder(feriePerioder: Periode[]): string {
-  return feriePerioder
-    .map((periode) => `${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)}`)
-    .join(', ');
+function formaterFeriePerioder(periode: Periode): string {
+  return `${formaterDatoForFrontend(periode.fom)} - ${formaterDatoForFrontend(periode.tom)}`;
 }

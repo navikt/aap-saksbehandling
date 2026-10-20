@@ -21,6 +21,8 @@ const brevdata: BrevdataDto = {
   delmaler: [],
   fritekster: [],
   valg: [],
+  automatiskValgteDelmalIder: [],
+  automatiskValgteValg: [],
 };
 
 const user = userEvent.setup();
@@ -40,7 +42,8 @@ describe('Feilhåndtering', () => {
         referanse={'1234'}
         brevmal={'ugyldig json'}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -98,7 +101,8 @@ describe('Delmalvelger', () => {
         brevmal={JSON.stringify(enMal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
       />
@@ -114,7 +118,8 @@ describe('Delmalvelger', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
       />
@@ -129,7 +134,8 @@ describe('Delmalvelger', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -151,7 +157,8 @@ describe('Delmalvelger', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -167,7 +174,8 @@ describe('Delmalvelger', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -189,7 +197,8 @@ describe('Delmalvelger', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmal.delmal._id }] }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -202,6 +211,29 @@ describe('Delmalvelger', () => {
     } else {
       expect(kort).not.toBeNull();
     }
+  });
+
+  test('forhåndsvalgte delmaler er markert med "Forhåndsvalgt"', () => {
+    render(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{
+          ...brevdata,
+          delmaler: [{ id: valgfriDelmal.delmal._id }],
+          automatiskValgteDelmalIder: [valgfriDelmal.delmal._id],
+        }}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        behandlingVersjon={1}
+        readOnly={false}
+        brevtype={'INNVILGELSE'}
+      />
+    );
+    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel }).closest('div');
+    expect(kort).not.toBeNull();
+    expect(within(kort!).getByText('Forhåndsvalgt')).toBeVisible();
   });
 });
 
@@ -223,7 +255,8 @@ describe('Delmaler med valg', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -239,7 +272,8 @@ describe('Delmaler med valg', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -264,7 +298,8 @@ describe('Delmaler med valg', () => {
         brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -290,7 +325,8 @@ describe('Delmaler med valg', () => {
         brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -312,7 +348,8 @@ describe('Delmaler med valg', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -340,7 +377,8 @@ describe('Delmaler med valg', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -367,9 +405,16 @@ describe('Delmaler med valg', () => {
               key: 'alt1-key',
             },
           ],
+          automatiskValgteValg: [
+            {
+              id: 'valgref-1',
+              key: 'alt1-key',
+            },
+          ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -378,7 +423,9 @@ describe('Delmaler med valg', () => {
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
-    expect((screen.getByRole('option', { name: 'Alternativ 1' }) as HTMLOptionElement).selected).toBe(true);
+    expect((screen.getByRole('option', { name: 'Alternativ 1 (Forhåndsvalgt)' }) as HTMLOptionElement).selected).toBe(
+      true
+    );
   });
 
   test('fritekst er valgt når det kommer som input til brevbyggeren', () => {
@@ -404,7 +451,8 @@ describe('Delmaler med valg', () => {
           ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -433,7 +481,8 @@ describe('Delmaler med valg', () => {
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -460,7 +509,8 @@ describe('Delmaler med valg', () => {
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -493,7 +543,8 @@ describe('Delmaler med fritekst', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdataMedValgtDelmal}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -510,7 +561,8 @@ describe('Delmaler med fritekst', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdataMedValgtDelmal}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -528,7 +580,8 @@ describe('Delmaler med fritekst', () => {
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdataMedValgtDelmal}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -561,7 +614,8 @@ describe('Delmaler med fritekst', () => {
           ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}

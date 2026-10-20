@@ -29,6 +29,7 @@ const grunnlagMedTidligereVurdering: BeregningTidspunktGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'Saksbehandler',
+        kilde: 'SAKSBEHANDLER',
         dato: '2022-07-01',
       },
     },
@@ -47,6 +48,7 @@ const grunnlagMedÅrsak: BeregningTidspunktGrunnlag = {
     vurderingerMeta: {
       vurdertAv: {
         ident: 'Saksbehandler',
+        kilde: 'SAKSBEHANDLER',
         dato: '2022-07-01',
       },
     },
@@ -65,6 +67,7 @@ const grunnlagMedHistorikk: BeregningTidspunktGrunnlag = {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
           dato: '2021-06-06',
         },
       },
@@ -376,6 +379,7 @@ describe('mellomlagring', () => {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
           dato: '2025-08-21',
         },
       },
@@ -559,6 +563,28 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
     expect(screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).toBeVisible();
   });
 
+  it('skal tilby Sykemeldingsdato, Kravdato, Dato på legeerklæring, Henvist til behandling, Uføretidspunkt og Annet for årsak til ytterligere nedsatt tidspunkt', () => {
+    render(
+      <FastsettBeregning
+        readOnly={false}
+        behandlingVersjon={0}
+        visAarsakDropdowns={true}
+        grunnlag={grunnlagUtenVurdering}
+      />
+    );
+    const dropdown = screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' });
+    const optionLabels = Array.from(dropdown.querySelectorAll('option')).map((option) => option.textContent);
+    expect(optionLabels).toEqual([
+      '',
+      'Sykemeldingsdato',
+      'Kravdato',
+      'Dato på legeerklæring',
+      'Henvist til behandling',
+      'Uføretidspunkt',
+      'Annet',
+    ]);
+  });
+
   it('skal ikke vise dropdown for årsak til ytterligere nedsatt tidspunkt når toggle er av', () => {
     render(
       <FastsettBeregning
@@ -681,6 +707,7 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
       'Dato på legeerklæring',
       'Henvist til behandling',
       'Uføretidspunkt',
+      '16 år som beregningstidspunkt',
       'Annet',
     ]);
   });

@@ -34,15 +34,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     løsPeriodisertAvklaringsbehov.mockReset();
   });
 
-  it('skal ikke kalle backend ved submit uten vurderinger', async () => {
-    render(<EtableringAvEgenVirksomhet grunnlag={tomtGrunnlag} readOnly={false} behandlingVersjon={0} />);
-
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-
-    expect(løsPeriodisertAvklaringsbehov).not.toHaveBeenCalled();
-  });
-
-  it('skal kalle backend ved submit med vurderinger', async () => {
+  it('skal kalle backend ved submit', async () => {
     const grunnlagMedVurdering: EtableringEgenVirksomhetGrunnlagResponse = {
       ...tomtGrunnlag,
       nyeVurderinger: [

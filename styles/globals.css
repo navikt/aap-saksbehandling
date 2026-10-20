@@ -3,6 +3,13 @@
   width: fit-content;
 }
 
+/*
+Legger til scroll-padding-top på html for å sikre at ankermål ikke havner bak den sticky toppmenyen/saksinfobanneret.
+*/
+html {
+  scroll-padding-top: 7rem;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;

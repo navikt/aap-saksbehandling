@@ -1,0 +1,194 @@
+import { addDays, eachDayOfInterval, isWeekend, subDays } from 'date-fns';
+import { SamordnetYtelse } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
+import { erNorskHelligdag } from 'lib/utils/helligdager';
+import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+
+/**
+ * Ferie i en sykepengeperiode forskyver maksdato for sykepenger tilsvarende lengden på ferien.
+ * Antall sykepengedager bevares: dagene før ferien blir stående, og de resterende dagene
+ * legges som en egen rad rett etter ferieslutt.
+ */
+export function beregnSplittingAvSykepengeperiode(rader: SamordnetYtelse[]): SamordnetYtelse[] {
+  const ferieRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'));
+  let resultat = slåSammenSplittedeSykepengeperioder(rader).filter((n) => n.ytelseType !== 'FERIE_I_SYKEPENGEPERIODE');
+
+  ferieRader.forEach((rad) => {
+    resultat = splittForEnFerie(resultat, rad);
+  });
+
+  return sorterEtterFom([...resultat, ...ferieRader]);
+}
+
+export function slåSammenSplittedeSykepengeperioder(rader: SamordnetYtelse[]): SamordnetYtelse[] {
+  const ferier = sorterEtterFom(rader.filter((n) => n.ytelseType === 'FERIE_I_SYKEPENGEPERIODE'))
+    .map(tilPeriode)
+    .filter((periode): periode is Periode => periode !== undefined);
+  const andreRader = rader.filter((n) => n.ytelseType !== 'SYKEPENGER');
+  const sykepengeRader = sorterEtterFom(rader.filter((n) => n.ytelseType === 'SYKEPENGER'));
+
+  const resultat: SamordnetYtelse[] = [];
+  let kjede: SamordnetYtelse[] = [];
+
+  function avsluttKjede() {
+    if (kjede.length === 0) {
+      return;
+    }
+
+    const start = tilPeriode(kjede[0])!.fom;
+    const totaltAntallVirkedager = kjede.reduce((sum, rad) => {
+      const periode = tilPeriode(rad)!;
+      return sum + antallVirkedagerMellom(periode.fom, periode.tom);
+    }, 0);
+
+    resultat.push(medPeriode(kjede[0], start, leggTilVirkedager(start, totaltAntallVirkedager)));
+    kjede = [];
+  }
+
+  sykepengeRader.forEach((rad) => {
+    const periode = tilPeriode(rad);
+
+    if (!periode) {
+      avsluttKjede();
+      resultat.push(rad);
+      return;
+    }
+
+    const forrige = kjede.length > 0 ? tilPeriode(kjede[kjede.length - 1]) : undefined;
+
+    if (forrige && erDekketAvFerie(addDays(forrige.tom, 1), subDays(periode.fom, 1), ferier)) {
+      kjede.push(rad);
+    } else {
+      avsluttKjede();
+      kjede.push(rad);
+    }
+  });
+
+  avsluttKjede();
+
+  return sorterEtterFom([...resultat, ...andreRader]);
+}
+
+function erDekketAvFerie(fom: Date, tom: Date, ferier: Periode[]): boolean {
+  if (fom > tom) {
+    return false;
+  }
+
+  let dekketTilOgMed = fom;
+
+  for (const ferie of ferier) {
+    if (ferie.fom > dekketTilOgMed) {
+      break;
+    }
+    if (ferie.tom >= dekketTilOgMed) {
+      dekketTilOgMed = addDays(ferie.tom, 1);
+    }
+  }
+
+  return dekketTilOgMed > tom;
+}
+
+function sorterEtterFom(rader: SamordnetYtelse[]): SamordnetYtelse[] {
+  return [...rader].sort((a, b) => {
+    const periodeA = tilPeriode(a);
+    const periodeB = tilPeriode(b);
+    if (!periodeA || !periodeB) {
+      return 0;
+    }
+    return periodeA.fom.getTime() - periodeB.fom.getTime();
+  });
+}
+
+function splittForEnFerie(rader: SamordnetYtelse[], ferieRad: SamordnetYtelse): SamordnetYtelse[] {
+  const nyeRader: SamordnetYtelse[] = [];
+  const ferieRadPeriode = tilPeriode(ferieRad);
+
+  if (!ferieRadPeriode) {
+    return rader;
+  }
+
+  rader.forEach((rad) => {
+    const sykepengeperiode = rad === ferieRad ? undefined : tilPeriode(rad);
+
+    if (rad.ytelseType !== 'SYKEPENGER' || !sykepengeperiode || !overlapper(sykepengeperiode, ferieRadPeriode)) {
+      nyeRader.push(rad);
+      return;
+    }
+
+    forskyvSykepenger(rad, sykepengeperiode, ferieRadPeriode).forEach((splittetRad) => {
+      nyeRader.push(splittetRad);
+    });
+  });
+
+  return nyeRader;
+}
+
+function forskyvSykepenger(rad: SamordnetYtelse, sykepenger: Periode, ferie: Periode): SamordnetYtelse[] {
+  const resultat: SamordnetYtelse[] = [];
+
+  const finnesDagerFørFerien = ferie.fom > sykepenger.fom;
+
+  if (finnesDagerFørFerien) {
+    resultat.push(medPeriode(rad, sykepenger.fom, subDays(ferie.fom, 1)));
+  }
+
+  const totaltAntallVirkedager = antallVirkedagerMellom(sykepenger.fom, sykepenger.tom);
+  const virkedagerFørFerien = finnesDagerFørFerien ? antallVirkedagerMellom(sykepenger.fom, subDays(ferie.fom, 1)) : 0;
+  const virkedagerIgjen = totaltAntallVirkedager - virkedagerFørFerien;
+
+  if (virkedagerIgjen > 0) {
+    const fom = addDays(ferie.tom, 1);
+    resultat.push(medPeriode(rad, fom, leggTilVirkedager(fom, virkedagerIgjen)));
+  }
+
+  return resultat;
+}
+
+interface Periode {
+  fom: Date;
+  tom: Date;
+}
+
+function tilPeriode(rad: SamordnetYtelse | undefined): Periode | undefined {
+  const fom = parseDatoFraDatePicker(rad?.periode.fom);
+  const tom = parseDatoFraDatePicker(rad?.periode.tom);
+
+  if (!fom || !tom || fom > tom) {
+    return undefined;
+  }
+
+  return { fom, tom };
+}
+
+function overlapper(en: Periode, annen: Periode): boolean {
+  return en.fom <= annen.tom && annen.fom <= en.tom;
+}
+
+function erVirkedag(dato: Date): boolean {
+  return !isWeekend(dato) && !erNorskHelligdag(dato);
+}
+
+export function antallVirkedagerMellom(fom: Date, tom: Date): number {
+  return eachDayOfInterval({ start: fom, end: tom }).filter(erVirkedag).length;
+}
+
+function leggTilVirkedager(fra: Date, virkedagerAntall: number): Date {
+  let dato = fra;
+  let talteVirkedager = 0;
+  while (talteVirkedager < virkedagerAntall) {
+    if (erVirkedag(dato)) {
+      talteVirkedager++;
+      if (talteVirkedager === virkedagerAntall) {
+        return dato;
+      }
+    }
+    dato = addDays(dato, 1);
+  }
+  return dato;
+}
+
+function medPeriode(rad: SamordnetYtelse, fom: Date, tom: Date): SamordnetYtelse {
+  return {
+    ...rad,
+    periode: { fom: formaterDatoForFrontend(fom), tom: formaterDatoForFrontend(tom) },
+  };
+}

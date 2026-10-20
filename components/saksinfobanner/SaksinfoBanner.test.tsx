@@ -206,13 +206,9 @@ describe('SaksinfoBanner på behandling siden', () => {
     customRender(
       <SaksinfoBanner
         sak={sak}
-        behandling={{
-          ...behandling,
-          arenaStatus: {
-            harArenaHistorikk: true,
-          },
-        }}
+        behandling={behandling}
         oppgaveVisningsinfo={oppgaveVisningsinfo}
+        arenaStatus={{ harArenaHistorikk: true }}
       />
     );
     const returTag = screen.queryByText('Arenahistorikk');

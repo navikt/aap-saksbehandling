@@ -5,9 +5,10 @@ import {
   Button,
   CopyButton,
   Detail,
-  Heading,
+  HStack,
   InfoCard,
   InlineMessage,
+  Label,
   Link,
   Loader,
   Radio,
@@ -26,7 +27,6 @@ import { FormField, ValuePair } from 'components/form/FormField';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { isError, isSuccess } from 'lib/utils/api';
 import { ExternalLinkIcon, InformationSquareIcon } from '@navikt/aksel-icons';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Alert } from 'components/alert/Alert';
 import useSWR from 'swr';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -74,10 +74,8 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   const [defaultOptions, setDefaultOptions] = useState<ValuePair[]>([]);
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
-  const skalHenteFastlege = useFeatureFlag('HentFastlege');
-
   const { data: fastlege, isLoading: fastlegeIsLoading } = useSWR(
-    skalHenteFastlege ? `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}` : null,
+    `api/dokumentinnhenting/behandleroppslag/fastlege/${saksnummer}`,
     () => clientHentFastlege(saksnummer),
     {
       revalidateOnFocus: false,
@@ -179,18 +177,16 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
 
   return (
     <div className={'flex-column'}>
-      <Heading level={'3'} size={'small'}>
-        Send forespørsel til behandler
-      </Heading>
-      <Link
-        href={
-          'https://navno.sharepoint.com/sites/fag-og-ytelser-radgivende-legetjeneste/SitePages/Felles-rutine-for-innhenting-av-helseopplysninger.aspx?&xsdata=MDV8MDJ8fGIwNWFkNTJkZjczMTQzNjhiNTg5MDhkZTY4N2Y1MzAzfDYyMzY2NTM0MWVjMzQ5NjI4ODY5OWI1NTM1Mjc5ZDBifDB8MHw2MzkwNjMwOTMxOTYwNzY0MjV8VW5rbm93bnxWR1ZoYlhOVFpXTjFjbWwwZVZObGNuWnBZMlY4ZXlKRFFTSTZJbFJsWVcxelgwRlVVRk5sY25acFkyVmZVMUJQVEU5R0lpd2lWaUk2SWpBdU1DNHdNREF3SWl3aVVDSTZJbGRwYmpNeUlpd2lRVTRpT2lKUGRHaGxjaUlzSWxkVUlqb3hNWDA9fDF8TDJOb1lYUnpMekU1T20xbFpYUnBibWRmV2tSVmQxbDZUWGxOUkVGMFRXcFZNRmw1TURCTmFteHRURlJuZWs5WFVYUk9SMUV5V2xSa2ExbFhWVFZPZWtwcVFIUm9jbVZoWkM1Mk1pOXRaWE56WVdkbGN5OHhOemN3TnpFeU5URTNPRFF4fDg3ZDNjODMyYWZjNjRjZjk1MzQxMDhkZTY4N2Y1MzAxfDViMjBjYjYwZGEyODQ2ZDU4NjI1MDIzYzQ1YWFjNTdk&sdata=TktPbXp3NHJQU0hMOFRJS0dUTUxpaEFYZkoyRnA0RHNWcWNMcThtRXhaMD0%3D'
-        }
-        target={'_blank'}
-      >
-        <BodyShort size={'small'}>Rutiner for innhenting av helseopplysninger</BodyShort>
-        <ExternalLinkIcon />
-      </Link>
+      <VStack>
+        <Label>Send forespørsel til behandler</Label>
+        <Link
+          href="https://navno.sharepoint.com/sites/fag-og-ytelser-radgivende-legetjeneste/SitePages/Felles-rutine-for-innhenting-av-helseopplysninger.aspx"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Rutiner for innhenting av helseopplysninger <ExternalLinkIcon />
+        </Link>
+      </VStack>
       {isError(fastlege) ? (
         fastlege.status === 403 ? (
           <InfoCard data-color="warning" size="small">
@@ -314,26 +310,28 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
           ))}
           <FormField form={form} formField={formFields.dokumentasjonstype} />
           <FormField form={form} formField={formFields.melding} />
-          <div className={styles.rad}>
-            <Button size={'small'} loading={isLoading}>
-              Send dialogmelding
-            </Button>
-            <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
-              Forhåndsvis
-            </Button>
-            {visModal && (
-              <Forhåndsvisning
-                saksnummer={saksnummer}
-                fritekst={form.getValues('melding')}
-                dokumentasjonsType={form.getValues('dokumentasjonstype')}
-                visModal={visModal}
-                onClose={() => setVisModal(false)}
-              />
-            )}
+          <HStack justify={'space-between'}>
             <Button size={'small'} variant="tertiary" type="button" onClick={onCancel} disabled={isLoading}>
               Avbryt
             </Button>
-          </div>
+            <HStack gap={'space-8'}>
+              <Button size={'small'} variant="secondary" type="button" onClick={forhåndsvis} disabled={isLoading}>
+                Forhåndsvis
+              </Button>
+              {visModal && (
+                <Forhåndsvisning
+                  saksnummer={saksnummer}
+                  fritekst={form.getValues('melding')}
+                  dokumentasjonsType={form.getValues('dokumentasjonstype')}
+                  visModal={visModal}
+                  onClose={() => setVisModal(false)}
+                />
+              )}
+              <Button size={'small'} loading={isLoading}>
+                Send dialogmelding
+              </Button>
+            </HStack>
+          </HStack>
           {error && (
             <div className={styles.rad}>
               <Alert variant="error">{error || 'Noe gikk galt ved bestilling av dialogmelding'}</Alert>

@@ -67,7 +67,7 @@ const behovskodeMap = {
   '5058': '§ 11-15 Etablering av egen virksomhet',
   '5059': 'Avklar vedtaksperiode',
   '5060': 'Oppsummert rettighet i vedtaket',
-  '5096': 'Forslå uttak',
+  '5096': 'Foreslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
   '5099': 'Beslutte sak',
@@ -407,16 +407,5 @@ export function mapStatusTilTekst(
       return 'Retur fra saksbehandler';
     case 'AVSLAG_11_5':
       return 'Avslag § 11-5';
-  }
-}
-
-export function mapReturFraStatusTilTekst(status: string): string {
-  switch (status) {
-    case 'SENDT_TILBAKE_FRA_BESLUTTER':
-      return 'Sendt tilbake fra beslutter';
-    case 'SENDT_TILBAKE_FRA_KVALITETSSIKRER':
-      return 'Sendt tilbake fra kvalitetssikrer';
-    default:
-      return status;
   }
 }

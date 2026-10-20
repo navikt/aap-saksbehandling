@@ -66,6 +66,7 @@ export const VilkårskortPeriodisert = ({
 
   return (
     <VStack
+      id={steg}
       padding={'space-12'}
       gap={'space-4'}
       role="region"

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Detail, HStack, InfoCard, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, HStack, InfoCard, Link, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -10,6 +10,7 @@ import type { Markering } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
+  LøsAvklaringsbehovPåBehandling,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
@@ -30,7 +31,6 @@ import {
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 import { useFieldArray } from 'react-hook-form';
-
 import { Alert } from 'components/alert/Alert';
 import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
@@ -40,7 +40,7 @@ import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsv
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { EnvelopeClosedIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 
 interface Props {
   grunnlag: FatteVedtakGrunnlag | KvalitetssikringGrunnlag;
@@ -164,10 +164,10 @@ export const TotrinnsvurderingForm = ({
           return;
         }
 
-        const behovParams = {
+        const behovParams: LøsAvklaringsbehovPåBehandling = {
           behandlingVersjon: behandlingsversjon,
           behov: {
-            behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+            behovstype: erKvalitetssikring ? '5097' : '5099',
             vurderinger: assessedFields.map((vurdering) => {
               if (vurdering.godkjent === JaEllerNei.Ja) {
                 return {
@@ -213,7 +213,7 @@ export const TotrinnsvurderingForm = ({
       autoComplete={'off'}
     >
       {fields.map((field, index) => {
-        const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
+        const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon);
         const endretSidenForrigeGang =
           grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {
@@ -258,12 +258,25 @@ export const TotrinnsvurderingForm = ({
       )}
       {skalViseKvalitetssikrerFatterVedtakBoks && (
         <InfoCard data-color="warning">
-          <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-            <InfoCard.Title>Obs! Behandlingen fullføres automatisk</InfoCard.Title>
+          <InfoCard.Header icon={<EnvelopeClosedIcon aria-hidden />}>
+            <InfoCard.Title>Send vedtak om avslag</InfoCard.Title>
           </InfoCard.Header>
           <InfoCard.Content>
-            Siden dette er avslag på § 11-5 vil resten av behandlingen gå automatisk når alle vilkårene er godkjent.
-            Brevet vil sendes direkte til bruker uten flere kontroller.
+            <BodyShort>
+              Når du godkjenner vilkårene, fatter du vedtaket. Brevet sendes direkte til brukeren med teksten fra den
+              individuelle begrunnelsen.
+            </BodyShort>
+
+            <Link
+              inlineText={true}
+              href={
+                'https://navno.sharepoint.com/:b:/r/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/Delte%20dokumenter/Oppl%C3%A6ringsmateriell,%20Kelvin/Brevmal%20avslag%2011-5.pdf?d=w3a576e3104044632acf51e02bd3f7227&csf=1&web=1&e=UOakL4'
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Se eksempel på vedtaksbrev for avslag etter § 11-5 (Navet) <ExternalLinkIcon />
+            </Link>
           </InfoCard.Content>
         </InfoCard>
       )}
@@ -305,7 +318,7 @@ function utledKnappetekst(finnesUnderkjentVilkår: Boolean, vedtakFattesAvKvalit
   if (finnesUnderkjentVilkår) {
     return 'Returner';
   } else if (vedtakFattesAvKvalitetssikrer) {
-    return 'Godkjenn og fullfør behandling';
+    return 'Send vedtak om avslag';
   } else {
     return 'Godkjenn';
   }

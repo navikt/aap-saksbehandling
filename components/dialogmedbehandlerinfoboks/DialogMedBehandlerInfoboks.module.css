@@ -1,0 +1,13 @@
+.tag {
+  justify-content: left;
+  height: var(--ax-space-40);
+  padding-top: 0.5rem;
+}
+
+.boks > * {
+  padding-left: var(--ax-space-12);
+  padding-right: var(--ax-space-12);
+  padding-bottom: 0.5rem;
+  min-width: 200px;
+  max-width: 400px;
+}
