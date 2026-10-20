@@ -17,12 +17,8 @@ const grunnlag: DigitaliseringsGrunnlag = {
   },
 };
 
-const Wrapper = ({ children, stoppAutomatikk }: { children: ReactNode; stoppAutomatikk?: boolean }) => (
-  <FeatureFlagProvider
-    flags={{ ...mockedFlags, StoppAutomatikkForLegeerklaringVedAvslag: stoppAutomatikk ?? false }}
-  >
-    {children}
-  </FeatureFlagProvider>
+const Wrapper = ({ children }: { children: ReactNode }) => (
+  <FeatureFlagProvider flags={{ ...mockedFlags }}>{children}</FeatureFlagProvider>
 );
 
 describe('DigitaliserAnnetDokument', () => {
@@ -173,7 +169,7 @@ describe('DigitaliserAnnetDokument', () => {
     const submit = vi.fn(() => {});
 
     render(
-      <Wrapper stoppAutomatikk>
+      <Wrapper>
         <DigitaliserAnnetRelevantDokument
           submit={submit}
           grunnlag={grunnlag}
