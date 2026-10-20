@@ -89,6 +89,7 @@ spec:
         - application: endringslogg
           namespace: k9saksbehandling
       external:
+        - host: kodeverk-api.nav.no # nødvendig i dev (se https://navikt.github.io/felleskodeverk)
         - host: cdn.nav.no
         - host: aap-unleash-api.nav.cloud.nais.io
         - host: arbeid-og-inntekt-q2.dev-fss-pub.nais.io
