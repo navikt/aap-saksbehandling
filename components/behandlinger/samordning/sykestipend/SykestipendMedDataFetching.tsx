@@ -17,7 +17,7 @@ export const SykestipendMedDataFetching = async ({ behandlingsreferanse, stegDat
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  const totalReadOnly = stegData.readOnly;
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
     Behovstype.AVKLAR_SAMORDNING_SYKESTIPEND_KODE,
