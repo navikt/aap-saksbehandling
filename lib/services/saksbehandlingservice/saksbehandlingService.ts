@@ -107,6 +107,7 @@ import {
   TilkjentYtelseGrunnlagMedDiff,
   TrekkKlageGrunnlag,
   TrukketSøknadGrunnlag,
+  UbesvarteForespørslerLegeerklæringResponse,
   UnderveisGrunnlagMedDiff,
   UtbetalingOgSimuleringGrunnlag,
   VedtakslengdeGrunnlag,
@@ -415,6 +416,11 @@ export const hentTilkjentYtelseMedDiff = async (behandlingsreferanse: string) =>
 export const hentTrukketSøknad = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/trukket-søknad`;
   return await apiFetch<TrukketSøknadGrunnlag>(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentUbesvarteForespørslerLegeerklæring = async (behandlingsReferanse: string) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/legeerklaering/${behandlingsReferanse}/ubesvarte-foresporsler`;
+  return await apiFetch<UbesvarteForespørslerLegeerklæringResponse>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAvbruttRevurdering = async (behandlingsreferanse: string) => {
