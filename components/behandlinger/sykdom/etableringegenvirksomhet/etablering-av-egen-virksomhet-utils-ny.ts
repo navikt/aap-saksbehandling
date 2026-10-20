@@ -149,12 +149,3 @@ export function maksVarighetsDato(fraDato: string): string {
 
   return dato ? formaterDatoForFrontend( subDays(dato, 1)) : '';
 }
-
-
-
-// grunnlag.ikkeRelevantePerioder.forEach((periode) => {
-//   const ikkeRelevantTil = stringToDate(periode.tom, 'yyyy-MM-dd');
-//   if (ikkeRelevantTil?.getFullYear() === 2999) {
-//     maksDato = formaterDatoForFrontend(periode.fom);
-//   }
-// });

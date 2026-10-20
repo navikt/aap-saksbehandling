@@ -16,8 +16,9 @@ import {
 } from 'lib/types/types';
 import { useEffect } from 'react';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { maksVarighetsDato } from './etablering-av-egen-virksomhet-utils-ny';
+import { subDays } from 'date-fns';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -134,7 +135,7 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly, s
           </BodyShort>
           <BodyShort size={'small'}>
             {sluttDato
-              ? formaterDatoForFrontend(sluttDato)
+              ? formaterDatoForFrontend(subDays(sluttDato, 1))
               : maksVarighetsDato(form.watch(`vurderinger.${index + 1}.fraDato`))}
           </BodyShort>
         </>

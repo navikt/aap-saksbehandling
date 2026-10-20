@@ -24,7 +24,7 @@ import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype, JaEllerNei } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import {
-  getDefaultValuesFromGrunnlag, maksVarighetsDato,
+  getDefaultValuesFromGrunnlag,
   mapEtableringEgenVirksomhetVurderingTilDto,
   nyVurderingErOppfylt,
   tidligereVurderingErOppfylt,
@@ -239,13 +239,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                   vurderingStatus={getErOppfyltEllerIkkeStatus(
                     nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                   )}
-                  nestePeriodeFraDato={(() => {
-                    const lol = sluttdatoForSisteVurdering(index);
-                    if (lol !== null) {
-                      return addDays(lol, 1);
-                    }
-                    return null;
-                  })()}
+                  nestePeriodeFraDato={sluttdatoForSisteVurdering(index)}
                   isLast={index === vedtatteVurderinger.length - 1}
                   vurdering={vurdering}
                   finnesFeil={finnesFeilForVurdering(index, errorList)}
