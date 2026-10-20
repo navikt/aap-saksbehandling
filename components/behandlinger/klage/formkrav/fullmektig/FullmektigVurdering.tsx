@@ -151,7 +151,10 @@ export const FullmektigVurdering = ({ behandlingVersjon, grunnlag, readOnly, ini
         label: 'Poststed',
         rules: {
           required: 'Du må skrive inn poststed',
-          pattern: { value: /^[A-ZÆØÅa-zæøå]+$/, message: 'Skriv inn et gyldig poststed (kun bokstaver)' },
+          pattern: {
+            value: /^[A-ZÆØÅa-zæøå -]+$/,
+            message: 'Skriv inn et gyldig poststed (kun bokstaver, mellomrom og bindestrek er tillatt)',
+          },
         },
         defaultValue: defaultValue.poststed,
       },
