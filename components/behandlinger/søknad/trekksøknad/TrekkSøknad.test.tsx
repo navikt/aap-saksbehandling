@@ -24,7 +24,7 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -37,7 +37,7 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -50,7 +50,7 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -77,7 +77,7 @@ describe('Trekk søknad', () => {
           grunnlag={{ vurderinger: [] }}
           readOnly={false}
           behandlingVersjon={1}
-          ubesvarteForespørsler={ubesvarteForespørsler}
+          ubesvarteForespørslerEllerUndefinedVedFeil={ubesvarteForespørsler}
           viseVentendeLEToggle={true}
         />
       );
@@ -114,7 +114,7 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -164,7 +164,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -179,7 +179,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -202,7 +202,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -220,7 +220,7 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -239,7 +239,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -264,7 +264,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );
@@ -291,7 +291,7 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
-          ubesvarteForespørsler={[]}
+          ubesvarteForespørslerEllerUndefinedVedFeil={[]}
           viseVentendeLEToggle={false}
         />
       );

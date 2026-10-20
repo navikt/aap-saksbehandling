@@ -34,7 +34,7 @@ export const TrekkSøknadMedDatafetching = async ({
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
   }
 
-  const ubesvarteForespørsler =
+  const ubesvarteForespørslerEllerUndefinedVedFeil =
     ubesvarteForespørslerResponse !== undefined && isError(ubesvarteForespørslerResponse)
       ? undefined
       : (ubesvarteForespørslerResponse?.data?.forespørsler ?? []);
@@ -52,7 +52,7 @@ export const TrekkSøknadMedDatafetching = async ({
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      ubesvarteForespørsler={ubesvarteForespørsler}
+      ubesvarteForespørslerEllerUndefinedVedFeil={ubesvarteForespørslerEllerUndefinedVedFeil}
       viseVentendeLEToggle={viseVentendeLEToggle}
     />
   );
