@@ -7,10 +7,9 @@ import { useDebounce } from 'hooks/DebounceHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
+import { Brev, BrevBehovstype, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
 import { isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { Behovstype } from 'lib/utils/form';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
@@ -39,7 +38,7 @@ export const SkriveBrev = ({
   brevtype,
 }: {
   referanse: string;
-  behovstype: Behovstype;
+  behovstype: BrevBehovstype;
   mottaker: BrevMottaker;
   fullmektigMottaker?: Mottaker;
   brukerMottaker?: Mottaker;

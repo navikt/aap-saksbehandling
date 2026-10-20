@@ -58,6 +58,13 @@ export interface SøknadFormFields {
   utenlandsOpphold: Utenlandsopphold[];
 }
 
+type SøknadTilSerialisering = Omit<Søknad, 'meldingType' | 'student'> & {
+  student?: {
+    erStudent: Exclude<JaNeiAvbruttIkkeOppgitt, JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT>;
+    kommeTilbake?: JaNeiVetIkke | null;
+  };
+};
+
 interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   registrertDato?: string | null;
@@ -66,7 +73,7 @@ interface Props extends Submittable {
 }
 
 function mapTilSøknadKontrakt(data: SøknadFormFields) {
-  const søknad: Søknad = {
+  const søknad: SøknadTilSerialisering = {
     student:
       data.erStudent === JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT
         ? undefined

@@ -4,8 +4,14 @@ import { BodyShort, Box, Button, HGrid, HStack, LocalAlert, VStack } from '@navi
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOppdaterBrevmal } from 'lib/clientApi';
-import { BrevdataDto, BrevGrunnlagBrev, IdentOgNavn, Mottaker, RefusjonskravGrunnlag } from 'lib/types/types';
-import { Behovstype } from 'lib/utils/form';
+import {
+  BrevBehovstype,
+  BrevdataDto,
+  BrevGrunnlagBrev,
+  IdentOgNavn,
+  Mottaker,
+  RefusjonskravGrunnlag,
+} from 'lib/types/types';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -31,7 +37,7 @@ import { VelgeMottakere } from 'components/brevbygger/VelgeMottakere';
 
 interface BrevbyggerProps {
   referanse: string;
-  behovstype: Behovstype;
+  behovstype: BrevBehovstype;
   bruker: IdentOgNavn;
   behandlingVersjon: number;
   readOnly: boolean;

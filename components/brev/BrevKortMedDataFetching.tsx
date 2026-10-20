@@ -1,7 +1,7 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
 import { hentBrevGrunnlag, hentFullmektigGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { AvklaringsbehovKode, StegType } from 'lib/types/types';
+import { AvklaringsbehovKode, BrevBehovstype, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
@@ -67,7 +67,7 @@ export const BrevKortMedDataFetching = async ({
   );
 };
 
-export function skrivBrevBehovstype(avklaringsbehovKode: AvklaringsbehovKode): Behovstype {
+export function skrivBrevBehovstype(avklaringsbehovKode: AvklaringsbehovKode): BrevBehovstype {
   switch (avklaringsbehovKode) {
     case Behovstype.SKRIV_VEDTAKSBREV_KODE:
       return Behovstype.SKRIV_VEDTAKSBREV_KODE;

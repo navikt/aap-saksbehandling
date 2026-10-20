@@ -10,6 +10,7 @@ import type { Markering } from 'lib/types/oppgaveTypes';
 import {
   FatteVedtakGrunnlag,
   KvalitetssikringGrunnlag,
+  LøsAvklaringsbehovPåBehandling,
   MellomlagretVurdering,
   ToTrinnsVurdering,
 } from 'lib/types/types';
@@ -163,10 +164,10 @@ export const TotrinnsvurderingForm = ({
           return;
         }
 
-        const behovParams = {
+        const behovParams: LøsAvklaringsbehovPåBehandling = {
           behandlingVersjon: behandlingsversjon,
           behov: {
-            behovstype: erKvalitetssikring ? Behovstype.KVALITETSSIKRING_KODE : Behovstype.FATTE_VEDTAK_KODE,
+            behovstype: erKvalitetssikring ? '5097' : '5099',
             vurderinger: assessedFields.map((vurdering) => {
               if (vurdering.godkjent === JaEllerNei.Ja) {
                 return {
@@ -212,7 +213,7 @@ export const TotrinnsvurderingForm = ({
       autoComplete={'off'}
     >
       {fields.map((field, index) => {
-        const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon as Behovstype);
+        const link = byggVilkårskortLenke(saksnummer, behandlingsreferanse, field.definisjon);
         const endretSidenForrigeGang =
           grunnlag.vurderinger.find((vurdering) => vurdering.definisjon === field.definisjon)?.endretSidenSist ?? null;
         if (field.definisjon === Behovstype.SYKDOMSVURDERING_BREV_KODE) {

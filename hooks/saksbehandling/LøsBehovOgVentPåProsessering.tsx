@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlytProsesseringStatus, LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
+import { FlytProsesseringStatus, GjenåpneAvklaringsbehovPåBehandling } from 'lib/types/types';
 import { clientHentFlyt, clientLøsBehov } from 'lib/clientApi';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
@@ -12,7 +12,7 @@ export type LøsBehovOgVentPåProsesseringStatus = FlytProsesseringStatus | unde
 export function useLøsBehovOgVentPåProsessering(): {
   status: LøsBehovOgVentPåProsesseringStatus;
   isLoading: boolean;
-  løsBehovOgVentPåProsessering: (behov: LøsAvklaringsbehovPåBehandling) => void;
+  løsBehovOgVentPåProsessering: (behov: GjenåpneAvklaringsbehovPåBehandling) => void;
   løsBehovError?: ApiException;
 } {
   const params = useParamsMedType();
@@ -21,7 +21,7 @@ export function useLøsBehovOgVentPåProsessering(): {
   const [error, setError] = useState<ApiException | undefined>();
   const { refetchFlytClient } = useFlyt();
 
-  const løsBehovOgVentPåProsessering = async (behov: LøsAvklaringsbehovPåBehandling) => {
+  const løsBehovOgVentPåProsessering = async (behov: GjenåpneAvklaringsbehovPåBehandling) => {
     setError(undefined);
     setIsLoading(true);
     setStatus(undefined);
