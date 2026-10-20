@@ -259,6 +259,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
                         const valueAsNumber = Number(value);
                         if (isNaN(valueAsNumber)) {
                           return 'Prosent må være et tall';
+                        } else if (!/^\d+$/.test(String(value))) {
+                          return 'Prosent kan bare være et heltall.';
                         } else if (!erProsent(valueAsNumber)) {
                           return 'Prosent kan bare være mellom 0 og 100.';
                         }

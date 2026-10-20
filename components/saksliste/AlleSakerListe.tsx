@@ -6,17 +6,17 @@ import useSWR from 'swr';
 import { Button, Pagination, Table, TextField } from '@navikt/ds-react';
 import { formaterDatoMedTidspunktForFrontend, sorterEtterNyesteDato } from 'lib/utils/date';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ArrowCirclepathIcon } from '@navikt/aksel-icons';
+import { ArrowCirclepathIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
-import { SaksInfo } from 'lib/types/types';
+import { SaksinfoDTO } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 
 function getSortedAndPaginatedData(
-  data: SaksInfo[],
+  data: SaksinfoDTO[],
   searhString: string | null,
   page: number,
   itemsPerPage: number
-): SaksInfo[] {
+): SaksinfoDTO[] {
   return data
     .filter((sak) => !searhString || sak.ident.includes(searhString))
     .sort((a, b) => sorterEtterNyesteDato(a.opprettetTidspunkt, b.opprettetTidspunkt))
@@ -66,6 +66,7 @@ export const AlleSakerListe = () => {
             <Table.HeaderCell>Saksnummer</Table.HeaderCell>
             <Table.HeaderCell>Ident</Table.HeaderCell>
             <Table.HeaderCell>Opprettelsestidspunkt</Table.HeaderCell>
+            <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -79,6 +80,21 @@ export const AlleSakerListe = () => {
                 </Table.DataCell>
                 <Table.DataCell>{sak.ident}</Table.DataCell>
                 <Table.DataCell>{formaterDatoMedTidspunktForFrontend(sak.opprettetTidspunkt)}</Table.DataCell>
+                <Table.DataCell align="right">
+                  {sak.sisteBehandlingReferanse && (
+                    <Button
+                      as={Link}
+                      size="small"
+                      variant="secondary"
+                      title={`Åpner siste behandling for sak ${sak.saksnummer}`}
+                      href={`/saksbehandling/sak/${sak.saksnummer}/${sak.sisteBehandlingReferanse}`}
+                      target="_blank"
+                      icon={<ExternalLinkIcon aria-hidden />}
+                    >
+                      Åpne behandling
+                    </Button>
+                  )}
+                </Table.DataCell>
               </Table.Row>
             ))}
         </Table.Body>
