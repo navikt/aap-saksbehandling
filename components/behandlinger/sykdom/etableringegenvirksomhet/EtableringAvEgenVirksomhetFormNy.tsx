@@ -10,10 +10,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { JaEllerNei } from 'lib/utils/form';
-import {
-  EtableringEierBrukerVirksomheten,
-  lagEnumObjektFraUnionType,
-} from 'lib/types/types';
+import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { useEffect } from 'react';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';

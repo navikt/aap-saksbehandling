@@ -44,7 +44,7 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
         behandlingVersjon={stegData.behandlingVersjon}
         initialMellomlagretVurdering={initalMellomlagretVurdering}
       />
-    )
+    );
   }
 
   return (

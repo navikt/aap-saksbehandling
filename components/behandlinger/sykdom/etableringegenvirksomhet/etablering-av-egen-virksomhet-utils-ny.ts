@@ -10,13 +10,12 @@ import { hentPerioderSomTrengerVurdering } from 'lib/utils/periodisering';
 
 import {
   EtableringAvEgenVirksomhetForm,
-  EtableringAvEgenVirksomhetVurderingForm, EtableringFase,
+  EtableringAvEgenVirksomhetVurderingForm,
+  EtableringFase,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { DateInputWrapper } from '../../../form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from '../../../../lib/validation/dateValidation';
-import {
-  HvordanLeggeTilSluttdatoReadMore
-} from '../../../hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
+import { HvordanLeggeTilSluttdatoReadMore } from '../../../hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { formaterDatoForFrontend, stringToDate } from '../../../../lib/utils/date';
 
 export function getDefaultValuesFromGrunnlag(
@@ -147,5 +146,5 @@ export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetV
 export function maksVarighetsDato(fraDato: string): string {
   const dato = stringToDate(fraDato, 'dd.MM.yyyy');
 
-  return dato ? formaterDatoForFrontend( subDays(dato, 1)) : '';
+  return dato ? formaterDatoForFrontend(subDays(dato, 1)) : '';
 }
