@@ -812,6 +812,97 @@ describe('handleSubmit - gap mellom vedtatt og ny vurdering', () => {
   });
 });
 
+describe('vedtatt reduksjon etter oppholdets nye sluttdato', () => {
+  const grunnlagMedReduksjonEtterSlutt: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [],
+    opphold: [
+      {
+        oppholdId: 'solglott',
+        institusjonstype: 'Helseinstitusjon',
+        oppholdstype: 'Heldøgnpasient',
+        status: 'AVSLUTTET',
+        oppholdFra: '2025-11-01',
+        avsluttetDato: '2026-02-01',
+        tidligsteReduksjonsdato: '2026-03-01',
+        kildeinstitusjon: 'Solgløtt',
+        delperioder: [],
+      },
+    ],
+    vedtatteVurderinger: [
+      {
+        oppholdId: 'solglott',
+        status: 'UAVKLART',
+        periode: { fom: '2026-03-01', tom: '2999-01-01' },
+        delperioder: [],
+        vurderinger: [
+          {
+            oppholdId: 'solglott',
+            begrunnelse: 'Vedtatt reduksjon',
+            periode: { fom: '2026-03-01', tom: '2999-01-01' },
+            faarFriKostOgLosji: true,
+            forsoergerEktefelle: false,
+            harFasteUtgifter: false,
+            vurderingerMeta: {},
+            erHistoriskUtenReduksjonsberegning: false,
+          },
+        ],
+      },
+    ],
+  };
+
+  const renderMedToggle = (grunnlag: HelseinstitusjonGrunnlag, aktiv: boolean) =>
+    render(
+      <FeatureFlagProvider flags={{ ...mockedFlags, Helseinstitusjon1Manedsregel: aktiv }}>
+        <Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />
+      </FeatureFlagProvider>
+    );
+
+  it('toggle på: viser vedtatt reduksjon som starter etter oppholdets slutt som overskrevet', () => {
+    renderMedToggle(grunnlagMedReduksjonEtterSlutt, true);
+
+    expect(screen.getByRole('button', { name: /1\. mars 2026.*overskrevet/i })).toBeVisible();
+  });
+
+  it('toggle på: viser kun fra-dato og ikke den åpne sluttdatoen', () => {
+    renderMedToggle(grunnlagMedReduksjonEtterSlutt, true);
+
+    const kort = screen.getByRole('button', { name: /1\. mars 2026/i });
+    expect(kort).not.toHaveTextContent(/2999/);
+    expect(kort).not.toHaveTextContent('–');
+  });
+
+  it('toggle av: skjuler vedtatt reduksjon som starter etter oppholdets slutt', () => {
+    renderMedToggle(grunnlagMedReduksjonEtterSlutt, false);
+
+    expect(screen.queryByRole('button', { name: /1\. mars 2026/i })).not.toBeInTheDocument();
+  });
+
+  it('toggle på: markerer ikke vedtatt reduksjon innenfor oppholdet som overskrevet', () => {
+    const grunnlagInnenfor: HelseinstitusjonGrunnlag = {
+      ...grunnlagMedReduksjonEtterSlutt,
+      vedtatteVurderinger: [
+        {
+          ...grunnlagMedReduksjonEtterSlutt.vedtatteVurderinger[0],
+          periode: { fom: '2026-01-01', tom: '2026-02-01' },
+          vurderinger: [
+            {
+              ...grunnlagMedReduksjonEtterSlutt.vedtatteVurderinger[0].vurderinger![0],
+              periode: { fom: '2026-01-01', tom: '2026-02-01' },
+            },
+          ],
+        },
+      ],
+    };
+
+    renderMedToggle(grunnlagInnenfor, true);
+
+    const kort = screen.getByRole('button', { name: /1\. januar 2026/i });
+    expect(kort).toBeVisible();
+    expect(kort).not.toHaveTextContent(/overskrevet/i);
+  });
+});
+
 async function svarPåSpørsmålOmFriKostOgLosji(value: boolean, index: number) {
   const gruppe = screen.getAllByRole('radiogroup', {
     name: 'Får brukeren fri kost og losji?',
