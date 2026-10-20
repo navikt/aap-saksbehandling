@@ -1,6 +1,6 @@
 import { hentMellomlagring, hentSykestipendGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { Behovstype } from 'lib/utils/form';
-import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
+import { StegData } from 'lib/utils/steg';
 import { SykestipendVurdering } from 'components/behandlinger/samordning/sykestipend/SykestipendVurdering';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -15,10 +15,6 @@ export const SykestipendMedDataFetching = async ({ behandlingsreferanse, stegDat
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
-  }
-
-  if (!skalViseStegIkkePeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data.gjeldendeVurdering != null)) {
-    return null;
   }
 
   const totalReadOnly = stegData.readOnly;
