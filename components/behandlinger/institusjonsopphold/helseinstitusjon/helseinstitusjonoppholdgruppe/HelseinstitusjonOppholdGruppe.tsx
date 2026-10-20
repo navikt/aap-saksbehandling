@@ -55,7 +55,6 @@ interface Props {
   opphold: HelseinstitusjonGrunnlag['opphold'][0];
   vedtatteVurderinger: HelseinstitusjonGrunnlag['vedtatteVurderinger'];
   tidligereVurderinger?: HelseInstiusjonVurdering[] | null;
-  forrigeOppholdAvsluttetDato?: string | null;
   forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
   accordionsSignal: AccordionsSignal;
   erAktivUtenAvbryt: boolean;
@@ -66,7 +65,6 @@ export const HelseinstitusjonOppholdGruppe = ({
   form,
   oppholdIndex,
   tidligereVurderinger,
-  forrigeOppholdAvsluttetDato,
   forrigeOppholdVedtatteVurderinger,
   vedtatteVurderinger,
   accordionsSignal,
