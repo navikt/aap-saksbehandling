@@ -74,7 +74,9 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('radio', { name: 'Nei' }));
     expect(screen.queryByText(/Tema endres på journalposten/)).not.toBeInTheDocument();
     const select = screen.getByRole('combobox', { name: 'Velg tema' });
-    expect(select.querySelectorAll('option')).toHaveLength(27);
+    expect(select.querySelectorAll('option')).toHaveLength(28);
+    expect(screen.getByRole('option', { name: 'Innsyn' })).toHaveValue('INN');
+    expect(screen.getByRole('option', { name: 'Send til Gosys' })).toHaveValue('UKJENT');
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     expect(await screen.findByText('Du må velge tema')).toBeVisible();
     expect(løsBehov).not.toHaveBeenCalled();
@@ -96,6 +98,7 @@ describe('AvklarTema', () => {
     visTema(true, { ...grunnlag, vurdering: { skalTilAap: false, tema: 'UKJENT' } });
     const select = screen.getByRole('combobox', { name: 'Velg tema' });
     expect(select).toHaveValue('UKJENT');
+    expect(screen.getByRole('option', { name: 'Send til Gosys' })).toBeInTheDocument();
     expect(screen.getByText(/Dokumentet sendes til Gosys for avklaring/)).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
