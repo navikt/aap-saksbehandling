@@ -17,6 +17,7 @@ import { Alert } from 'components/alert/Alert';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { clientConfig } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingsVersjon: number;
@@ -27,16 +28,47 @@ interface Props {
 
 interface FormFields {
   erTemaAAP: string;
+  tema: string;
 }
+
+const temaer: Record<string, string> = {
+  EYB: 'Barnepensjon',
+  BAR: 'Barnetrygd',
+  BID: 'Bidrag',
+  DAG: 'Dagpenger',
+  ENF: 'Enslig mor eller far',
+  ERS: 'Erstatning',
+  FEI: 'Feilutbetaling',
+  FOR: 'Foreldre- og svangerskapspenger',
+  FUL: 'Fullmakt',
+  GEN: 'Generell',
+  GRU: 'Grunn- og hjelpestønad',
+  KOM: 'Kommunale tjenester',
+  OMS: 'Omsorgspenger, pleiepenger og opplæringspenger',
+  EYO: 'Omstillingsstønad',
+  OPP: 'Oppfølging',
+  PEN: 'Pensjon',
+  SAK: 'Sakskostnader',
+  SER: 'Serviceklage',
+  SYK: 'Sykepenger',
+  TSO: 'Tilleggsstønad',
+  TIL: 'Tiltak',
+  IND: 'Tiltakspenger',
+  TRK: 'Trekkhåndtering',
+  UFO: 'Uføretrygd',
+  YRK: 'Yrkesskade',
+  UKJENT: 'Ukjent',
+};
 
 const NAV_KLAGEINSTANS_ENHET = '4260';
 const KLAGE_ETTERSENDELSE_BREVKODE = 'NAVe 90-00.08 K';
 
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+  const velgTema = useFeatureFlag('PostmottakVelgTema');
   const [config, setConfig] = useState<ClientConfig>();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg<AvklarTemaLøsning>('AVKLAR_TEMA');
-  const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
+  const [visModal, setVisModal] = useState<boolean>(!velgTema && grunnlag.vurdering?.skalTilAap === false);
 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
 
@@ -49,6 +81,19 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         defaultValue: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap),
         options: JaEllerNeiOptions,
       },
+      tema: {
+        type: 'select',
+        label: 'Velg tema',
+        defaultValue: grunnlag.vurdering?.tema ?? '',
+        rules: {
+          validate: (value, values) =>
+            !velgTema || values.erTemaAAP !== JaEllerNei.Nei || !!value || 'Du må velge tema',
+        },
+        options: [
+          { value: '', label: 'Velg tema' },
+          ...Object.entries(temaer).map(([value, label]) => ({ value, label })),
+        ],
+      },
     },
     { readOnly: formReadOnly }
   );
@@ -59,12 +104,13 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      if (data.erTemaAAP === JaEllerNei.Ja) {
+      if (data.erTemaAAP === JaEllerNei.Ja || velgTema) {
         løsBehovOgGåTilNesteSteg({
           behandlingVersjon: behandlingsVersjon,
           behov: {
             behovstype: Behovstype.AVKLAR_TEMA,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
+            ...(velgTema && data.erTemaAAP === JaEllerNei.Nei ? { tema: data.tema } : {}),
           },
           referanse: behandlingsreferanse,
         });
@@ -98,7 +144,12 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       knappTekst={'Neste'}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset({ erTemaAAP: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap) })}
+      formReset={() =>
+        form.reset({
+          erTemaAAP: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap),
+          tema: grunnlag.vurdering?.tema ?? '',
+        })
+      }
     >
       <Modal
         open={visModal}
@@ -141,11 +192,25 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           <Alert variant={'info'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}
             {NAV_KLAGEINSTANS_ENHET}. Svar <i>Nei</i> dersom du ønsker å opprette journalføringsoppgave i Gosys for Nav
-            Klageinstans.
+            Klageinstans.{velgTema && ' Velg Ukjent for å sende dokumentet til Gosys.'}
           </Alert>
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
+        {velgTema && form.watch('erTemaAAP') === JaEllerNei.Nei && (
+          <>
+            <FormField form={form} formField={formFields.tema} />
+            {!!form.watch('tema') && (
+              <BodyShort>
+                {form.watch('tema') === 'UKJENT'
+                  ? 'Dokumentet sendes til Gosys for avklaring av tema. Behandlingen i Postmottak avsluttes.'
+                  : form.watch('tema') === 'OPP'
+                    ? 'Dokumentet journalføres på generell sak med tema Oppfølging.'
+                    : 'Tema endres på journalposten uten å ferdigstille den. Behandlingen i Postmottak avsluttes.'}
+              </BodyShort>
+            )}
+          </>
+        )}
       </VStack>
     </PostmottakVilkårskort>
   );

@@ -37,12 +37,12 @@ export function finnOverstyrMuligRettFra(vurdering: KravVurdering): OverstyrMuli
 }
 
 export function finnSøknadsdatoFraLøsning(løsning: KravVurderingLøsning): Søknadsdato | null {
-  if (løsning.kravType === 'RELEVANT_KRAV') return (løsning as RelevantKravLøsning).søknadsdato;
+  if (løsning.kravType === 'RELEVANT_KRAV') return løsning.søknadsdato;
   return null;
 }
 
 export function finnOverstyrMuligRettFraFraLøsning(løsning: KravVurderingLøsning): OverstyrMuligRettFra | null {
-  if (løsning.kravType === 'RELEVANT_KRAV') return (løsning as RelevantKravLøsning).overstyrMuligRettFra ?? null;
+  if (løsning.kravType === 'RELEVANT_KRAV') return løsning.overstyrMuligRettFra ?? null;
   return null;
 }
 

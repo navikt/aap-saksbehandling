@@ -11,6 +11,7 @@ import {
   FastlegeResponse,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  GjenåpneAvklaringsbehovPåBehandling,
   HarRegistrertTimerResponse,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
@@ -116,7 +117,7 @@ export function clientLøsPeriodisertBehov(avklaringsBehov: LøsPeriodisertBehov
   return clientFetch(`${BASE_URL}/api/behandling/los-periodisert-behov/`, 'POST', avklaringsBehov);
 }
 
-export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
+export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling | GjenåpneAvklaringsbehovPåBehandling) {
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 

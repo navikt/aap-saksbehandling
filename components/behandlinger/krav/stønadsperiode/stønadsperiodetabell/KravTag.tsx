@@ -7,7 +7,6 @@ type KravType = StønadsperiodeVurdering['relevantKravType']['type'];
 interface Props {
   type: KravType;
 }
-
 export const KravTag = ({ type }: Props) => {
   const [farge, tekst] = ((): [AkselColorRole, string] => {
     switch (type) {
@@ -23,7 +22,6 @@ export const KravTag = ({ type }: Props) => {
         return ['success', 'Migrert stønadsperiode'];
     }
   })();
-
   return (
     <Tag size="xsmall" variant={'strong'} data-color={farge}>
       <BodyShort size={'small'}>{tekst}</BodyShort>

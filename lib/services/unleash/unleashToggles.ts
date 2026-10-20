@@ -16,6 +16,7 @@ export const FLAGS = [
   'StoppAutomatikkForLegeerklaringVedAvslag',
   'RegistrerMeldedato',
   'SammenhengendeInstitusjonsopphold',
+  'PostmottakVelgTema',
   'StonadsperiodeVurdering',
 ] as const;
 
@@ -40,5 +41,6 @@ export const mockedFlags: Flags = {
   StoppAutomatikkForLegeerklaringVedAvslag: true,
   RegistrerMeldedato: true,
   SammenhengendeInstitusjonsopphold: true,
+  PostmottakVelgTema: false,
   StonadsperiodeVurdering: true,
 };

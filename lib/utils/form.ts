@@ -1,4 +1,4 @@
-import { ArbeidsevneNedsattValg } from 'lib/types/types';
+import type { ArbeidsevneNedsattValg, AvklaringsbehovKode } from 'lib/types/types';
 
 import { ValuePair } from 'components/form/FormField';
 
@@ -90,7 +90,7 @@ export enum Behovstype {
 
 type BehovsKode = `${Behovstype}`;
 
-export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
+export function mapBehovskodeTilBehovstype(kode: BehovsKode | AvklaringsbehovKode): string {
   switch (kode) {
     case '4101':
       return '§ 11-7 Medlemmets aktivitetsplikt';

@@ -38,14 +38,14 @@ export type OvergangArbeidGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/
 export type FritakMeldepliktGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/fritak-meldeplikt'>;
 
 export type PeriodisertFritaksvurderingDto =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto'];
+  components['schemas']['no.nav.aap.meldeplikt.PeriodisertFritaksvurderingDto'];
 
 export type OverstyringMeldepliktGrunnlag =
   ResponseOfGet<'/api/behandling/{referanse}/grunnlag/meldeplikt-overstyring'>;
 export type MeldepliktOverstyringLøsningDto =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringL\u00F8sningDto'];
+  components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringLøsningDto'];
 export type OverstyringMeldepliktGrunnlagVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringVurderingResponse'];
+  components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringVurderingResponse'];
 export type MeldepliktOverstyringStatus = 'RIMELIG_GRUNN' | 'IKKE_MELDT_SEG' | 'HAR_MELDT_SEG';
 export type ArbeidsevneGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/arbeidsevne'>;
 
@@ -285,8 +285,29 @@ export type FlytVisning = components['schemas']['no.nav.aap.behandlingsflyt.flyt
 export type TypeBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.visning.Visning']['typeBehandling'];
 
-export type LøsAvklaringsbehovPåBehandling =
+type GeneratedLøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
+export type BrevBehovstype =
+  | '5050'
+  | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
+
+type BrevLøsning = {
+  behovstype: BrevBehovstype;
+  brevbestillingReferanse: string;
+  begrunnelse?: string | null;
+  handling: 'AVBRYT' | 'FERDIGSTILL';
+  mottakere?: Mottaker[];
+};
+
+export type LøsAvklaringsbehovPåBehandling = Omit<GeneratedLøsAvklaringsbehovPåBehandling, 'behov'> & {
+  behov: GeneratedLøsAvklaringsbehovPåBehandling['behov'] | BrevLøsning;
+};
+
+export type GjenåpneAvklaringsbehovPåBehandling = Omit<GeneratedLøsAvklaringsbehovPåBehandling, 'behov'> & {
+  behov: {
+    behovstype: components['schemas']['no.nav.aap.behandlingsflyt.flyt.Venteinformasjon']['definisjon']['kode'];
+  };
+};
 export type LøsPeriodisertBehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.L\u00F8sPeriodisertAvklaringsbehovP\u00E5Behandling'];
 
