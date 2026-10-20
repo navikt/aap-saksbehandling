@@ -274,9 +274,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
             .flatMap((v) => v.vurderinger || []);
 
           const forrigeOppholdField = oppholdIndex > 0 ? oppholdFields[oppholdIndex - 1] : undefined;
-          const forrigeOppholdFaktisk = forrigeOppholdField
-            ? grunnlag.opphold.find((o) => o.oppholdId === forrigeOppholdField.oppholdId)
-            : undefined;
 
           const forrigeOppholdVedtatteVurderinger = forrigeOppholdField
             ? grunnlag.vedtatteVurderinger
@@ -290,7 +287,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
               opphold={faktiskOpphold}
               vedtatteVurderinger={grunnlag.vedtatteVurderinger}
               tidligereVurderinger={tidligereVurderinger}
-              forrigeOppholdAvsluttetDato={forrigeOppholdFaktisk?.avsluttetDato}
               forrigeOppholdVedtatteVurderinger={forrigeOppholdVedtatteVurderinger}
               accordionsSignal={accordionsSignal}
               oppholdIndex={oppholdIndex}
