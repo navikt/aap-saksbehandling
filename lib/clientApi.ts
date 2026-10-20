@@ -34,7 +34,7 @@ import {
   OpprettTestcase,
   RegistrerMeldedatoRequest,
   SakPersoninfo,
-  SaksInfo,
+  SaksinfoDTO,
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
@@ -110,7 +110,7 @@ export function clientOpprettDummySak(sak: OpprettDummySakDto) {
 }
 
 export function clientHentAlleSaker() {
-  return clientFetch<SaksInfo[]>(`${BASE_URL}/api/sak/siste/20`, 'GET');
+  return clientFetch<SaksinfoDTO[]>(`${BASE_URL}/api/sak/siste/20`, 'GET');
 }
 
 export function clientLøsPeriodisertBehov(avklaringsBehov: LøsPeriodisertBehovPåBehandling) {

@@ -15638,6 +15638,8 @@ export interface components {
         | 'TRUKKET'
         | null;
       saksnummer: string;
+      /** Format: uuid */
+      sisteBehandlingReferanse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SøkDto': {
       søketekst: string;
