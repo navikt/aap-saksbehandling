@@ -43,6 +43,7 @@ const temaer: Record<string, string> = {
   FUL: 'Fullmakt',
   GEN: 'Generell',
   GRU: 'Grunn- og hjelpestønad',
+  INN: 'Innsyn',
   KOM: 'Kommunale tjenester',
   OMS: 'Omsorgspenger, pleiepenger og opplæringspenger',
   EYO: 'Omstillingsstønad',
@@ -57,7 +58,7 @@ const temaer: Record<string, string> = {
   TRK: 'Trekkhåndtering',
   UFO: 'Uføretrygd',
   YRK: 'Yrkesskade',
-  UKJENT: 'Ukjent',
+  UKJENT: 'Send til Gosys',
 };
 
 const NAV_KLAGEINSTANS_ENHET = '4260';
