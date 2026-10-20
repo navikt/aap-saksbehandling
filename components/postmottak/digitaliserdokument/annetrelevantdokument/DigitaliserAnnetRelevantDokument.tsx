@@ -109,6 +109,9 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         <VStack gap={'space-24'}>
           <FormField form={form} formField={formFields.underkategori} />
           <FormField form={form} formField={formFields.årsaker} />
+          {readOnly && annetRelevantDokumentGrunnlag.begrunnelse && (
+            <FormField form={form} formField={formFields.begrunnelse} readOnly />
+          )}
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>
               Neste
