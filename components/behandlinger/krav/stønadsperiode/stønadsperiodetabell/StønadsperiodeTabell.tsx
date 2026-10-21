@@ -1,22 +1,28 @@
 'use client';
 
-import { BodyShort, Heading, HStack, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { StønadsperiodeGrunnlag, StønadsperiodeVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { KravTag } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/KravTag';
 import { getJaEllerNei } from 'lib/utils/form';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: StønadsperiodeGrunnlag;
+  readOnly: boolean;
+  valgteKrav: string[];
+  onToggleValgtKrav: (referanse: string) => void;
 }
 
-export const StønadsperiodeTabell = ({ grunnlag }: Props) => {
+export const StønadsperiodeTabell = ({ grunnlag, valgteKrav, onToggleValgtKrav, readOnly }: Props) => {
   const rader = [
     ...grunnlag.vedtatteVurderinger.map((vedtatt) => ({ status: 'Vedtatt', ...vedtatt })),
     ...grunnlag.nyeVurderinger.map((ny) => ({ status: 'Ny', ...ny })),
   ];
+
+  const skalViseEndreValg = useFeatureFlag('StonadsperiodeVurdering');
 
   return (
     <VStack gap={'space-16'}>
@@ -29,6 +35,7 @@ export const StønadsperiodeTabell = ({ grunnlag }: Props) => {
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Vurderes fra</Table.HeaderCell>
             <Table.HeaderCell>Vurdert av</Table.HeaderCell>
+            {skalViseEndreValg && <Table.HeaderCell>Valg</Table.HeaderCell>}
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -42,6 +49,19 @@ export const StønadsperiodeTabell = ({ grunnlag }: Props) => {
               <Table.DataCell
                 textSize={'small'}
               >{`${rad.vurdertAv} (${formaterDatoForFrontend(rad.opprettet)})`}</Table.DataCell>
+              {skalViseEndreValg && (
+                <Table.DataCell>
+                  <Button
+                    type="button"
+                    size="small"
+                    variant={valgteKrav.includes(rad.referanse) ? 'primary' : 'secondary'}
+                    onClick={() => onToggleValgtKrav(rad.referanse)}
+                    disabled={readOnly}
+                  >
+                    {valgteKrav.includes(rad.referanse) ? 'Avbryt' : 'Endre'}
+                  </Button>
+                </Table.DataCell>
+              )}
             </Table.ExpandableRow>
           ))}
         </Table.Body>

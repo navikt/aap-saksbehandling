@@ -1,19 +1,140 @@
 'use client';
 
-import { StønadsperiodeGrunnlag } from 'lib/types/types';
-
+import { MellomlagretVurdering, StønadsperiodeGrunnlag } from 'lib/types/types';
 import { StønadsperiodeTabell } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/StønadsperiodeTabell';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { StønadsperiodeBoks } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodeboks/StønadsperiodeBoks';
+import { VStack } from '@navikt/ds-react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
+import { Behovstype } from 'lib/utils/form';
+import {
+  byggInitielleStønadsperiodeVurderinger,
+  byggVurderingerFraSKjema,
+  finnStønadsperiodeVurderingFraReferanse,
+  hentOriginaleStønadsperiodeFormFelter,
+  StønadsperiodeFormFields,
+} from 'components/behandlinger/krav/utils/stønadsperiodeutils';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
+import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { SubmitEventHandler } from 'react';
+import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   behandlingVersjon: number;
   grunnlag: StønadsperiodeGrunnlag;
   readOnly: boolean;
+  initialMellomlagretVurdering?: MellomlagretVurdering;
 }
-export const Stønadsperiode = ({ grunnlag }: Props) => {
+
+export const Stønadsperiode = ({ grunnlag, initialMellomlagretVurdering, behandlingVersjon, readOnly }: Props) => {
+  const { behandlingsreferanse } = useParamsMedType();
+  const stonadsperiodeVurderingFeatureFlagIsEnabled = useFeatureFlag('StonadsperiodeVurdering');
+
+  const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
+    stonadsperiodeVurderingFeatureFlagIsEnabled ? readOnly : true,
+    'AVKLAR_STØNADSPERIODE',
+    initialMellomlagretVurdering
+  );
+
+  const defaultValues: StønadsperiodeFormFields = initialMellomlagretVurdering
+    ? JSON.parse(initialMellomlagretVurdering.data)
+    : {
+        valgteKrav: [],
+        vurderinger: byggInitielleStønadsperiodeVurderinger(grunnlag),
+      };
+
+  const form = useForm<StønadsperiodeFormFields>({ defaultValues });
+
+  const { mellomlagretVurdering, slettMellomlagring } = useMellomlagring(
+    Behovstype.AVKLAR_STØNADSPERIODE_KODE,
+    initialMellomlagretVurdering,
+    form
+  );
+
+  const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovError, løsAvklaringsbehovIsLoading } =
+    useLøsAvklaringsbehov('AVKLAR_STØNADSPERIODE');
+
+  const valgteKrav = useWatch({ control: form.control, name: 'valgteKrav' }) ?? [];
+
+  const lukkKrav = (referanse: string) => {
+    const originaleFelter = hentOriginaleStønadsperiodeFormFelter(grunnlag, referanse);
+    if (originaleFelter) {
+      form.setValue(`vurderinger.${referanse}`, originaleFelter);
+    }
+    form.setValue(
+      'valgteKrav',
+      (form.getValues('valgteKrav') ?? []).filter((valgt) => valgt !== referanse)
+    );
+  };
+
+  const toggleValgtKrav = (referanse: string) => {
+    if (valgteKrav.includes(referanse)) {
+      lukkKrav(referanse);
+    } else {
+      form.setValue('valgteKrav', [...(form.getValues('valgteKrav') ?? []), referanse]);
+    }
+  };
+
+  const handleSubmit: SubmitEventHandler = (event) => {
+    form.handleSubmit((data) => {
+      løsAvklaringsbehov(
+        {
+          behandlingVersjon,
+          referanse: behandlingsreferanse,
+          behov: {
+            behovstype: Behovstype.AVKLAR_STØNADSPERIODE_KODE,
+            stønadsperiodeVurderinger: byggVurderingerFraSKjema(grunnlag, data.vurderinger),
+          },
+        },
+        () => {
+          visningActions.onBekreftClick();
+          slettMellomlagring();
+        }
+      );
+    })(event);
+  };
+
   return (
-    <VilkårsKort heading={'Forskrift om AAP § 12. Ny stønadsperiode'} steg={'AVKLAR_STØNADSPERIODE'}>
-      <StønadsperiodeTabell grunnlag={grunnlag} />
-    </VilkårsKort>
+    <VilkårskortMedFormOgMellomlagring
+      heading={'Forskrift om AAP § 12. Ny stønadsperiode'}
+      steg={'AVKLAR_STØNADSPERIODE'}
+      onSubmit={handleSubmit}
+      isLoading={løsAvklaringsbehovIsLoading}
+      status={løsAvklaringsbehovStatus}
+      løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+      visningModus={visningModus}
+      visningActions={visningActions}
+      onDeleteMellomlagringClick={() =>
+        slettMellomlagring(() => {
+          form.reset();
+        })
+      }
+      mellomlagretVurdering={mellomlagretVurdering}
+      formReset={() => form.reset()}
+      vilkårTilhørerNavKontor={false}
+    >
+      <VStack gap="space-16">
+        <FormProvider {...form}>
+          <StønadsperiodeTabell
+            grunnlag={grunnlag}
+            readOnly={formReadOnly}
+            valgteKrav={valgteKrav}
+            onToggleValgtKrav={toggleValgtKrav}
+          />
+
+          {stonadsperiodeVurderingFeatureFlagIsEnabled &&
+            valgteKrav.map((referanse) => {
+              const vurdering = finnStønadsperiodeVurderingFraReferanse(grunnlag, referanse);
+              return (
+                vurdering && (
+                  <StønadsperiodeBoks key={referanse} vurdering={vurdering} onLukk={() => lukkKrav(referanse)} />
+                )
+              );
+            })}
+        </FormProvider>
+      </VStack>
+    </VilkårskortMedFormOgMellomlagring>
   );
 };

@@ -4,6 +4,8 @@ import { components, paths } from './schema';
 export type StønadsperiodeGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/stonadsperiode'>;
 export type StønadsperiodeVurdering = StønadsperiodeGrunnlag['nyeVurderinger'][number];
 
+export type StønadsperiodeVurderingLøsning =
+  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.stønadsperiode.StønadsperiodeLøsningDto'];
 export type StudentGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/student'>;
 export type SykestipendGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/sykestipend'>;
 export type SykdomsGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/sykdom/sykdom'>;
