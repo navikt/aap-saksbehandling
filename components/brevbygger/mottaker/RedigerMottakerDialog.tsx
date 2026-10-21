@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Checkbox, HGrid, Modal, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, HGrid, HStack, Modal, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { Mottaker } from 'lib/types/types';
 import { useEffect, useState } from 'react';
@@ -46,7 +46,10 @@ const tilFormFields = (mottaker?: Mottaker): RedigerMottakerFields => ({
 });
 
 export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: Props) => {
-  const [manglerIdent, setManglerIdent] = useState(false);
+  const [manglerIdent, setManglerIdent] = useState(!mottaker?.ident && !!mottaker?.navnOgAdresse?.adresse);
+  const [manuellAdresse, setManuellAdresse] = useState(
+    !!mottaker?.navnOgAdresse?.adresse || (mottaker?.identType !== 'FNR' && mottaker?.identType !== 'ORGNR')
+  );
   const { data: landkoderResponse } = useSWR('/api/kodeverk/landkoderiso2', clientHentLandkoderIso2, {
     revalidateOnFocus: false,
   });
@@ -99,7 +102,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
   };
 
   return (
-    <Modal open={true} onClose={() => setIsOpen(false)} header={{ heading: 'Rediger mottaker' }}>
+    <Modal open={true} onClose={() => setIsOpen(false)} header={{ heading: 'Rediger mottaker' }} width="small">
       <form onSubmit={handleSubmit(lagre)}>
         <Modal.Body>
           <VStack gap="space-16">
@@ -132,7 +135,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
 
               <Checkbox
                 id="manglerIdent"
-                defaultChecked={false}
+                defaultChecked={manglerIdent}
                 onChange={(e) => {
                   setValue('ident', '');
                   setValue('identType', '');
@@ -142,92 +145,126 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
               >
                 Mottaker mangler identifikator
               </Checkbox>
+
+              <Checkbox
+                id="manuellAdresse"
+                defaultChecked={manuellAdresse || manglerIdent}
+                onChange={(e) => {
+                  setManuellAdresse(e.target.checked);
+                  if (!e.target.checked) {
+                    setValue('navn', '');
+                    setValue('adresselinje1', '');
+                    setValue('adresselinje2', '');
+                    setValue('adresselinje3', '');
+                    setValue('postnummer', '');
+                    setValue('poststed', '');
+                    setValue('landkode', '');
+                  }
+                }}
+                size="small"
+                readOnly={manglerIdent}
+              >
+                Skriv adresse manuelt
+              </Checkbox>
             </div>
 
-            <TextFieldWrapper
-              name="navn"
-              label="Navn"
-              type="text"
-              control={control}
-              rules={{ required: { value: manglerIdent, message: 'Må oppgi navn når mottaker mangler identifikator' } }}
-            />
-
-            <ComboboxWrapper
-              control={control}
-              name="landkode"
-              label="Land"
-              size="small"
-              rules={{ required: { value: manglerIdent, message: 'Må oppgi land når mottaker mangler identifikator' } }}
-              options={landkoder}
-            />
-            {isError(landkoderResponse) && (
-              <Alert variant="warning" size="small">
-                Feil oppsto ved henting av land og landkoder. Prøv å laste siden på nytt.
-              </Alert>
-            )}
-
-            <VStack gap="space-8">
-              <TextFieldWrapper
-                name="adresselinje1"
-                label="Adresselinjer"
-                placeholder="Adresselinje 1"
-                type="text"
-                control={control}
-                rules={{
-                  required: { value: manglerIdent, message: 'Må oppgi adresse mottaker ikke har identifikator' },
-                }}
-              />
-              <TextFieldWrapper
-                name="adresselinje2"
-                placeholder="Adresselinje 2"
-                type="text"
-                control={control}
-                hideLabel
-              />
-              <TextFieldWrapper
-                name="adresselinje3"
-                placeholder="Adresselinje 3"
-                type="text"
-                control={control}
-                hideLabel
-              />
-            </VStack>
-
-            {erNorskAdresse && (
-              <HGrid columns={'.5fr 1fr'} gap="space-16">
+            {(manuellAdresse || manglerIdent) && (
+              <>
                 <TextFieldWrapper
-                  name="postnummer"
-                  label="Postnummer"
+                  name="navn"
+                  label="Navn"
                   type="text"
                   control={control}
                   rules={{
-                    required: {
-                      value: manglerIdent && erNorskAdresse,
-                      message: 'Må oppgi postnummer når land er Norge',
-                    },
-                    minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
-                    maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
-                    pattern: { value: /^[0-9]+$/, message: 'Postnummer kan kun inneholde tall' },
+                    required: { value: manglerIdent || manuellAdresse, message: 'Må oppgi navn' },
                   }}
                 />
-                <TextFieldWrapper
-                  name="poststed"
-                  label="Poststed"
-                  type="text"
+
+                <ComboboxWrapper
                   control={control}
+                  name="landkode"
+                  label="Land"
+                  size="small"
                   rules={{
-                    required: { value: manglerIdent && erNorskAdresse, message: 'Må oppgi poststed når land er Norge' },
+                    required: { value: manglerIdent || manuellAdresse, message: 'Må oppgi land' },
                   }}
+                  options={landkoder}
                 />
-              </HGrid>
+                {isError(landkoderResponse) && (
+                  <Alert variant="warning" size="small">
+                    Feil oppsto ved henting av land og landkoder. Prøv å laste siden på nytt.
+                  </Alert>
+                )}
+
+                <VStack gap="space-8">
+                  <TextFieldWrapper
+                    name="adresselinje1"
+                    label="Adresselinjer"
+                    placeholder="Adresselinje 1"
+                    type="text"
+                    control={control}
+                    rules={{
+                      required: { value: manglerIdent || manuellAdresse, message: 'Må oppgi adresse' },
+                    }}
+                  />
+                  <TextFieldWrapper
+                    name="adresselinje2"
+                    placeholder="Adresselinje 2"
+                    type="text"
+                    control={control}
+                    hideLabel
+                  />
+                  <TextFieldWrapper
+                    name="adresselinje3"
+                    placeholder="Adresselinje 3"
+                    type="text"
+                    control={control}
+                    hideLabel
+                  />
+                </VStack>
+
+                {erNorskAdresse && (
+                  <HGrid columns={'.5fr 1fr'} gap="space-16">
+                    <TextFieldWrapper
+                      name="postnummer"
+                      label="Postnummer"
+                      type="text"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: (manglerIdent || manuellAdresse) && erNorskAdresse,
+                          message: 'Må oppgi postnummer når land er Norge',
+                        },
+                        minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
+                        maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
+                        pattern: { value: /^[0-9]+$/, message: 'Postnummer kan kun inneholde tall' },
+                      }}
+                    />
+                    <TextFieldWrapper
+                      name="poststed"
+                      label="Poststed"
+                      type="text"
+                      control={control}
+                      rules={{
+                        required: {
+                          value: (manglerIdent || manuellAdresse) && erNorskAdresse,
+                          message: 'Må oppgi poststed når land er Norge',
+                        },
+                      }}
+                    />
+                  </HGrid>
+                )}
+              </>
             )}
           </VStack>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-            Avbryt
-          </Button>
-          <Button type="submit">Lagre</Button>
+          <HStack gap="space-16">
+            <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
+              Avbryt
+            </Button>
+            <Button type="submit">Lagre</Button>
+          </HStack>
         </Modal.Footer>
       </form>
     </Modal>
