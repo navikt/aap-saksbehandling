@@ -23,5 +23,5 @@ export async function GET() {
     logError(`/api/kodeverk/postnummer ${res.status} - ${res.apiException.code}: ${res.apiException.message}`);
   }
 
-  return NextResponse.json(res, { status: res.status ?? 200 });
+  return NextResponse.json(res, { status: res.status });
 }

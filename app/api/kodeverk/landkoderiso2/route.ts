@@ -24,5 +24,5 @@ export async function GET() {
     return NextResponse.json(res, { status: res.status });
   }
 
-  return NextResponse.json(res, { status: res.status ?? 200 });
+  return NextResponse.json(res, { status: res.status });
 }
