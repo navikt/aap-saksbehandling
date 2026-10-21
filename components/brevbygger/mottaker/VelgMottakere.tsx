@@ -100,6 +100,7 @@ export function VelgMottakere({
   };
 
   const lagreRedigertMottaker = (type: MottakerType, redigertMottaker: Mottaker) => {
+    console.log(`lagrer ${type}`, redigertMottaker);
     if (type === MottakerType.HOVEDMOTTAKER) {
       oppdaterMottakere(redigertMottaker, kopimottaker);
     } else if (type === MottakerType.KOPIMOTTAKER) {

@@ -1,24 +1,28 @@
 'use client';
 
-import { Button, Checkbox, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Button, Checkbox, HGrid, Modal, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { Mottaker } from 'lib/types/types';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import useSWR from 'swr';
 
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
+import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
 import { MottakerType } from 'components/brevbygger/mottaker/VelgMottakere';
+import { clientHentLandkoderIso2 } from 'lib/clientApi';
+import { isError, isSuccess } from 'lib/utils/api';
 
 interface RedigerMottakerFields {
   ident: string;
   identType: Mottaker['identType'] | string;
   navn: string;
   adresselinje1: string;
-  adresselinje2: string;
-  adresselinje3: string;
-  postnummer: string;
-  poststed: string;
+  adresselinje2?: string;
+  adresselinje3?: string;
+  postnummer?: string;
+  poststed?: string;
   landkode: string;
 }
 
@@ -38,15 +42,36 @@ const tilFormFields = (mottaker?: Mottaker): RedigerMottakerFields => ({
   adresselinje3: mottaker?.navnOgAdresse?.adresse?.adresselinje3 ?? '',
   postnummer: mottaker?.navnOgAdresse?.adresse?.postnummer ?? '',
   poststed: mottaker?.navnOgAdresse?.adresse?.poststed ?? '',
-  landkode: mottaker?.navnOgAdresse?.adresse?.landkode ?? 'NO',
+  landkode: mottaker?.navnOgAdresse?.adresse?.landkode ?? '',
 });
 
 export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: Props) => {
   const [manglerIdent, setManglerIdent] = useState(false);
+  const { data: landkoderResponse } = useSWR('/api/kodeverk/landkoderiso2', clientHentLandkoderIso2, {
+    revalidateOnFocus: false,
+  });
 
-  const { control, handleSubmit, reset } = useForm<RedigerMottakerFields>({
+  const { control, handleSubmit, setValue } = useForm<RedigerMottakerFields>({
     defaultValues: tilFormFields(mottaker),
   });
+  const valgtLandkode = useWatch({ control, name: 'landkode' });
+  const erNorskAdresse = valgtLandkode === 'NO';
+
+  useEffect(() => {
+    if (!erNorskAdresse) {
+      setValue('postnummer', '');
+      setValue('poststed', '');
+    }
+  }, [erNorskAdresse, setValue]);
+
+  const landkoder = isSuccess(landkoderResponse)
+    ? Object.entries(landkoderResponse.data.betydninger)
+        .map(([kode, betydninger]) => {
+          const beskrivelse = betydninger[0]?.beskrivelser?.nb?.tekst;
+          return { label: `${beskrivelse ?? kode} (${kode})`, value: kode };
+        })
+        .sort((a, b) => a.label.localeCompare(b.label, 'nb'))
+    : [];
 
   const lagre = (felter: RedigerMottakerFields) => {
     const harIdentUtenAdresse = felter.ident && !felter.adresselinje1 && !felter.postnummer && !felter.poststed;
@@ -59,13 +84,9 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
             adresselinje1: felter.adresselinje1,
             adresselinje2: felter.adresselinje2 || undefined,
             adresselinje3: felter.adresselinje3 || undefined,
-            postnummer: felter.postnummer,
-            poststed: felter.poststed,
-            /*
-             * Støtter kun norske adresser enn så lenge.
-             * Må gjøre oppslag mot kodeverk for å hente landkode dersom vi skal støtte utenlandske adresser.
-             */
-            landkode: 'NO',
+            postnummer: erNorskAdresse ? felter.postnummer : undefined,
+            poststed: erNorskAdresse ? felter.poststed : undefined,
+            landkode: felter.landkode,
           },
         };
 
@@ -79,97 +100,136 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
 
   return (
     <Modal open={true} onClose={() => setIsOpen(false)} header={{ heading: 'Rediger mottaker' }}>
-      <Modal.Body>
-        <VStack gap="space-16">
-          <div>
-            <HStack gap="space-16">
-              <SelectWrapper
-                control={control}
-                name="identType"
-                label="Identtype"
-                size="small"
-                rules={{ required: { value: !manglerIdent, message: 'Du må velge identtype.' } }}
-                readOnly={manglerIdent}
-              >
-                <option value="">Velg type ident</option>
-                <option value="FNR">Fødselsnummer</option>
-                <option value="HPRNR">HPRNR</option>
-                <option value="ORGNR">Orgnr.</option>
-                <option value="UTL_ORG">Utenlandsk orgnr.</option>
-              </SelectWrapper>
+      <form onSubmit={handleSubmit(lagre)}>
+        <Modal.Body>
+          <VStack gap="space-16">
+            <div>
+              <HGrid columns={2} gap="space-16">
+                <SelectWrapper
+                  control={control}
+                  name="identType"
+                  label="Identtype"
+                  size="small"
+                  rules={{ required: { value: !manglerIdent, message: 'Du må velge identtype.' } }}
+                  readOnly={manglerIdent}
+                >
+                  <option value="">Velg type ident</option>
+                  <option value="FNR">Fødselsnummer</option>
+                  <option value="HPRNR">HPRNR</option>
+                  <option value="ORGNR">Orgnr.</option>
+                  <option value="UTL_ORG">Utenlandsk orgnr.</option>
+                </SelectWrapper>
 
+                <TextFieldWrapper
+                  name="ident"
+                  label="Identifikator"
+                  type="text"
+                  control={control}
+                  rules={{ required: { value: !manglerIdent, message: 'Du må fylle inn identifikator.' } }}
+                  readOnly={manglerIdent}
+                />
+              </HGrid>
+
+              <Checkbox
+                id="manglerIdent"
+                defaultChecked={false}
+                onChange={(e) => {
+                  setValue('ident', '');
+                  setValue('identType', '');
+                  setManglerIdent(e.target.checked);
+                }}
+                size="small"
+              >
+                Mottaker mangler identifikator
+              </Checkbox>
+            </div>
+
+            <TextFieldWrapper
+              name="navn"
+              label="Navn"
+              type="text"
+              control={control}
+              rules={{ required: { value: manglerIdent, message: 'Må oppgi navn når mottaker mangler identifikator' } }}
+            />
+
+            <ComboboxWrapper
+              control={control}
+              name="landkode"
+              label="Land"
+              size="small"
+              rules={{ required: { value: manglerIdent, message: 'Må oppgi land når mottaker mangler identifikator' } }}
+              options={landkoder}
+            />
+            {isError(landkoderResponse) && (
+              <Alert variant="warning" size="small">
+                Feil oppsto ved henting av land og landkoder. Prøv å laste siden på nytt.
+              </Alert>
+            )}
+
+            <VStack gap="space-8">
               <TextFieldWrapper
-                name="ident"
-                label="Identifikator"
+                name="adresselinje1"
+                label="Adresselinjer"
+                placeholder="Adresselinje 1"
                 type="text"
                 control={control}
-                rules={{ required: { value: !manglerIdent, message: 'Du må fylle inn identifikator.' } }}
-                readOnly={manglerIdent}
+                rules={{
+                  required: { value: manglerIdent, message: 'Må oppgi adresse mottaker ikke har identifikator' },
+                }}
               />
-            </HStack>
+              <TextFieldWrapper
+                name="adresselinje2"
+                placeholder="Adresselinje 2"
+                type="text"
+                control={control}
+                hideLabel
+              />
+              <TextFieldWrapper
+                name="adresselinje3"
+                placeholder="Adresselinje 3"
+                type="text"
+                control={control}
+                hideLabel
+              />
+            </VStack>
 
-            <Checkbox
-              id="manglerIdent"
-              defaultChecked={false}
-              onChange={(e) => {
-                reset({ ...tilFormFields(mottaker), ident: '', identType: '' });
-                setManglerIdent(e.target.checked);
-              }}
-              size="small"
-            >
-              Mottaker mangler identifikator / ikke relevant
-            </Checkbox>
-          </div>
-          <TextFieldWrapper
-            name="navn"
-            label="Navn"
-            type="text"
-            control={control}
-            rules={{ required: { value: manglerIdent, message: 'Må oppgi navn når mottaker mangler identifikator' } }}
-          />
-          <TextFieldWrapper
-            name="adresselinje1"
-            label="Adresselinje 1"
-            type="text"
-            control={control}
-            rules={{ required: { value: manglerIdent, message: 'Må oppgi adresse mottaker ikke har identifikator' } }}
-          />
-          <TextFieldWrapper name="adresselinje2" label="Adresselinje 2" type="text" control={control} />
-          <TextFieldWrapper name="adresselinje3" label="Adresselinje 3" type="text" control={control} />
-          <TextFieldWrapper
-            name="postnummer"
-            label="Postnummer"
-            type="text"
-            control={control}
-            rules={{
-              required: { value: manglerIdent, message: 'Må oppgi postnummer når mottaker mangler identifikator' },
-              minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
-              maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
-              pattern: { value: /^[0-9]+$/, message: 'Postnummer kan kun inneholde tall' },
-            }}
-          />
-          <TextFieldWrapper
-            name="poststed"
-            label="Poststed"
-            type="text"
-            control={control}
-            rules={{
-              required: { value: manglerIdent, message: 'Må oppgi poststed når mottaker mangler identifikator' },
-            }}
-          />
-          <Alert variant="info" size="small">
-            Støtter foreløpig kun norske adresser.
-          </Alert>
-        </VStack>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
-          Avbryt
-        </Button>
-        <Button type="button" onClick={handleSubmit(lagre)}>
-          Lagre
-        </Button>
-      </Modal.Footer>
+            {erNorskAdresse && (
+              <HGrid columns={'.5fr 1fr'} gap="space-16">
+                <TextFieldWrapper
+                  name="postnummer"
+                  label="Postnummer"
+                  type="text"
+                  control={control}
+                  rules={{
+                    required: {
+                      value: manglerIdent && erNorskAdresse,
+                      message: 'Må oppgi postnummer når land er Norge',
+                    },
+                    minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
+                    maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
+                    pattern: { value: /^[0-9]+$/, message: 'Postnummer kan kun inneholde tall' },
+                  }}
+                />
+                <TextFieldWrapper
+                  name="poststed"
+                  label="Poststed"
+                  type="text"
+                  control={control}
+                  rules={{
+                    required: { value: manglerIdent && erNorskAdresse, message: 'Må oppgi poststed når land er Norge' },
+                  }}
+                />
+              </HGrid>
+            )}
+          </VStack>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
+            Avbryt
+          </Button>
+          <Button type="submit">Lagre</Button>
+        </Modal.Footer>
+      </form>
     </Modal>
   );
 };

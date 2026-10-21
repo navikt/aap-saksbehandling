@@ -7,15 +7,21 @@ import { isServerError } from 'lib/utils/api';
 
 export async function GET() {
   if (isLocal()) {
-    return NextResponse.json(mockResponseKodeverkPostnummer, { status: 200 });
+    return NextResponse.json(
+      {
+        type: 'SUCCESS',
+        status: 200,
+        data: mockResponseKodeverkPostnummer,
+      },
+      { status: 200 }
+    );
   }
 
   const res = await hentPostnummerKodeverk();
 
   if (isServerError(res)) {
     logError(`/api/kodeverk/postnummer ${res.status} - ${res.apiException.code}: ${res.apiException.message}`);
-    return NextResponse.json(res.apiException, { status: res.status });
   }
 
-  return NextResponse.json(res.data, { status: res.status });
+  return NextResponse.json(res, { status: res.status ?? 200 });
 }
