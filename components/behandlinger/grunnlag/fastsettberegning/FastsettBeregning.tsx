@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading } from '@navikt/ds-react';
+import { Heading, Link } from '@navikt/ds-react';
 import { isBefore, parse } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -73,10 +73,6 @@ const ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS: ValuePair[] = [
   { label: 'Ikke betydning / ikke relevant', value: 'IKKE_BETYDNING_IKKE_RELEVANT' },
 ];
 
-export const defaultNedsattArbeidsevneBegrunnelseOverskrifter = ['Relevant faktum', 'Vurdering', 'Konklusjon'];
-
-export const defaultNedsattArbeidsevneBegrunnelse = defaultNedsattArbeidsevneBegrunnelseOverskrifter.join('\n\n');
-
 interface FormFields {
   nedsattArbeidsevneDatobegrunnelse: string;
   nedsattArbeidsevneDato: string;
@@ -124,11 +120,6 @@ export const FastsettBeregning = ({
         defaultValue: defaultValues.nedsattArbeidsevneDatobegrunnelse,
         rules: {
           required: 'Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne',
-          validate: {
-            kanIkkeVæreDefaultBegrunnelse: (value) =>
-              (value as string).trim() !== defaultNedsattArbeidsevneBegrunnelse.trim() ||
-              'Du må skrive en egen vilkårsvurdering',
-          },
         },
       },
       nedsattArbeidsevneDato: {
@@ -279,6 +270,15 @@ export const FastsettBeregning = ({
         />
       )}
 
+      <Link
+        href={
+          'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-fastsettelse-av-beregningstidspunkt.aspx?https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-fastsettelse-av-beregningstidspunkt.aspx'
+        }
+        target={'_blank'}
+      >
+        Metode for fastsettelse av beregningstidspunkt
+      </Link>
+
       <FormField form={form} formField={formFields.nedsattArbeidsevneDatobegrunnelse} className="begrunnelse" />
       <FormField form={form} formField={formFields.nedsattArbeidsevneDato} />
       {erBeregningsTidspunktEtterSøknadstidspunkt && (
@@ -310,7 +310,7 @@ export const FastsettBeregning = ({
 
 function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vurdering']): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse ?? defaultNedsattArbeidsevneBegrunnelse,
+    nedsattArbeidsevneDatobegrunnelse: vurdering?.begrunnelse,
     nedsattArbeidsevneDato: vurdering?.nedsattArbeidsevneDato
       ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato)
       : undefined,
@@ -325,7 +325,7 @@ function mapVurderingToDraftFormFields(vurdering: BeregningTidspunktGrunnlag['vu
 
 function emptyDraftFormFields(): DraftFormFields {
   return {
-    nedsattArbeidsevneDatobegrunnelse: defaultNedsattArbeidsevneBegrunnelse,
+    nedsattArbeidsevneDatobegrunnelse: '',
     nedsattArbeidsevneDato: '',
     årsak: '',
     ytterligereNedsattArbeidsevneDato: '',
