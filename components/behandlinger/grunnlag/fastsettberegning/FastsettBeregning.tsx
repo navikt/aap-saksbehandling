@@ -272,7 +272,7 @@ export const FastsettBeregning = ({
 
       <Link
         href={
-          'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-fastsettelse-av-beregningstidspunkt.aspx?https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-fastsettelse-av-beregningstidspunkt.aspx'
+          'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Metode-for-fastsettelse-av-beregningstidspunkt.aspx'
         }
         target={'_blank'}
       >
