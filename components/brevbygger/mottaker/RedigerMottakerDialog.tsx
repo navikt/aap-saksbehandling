@@ -1,20 +1,28 @@
 'use client';
 
-import { Button, Checkbox, HGrid, HStack, Modal, VStack } from '@navikt/ds-react';
+import { Box, Button, HGrid, HStack, Modal, Radio, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { Mottaker } from 'lib/types/types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import useSWR from 'swr';
 
 import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrapper';
 import { SelectWrapper } from 'components/form/selectwrapper/SelectWrapper';
 import { ComboboxWrapper } from 'components/form/comboboxwrapper/ComboboxWrapper';
+import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { MottakerType } from 'components/brevbygger/mottaker/VelgMottakere';
 import { clientHentLandkoderIso2 } from 'lib/clientApi';
 import { isError, isSuccess } from 'lib/utils/api';
 
+enum Opplysningstype {
+  KUN_IDENT = 'KUN_IDENT',
+  KUN_ADRESSE = 'KUN_ADRESSE',
+  BEGGE = 'BEGGE',
+}
+
 interface RedigerMottakerFields {
+  opplysningstype?: Opplysningstype;
   ident: string;
   identType: Mottaker['identType'] | string;
   navn: string;
@@ -33,7 +41,18 @@ interface Props {
   setIsOpen: (isOpen: boolean) => void;
 }
 
+const finnOpplysningstype = (mottaker?: Mottaker): Opplysningstype | undefined => {
+  if (mottaker?.ident && !mottaker?.navnOgAdresse?.adresse) {
+    return Opplysningstype.KUN_IDENT;
+  } else if (!mottaker?.ident && mottaker?.navnOgAdresse?.adresse) {
+    return Opplysningstype.KUN_ADRESSE;
+  } else if (mottaker?.ident && mottaker?.navnOgAdresse?.adresse) {
+    return Opplysningstype.BEGGE;
+  } else return undefined;
+};
+
 const tilFormFields = (mottaker?: Mottaker): RedigerMottakerFields => ({
+  opplysningstype: finnOpplysningstype(mottaker),
   ident: mottaker?.ident ?? '',
   identType: mottaker?.identType ?? '',
   navn: mottaker?.navnOgAdresse?.navn ?? '',
@@ -46,26 +65,45 @@ const tilFormFields = (mottaker?: Mottaker): RedigerMottakerFields => ({
 });
 
 export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: Props) => {
-  const [manglerIdent, setManglerIdent] = useState(!mottaker?.ident && !!mottaker?.navnOgAdresse?.adresse);
-  const [manuellAdresse, setManuellAdresse] = useState(
-    !!mottaker?.navnOgAdresse?.adresse || (mottaker?.identType !== 'FNR' && mottaker?.identType !== 'ORGNR')
-  );
   const { data: landkoderResponse } = useSWR('/api/kodeverk/landkoderiso2', clientHentLandkoderIso2, {
     revalidateOnFocus: false,
   });
 
   const { control, handleSubmit, setValue } = useForm<RedigerMottakerFields>({
     defaultValues: tilFormFields(mottaker),
+    shouldUnregister: true,
   });
+  const opplysningstype = useWatch({ control, name: 'opplysningstype' });
   const valgtLandkode = useWatch({ control, name: 'landkode' });
+  const visIdentfelter = !!opplysningstype && opplysningstype !== Opplysningstype.KUN_ADRESSE;
+  const visAdressefelter = !!opplysningstype && opplysningstype !== Opplysningstype.KUN_IDENT;
   const erNorskAdresse = valgtLandkode === 'NO';
 
   useEffect(() => {
-    if (!erNorskAdresse) {
+    if (visAdressefelter && !erNorskAdresse) {
       setValue('postnummer', '');
       setValue('poststed', '');
     }
-  }, [erNorskAdresse, setValue]);
+  }, [erNorskAdresse, setValue, visAdressefelter]);
+
+  useEffect(() => {
+    if (!visIdentfelter) {
+      setValue('ident', '');
+      setValue('identType', '');
+    }
+  }, [setValue, visIdentfelter]);
+
+  useEffect(() => {
+    if (!visAdressefelter) {
+      setValue('navn', '');
+      setValue('adresselinje1', '');
+      setValue('adresselinje2', '');
+      setValue('adresselinje3', '');
+      setValue('landkode', 'NO');
+      setValue('postnummer', '');
+      setValue('poststed', '');
+    }
+  }, [setValue, visAdressefelter]);
 
   const landkoder = isSuccess(landkoderResponse)
     ? Object.entries(landkoderResponse.data.betydninger)
@@ -77,9 +115,10 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
     : [];
 
   const lagre = (felter: RedigerMottakerFields) => {
-    const harIdentUtenAdresse = felter.ident && !felter.adresselinje1 && !felter.postnummer && !felter.poststed;
+    const brukerKunIdent = felter.opplysningstype === Opplysningstype.KUN_IDENT;
+    const brukerKunAdresse = felter.opplysningstype === Opplysningstype.KUN_ADRESSE;
 
-    const navnOgAdresse = harIdentUtenAdresse
+    const navnOgAdresse = brukerKunIdent
       ? undefined
       : {
           navn: felter.navn,
@@ -94,33 +133,55 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
         };
 
     onLagre(target, {
-      ident: felter.ident || undefined,
-      identType: felter.identType ? (felter.identType as Mottaker['identType']) : undefined,
+      ident: brukerKunAdresse ? undefined : felter.ident || undefined,
+      identType: brukerKunAdresse
+        ? undefined
+        : felter.identType
+          ? (felter.identType as Mottaker['identType'])
+          : undefined,
       navnOgAdresse,
     });
     setIsOpen(false);
   };
 
   return (
-    <Modal open={true} onClose={() => setIsOpen(false)} header={{ heading: 'Rediger mottaker' }} width="small">
+    <Modal open={true} onClose={() => setIsOpen(false)} header={{ heading: 'Rediger mottaker' }}>
       <form onSubmit={handleSubmit(lagre)}>
         <Modal.Body>
           <VStack gap="space-16">
-            <div>
+            <Box background="neutral-soft" padding="space-16" borderRadius="8" borderColor="neutral" borderWidth="1">
+              <RadioGroupWrapper
+                control={control}
+                name="opplysningstype"
+                label="Hvilke opplysninger vil du registrere?"
+                rules={{ required: 'Du må velge opplysningstype.' }}
+                size="small"
+              >
+                <Radio value={Opplysningstype.KUN_IDENT} description="Det vanligste. Distribusjon går automatisk.">
+                  Kun ident
+                </Radio>
+                <Radio value={Opplysningstype.KUN_ADRESSE} description="Kun hvis ident ikke finnes">
+                  Kun adresse
+                </Radio>
+                <Radio value={Opplysningstype.BEGGE} description="For eksempel dødsbo eller utenlandsk adresse">
+                  Begge deler
+                </Radio>
+              </RadioGroupWrapper>
+            </Box>
+
+            {visIdentfelter && (
               <HGrid columns={2} gap="space-16">
                 <SelectWrapper
                   control={control}
                   name="identType"
                   label="Identtype"
                   size="small"
-                  rules={{ required: { value: !manglerIdent, message: 'Du må velge identtype.' } }}
-                  readOnly={manglerIdent}
+                  rules={{ required: { value: visIdentfelter, message: 'Du må velge identtype.' } }}
                 >
                   <option value="">Velg type ident</option>
                   <option value="FNR">Fødselsnummer</option>
-                  <option value="HPRNR">HPRNR</option>
                   <option value="ORGNR">Orgnr.</option>
-                  <option value="UTL_ORG">Utenlandsk orgnr.</option>
+                  {opplysningstype !== Opplysningstype.KUN_IDENT && <option value="UTL_ORG">Utenlandsk orgnr.</option>}
                 </SelectWrapper>
 
                 <TextFieldWrapper
@@ -128,56 +189,19 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                   label="Identifikator"
                   type="text"
                   control={control}
-                  rules={{ required: { value: !manglerIdent, message: 'Du må fylle inn identifikator.' } }}
-                  readOnly={manglerIdent}
+                  rules={{ required: { value: visIdentfelter, message: 'Du må fylle inn identifikator.' } }}
                 />
               </HGrid>
+            )}
 
-              <Checkbox
-                id="manglerIdent"
-                defaultChecked={manglerIdent}
-                onChange={(e) => {
-                  setValue('ident', '');
-                  setValue('identType', '');
-                  setManglerIdent(e.target.checked);
-                }}
-                size="small"
-              >
-                Mottaker mangler identifikator
-              </Checkbox>
-
-              <Checkbox
-                id="manuellAdresse"
-                defaultChecked={manuellAdresse || manglerIdent}
-                onChange={(e) => {
-                  setManuellAdresse(e.target.checked);
-                  if (!e.target.checked) {
-                    setValue('navn', '');
-                    setValue('adresselinje1', '');
-                    setValue('adresselinje2', '');
-                    setValue('adresselinje3', '');
-                    setValue('postnummer', '');
-                    setValue('poststed', '');
-                    setValue('landkode', '');
-                  }
-                }}
-                size="small"
-                readOnly={manglerIdent}
-              >
-                Skriv adresse manuelt
-              </Checkbox>
-            </div>
-
-            {(manuellAdresse || manglerIdent) && (
+            {visAdressefelter && (
               <>
                 <TextFieldWrapper
                   name="navn"
                   label="Navn"
                   type="text"
                   control={control}
-                  rules={{
-                    required: { value: manglerIdent || manuellAdresse, message: 'Må oppgi navn' },
-                  }}
+                  rules={{ required: { value: visAdressefelter, message: 'Må oppgi navn når adresse brukes' } }}
                 />
 
                 <ComboboxWrapper
@@ -185,9 +209,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                   name="landkode"
                   label="Land"
                   size="small"
-                  rules={{
-                    required: { value: manglerIdent || manuellAdresse, message: 'Må oppgi land' },
-                  }}
+                  rules={{ required: { value: visAdressefelter, message: 'Må oppgi land når adresse brukes' } }}
                   options={landkoder}
                 />
                 {isError(landkoderResponse) && (
@@ -204,7 +226,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                     type="text"
                     control={control}
                     rules={{
-                      required: { value: manglerIdent || manuellAdresse, message: 'Må oppgi adresse' },
+                      required: { value: visAdressefelter, message: 'Må oppgi adresselinje 1 når adresse brukes' },
                     }}
                   />
                   <TextFieldWrapper
@@ -224,7 +246,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                 </VStack>
 
                 {erNorskAdresse && (
-                  <HGrid columns={'.5fr 1fr'} gap="space-16">
+                  <HGrid columns={'.5fr 1fr'} gap="space-16" align="start">
                     <TextFieldWrapper
                       name="postnummer"
                       label="Postnummer"
@@ -232,8 +254,8 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                       control={control}
                       rules={{
                         required: {
-                          value: (manglerIdent || manuellAdresse) && erNorskAdresse,
-                          message: 'Må oppgi postnummer når land er Norge',
+                          value: visAdressefelter && erNorskAdresse,
+                          message: 'Må oppgi postnummer',
                         },
                         minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
                         maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
@@ -247,8 +269,8 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                       control={control}
                       rules={{
                         required: {
-                          value: (manglerIdent || manuellAdresse) && erNorskAdresse,
-                          message: 'Må oppgi poststed når land er Norge',
+                          value: visAdressefelter && erNorskAdresse,
+                          message: 'Må oppgi poststed',
                         },
                       }}
                     />
