@@ -4,6 +4,7 @@ import { Dato } from 'lib/types/Dato';
 import { HelseInstiusjonVurdering } from 'lib/types/types';
 import {
   beregnEffektivTidligsteReduksjonsdatoFraSkjema,
+  beregnReduksjonskjede,
   beregnStandardTidligsteReduksjonsdato,
   erNyttOppholdInnenfor3MaanederEtterSistOpphold,
   erReduksjonMuligForOpphold,
@@ -16,7 +17,10 @@ import {
   validerDatoErInnenforOpphold,
   validerErIKronologiskRekkeFølge,
 } from 'lib/utils/institusjonopphold';
-import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import {
+  OppholdMedVurderinger,
+  OppholdVurdering,
+} from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { JaEllerNei } from 'lib/utils/form';
 import { getReduksjonsstatus, VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 
@@ -174,6 +178,38 @@ describe('lagReduksjonBeskrivelseNyttOpphold', () => {
     expect(lagReduksjonBeskrivelseNyttOpphold('01.11.2025', '01.03.2026')).toBe(
       'Innleggelsesmåned: november 2025. Reduksjonen bør som regel starte 1. desember 2025 ved reduksjon i forrige opphold, ellers 1. mars 2026. Det finnes likevel unntak.'
     );
+  });
+});
+
+describe('beregnReduksjonskjede - forrige opphold uten vurderinger i skjemaet', () => {
+  const lagOpphold = (
+    oppholdId: string,
+    fom: string,
+    tom: string,
+    vurderinger: OppholdVurdering[],
+    tidligsteReduksjonsdato?: string
+  ): OppholdMedVurderinger => ({ oppholdId, periode: { fom, tom }, tidligsteReduksjonsdato, vurderinger });
+
+  const opphold = [
+    lagOpphold('kysthaven', '01.02.2025', '01.09.2025', []),
+    lagOpphold('solglott', '01.11.2025', '01.02.2026', [reduksjon('01.12.2025')], '2025-12-01'),
+  ];
+
+  it('vedtatt reduksjon i forrige opphold gir 1-månedsregel og ingen historikk', () => {
+    const kjede = beregnReduksjonskjede(opphold, { kysthaven: [vedtattReduksjon] }, true, 1);
+
+    expect(kjede[0].girReduksjon).toBe(true);
+    expect(kjede[1].bruker1Månedsregelen).toBe(true);
+    expect(kjede[1].reduksjonErMulig).toBe(true);
+    expect(kjede[1].girReduksjon).toBe(true);
+  });
+
+  it('uten vedtatt reduksjon i forrige opphold gir 3-månedersregel og historikk', () => {
+    const kjede = beregnReduksjonskjede(opphold, {}, true, 1);
+
+    expect(kjede[0].girReduksjon).toBe(false);
+    expect(kjede[1].reduksjonErMulig).toBe(false);
+    expect(kjede[1].girReduksjon).toBe(false);
   });
 });
 

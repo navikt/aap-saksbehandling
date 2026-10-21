@@ -268,6 +268,27 @@ export interface OppholdReduksjonsstatus {
   girReduksjon: boolean;
 }
 
+function girOppholdReduksjon(
+  opphold: OppholdMedVurderinger,
+  vedtatte: HelseInstiusjonVurdering[] | undefined,
+  reduksjonErMulig: boolean,
+  enManedsregelEnabled: boolean
+): boolean {
+  if (opphold.vurderinger.length > 0) {
+    return opphold.vurderinger.some(
+      (v) => erReduksjonUtIFraFormFields(v) && !erVurderingHistorisk(v, reduksjonErMulig, enManedsregelEnabled)
+    );
+  }
+
+  const oppholdTil = new Dato(opphold.periode.tom).dato;
+  return (vedtatte ?? []).some(
+    (v) =>
+      !v.erHistoriskUtenReduksjonsberegning &&
+      erReduksjonUtIFraVurdering(v) &&
+      !isAfter(new Dato(v.periode.fom).dato, oppholdTil)
+  );
+}
+
 export function beregnReduksjonskjede(
   opphold: OppholdMedVurderinger[],
   vedtattePerOppholdId: Record<string, HelseInstiusjonVurdering[]>,
@@ -292,8 +313,11 @@ export function beregnReduksjonskjede(
     const reduksjonErMulig =
       !enManedsregelEnabled || erReduksjonMuligForOpphold(o.periode.tom, effektivTidligsteReduksjonsdato);
 
-    const girReduksjon = o.vurderinger.some(
-      (v) => erReduksjonUtIFraFormFields(v) && !erVurderingHistorisk(v, reduksjonErMulig, enManedsregelEnabled)
+    const girReduksjon = girOppholdReduksjon(
+      o,
+      vedtattePerOppholdId[o.oppholdId],
+      reduksjonErMulig,
+      enManedsregelEnabled
     );
 
     resultat.push({ effektivTidligsteReduksjonsdato, bruker1Månedsregelen, reduksjonErMulig, girReduksjon });
