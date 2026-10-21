@@ -6799,6 +6799,17 @@ export interface components {
       institusjoner: components['schemas']['no.nav.aap.behandlingsflyt.Institusjoner'];
       kravVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.KravVurderingTestDto'][];
       medlemskap: boolean;
+      /** @enum {string} */
+      personStatus:
+        | 'bosatt'
+        | 'doed'
+        | 'foedselsregistrert'
+        | 'forsvunnet'
+        | 'ikkeBosatt'
+        | 'inaktiv'
+        | 'midlertidig'
+        | 'opphort'
+        | 'utflyttet';
       samordning: components['schemas']['no.nav.aap.behandlingsflyt.SamordningDto'][];
       /** @enum {string|null} */
       steg?:
