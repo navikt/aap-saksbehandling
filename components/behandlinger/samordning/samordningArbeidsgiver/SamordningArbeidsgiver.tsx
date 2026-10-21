@@ -177,11 +177,11 @@ export const SamordningArbeidsgiver = ({
   );
 };
 
-function byggFelter(vurdering: SamordningArbeidsgiverVurdering): ValuePair<string>[] {
+function byggFelter(vurdering: SamordningArbeidsgiverVurdering): ValuePair[] {
   const begrunnelse = vurdering.begrunnelse || 'Ingen begrunnelse på behandling funnet';
   const perioder = vurdering.perioder || [];
 
-  const felter: ValuePair<string>[] = [
+  const felter: ValuePair[] = [
     {
       label: 'Begrunnelse',
       value: begrunnelse,

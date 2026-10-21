@@ -64,7 +64,7 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
   return (
     <VStack gap="space-8">
       <Label size="small">Legg til periode med reduksjon som følge av ytelse fra arbeidsgiver</Label>
-      <TableStyled>
+      <TableStyled size={'small'}>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell textSize={'small'}>Reduksjon fra dato</Table.HeaderCell>
@@ -75,7 +75,7 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
 
         <Table.Body>
           {fields.map((field, index) => (
-            <PeriodeRow key={field.id} index={index} form={form} readOnly={readOnly} remove={remove} />
+            <PeriodeRad key={field.id} index={index} form={form} readOnly={readOnly} remove={remove} />
           ))}
         </Table.Body>
       </TableStyled>
@@ -93,14 +93,14 @@ export const SamordningArbeidsGiverTabell = ({ form, readOnly }: Props) => {
   );
 };
 
-interface PeriodeRowProps {
+interface PeriodeRadProps {
   index: number;
   form: UseFormReturn<SamordningArbeidsgiverFormFields>;
   readOnly: boolean;
   remove: (index: number) => void;
 }
 
-const PeriodeRow = ({ index, form, readOnly, remove }: PeriodeRowProps) => {
+const PeriodeRad = ({ index, form, readOnly, remove }: PeriodeRadProps) => {
   const { control } = form;
   return (
     <Table.Row>
