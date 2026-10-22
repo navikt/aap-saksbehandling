@@ -10934,6 +10934,8 @@ export interface components {
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
+    /** Format: int64 */
+    'no.nav.aap.behandlingsflyt.behandling.vedtak.VedtakId': number;
     'no.nav.aap.behandlingsflyt.behandling.vedtakslengde.VedtakslengdeGrunnlagResponse': {
       behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       harTilgangTilÅSaksbehandle: boolean;
@@ -11212,6 +11214,7 @@ export interface components {
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
       type: string;
+      vedtakId?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vedtak.VedtakId'];
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -12563,6 +12566,7 @@ export interface components {
       faarFriKostOgLosji: boolean;
       forsoergerEktefelle?: boolean | null;
       harFasteUtgifter?: boolean | null;
+      oppholdId?: string | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.institusjon.flate.HelseinstitusjonVurderingerDto': {
@@ -12597,10 +12601,8 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.RelevantKravLøsningDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TilleggsopplysningKravLøsningDto']
       | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.TrukketSøknadKravLøsningDto'];
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.Kravreferanse': {
-      /** Format: uuid */
-      verdi: string;
-    };
+    /** Format: uuid */
+    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.Kravreferanse': string;
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.krav.MigrertKravLøsningDto': {
       arenaSaksnummer: string;
       begrunnelse: string;
@@ -14640,25 +14642,28 @@ export interface components {
       meldingType: 'MeldekortV0';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Melding':
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Aktivitetskort']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokument']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtak']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelse']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KabalHendelse']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Klage']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KorrigerSøknadsdato']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Legeerklæring']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurdering']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Meldekort']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AktivitetskortV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AnnetRelevantDokumentV1']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ForeldrepengeVedtakV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.InstitusjonsOppholdHendelseV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KabalHendelseV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KlageV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.KorrigerSøknadsdatoV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.LegeerklæringV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.ManuellRevurderingV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MeldekortV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MigreringFraArenaV0']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.NyÅrsakTilBehandling']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjøringKlageRevurdering']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Oppfølgingsoppgave']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.PdlHendelse']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SykepengeSpleisVedtak']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Søknad']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelse']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uførevedtak'];
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.NyÅrsakTilBehandlingV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjøringKlageRevurderingV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OmgjøringKlageRevurderingV1']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.OppfølgingsoppgaveV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.PdlHendelseV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SykepengevedtakV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FagsysteminfoBehovV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MigreringFraArenaV0': {
       beskrivelse: string;
       /**
