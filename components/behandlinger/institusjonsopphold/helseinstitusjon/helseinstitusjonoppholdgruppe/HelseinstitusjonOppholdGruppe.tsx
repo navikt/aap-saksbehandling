@@ -22,20 +22,22 @@ import { Dato } from 'lib/types/Dato';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
 import {
+  beregnReduksjonskjede,
   beregnStandardTidligsteReduksjonsdato,
   erReduksjonUtIFraFormFields,
   erReduksjonUtIFraVurdering,
   erVurderingHistorisk,
   forrigeOppholdHarIngenReduksjonLengre,
+  grupperVedtattePerOppholdId,
+  harKorrigertReduksjonsdato,
 } from 'lib/utils/institusjonopphold';
 import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjontidligerevurdering/HelseinstitusjonTidligereVurdering';
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
-import { addDays, isBefore } from 'date-fns';
+import { addDays } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { TidligereVurderingKortMedGap } from 'components/periodisering/tidligerevurderingkortmedgap/TidligereVurderingKortMedGap';
-import { useEffektivTidligsteReduksjonsdato } from 'lib/utils/useEffektivTidligsteReduksjonsdato';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 
 interface Props {
@@ -82,7 +84,12 @@ export const HelseinstitusjonOppholdGruppe = ({
   const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
   const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
 
-  const { reduksjonErMulig } = useEffektivTidligsteReduksjonsdato(form, oppholdIndex, vedtatteVurderinger);
+  const { reduksjonErMulig } = beregnReduksjonskjede(
+    form.watch('helseinstitusjonsvurderinger'),
+    grupperVedtattePerOppholdId(vedtatteVurderinger),
+    enManedsregelEnabled,
+    oppholdIndex
+  )[oppholdIndex];
 
   const erLagretHistorisk = (v: HelseInstiusjonVurdering) =>
     enManedsregelEnabled && v.erHistoriskUtenReduksjonsberegning;
@@ -130,12 +137,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   const erHistoriskVurdering = (v: (typeof liveVurderinger)[number]) =>
     erVurderingHistorisk(v, reduksjonErMulig, enManedsregelEnabled);
 
-  const harKorrigertEgenVurdering = liveVurderinger?.some((v) => {
-    if (!erReduksjonUtIFraFormFields(v)) return false;
-    const fom = v.periode?.fom;
-    if (!fom || !/^\d{2}\.\d{2}\.\d{4}$/.test(fom)) return false;
-    return !isBefore(new Dato(fom).dato, new Dato(standardTidligsteReduksjonsdato).dato);
-  });
+  const harKorrigertEgenVurdering = harKorrigertReduksjonsdato(liveVurderinger, standardTidligsteReduksjonsdato);
 
   const sisteTidligereVurdering = tidligereVurderinger
     ?.filter((v) => {
