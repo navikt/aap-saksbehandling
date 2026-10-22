@@ -22,6 +22,7 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
 
 export const SkriveBrev = ({
   referanse,
@@ -50,6 +51,7 @@ export const SkriveBrev = ({
   readOnly: boolean;
   brevtype: BrevGrunnlagBrev['brevtype'];
 }) => {
+  const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
@@ -102,6 +104,27 @@ export const SkriveBrev = ({
     });
     await revalidateBehandlingPath(saksnummer, behandlingsreferanse);
     settIkkeSendBrevModalOpen(false);
+  };
+
+  const sendBrev = async () => {
+    await clientMellomlagreBrev(referanse, brev);
+    const flyt = await clientHentFlyt(behandlingsreferanse);
+    if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
+      setKanMellomlagreBrev(false);
+      løsAvklaringsbehov(
+        {
+          behandlingVersjon: flyt.data.behandlingVersjon,
+          behov: {
+            behovstype: behovstype,
+            brevbestillingReferanse: referanse,
+            mottakere: valgteMottakere,
+            handling: 'FERDIGSTILL',
+          },
+          referanse: behandlingsreferanse,
+        },
+        () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
+      );
+    }
   };
 
   return (
@@ -200,33 +223,25 @@ export const SkriveBrev = ({
             brukerMottaker={brukerMottaker}
           />
           {!readOnly && (
-            <Button
-              disabled={status !== 'FORHÅNDSVISNING_KLAR' || !!distribusjonssjekkFeil}
-              onClick={async () => {
-                await clientMellomlagreBrev(referanse, brev);
-                const flyt = await clientHentFlyt(behandlingsreferanse);
-                if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
-                  setKanMellomlagreBrev(false);
-                  løsAvklaringsbehov(
-                    {
-                      behandlingVersjon: flyt.data.behandlingVersjon,
-                      behov: {
-                        behovstype: behovstype,
-                        brevbestillingReferanse: referanse,
-                        mottakere: valgteMottakere,
-                        handling: 'FERDIGSTILL',
-                      },
-                      referanse: behandlingsreferanse,
-                    },
-                    () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
-                  );
-                }
-              }}
-              className={'fit-content'}
-              loading={løsAvklaringsbehovIsLoading}
-            >
-              Send brev
-            </Button>
+            <HStack justify="end">
+              <Button
+                type="button"
+                onClick={() => settVisFerdigstillBrevDialog(true)}
+                disabled={status !== 'FORHÅNDSVISNING_KLAR' || !!distribusjonssjekkFeil}
+              >
+                Ferdigstill brev
+              </Button>
+
+              <FerdigstillBrevDialog
+                referanse={referanse}
+                isOpen={visFerdigstillBrevDialog}
+                onClose={() => settVisFerdigstillBrevDialog(false)}
+                sendBrev={sendBrev}
+                senderBrev={løsAvklaringsbehovIsLoading}
+                løsBehovStatus={løsAvklaringsbehovStatus}
+                løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+              />
+            </HStack>
           )}
         </VStack>
 
