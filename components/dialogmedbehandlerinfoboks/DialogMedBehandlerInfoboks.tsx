@@ -7,9 +7,11 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ForespørselSendtTilBehandler } from 'lib/types/oppgaveTypes';
 import styles from './DialogMedBehandlerInfoboks.module.css';
 
-const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
-  if (!påminnelseDato) return false;
-  return new Date(påminnelseDato).getTime() <= Date.now();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const erPåminnelsenIFortiden = (_: ForespørselSendtTilBehandler['påminnelseDato']) => {
+  return false;
+  // if (!påminnelseDato) return false;
+  // return new Date(påminnelseDato).getTime() <= Date.now();
 };
 
 export const DialogMedBehandlerInfoboks = ({ påminnelseDato, påminnelseAvbrutt }: ForespørselSendtTilBehandler) => {
