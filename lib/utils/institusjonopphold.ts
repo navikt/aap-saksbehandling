@@ -28,7 +28,21 @@ export function beregnStandardTidligsteReduksjonsdato(oppholdFra: string): strin
   return format(startOfMonth(addMonths(new Dato(oppholdFra).dato, 4)), 'yyyy-MM-dd');
 }
 
-function erGyldigDatoFormat(dato: string | undefined): dato is string {
+export function harKorrigertReduksjonsdato(
+  vurderinger: OppholdVurdering[] | undefined,
+  standardTidligsteReduksjonsdato: string
+): boolean {
+  return (
+    vurderinger?.some((v) => {
+      if (!erReduksjonUtIFraFormFields(v)) return false;
+      const fom = v.periode?.fom;
+      if (!erGyldigDatoFormat(fom)) return false;
+      return !isBefore(new Dato(fom).dato, new Dato(standardTidligsteReduksjonsdato).dato);
+    }) ?? false
+  );
+}
+
+export function erGyldigDatoFormat(dato: string | undefined): dato is string {
   return !!dato && /^\d{2}\.\d{2}\.\d{4}$/.test(dato);
 }
 
@@ -41,8 +55,8 @@ export function forrigeOppholdHarIngenReduksjonLengre(
   const forrigeErBesvart = forrigeOppholdVurderinger.every((v) => v.faarFriKostOgLosji !== undefined);
   if (!forrigeErBesvart) return false;
 
-  const liveHarReduksjonNoeSted = forrigeOppholdVurderinger.some((v) => erReduksjonUtIFraFormFields(v));
-  if (liveHarReduksjonNoeSted) return false;
+  const harVurderingerMedReduksjon = forrigeOppholdVurderinger.some((v) => erReduksjonUtIFraFormFields(v));
+  if (harVurderingerMedReduksjon) return false;
 
   // Ingen live vurdering gir reduksjon. Sjekk om det finnes en vedtatt reduksjonsperiode som
   // fortsatt delvis gjaldt - dvs. den nye "stopp reduksjon fra"-datoen ligger etter vedtatt
@@ -83,14 +97,7 @@ export function manglerKorrigertReduksjonsdato(
 
   const standardTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(oppholdFra);
 
-  const harKorrigertEgenVurdering = oppholdVurderinger.some((v) => {
-    if (!erReduksjonUtIFraFormFields(v)) return false;
-    const fom = v.periode?.fom;
-    if (!erGyldigDatoFormat(fom)) return false;
-    return !isBefore(new Dato(fom).dato, new Dato(standardTidligsteReduksjonsdato).dato);
-  });
-
-  return !harKorrigertEgenVurdering;
+  return !harKorrigertReduksjonsdato(oppholdVurderinger, standardTidligsteReduksjonsdato);
 }
 
 export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string, oppholdTil: string): string {

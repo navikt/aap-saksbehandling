@@ -6,8 +6,10 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import {
+  beregnReduksjonskjede,
   erReduksjonUtIFraFormFields,
   erVurderingHistorisk,
+  grupperVedtattePerOppholdId,
   lagReduksjonBeskrivelseNyttOpphold,
   lagReduksjonsBeskrivelse,
   validerDatoErInnenforOpphold,
@@ -18,9 +20,9 @@ import { HelseinstitusjonGrunnlag } from 'lib/types/types';
 import { validerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { useEffektivTidligsteReduksjonsdato } from 'lib/utils/useEffektivTidligsteReduksjonsdato';
 import { Dato } from 'lib/types/Dato';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -53,8 +55,13 @@ export const Helseinstitusjonsvurdering = ({
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
 
-  const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig, enManedsregelEnabled } =
-    useEffektivTidligsteReduksjonsdato(form, oppholdIndex, vedtatteVurderinger);
+  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
+  const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig } = beregnReduksjonskjede(
+    form.watch('helseinstitusjonsvurderinger'),
+    grupperVedtattePerOppholdId(vedtatteVurderinger),
+    enManedsregelEnabled,
+    oppholdIndex
+  )[oppholdIndex];
 
   const erFørsteVurdering = vurderingIndex === 0;
   const forrigeErHistorisk =
