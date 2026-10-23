@@ -10,6 +10,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
 interface Props {
   behandlingsVersjon: number;
@@ -48,18 +49,22 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
     usePostmottakLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
 
   const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'OVERLEVER_TIL_FAGSYSTEM');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingsVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_OVERLEVERING,
-          skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
-          begrunnelse: data.begrunnelse,
-        } satisfies AvklarOverleveringLøsning,
-        referanse: behandlingsreferanse,
-      });
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingsVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_OVERLEVERING,
+            skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
+            begrunnelse: data.begrunnelse,
+          } satisfies AvklarOverleveringLøsning,
+          referanse: behandlingsreferanse,
+        },
+        () => loggUmamiVarighet('STEG_OVERLEVER_TIL_FAGSYSTEM_VARIGHET', umamiStartTidspunkt, Date.now())
+      );
     })(event);
   };
 

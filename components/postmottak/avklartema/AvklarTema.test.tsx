@@ -84,11 +84,14 @@ describe('AvklarTema', () => {
     expect(screen.getByText(/Tema endres på journalposten/)).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
-      expect(løsBehov).toHaveBeenCalledWith({
-        behandlingVersjon: 1,
-        referanse: '123',
-        behov: { behovstype: '1339', skalTilAap: false, tema: 'BAR' },
-      })
+      expect(løsBehov).toHaveBeenCalledWith(
+        {
+          behandlingVersjon: 1,
+          referanse: '123',
+          behov: { behovstype: '1339', skalTilAap: false, tema: 'BAR' },
+        },
+        expect.any(Function)
+      )
     );
     expect(gosysBehov).not.toHaveBeenCalled();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -103,7 +106,8 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith(
-        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: false, tema: 'UKJENT' } })
+        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: false, tema: 'UKJENT' } }),
+        expect.any(Function)
       )
     );
   });
@@ -115,7 +119,8 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith(
-        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: true } })
+        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: true } }),
+        expect.any(Function)
       )
     );
   });

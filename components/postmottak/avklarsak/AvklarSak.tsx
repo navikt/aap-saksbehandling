@@ -17,6 +17,7 @@ import { Behovstype } from 'lib/postmottakForm';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
 import { Alert } from 'components/alert/Alert';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
 interface Props {
   behandlingsVersjon: number;
@@ -100,31 +101,35 @@ export const AvklarSak = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, 
     isLoading,
     løsBehovOgGåTilNesteStegError: error,
   } = usePostmottakLøsBehovOgGåTilNesteSteg<AvklarSaksnummerLøsning>('AVKLAR_SAK');
+  const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_SAK');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
+
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingsVersjon,
-        behov: {
-          behovstype: Behovstype.FINN_SAK,
-          opprettNySak: data.knyttTilSak === NY,
-          førPåGenerellSak: data.knyttTilSak === GENERELL,
-          saksnummer: data.knyttTilSak === NY || data.knyttTilSak === GENERELL ? null : data.knyttTilSak,
-          journalposttittel: data.journalpostTittel,
-          avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
-            ? {
-                id: data.avsenderMottaker.id,
-                idType: mapIdType(data.avsenderMottaker.idType) as AvsenderMottakerIdType,
-                navn: data.avsenderMottaker.navn,
-              }
-            : undefined,
-          dokumenter: data.dokumenter,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingsVersjon,
+          behov: {
+            behovstype: Behovstype.FINN_SAK,
+            opprettNySak: data.knyttTilSak === NY,
+            førPåGenerellSak: data.knyttTilSak === GENERELL,
+            saksnummer: data.knyttTilSak === NY || data.knyttTilSak === GENERELL ? null : data.knyttTilSak,
+            journalposttittel: data.journalpostTittel,
+            avsenderMottaker: grunnlag.kanEndreAvsenderMottaker
+              ? {
+                  id: data.avsenderMottaker.id,
+                  idType: mapIdType(data.avsenderMottaker.idType) as AvsenderMottakerIdType,
+                  navn: data.avsenderMottaker.navn,
+                }
+              : undefined,
+            dokumenter: data.dokumenter,
+          },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      });
+        () => loggUmamiVarighet('STEG_AVKLAR_SAK_VARIGHET', umamiStartTidspunkt, Date.now())
+      );
     })(event);
   };
-
-  const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_SAK');
 
   const valgtIdType = form.watch('avsenderMottaker.idType');
   const valgtSaksnummer = form.watch('knyttTilSak');
