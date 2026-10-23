@@ -32,9 +32,7 @@ export const KommendeMeldinger = ({
         setFeilmelding(res.apiException.message);
         return;
       }
-      /**
-       * Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
-       */
+      // Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
       const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
         referanse: behandlingsreferanse,
         påminnelseDato: kommendeMelding.påminnelseDato,
@@ -58,6 +56,15 @@ export const KommendeMeldinger = ({
       const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
+        return;
+      }
+      // Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
+      const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
+        referanse: behandlingsreferanse,
+        påminnelseAvbrutt: false,
+      });
+      if (isError(oppdaterPåminnelseResponse)) {
+        setFeilmelding(oppdaterPåminnelseResponse.apiException.message);
         return;
       }
       setFeilmelding(null);
