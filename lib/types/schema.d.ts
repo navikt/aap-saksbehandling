@@ -8824,6 +8824,11 @@ export interface components {
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse'][];
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetVurderingResponse': {
@@ -8842,14 +8847,14 @@ export interface components {
       jobberBrukerAktivMedVirksomheten?: boolean | null;
       kanFøreTilSelvforsørget?: boolean | null;
       oppfylt: boolean;
-      oppstartsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      oppstartsPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       orgNr?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       tom?: string | null;
-      utviklingsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      utviklingsPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
@@ -12549,14 +12554,22 @@ export interface components {
       foreliggerFagligVurdering: boolean;
       jobberBrukerAktivMedVirksomheten?: boolean | null;
       kanFøreTilSelvforsørget?: boolean | null;
-      oppstartsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /**
+       * @deprecated
+       * @description Bruk fase + fom. Fjernes etter frontend mignering
+       */
+      oppstartsPerioder?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       orgNr?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       tom?: string | null;
-      utviklingsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /**
+       * @deprecated
+       * @description Bruk fase + fom. Fjernes etter frontend mignering
+       */
+      utviklingsPerioder?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
     };
@@ -15656,8 +15669,6 @@ export interface components {
         | 'TRUKKET'
         | null;
       saksnummer: string;
-      /** Format: uuid */
-      sisteBehandlingReferanse?: string | null;
     };
     'no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SøkDto': {
       søketekst: string;
