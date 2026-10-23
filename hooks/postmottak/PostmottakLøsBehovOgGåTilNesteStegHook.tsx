@@ -18,7 +18,11 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
   status: ServerSentEventStatus | undefined;
   resetStatus: () => void;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling<B>, sjekkTildeltStatus?: boolean) => void;
+  løsBehovOgGåTilNesteSteg: (
+    behov: LøsAvklaringsbehovPåBehandling<B>,
+    onSuccess?: () => void,
+    sjekkTildeltStatus?: boolean
+  ) => void;
   løsBehovOgGåTilNesteStegError?: ApiException;
 } => {
   const params = useParamsMedType();
@@ -32,10 +36,12 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
     behov: LøsAvklaringsbehovPåBehandling<B>;
+    onSuccess?: () => void;
   }>(null);
 
   const løsBehovOgGåTilNesteSteg = async (
     behov: LøsAvklaringsbehovPåBehandling<B>,
+    onSuccess?: () => void,
     sjekkTildeltStatus: boolean = true
   ) => {
     setIsLoading(true);
@@ -56,7 +62,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
           );
           setIsLoading(false);
           setCallback(() => bekreftOgFortsett);
-          sisteBehovRef.current = { behov };
+          sisteBehovRef.current = { behov, onSuccess };
           return;
         }
       } // Hvis henting av tildelt-status feiler, la saksbehandler fortsette
@@ -68,9 +74,9 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
       setIsLoading(false);
       return;
     }
-    listenSSE();
+    listenSSE(onSuccess);
   };
-  const listenSSE = () => {
+  const listenSSE = (onSuccess?: () => void) => {
     const eventSource = new EventSource(
       `/postmottak/api/post/${params.behandlingsreferanse}/hent/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
@@ -81,6 +87,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();
+        onSuccess?.();
         if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
           // TODO: Legge tilbake igjen hash for aktivt-steg hvis vi tar i bruk dette?
           router.push(`/postmottak/${params.behandlingsreferanse}/${eventData.aktivGruppe}/`);
@@ -112,7 +119,8 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
       setError({ message: 'Noe gikk galt ved overstyring av tildeling. Prøv igjen.' });
       return;
     }
-    sisteBehovRef.current && løsBehovOgGåTilNesteSteg(sisteBehovRef.current.behov, false);
+    sisteBehovRef.current &&
+      løsBehovOgGåTilNesteSteg(sisteBehovRef.current.behov, sisteBehovRef.current.onSuccess, false);
   };
 
   return {

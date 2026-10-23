@@ -10,6 +10,7 @@ import {
   KategoriserDokumentKategori,
 } from 'lib/types/postmottakTypes';
 import { formaterDatoForBackend } from 'lib/utils/date';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { useState } from 'react';
 
 import { DigitaliserKlage } from 'components/postmottak/digitaliserdokument/klage/DigitaliserKlage';
@@ -41,21 +42,25 @@ export const DigitaliserDokument = ({
   registrertDato,
 }: Props) => {
   const [kategori, setKategori] = useState<KategoriserDokumentKategori | undefined>(grunnlag.vurdering?.kategori);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
 
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg<DigitaliserDokumentLøsning>('DIGITALISER_DOKUMENT');
 
   function handleSubmit(kategori: KategoriserDokumentKategori, jsonString: string | null, søknadsdato: Date | null) {
-    løsBehovOgGåTilNesteSteg({
-      behandlingVersjon: behandlingsVersjon,
-      behov: {
-        behovstype: Behovstype.DIGITALISER_DOKUMENT,
-        kategori: kategori,
-        strukturertDokument: jsonString,
-        søknadsdato: søknadsdato && formaterDatoForBackend(søknadsdato),
+    løsBehovOgGåTilNesteSteg(
+      {
+        behandlingVersjon: behandlingsVersjon,
+        behov: {
+          behovstype: Behovstype.DIGITALISER_DOKUMENT,
+          kategori: kategori,
+          strukturertDokument: jsonString,
+          søknadsdato: søknadsdato && formaterDatoForBackend(søknadsdato),
+        },
+        referanse: behandlingsreferanse,
       },
-      referanse: behandlingsreferanse,
-    });
+      () => loggUmamiVarighet('STEG_DIGITALISER_DOKUMENT_VARIGHET', umamiStartTidspunkt, Date.now())
+    );
   }
 
   const erKravEnabled = useFeatureFlag('KravManuellVurdering');
