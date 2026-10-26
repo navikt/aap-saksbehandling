@@ -47,6 +47,7 @@ function renderSkrivBrev(readOnly: boolean) {
     <SkriveBrev
       referanse={'123'}
       behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+      bruker={{ ident: '123', navn: 'Iren Panikk' }}
       mottaker={{ ident: 'hei', navn: 'Iren Panikk' }}
       behandlingVersjon={1}
       grunnlag={{

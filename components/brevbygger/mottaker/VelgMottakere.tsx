@@ -9,44 +9,21 @@ import { clientOppdaterMottakere } from 'lib/clientApi';
 import { MottakerInfoCard } from 'components/brevbygger/mottaker/MottakerInfoCard';
 import { RedigerMottakerDialog } from 'components/brevbygger/mottaker/RedigerMottakerDialog';
 import { isSuccess } from 'lib/utils/api';
-import { capitalize } from 'lodash';
 import { Alert } from 'components/alert/Alert';
+import { erGyldigFullmektig, formaterNavn, mottakerErBrukerUtenAdresse } from 'lib/utils/brevmottakere';
 
 export enum MottakerType {
   HOVEDMOTTAKER = 'HOVEDMOTTAKER',
   KOPIMOTTAKER = 'KOPIMOTTAKER',
 }
 
-interface Props {
+export interface VelgMottakereProps {
   bestillingsreferanse: string;
   readOnly: boolean;
   bruker: IdentOgNavn;
   initellMottaker: Mottaker;
   initiellKopimottaker?: Mottaker;
   fullmektig?: Mottaker;
-}
-
-function formaterNavn(navn?: string): string | undefined {
-  if (!navn) return undefined;
-  else
-    return navn
-      .split(' ')
-      .map((del) => capitalize(del))
-      .join(' ');
-}
-
-function mottakerErBrukerUtenAdresse(mottaker: Mottaker, bruker: IdentOgNavn): boolean {
-  return mottaker.ident === bruker.ident && !mottaker.navnOgAdresse?.adresse;
-}
-
-function erGyldigFullmektig(fullmektig?: Mottaker, hovedmottaker?: Mottaker, kopimottaker?: Mottaker): boolean {
-  if (!fullmektig) return false;
-  const fullmektigErHovedmottaker =
-    fullmektig.ident === hovedmottaker?.ident || fullmektig.navnOgAdresse?.navn === hovedmottaker?.navnOgAdresse?.navn;
-  const fullmektigErKopimottaker =
-    fullmektig.ident === kopimottaker?.ident || fullmektig.navnOgAdresse?.navn === kopimottaker?.navnOgAdresse?.navn;
-
-  return !fullmektigErHovedmottaker && !fullmektigErKopimottaker;
 }
 
 export function VelgMottakere({
@@ -56,7 +33,7 @@ export function VelgMottakere({
   initellMottaker,
   initiellKopimottaker,
   fullmektig,
-}: Props) {
+}: VelgMottakereProps) {
   const [hovedmottaker, setHovedmottaker] = useState<Mottaker>(initellMottaker);
   const [kopimottaker, setKopimottaker] = useState<Mottaker | undefined>(initiellKopimottaker);
 
@@ -182,31 +159,7 @@ export function VelgMottakere({
                 </div>
               )}
 
-              {fullmektig && fullmektigKanTilbys && (
-                <HStack gap="space-8">
-                  <Alert variant="info" size="small">
-                    <BodyShort size="small">Det finnes fullmektig i denne saken</BodyShort>
-                    <Button
-                      type="button"
-                      variant="tertiary"
-                      size="xsmall"
-                      icon={<PersonPlusIcon aria-hidden />}
-                      onClick={() => leggTilFullmektig(MottakerType.HOVEDMOTTAKER)}
-                    >
-                      Sett som hovedmottaker
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="tertiary"
-                      size="xsmall"
-                      icon={<PersonPlusIcon aria-hidden />}
-                      onClick={() => leggTilFullmektig(MottakerType.KOPIMOTTAKER)}
-                    >
-                      Sett som kopimottaker
-                    </Button>
-                  </Alert>
-                </HStack>
-              )}
+              {fullmektigKanTilbys && <LeggTilFullmektigKnapp action={leggTilFullmektig} />}
             </>
           )}
         </VStack>
@@ -260,3 +213,29 @@ export function VelgMottakere({
     </>
   );
 }
+
+export const LeggTilFullmektigKnapp = ({ action }: { action: (type: MottakerType) => void }) => (
+  <HStack gap="space-8">
+    <Alert variant="info" size="small">
+      <BodyShort size="small">Det finnes fullmektig i denne saken</BodyShort>
+      <Button
+        type="button"
+        variant="tertiary"
+        size="xsmall"
+        icon={<PersonPlusIcon aria-hidden />}
+        onClick={() => action(MottakerType.HOVEDMOTTAKER)}
+      >
+        Sett som hovedmottaker
+      </Button>
+      <Button
+        type="button"
+        variant="tertiary"
+        size="xsmall"
+        icon={<PersonPlusIcon aria-hidden />}
+        onClick={() => action(MottakerType.KOPIMOTTAKER)}
+      >
+        Sett som kopimottaker
+      </Button>
+    </Alert>
+  </HStack>
+);
