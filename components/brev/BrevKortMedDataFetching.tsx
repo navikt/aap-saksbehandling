@@ -1,5 +1,5 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { hentBrevGrunnlag, hentFullmektigGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { AvklaringsbehovKode, BrevBehovstype, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';

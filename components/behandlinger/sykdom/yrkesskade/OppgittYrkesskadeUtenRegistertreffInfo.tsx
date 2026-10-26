@@ -1,5 +1,5 @@
 import { BodyShort, Label, VStack } from '@navikt/ds-react';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { YrkesskadeVurderingGrunnlag } from 'lib/types/types';
 import { Alert } from 'components/alert/Alert';
 

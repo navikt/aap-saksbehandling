@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 
 describe('VilkRskort', () => {
   it('skal vise overskrift', () => {

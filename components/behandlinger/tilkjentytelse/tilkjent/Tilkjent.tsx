@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/tilkjentytelse/tilkjent/Tilkjent.module.css';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 
 interface PropsMedDiff {
   grunnlagMedDiff: TilkjentYtelseGrunnlagMedDiff;
