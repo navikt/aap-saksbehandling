@@ -279,7 +279,7 @@ export const TotrinnsvurderingForm = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Se eksempel på vedtaksbrev for avslag etter § 11-5 (Navet) <ExternalLinkIcon />
+              Se brevmal for avslag § 11-5 (Navet) <ExternalLinkIcon />
             </Link>
           </InfoCard.Content>
         </InfoCard>
