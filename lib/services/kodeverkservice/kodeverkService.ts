@@ -2,21 +2,7 @@ import 'server-only';
 
 import { apiFetch } from 'lib/services/apiFetch';
 import { FetchResponse } from 'lib/utils/api';
-
-type Beskrivelse = {
-  term: string;
-  tekst: string;
-};
-
-type Betydning = {
-  gyldigFra: string;
-  gyldigTil: string;
-  beskrivelser: Record<string, Beskrivelse>;
-};
-
-export type KodeverkResponse = {
-  betydninger: Record<string, Betydning[]>;
-};
+import { KodeverkResponse } from 'lib/types/kodeverk';
 
 const kodeverkApiBaseUrl = process.env.KODEVERK_API_BASE_URL;
 const kodeverkApiScope = process.env.KODEVERK_API_SCOPE ?? '';

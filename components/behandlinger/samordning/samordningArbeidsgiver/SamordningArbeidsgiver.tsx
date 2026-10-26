@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyLong, BodyShort, Link, VStack } from '@navikt/ds-react';
-import { differenceInBusinessDays, parse } from 'date-fns';
+import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -37,7 +37,6 @@ export interface SamordningArbeidsgiverFormFields {
 export interface SamordningArbeidsGiverPeriode {
   fom: string;
   tom: string;
-  antallDager?: string;
 }
 
 type DraftFormFields = Partial<SamordningArbeidsgiverFormFields>;
@@ -74,7 +73,6 @@ export const SamordningArbeidsgiver = ({
       perioder: {
         type: 'fieldArray',
         defaultValue: defaultValue.perioder,
-        rules: {},
       },
     },
     { readOnly: formReadOnly }
@@ -179,11 +177,11 @@ export const SamordningArbeidsgiver = ({
   );
 };
 
-function byggFelter(vurdering: SamordningArbeidsgiverVurdering): ValuePair<string>[] {
+function byggFelter(vurdering: SamordningArbeidsgiverVurdering): ValuePair[] {
   const begrunnelse = vurdering.begrunnelse || 'Ingen begrunnelse på behandling funnet';
   const perioder = vurdering.perioder || [];
 
-  const felter: ValuePair<string>[] = [
+  const felter: ValuePair[] = [
     {
       label: 'Begrunnelse',
       value: begrunnelse,
@@ -214,15 +212,9 @@ function mapVurderingToDraftFormFields(vurdering: SamordningArbeidsgiverGrunnlag
   return {
     begrunnelse: vurdering?.begrunnelse || '',
     perioder: (vurdering?.perioder || []).map((periode) => {
-      const fomDate = parse(periode.fom, 'yyyy-MM-dd', new Date());
-      const tomDate = parse(periode.tom, 'yyyy-MM-dd', new Date());
-
-      const antallDager = differenceInBusinessDays(tomDate, fomDate) + 1;
-
       return {
         fom: formaterDatoForFrontend(periode.fom),
         tom: formaterDatoForFrontend(periode.tom),
-        antallDager: String(antallDager),
       };
     }),
   };

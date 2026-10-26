@@ -7,6 +7,7 @@ import { RelevanteDokumenter } from '../innhentdokumentasjon/relevantedokumenter
 import { useMeldingerFraDialog } from '../../hooks/saksbehandling/SakMeldingerFraDialogHook';
 import { DialogMedBehandler } from './DialogMedBehandler';
 import { revalidateBehandlingPath } from '../../lib/actions/actions';
+import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 
 export const BeOmOpplysninger = () => {
   const { meldingerMedDokumentliste, kommendeMeldinger, isLoading, error, refetchDialogmeldingerClient } =
@@ -36,7 +37,14 @@ export const BeOmOpplysninger = () => {
           />
           <VStack gap={'space-16'} align={'end'}>
             <div>
-              <Button type="button" variant={'secondary'} onClick={() => oppdaterVisSkjema(true)}>
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GÅ_TIL_SEND_FORESPØRSEL');
+                  oppdaterVisSkjema(true);
+                }}
+              >
                 Send forespørsel til behandler
               </Button>
             </div>

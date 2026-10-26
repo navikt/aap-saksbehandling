@@ -46,6 +46,7 @@ import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } f
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
+import { KodeverkResponse } from 'lib/types/kodeverk';
 
 const BASE_URL = '/saksbehandling';
 
@@ -270,6 +271,10 @@ export function clientSendHendelse(saksnummer: string, body: Object) {
 
 export function clientConfig() {
   return clientFetch<ClientConfig>('/api/config', 'GET');
+}
+
+export function clientHentLandkoderIso2() {
+  return clientFetch<KodeverkResponse>('/api/kodeverk/landkoderiso2', 'GET');
 }
 
 export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {

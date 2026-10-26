@@ -13,10 +13,11 @@ export const FLAGS = [
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
   'ForesporselSendtTilBehandlerFrontend',
-  'StoppAutomatikkForLegeerklaringVedAvslag',
+  'RegistrerMeldedato',
   'SammenhengendeInstitusjonsopphold',
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
+  'Helseinstitusjon1Manedsregel',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -37,8 +38,9 @@ export const mockedFlags: Flags = {
   HoppOverBeslutterVedAvslagSykdom: true,
   KanVurdereRefusjonIRevurdering: true,
   ForesporselSendtTilBehandlerFrontend: true,
-  StoppAutomatikkForLegeerklaringVedAvslag: true,
+  RegistrerMeldedato: true,
   SammenhengendeInstitusjonsopphold: true,
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
+  Helseinstitusjon1Manedsregel: true,
 };

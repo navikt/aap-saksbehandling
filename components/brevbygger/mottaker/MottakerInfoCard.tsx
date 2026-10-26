@@ -143,10 +143,8 @@ const NavnOgAdresse = ({ mottaker }: { mottaker: Mottaker }) => {
           <BodyShort size="small">{mottaker.ident}</BodyShort>
         </>
       )}
-
       <Label size="small">Navn</Label>
       <BodyShort size="small">{mottaker.navnOgAdresse?.navn || 'Mangler navn'}</BodyShort>
-
       <Label size="small">Adresse</Label>
       <div>
         <BodyShort size="small">{adresse?.adresselinje1}</BodyShort>

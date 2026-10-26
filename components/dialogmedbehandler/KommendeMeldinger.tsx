@@ -24,7 +24,7 @@ export const KommendeMeldinger = ({
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
   const avbrytPåminnelse = async (kommendeMelding: KommendeMeldingDto) => {
-    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE_KLIKK');
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE');
     setLoading(kommendeMelding.bestillingId);
     try {
       const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
@@ -52,7 +52,7 @@ export const KommendeMeldinger = ({
   };
 
   const gjenopptaPåminnelse = async (bestillingId: string) => {
-    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE_KLIKK');
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE');
     setLoading(bestillingId);
     try {
       const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);

@@ -7,8 +7,15 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ForespørselSendtTilBehandler } from 'lib/types/oppgaveTypes';
 import styles from './DialogMedBehandlerInfoboks.module.css';
 
-const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
+export const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
   if (!påminnelseDato) return false;
+
+  const kalkulertForespørseldato = new Date(påminnelseDato);
+  kalkulertForespørseldato.setDate(kalkulertForespørseldato.getDate() - 22);
+  if (kalkulertForespørseldato.getTime() < new Date('2026-09-29').getTime()) {
+    return false;
+  }
+
   return new Date(påminnelseDato).getTime() <= Date.now();
 };
 
