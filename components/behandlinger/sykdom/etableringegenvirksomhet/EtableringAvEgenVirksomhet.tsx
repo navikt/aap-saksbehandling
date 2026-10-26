@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { HStack, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
@@ -39,7 +39,7 @@ import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 

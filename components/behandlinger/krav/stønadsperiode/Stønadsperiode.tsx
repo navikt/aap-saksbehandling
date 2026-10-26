@@ -3,7 +3,7 @@
 import { StønadsperiodeGrunnlag } from 'lib/types/types';
 
 import { StønadsperiodeTabell } from 'components/behandlinger/krav/stønadsperiode/stønadsperiodetabell/StønadsperiodeTabell';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 
 interface Props {
   behandlingVersjon: number;

@@ -5,7 +5,7 @@ import { StegType, VurdertAvAnsatt } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
-import styles from 'components/vilkårskort/Vilkårskort.module.css';
+import styles from 'components/vilkaarskort/Vilkårskort.module.css';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { ReactNode, SubmitEventHandler } from 'react';
 

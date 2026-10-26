@@ -4,13 +4,13 @@ import { Button, Detail, ExpansionCard, HStack, VStack } from '@navikt/ds-react'
 import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 
-import styles from 'components/vilkårskort/Vilkårskort.module.css';
+import styles from 'components/vilkaarskort/Vilkårskort.module.css';
 import { ReactNode, SubmitEventHandler } from 'react';
 
 import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
-import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
+import { UtkastInfo } from 'components/vilkaarskort/utkastinfo/UtkastInfo';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 

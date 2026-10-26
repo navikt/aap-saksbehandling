@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 import { Alert } from 'components/alert/Alert';
 import styles from 'components/behandlinger/underveis/underveisgrunnlag/Underveisgrunnlag.module.css';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 type Props = {

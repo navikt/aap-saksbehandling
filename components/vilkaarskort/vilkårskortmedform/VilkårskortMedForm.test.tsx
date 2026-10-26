@@ -4,7 +4,7 @@ import { VisningModus } from 'lib/types/visningTypes';
 import {
   VilkårskortMedForm,
   VilkårsKortMedFormProps,
-} from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+} from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 
 describe('Vilkårskort med form', () => {
   it('skal ha en overskrift', () => {

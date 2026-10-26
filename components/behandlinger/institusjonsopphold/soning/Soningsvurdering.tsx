@@ -18,7 +18,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 
 import { InstitusjonsoppholdTabell } from '../InstitusjonsoppholdTabell';
 import styles from './Soningsvurdering.module.css';
