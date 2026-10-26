@@ -4,10 +4,8 @@ import { MeldekortTabell } from 'components/saksoversikt/meldekortoversikt/melde
 import { SaksInfo } from 'lib/types/types';
 import { Alert } from 'components/alert/Alert';
 import { RegistrerMeldedatoModal } from 'components/saksoversikt/meldekortoversikt/registrermeldedatomodal/RegistrerMeldedatoModal';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 export const MeldekortOversikt = ({ sak }: { sak: SaksInfo }) => {
-  const registrerMeldedatoFeatureIsEnabled = useFeatureFlag('RegistrerMeldedato');
   const [erRegistrerMeldedatoModalÅpen, setErRegistrerMeldedatoModalÅpen] = useState(false);
 
   const finnesÅpenFørstegangsbehandling = sak.behandlinger.some(
@@ -15,8 +13,7 @@ export const MeldekortOversikt = ({ sak }: { sak: SaksInfo }) => {
       behandling.typeBehandling === 'Førstegangsbehandling' && !['IVERKSETTES', 'AVSLUTTET'].includes(behandling.status)
   );
 
-  const skalViseKnappForRegistreringAvMeldedato =
-    !finnesÅpenFørstegangsbehandling && registrerMeldedatoFeatureIsEnabled;
+  const skalViseKnappForRegistreringAvMeldedato = !finnesÅpenFørstegangsbehandling;
 
   return (
     <VStack gap={'space-16'}>
@@ -39,9 +36,8 @@ export const MeldekortOversikt = ({ sak }: { sak: SaksInfo }) => {
         </Alert>
       )}
       <MeldekortTabell />
-      {registrerMeldedatoFeatureIsEnabled && (
-        <RegistrerMeldedatoModal isOpen={erRegistrerMeldedatoModalÅpen} setIsOpen={setErRegistrerMeldedatoModalÅpen} />
-      )}
+
+      <RegistrerMeldedatoModal isOpen={erRegistrerMeldedatoModalÅpen} setIsOpen={setErRegistrerMeldedatoModalÅpen} />
     </VStack>
   );
 };
