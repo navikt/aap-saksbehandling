@@ -1,8 +1,8 @@
 'use client';
 
-import { ArrowRightLeftIcon, PersonPlusIcon, PlusIcon } from '@navikt/aksel-icons';
-import { BodyShort, Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
-import { IdentOgNavn, Mottaker } from 'lib/types/types';
+import { ArrowRightLeftIcon, PlusIcon } from '@navikt/aksel-icons';
+import { Box, Button, HGrid, HStack, VStack } from '@navikt/ds-react';
+import { Mottaker } from 'lib/types/types';
 import { useState } from 'react';
 
 import { clientOppdaterMottakere } from 'lib/clientApi';
@@ -10,36 +10,8 @@ import { MottakerInfoCard } from 'components/brevbygger/mottaker/MottakerInfoCar
 import { RedigerMottakerDialog } from 'components/brevbygger/mottaker/RedigerMottakerDialog';
 import { isSuccess } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
-
-export enum MottakerType {
-  HOVEDMOTTAKER = 'HOVEDMOTTAKER',
-  KOPIMOTTAKER = 'KOPIMOTTAKER',
-}
-
-interface Props {
-  bestillingsreferanse: string;
-  readOnly: boolean;
-  bruker: IdentOgNavn;
-  initellMottaker: Mottaker;
-  initiellKopimottaker?: Mottaker;
-  fullmektig?: Mottaker;
-  brevbygger: boolean;
-}
-
-function erSamme(mottaker1?: Mottaker, mottaker2?: Mottaker): boolean {
-  if (!mottaker1 || !mottaker2) {
-    return false;
-  }
-  return mottaker1.ident === mottaker2.ident || mottaker1.navnOgAdresse?.navn === mottaker2.navnOgAdresse?.navn;
-}
-
-function erGyldigFullmektig(fullmektig?: Mottaker, hovedmottaker?: Mottaker, kopimottaker?: Mottaker): boolean {
-  if (!fullmektig) return false;
-  const fullmektigErHovedmottaker = erSamme(fullmektig, hovedmottaker);
-  const fullmektigErKopimottaker = erSamme(fullmektig, kopimottaker);
-
-  return !fullmektigErHovedmottaker && !fullmektigErKopimottaker;
-}
+import { LeggTilFullmektigKnapp, MottakerType, VelgMottakereProps } from 'components/brevbygger/mottaker/VelgMottakere';
+import { erGyldigFullmektig } from 'lib/utils/brevmottakere';
 
 /**
  * Duplikat av VelgMottakere som brukes i [Brevbygger.tsx] med styling tilpasset gammel løsning.
@@ -52,7 +24,7 @@ export function VelgMottakere_SkriveBrev({
   initellMottaker,
   initiellKopimottaker,
   fullmektig,
-}: Props) {
+}: VelgMottakereProps) {
   const [hovedmottaker, setHovedmottaker] = useState<Mottaker>(initellMottaker);
   const [kopimottaker, setKopimottaker] = useState<Mottaker | undefined>(initiellKopimottaker);
 
@@ -186,31 +158,7 @@ export function VelgMottakere_SkriveBrev({
                 </div>
               )}
 
-              {fullmektig && fullmektigKanTilbys && (
-                <HStack gap="space-8">
-                  <Alert variant="info" size="small">
-                    <BodyShort size="small">Det finnes fullmektig i denne saken</BodyShort>
-                    <Button
-                      type="button"
-                      variant="tertiary"
-                      size="xsmall"
-                      icon={<PersonPlusIcon aria-hidden />}
-                      onClick={() => leggTilFullmektig(MottakerType.HOVEDMOTTAKER)}
-                    >
-                      Sett som hovedmottaker
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="tertiary"
-                      size="xsmall"
-                      icon={<PersonPlusIcon aria-hidden />}
-                      onClick={() => leggTilFullmektig(MottakerType.KOPIMOTTAKER)}
-                    >
-                      Sett som kopimottaker
-                    </Button>
-                  </Alert>
-                </HStack>
-              )}
+              {fullmektigKanTilbys && <LeggTilFullmektigKnapp action={leggTilFullmektig} />}
             </HStack>
           )}
 

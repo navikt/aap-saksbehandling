@@ -163,7 +163,6 @@ export const SkriveBrev = ({
             initellMottaker={mottaker}
             initiellKopimottaker={kopimottaker}
             fullmektig={fullmektigMottaker}
-            brevbygger={false}
           />
         )}
 
