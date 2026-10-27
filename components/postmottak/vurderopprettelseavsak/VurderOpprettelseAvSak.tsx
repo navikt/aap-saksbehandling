@@ -10,6 +10,7 @@ import { ManuellFordelingsgrunnlagResponse } from 'lib/services/apiinternservice
 import { AvklarFordelingLøsning, StegType } from 'lib/types/postmottakTypes';
 import { ForeldrepengeperiodeDTO, SykepengeperiodeDTO } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 
 import { Alert } from 'components/alert/Alert';
@@ -115,6 +116,7 @@ export const VurderOpprettelseAvSak = ({
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
     usePostmottakLøsBehovOgGåTilNesteSteg<AvklarFordelingLøsning>(STEG);
   const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, STEG);
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const valgtHvorBehandles = form.watch('hvorBehandles');
   const opprettesOppgaveIArena = valgtHvorBehandles === HvorSkalSøknadenBehandles.ARENA;
@@ -123,15 +125,18 @@ export const VurderOpprettelseAvSak = ({
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingsVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_FORDELING,
-          valgtSystem: data.hvorBehandles,
-          kommentar: data.kommentar || null,
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingsVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_FORDELING,
+            valgtSystem: data.hvorBehandles,
+            kommentar: data.kommentar || null,
+          },
+          referanse: behandlingsreferanse,
         },
-        referanse: behandlingsreferanse,
-      });
+        () => loggUmamiVarighet('STEG_AVKLAR_FORDELING_VARIGHET', umamiStartTidspunkt, Date.now())
+      );
     })(event);
   };
 
