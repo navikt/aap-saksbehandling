@@ -161,7 +161,7 @@ function mapUnderveisÅrsakTilHjemmel(underveisAvslag: UnderveisAvslagsÅrsak) {
       return '§ 11-10';
     case 'BRUDD_PÅ_AKTIVITETSPLIKT_11_7_OPPHØR':
       return '§ 11-7';
-    case 'SONER_STRAFF': // TODO Thao: Denne er markert deprecated i UnderveisÅrsak i backend
+    case 'SONER_STRAFF':
       return '§ 11-26';
     case 'ARBEIDER_MER_ENN_GRENSEVERDI':
       return '§ 11-23';
