@@ -7,7 +7,7 @@ import {
   KnyttTilAnnenSakResponse,
 } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
-import { Journalpost } from 'lib/types/journalpost';
+import { HentUtsendingsinfoResponse, Journalpost } from 'lib/types/journalpost';
 
 const dokumentinnhentingApiBaseUrl = process.env.DOKUMENTINNHENTING_API_BASE_URL;
 const dokumentinnhentingApiScope = process.env.DOKUMENTINNHENTING_API_SCOPE ?? '';
@@ -30,6 +30,11 @@ export async function hentHelsedokumenterPåBruker(request: object) {
 export const hentDokument = async (journalPostId: string, dokumentInfoId: string): Promise<Response> => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
   return await apiFetchPdf(url, dokumentinnhentingApiScope);
+};
+
+export const hentUtsendingsinfo = async (journalPostId: string) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/utsendingsinfo`;
+  return await apiFetch<HentUtsendingsinfoResponse>(url, dokumentinnhentingApiScope);
 };
 
 export const knyttTilAnnenSak = async (journalpostId: string, request: KnyttTilAnnenSakRequest) => {

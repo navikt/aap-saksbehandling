@@ -176,7 +176,7 @@ export const mockResponseDokumenter = {
       ],
       tittel: 'Vedtak om innvilget AAP',
       journalposttype: 'U',
-      journalstatus: 'JOURNALFOERT',
+      journalstatus: 'FERDIGSTILT',
       tema: 'AAP',
       temanavn: null,
       behandlingstema: null,
