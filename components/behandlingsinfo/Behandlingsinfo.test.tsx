@@ -52,4 +52,15 @@ describe('Behandlingsinfo', () => {
     render(<Behandlingsinfo behandling={{ ...behandling, virkningstidspunkt: null }} sak={sak} />);
     expect(screen.getByText('Virkningstidspunkt (foreløpig):')).toBeVisible();
   });
+
+  it('Skal vise AAP maksdato når den finnes', () => {
+    render(<Behandlingsinfo behandling={behandling} sak={sak} rettighetsinfo={{ sisteDagMedRett: '2026-12-31' }} />);
+    expect(screen.getByText('AAP maksdato:')).toBeVisible();
+    expect(screen.getByText('31.12.2026')).toBeVisible();
+  });
+
+  it('Skal ikke vise maksdato når den mangler', () => {
+    render(<Behandlingsinfo behandling={behandling} sak={sak} rettighetsinfo={{ sisteDagMedRett: null }} />);
+    expect(screen.queryByText('AAP maksdato:')).not.toBeInTheDocument();
+  });
 });

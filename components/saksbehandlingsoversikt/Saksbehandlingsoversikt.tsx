@@ -15,7 +15,7 @@ import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDok
 
 import styles from './Saksbehandlingsoversikt.module.css';
 import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
-import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, KabalKlageResultat, Klageresultat, RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { FetchResponse, isError } from 'lib/utils/api';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
@@ -49,6 +49,7 @@ interface Props {
   kabalKlageresultat: FetchResponse<KabalKlageResultat>;
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
+  rettighetsinfo?: RettighetsinfoDto | null;
 }
 
 export const Saksbehandlingsoversikt = ({
@@ -58,6 +59,7 @@ export const Saksbehandlingsoversikt = ({
   kabalKlageresultat,
   expanded: expandedProp,
   onExpandedChange,
+  rettighetsinfo,
 }: Props) => {
   const [expandedState, setExpandedState] = useState<boolean>(true);
   const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.SAKSDOKUMENTER);
@@ -119,7 +121,12 @@ export const Saksbehandlingsoversikt = ({
               </Label>
             </Box>
           </HGrid>
-          <Behandlingsinfo behandling={behandling} sak={sak} klageresultat={klageresultat} />
+          <Behandlingsinfo
+            behandling={behandling}
+            sak={sak}
+            klageresultat={klageresultat}
+            rettighetsinfo={rettighetsinfo}
+          />
           <Tabs
             defaultValue={toggleGroupValue}
             onChange={(value) => setToggleGroupValue(value as Tab)}

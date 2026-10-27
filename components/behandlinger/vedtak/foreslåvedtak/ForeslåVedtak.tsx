@@ -1,13 +1,12 @@
 'use client';
 
-import { Label, VStack } from '@navikt/ds-react';
+import { VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
-import { StansOpphørTabell } from 'components/behandlinger/vedtak/foreslåvedtak/StansOpphørTabell';
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -28,7 +27,7 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
 
   return (
     <VilkårskortMedForm
-      heading="Foreslå vedtak"
+      heading="Behandlingen medfører følgende rettighetsperiode"
       steg={'FORESLÅ_VEDTAK'}
       vilkårTilhørerNavKontor={false}
       status={løsAvklaringsbehovStatus}
@@ -54,12 +53,8 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={'space-16'}>
-        <Label as="p" size={'medium'}>
-          Vedtaket medfører følgende konsekvens for brukeren:
-        </Label>
+      <VStack gap={'space-20'}>
         <ForeslåVedtakTabell grunnlag={grunnlag} />
-        <StansOpphørTabell stansOpphør={grunnlag.stansOpphør} />
       </VStack>
     </VilkårskortMedForm>
   );
