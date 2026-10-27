@@ -32,6 +32,8 @@ export function harKorrigertReduksjonsdato(
   vurderinger: OppholdVurdering[] | undefined,
   standardTidligsteReduksjonsdato: string
 ): boolean {
+  if (harBesvartUtenReduksjon(vurderinger)) return true;
+
   return (
     vurderinger?.some((v) => {
       if (!erReduksjonUtIFraFormFields(v)) return false;
@@ -40,6 +42,11 @@ export function harKorrigertReduksjonsdato(
       return !isBefore(new Dato(fom).dato, new Dato(standardTidligsteReduksjonsdato).dato);
     }) ?? false
   );
+}
+
+function harBesvartUtenReduksjon(vurderinger: OppholdVurdering[] | undefined): boolean {
+  if (!vurderinger || vurderinger.length === 0) return false;
+  return vurderinger.every((v) => v.faarFriKostOgLosji !== undefined && !erReduksjonUtIFraFormFields(v));
 }
 
 export function erGyldigDatoFormat(dato: string | undefined): dato is string {
