@@ -58,9 +58,9 @@ Alle sendes via `clientLoggUmamiEvent` (`client.ts`) → `POST /api/umami` (`app
 
 `loggUmamiBehandlerdialogKlikk(name)` sender kun hendelsesnavn og type, uten saks- eller personopplysninger:
 
-- `BEHANDLERDIALOG_BESTILL_LEGEERKLÆRING_KLIKK` — innsending av bestilling/dialogmelding etter skjemavalidering.
-- `BEHANDLERDIALOG_SEND_PÅMINNELSE_KLIKK` — send purring.
-- `BEHANDLERDIALOG_AVBRYT_PÅMINNELSE_KLIKK` — avbryt automatisk påminnelse.
-- `BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE_KLIKK` — gjenoppta automatisk påminnelse.
+- `BEHANDLERDIALOG_ÅPNE_SEND_FORESPØRSEL` — innsending av bestilling/dialogmelding etter skjemavalidering.
+- `BEHANDLERDIALOG_SEND_FORESPØRSEL` — send purring.
+- `BEHANDLERDIALOG_AVBRYT_PÅMINNELSE` — avbryt automatisk påminnelse.
+- `BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE` — gjenoppta automatisk påminnelse.
 
 Hendelsene måler brukerens handling før API-kallet, ikke om kallet lykkes.

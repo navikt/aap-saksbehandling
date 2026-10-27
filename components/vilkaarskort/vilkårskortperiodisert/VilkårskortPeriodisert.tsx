@@ -1,6 +1,6 @@
 import { MellomlagretVurdering, StegType, VurderingerMeta } from 'lib/types/types';
 import styles from './VilkårskortPeriodisert.module.css';
-import vilkårskortStyles from 'components/vilkårskort/Vilkårskort.module.css';
+import vilkårskortStyles from 'components/vilkaarskort/Vilkårskort.module.css';
 import { Button, Detail, Heading, HGrid, HStack, VStack } from '@navikt/ds-react';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { PlusIcon } from '@navikt/aksel-icons';
@@ -12,7 +12,7 @@ import { ApiException } from 'lib/utils/api';
 import { VisningActions, VisningModus } from 'lib/types/visningTypes';
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
-import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
+import { UtkastInfo } from 'components/vilkaarskort/utkastinfo/UtkastInfo';
 import { LøsBehovOgGåTilNesteStegStatus } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface VilkårsKortPeriodisertProps {

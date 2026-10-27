@@ -7,22 +7,29 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ForespørselSendtTilBehandler } from 'lib/types/oppgaveTypes';
 import styles from './DialogMedBehandlerInfoboks.module.css';
 
-export const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
+const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
   if (!påminnelseDato) return false;
 
-  const kalkulertForespørseldato = new Date(påminnelseDato);
-  kalkulertForespørseldato.setDate(kalkulertForespørseldato.getDate() - 22);
-  if (kalkulertForespørseldato.getTime() < new Date('2026-09-29').getTime()) {
+  if (erForespørselFør29september2026(påminnelseDato)) {
     return false;
   }
 
   return new Date(påminnelseDato).getTime() <= Date.now();
 };
 
+export const erForespørselFør29september2026 = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
+  if (!påminnelseDato) return false;
+
+  const kalkulertForespørseldato = new Date(påminnelseDato);
+  kalkulertForespørseldato.setDate(kalkulertForespørseldato.getDate() - 22);
+  return kalkulertForespørseldato.getTime() < new Date('2026-09-29').getTime();
+};
+
 export const DialogMedBehandlerInfoboks = ({ påminnelseDato, påminnelseAvbrutt }: ForespørselSendtTilBehandler) => {
   if (!påminnelseDato) return null;
 
   const erPåminnelseSendt = erPåminnelsenIFortiden(påminnelseDato) && !påminnelseAvbrutt;
+  const harIkkeAutomatiskPåminnelse = erForespørselFør29september2026(påminnelseDato);
 
   return (
     <TagMedPopover
@@ -46,16 +53,18 @@ export const DialogMedBehandlerInfoboks = ({ påminnelseDato, påminnelseAvbrutt
               {erPåminnelseSendt ? 'Påminnelse sendt til behandler' : 'Forespørsel sendt til behandler'}
             </BodyShort>
           </Tag>
-          <VStack>
-            <Detail textColor="subtle">{erPåminnelseSendt ? 'Påminnelse sendt' : 'Påminnelse'}</Detail>
-            {påminnelseAvbrutt ? (
-              <div>Avbrutt</div>
-            ) : erPåminnelseSendt ? (
-              <div>{formaterDatoForFrontend(påminnelseDato)}</div>
-            ) : (
-              <div>Sendes {formaterDatoForFrontend(påminnelseDato)}</div>
-            )}
-          </VStack>
+          {harIkkeAutomatiskPåminnelse ? null : (
+            <VStack>
+              <Detail textColor="subtle">{erPåminnelseSendt ? 'Påminnelse sendt' : 'Påminnelse'}</Detail>
+              {påminnelseAvbrutt ? (
+                <div>Avbrutt</div>
+              ) : erPåminnelseSendt ? (
+                <div>{formaterDatoForFrontend(påminnelseDato)}</div>
+              ) : harIkkeAutomatiskPåminnelse ? null : (
+                <div>Sendes {formaterDatoForFrontend(påminnelseDato)}</div>
+              )}
+            </VStack>
+          )}
         </VStack>
       }
     />

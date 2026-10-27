@@ -31,6 +31,7 @@ import { Alert } from 'components/alert/Alert';
 import useSWR from 'swr';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { slåSammenDefinerte } from 'lib/utils/string';
+import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 
 export type Behandler = {
   type?: string;
@@ -115,6 +116,7 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   });
 
   const handleSubmit: SubmitEventHandler = (event) => {
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_SEND_FORESPØRSEL');
     form.handleSubmit(async (data) => {
       const isFastlegeValgt = fastlegeDto && data.behandlerValg === 'fastlege';
       const behandlerNavn = isFastlegeValgt

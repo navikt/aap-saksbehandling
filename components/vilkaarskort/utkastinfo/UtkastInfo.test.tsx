@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { UtkastInfo } from 'components/vilkårskort/utkastinfo/UtkastInfo';
+import { UtkastInfo } from 'components/vilkaarskort/utkastinfo/UtkastInfo';
 import { MellomlagretVurdering } from 'lib/types/types';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 

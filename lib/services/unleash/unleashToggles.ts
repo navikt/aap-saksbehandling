@@ -13,7 +13,6 @@ export const FLAGS = [
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
   'ForesporselSendtTilBehandlerFrontend',
-  'RegistrerMeldedato',
   'SammenhengendeInstitusjonsopphold',
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
@@ -24,7 +23,7 @@ export type FlagNames = (typeof FLAGS)[number];
 export type Flags = Record<FlagNames, boolean>;
 
 export const mockedFlags: Flags = {
-  RedigerMottakerBrevbygger: false,
+  RedigerMottakerBrevbygger: true,
   ArenasakerLenkeTilVisninsklient: true,
   OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
@@ -38,7 +37,6 @@ export const mockedFlags: Flags = {
   HoppOverBeslutterVedAvslagSykdom: true,
   KanVurdereRefusjonIRevurdering: true,
   ForesporselSendtTilBehandlerFrontend: true,
-  RegistrerMeldedato: true,
   SammenhengendeInstitusjonsopphold: true,
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,

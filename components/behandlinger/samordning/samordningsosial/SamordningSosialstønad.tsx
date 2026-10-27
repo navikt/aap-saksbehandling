@@ -1,7 +1,7 @@
 'use client';
 
 import { BodyShort, HStack, Table } from '@navikt/ds-react';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { RefusjonskravGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { TableStyled } from 'components/tablestyled/TableStyled';

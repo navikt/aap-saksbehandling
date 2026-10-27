@@ -76,9 +76,13 @@ export const TotrinnsvurderingForm = ({
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt('TOTRINN');
 
+  const vurderingerFraGrunnlag = mapVurderingToDraftFormFields(grunnlag.vurderinger);
   const defaultValue: DraftFormFields = initialMellomlagretVurdering
-    ? mapMellomlagringToDraftFormFields(JSON.parse(initialMellomlagretVurdering.data))
-    : mapVurderingToDraftFormFields(grunnlag.vurderinger);
+    ? mapMellomlagringToDraftFormFields(
+        JSON.parse(initialMellomlagretVurdering.data),
+        vurderingerFraGrunnlag.totrinnsvurderinger ?? []
+      )
+    : vurderingerFraGrunnlag;
 
   const totrinnsvurderinger = defaultValue.totrinnsvurderinger;
   const erBehandlingHastemarkert = hastemarkering !== undefined;
@@ -275,7 +279,7 @@ export const TotrinnsvurderingForm = ({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Se eksempel på vedtaksbrev for avslag etter § 11-5 (Navet) <ExternalLinkIcon />
+              Se brevmal for avslag § 11-5 (Navet) <ExternalLinkIcon />
             </Link>
           </InfoCard.Content>
         </InfoCard>
@@ -327,19 +331,32 @@ function utledKnappetekst(finnesUnderkjentVilkår: Boolean, vedtakFattesAvKvalit
 function mapTrueFalseStringTilJaNei(str: 'true' | 'false') {
   return str === 'true' ? JaEllerNei.Ja : JaEllerNei.Nei;
 }
-function mapMellomlagringToDraftFormFields(mellomlagring: FormFieldsToTrinnsVurdering): DraftFormFields {
+function mapMellomlagringToDraftFormFields(
+  mellomlagring: FormFieldsToTrinnsVurdering,
+  vurderingerFraGrunnlag: ToTrinnsVurderingFormFields[]
+): DraftFormFields {
+  const mellomlagredeVurderinger = new Map(
+    mellomlagring.totrinnsvurderinger.map((vurdering) => {
+      return [
+        vurdering.definisjon,
+        {
+          ...vurdering,
+          begrunnelse: getDefaultBegrunnelse(vurdering.begrunnelse, vurdering.årsakFritekst),
+          godkjent:
+            // @ts-expect-error migrering for true og false verdier i mellomlagring, endret til JaEllerNei
+            vurdering.godkjent === 'true' || vurdering.godkjent === 'false'
+              ? mapTrueFalseStringTilJaNei(vurdering.godkjent)
+              : vurdering.godkjent,
+        },
+      ] as const;
+    })
+  );
+
   return {
-    totrinnsvurderinger: mellomlagring.totrinnsvurderinger.map((vurdering) => {
-      return {
-        ...vurdering,
-        begrunnelse: getDefaultBegrunnelse(vurdering.begrunnelse, vurdering.årsakFritekst),
-        godkjent:
-          // @ts-expect-error migrering for true og false verdier i mellomlagring, endret til JaEllerNei
-          vurdering.godkjent === 'true' || vurdering.godkjent === 'false'
-            ? mapTrueFalseStringTilJaNei(vurdering.godkjent)
-            : vurdering.godkjent,
-      };
-    }),
+    totrinnsvurderinger: vurderingerFraGrunnlag.map((vurdering) => ({
+      ...vurdering,
+      ...mellomlagredeVurderinger.get(vurdering.definisjon),
+    })),
   };
 }
 function mapVurderingToDraftFormFields(vurderinger: ToTrinnsVurdering[]): DraftFormFields {

@@ -1,5 +1,5 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { hentBrevGrunnlag, hentFullmektigGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { AvklaringsbehovKode, BrevBehovstype, StegType } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
@@ -52,7 +52,9 @@ export const BrevKortMedDataFetching = async ({
           status={status}
           grunnlag={brev}
           mottaker={mottaker}
+          bruker={grunnlag.bruker}
           brukerMottaker={bruker}
+          kopimottaker={grunnlag.kopimottaker}
           fullmektigMottaker={fullmektig}
           behandlingVersjon={behandlingVersjon}
           referanse={brevbestillingReferanse}

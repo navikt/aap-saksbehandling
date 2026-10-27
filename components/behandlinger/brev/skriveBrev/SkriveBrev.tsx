@@ -7,7 +7,16 @@ import { useDebounce } from 'hooks/DebounceHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevBehovstype, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
+import {
+  Brev,
+  BrevBehovstype,
+  BrevGrunnlagBrev,
+  BrevMottaker,
+  BrevStatus,
+  IdentOgNavn,
+  Mottaker,
+  Signatur,
+} from 'lib/types/types';
 import { isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
@@ -23,13 +32,17 @@ import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { VelgMottakere_SkriveBrev } from 'components/brevbygger/mottaker/VelgMottakere_SkriveBrev';
 
 export const SkriveBrev = ({
   referanse,
   behovstype,
   behandlingVersjon,
   mottaker,
+  kopimottaker,
   fullmektigMottaker,
+  bruker,
   brukerMottaker,
   grunnlag,
   signaturer,
@@ -41,7 +54,9 @@ export const SkriveBrev = ({
   referanse: string;
   behovstype: BrevBehovstype;
   mottaker: BrevMottaker;
+  kopimottaker?: BrevMottaker;
   fullmektigMottaker?: Mottaker;
+  bruker: IdentOgNavn;
   brukerMottaker?: Mottaker;
   behandlingVersjon: number;
   grunnlag: Brev;
@@ -62,6 +77,7 @@ export const SkriveBrev = ({
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
+  const redigerMottakerBrevbygger = useFeatureFlag('RedigerMottakerBrevbygger');
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
@@ -129,7 +145,7 @@ export const SkriveBrev = ({
 
   return (
     <>
-      {fullmektigMottaker && brukerMottaker && (
+      {!redigerMottakerBrevbygger && fullmektigMottaker && brukerMottaker && (
         <VelgeMottakere
           setMottakere={setMottakere}
           readOnly={readOnly}
@@ -139,6 +155,17 @@ export const SkriveBrev = ({
         />
       )}
       <div>
+        {redigerMottakerBrevbygger && (
+          <VelgMottakere_SkriveBrev
+            bestillingsreferanse={referanse}
+            readOnly={readOnly}
+            bruker={bruker}
+            initellMottaker={mottaker}
+            initiellKopimottaker={kopimottaker}
+            fullmektig={fullmektigMottaker}
+          />
+        )}
+
         <HStack gap="space-16" justify="space-between" wrap={false} align="center" marginBlock="space-0 space-16">
           <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}

@@ -24,7 +24,7 @@ export const KommendeMeldinger = ({
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
   const avbrytPåminnelse = async (kommendeMelding: KommendeMeldingDto) => {
-    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE_KLIKK');
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE');
     setLoading(kommendeMelding.bestillingId);
     try {
       const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
@@ -32,9 +32,7 @@ export const KommendeMeldinger = ({
         setFeilmelding(res.apiException.message);
         return;
       }
-      /**
-       * Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
-       */
+      // Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
       const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
         referanse: behandlingsreferanse,
         påminnelseDato: kommendeMelding.påminnelseDato,
@@ -52,12 +50,21 @@ export const KommendeMeldinger = ({
   };
 
   const gjenopptaPåminnelse = async (bestillingId: string) => {
-    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE_KLIKK');
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE');
     setLoading(bestillingId);
     try {
       const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
+        return;
+      }
+      // Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
+      const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
+        referanse: behandlingsreferanse,
+        påminnelseAvbrutt: false,
+      });
+      if (isError(oppdaterPåminnelseResponse)) {
+        setFeilmelding(oppdaterPåminnelseResponse.apiException.message);
         return;
       }
       setFeilmelding(null);

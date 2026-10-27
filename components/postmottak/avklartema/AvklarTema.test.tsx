@@ -74,8 +74,9 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('radio', { name: 'Nei' }));
     expect(screen.queryByText(/Tema endres på journalposten/)).not.toBeInTheDocument();
     const select = screen.getByRole('combobox', { name: 'Velg tema' });
-    expect(select.querySelectorAll('option')).toHaveLength(28);
-    expect(screen.getByRole('option', { name: 'Innsyn' })).toHaveValue('INN');
+    expect(select.querySelectorAll('option')).toHaveLength(27);
+    expect(screen.queryByRole('option', { name: 'Kommunale tjenester' })).not.toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Innsyn' })).toHaveValue('PAI');
     expect(screen.getByRole('option', { name: 'Send til Gosys' })).toHaveValue('UKJENT');
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     expect(await screen.findByText('Du må velge tema')).toBeVisible();
