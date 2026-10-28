@@ -13,13 +13,14 @@ import { GosysOppgaver } from 'components/oppgaveliste/gosysoppgaver/GosysOppgav
 
 interface Props {
   enheter: Enhet[];
+  gosysUrl?: string;
 }
 
 type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver' | 'Gosys oppgaver';
 
 const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver', 'Gosys oppgaver'];
 
-export const OppgaveListe = ({ enheter }: Props) => {
+export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
   const { lagreAktivTab, hentAktivTab } = useLagreAktivTab<MenyValg>();
   const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
 
@@ -55,7 +56,7 @@ export const OppgaveListe = ({ enheter }: Props) => {
         {selected === 'Mine oppgaver' && <MineOppgaver />}
         {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
         {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
-        {selected === 'Gosys oppgaver' && <GosysOppgaver />}
+        {selected === 'Gosys oppgaver' && <GosysOppgaver enheter={enheter} gosysUrl={gosysUrl} />}
       </TildelOppgaverProvider>
     </VStack>
   );
