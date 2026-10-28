@@ -9,14 +9,15 @@ import { useEffect, useState } from 'react';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { GosysOppgaver } from 'components/oppgaveliste/gosysoppgaver/GosysOppgaver';
 
 interface Props {
   enheter: Enhet[];
 }
 
-type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver';
+type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver' | 'Gosys oppgaver';
 
-const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver'];
+const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver', 'Gosys oppgaver'];
 
 export const OppgaveListe = ({ enheter }: Props) => {
   const { lagreAktivTab, hentAktivTab } = useLagreAktivTab<MenyValg>();
@@ -54,6 +55,7 @@ export const OppgaveListe = ({ enheter }: Props) => {
         {selected === 'Mine oppgaver' && <MineOppgaver />}
         {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
         {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Gosys oppgaver' && <GosysOppgaver />}
       </TildelOppgaverProvider>
     </VStack>
   );
