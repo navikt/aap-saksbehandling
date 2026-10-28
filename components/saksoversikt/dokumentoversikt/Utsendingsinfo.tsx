@@ -24,10 +24,6 @@ export const Utsendingsinfo = ({ journalpostId }: { journalpostId: string }) => 
       .finally(() => setIsLoading(false));
   };
 
-  if (error) {
-    return <Alert variant="error">{error || 'Ukjent feil oppsto'}</Alert>;
-  }
-
   return (
     <>
       <Button
