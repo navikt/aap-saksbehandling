@@ -47,6 +47,7 @@ import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring
 import { isLocal } from 'lib/utils/environment';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
 import { KodeverkResponse } from 'lib/types/kodeverk';
+import { FinnGosysOppgaverQueryParams, FinnGosysOppgaverResponse } from 'lib/types/gosysTypes';
 
 const BASE_URL = '/saksbehandling';
 
@@ -348,6 +349,10 @@ export function clientHentAInntektRedirectUrl(saksnummer: string) {
 
 export function clientHentSakPersoninfo(saksnummer: string) {
   return clientFetch<SakPersoninfo>(`${BASE_URL}/api/sak/${saksnummer}/personinformasjon`, 'GET');
+}
+
+export function clientHentGosysOppgaver(request: FinnGosysOppgaverQueryParams) {
+  return clientFetch<FinnGosysOppgaverResponse>('/oppgave/api/gosys', 'POST', request);
 }
 
 interface LeggTilYrkesskadeRequest {
