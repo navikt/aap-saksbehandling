@@ -1,5 +1,9 @@
 import { Journalposttype, Journalstatus } from 'lib/types/journalpost';
 
+export const erUtgåendeOgFerdigstilt = (status: Journalstatus, type: Journalposttype) => {
+  return type === Journalposttype.U && status === Journalstatus.FERDIGSTILT;
+};
+
 export const erFerdigstilt = (status: Journalstatus) => {
   switch (status) {
     case 'JOURNALFOERT':

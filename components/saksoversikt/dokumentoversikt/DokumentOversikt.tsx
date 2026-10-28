@@ -1,12 +1,17 @@
 import { ArrowCirclepathReverseIcon } from '@navikt/aksel-icons';
-import { Button, HStack, Heading, Table, VStack } from '@navikt/ds-react';
+import { Button, Heading, HStack, Table, VStack } from '@navikt/ds-react';
 import { useLagretDokumentFilter } from 'hooks/dokumenter/dokumentFilterHook';
 import { clientHentAlleDokumenterPåBruker } from 'lib/dokumentClientApi';
 import { Journalpost, Journalposttype, Journalstatus, Tema } from 'lib/types/journalpost';
 import { SaksInfo } from 'lib/types/types';
 import { isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { erFerdigstilt, formaterJournalpostType, formaterJournalstatus } from 'lib/utils/journalpost';
+import {
+  erFerdigstilt,
+  erUtgåendeOgFerdigstilt,
+  formaterJournalpostType,
+  formaterJournalstatus,
+} from 'lib/utils/journalpost';
 import { useEffect, useState } from 'react';
 
 import { Alert } from 'components/alert/Alert';
@@ -19,6 +24,8 @@ import { ÅpneDokumentButton } from 'components/saksoversikt/dokumentoversikt/Å
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 import styles from './DokumentOversikt.module.css';
+import { Utsendingsinfo } from 'components/saksoversikt/dokumentoversikt/Utsendingsinfo';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -34,6 +41,8 @@ interface HentDokumentoversiktBrukerRequest {
 }
 
 export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
+  const visUtsendingsinfo = useFeatureFlag('BrevUtsendingsinfo');
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [journalposter, setJournalposter] = useState<Journalpost[]>([]);
@@ -143,7 +152,12 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
                 </Table.Row>
               ) : (
                 journalposter?.map((journalpost) => (
-                  <JournalpostRad key={journalpost.journalpostId} journalpost={journalpost} sak={sak} />
+                  <JournalpostRad
+                    key={journalpost.journalpostId}
+                    journalpost={journalpost}
+                    sak={sak}
+                    visUtsendingsinfo={visUtsendingsinfo}
+                  />
                 ))
               )}
             </Table.Body>
@@ -154,7 +168,15 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   );
 };
 
-const JournalpostRad = ({ journalpost, sak }: { journalpost: Journalpost; sak: SaksInfo }) => (
+const JournalpostRad = ({
+  journalpost,
+  sak,
+  visUtsendingsinfo,
+}: {
+  journalpost: Journalpost;
+  sak: SaksInfo;
+  visUtsendingsinfo: boolean;
+}) => (
   <Table.Row>
     <Table.DataCell textSize={'small'}>{journalpost.journalpostId}</Table.DataCell>
     <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis} textSize={'small'}>
@@ -170,7 +192,12 @@ const JournalpostRad = ({ journalpost, sak }: { journalpost: Journalpost; sak: S
       {journalpost.tema}
     </Table.DataCell>
     <Table.DataCell textSize={'small'}>
-      {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
+      <HStack gap="space-8" wrap={false} align="center">
+        {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
+        {visUtsendingsinfo && erUtgåendeOgFerdigstilt(journalpost.journalstatus, journalpost.journalposttype) && (
+          <Utsendingsinfo journalpostId={journalpost.journalpostId} />
+        )}
+      </HStack>
     </Table.DataCell>
     <Table.DataCell textSize={'small'}>
       {journalpost.journalstatus && formaterJournalstatus(journalpost.journalstatus)}
