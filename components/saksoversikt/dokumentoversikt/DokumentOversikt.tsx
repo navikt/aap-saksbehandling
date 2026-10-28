@@ -24,7 +24,7 @@ import { ÅpneDokumentButton } from 'components/saksoversikt/dokumentoversikt/Å
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 import styles from './DokumentOversikt.module.css';
-import { Utsendingsinfo } from 'components/saksoversikt/dokumentoversikt/Utsendingsinfo';
+import { UtsendingsinfoDialog } from 'components/saksoversikt/dokumentoversikt/Utsendingsinfo';
 import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface DokumentFilterFormFields {
@@ -195,7 +195,7 @@ const JournalpostRad = ({
       <HStack gap="space-8" wrap={false} align="center">
         {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
         {visUtsendingsinfo && erUtgåendeOgFerdigstilt(journalpost.journalstatus, journalpost.journalposttype) && (
-          <Utsendingsinfo journalpostId={journalpost.journalpostId} />
+          <UtsendingsinfoDialog journalpostId={journalpost.journalpostId} />
         )}
       </HStack>
     </Table.DataCell>

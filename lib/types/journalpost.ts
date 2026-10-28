@@ -132,20 +132,20 @@ export const Tema: Record<string, string> = {
 };
 
 export interface HentUtsendingsinfoResponse {
-  utsendingsinfo: Utsendingsinfo | null;
+  utsendingsinfo?: Utsendingsinfo;
 }
 
-interface Utsendingsinfo {
+export interface Utsendingsinfo {
   varselSendt?: {
     type?: string;
     varslingstidspunkt?: string;
-  };
+  }[];
   // Mappes hvis Journalpost.utsendingskanal er S (sentral utskrift)
   fysiskpostSendt?: {
-    adressetekstKonvolutt?: String;
+    adressetekstKonvolutt?: string;
   };
   // Mappes hvis Journalpost.utsendingskanal er SDP (sikker digital postkasse)
   digitalpostSendt?: {
-    adresse?: String;
+    adresse?: string;
   };
 }
