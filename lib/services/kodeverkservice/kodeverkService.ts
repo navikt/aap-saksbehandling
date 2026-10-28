@@ -10,7 +10,7 @@ const kodeverkApiScope = process.env.KODEVERK_API_SCOPE ?? '';
 type Kodeverknavn = 'Postnummer' | 'LandkoderISO2';
 
 const hentKodeverkBetydninger = async (kodeverkNavn: Kodeverknavn): Promise<FetchResponse<KodeverkResponse>> => {
-  const url = `${kodeverkApiBaseUrl}/api/v1/kodeverk/${kodeverkNavn}/koder/betydninger`;
+  const url = `${kodeverkApiBaseUrl}/api/v1/kodeverk/${kodeverkNavn}/koder/betydninger?ekskluderUgyldige=$ekskluderUgyldige&spraak=nb`;
   return await apiFetch<KodeverkResponse>(url, kodeverkApiScope, 'GET', undefined, {
     revalidate: 86400, // 1 dag
     tags: [`kodeverk-${kodeverkNavn}`],
