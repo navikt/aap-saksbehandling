@@ -80,6 +80,9 @@ spec:
       rules:
         - application: behandlingsflyt
         - application: oppgave
+        - application: oppgave
+          namespace: oppgavehandtering
+          cluster: dev-fss
         - application: postmottak-backend
         - application: statistikk
         - application: dokumentinnhenting
