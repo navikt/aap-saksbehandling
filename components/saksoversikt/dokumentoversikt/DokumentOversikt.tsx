@@ -25,6 +25,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 
 import styles from './DokumentOversikt.module.css';
 import { Utsendingsinfo } from 'components/saksoversikt/dokumentoversikt/Utsendingsinfo';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 export interface DokumentFilterFormFields {
   tema: string[];
@@ -40,6 +41,8 @@ interface HentDokumentoversiktBrukerRequest {
 }
 
 export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
+  const visUtsendingsinfo = useFeatureFlag('BrevUtsendingsinfo');
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>();
   const [journalposter, setJournalposter] = useState<Journalpost[]>([]);
@@ -149,7 +152,12 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
                 </Table.Row>
               ) : (
                 journalposter?.map((journalpost) => (
-                  <JournalpostRad key={journalpost.journalpostId} journalpost={journalpost} sak={sak} />
+                  <JournalpostRad
+                    key={journalpost.journalpostId}
+                    journalpost={journalpost}
+                    sak={sak}
+                    visUtsendingsinfo={visUtsendingsinfo}
+                  />
                 ))
               )}
             </Table.Body>
@@ -160,7 +168,15 @@ export const DokumentOversikt = ({ sak }: { sak: SaksInfo }) => {
   );
 };
 
-const JournalpostRad = ({ journalpost, sak }: { journalpost: Journalpost; sak: SaksInfo }) => (
+const JournalpostRad = ({
+  journalpost,
+  sak,
+  visUtsendingsinfo,
+}: {
+  journalpost: Journalpost;
+  sak: SaksInfo;
+  visUtsendingsinfo: boolean;
+}) => (
   <Table.Row>
     <Table.DataCell textSize={'small'}>{journalpost.journalpostId}</Table.DataCell>
     <Table.DataCell title={journalpost.tittel || ''} className={styles.ellipsis} textSize={'small'}>
@@ -178,7 +194,7 @@ const JournalpostRad = ({ journalpost, sak }: { journalpost: Journalpost; sak: S
     <Table.DataCell textSize={'small'}>
       <HStack gap="space-8" wrap={false} align="center">
         {journalpost.journalposttype && formaterJournalpostType(journalpost.journalposttype)}
-        {erUtgåendeOgFerdigstilt(journalpost.journalstatus, journalpost.journalposttype) && (
+        {visUtsendingsinfo && erUtgåendeOgFerdigstilt(journalpost.journalstatus, journalpost.journalposttype) && (
           <Utsendingsinfo journalpostId={journalpost.journalpostId} />
         )}
       </HStack>
