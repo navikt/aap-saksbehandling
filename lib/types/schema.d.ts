@@ -8883,6 +8883,8 @@ export interface components {
        */
       tom?: string | null;
       utviklingsPeriode: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /** @enum {string} */
+      versjon: 'V0';
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
@@ -12543,6 +12545,8 @@ export interface components {
        */
       tom?: string | null;
       utviklingsPerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      /** @enum {string} */
+      versjon: 'V0';
       virksomhetErNy?: boolean | null;
       virksomhetNavn: string;
     };
