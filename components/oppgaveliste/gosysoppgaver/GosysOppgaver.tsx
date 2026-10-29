@@ -8,6 +8,7 @@ import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
 import { GosysTabell } from 'components/oppgaveliste/gosysoppgaver/gosystabell/GosysTabell';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
+import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 
 interface Props {
   enheter: Enhet[];
@@ -34,11 +35,13 @@ const gjelderOptions: ValuePair<GjelderTyper>[] = [
 ];
 
 export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
+  const { hentLagredeAktiveEnheter } = useLagreAktiveEnheter();
+
   const { form, formFields } = useConfigForm<FormFields>({
     enhet: {
       type: 'select',
       label: 'Velg enhet',
-      defaultValue: enheter[0].enhetNr,
+      defaultValue: hentLagredeAktiveEnheter()?.[0].value ?? enheter[0].enhetNr,
       options: enheter.map((enhet) => {
         return { label: enhet.navn, value: enhet.enhetNr };
       }),
