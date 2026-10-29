@@ -1,4 +1,4 @@
-import { addMonths, subDays } from 'date-fns';
+import { subDays } from 'date-fns';
 import { Dato } from 'lib/types/Dato';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
@@ -11,12 +11,7 @@ import { hentPerioderSomTrengerVurdering } from 'lib/utils/periodisering';
 import {
   EtableringAvEgenVirksomhetForm,
   EtableringAvEgenVirksomhetVurderingForm,
-  EtableringFase,
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
-import { DateInputWrapper } from '../../../form/dateinputwrapper/DateInputWrapper';
-import { validerDato } from '../../../../lib/validation/dateValidation';
-import { HvordanLeggeTilSluttdatoReadMore } from '../../../hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
-import { formaterDatoForFrontend, stringToDate } from '../../../../lib/utils/date';
 
 export function getDefaultValuesFromGrunnlag(
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse
@@ -34,6 +29,7 @@ export function getDefaultValuesFromGrunnlag(
     vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
       fraDato: new Dato(vurdering.fom).formaterForFrontend(),
       begrunnelse: vurdering.begrunnelse,
+      versjon: vurdering.versjon,
       erVirksomhetenNy: getJaNeiEllerUndefined(vurdering.virksomhetErNy),
       foreliggerEnNæringsfagligVurdering: getJaNeiEllerUndefined(vurdering.foreliggerFagligVurdering),
       eierBrukerVirksomheten: vurdering.brukerEierVirksomheten,
@@ -51,12 +47,14 @@ export function getDefaultValuesFromGrunnlag(
 export function mapEtableringEgenVirksomhetVurderingTilDto(
   vurdering: EtableringAvEgenVirksomhetVurderingForm,
   virksomhetNavn: string,
-  tilDato: string | undefined
+  tilDato: string | undefined,
+  versjon: EtableringEgenVirksomhetLøsningDto['versjon']
 ): EtableringEgenVirksomhetLøsningDto {
   return {
     fom: new Dato(vurdering.fraDato).formaterForBackend(),
     tom: tilDato ? new Dato(subDays(new Dato(tilDato).dato, 1)).formaterForBackend() : null,
     begrunnelse: vurdering.begrunnelse,
+    versjon,
     virksomhetErNy: vurdering.erVirksomhetenNy === JaEllerNei.Ja,
     brukerEierVirksomheten: vurdering.eierBrukerVirksomheten || null,
     foreliggerFagligVurdering: vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja,
@@ -118,28 +116,6 @@ export function nyVurderingErOppfylt(vurdering?: EtableringAvEgenVirksomhetVurde
 }
 
 export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetVurderingResponse): boolean | undefined {
-  if (
-    vurdering.foreliggerFagligVurdering === false ||
-    vurdering.virksomhetErNy === false ||
-    vurdering.brukerEierVirksomheten === 'NEI' ||
-    vurdering.kanFøreTilSelvforsørget === false ||
-    vurdering.jobberBrukerAktivMedVirksomheten === false ||
-    (vurdering.fase === 'OPPSTART' && vurdering.erRegistrertINødvendigeOffentligeRegister === false)
-  ) {
-    return false;
-  }
-
-  if (
-    vurdering.foreliggerFagligVurdering === true &&
-    vurdering.virksomhetErNy === true &&
-    (vurdering.brukerEierVirksomheten === 'EIER_MINST_50_PROSENT' ||
-      vurdering.brukerEierVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
-    vurdering.kanFøreTilSelvforsørget === true &&
-    vurdering.jobberBrukerAktivMedVirksomheten === true &&
-    vurdering.fase === 'OPPSTART' &&
-    vurdering.erRegistrertINødvendigeOffentligeRegister === true
-  ) {
-    return true;
-  }
+  return vurdering.oppfylt;
 }
 
