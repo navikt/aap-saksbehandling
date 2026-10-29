@@ -56,7 +56,6 @@ import {
   KravGrunnlag,
   KvalitetssikringGrunnlag,
   KvalitetssikringTilgang,
-  LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   ManuellInntektGrunnlag,
@@ -629,11 +628,6 @@ export const forberedBehandlingOgVentPåProsessering = async (
   return await apiFetch(url, saksbehandlingApiScope, 'GET').then(() =>
     ventTilProsesseringErFerdig(behandlingsreferanse)
   );
-};
-
-export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
-  return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
 };
 
 export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
