@@ -22,9 +22,6 @@ spec:
     - application: statistikk
       cluster: dev-gcp
       namespace: aap
-    - application: saksbehandling-pdfgen
-      cluster: dev-gcp
-      namespace: aap
     - application: dokumentinnhenting
       cluster: dev-gcp
       namespace: aap

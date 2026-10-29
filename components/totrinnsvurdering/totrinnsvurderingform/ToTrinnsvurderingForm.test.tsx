@@ -535,6 +535,40 @@ describe('mellomlagring', () => {
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
   });
 
+  it('Skal bare bruke mellomlagrede vurderinger som finnes i grunnlaget, og ta med nye vurderinger fra grunnlaget', () => {
+    const grunnlagMedNyVurdering = {
+      ...grunnlagMedVurdering,
+      vurderinger: [
+        ...grunnlagMedVurdering.vurderinger,
+        { definisjon: Behovstype.AVKLAR_BISTANDSBEHOV_KODE },
+      ],
+    };
+    const mellomlagringMedUtdatertVurdering = {
+      ...mellomlagring.mellomlagretVurdering!,
+      data: '{"totrinnsvurderinger":[{"definisjon":"5003","godkjent":"false","begrunnelse":"Dette er min vurdering som er mellomlagret","grunner":[],"årsakFritekst":""},{"definisjon":"5004","godkjent":"false","begrunnelse":"Utdatert vurdering","grunner":[],"årsakFritekst":""}]}',
+    };
+
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        readOnly={false}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedNyVurdering}
+        initialMellomlagretVurdering={mellomlagringMedUtdatertVurdering}
+      />
+    );
+
+    expect(
+      screen.getByRole('link', { name: '§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid' })
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('link', { name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet' })
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse for retur' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret'
+    );
+  });
+
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
     render(
       <TotrinnsvurderingForm

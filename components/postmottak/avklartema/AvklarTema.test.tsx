@@ -74,8 +74,9 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('radio', { name: 'Nei' }));
     expect(screen.queryByText(/Tema endres på journalposten/)).not.toBeInTheDocument();
     const select = screen.getByRole('combobox', { name: 'Velg tema' });
-    expect(select.querySelectorAll('option')).toHaveLength(28);
-    expect(screen.getByRole('option', { name: 'Innsyn' })).toHaveValue('INN');
+    expect(select.querySelectorAll('option')).toHaveLength(27);
+    expect(screen.queryByRole('option', { name: 'Kommunale tjenester' })).not.toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Innsyn' })).toHaveValue('PAI');
     expect(screen.getByRole('option', { name: 'Send til Gosys' })).toHaveValue('UKJENT');
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     expect(await screen.findByText('Du må velge tema')).toBeVisible();
@@ -84,11 +85,14 @@ describe('AvklarTema', () => {
     expect(screen.getByText(/Tema endres på journalposten/)).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
-      expect(løsBehov).toHaveBeenCalledWith({
-        behandlingVersjon: 1,
-        referanse: '123',
-        behov: { behovstype: '1339', skalTilAap: false, tema: 'BAR' },
-      })
+      expect(løsBehov).toHaveBeenCalledWith(
+        {
+          behandlingVersjon: 1,
+          referanse: '123',
+          behov: { behovstype: '1339', skalTilAap: false, tema: 'BAR' },
+        },
+        expect.any(Function)
+      )
     );
     expect(gosysBehov).not.toHaveBeenCalled();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -103,7 +107,8 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith(
-        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: false, tema: 'UKJENT' } })
+        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: false, tema: 'UKJENT' } }),
+        expect.any(Function)
       )
     );
   });
@@ -115,7 +120,8 @@ describe('AvklarTema', () => {
     await user.click(screen.getByRole('button', { name: 'Neste' }));
     await waitFor(() =>
       expect(løsBehov).toHaveBeenCalledWith(
-        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: true } })
+        expect.objectContaining({ behov: { behovstype: '1339', skalTilAap: true } }),
+        expect.any(Function)
       )
     );
   });

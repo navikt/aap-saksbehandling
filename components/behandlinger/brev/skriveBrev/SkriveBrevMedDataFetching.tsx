@@ -92,6 +92,11 @@ export const SkriveBrevMedDataFetching = async ({
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
+  /*
+   * TODO:
+   *  Dette må ryddes opp i når vi skroter den gamle brevbyggeren.
+   *  Kan forenkles litt når vi går over til ny Brevbygger.
+   */
   const brukerMottaker = { ident: brev.mottaker.ident || '', navn: brev.mottaker.navn || '' }; // Midlertidig
   const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
 
@@ -129,6 +134,8 @@ export const SkriveBrevMedDataFetching = async ({
           behovstype={behovstype}
           grunnlag={brev.brev}
           mottaker={brev.mottaker}
+          kopimottaker={brev.kopimottaker}
+          bruker={brev.bruker}
           brukerMottaker={bruker}
           fullmektigMottaker={fullmektig}
           readOnly={readOnlyBrev}

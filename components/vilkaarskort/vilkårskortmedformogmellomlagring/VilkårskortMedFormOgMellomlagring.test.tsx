@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import {
   VilkårskortMedFormOgMellomlagring,
   VilkårsKortMedFormOgMellomlagringProps,
-} from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+} from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { VisningModus } from 'lib/types/visningTypes';
 import { SubmitEventHandler } from 'react';
 

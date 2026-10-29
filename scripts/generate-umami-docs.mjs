@@ -38,6 +38,7 @@ function extractStringArray(source, constName) {
 const stegSource = readSource('steg.ts');
 const hendelserVarighetSource = readSource('hendelserVarighet.ts');
 const navigeringSource = readSource('navigering.ts');
+const behandlerdialogNavn = extractStringArray(readSource('behandlerdialog.ts'), 'UMAMI_BEHANDLERDIALOG_NAVN');
 
 const UMAMI_STEG = extractStringArray(stegSource, 'UMAMI_STEG');
 const UMAMI_HENDELSER_SERIE_KONTEKST = extractStringArray(hendelserVarighetSource, 'UMAMI_HENDELSER_SERIE_KONTEKST');
@@ -53,6 +54,25 @@ const navigeringNavn = [
 
 /** Definisjon av hver event-type i `UmamiKelvinEvent`-unionen, brukt til å bygge Markdown-tabeller. */
 const eventTypes = [
+  {
+    type: 'BEHANDLERDIALOG',
+    beskrivelse:
+      'Brukerinitierte forsøk på å bestille legeerklæring/sende dialogmelding, sende påminnelse ' +
+      'eller avbryte/gjenoppta automatisk påminnelse. Bestilling logges etter skjemavalidering. ' +
+      'Hendelsene måler handlingen, ikke om API-kallet lykkes. Ingen saks- eller personopplysninger sendes.',
+    kilde: 'lib/utils/umami/behandlerdialog.ts',
+    funksjoner: ['loggUmamiBehandlerdialogKlikk(name)'],
+    felter: [
+      { navn: 'type', typ: "'BEHANDLERDIALOG'", pkt: 'Ja', beskrivelse: 'Diskriminator for event-varianten.' },
+      {
+        navn: 'name',
+        typ: '(typeof UMAMI_BEHANDLERDIALOG_NAVN)[number]',
+        pkt: 'Ja',
+        beskrivelse: 'Hvilken handling brukeren utførte.',
+      },
+    ],
+    gyldigeNavn: behandlerdialogNavn,
+  },
   {
     type: 'VARIGHET',
     beskrivelse:
@@ -234,7 +254,7 @@ lines.push(
 );
 lines.push('');
 lines.push(
-  `Totalt **${varighetNavn.length + hendelserVarighetNavn.length + navigeringNavn.length + 1}** gyldige \`name\`-verdier på tvers av ${eventTypes.length} event-typer.`
+  `Totalt **${eventTypes.reduce((sum, eventType) => sum + eventType.gyldigeNavn.length, 0)}** gyldige \`name\`-verdier på tvers av ${eventTypes.length} event-typer.`
 );
 lines.push('');
 lines.push('## Innholdsfortegnelse');

@@ -87,8 +87,8 @@ export enum Journalposttype {
 
 export enum Journalstatus {
   MOTTATT = 'MOTTATT',
-  JOURNALFOERT = 'JOURNALFOERT',
-  FERDIGSTILT = 'FERDIGSTILT',
+  JOURNALFOERT = 'JOURNALFOERT', // Kun inngående journalposter (journalposttype = I)
+  FERDIGSTILT = 'FERDIGSTILT', // Kun utgående journalposter (journalposttype = U)
   EKSPEDERT = 'EKSPEDERT',
   UNDER_ARBEID = 'UNDER_ARBEID',
   FEILREGISTRERT = 'FEILREGISTRERT',
@@ -130,3 +130,22 @@ export const Tema: Record<string, string> = {
   UFO: 'Uføretrygd',
   YRK: 'Yrkesskade og menerstatning',
 };
+
+export interface HentUtsendingsinfoResponse {
+  utsendingsinfo?: Utsendingsinfo;
+}
+
+export interface Utsendingsinfo {
+  varselSendt?: {
+    type?: string;
+    varslingstidspunkt?: string;
+  }[];
+  // Mappes hvis Journalpost.utsendingskanal er S (sentral utskrift)
+  fysiskpostSendt?: {
+    adressetekstKonvolutt?: string;
+  };
+  // Mappes hvis Journalpost.utsendingskanal er SDP (sikker digital postkasse)
+  digitalpostSendt?: {
+    adresse?: string;
+  };
+}

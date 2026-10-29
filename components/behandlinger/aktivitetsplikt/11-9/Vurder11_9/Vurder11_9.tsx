@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button, Heading, VStack } from '@navikt/ds-react';
 import { Registrer11_9BruddTabell } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Registrer11_9BruddTabell';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { PlusIcon } from '@navikt/aksel-icons';
 import { Mellomlagre11_9Modal } from 'components/behandlinger/aktivitetsplikt/11-9/Vurder11_9/Mellomlagre11_9Modal';
 import { Aktivitetsplikt11_9Grunnlag, Aktivitetsplikt11_9Løsning, MellomlagretVurdering } from 'lib/types/types';

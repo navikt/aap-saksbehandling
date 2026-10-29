@@ -18,6 +18,7 @@ import { ClientConfig } from 'lib/types/clientTypes';
 import { clientConfig } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useFeatureFlag } from 'context/UnleashContext';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
 interface Props {
   behandlingsVersjon: number;
@@ -43,8 +44,7 @@ const temaer: Record<string, string> = {
   FUL: 'Fullmakt',
   GEN: 'Generell',
   GRU: 'Grunn- og hjelpestønad',
-  INN: 'Innsyn',
-  KOM: 'Kommunale tjenester',
+  PAI: 'Innsyn',
   OMS: 'Omsorgspenger, pleiepenger og opplæringspenger',
   EYO: 'Omstillingsstønad',
   OPP: 'Oppfølging',
@@ -72,6 +72,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   const [visModal, setVisModal] = useState<boolean>(!velgTema && grunnlag.vurdering?.skalTilAap === false);
 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -106,15 +107,18 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       if (data.erTemaAAP === JaEllerNei.Ja || velgTema) {
-        løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingsVersjon,
-          behov: {
-            behovstype: Behovstype.AVKLAR_TEMA,
-            skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
-            ...(velgTema && data.erTemaAAP === JaEllerNei.Nei ? { tema: data.tema } : {}),
+        løsBehovOgGåTilNesteSteg(
+          {
+            behandlingVersjon: behandlingsVersjon,
+            behov: {
+              behovstype: Behovstype.AVKLAR_TEMA,
+              skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
+              ...(velgTema && data.erTemaAAP === JaEllerNei.Nei ? { tema: data.tema } : {}),
+            },
+            referanse: behandlingsreferanse,
           },
-          referanse: behandlingsreferanse,
-        });
+          () => loggUmamiVarighet('STEG_AVKLAR_TEMA_VARIGHET', umamiStartTidspunkt, Date.now())
+        );
       } else {
         postmottakLøsBehovClient({
           behandlingVersjon: behandlingsVersjon,
@@ -123,7 +127,12 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
           referanse: behandlingsreferanse,
-        }).then(() => setVisModal(true));
+        }).then((response) => {
+          if (isSuccess(response)) {
+            loggUmamiVarighet('STEG_AVKLAR_TEMA_VARIGHET', umamiStartTidspunkt, Date.now());
+          }
+          setVisModal(true);
+        });
       }
     })(event);
   };

@@ -22,7 +22,7 @@ import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrap
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -35,7 +35,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {

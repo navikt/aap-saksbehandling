@@ -29,6 +29,7 @@ export function getDefaultValuesFromGrunnlag(
     vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
       fraDato: new Dato(vurdering.fom).formaterForFrontend(),
       begrunnelse: vurdering.begrunnelse,
+      versjon: vurdering.versjon,
       erVirksomhetenNy: getJaNeiEllerUndefined(vurdering.virksomhetErNy),
       foreliggerEnNæringsfagligVurdering: getJaNeiEllerUndefined(vurdering.foreliggerFagligVurdering),
       eierBrukerVirksomheten: vurdering.brukerEierVirksomheten,
@@ -53,12 +54,14 @@ export function getDefaultValuesFromGrunnlag(
 export function mapEtableringEgenVirksomhetVurderingTilDto(
   vurdering: EtableringAvEgenVirksomhetVurderingForm,
   virksomhetNavn: string,
-  tilDato: string | undefined
+  tilDato: string | undefined,
+  versjon: EtableringEgenVirksomhetLøsningDto['versjon']
 ): EtableringEgenVirksomhetLøsningDto {
   return {
     fom: new Dato(vurdering.fraDato).formaterForBackend(),
     tom: tilDato ? new Dato(subDays(new Dato(tilDato).dato, 1)).formaterForBackend() : null,
     begrunnelse: vurdering.begrunnelse,
+    versjon,
     virksomhetErNy: vurdering.erVirksomhetenNy === JaEllerNei.Ja,
     brukerEierVirksomheten: vurdering.eierBrukerVirksomheten || null,
     foreliggerFagligVurdering: vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja,
@@ -114,23 +117,6 @@ export function nyVurderingErOppfylt(vurdering?: EtableringAvEgenVirksomhetVurde
   }
 }
 
-export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetVurderingResponse): boolean | undefined {
-  if (
-    vurdering.foreliggerFagligVurdering === false ||
-    vurdering.virksomhetErNy === false ||
-    vurdering.brukerEierVirksomheten === 'NEI' ||
-    vurdering.kanFøreTilSelvforsørget === false
-  ) {
-    return false;
-  }
-
-  if (
-    vurdering.foreliggerFagligVurdering === true &&
-    vurdering.virksomhetErNy === true &&
-    (vurdering.brukerEierVirksomheten === 'EIER_MINST_50_PROSENT' ||
-      vurdering.brukerEierVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
-    vurdering.kanFøreTilSelvforsørget === true
-  ) {
-    return true;
-  }
+export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetVurderingResponse): boolean {
+  return vurdering.oppfylt;
 }

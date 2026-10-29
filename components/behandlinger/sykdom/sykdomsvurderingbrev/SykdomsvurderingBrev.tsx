@@ -18,9 +18,9 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {

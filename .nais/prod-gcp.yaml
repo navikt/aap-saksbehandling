@@ -81,7 +81,6 @@ spec:
         - application: oppgave
         - application: postmottak-backend
         - application: statistikk
-        - application: saksbehandling-pdfgen
         - application: dokumentinnhenting
         - application: tilgang
         - application: api-intern

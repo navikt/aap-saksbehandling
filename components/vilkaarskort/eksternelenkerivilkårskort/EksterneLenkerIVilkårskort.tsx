@@ -5,8 +5,8 @@ import { Link } from '@navikt/ds-react';
 import { StegType } from 'lib/types/types';
 import { loggUmamiEksternLenkeKlikk } from 'lib/utils/umami/lenkeKlikk';
 
-import styles from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort.module.css';
-import { lenkerPerSteg } from 'components/vilkårskort/eksternelenkerivilkårskort/lenkerPerSteg';
+import styles from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort.module.css';
+import { lenkerPerSteg } from 'components/vilkaarskort/eksternelenkerivilkårskort/lenkerPerSteg';
 
 export const EksterneLenkerIVilkårskort = ({ steg }: { steg: StegType }) => {
   const lenker = lenkerPerSteg[steg];
