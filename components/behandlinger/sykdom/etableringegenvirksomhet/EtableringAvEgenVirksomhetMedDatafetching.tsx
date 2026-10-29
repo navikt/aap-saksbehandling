@@ -35,7 +35,6 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
   );
 
   const skalViseNyFlyt = unleashService.isEnabled('NyFlytEtablerEgenVirksomhet');
-  console.log('skalViseNyFlyt', skalViseNyFlyt);
   if (skalViseNyFlyt) {
     return (
       <EtableringAvEgenVirksomhetNy

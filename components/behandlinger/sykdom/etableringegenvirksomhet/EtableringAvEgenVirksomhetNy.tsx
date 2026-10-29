@@ -10,7 +10,8 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
 import { SubmitEventHandler, useState } from 'react';
 import {
-  EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetLøsningDto,
+  EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEgenVirksomhetLøsningDto,
   EtableringEgenVirksomhetVurderingResponse,
   EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
@@ -154,8 +155,12 @@ export const EtableringAvEgenVirksomhetNy = ({
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
               const sisteVurdering = index === data.vurderinger.length - 1;
               const tilDato = sisteVurdering ? undefined : data.vurderinger[index + 1].fraDato;
-              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn!, tilDato,
-                versjoner[index] ?? 'V0');
+              return mapEtableringEgenVirksomhetVurderingTilDto(
+                vurdering,
+                data.virksomhetNavn!,
+                tilDato,
+                versjoner[index] ?? 'V1'
+              );
             }),
           },
           referanse: behandlingsreferanse,
@@ -172,7 +177,7 @@ export const EtableringAvEgenVirksomhetNy = ({
 
   function leggTilVurdering() {
     append(tomEtableringAvEgenVirksomhetVurdering());
-    setVersjoner((nåværende) => [...nåværende, 'V0']);
+    setVersjoner((nåværende) => [...nåværende, 'V1']);
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;

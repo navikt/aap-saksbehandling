@@ -118,4 +118,3 @@ export function nyVurderingErOppfylt(vurdering?: EtableringAvEgenVirksomhetVurde
 export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetVurderingResponse): boolean | undefined {
   return vurdering.oppfylt;
 }
-
