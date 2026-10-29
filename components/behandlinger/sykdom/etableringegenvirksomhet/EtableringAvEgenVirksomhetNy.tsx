@@ -8,9 +8,9 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { SubmitEventHandler } from 'react';
+import { SubmitEventHandler, useState } from 'react';
 import {
-  EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetLøsningDto,
   EtableringEgenVirksomhetVurderingResponse,
   EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
@@ -62,7 +62,13 @@ export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingFormMe
   fase: EtableringFase | undefined;
   erRegistrertINødvendigeOffentligeRegister: JaEllerNei | undefined;
   jobberBrukerAktivMedVirksomheten: JaEllerNei | undefined;
+  versjon?: Versjon;
 }
+
+type Versjon = EtableringEgenVirksomhetLøsningDto['versjon'];
+
+const versjonerFra = (form: EtableringAvEgenVirksomhetForm): Versjon[] =>
+  form.vurderinger.map((vurdering) => vurdering.versjon ?? 'V1');
 
 export interface EtableringAvEgenVirksomhetForm {
   vurderinger: EtableringAvEgenVirksomhetVurderingForm[];
@@ -98,6 +104,7 @@ export const EtableringAvEgenVirksomhetNy = ({
 
   const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
   const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
+  const [versjoner, setVersjoner] = useState<Versjon[]>(versjonerFra(defaultValues));
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
@@ -145,9 +152,10 @@ export const EtableringAvEgenVirksomhetNy = ({
           behov: {
             behovstype: Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
-              const isLast = index === data.vurderinger.length - 1;
-              const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
-              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn!, tilDato);
+              const sisteVurdering = index === data.vurderinger.length - 1;
+              const tilDato = sisteVurdering ? undefined : data.vurderinger[index + 1].fraDato;
+              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn!, tilDato,
+                versjoner[index] ?? 'V0');
             }),
           },
           referanse: behandlingsreferanse,
@@ -162,8 +170,9 @@ export const EtableringAvEgenVirksomhetNy = ({
     })(event);
   };
 
-  function onAddPeriode() {
+  function leggTilVurdering() {
     append(tomEtableringAvEgenVirksomhetVurdering());
+    setVersjoner((nåværende) => [...nåværende, 'V0']);
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
@@ -183,7 +192,7 @@ export const EtableringAvEgenVirksomhetNy = ({
       visningModus={visningModus}
       visningActions={visningActions}
       formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
-      onLeggTilVurdering={onAddPeriode}
+      onLeggTilVurdering={leggTilVurdering}
       errorList={errorList}
     >
       <VStack gap={'space-16'}>

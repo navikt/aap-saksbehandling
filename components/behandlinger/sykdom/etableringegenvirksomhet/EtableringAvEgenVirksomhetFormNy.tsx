@@ -8,9 +8,7 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import {
-  EtableringAvEgenVirksomhetForm,
-} from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
+import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { JaEllerNei } from 'lib/utils/form';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
@@ -20,6 +18,7 @@ import {
 import { useEffect } from 'react';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from '../../../../lib/utils/date';
+import { addMonths, isValid, parse } from 'date-fns';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -38,8 +37,16 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly, v
     form.clearErrors(`vurderinger`);
   }, [form]);
 
+  const valgtFase = form.watch(`vurderinger.${index}.fase`);
+  const valgtFraDato = form.watch(`vurderinger.${index}.fraDato`);
+
   const vurdering = vurderinger[index];
-  const visSluttDato = vurdering?.tom != null;
+
+  const parsedFraDato = parse(valgtFraDato || '', 'dd.MM.yyyy', new Date());
+  const harGyldigFraDato = isValid(parsedFraDato);
+  const antallMåneder = valgtFase === 'UTVIKLING' ? 6 : valgtFase === 'OPPSTART' ? 3 : null;
+  const forelopigSluttDato = harGyldigFraDato && antallMåneder ? addMonths(parsedFraDato, antallMåneder) : null;
+  const maksDato = vurdering?.tom ?? forelopigSluttDato;
 
   return (
     <VStack gap={'space-16'}>
@@ -132,7 +139,7 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly, v
         </RadioGroupWrapper>
       )}
 
-      {form.watch(`vurderinger.${index}.fase`) === 'OPPSTART' && (
+      {valgtFase === 'OPPSTART' && (
         <RadioGroupJaNei
           name={`vurderinger.${index}.erRegistrertINødvendigeOffentligeRegister`}
           control={form.control}
@@ -143,14 +150,12 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly, v
         />
       )}
 
-      {visSluttDato && (
+      {maksDato && harGyldigFraDato && (
         <>
           <BodyShort size={'small'} weight={'semibold'}>
-            {form.watch(`vurderinger.${index}.fase`) === 'UTVIKLING'
-              ? 'Maks varighet i utviklingsfasen'
-              : 'Maks varighet i oppstartsfasen'}
+            {valgtFase === 'UTVIKLING' ? 'Maks varighet i utviklingsfasen' : 'Maks varighet i oppstartsfasen'}
           </BodyShort>
-          <BodyShort size={'small'}>{formaterDatoForFrontend(vurderinger[index].tom ?? 'null')}</BodyShort>
+          <BodyShort size={'small'}>{formaterDatoForFrontend(maksDato)}</BodyShort>
         </>
       )}
 
