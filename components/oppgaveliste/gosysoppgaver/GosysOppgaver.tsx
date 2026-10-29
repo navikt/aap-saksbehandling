@@ -9,7 +9,6 @@ import { Enhet } from 'lib/types/oppgaveTypes';
 import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { GosysBeskrivelse } from './GosysBeskrivelse';
 
 interface Props {
   enheter: Enhet[];
@@ -77,9 +76,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
                       {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
                     </Table.DataCell>
                     <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
-                    <Table.DataCell>
-                      <GosysBeskrivelse beskrivelse={oppgave.beskrivelse} />
-                    </Table.DataCell>
+                    <Table.DataCell>{oppgave.beskrivelse}</Table.DataCell>
                     <Table.DataCell>
                       {gosysUrl && (
                         <Button
