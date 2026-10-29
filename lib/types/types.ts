@@ -289,8 +289,7 @@ export type TypeBehandling =
 type GeneratedLøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
 export type BrevBehovstype =
-  | '5050'
-  | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
+  '5050' | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
 
 type BrevLøsning = {
   behovstype: BrevBehovstype;
@@ -517,10 +516,10 @@ export type AvklarPeriodisertForutgåendeMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForForutgåendeMedlemskapDto'];
 
 export type PeriodisertForutgåendeMedlemskapGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertForutgåendeMedlemskapGrunnlagResponse'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/forutgaaendemedlemskap'>;
 
 export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutgåendeMedlemskapResponse'];
+  PeriodisertForutgåendeMedlemskapGrunnlag['nyeVurderinger'][number];
 
 export type EtableringEgenVirksomhetGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse'];
