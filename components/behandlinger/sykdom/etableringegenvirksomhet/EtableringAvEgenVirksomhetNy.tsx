@@ -33,7 +33,7 @@ import {
 } from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils-ny';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
+import { EtableringEgenVirksomhetTidligereVurderingNy } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurderingNy';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
@@ -220,7 +220,7 @@ export const EtableringAvEgenVirksomhetNy = ({
             vurderingStatus={getErOppfyltEllerIkkeStatus(tidligereVurderingErOppfylt(vurdering))}
             vurderingerMeta={vurdering.vurderingerMeta}
           >
-            <EtableringEgenVirksomhetTidligereVurdering vurdering={vurdering} />
+            <EtableringEgenVirksomhetTidligereVurderingNy vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
         {nyeVurderinger.length > 0 && (
