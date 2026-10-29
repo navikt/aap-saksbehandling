@@ -8,6 +8,8 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { GosysBeskrivelse } from './GosysBeskrivelse';
 
 interface Props {
   enheter: Enhet[];
@@ -51,11 +53,11 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
           <TableStyled size="small" zebraStripes aria-label="Gosys-oppgaver">
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>Oppgave-ID</Table.HeaderCell>
                 <Table.HeaderCell>Oppgavetype</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
-                <Table.HeaderCell>Enhet</Table.HeaderCell>
+                <Table.HeaderCell>Opprettet</Table.HeaderCell>
+                <Table.HeaderCell>Frist</Table.HeaderCell>
                 <Table.HeaderCell>Tildelt</Table.HeaderCell>
+                <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
                 <Table.HeaderCell>Handling</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -67,11 +69,17 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
               ) : (
                 oppgaver.map((oppgave) => (
                   <Table.Row key={oppgave.id}>
-                    <Table.DataCell>{oppgave.id}</Table.DataCell>
                     <Table.DataCell>{oppgave.oppgavetype}</Table.DataCell>
-                    <Table.DataCell>{oppgave.status}</Table.DataCell>
-                    <Table.DataCell>{oppgave.tildeltEnhetsnr}</Table.DataCell>
+                    <Table.DataCell>
+                      {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
+                    </Table.DataCell>
                     <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
+                    <Table.DataCell>
+                      <GosysBeskrivelse beskrivelse={oppgave.beskrivelse} />
+                    </Table.DataCell>
                     <Table.DataCell>
                       {gosysUrl && (
                         <Button
