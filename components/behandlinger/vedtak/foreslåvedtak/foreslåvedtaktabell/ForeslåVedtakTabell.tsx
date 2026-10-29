@@ -1,6 +1,6 @@
 import { ForeslåVedtakGrunnlag, UnderveisAvslagsÅrsak, VilkårsavslagDto } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { HStack, Table } from '@navikt/ds-react';
+import { BodyShort, HStack, Table } from '@navikt/ds-react';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
@@ -16,6 +16,12 @@ type StansOpphørÅrsak = StansOpphørVurdering['årsaker'][number];
 interface Props {
   grunnlag: ForeslåVedtakGrunnlag;
 }
+
+const NyTag = () => (
+  <BodyShort size="small" weight="semibold" className={styles.nyTag}>
+    Ny
+  </BodyShort>
+);
 
 export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
   const sistePeriodeMedRettighetIndex = grunnlag.perioder.findLastIndex((periode) => periode.utfall === 'OPPFYLT');
@@ -55,11 +61,16 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
             vedtaksPeriode.utfall === 'IKKE_OPPFYLT' && index > sistePeriodeMedRettighetIndex;
           const stansOpphørType = finnStansOpphørType(vedtaksPeriode.periode, grunnlag.stansOpphør);
           const stansOpphørVurdering = finnStansOpphørVurdering(vedtaksPeriode.periode, grunnlag.stansOpphør);
+          const erNy = vedtaksPeriode.utfall === 'OPPFYLT' ? vedtaksPeriode.erNy : stansOpphørVurdering?.erNy === true;
 
           return (
-            <Table.Row key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}>
+            <Table.Row
+              key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}
+              className={erNy ? styles.ny : undefined}
+            >
               <Table.DataCell>
                 <HStack gap={'space-8'} align={'center'}>
+                  {erNy && <NyTag />}
                   {vedtaksPeriode.utfall == 'OPPFYLT' ? (
                     <CheckmarkCircleIcon className={styles.godkjentIcon} />
                   ) : (
@@ -69,15 +80,23 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
                 </HStack>
               </Table.DataCell>
               <Table.DataCell>
-                {formatDatoMedMånedsnavn(vedtaksPeriode.periode.fom)} -
-                {!avslagUtenViderePerioder && formatDatoMedMånedsnavn(vedtaksPeriode.periode.tom)}
+                <HStack gap={'space-4'}>
+                  <span>{formatDatoMedMånedsnavn(vedtaksPeriode.periode.fom)} –</span>
+                  {vedtaksPeriode.tidligereTilOgMed.map((tom) => (
+                    <span key={tom} className={styles.gammelDato}>
+                      {formatDatoMedMånedsnavn(tom)}
+                    </span>
+                  ))}
+                  {!avslagUtenViderePerioder && <span>{formatDatoMedMånedsnavn(vedtaksPeriode.periode.tom)}</span>}
+                </HStack>
               </Table.DataCell>
               <Table.DataCell>
                 {vedtaksPeriode.utfall == 'OPPFYLT'
                   ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType)
                   : mapAvslagsÅrsakTilTekst(
                       vedtaksPeriode.avslagsårsak.vilkårsavslag,
-                      vedtaksPeriode.avslagsårsak.underveisavslag
+                      vedtaksPeriode.avslagsårsak.underveisavslag,
+                      stansOpphørVurdering
                     )}
               </Table.DataCell>
               <Table.DataCell>
@@ -90,9 +109,13 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
           const vurdering = stansOpphør.historikk.at(0);
 
           return (
-            <Table.Row key={`stansopphør-${stansOpphør.stansOpphørFraOgMed}`}>
+            <Table.Row
+              key={`stansopphør-${stansOpphør.stansOpphørFraOgMed}`}
+              className={vurdering?.erNy ? styles.ny : undefined}
+            >
               <Table.DataCell>
                 <HStack gap={'space-8'} align={'center'}>
+                  {vurdering?.erNy && <NyTag />}
                   <XMarkOctagonIcon className={styles.avslåttIcon} />
                   {mapStansOpphørTilTekst(vurdering?.type)}
                 </HStack>
@@ -210,18 +233,27 @@ function mapÅrsakTilHjemmel(årsak: StansOpphørÅrsak): string | undefined {
   }
 }
 
-function mapStansOpphørÅrsakerTilHjemmel(vurdering?: StansOpphørVurdering) {
+function mapÅrsakerTilHjemler(vurdering?: StansOpphørVurdering): string[] {
   if (!vurdering || vurdering.type === 'OPPHEVET') {
-    return '-';
+    return [];
   }
-  const hjemler = vurdering.årsaker.map(mapÅrsakTilHjemmel).filter((hjemmel) => hjemmel !== undefined);
+  return vurdering.årsaker.map(mapÅrsakTilHjemmel).filter((hjemmel) => hjemmel !== undefined);
+}
+
+function mapStansOpphørÅrsakerTilHjemmel(vurdering?: StansOpphørVurdering) {
+  const hjemler = mapÅrsakerTilHjemler(vurdering);
   return hjemler.length === 0 ? '-' : [...new Set(hjemler)].join(', ');
 }
 
-function mapAvslagsÅrsakTilTekst(vilkårAvslag: VilkårsavslagDto[], underveisAvslag?: UnderveisAvslagsÅrsak | null) {
+function mapAvslagsÅrsakTilTekst(
+  vilkårAvslag: VilkårsavslagDto[],
+  underveisAvslag?: UnderveisAvslagsÅrsak | null,
+  stansOpphørVurdering?: StansOpphørVurdering
+) {
   const hjemler = vilkårAvslag.map((avslag) => avslag.vilkår);
   if (underveisAvslag && underveisAvslag != 'IKKE_GRUNNLEGGENDE_RETT') {
     hjemler.push(mapUnderveisÅrsakTilHjemmel(underveisAvslag));
   }
+  hjemler.push(...mapÅrsakerTilHjemler(stansOpphørVurdering));
   return [...new Set(hjemler)].join(', ');
 }
