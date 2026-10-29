@@ -1,8 +1,13 @@
+'use client';
+
 import { Button, Table } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { formaterDatoForFrontend, sorterEtterEldsteDato, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { GosysOppgave } from 'lib/types/gosysTypes';
+import { useState } from 'react';
+
+type Sorteringsfelt = 'opprettetTidspunkt' | 'fristFerdigstillelse';
 
 interface Props {
   oppgaver: GosysOppgave[];
@@ -10,13 +15,56 @@ interface Props {
 }
 
 export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
+  const [sortering, setSortering] = useState<{
+    orderBy: Sorteringsfelt;
+    direction: 'ascending' | 'descending';
+  }>();
+
+  const sorterteOppgaver = sortering
+    ? [...oppgaver].sort((a, b) => {
+        const datoA = a[sortering.orderBy];
+        const datoB = b[sortering.orderBy];
+
+        if (!datoA) return datoB ? 1 : 0;
+        if (!datoB) return -1;
+
+        return sortering.direction === 'ascending'
+          ? sorterEtterEldsteDato(datoA, datoB)
+          : sorterEtterNyesteDato(datoA, datoB);
+      })
+    : oppgaver;
+
   return (
-    <TableStyled size="small" zebraStripes aria-label="Gosys-oppgaver">
+    <TableStyled
+      size="small"
+      zebraStripes
+      aria-label="Gosys-oppgaver"
+      sort={sortering}
+      onSortChange={(sortKey) => {
+        if (sortKey !== 'opprettetTidspunkt' && sortKey !== 'fristFerdigstillelse') return;
+
+        setSortering((forrige) => {
+          if (forrige?.orderBy !== sortKey) {
+            return { orderBy: sortKey, direction: 'ascending' };
+          }
+
+          if (forrige.direction === 'ascending') {
+            return { orderBy: sortKey, direction: 'descending' };
+          }
+
+          return undefined;
+        });
+      }}
+    >
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Oppgavetype</Table.HeaderCell>
-          <Table.HeaderCell>Opprettet</Table.HeaderCell>
-          <Table.HeaderCell>Frist</Table.HeaderCell>
+          <Table.ColumnHeader sortKey="opprettetTidspunkt" sortable>
+            Opprettet
+          </Table.ColumnHeader>
+          <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
+            Frist
+          </Table.ColumnHeader>
           <Table.HeaderCell>Tildelt</Table.HeaderCell>
           <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
           <Table.HeaderCell>Handling</Table.HeaderCell>
@@ -28,7 +76,7 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
             <Table.DataCell colSpan={6}>Ingen Gosys-oppgaver funnet.</Table.DataCell>
           </Table.Row>
         ) : (
-          oppgaver.map((oppgave) => (
+          sorterteOppgaver.map((oppgave) => (
             <Table.Row key={oppgave.id}>
               <Table.DataCell>{oppgave.oppgavetype}</Table.DataCell>
               <Table.DataCell>
