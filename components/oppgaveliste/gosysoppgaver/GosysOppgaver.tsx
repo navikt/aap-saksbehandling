@@ -17,7 +17,7 @@ interface Props {
 interface FormFields {
   enhet: string;
   gjelder: GjelderTyper;
-  erTildelt: boolean;
+  visKunTildelteOppgaver: boolean;
 }
 
 // ae0292 og ae0294 er behandlingstyper, mens ab0269 og ae0012 er behandlingstema
@@ -49,7 +49,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
       defaultValue: 'ae0292',
       options: gjelderOptions,
     },
-    erTildelt: {
+    visKunTildelteOppgaver: {
       type: 'switch',
       defaultValue: false,
       label: 'Vis kun tildelte oppgaver',
@@ -66,7 +66,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
     behandlingstema
   );
 
-  const visBareOppgaverSomErTildelt = form.watch('erTildelt');
+  const visBareOppgaverSomErTildelt = form.watch('visKunTildelteOppgaver');
   const oppgaverSomSkalVises = visBareOppgaverSomErTildelt
     ? oppgaver.filter((oppgave) => oppgave.tilordnetRessurs)
     : oppgaver;
@@ -84,7 +84,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
           >
             <FormField form={form} formField={formFields.enhet} />
             <FormField form={form} formField={formFields.gjelder} />
-            <FormField form={form} formField={formFields.erTildelt} />
+            <FormField form={form} formField={formFields.visKunTildelteOppgaver} />
           </HStack>
           <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <Label as="p" size={'small'}>
