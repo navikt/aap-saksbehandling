@@ -106,16 +106,18 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
           <GosysTabell oppgaver={oppgaverSomSkalVises} gosysUrl={gosysUrl} />
           {error && <Alert variant="error">Kunne ikke hente flere Gosys-oppgaver. Prøv igjen.</Alert>}
           {kanLasteFlere && (
-            <Button
-              variant="secondary"
-              size="small"
-              loading={isValidating}
-              disabled={isValidating}
-              onClick={() => lastInnFlere()}
-              className={'fit-content'}
-            >
-              Last inn flere oppgaver
-            </Button>
+            <HStack justify={'center'}>
+              <Button
+                variant="secondary"
+                size="small"
+                loading={isValidating}
+                disabled={isValidating}
+                onClick={() => lastInnFlere()}
+                className={'fit-content'}
+              >
+                Last inn flere oppgaver
+              </Button>
+            </HStack>
           )}
         </>
       )}
