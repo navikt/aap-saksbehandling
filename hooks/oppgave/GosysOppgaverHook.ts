@@ -3,7 +3,7 @@ import { clientHentGosysOppgaver } from 'lib/clientApi';
 import { FinnGosysOppgaverResponse } from 'lib/types/gosysTypes';
 import { isError } from 'lib/utils/api';
 
-const OPPGAVER_PER_SIDE = 10;
+const OPPGAVER_PER_SIDE = 50;
 
 export function useGosysOppgaver(aktivEnhet: string) {
   const { data, isLoading, isValidating, error, size, setSize, mutate } = useSWRInfinite(
