@@ -316,10 +316,27 @@ describe('manglerKorrigertReduksjonsdato', () => {
     ).toBe(false);
   });
 
-  it('returnerer true når oppholdet ikke har noen egen reduksjonsvurdering', () => {
+  it('returnerer true når oppholdet ikke er besvart', () => {
+    expect(
+      manglerKorrigertReduksjonsdato('01.12.2025', [lagFormVurdering()], forrigeUtenReduksjon, [vedtattReduksjon])
+    ).toBe(true);
+  });
+
+  it('returnerer false når oppholdet er besvart uten reduksjon', () => {
     expect(
       manglerKorrigertReduksjonsdato('01.12.2025', [ikkeReduksjon('')], forrigeUtenReduksjon, [vedtattReduksjon])
-    ).toBe(true);
+    ).toBe(false);
+  });
+
+  it('returnerer false når oppholdet er besvart uten reduksjon med dato før standard tidligste dato', () => {
+    expect(
+      manglerKorrigertReduksjonsdato(
+        '01.10.2026',
+        [ikkeReduksjon('15.11.2026')],
+        [ikkeReduksjon('26.01.2026')],
+        [{ ...vedtattReduksjon, periode: { fom: '2026-05-01', tom: '2026-07-31' } }]
+      )
+    ).toBe(false);
   });
 
   it('returnerer true når reduksjonsdato er før standard tidligste dato', () => {

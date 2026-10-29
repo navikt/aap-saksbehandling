@@ -61,6 +61,11 @@ export const UMAMI_STEG = [
   'AVKLAR_STUDENT_V2',
   'AVKLAR_SYKDOM',
   'SYKDOMSVURDERING_BREV',
+  'AVKLAR_TEMA',
+  'AVKLAR_SAK',
+  'AVKLAR_FORDELING',
+  'DIGITALISER_DOKUMENT',
+  'OVERLEVER_TIL_FAGSYSTEM',
 ] as const;
 
 export type UmamiSteg = (typeof UMAMI_STEG)[number];

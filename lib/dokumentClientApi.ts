@@ -1,7 +1,7 @@
 import { KnyttTilAnnenSakRequest } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 import { clientFetch } from 'lib/clientApi';
 import { RelevantDokumentType } from 'components/innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
-import { Journalpost } from 'lib/types/journalpost';
+import { HentUtsendingsinfoResponse, Journalpost } from 'lib/types/journalpost';
 
 const BASE_URL = '/saksbehandling';
 
@@ -36,4 +36,8 @@ export function clientHentRelevanteDokumenter(saksnummer: string, personIdent: s
     saksnummer,
     personIdent,
   });
+}
+
+export function clientHentUtsendingsinfo(journalpostId: string) {
+  return clientFetch<HentUtsendingsinfoResponse>(`${BASE_URL}/api/dokumenter/${journalpostId}/utsendingsinfo`, 'GET');
 }

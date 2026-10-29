@@ -6,7 +6,6 @@ export type KodeverkBeskrivelse = {
 export type KodeverkBetydning = {
   gyldigFra: string;
   gyldigTil: string;
-  isolandkode?: string;
   beskrivelser: Record<string, KodeverkBeskrivelse>;
 };
 
