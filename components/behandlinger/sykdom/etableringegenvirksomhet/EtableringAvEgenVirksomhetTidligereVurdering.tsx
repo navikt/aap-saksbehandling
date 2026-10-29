@@ -34,9 +34,9 @@ export const EtableringEgenVirksomhetTidligereVurdering = ({ vurdering }: Props)
           svar={getJaNeiEllerUndefined(vurdering.kanFøreTilSelvforsørget)!}
         />
       )}
-      {vurdering.utviklingsPeriode.length > 0 && (
+      {(vurdering.utviklingsPeriode ?? []).length > 0 && (
         <>
-          {vurdering.utviklingsPeriode.map((periode) => (
+          {(vurdering.utviklingsPeriode ?? []).map((periode) => (
             <VStack key={periode.fom}>
               <Label size={'small'}>Utviklingsperiode</Label>
               <BodyShort
@@ -46,9 +46,9 @@ export const EtableringEgenVirksomhetTidligereVurdering = ({ vurdering }: Props)
           ))}
         </>
       )}
-      {vurdering.oppstartsPeriode.length > 0 && (
+      {(vurdering.oppstartsPeriode ?? []).length > 0 && (
         <>
-          {vurdering.oppstartsPeriode.map((periode) => (
+          {(vurdering.oppstartsPeriode ?? []).map((periode) => (
             <VStack key={periode.fom}>
               <Label size={'small'}>Oppstartsperiode</Label>
               <BodyShort

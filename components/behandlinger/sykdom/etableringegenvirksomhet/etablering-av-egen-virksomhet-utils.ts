@@ -34,18 +34,14 @@ export function getDefaultValuesFromGrunnlag(
       foreliggerEnNæringsfagligVurdering: getJaNeiEllerUndefined(vurdering.foreliggerFagligVurdering),
       eierBrukerVirksomheten: vurdering.brukerEierVirksomheten,
       antasDetAtEtableringenFørerTilSelvforsørgelse: getJaNeiEllerUndefined(vurdering.kanFøreTilSelvforsørget),
-      utviklingsperioder: vurdering.utviklingsPeriode
-        ? vurdering.utviklingsPeriode.map((periode) => ({
-            fom: new Dato(periode.fom).formaterForFrontend(),
-            tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
-          }))
-        : [],
-      oppstartsperioder: vurdering.oppstartsPeriode
-        ? vurdering.oppstartsPeriode.map((periode) => ({
-            fom: new Dato(periode.fom).formaterForFrontend(),
-            tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
-          }))
-        : [],
+      utviklingsperioder: (vurdering.utviklingsPeriode ?? []).map((periode) => ({
+        fom: new Dato(periode.fom).formaterForFrontend(),
+        tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
+      })),
+      oppstartsperioder: (vurdering.oppstartsPeriode ?? []).map((periode) => ({
+        fom: new Dato(periode.fom).formaterForFrontend(),
+        tom: periode.tom ? new Dato(periode.tom).formaterForFrontend() : '',
+      })),
       erNyVurdering: false,
       behøverVurdering: false,
     })),
