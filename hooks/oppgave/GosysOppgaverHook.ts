@@ -5,7 +5,7 @@ import { isError } from 'lib/utils/api';
 
 const OPPGAVER_PER_SIDE = 50;
 
-export function useGosysOppgaver(aktivEnhet: string) {
+export function useGosysOppgaver(aktivEnhet: string, behandlingstype: string, behandlingstema?: string) {
   const { data, isLoading, isValidating, error, size, setSize, mutate } = useSWRInfinite(
     (pageIndex: number, previousPage: FinnGosysOppgaverResponse | null) => {
       if (!aktivEnhet) return null;
@@ -17,12 +17,19 @@ export function useGosysOppgaver(aktivEnhet: string) {
       ) {
         return null;
       }
-      return ['/oppgave/api/gosys', pageIndex * OPPGAVER_PER_SIDE, aktivEnhet] as const;
+      return [
+        '/oppgave/api/gosys',
+        pageIndex * OPPGAVER_PER_SIDE,
+        aktivEnhet,
+        behandlingstype,
+        behandlingstema,
+      ] as const;
     },
-    async ([, offset, enhet]) => {
+    async ([, offset, enhet, valgtBehandlingstype, valgtBehandlingstema]) => {
       const response = await clientHentGosysOppgaver({
         tema: ['AAP'],
-        behandlingstype: 'ae0292',
+        behandlingstype: valgtBehandlingstype,
+        ...(valgtBehandlingstema !== undefined && { behandlingstema: valgtBehandlingstema }),
         statuskategori: 'AAPEN',
         tildeltEnhetsnr: enhet,
         limit: OPPGAVER_PER_SIDE,

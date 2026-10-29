@@ -1,102 +1,106 @@
 'use client';
 
-import { useState } from 'react';
-import { Button, Select, Table, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, HStack, Label, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { Spinner } from 'components/felles/Spinner';
-import { TableStyled } from 'components/tablestyled/TableStyled';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { formaterDatoForFrontend } from 'lib/utils/date';
+import { GosysTabell } from 'components/oppgaveliste/gosysoppgaver/gosystabell/GosysTabell';
+import { useConfigForm } from 'components/form/FormHook';
+import { FormField, ValuePair } from 'components/form/FormField';
 
 interface Props {
   enheter: Enhet[];
   gosysUrl?: string;
 }
 
-export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
-  const [aktivEnhet, setAktivEnhet] = useState(enheter[0]?.enhetNr ?? '');
-  const { oppgaver, antallTreff, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, lastInnFlere } =
-    useGosysOppgaver(aktivEnhet);
+interface FormFields {
+  enhet: string;
+  gjelder: GjelderTyper;
+  erTildelt: boolean;
+}
 
-  console.log(oppgaver);
+// ae0292 og ae0294 er behandlingstyper, mens ab0269 og ae0012 er behandlingstema
+type GjelderTyper = 'ae0292' | 'ae0294' | 'ab0269' | 'ae0012';
+
+const gjelderOptions: ValuePair<GjelderTyper>[] = [
+  {
+    value: 'ae0292',
+    label: 'Kelvin',
+  },
+  { value: 'ae0294', label: 'Klage - Kelvin' },
+  { value: 'ab0269', label: 'Medlemskap | Kelvin ' },
+  { value: 'ae0012', label: 'Avbryt revurdering | Kelvin ' },
+];
+
+export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
+  const { form, formFields } = useConfigForm<FormFields>({
+    enhet: {
+      type: 'select',
+      label: 'Velg enhet',
+      defaultValue: enheter[0].enhetNr,
+      options: enheter.map((enhet) => {
+        return { label: enhet.navn, value: enhet.enhetNr };
+      }),
+    },
+    gjelder: {
+      type: 'select',
+      label: 'Gjelder',
+      defaultValue: 'ae0292',
+      options: gjelderOptions,
+    },
+    erTildelt: {
+      type: 'switch',
+      defaultValue: false,
+      label: 'Vis kun tildelte oppgaver',
+    },
+  });
+
+  const gjelder = form.watch('gjelder');
+  const behandlingstema = gjelder === 'ab0269' || gjelder === 'ae0012' ? gjelder : undefined;
+  const behandlingstype = behandlingstema ? 'ae0292' : gjelder;
+
+  const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, lastInnFlere } = useGosysOppgaver(
+    form.watch('enhet'),
+    behandlingstype,
+    behandlingstema
+  );
+
+  const visBareOppgaverSomErTildelt = form.watch('erTildelt');
+  const oppgaverSomSkalVises = visBareOppgaverSomErTildelt
+    ? oppgaver.filter((oppgave) => oppgave.tilordnetRessurs)
+    : oppgaver;
 
   return (
     <VStack gap="space-16">
-      <Select
-        label="Velg enhet"
-        className={'fit-content'}
-        size="small"
-        value={aktivEnhet}
-        onChange={(event) => {
-          setAktivEnhet(event.target.value);
-        }}
-      >
-        {enheter.map((enhet) => (
-          <option key={enhet.enhetNr} value={enhet.enhetNr}>
-            {enhet.navn}
-          </option>
-        ))}
-      </Select>
+      <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={'12'}>
+        <VStack>
+          <HStack
+            align={'end'}
+            paddingInline={'space-16'}
+            paddingBlock={'space-8'}
+            gap={'space-16'}
+            style={{ borderBottom: '1px solid #071A3636' }}
+          >
+            <FormField form={form} formField={formFields.enhet} />
+            <FormField form={form} formField={formFields.gjelder} />
+            <FormField form={form} formField={formFields.erTildelt} />
+          </HStack>
+          <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
+            <Label as="p" size={'small'}>
+              Beskrivelse av køen:
+            </Label>
+            <BodyShort size={'small'}>Her må vi få inn noe beskrivende</BodyShort>
+          </HStack>
+        </VStack>
+      </Box>
       {isLoading ? (
         <Spinner label="Henter Gosys-oppgaver" />
       ) : error && !harLastetOppgaver ? (
         <Alert variant="error">Kunne ikke hente Gosys-oppgaver.</Alert>
       ) : (
         <>
-          <div>
-            Viser {oppgaver.length}
-            {antallTreff !== undefined && ` av ${antallTreff}`} Gosys-oppgaver.
-          </div>
-          <TableStyled size="small" zebraStripes aria-label="Gosys-oppgaver">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Oppgavetype</Table.HeaderCell>
-                <Table.HeaderCell>Opprettet</Table.HeaderCell>
-                <Table.HeaderCell>Frist</Table.HeaderCell>
-                <Table.HeaderCell>Tildelt</Table.HeaderCell>
-                <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
-                <Table.HeaderCell>Handling</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {oppgaver.length === 0 ? (
-                <Table.Row>
-                  <Table.DataCell colSpan={6}>Ingen Gosys-oppgaver funnet.</Table.DataCell>
-                </Table.Row>
-              ) : (
-                oppgaver.map((oppgave) => (
-                  <Table.Row key={oppgave.id}>
-                    <Table.DataCell>{oppgave.oppgavetype}</Table.DataCell>
-                    <Table.DataCell>
-                      {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
-                    </Table.DataCell>
-                    <Table.DataCell>
-                      {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
-                    </Table.DataCell>
-                    <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
-                    <Table.DataCell>{oppgave.beskrivelse}</Table.DataCell>
-                    <Table.DataCell>
-                      {gosysUrl && (
-                        <Button
-                          as="a"
-                          role="link"
-                          href={`${gosysUrl.replace(/\/$/, '')}/oppgavebehandling/oppgave/${oppgave.id}`}
-                          target="_blank"
-                          variant="secondary"
-                          size="small"
-                          icon={<ExternalLinkIcon aria-hidden />}
-                        >
-                          Åpne i Gosys
-                        </Button>
-                      )}
-                    </Table.DataCell>
-                  </Table.Row>
-                ))
-              )}
-            </Table.Body>
-          </TableStyled>
+          <GosysTabell oppgaver={oppgaverSomSkalVises} gosysUrl={gosysUrl} />
           {error && <Alert variant="error">Kunne ikke hente flere Gosys-oppgaver. Prøv igjen.</Alert>}
           {kanLasteFlere && (
             <Button
