@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { InfoCard, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
@@ -34,11 +34,11 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EtableringEgenVirksomhetTidligereVurdering } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurdering';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { addDays, parseISO } from 'date-fns';
-import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { parseISO } from 'date-fns';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { Buildings3Icon } from '@navikt/aksel-icons';
@@ -162,14 +162,6 @@ export const EtableringAvEgenVirksomhetNy = ({
     })(event);
   };
 
-  function sluttdatoForSisteVurdering(index: number): Date | null {
-    if (index === form.watch(`vurderinger`).length - 1 && grunnlag.tom) {
-      return gyldigDatoEllerNull(formaterDatoForFrontend(grunnlag.tom));
-    }
-
-    return gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`));
-  }
-
   function onAddPeriode() {
     append(tomEtableringAvEgenVirksomhetVurdering());
   }
@@ -239,7 +231,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                   vurderingStatus={getErOppfyltEllerIkkeStatus(
                     nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                   )}
-                  nestePeriodeFraDato={sluttdatoForSisteVurdering(index)}
+                  nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
                   isLast={index === vedtatteVurderinger.length - 1}
                   vurdering={vurdering}
                   finnesFeil={finnesFeilForVurdering(index, errorList)}
@@ -254,7 +246,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                     form={form}
                     readOnly={formReadOnly}
                     index={index}
-                    sluttDato={sluttdatoForSisteVurdering(index)}
+                    vurderinger={grunnlag.nyeVurderinger}
                   />
                 </NyVurderingExpandableCard>
               ))}

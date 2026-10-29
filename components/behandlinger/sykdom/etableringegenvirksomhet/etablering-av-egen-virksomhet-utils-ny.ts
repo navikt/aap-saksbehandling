@@ -143,8 +143,3 @@ export function tidligereVurderingErOppfylt(vurdering: EtableringEgenVirksomhetV
   }
 }
 
-export function maksVarighetsDato(fraDato: string): string {
-  const dato = stringToDate(fraDato, 'dd.MM.yyyy');
-
-  return dato ? formaterDatoForFrontend(subDays(dato, 1)) : '';
-}
