@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Table } from '@navikt/ds-react';
+import { Box, Button, Table } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { formaterDatoForFrontend, sorterEtterEldsteDato, sorterEtterNyesteDato } from 'lib/utils/date';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
@@ -35,77 +35,79 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
     : oppgaver;
 
   return (
-    <TableStyled
-      size="small"
-      zebraStripes
-      aria-label="Gosys-oppgaver"
-      sort={sortering}
-      onSortChange={(sortKey) => {
-        if (sortKey !== 'opprettetTidspunkt' && sortKey !== 'fristFerdigstillelse') return;
+    <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={'12'}>
+      <TableStyled
+        size="small"
+        zebraStripes
+        aria-label="Gosys-oppgaver"
+        sort={sortering}
+        onSortChange={(sortKey) => {
+          if (sortKey !== 'opprettetTidspunkt' && sortKey !== 'fristFerdigstillelse') return;
 
-        setSortering((forrige) => {
-          if (forrige?.orderBy !== sortKey) {
-            return { orderBy: sortKey, direction: 'ascending' };
-          }
+          setSortering((forrige) => {
+            if (forrige?.orderBy !== sortKey) {
+              return { orderBy: sortKey, direction: 'ascending' };
+            }
 
-          if (forrige.direction === 'ascending') {
-            return { orderBy: sortKey, direction: 'descending' };
-          }
+            if (forrige.direction === 'ascending') {
+              return { orderBy: sortKey, direction: 'descending' };
+            }
 
-          return undefined;
-        });
-      }}
-    >
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Oppgavetype</Table.HeaderCell>
-          <Table.ColumnHeader sortKey="opprettetTidspunkt" sortable>
-            Opprettet
-          </Table.ColumnHeader>
-          <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
-            Frist
-          </Table.ColumnHeader>
-          <Table.HeaderCell>Tildelt</Table.HeaderCell>
-          <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
-          <Table.HeaderCell>Handling</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {oppgaver.length === 0 ? (
+            return undefined;
+          });
+        }}
+      >
+        <Table.Header>
           <Table.Row>
-            <Table.DataCell colSpan={6}>Ingen Gosys-oppgaver funnet.</Table.DataCell>
+            <Table.HeaderCell>Oppgavetype</Table.HeaderCell>
+            <Table.ColumnHeader sortKey="opprettetTidspunkt" sortable>
+              Opprettet
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
+              Frist
+            </Table.ColumnHeader>
+            <Table.HeaderCell>Tildelt</Table.HeaderCell>
+            <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
+            <Table.HeaderCell>Handling</Table.HeaderCell>
           </Table.Row>
-        ) : (
-          sorterteOppgaver.map((oppgave) => (
-            <Table.Row key={oppgave.id}>
-              <Table.DataCell>{oppgave.oppgavetype}</Table.DataCell>
-              <Table.DataCell>
-                {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
-              </Table.DataCell>
-              <Table.DataCell>
-                {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
-              </Table.DataCell>
-              <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
-              <Table.DataCell>{oppgave.beskrivelse}</Table.DataCell>
-              <Table.DataCell>
-                {gosysUrl && (
-                  <Button
-                    as="a"
-                    role="link"
-                    href={`${gosysUrl.replace(/\/$/, '')}/oppgavebehandling/oppgave/${oppgave.id}`}
-                    target="_blank"
-                    variant="secondary"
-                    size="small"
-                    icon={<ExternalLinkIcon aria-hidden />}
-                  >
-                    Åpne i Gosys
-                  </Button>
-                )}
-              </Table.DataCell>
+        </Table.Header>
+        <Table.Body>
+          {oppgaver.length === 0 ? (
+            <Table.Row>
+              <Table.DataCell colSpan={6}>Ingen Gosys-oppgaver funnet.</Table.DataCell>
             </Table.Row>
-          ))
-        )}
-      </Table.Body>
-    </TableStyled>
+          ) : (
+            sorterteOppgaver.map((oppgave) => (
+              <Table.Row key={oppgave.id}>
+                <Table.DataCell>{oppgave.oppgavetype}</Table.DataCell>
+                <Table.DataCell>
+                  {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
+                </Table.DataCell>
+                <Table.DataCell>
+                  {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
+                </Table.DataCell>
+                <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
+                <Table.DataCell>{oppgave.beskrivelse}</Table.DataCell>
+                <Table.DataCell>
+                  {gosysUrl && (
+                    <Button
+                      as="a"
+                      role="link"
+                      href={`${gosysUrl.replace(/\/$/, '')}/oppgavebehandling/oppgave/${oppgave.id}`}
+                      target="_blank"
+                      variant="secondary"
+                      size="small"
+                      icon={<ExternalLinkIcon aria-hidden />}
+                    >
+                      Åpne i Gosys
+                    </Button>
+                  )}
+                </Table.DataCell>
+              </Table.Row>
+            ))
+          )}
+        </Table.Body>
+      </TableStyled>
+    </Box>
   );
 };
