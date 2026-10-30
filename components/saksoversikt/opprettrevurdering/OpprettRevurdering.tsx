@@ -41,7 +41,7 @@ export const OpprettRevurdering = ({
   const [error, setError] = useState<string>();
 
   async function sendHendelse(data: ManuellRevurderingFormFields) {
-    const innsending = {
+    const innsending: Parameters<typeof clientSendHendelse>[1] = {
       saksnummer: sak.saksnummer,
       referanse: {
         type: 'REVURDERING_ID',

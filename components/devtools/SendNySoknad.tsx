@@ -3,11 +3,11 @@ import { clientSendHendelse } from 'lib/clientApi';
 
 export const SendNySoknad = ({ saksid }: { saksid: string }) => {
   async function postSoknad() {
-    const reqBody = {
+    const reqBody: Parameters<typeof clientSendHendelse>[1] = {
       kanal: 'DIGITAL',
       melding: {
-        vedlegg: {},
-        barn: [],
+        meldingType: 'SøknadV0',
+        oppgitteBarn: { barn: [], identer: [] },
         fastlege: [
           {
             navn: 'Sonja Paracet Plastersen',
@@ -34,9 +34,6 @@ export const SendNySoknad = ({ saksid }: { saksid: string }) => {
           stønad: ['NEI'],
           afp: {},
         },
-        søknadBekreft: true,
-        version: 1,
-        etterspurtDokumentasjon: [],
       },
       mottattTidspunkt: new Date().toISOString(),
       referanse: {

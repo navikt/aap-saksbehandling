@@ -60,11 +60,13 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
   const send = async () => {
     const { kravVurderinger } = form.getValues();
     await leggTilKravVurdering(saksnummer, {
-      kravVurderinger: kravVurderinger.map((k) => ({
-        kravType: k.kravType,
-        søknadsdato: formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date())),
-        muligRettFra: formaterDatoForBackend(parse(k.muligRettFra, 'dd.MM.yyyy', new Date())),
-      })),
+      kravVurderinger: kravVurderinger.map(
+        (k): Parameters<typeof clientLeggTilKravVurdering>[1]['kravVurderinger'][number] => ({
+          kravType: k.kravType,
+          søknadsdato: formaterDatoForBackend(parse(k.søknadsdato, 'dd.MM.yyyy', new Date())),
+          overstyrMuligRettFra: formaterDatoForBackend(parse(k.muligRettFra, 'dd.MM.yyyy', new Date())),
+        })
+      ),
     });
   };
 

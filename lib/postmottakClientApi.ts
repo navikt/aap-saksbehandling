@@ -6,13 +6,16 @@ import {
   SettPåVentRequest,
   BehandlingFlytOgTilstand,
   FinnBehandlingerRespons,
+  FinnBehandlingerRequest,
+  OpprettPostmottakBehandlingRequest,
+  OpprettPostmottakBehandlingResponse,
 } from 'lib/types/postmottakTypes';
 
 // TODO: Test-endepunkt - skal fjernes
 export function postmottakOpprettBehandlingClient(journalpostId: number) {
-  return clientFetch<{ referanse: number }>('/postmottak/api/test/behandling/opprett/', 'POST', {
+  return clientFetch<OpprettPostmottakBehandlingResponse>('/postmottak/api/test/behandling/opprett/', 'POST', {
     referanse: journalpostId,
-  });
+  } satisfies OpprettPostmottakBehandlingRequest);
 }
 
 export function postmottakSettPåVentClient(behandlingsreferanse: string, body: SettPåVentRequest) {
@@ -24,7 +27,9 @@ export function postmottakLøsBehovClient(avklaringsBehov: LøsAvklaringsbehovP�
 }
 
 export function postmottakAlleBehandlinger(ident: string) {
-  return clientFetch<FinnBehandlingerRespons>(`/postmottak/api/post/alle-behandlinger`, 'POST', { ident: ident });
+  return clientFetch<FinnBehandlingerRespons>(`/postmottak/api/post/alle-behandlinger`, 'POST', {
+    ident: ident,
+  } satisfies FinnBehandlingerRequest);
 }
 
 export async function postmottakHentDokumentClient(journalpostId: number, dokumentInfoId: string): Promise<Blob> {

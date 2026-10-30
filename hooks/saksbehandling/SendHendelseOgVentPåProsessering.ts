@@ -8,15 +8,16 @@ import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export type SendHendelseOgVentPåProsesseringStatus =
-  | FlytProsesseringStatus
-  | 'CLIENT_ERROR'
-  | 'CLIENT_CONFLICT'
-  | undefined;
+  FlytProsesseringStatus | 'CLIENT_ERROR' | 'CLIENT_CONFLICT' | undefined;
 
 export const useSendHendelseOgVentPåProsessering = (): {
   status: SendHendelseOgVentPåProsesseringStatus;
   isLoading: boolean;
-  sendHendelseOgVentPåProsessering: (saksnummer: string, hendelse: Object, onSuccess?: () => void) => void;
+  sendHendelseOgVentPåProsessering: (
+    saksnummer: string,
+    hendelse: Parameters<typeof clientSendHendelse>[1],
+    onSuccess?: () => void
+  ) => void;
   sendHendelseError?: ApiException;
 } => {
   const params = useParamsMedType();
@@ -26,7 +27,11 @@ export const useSendHendelseOgVentPåProsessering = (): {
   const { refetchFlytClient } = useFlyt();
   const router = useRouter();
 
-  const sendHendelseOgVentPåProsessering = async (saksnummer: string, hendelse: Object, onSuccess?: () => void) => {
+  const sendHendelseOgVentPåProsessering = async (
+    saksnummer: string,
+    hendelse: Parameters<typeof clientSendHendelse>[1],
+    onSuccess?: () => void
+  ) => {
     setError(undefined);
     setIsLoading(true);
     setStatus(undefined);
@@ -54,8 +59,8 @@ export const useSendHendelseOgVentPåProsessering = (): {
       }
     );
 
-    eventSource.onmessage = async (event: MessageEvent) => {
-      const eventData: FlytProsesseringServerSentEvent = JSON.parse(event.data);
+    eventSource.onmessage = async (event: MessageEvent<string>) => {
+      const eventData = JSON.parse(event.data) as FlytProsesseringServerSentEvent;
       if (eventData.status === 'FERDIG') {
         eventSource.close();
         refetchFlytClient();

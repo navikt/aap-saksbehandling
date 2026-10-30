@@ -57,6 +57,7 @@ export const LeggTilMockYrkesskade = ({ saksnummer }: { saksnummer: string }) =>
     leggTilYrkesskade(saksnummer, {
       yrkesskader: yrkesskader.map((y) => ({
         kilde: 'REGISTER',
+        saksreferanse: '',
         harYrkesskade: false,
         skadeart: y.skadeart,
         diagnose: y.diagnose,
