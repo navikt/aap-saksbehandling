@@ -3,11 +3,13 @@ import { PlukkOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { plukkOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { logError } from 'lib/serverutlis/logger';
 import { isServerError } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: NextRequest) {
-  const data: PlukkOppgaveRequest = await req
-    .json()
-    .then((data) => ({ oppgaveId: data.oppgaveId, versjon: data.versjon }));
+  const data = await readRequestBody<PlukkOppgaveRequest>(req).then((data) => ({
+    oppgaveId: data.oppgaveId,
+    versjon: data.versjon,
+  }));
   if (data.oppgaveId === undefined || data.versjon === undefined) {
     return NextResponse.json({ message: 'Missing oppgaveId or versjon', status: 400 }, { status: 400 });
   }

@@ -13,6 +13,10 @@ import {
   SettPåVentRequest,
   UbehandletJournalpost,
   Venteinformasjon,
+  FinnBehandlingerRequest,
+  FinnBehandlingerRespons,
+  OpprettPostmottakBehandlingRequest,
+  OpprettPostmottakBehandlingResponse,
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
 import { apiFetch, apiFetchPdf } from 'lib/services/apiFetch';
@@ -82,8 +86,8 @@ export const endreTema = async (behandlingsreferanse: string) => {
 
 export const alleBehandlinger = async (ident: string) => {
   const url = `${postmottakApiBaseUrl}/api/alle-behandlinger`;
-  const body = { ident: ident };
-  return await apiFetch<{ redirectUrl: string }>(url, postmottakApiScope, 'POST', body);
+  const body = { ident: ident } satisfies FinnBehandlingerRequest;
+  return await apiFetch<FinnBehandlingerRespons>(url, postmottakApiScope, 'POST', body);
 };
 
 export const hentAlleBehandlinger = async () => {
@@ -108,9 +112,9 @@ export const auditlog = async (journalpostId: number) => {
 };
 
 // TODO: Fjern denne - testendepunkt
-export const opprettBehandlingForJournalpost = async (body: { journalpostId: number }) => {
+export const opprettBehandlingForJournalpost = async (body: OpprettPostmottakBehandlingRequest) => {
   const url = `${postmottakApiBaseUrl}/api/behandling`;
-  return await apiFetch<{ referanse: number }>(url, postmottakApiScope, 'POST', body);
+  return await apiFetch<OpprettPostmottakBehandlingResponse>(url, postmottakApiScope, 'POST', body);
 };
 
 async function ventTilProsesseringErFerdig(

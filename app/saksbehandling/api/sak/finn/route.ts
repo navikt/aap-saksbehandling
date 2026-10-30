@@ -3,9 +3,10 @@ import { finnSakerForIdent } from 'lib/services/saksbehandlingservice/saksbehand
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 import { NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: Request) {
-  const body: FinnSakForIdent = await req.json();
+  const body = await readRequestBody<FinnSakForIdent>(req);
   if (!body.ident) {
     return NextResponse.json({ message: 'ident mangler' }, { status: 400 });
   }

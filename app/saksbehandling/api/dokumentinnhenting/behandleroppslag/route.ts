@@ -3,6 +3,8 @@ import { hentBehandleroppslag } from 'lib/services/dokumentinnhentingservice/dok
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 import { FetchResponse } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { BehandleroppslagRequest } from 'lib/types/types';
 
 const testdata: Behandler[] = [
   {
@@ -58,7 +60,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(response, { status: 200 });
   }
-  const body = await req.json();
+  const body = await readRequestBody<BehandleroppslagRequest>(req);
   const res = await hentBehandleroppslag(body);
 
   return NextResponse.json(res, { status: 200 });

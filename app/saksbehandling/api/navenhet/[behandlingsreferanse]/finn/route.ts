@@ -3,9 +3,10 @@ import { hentAlleNavEnheter } from 'lib/services/saksbehandlingservice/saksbehan
 import { NavEnhetRequest } from 'lib/types/types';
 import { isServerError } from 'lib/utils/api';
 import { NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: Request, props: { params: Promise<{ behandlingsreferanse: string }> }) {
-  const body: NavEnhetRequest = await req.json();
+  const body = await readRequestBody<NavEnhetRequest>(req);
   const params = await props.params;
 
   const res = await hentAlleNavEnheter(params.behandlingsreferanse, body);

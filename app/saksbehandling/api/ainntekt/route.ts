@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logError } from 'lib/serverutlis/logger';
 import { hentSakPersoninfo } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { HentAInntektRedirectUrlRequest } from 'lib/types/types';
 
 const aInntektBaseUrl = process.env.A_INNTEKT_URL_PUB;
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const body = await readRequestBody<HentAInntektRedirectUrlRequest>(req);
   const saksnummer = body?.saksnummer;
   if (!saksnummer) {
     return NextResponse.json({ message: 'saksnummer mangler' }, { status: 400 });

@@ -2,10 +2,12 @@ import { logError } from 'lib/serverutlis/logger';
 import { mellomlagreBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { Brev } from 'lib/types/types';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
   const params = await props.params;
-  const body = await req.json();
+  const body = await readRequestBody<Brev>(req);
   try {
     const res = await mellomlagreBrev(params.brevbestillingReferanse, body);
     if (isServerError(res)) {

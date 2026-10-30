@@ -1,8 +1,10 @@
 import { migrerArenasak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { MigrerArenaSakRequest } from 'lib/types/types';
 
 export async function POST(req: Request) {
-  const { saksnummerArena, ident }: { saksnummerArena: string; ident: string } = await req.json();
+  const { saksnummerArena, ident } = await readRequestBody<MigrerArenaSakRequest>(req);
   const res = await migrerArenasak(saksnummerArena, ident);
 
   if (res.type === 'ERROR') {

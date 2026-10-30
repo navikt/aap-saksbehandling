@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@navikt/ds-react';
 import { ArenaSakMedVedtakResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
+import { MigrerArenaSakRequest, SaksInfo } from 'lib/types/types';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -57,10 +58,10 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
         body: JSON.stringify({
           saksnummerArena: `${arenasak.opprettetAar}-${arenasak.lopenr}`,
           ident: arenasak.person.fodselsnummer,
-        }),
+        } satisfies MigrerArenaSakRequest),
       });
       if (res.ok) {
-        const data = await res.json();
+        const data = (await res.json()) as SaksInfo;
         handleClose();
         router.push(`/saksbehandling/sak/${data.saksnummer}/`);
       } else {
@@ -82,7 +83,7 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
 
     const res = await fetch(`/api/arena/sak/${value}/`);
     if (res.ok) {
-      const data: ArenaSakMedVedtakResponse = await res.json();
+      const data = (await res.json()) as ArenaSakMedVedtakResponse;
       setArenasak(data);
     } else if (res.status === 404) {
       setError('Fant ingen Arena-sak med dette saksnummeret');

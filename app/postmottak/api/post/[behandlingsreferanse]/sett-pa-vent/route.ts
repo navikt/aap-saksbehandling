@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SettPåVentRequest } from 'lib/types/postmottakTypes';
 import { logError } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ behandlingsreferanse: string }> }) {
   const params = await props.params;
-  const body: SettPåVentRequest = await req.json();
+  const body = await readRequestBody<SettPåVentRequest>(req);
 
   try {
     const settPåVentResponse = await settPåVent(params.behandlingsreferanse, body);

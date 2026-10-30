@@ -3,10 +3,11 @@ import { avreserverOppgave } from 'lib/services/oppgaveservice/oppgaveservice';
 import { AvreserverOppgaveDto } from 'lib/types/oppgaveTypes';
 import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: NextRequest) {
   try {
-    const body: AvreserverOppgaveDto = await req.json();
+    const body = await readRequestBody<AvreserverOppgaveDto>(req);
     const res = await avreserverOppgave(body);
     if (isServerError(res)) {
       logError(`/oppgave/api/avreserver`, res.apiException);

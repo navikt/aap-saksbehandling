@@ -3,6 +3,7 @@ import { hentMeldekort, oppdaterMeldekort } from 'lib/services/saksbehandlingser
 import { OppdaterMeldekortRequest } from 'lib/types/types';
 import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
@@ -16,7 +17,7 @@ export async function GET(_: NextRequest, props: { params: Promise<{ saksnummer:
 
 export async function POST(request: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
-  const payload: OppdaterMeldekortRequest = await request.json();
+  const payload = await readRequestBody<OppdaterMeldekortRequest>(request);
 
   const res = await oppdaterMeldekort(params.saksnummer, payload);
 

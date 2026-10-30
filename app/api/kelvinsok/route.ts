@@ -10,6 +10,9 @@ import { capitalize } from 'lodash';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { byggKelvinURL } from 'lib/utils/request';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+
+export type KelvinSøkRequest = { søketekst: string };
 
 export interface SøkeResultat {
   oppgaver?: {
@@ -38,7 +41,7 @@ const formaterSaksnummer = (saksnummer: string) => {
 };
 
 export async function POST(req: Request, brukerinformasjon: Props) {
-  const body: { søketekst: string } = await req.json();
+  const body = await readRequestBody<KelvinSøkRequest>(req);
   if (!body.søketekst) {
     return NextResponse.json({ message: 'søketekst mangler' }, { status: 400 });
   }

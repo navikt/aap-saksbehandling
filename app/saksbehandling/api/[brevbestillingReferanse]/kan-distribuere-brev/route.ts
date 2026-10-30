@@ -2,10 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { kanDistribuereBrev } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { logError, logInfo } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { KanDistribuereBrevRequest } from 'lib/types/types';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ brevbestillingReferanse: string }> }) {
   const params = await props.params;
-  const res = await kanDistribuereBrev(params.brevbestillingReferanse, await req.json());
+  const res = await kanDistribuereBrev(
+    params.brevbestillingReferanse,
+    await readRequestBody<KanDistribuereBrevRequest>(req)
+  );
 
   if (isError(res)) {
     if (res.status === 403) {

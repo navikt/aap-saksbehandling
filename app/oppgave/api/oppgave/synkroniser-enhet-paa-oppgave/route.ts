@@ -3,10 +3,11 @@ import { synkroniserEnhetPåOppgave } from 'lib/services/oppgaveservice/oppgaves
 import { EnhetSynkroniseringOppgave } from 'lib/types/oppgaveTypes';
 import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: NextRequest) {
   try {
-    const data: EnhetSynkroniseringOppgave = await req.json();
+    const data = await readRequestBody<EnhetSynkroniseringOppgave>(req);
     const res = await synkroniserEnhetPåOppgave(data);
     if (isServerError(res)) {
       logError(`/oppgave/api/synkroniser-enhet-paa-oppgave`, res.apiException);
