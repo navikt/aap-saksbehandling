@@ -3,9 +3,9 @@ export function storForbokstavIHvertOrd(value?: string | null): string {
     return '';
   }
 
-  const ord = value.split(' ');
+  const ord = value.split(/([ -])/);
   const ordMedStorForbokstav = ord.map((ord) => storForbokstav(ord));
-  return ordMedStorForbokstav.join(' ');
+  return ordMedStorForbokstav.join('');
 }
 
 export function replaceCommasWithDots(input: string): string {
