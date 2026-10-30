@@ -9,18 +9,24 @@ import { useEffect, useState } from 'react';
 import { AlleOppgaver } from 'components/oppgaveliste/alleoppgaver/AlleOppgaver';
 import { LedigeOppgaver } from 'components/oppgaveliste/ledigeoppgaver/LedigeOppgaver';
 import { MineOppgaver } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { GosysOppgaver } from 'components/oppgaveliste/gosysoppgaver/GosysOppgaver';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   enheter: Enhet[];
+  gosysUrl?: string;
 }
 
-type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver';
+type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver' | 'Gosys oppgaver';
 
-const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver'];
-
-export const OppgaveListe = ({ enheter }: Props) => {
+export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
   const { lagreAktivTab, hentAktivTab } = useLagreAktivTab<MenyValg>();
   const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
+
+  const visGosysOppgaverIOppgavelisten = useFeatureFlag('VisGosysOppgaverIOppgavelisten');
+  const options: MenyValg[] = visGosysOppgaverIOppgavelisten
+    ? ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver', 'Gosys oppgaver']
+    : ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver'];
 
   useEffect(() => {
     const lagretTab = hentAktivTab();
@@ -54,6 +60,9 @@ export const OppgaveListe = ({ enheter }: Props) => {
         {selected === 'Mine oppgaver' && <MineOppgaver />}
         {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
         {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
+        {selected === 'Gosys oppgaver' && visGosysOppgaverIOppgavelisten && (
+          <GosysOppgaver enheter={enheter} gosysUrl={gosysUrl} />
+        )}
       </TildelOppgaverProvider>
     </VStack>
   );
