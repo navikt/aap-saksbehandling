@@ -27,7 +27,7 @@ export const InntektsbortfallMedDataFetching = async ({ behandlingsreferanse, st
   const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
-    Behovstype.FASTSETT_BEREGNINGSTIDSPUNKT_KODE,
+    Behovstype.VURDER_INNTEKTSBORTFALL,
     totalReadOnly,
     stegData.erIkkePåVent
   );
