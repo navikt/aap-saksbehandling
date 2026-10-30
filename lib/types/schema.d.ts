@@ -4714,44 +4714,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/dokumentinnhenting/syfo/status/{saksnummer}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description saksnummer */
-          saksnummer: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto'][];
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/dokumentinnhenting/syfo/brevpreview': {
     parameters: {
       query?: never;
@@ -16077,25 +16039,6 @@ export interface components {
     };
     'no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingForhåndsvisningDto': {
       konstruertBrev: string;
-    };
-    'no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto': {
-      behandlerNavn: string;
-      behandlerRef: string;
-      /** Format: uuid */
-      behandlingsReferanse: string;
-      /** Format: uuid */
-      dialogmeldingUuid: string;
-      fritekst: string;
-      /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
-       */
-      opprettet: string;
-      personId: string;
-      saksnummer: string;
-      /** @enum {string|null} */
-      status?: 'AVVIST' | 'BESTILT' | 'MOTTATT' | 'OK' | 'SENDT' | null;
-      statusTekst?: string | null;
     };
     'no.nav.aap.komponenter.type.Periode': {
       /**
