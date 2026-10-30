@@ -2,18 +2,22 @@ import { BodyShort, Button } from '@navikt/ds-react';
 import { clientSendHendelse } from 'lib/clientApi';
 
 export const SendNySoknadUtenMedlemskap = ({ saksid }: { saksid: string }) => {
-  const reqBody = {
+  const reqBody: Parameters<typeof clientSendHendelse>[1] = {
     kanal: 'DIGITAL',
     melding: {
-      vedlegg: {},
-      barn: [
-        { navn: 'Jørgen Hatt Emaker', fødselsdato: '2021-03-07' },
-        {
-          navn: 'Jonas Li Ibux',
-          fødselsdato: '2023-03-07',
-        },
-        { navn: 'Embla Bakke Li', fødselsdato: '2024-03-07' },
-      ],
+      meldingType: 'SøknadV0',
+      oppgitteBarn: {
+        barn: [
+          { navn: 'Jørgen Hatt Emaker', fødselsdato: '2021-03-07', relasjon: 'FORELDER' },
+          {
+            navn: 'Jonas Li Ibux',
+            fødselsdato: '2023-03-07',
+            relasjon: 'FORELDER',
+          },
+          { navn: 'Embla Bakke Li', fødselsdato: '2024-03-07', relasjon: 'FORELDER' },
+        ],
+        identer: [],
+      },
       fastlege: [
         {
           navn: 'Sonja Paracet Plastersen',
@@ -36,17 +40,13 @@ export const SendNySoknadUtenMedlemskap = ({ saksid }: { saksid: string }) => {
             land: 'AI:Anguilla',
             fraDato: '2014-02-11T11:30:30.000Z',
             tilDato: '2025-01-31T23:00:00.000Z',
-            id: 'e98ae04c-9443-45fe-8c4f-702055df6800',
+            utenlandsId: 'e98ae04c-9443-45fe-8c4f-702055df6800',
           },
         ],
       },
       yrkesskade: 'Nei',
       student: { erStudent: 'Nei' },
       andreUtbetalinger: { lønn: 'Nei', stønad: ['NEI'], afp: {} },
-      tilleggsopplysninger: 'sdf',
-      søknadBekreft: true,
-      version: 1,
-      etterspurtDokumentasjon: [],
     },
     mottattTidspunkt: new Date().toISOString(),
     referanse: {

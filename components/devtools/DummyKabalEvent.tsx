@@ -131,7 +131,7 @@ export function DummyKabalEvent({
 
   async function publiserKabalEvent(kildereferanse: string, type: KabalSvarType) {
     const id = crypto.randomUUID();
-    const reqBody = {
+    const reqBody: Parameters<typeof clientSendHendelse>[1] = {
       saksnummer: saksnummer,
       referanse: {
         type: 'KABAL_HENDELSE_ID',

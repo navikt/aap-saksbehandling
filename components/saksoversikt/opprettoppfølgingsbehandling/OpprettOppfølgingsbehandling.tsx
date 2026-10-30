@@ -74,7 +74,7 @@ export const OpprettOppfølgingsBehandling = ({
   };
 
   async function sendHendelse(data: OppfølgingsoppgaveFormFields) {
-    const innsending = {
+    const innsending: Parameters<typeof clientSendHendelse>[1] = {
       saksnummer: saksnummer,
       referanse: {
         type: 'BEHANDLING_REFERANSE',

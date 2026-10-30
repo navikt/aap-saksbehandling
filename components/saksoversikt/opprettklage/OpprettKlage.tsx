@@ -27,7 +27,7 @@ export const OpprettKlage = ({ sak }: { sak: SaksInfo }) => {
   const [error, setError] = useState<string>();
 
   async function sendHendelse(data: KlageFormFields) {
-    const innsending = {
+    const innsending: Parameters<typeof clientSendHendelse>[1] = {
       saksnummer: sak.saksnummer,
       referanse: {
         type: 'MANUELL_OPPRETTELSE',

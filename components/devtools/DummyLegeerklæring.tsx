@@ -2,16 +2,16 @@ import { BodyShort, Button } from '@navikt/ds-react';
 import { clientSendHendelse } from 'lib/clientApi';
 
 async function postMeldekort(saksid: string) {
-  const reqBody = {
+  const reqBody: Parameters<typeof clientSendHendelse>[1] = {
     saksnummer: saksid,
     referanse: {
       type: 'JOURNALPOST',
-      verdi: new Date().getTime(),
+      verdi: new Date().getTime().toString(),
     },
     type: 'LEGEERKLÆRING',
     kanal: 'DIGITAL',
     mottattTidspunkt: new Date().toISOString(),
-    melding: null,
+    melding: { meldingType: 'LegeerklæringV0' },
   };
   await clientSendHendelse(saksid, reqBody);
 }

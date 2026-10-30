@@ -15,11 +15,11 @@ interface DummyMeldekortForm {
 }
 
 async function postMeldekort(saksid: string, data: DummyMeldekortForm) {
-  const reqBody = {
+  const reqBody: Parameters<typeof clientSendHendelse>[1] = {
     saksnummer: saksid,
     referanse: {
       type: 'JOURNALPOST',
-      verdi: new Date().getTime(),
+      verdi: new Date().getTime().toString(),
     },
     type: 'MELDEKORT',
     kanal: 'DIGITAL',

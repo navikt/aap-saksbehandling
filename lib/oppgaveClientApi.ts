@@ -15,6 +15,8 @@ import {
   SakOgAvklaringsbehov,
   TildeltStatus,
   UføreVedtak,
+  EnhetSynkroniseringOppgave,
+  DokumenterLestDto,
 } from './types/oppgaveTypes';
 import { mapSortStateDirectionTilQueryParamEnum, mineOppgaverQueryParams, queryParamsArray } from './utils/request';
 
@@ -57,12 +59,12 @@ export async function plukkOppgaveClient(oppgaveId: number, versjon: number) {
 export async function synkroniserOppgaveMedEnhetClient(oppgaveId: number) {
   return await clientFetch<void>('/oppgave/api/oppgave/synkroniser-enhet-paa-oppgave', 'POST', {
     oppgaveId: oppgaveId,
-  });
+  } satisfies EnhetSynkroniseringOppgave);
 }
 export function clientMottattDokumenterLest(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/mottatt-dokumenter-lest`, 'POST', {
     behandlingRef: behandlingsreferanse,
-  });
+  } satisfies DokumenterLestDto);
 }
 
 export function clientFjernUføreVedtakTag(uføreVedtak: UføreVedtak) {
@@ -72,7 +74,7 @@ export function clientFjernUføreVedtakTag(uføreVedtak: UføreVedtak) {
 export function clientFjernHelseopplysningIkon(behandlingsreferanse: string) {
   return clientFetch(`/oppgave/api/oppgave/fjern-helseopplysning-ikon`, 'POST', {
     behandlingRef: behandlingsreferanse,
-  });
+  } satisfies DokumenterLestDto);
 }
 
 export async function clientHentMineSisteOppgaver() {
