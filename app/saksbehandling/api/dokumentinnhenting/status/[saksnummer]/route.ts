@@ -1,5 +1,5 @@
 import { logError } from 'lib/serverutlis/logger';
-import { hentAlleDialogmeldingerPåSak } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import { hentAlleDialogmeldingerPåSak } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
 
