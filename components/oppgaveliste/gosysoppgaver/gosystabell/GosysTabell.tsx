@@ -88,7 +88,7 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>{oppgave.beskrivelse}</Table.DataCell>
-                <Table.DataCell textSize={'small'} colSpan={3}>
+                <Table.DataCell textSize={'small'}>
                   {gosysUrl && (
                     <Button
                       as="a"

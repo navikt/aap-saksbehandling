@@ -43,12 +43,14 @@ export function useGosysOppgaver(aktivEnhet: string, behandlingstype: string, be
     { revalidateOnFocus: false, revalidateFirstPage: false, persistSize: false }
   );
 
-  const antallTreff = data?.[0]?.antallTreffTotalt;
+  const antallTreff = data?.at(-1)?.antallTreffTotalt;
   const oppgaver = data?.flatMap((page) => page.oppgaver ?? []) ?? [];
   const sisteSide = data?.at(-1)?.oppgaver ?? [];
   const kanLasteFlere =
     sisteSide.length > 0 &&
-    (antallTreff === undefined ? sisteSide.length === OPPGAVER_PER_SIDE : oppgaver.length < antallTreff);
+    (antallTreff === undefined
+      ? sisteSide.length === OPPGAVER_PER_SIDE
+      : (data?.length ?? 0) * OPPGAVER_PER_SIDE < antallTreff);
 
   return {
     oppgaver,
