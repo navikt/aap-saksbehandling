@@ -1,7 +1,7 @@
 import { useParamsMedType } from '../../hooks/saksbehandling/BehandlingHook';
 import { useState } from 'react';
 import { Button, VStack } from '@navikt/ds-react';
-import styles from '../innhentdokumentasjon/InnhentDokumentasjon.module.css';
+import styles from './BeOmOpplysninger.module.css';
 import { InnhentDokumentasjonSkjema } from '../innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { RelevanteDokumenter } from '../innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { useMeldingerFraDialog } from '../../hooks/saksbehandling/SakMeldingerFraDialogHook';

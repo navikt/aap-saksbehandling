@@ -424,8 +424,6 @@ export type AvklaringsbehovKode =
 export type BehandlingsFlytAvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
-export type LegeerklæringStatus =
-  components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto'];
 export type FastlegeResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.FastlegeResponse'];
 export type YrkesskadeVurderingGrunnlag =

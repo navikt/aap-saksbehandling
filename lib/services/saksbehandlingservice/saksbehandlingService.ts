@@ -662,14 +662,6 @@ export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogm
   return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const sendPåminnelsePåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  saksnummer: string;
-}) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/send`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
 export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
   dialogmeldingPurringUUID: string;
   behandlingsReferanse: string;
