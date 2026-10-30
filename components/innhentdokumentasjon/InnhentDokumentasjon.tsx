@@ -23,9 +23,13 @@ export const InnhentDokumentasjon = () => {
     isLoading,
     error,
     mutate,
-  } = useSWR(`api/dokumentinnhenting/status/${saksnummer}`, () => clientHentAlleDialogmeldingerPåSak(saksnummer), {
-    revalidateOnFocus: false,
-  });
+  } = useSWR<Awaited<ReturnType<typeof clientHentAlleDialogmeldingerPåSak>>, unknown>(
+    `api/dokumentinnhenting/status/${saksnummer}`,
+    () => clientHentAlleDialogmeldingerPåSak(saksnummer),
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
   const skjulSkjema = () => oppdaterVisSkjema(false);
@@ -48,7 +52,7 @@ export const InnhentDokumentasjon = () => {
               <Loader title="Ser etter dialogmeldinger..." size={'small'} />
             </div>
           )}
-          {error && <Alert variant="error">Noe gikk galt under henting av dialogmeldinger</Alert>}
+          {!!error && <Alert variant="error">Noe gikk galt under henting av dialogmeldinger</Alert>}
           {dialogmeldinger && isError(dialogmeldinger) ? (
             <ApiException apiResponses={[dialogmeldinger]} />
           ) : (

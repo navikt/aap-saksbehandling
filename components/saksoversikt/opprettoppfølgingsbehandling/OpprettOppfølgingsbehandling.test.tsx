@@ -43,12 +43,16 @@ describe('opprett oppfølgingsbehandling', () => {
     expect(fetchMock.mock.calls).toHaveLength(1);
     const firstCall = fetchMock.mock.calls[0];
 
-    const jsonBody = JSON.parse(String(firstCall[1]?.body));
+    const jsonBody: unknown = JSON.parse(String(firstCall[1]?.body));
 
-    expect(jsonBody.melding.meldingType).toBe('OppfølgingsoppgaveV0');
-    expect(jsonBody.melding.datoForOppfølging).toBe('2100-02-13');
-    expect(jsonBody.melding.hvemSkalFølgeOpp).toBe('NasjonalEnhet');
-    expect(jsonBody.melding.reserverTilBruker).toBe('Z000000');
+    expect(jsonBody).toMatchObject({
+      melding: {
+        meldingType: 'OppfølgingsoppgaveV0',
+        datoForOppfølging: '2100-02-13',
+        hvemSkalFølgeOpp: 'NasjonalEnhet',
+        reserverTilBruker: 'Z000000',
+      },
+    });
 
     fetchMock.resetMocks();
   });
@@ -77,12 +81,16 @@ describe('opprett oppfølgingsbehandling', () => {
     expect(fetchMock.mock.calls).toHaveLength(1);
     const firstCall = fetchMock.mock.calls[0];
 
-    const jsonBody = JSON.parse(String(firstCall[1]?.body));
+    const jsonBody: unknown = JSON.parse(String(firstCall[1]?.body));
 
-    expect(jsonBody.melding.meldingType).toBe('OppfølgingsoppgaveV0');
-    expect(jsonBody.melding.datoForOppfølging).toBe('2100-02-13');
-    expect(jsonBody.melding.hvemSkalFølgeOpp).toBe('Lokalkontor');
-    expect(jsonBody.melding.reserverTilBruker).toBeUndefined();
+    expect(jsonBody).toMatchObject({
+      melding: {
+        meldingType: 'OppfølgingsoppgaveV0',
+        datoForOppfølging: '2100-02-13',
+        hvemSkalFølgeOpp: 'Lokalkontor',
+      },
+    });
+    expect(jsonBody).not.toHaveProperty('melding.reserverTilBruker');
   });
 
   it('hvis NAY skal følge opp og bruker ikke er NAY-saksbehandler, ikke vis reserver til meg-boksen', async () => {

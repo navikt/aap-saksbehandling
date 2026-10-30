@@ -1,8 +1,9 @@
 import { ValuePair } from 'components/form/FormField';
 import countries from 'i18n-iso-countries';
+import norwegianLocale from 'i18n-iso-countries/langs/no.json';
+import { eeaMember } from 'is-european';
 
-const { eeaMember } = require('is-european');
-countries.registerLocale(require('i18n-iso-countries/langs/no.json'));
+countries.registerLocale(norwegianLocale);
 
 const countriesAlpha3: Record<string, string> = countries.getAlpha3Codes();
 const countryList = Object.entries(countriesAlpha3).map(([key, value]) => ({ alpha2: value, alpha3: key }));

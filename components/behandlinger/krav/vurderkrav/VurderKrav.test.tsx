@@ -170,8 +170,8 @@ describe('VurderKrav - handleSubmit', () => {
       if (req.method === 'POST') {
         try {
           const text = await req.text();
-          const body = JSON.parse(text);
-          if (body?.behov?.behovstype === Behovstype.VURDER_KRAV_KODE) {
+          const body: unknown = JSON.parse(text);
+          if (erKravRequest(body)) {
             capturedRequest = body;
           }
         } catch {
@@ -181,6 +181,39 @@ describe('VurderKrav - handleSubmit', () => {
       return JSON.stringify({ type: 'SUCCESS', status: 200, data: {} });
     });
   });
+
+  function erKravRequest(body: unknown): body is {
+    behov: {
+      kravVurderinger: Array<{ referanse?: string; journalpostId: { identifikator: string }; begrunnelse: string }>;
+    };
+  } {
+    if (
+      typeof body !== 'object' ||
+      body === null ||
+      !('behov' in body) ||
+      typeof body.behov !== 'object' ||
+      body.behov === null ||
+      !('behovstype' in body.behov) ||
+      body.behov.behovstype !== Behovstype.VURDER_KRAV_KODE ||
+      !('kravVurderinger' in body.behov) ||
+      !Array.isArray(body.behov.kravVurderinger)
+    ) {
+      return false;
+    }
+    return body.behov.kravVurderinger.every(
+      (v: unknown) =>
+        typeof v === 'object' &&
+        v !== null &&
+        (!('referanse' in v) || typeof v.referanse === 'string') &&
+        'journalpostId' in v &&
+        typeof v.journalpostId === 'object' &&
+        v.journalpostId !== null &&
+        'identifikator' in v.journalpostId &&
+        typeof v.journalpostId.identifikator === 'string' &&
+        'begrunnelse' in v &&
+        typeof v.begrunnelse === 'string'
+    );
+  }
 
   it('sender kun endrede eksisterende krav og utfylte nye søknad-utkast, med riktig referanse-håndtering', async () => {
     const kravUendret = relevantKrav({ referanse: 'krav-uendret', begrunnelse: 'Blir stående uendret' });

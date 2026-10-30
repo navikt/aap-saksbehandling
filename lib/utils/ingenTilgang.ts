@@ -15,5 +15,5 @@ export function ingenTilgang(): never {
   throw error;
 }
 
-export const erIngenTilgangError = (error: Error & { digest?: string }): boolean =>
-  error.digest === INGEN_TILGANG_DIGEST;
+export const erIngenTilgangError = (error: unknown): boolean =>
+  typeof error === 'object' && error !== null && 'digest' in error && error.digest === INGEN_TILGANG_DIGEST;

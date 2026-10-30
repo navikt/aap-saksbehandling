@@ -1,8 +1,9 @@
-import { describe, expect, it, vi, vitest } from 'vitest';
+import { assert, describe, expect, it, vi, vitest } from 'vitest';
 import { DigitaliserSøknad } from './DigitaliserSøknad';
 import { userEvent } from '@testing-library/user-event';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { render, screen, within } from 'lib/test/CustomRender';
+import type { Submittable } from 'components/postmottak/digitaliserdokument/DigitaliserDokument';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   erPapir: false,
@@ -145,7 +146,7 @@ describe('DigitaliserSøknad', () => {
   });
 
   it('fraDatoLocalDate og tilDatoLocalDate er satt i utenlandsopphold ved innsending', async () => {
-    const submitMock = vi.fn();
+    const submitMock = vi.fn<Submittable['submit']>();
     render(<DigitaliserSøknad submit={submitMock} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
     // Søknadsdato
@@ -196,14 +197,14 @@ describe('DigitaliserSøknad', () => {
 
     expect(submitMock).toHaveBeenCalledOnce();
     const submittedJson = submitMock.mock.calls[0][1];
-    const submitted = JSON.parse(submittedJson);
-    const opphold = submitted.medlemskap.utenlandsOpphold[0];
-    expect(opphold.fraDatoLocalDate).toBe('2020-01-01');
-    expect(opphold.tilDatoLocalDate).toBe('2020-12-31');
+    assert(typeof submittedJson === 'string');
+    const submitted: unknown = JSON.parse(submittedJson);
+    expect(submitted).toHaveProperty('medlemskap.utenlandsOpphold.0.fraDatoLocalDate', '2020-01-01');
+    expect(submitted).toHaveProperty('medlemskap.utenlandsOpphold.0.tilDatoLocalDate', '2020-12-31');
   });
 
   it('sender ikke svar fra medlemskapsspørsmål som er skjult etter endring av svar', async () => {
-    const submitMock = vi.fn();
+    const submitMock = vi.fn<Submittable['submit']>();
     render(<DigitaliserSøknad submit={submitMock} grunnlag={grunnlag} readOnly={false} isLoading={false} />);
 
     await user.type(screen.getByRole('textbox', { name: /søknadsdato/i }), '01.01.2024');
@@ -217,10 +218,16 @@ describe('DigitaliserSøknad', () => {
     await user.click(screen.getByRole('button', { name: 'Neste' }));
 
     expect(submitMock).toHaveBeenCalledOnce();
-    const submitted = JSON.parse(submitMock.mock.calls[0][1]);
-    expect(submitted.medlemskap.harBoddINorgeSiste5År).toBe('ja');
-    expect(submitted.medlemskap.arbeidetUtenforNorgeFørSykdom).toBe('nei');
-    expect(submitted.medlemskap).not.toHaveProperty('harArbeidetINorgeSiste5År');
-    expect(submitted.medlemskap).not.toHaveProperty('iTilleggArbeidUtenforNorge');
+    const submittedJson = submitMock.mock.calls[0][1];
+    assert(typeof submittedJson === 'string');
+    const submitted: unknown = JSON.parse(submittedJson);
+    expect(submitted).toMatchObject({
+      medlemskap: {
+        harBoddINorgeSiste5År: 'ja',
+        arbeidetUtenforNorgeFørSykdom: 'nei',
+      },
+    });
+    expect(submitted).not.toHaveProperty('medlemskap.harArbeidetINorgeSiste5År');
+    expect(submitted).not.toHaveProperty('medlemskap.iTilleggArbeidUtenforNorge');
   });
 });

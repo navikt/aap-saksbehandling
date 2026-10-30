@@ -9,6 +9,7 @@ import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from '../../../../lib/types/Dato';
+import { ChangeEvent } from 'react';
 
 interface Props {
   readOnly: boolean;
@@ -149,7 +150,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
                     }
                   },
                 },
-                onChange: (e) => {
+                onChange: (e: ChangeEvent<HTMLInputElement>) => {
                   const value = e.target.value.replaceAll(/\D/g, '').slice(0, 11);
                   setValue('ident', value, {
                     shouldValidate: true,

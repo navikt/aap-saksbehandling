@@ -38,15 +38,15 @@ describe('apiFetch', () => {
 
     expect(result).toEqual({ type: 'SUCCESS', status: 200, data: mockData });
     expect(getToken).toHaveBeenCalledWith(mockScope, mockUrl);
-    expect(fetch).toHaveBeenCalledWith(
+    expect(vi.mocked(fetch).mock.lastCall).toMatchObject([
       mockUrl,
-      expect.objectContaining({
+      {
         method: 'GET',
-        headers: expect.objectContaining({
+        headers: {
           Authorization: `Bearer ${mockToken}`,
-        }),
-      })
-    );
+        },
+      },
+    ]);
   });
 
   it('should pass revalidate and tags in next config when cache options provided', async () => {
@@ -77,12 +77,7 @@ describe('apiFetch', () => {
 
     await apiFetch(mockUrl, mockScope);
 
-    expect(fetch).toHaveBeenCalledWith(
-      mockUrl,
-      expect.objectContaining({
-        next: expect.objectContaining({ revalidate: 0 }),
-      })
-    );
+    expect(vi.mocked(fetch).mock.lastCall).toMatchObject([mockUrl, { next: { revalidate: 0 } }]);
   });
 
   it('should handle 204 No Content response', async () => {
@@ -211,12 +206,8 @@ describe('apiFetchNoMemoization', () => {
 
     await apiFetchNoMemoization(mockUrl, mockScope);
 
-    expect(fetch).toHaveBeenCalledWith(
-      mockUrl,
-      expect.objectContaining({
-        signal: expect.any(AbortSignal),
-      })
-    );
+    expect(vi.mocked(fetch).mock.lastCall?.[0]).toBe(mockUrl);
+    expect(vi.mocked(fetch).mock.lastCall?.[1]?.signal).toBeInstanceOf(AbortSignal);
   });
 
   it('should work with different HTTP methods', async () => {
@@ -229,12 +220,7 @@ describe('apiFetchNoMemoization', () => {
 
     await apiFetchNoMemoization(mockUrl, mockScope, 'PUT', { update: true });
 
-    expect(fetch).toHaveBeenCalledWith(
-      mockUrl,
-      expect.objectContaining({
-        method: 'PUT',
-        signal: expect.any(AbortSignal),
-      })
-    );
+    expect(vi.mocked(fetch).mock.lastCall).toMatchObject([mockUrl, { method: 'PUT' }]);
+    expect(vi.mocked(fetch).mock.lastCall?.[1]?.signal).toBeInstanceOf(AbortSignal);
   });
 });

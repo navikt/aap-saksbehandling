@@ -19,7 +19,7 @@ export function useMeldekortProsessering(): {
         withCredentials: true,
       });
 
-      eventSource.onmessage = async (event: MessageEvent) => {
+      eventSource.onmessage = async (event: MessageEvent<string>) => {
         const eventData: MeldekortProsesseringServerSentEvent = JSON.parse(event.data);
 
         if (eventData.status === 'KLAR') {

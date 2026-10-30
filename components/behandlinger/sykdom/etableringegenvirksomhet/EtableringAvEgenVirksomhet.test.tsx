@@ -6,8 +6,10 @@ import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils';
 import * as clientApi from 'lib/clientApi';
+import type { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
-const løsPeriodisertAvklaringsbehov = vi.fn();
+const løsPeriodisertAvklaringsbehov =
+  vi.fn<ReturnType<typeof useLøsAvklaringsbehov>['løsPeriodisertAvklaringsbehov']>();
 
 vi.mock('hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov', () => ({
   useLøsAvklaringsbehov: () => ({
@@ -96,18 +98,12 @@ describe('EtableringAvEgenVirksomhet', () => {
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertAvklaringsbehov).toHaveBeenCalledWith(
-      expect.objectContaining({
-        behov: expect.objectContaining({
-          løsningerForPerioder: [
-            expect.objectContaining({
-              versjon: 'V0',
-            }),
-          ],
-        }),
-      }),
-      expect.any(Function)
-    );
+    expect(løsPeriodisertAvklaringsbehov.mock.lastCall?.[0]).toMatchObject({
+      behov: {
+        løsningerForPerioder: [{ versjon: 'V0' }],
+      },
+    });
+    expect(løsPeriodisertAvklaringsbehov.mock.lastCall?.[1]).toBeTypeOf('function');
   });
 
   it('viser backendens avslag etter at et eksisterende utkast avbrytes', async () => {
@@ -180,16 +176,12 @@ describe('EtableringAvEgenVirksomhet', () => {
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertAvklaringsbehov).toHaveBeenCalledWith(
-      expect.objectContaining({
-        behov: expect.objectContaining({
-          løsningerForPerioder: (slettFørste ? ['V1'] : ['V0', 'V1']).map((versjon) =>
-            expect.objectContaining({ versjon })
-          ),
-        }),
-      }),
-      expect.any(Function)
-    );
+    expect(løsPeriodisertAvklaringsbehov.mock.lastCall?.[0]).toMatchObject({
+      behov: {
+        løsningerForPerioder: (slettFørste ? ['V1'] : ['V0', 'V1']).map((versjon) => ({ versjon })),
+      },
+    });
+    expect(løsPeriodisertAvklaringsbehov.mock.lastCall?.[1]).toBeTypeOf('function');
   });
 
   it('skal kalle backend ved submit', async () => {

@@ -83,7 +83,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
         withCredentials: true,
       }
     );
-    eventSource.onmessage = async (event: MessageEvent) => {
+    eventSource.onmessage = async (event: MessageEvent<string>) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();

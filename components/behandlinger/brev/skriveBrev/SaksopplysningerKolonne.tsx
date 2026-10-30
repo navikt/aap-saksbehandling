@@ -24,10 +24,13 @@ export const SaksopplysningerKolonne = ({
   const gjeldendeSykdomsvurderingForBrev = sykdomsvurderingBrevGrunnlag?.vurdering?.vurdering;
   const aktivitetspliktVurdering = aktivitetsplikt11_7Grunnlag?.vurdering;
   const refusjonVurderinger = refusjonGrunnlag?.gjeldendeVurderinger?.filter((vurdering) => vurdering.harKrav === true);
-  const refusjonVurderingerGruppertPerNavKontor: Map<string, RefusjonkravVurderingResponse[]> =
+  const refusjonVurderingerGruppertPerNavKontor: Map<
+    RefusjonkravVurderingResponse['navKontor'],
+    RefusjonkravVurderingResponse[]
+  > =
     refusjonVurderinger && refusjonVurderinger.length > 0
       ? Map.groupBy(refusjonVurderinger, (vurdering) => vurdering.navKontor)
-      : new Map();
+      : new Map<RefusjonkravVurderingResponse['navKontor'], RefusjonkravVurderingResponse[]>();
 
   return (
     <div className={styles.kolonne}>

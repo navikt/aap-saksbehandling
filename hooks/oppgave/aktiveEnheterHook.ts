@@ -27,7 +27,9 @@ export function useLagreAktiveEnheter(): {
 
   const hentLagredeAktiveEnheter = (): ValuePair[] | undefined => {
     try {
-      const obj = JSON.parse(localStorage[KEY]) as LagredeValgteEnheter;
+      const lagredeEnheter = localStorage.getItem(KEY);
+      if (lagredeEnheter === null) return undefined;
+      const obj = JSON.parse(lagredeEnheter) as LagredeValgteEnheter;
 
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         // Glidende utløp: forleng levetiden ved hvert vellykkede lesing, slik at saksbehandler/veileder ikke mister valgt enhet midt i arbeidsdagen.

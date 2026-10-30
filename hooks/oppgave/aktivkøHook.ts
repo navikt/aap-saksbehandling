@@ -32,7 +32,9 @@ export function useLagreAktivKø(): {
 
   const hentLagretAktivKø = (): AktivKø | undefined => {
     try {
-      const aktivKø: AktivKø = JSON.parse(localStorage[AKTIV_OPPGAVE_KØ_KEY]);
+      const lagretKø = localStorage.getItem(AKTIV_OPPGAVE_KØ_KEY);
+      if (lagretKø === null) return undefined;
+      const aktivKø: AktivKø = JSON.parse(lagretKø);
       if (aktivKø.user === bruker.NAVident && new Date().getTime() < aktivKø.timestamp + MAKS_LEVETID) {
         return aktivKø;
       } else {

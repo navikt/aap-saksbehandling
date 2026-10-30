@@ -123,7 +123,8 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
     'Skal blokkere %s under redigering og kunne sende inn etter valg av opprettholdelse',
     async (innstilling) => {
       setMockFlytResponse(defaultFlytResponse);
-      const løsAvklaringsbehov = vi.fn();
+      const løsAvklaringsbehov =
+        vi.fn<ReturnType<typeof løsAvklaringsbehovHook.useLøsAvklaringsbehov>['løsAvklaringsbehov']>();
       vi.spyOn(løsAvklaringsbehovHook, 'useLøsAvklaringsbehov').mockReturnValue({
         løsAvklaringsbehov,
         løsPeriodisertAvklaringsbehov: vi.fn(),
@@ -179,16 +180,14 @@ describe('Klage - vurdering nay ved klage på tilbakekreving', () => {
       }
       await user.click(screen.getByRole('button', { name: 'Send til klageinstans' }));
 
-      await waitFor(() =>
-        expect(løsAvklaringsbehov).toHaveBeenCalledWith(
-          expect.objectContaining({
-            behov: expect.objectContaining({
-              klagevurderingNay: expect.objectContaining({ innstilling: 'OPPRETTHOLD' }),
-            }),
-          }),
-          expect.any(Function)
-        )
-      );
+      await waitFor(() => {
+        expect(løsAvklaringsbehov.mock.lastCall?.[0]).toMatchObject({
+          behov: {
+            klagevurderingNay: { innstilling: 'OPPRETTHOLD' },
+          },
+        });
+        expect(løsAvklaringsbehov.mock.lastCall?.[1]).toBeTypeOf('function');
+      });
     }
   );
 
