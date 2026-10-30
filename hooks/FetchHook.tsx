@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { clientOpprettDummySak, clientOpprettSak, clientPurrPåLegeerklæring } from 'lib/clientApi';
+import { clientOpprettDummySak, clientOpprettSak } from 'lib/clientApi';
 import { OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
@@ -72,20 +72,6 @@ export function useOpprettDummySak(): {
   }
 
   return { opprettSak: opprettSakMethod, isLoading, data, error };
-}
-
-export function usePurrPåDialogmelding(): {
-  purrPåDialogmelding: (dialogmeldingUuid: string, behandlingsreferanse: string) => Promise<{ ok: boolean }>;
-  isLoading: boolean;
-  error?: string;
-} {
-  const { method, isLoading, error } = useFetch(clientPurrPåLegeerklæring);
-
-  async function purr(dialogmeldingUuid: string, behandlingsreferanse: string) {
-    return await method(dialogmeldingUuid, behandlingsreferanse);
-  }
-
-  return { purrPåDialogmelding: purr, isLoading, error };
 }
 
 export function useMottattDokumenterLest(): {

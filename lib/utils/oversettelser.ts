@@ -146,13 +146,13 @@ export function mapTilVenteÅrsakTekst(
 export function mapTilResultat(resultat: UføreVedtakStatus): string {
   switch (resultat) {
     case 'INNVILGELSE':
-      return 'innvilgelse';
+      return 'Innvilgelse';
     case 'OPPHØR':
-      return 'opphør';
+      return 'Opphør';
     case 'AVSLAG':
-      return 'avslag';
+      return 'Avslag';
     case 'ENDRET':
-      return 'endret';
+      return 'Endret';
   }
   exhaustiveCheck(resultat);
 }

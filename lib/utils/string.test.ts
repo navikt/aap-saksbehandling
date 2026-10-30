@@ -18,12 +18,16 @@ describe('storForbokstav', () => {
 });
 
 describe('storForbokstavIHvertOrd', () => {
-  it('skal returnere en string med stor forbokstav på hvert ord dersom value er bare uppercase', () => {
+  it('skal returnere en string med stor forbokstav i hvert ord, uavhengig av casing', () => {
     expect(storForbokstavIHvertOrd('HELLO PELLO')).toBe('Hello Pello');
+    expect(storForbokstavIHvertOrd('hello pello')).toBe('Hello Pello');
+    expect(storForbokstavIHvertOrd('HeLlO pElLO')).toBe('Hello Pello');
   });
 
-  it('skal returnere en string med stor forbokstav på hvert ord dersom value er bare lowercase', () => {
-    expect(storForbokstavIHvertOrd('hello pello')).toBe('Hello Pello');
+  it('beholder bindestrek og returnerer string med stor forbokstav i hvert ord', () => {
+    expect(storForbokstavIHvertOrd('FORNAVN-MELLOMNAVN ETTERNAVN')).toBe('Fornavn-Mellomnavn Etternavn');
+    expect(storForbokstavIHvertOrd('AM. SAMOA')).toBe('Am. Samoa');
+    expect(storForbokstavIHvertOrd('SAINT-PIERRE OG MIQUELON')).toBe('Saint-Pierre Og Miquelon');
   });
 });
 
