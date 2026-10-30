@@ -17,6 +17,8 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
         underveisavslag: null,
         vilkårsavslag: [],
       },
+      erNy: false,
+      tidligereTilOgMed: [],
     },
     {
       periode: {
@@ -29,6 +31,8 @@ const foreslåVedtakGrunnlag: ForeslåVedtakGrunnlag = {
         underveisavslag: null,
         vilkårsavslag: [],
       },
+      erNy: false,
+      tidligereTilOgMed: [],
     },
   ],
   stansOpphør: [],

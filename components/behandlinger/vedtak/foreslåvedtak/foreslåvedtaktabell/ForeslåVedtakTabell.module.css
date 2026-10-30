@@ -9,3 +9,20 @@
 .iconSubtle {
   color: var(--ax-text-neutral-subtle);
 }
+
+.ny {
+  background-color: var(--ax-bg-accent-moderate);
+}
+
+.ny > td:first-of-type {
+  box-shadow: inset 5px 0 var(--ax-border-info);
+}
+
+.nyTag {
+  color: var(--ax-text-accent-subtle);
+}
+
+.gammelDato {
+  text-decoration: line-through;
+  color: var(--ax-text-neutral-subtle);
+}
