@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, InfoCard, Radio, VStack } from '@navikt/ds-react';
+import { InfoCard, Radio, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
@@ -11,14 +11,11 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { JaEllerNei } from 'lib/utils/form';
 import {
-  EtableringEgenVirksomhetGrunnlagResponse,
   EtableringEierBrukerVirksomheten,
   lagEnumObjektFraUnionType,
 } from 'lib/types/types';
 import { useEffect } from 'react';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
-import { formaterDatoForFrontend } from '../../../../lib/utils/date';
-import { addMonths, isValid, parse } from 'date-fns';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -30,24 +27,13 @@ type Props = {
   form: UseFormReturn<EtableringAvEgenVirksomhetForm>;
   readOnly: boolean;
   index: number;
-  vurderinger: EtableringEgenVirksomhetGrunnlagResponse['nyeVurderinger'];
 };
-export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly, vurderinger }: Props) => {
+export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly }: Props) => {
   useEffect(() => {
     form.clearErrors(`vurderinger`);
   }, [form]);
 
   const valgtFase = form.watch(`vurderinger.${index}.fase`);
-  const valgtFraDato = form.watch(`vurderinger.${index}.fraDato`);
-
-  const vurdering = vurderinger[index];
-
-  const parsedFraDato = parse(valgtFraDato || '', 'dd.MM.yyyy', new Date());
-  const harGyldigFraDato = isValid(parsedFraDato);
-  const antallMåneder = valgtFase === 'UTVIKLING' ? 6 : valgtFase === 'OPPSTART' ? 3 : null;
-  const forelopigSluttDato = harGyldigFraDato && antallMåneder ? addMonths(parsedFraDato, antallMåneder) : null;
-  const maksDato = vurdering?.tom ?? forelopigSluttDato;
-
   return (
     <VStack gap={'space-16'}>
       <DateInputWrapper
@@ -148,15 +134,6 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly, v
           rules={{ required: 'Du må svare på om virksomheten er registrert i offentlige registre' }}
           readOnly={readOnly}
         />
-      )}
-
-      {maksDato && harGyldigFraDato && (
-        <>
-          <BodyShort size={'small'} weight={'semibold'}>
-            {valgtFase === 'UTVIKLING' ? 'Maks varighet i utviklingsfasen' : 'Maks varighet i oppstartsfasen'}
-          </BodyShort>
-          <BodyShort size={'small'}>{formaterDatoForFrontend(maksDato)}</BodyShort>
-        </>
       )}
 
       <InfoCard data-color="info" aria-label={'info alert'} size={'small'}>

@@ -35,8 +35,8 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
 import { EtableringEgenVirksomhetTidligereVurderingNy } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurderingNy';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { parseISO } from 'date-fns';
-import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { addDays, parseISO } from 'date-fns';
+import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
@@ -113,6 +113,8 @@ export const EtableringAvEgenVirksomhetNy = ({
     form
   );
 
+  const erLagretVurdering = formReadOnly && !mellomlagretVurdering;
+
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
       // Må finnes minst en oppstart eller utviklingsperiode hvis vilkår er oppfylt
@@ -175,10 +177,34 @@ export const EtableringAvEgenVirksomhetNy = ({
     })(event);
   };
 
+  function nullstillSkjema() {
+    const verdier = getDefaultValuesFromGrunnlag(grunnlag);
+    form.reset(verdier);
+    setVersjoner(versjonerFra(verdier));
+  }
+
   function leggTilVurdering() {
     append(tomEtableringAvEgenVirksomhetVurdering());
     setVersjoner((nåværende) => [...nåværende, 'V1']);
   }
+
+  function onSlettVurdering(index: number) {
+    remove(index);
+    setVersjoner((nåværende) => nåværende.filter((_, i) => i !== index));
+  }
+
+  function sluttdato(index: number): Date | null {
+    const nesteFom = form.watch(`vurderinger.${index + 1}.fraDato`);
+    if (nesteFom) return gyldigDatoEllerNull(nesteFom);
+
+    const tom = grunnlag.nyeVurderinger[index]?.tom;
+    if (!tom) return null;
+
+    const sisteDato = gyldigDatoEllerNull(formaterDatoForFrontend(tom));
+    return sisteDato ? addDays(sisteDato, 1) : null;
+  }
+
+
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
@@ -193,10 +219,10 @@ export const EtableringAvEgenVirksomhetNy = ({
       isLoading={løsAvklaringsbehovIsLoading}
       løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
+      onDeleteMellomlagringClick={() => slettMellomlagring(() => nullstillSkjema())}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
+      formReset={nullstillSkjema}
       onLeggTilVurdering={leggTilVurdering}
       errorList={errorList}
     >
@@ -243,25 +269,22 @@ export const EtableringAvEgenVirksomhetNy = ({
                   accordionsSignal={accordionsSignal}
                   fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
                   vurderingStatus={getErOppfyltEllerIkkeStatus(
-                    nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
+                    erLagretVurdering
+                      ? grunnlag.nyeVurderinger[index]?.oppfylt
+                      : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                   )}
-                  nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+                  nestePeriodeFraDato={sluttdato(index)}
                   isLast={index === vedtatteVurderinger.length - 1}
                   vurdering={vurdering}
                   finnesFeil={finnesFeilForVurdering(index, errorList)}
                   readonly={formReadOnly}
-                  onSlettVurdering={() => remove(index)}
+                  onSlettVurdering={() => onSlettVurdering(index)}
                   // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
                   harTidligereVurderinger={true}
                   index={index}
                   initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
                 >
-                  <EtableringAvEgenVirksomhetFormInputNy
-                    form={form}
-                    readOnly={formReadOnly}
-                    index={index}
-                    vurderinger={grunnlag.nyeVurderinger}
-                  />
+                  <EtableringAvEgenVirksomhetFormInputNy form={form} readOnly={formReadOnly} index={index} />
                 </NyVurderingExpandableCard>
               ))}
             </InfoCard.Content>

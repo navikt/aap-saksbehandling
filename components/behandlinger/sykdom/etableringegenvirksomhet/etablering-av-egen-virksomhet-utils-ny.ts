@@ -101,15 +101,14 @@ export function nyVurderingErOppfylt(vurdering?: EtableringAvEgenVirksomhetVurde
   }
 
   if (
-    (vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja &&
-      vurdering.erVirksomhetenNy === JaEllerNei.Ja &&
-      vurdering.jobberBrukerAktivMedVirksomheten === JaEllerNei.Ja &&
-      (vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT' ||
-        vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
-      vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Ja &&
-      (vurdering.fase === 'OPPSTART' || vurdering.erRegistrertINødvendigeOffentligeRegister === JaEllerNei.Ja)) ||
-    vurdering.fase === 'UTVIKLING' ||
-    vurdering.erRegistrertINødvendigeOffentligeRegister === undefined
+    vurdering.foreliggerEnNæringsfagligVurdering === JaEllerNei.Ja &&
+    vurdering.erVirksomhetenNy === JaEllerNei.Ja &&
+    vurdering.jobberBrukerAktivMedVirksomheten === JaEllerNei.Ja &&
+    (vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT' ||
+      vurdering.eierBrukerVirksomheten === 'EIER_MINST_50_PROSENT_MED_FLER') &&
+    vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Ja &&
+    (vurdering.fase === 'UTVIKLING' ||
+      (vurdering.fase === 'OPPSTART' && vurdering.erRegistrertINødvendigeOffentligeRegister === JaEllerNei.Ja))
   ) {
     return true;
   }

@@ -1,7 +1,6 @@
 'use client';
 
-import { BodyShort, Label, VStack } from '@navikt/ds-react';
-import { Dato } from 'lib/types/Dato';
+import { VStack } from '@navikt/ds-react';
 import { EtableringEgenVirksomhetVurderingResponse } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { getJaNeiEllerUndefined } from 'lib/utils/form';
