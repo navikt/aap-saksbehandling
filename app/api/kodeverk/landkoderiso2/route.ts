@@ -7,14 +7,7 @@ import { isServerError } from 'lib/utils/api';
 
 export async function GET() {
   if (isLocal()) {
-    return NextResponse.json(
-      {
-        type: 'SUCCESS',
-        status: 200,
-        data: mockResponseKodeverkLandkoderIso2,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json(mockResponseKodeverkLandkoderIso2, { status: 200 });
   }
 
   const res = await hentLandkoderIso2Kodeverk();
