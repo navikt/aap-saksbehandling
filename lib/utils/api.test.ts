@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { isError, isServerError, isSuccess, type FetchResponse } from 'lib/utils/api';
 import { describe, expect, test } from 'vitest';
 
-const suksessRespons = (data: any): FetchResponse<string[]> => ({
+const suksessRespons = <T>(data: T): FetchResponse<T> => ({
   type: 'SUCCESS',
   status: 200,
   data,
 });
 
-const suksessResponsUtenStatus = (data: any): FetchResponse<string[]> => ({
+const suksessResponsUtenStatus = <T>(data: T): FetchResponse<T> => ({
   type: 'SUCCESS',
   data,
 });

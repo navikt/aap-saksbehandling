@@ -26,7 +26,9 @@ export function useLagreAktivTab<E>(): {
 
   const hentLagretAktivTab = (): E | undefined => {
     try {
-      const obj = JSON.parse(localStorage[KEY]) as LagretAktivTab<E>;
+      const lagretTab = localStorage.getItem(KEY);
+      if (lagretTab === null) return undefined;
+      const obj = JSON.parse(lagretTab) as LagretAktivTab<E>;
 
       if (obj.user === bruker.NAVident && new Date().getTime() < obj.timestamp + MAKS_LEVETID) {
         return obj.tab;

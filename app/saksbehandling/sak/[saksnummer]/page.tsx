@@ -18,7 +18,7 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
     hentSak(params.saksnummer),
     hentSakPersoninfo(params.saksnummer),
     hentRettighetsinfo(params.saksnummer),
-  ]).catch((err) => {
+  ]).catch((err: unknown) => {
     if (erIngenTilgangError(err)) {
       logWarning(`Ingen tilgang til saksoversikt for ${params.saksnummer}`);
     } else {

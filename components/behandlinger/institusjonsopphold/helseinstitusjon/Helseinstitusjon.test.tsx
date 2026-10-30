@@ -505,8 +505,8 @@ describe('handleSubmit - historiske vurderinger og gap', () => {
     fetchMock.mockResponse(async (req) => {
       if (req.method === 'POST') {
         try {
-          const body = JSON.parse(await req.text());
-          if (body?.behov?.behovstype) capturedRequest = body;
+          const body: unknown = JSON.parse(await req.text());
+          if (harBehovstype(body)) capturedRequest = body;
         } catch {
           // ignore
         }
@@ -741,8 +741,8 @@ describe('handleSubmit - gap mellom vedtatt og ny vurdering', () => {
     fetchMock.mockResponse(async (req) => {
       if (req.method === 'POST') {
         try {
-          const body = JSON.parse(await req.text());
-          if (body?.behov?.behovstype) capturedRequest = body;
+          const body: unknown = JSON.parse(await req.text());
+          if (harBehovstype(body)) capturedRequest = body;
         } catch {
           // ignore
         }
@@ -1114,8 +1114,8 @@ describe('handleSubmit - periode beregning', () => {
       if (req.method === 'POST') {
         try {
           const text = await req.text();
-          const body = JSON.parse(text);
-          if (body?.behov?.behovstype) {
+          const body: unknown = JSON.parse(text);
+          if (harBehovstype(body)) {
             capturedRequest = body;
           }
         } catch {
@@ -1273,6 +1273,18 @@ describe('handleSubmit - periode beregning', () => {
 });
 
 // Hjelpefunksjoner for handleSubmit-tester
+
+function harBehovstype(body: unknown): boolean {
+  return (
+    typeof body === 'object' &&
+    body !== null &&
+    'behov' in body &&
+    typeof body.behov === 'object' &&
+    body.behov !== null &&
+    'behovstype' in body.behov &&
+    Boolean(body.behov.behovstype)
+  );
+}
 
 function hentVurderingerFraRequest(request: unknown): Array<{
   periode: { fom: string; tom: string };

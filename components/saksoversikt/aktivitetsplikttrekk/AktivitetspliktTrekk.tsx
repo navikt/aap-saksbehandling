@@ -16,9 +16,13 @@ export const AktivitetspliktTrekk = ({ sak }: { sak: SaksInfo }) => {
     data: aktivitetspliktMedTrekk,
     isLoading,
     error,
-  } = useSWR(`api/aktivitetsplikt/trekk//${sak.saksnummer}`, () => clientHentAktivitetspliktMedTrekk(sak.saksnummer), {
-    revalidateOnFocus: false,
-  });
+  } = useSWR<Awaited<ReturnType<typeof clientHentAktivitetspliktMedTrekk>>, unknown>(
+    `api/aktivitetsplikt/trekk//${sak.saksnummer}`,
+    () => clientHentAktivitetspliktMedTrekk(sak.saksnummer),
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   if (isLoading) {
     return <Spinner label="Henter trekk" />;

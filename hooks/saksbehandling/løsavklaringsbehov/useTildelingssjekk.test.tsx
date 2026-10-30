@@ -1,10 +1,11 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { assert, describe, test, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useTildelingssjekk } from './useTildelingssjekk';
+import type { useOverstyrTildelingNyHook } from './useOverstyrTildeling';
 
 const mockSetVisOverstyrModal = vi.fn();
-const mockSetBekreftOverstyring = vi.fn();
-const mockSetAvbrytOverstyring = vi.fn();
+const mockSetBekreftOverstyring = vi.fn<ReturnType<typeof useOverstyrTildelingNyHook>['setBekreftOverstyring']>();
+const mockSetAvbrytOverstyring = vi.fn<ReturnType<typeof useOverstyrTildelingNyHook>['setAvbrytOverstyring']>();
 const mockSetReservertAvNavn = vi.fn();
 
 vi.mock('hooks/saksbehandling/løsavklaringsbehov/useOverstyrTildeling', () => ({
@@ -93,7 +94,9 @@ describe('useTildelingssjekk', () => {
       await Promise.resolve();
 
       const simulerBekreftOverstyring = mockSetBekreftOverstyring.mock.calls[0][0];
-      simulerBekreftOverstyring()();
+      const bekreftOverstyring = simulerBekreftOverstyring(() => {});
+      assert(typeof bekreftOverstyring === 'function');
+      bekreftOverstyring();
 
       kanFortsette = await promise;
     });
@@ -122,7 +125,9 @@ describe('useTildelingssjekk', () => {
       await Promise.resolve();
 
       const simulerAvbrytOverstyring = mockSetAvbrytOverstyring.mock.calls[0][0];
-      simulerAvbrytOverstyring()();
+      const avbrytOverstyring = simulerAvbrytOverstyring(() => {});
+      assert(typeof avbrytOverstyring === 'function');
+      avbrytOverstyring();
 
       kanFortsette = await promise;
     });

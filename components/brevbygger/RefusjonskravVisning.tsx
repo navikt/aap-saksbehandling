@@ -17,10 +17,13 @@ export const RefusjonskravVisning = ({ refusjonskravgrunnlag }: Props) => {
     return null;
   }
 
-  const refusjonVurderingerGruppertPerNavKontor: Map<string, RefusjonkravVurderingResponse[]> =
+  const refusjonVurderingerGruppertPerNavKontor: Map<
+    RefusjonkravVurderingResponse['navKontor'],
+    RefusjonkravVurderingResponse[]
+  > =
     refusjonVurderinger && refusjonVurderinger.length > 0
       ? Map.groupBy(refusjonVurderinger, (vurdering) => vurdering.navKontor)
-      : new Map();
+      : new Map<RefusjonkravVurderingResponse['navKontor'], RefusjonkravVurderingResponse[]>();
 
   return (
     <InfoCard data-color="meta-purple" size="small">

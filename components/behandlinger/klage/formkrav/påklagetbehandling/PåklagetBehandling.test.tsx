@@ -4,8 +4,9 @@ import { PåklagetBehandling } from './PåklagetBehandling';
 import { PåklagetBehandlingGrunnlag } from 'lib/types/types';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { userEvent } from '@testing-library/user-event';
+import type { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
-const løsAvklaringsbehov = vi.fn();
+const løsAvklaringsbehov = vi.fn<ReturnType<typeof useLøsAvklaringsbehov>['løsAvklaringsbehov']>();
 
 vi.mock('hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov', () => ({
   useLøsAvklaringsbehov: () => ({
@@ -96,7 +97,7 @@ describe('Klage', () => {
 
     expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
     const [avklaringsbehov] = løsAvklaringsbehov.mock.calls[0];
-    expect(avklaringsbehov.behov.påklagetBehandlingVurdering).toEqual({
+    expect(avklaringsbehov.behov).toHaveProperty('påklagetBehandlingVurdering', {
       påklagetVedtakType: 'KELVIN_BEHANDLING',
       påklagetBehandling: 'uuid-1',
     });
@@ -110,7 +111,7 @@ describe('Klage', () => {
 
     expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
     const [avklaringsbehov] = løsAvklaringsbehov.mock.calls[0];
-    expect(avklaringsbehov.behov.påklagetBehandlingVurdering).toEqual({
+    expect(avklaringsbehov.behov).toHaveProperty('påklagetBehandlingVurdering', {
       påklagetVedtakType: 'TILBAKEKREVING',
       påklagetBehandling: 'uuid-tilbake',
     });
@@ -203,7 +204,7 @@ describe('Klage', () => {
 
     expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
     const [avklaringsbehov] = løsAvklaringsbehov.mock.calls[0];
-    expect(avklaringsbehov.behov.påklagetBehandlingVurdering).toEqual({
+    expect(avklaringsbehov.behov).toHaveProperty('påklagetBehandlingVurdering', {
       påklagetVedtakType: 'KELVIN_BEHANDLING',
       påklagetBehandling: 'uuid-klage',
     });

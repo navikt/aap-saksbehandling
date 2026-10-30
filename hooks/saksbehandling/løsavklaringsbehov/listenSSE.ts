@@ -12,7 +12,7 @@ export const listenSSE = (url: string, callbacks: ListenSSECallbacks): Promise<S
   return new Promise((resolve) => {
     const eventSource = new EventSource(url, { withCredentials: true });
 
-    eventSource.onmessage = (event: MessageEvent) => {
+    eventSource.onmessage = (event: MessageEvent<string>) => {
       const eventData: ServerSentEventData = JSON.parse(event.data);
 
       if (eventData.status === 'DONE') {
