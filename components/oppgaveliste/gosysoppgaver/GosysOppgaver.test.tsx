@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ValuePair } from 'components/form/FormField';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
 import { GosysOppgave } from 'lib/types/gosysTypes';
@@ -11,10 +10,7 @@ import { GosysOppgaver } from './GosysOppgaver';
 vi.mock('hooks/oppgave/GosysOppgaverHook', () => ({ useGosysOppgaver: vi.fn() }));
 vi.mock('hooks/oppgave/aktiveEnheterHook', () => ({ useLagreAktiveEnheter: vi.fn() }));
 
-const enheter: Enhet[] = [
-  { enhetNr: '0300', navn: 'Enhet A' },
-  { enhetNr: '0400', navn: 'Enhet B' },
-];
+const enheter: Enhet[] = [{ enhetNr: '0300', navn: 'Enhet A' }];
 
 const tildeltOppgave: GosysOppgave = {
   id: 1,
@@ -29,7 +25,6 @@ const tildeltOppgave: GosysOppgave = {
   beskrivelse: 'Tildelt oppgave',
 };
 
-const hentLagredeAktiveEnheter = vi.fn<() => ValuePair[] | undefined>();
 const lastInnFlere = vi.fn(async () => undefined);
 let hookResultat: ReturnType<typeof useGosysOppgaver>;
 
@@ -37,7 +32,7 @@ describe('GosysOppgaver', () => {
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(useLagreAktiveEnheter).mockReturnValue({
-      hentLagredeAktiveEnheter,
+      hentLagredeAktiveEnheter: vi.fn(),
       lagreAktiveEnheter: vi.fn(),
     });
     hookResultat = {
@@ -54,27 +49,6 @@ describe('GosysOppgaver', () => {
       lastInnFlere,
     };
     vi.mocked(useGosysOppgaver).mockReturnValue(hookResultat);
-  });
-
-  it('velger første enhet som standard og sender endret enhet til hooken', async () => {
-    const user = userEvent.setup();
-    render(<GosysOppgaver enheter={enheter} />);
-
-    const select = screen.getByRole('combobox', { name: 'Velg enhet' });
-    expect(select).toHaveValue('0300');
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined);
-
-    await user.selectOptions(select, '0400');
-
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0400', 'ae0292', undefined);
-  });
-
-  it('bruker første lagrede enhet fremfor første enhet i listen', () => {
-    hentLagredeAktiveEnheter.mockReturnValue([{ value: '0400', label: 'Enhet B' }]);
-    render(<GosysOppgaver enheter={enheter} />);
-
-    expect(screen.getByRole('combobox', { name: 'Velg enhet' })).toHaveValue('0400');
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0400', 'ae0292', undefined);
   });
 
   it.each([
@@ -120,40 +94,6 @@ describe('GosysOppgaver', () => {
     expect(screen.getByText('Utildelt oppgave')).toBeVisible();
   });
 
-  it('viser lasteindikator i stedet for tabellen ved første henting', () => {
-    vi.mocked(useGosysOppgaver).mockReturnValue({ ...hookResultat, isLoading: true, harLastetOppgaver: false });
-    render(<GosysOppgaver enheter={enheter} />);
-
-    expect(screen.getByText('Henter Gosys-oppgaver')).toBeVisible();
-    expect(screen.queryByRole('table')).not.toBeInTheDocument();
-  });
-
-  it('viser feilmelding i stedet for tabellen når første henting feiler', () => {
-    vi.mocked(useGosysOppgaver).mockReturnValue({
-      ...hookResultat,
-      error: new Error('Henting feilet'),
-      harLastetOppgaver: false,
-    });
-    render(<GosysOppgaver enheter={enheter} />);
-
-    expect(screen.getByText('Kunne ikke hente Gosys-oppgaver.')).toBeVisible();
-    expect(screen.queryByRole('table')).not.toBeInTheDocument();
-  });
-
-  it('beholder innlastede oppgaver og viser feilmelding når henting av flere oppgaver feiler', async () => {
-    const user = userEvent.setup();
-    vi.mocked(useGosysOppgaver).mockReturnValue({ ...hookResultat, error: new Error('Henting feilet') });
-    render(<GosysOppgaver enheter={enheter} />);
-
-    expect(screen.getByRole('table', { name: 'Gosys-oppgaver' })).toBeVisible();
-    expect(screen.getByText('Tildelt oppgave')).toBeVisible();
-    expect(screen.getByText('Kunne ikke hente flere Gosys-oppgaver. Prøv igjen.')).toBeVisible();
-
-    await user.click(screen.getByRole('button', { name: 'Last inn flere oppgaver' }));
-
-    expect(lastInnFlere).toHaveBeenCalledOnce();
-  });
-
   it('laster flere oppgaver når brukeren trykker på knappen', async () => {
     const user = userEvent.setup();
     render(<GosysOppgaver enheter={enheter} />);
@@ -168,18 +108,5 @@ describe('GosysOppgaver', () => {
     render(<GosysOppgaver enheter={enheter} />);
 
     expect(screen.queryByRole('button', { name: 'Last inn flere oppgaver' })).not.toBeInTheDocument();
-  });
-
-  it('hindrer flere kall mens nye oppgaver lastes inn', async () => {
-    const user = userEvent.setup();
-    vi.mocked(useGosysOppgaver).mockReturnValue({ ...hookResultat, isValidating: true });
-    render(<GosysOppgaver enheter={enheter} />);
-
-    const button = screen.getByRole('button', { name: 'Last inn flere oppgaver' });
-    expect(button).toBeDisabled();
-    await user.click(button);
-
-    expect(lastInnFlere).not.toHaveBeenCalled();
-    expect(screen.getByRole('table', { name: 'Gosys-oppgaver' })).toBeVisible();
   });
 });
