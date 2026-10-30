@@ -79,16 +79,16 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
           ) : (
             sorterteOppgaver.map((oppgave) => (
               <Table.Row key={oppgave.id}>
-                <Table.DataCell>{oppgave.oppgavetype}</Table.DataCell>
-                <Table.DataCell>
+                <Table.DataCell textSize={'small'}>{mapOppgaveTypeTilTekst(oppgave.oppgavetype)}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>
                   {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
                 </Table.DataCell>
-                <Table.DataCell>
+                <Table.DataCell textSize={'small'}>
                   {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
                 </Table.DataCell>
-                <Table.DataCell>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
-                <Table.DataCell>{oppgave.beskrivelse}</Table.DataCell>
-                <Table.DataCell>
+                <Table.DataCell textSize={'small'}>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
+                <Table.DataCell textSize={'small'}>{oppgave.beskrivelse}</Table.DataCell>
+                <Table.DataCell textSize={'small'} colSpan={3}>
                   {gosysUrl && (
                     <Button
                       as="a"
@@ -96,7 +96,7 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
                       href={`${gosysUrl.replace(/\/$/, '')}/oppgavebehandling/oppgave/${oppgave.id}`}
                       target="_blank"
                       variant="secondary"
-                      size="small"
+                      size="xsmall"
                       icon={<ExternalLinkIcon aria-hidden />}
                     >
                       Åpne i Gosys
@@ -111,3 +111,16 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
     </Box>
   );
 };
+
+function mapOppgaveTypeTilTekst(oppgavetype: string): string {
+  switch (oppgavetype) {
+    case 'KONT_BRUK':
+      return 'Kontakt bruker';
+    case 'VUR_KONS_YTE':
+      return 'Vurder ytterligere konsekvens';
+    case 'INNH_DOK':
+      return 'Innhent dokumentasjon';
+    default:
+      return oppgavetype;
+  }
+}
