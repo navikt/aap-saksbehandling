@@ -23,6 +23,10 @@ import {
   TildeltStatus,
   UføreVedtak,
   OppdaterPåminnelseRequest,
+  OpprettMarkeringDto,
+  DokumenterLestDto,
+  PlukkOppgaveRequest,
+  SøkRequest,
 } from 'lib/types/oppgaveTypes';
 import { FetchResponse } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
@@ -111,7 +115,9 @@ export async function hentEnheter() {
 
 export async function synkroniserEnhetPåOppgave(data: EnhetSynkroniseringOppgave) {
   const url = `${oppgaveApiBaseURL}/synkroniser-enhet-paa-oppgave`;
-  return await apiFetch<void>(url, oppgaveApiScope, 'POST', { oppgaveId: data.oppgaveId });
+  return await apiFetch<void>(url, oppgaveApiScope, 'POST', {
+    oppgaveId: data.oppgaveId,
+  } satisfies EnhetSynkroniseringOppgave);
 }
 
 export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
@@ -120,7 +126,7 @@ export async function søkPåSaksbehandler(data: SaksbehandlerSøkRequest) {
     oppgaver: data.oppgaver,
     søketekst: data.søketekst,
     enheter: data.enheter,
-  });
+  } satisfies SaksbehandlerSøkRequest);
 }
 
 export async function tildelTilSaksbehandler(data: TildelOppgaveRequest) {
@@ -135,21 +141,28 @@ export async function hentTildeltStatus(behandlingReferanse: string) {
 
 export async function avreserverOppgave({ oppgaver }: AvreserverOppgaveDto) {
   const url = `${oppgaveApiBaseURL}/avreserver-oppgaver`;
-  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver });
+  return await apiFetch<unknown>(url, oppgaveApiScope, 'POST', { oppgaver: oppgaver } satisfies AvreserverOppgaveDto);
 }
 export async function plukkOppgave(oppgaveId: number, versjon: number) {
   const url = `${oppgaveApiBaseURL}/plukk-oppgave`;
-  return await apiFetch<PlukkOppgaveResponse>(url, oppgaveApiScope, 'POST', { oppgaveId, versjon });
+  return await apiFetch<PlukkOppgaveResponse>(url, oppgaveApiScope, 'POST', {
+    oppgaveId,
+    versjon,
+  } satisfies PlukkOppgaveRequest);
 }
 
 export async function mottattDokumenterLest(behandlingRef: string) {
   const url = `${oppgaveApiBaseURL}/mottatt-dokumenter-lest`;
-  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
+  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', {
+    behandlingRef: behandlingRef,
+  } satisfies DokumenterLestDto);
 }
 
 export async function fjernHelseopplysningIkon(behandlingRef: string) {
   const url = `${oppgaveApiBaseURL}/fjern-helseopplysning-ikon`;
-  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', { behandlingRef: behandlingRef });
+  return await apiFetch<{}>(url, oppgaveApiScope, 'POST', {
+    behandlingRef: behandlingRef,
+  } satisfies DokumenterLestDto);
 }
 
 export async function fjernUføreVedtakIkon(uføreVedtak: UføreVedtak) {
@@ -185,7 +198,7 @@ export async function oppgaveTekstSøk(søketekst: string) {
     return mockData;
   }
   const url = `${oppgaveApiBaseURL}/sok`;
-  return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst });
+  return await apiFetch<SøkResponse>(url, oppgaveApiScope, 'POST', { søketekst } satisfies SøkRequest);
 }
 
 export async function hentOppgaverPåSak(saksnummer: string) {
@@ -207,7 +220,7 @@ export const hentGjeldendeMarkeringerForBehandling = async (referanse: string) =
   return await apiFetch<Markering[]>(url, oppgaveApiScope, 'GET', undefined);
 };
 
-export const opprettMarkeringHendelse = async (referanse: string, body: object) => {
+export const opprettMarkeringHendelse = async (referanse: string, body: OpprettMarkeringDto) => {
   if (lokalFakeOppgave) {
     const mockData: FetchResponse<Markering[]> = {
       type: 'SUCCESS',

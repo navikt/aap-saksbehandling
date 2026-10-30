@@ -3,9 +3,11 @@ import { isError } from 'lib/utils/api';
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { opprettMarkeringHendelse } from 'lib/services/oppgaveservice/oppgaveservice';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { OpprettMarkeringDto } from 'lib/types/oppgaveTypes';
 
 export async function POST(req: NextRequest, props: { params: Promise<{ referanse: string }> }) {
-  const body = await req.json();
+  const body = await readRequestBody<OpprettMarkeringDto>(req);
   const params = await props.params;
 
   try {

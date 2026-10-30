@@ -3,10 +3,11 @@ import { registrerMeldedato } from 'lib/services/saksbehandlingservice/saksbehan
 import { isServerError } from 'lib/utils/api';
 import { NextRequest, NextResponse } from 'next/server';
 import { RegistrerMeldedatoRequest } from 'lib/types/types';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(request: NextRequest, props: { params: Promise<{ saksnummer: string }> }) {
   const params = await props.params;
-  const payload: RegistrerMeldedatoRequest = await request.json();
+  const payload = await readRequestBody<RegistrerMeldedatoRequest>(request);
 
   const res = await registrerMeldedato(params.saksnummer, payload);
 

@@ -3,9 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { LøsAvklaringsbehovPåBehandling } from 'lib/types/types';
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const body = await readRequestBody<LøsAvklaringsbehovPåBehandling>(req);
 
   try {
     const løsbehovRes = await løsAvklaringsbehov(body);

@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Search } from '@navikt/ds-react';
 import styles from 'components/kelvinappheader/KelvinAppHeader.module.css';
-import { SøkeResultat } from 'app/api/kelvinsok/route';
+import { KelvinSøkRequest, SøkeResultat } from 'app/api/kelvinsok/route';
 
 interface Props {
   setSøkeresultat: Dispatch<SetStateAction<SøkeResultat | undefined>>;
@@ -18,8 +18,8 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
     try {
       søkedata = await fetch(`/api/kelvinsok`, {
         method: 'POST',
-        body: JSON.stringify({ søketekst }),
-      }).then((res) => res.json());
+        body: JSON.stringify({ søketekst } satisfies KelvinSøkRequest),
+      }).then((res) => res.json() as Promise<SøkeResultat>);
     } catch (error) {
       console.error(error);
     }

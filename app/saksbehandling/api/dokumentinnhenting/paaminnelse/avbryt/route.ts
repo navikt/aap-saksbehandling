@@ -3,6 +3,8 @@ import { avbrytPåminnelsePåLegeerklæring } from 'lib/services/saksbehandlings
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { PurringLegeerklæringRequest } from 'lib/types/types';
 
 const lokalFakePåminnelseForDokumenter = isLocal();
 export async function POST(req: NextRequest) {
@@ -10,7 +12,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'ok' }, { status: 200 });
   }
   try {
-    const body = await req.json();
+    const body = await readRequestBody<PurringLegeerklæringRequest>(req);
     const res = await avbrytPåminnelsePåLegeerklæring(body);
     if (isError(res) && res.status !== 403) {
       logError(

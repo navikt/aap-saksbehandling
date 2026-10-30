@@ -3,9 +3,10 @@ import { hentOppgaverForFilter } from 'lib/services/oppgaveservice/oppgaveservic
 import { logError, logWarning } from 'lib/serverutlis/logger';
 import { isError } from 'lib/utils/api';
 import { OppgavelisteRequest } from 'lib/types/oppgaveTypes';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: NextRequest) {
-  const data: OppgavelisteRequest = await req.json();
+  const data = await readRequestBody<OppgavelisteRequest>(req);
   if (!data.filterId) {
     return NextResponse.json({ message: 'filterId mangler', status: 400 }, { status: 400 });
   } else if (!data.enheter) {

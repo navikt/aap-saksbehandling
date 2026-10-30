@@ -3,9 +3,10 @@ import { isError } from 'lib/utils/api';
 import { logError } from 'lib/serverutlis/logger';
 import { TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: Request) {
-  const body: TildelOppgaveRequest = await req.json();
+  const body = await readRequestBody<TildelOppgaveRequest>(req);
 
   const saksbehandlerResponse = await tildelTilSaksbehandler(body);
   if (isError(saksbehandlerResponse)) {

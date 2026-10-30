@@ -3,9 +3,11 @@ import { bestillTestBrev } from 'lib/services/saksbehandlingservice/saksbehandli
 import { isServerError, isSuccess } from 'lib/utils/api';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { BestillTestBrevRequest } from 'lib/types/types';
 
 export async function POST(req: NextRequest) {
-  const body: { behandlingsreferanse: string } = await req.json();
+  const body = await readRequestBody<BestillTestBrevRequest>(req);
 
   const res = await bestillTestBrev(body);
   if (isServerError(res)) {

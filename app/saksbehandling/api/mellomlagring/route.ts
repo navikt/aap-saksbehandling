@@ -3,6 +3,7 @@ import { Behovstype } from 'lib/utils/form';
 import { MellomlagretVurderingRequest } from 'lib/types/types';
 import { lagreMellomlagring, slettMellomlagring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isSuccess } from 'lib/utils/api';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export interface MellomLagringIdentifikator {
   behandlingsreferanse: string;
@@ -10,7 +11,7 @@ export interface MellomLagringIdentifikator {
 }
 
 export async function POST(request: NextRequest) {
-  const payload: MellomlagretVurderingRequest = await request.json();
+  const payload = await readRequestBody<MellomlagretVurderingRequest>(request);
 
   const res = await lagreMellomlagring(payload);
 
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const payload: MellomLagringIdentifikator = await request.json();
+  const payload = await readRequestBody<MellomLagringIdentifikator>(request);
 
   const res = await slettMellomlagring(payload.behandlingsreferanse, payload.behovstype);
 

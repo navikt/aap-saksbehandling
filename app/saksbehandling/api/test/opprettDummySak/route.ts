@@ -3,9 +3,11 @@ import { opprettDummySakTest } from 'lib/services/saksbehandlingservice/saksbeha
 import { isServerError } from 'lib/utils/api';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { OpprettDummySakDto } from 'lib/types/types';
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const body = await readRequestBody<OpprettDummySakDto>(req);
 
   const res = await opprettDummySakTest(body);
   if (isServerError(res)) {

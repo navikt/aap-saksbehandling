@@ -3,9 +3,11 @@ import { opprettOgFullfoerDummySak } from 'lib/services/saksbehandlingservice/sa
 import { isServerError } from 'lib/utils/api';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
+import { OpprettTestcase } from 'lib/types/types';
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
+  const body = await readRequestBody<OpprettTestcase>(req);
 
   const res = await opprettOgFullfoerDummySak(body);
   if (isServerError(res)) {

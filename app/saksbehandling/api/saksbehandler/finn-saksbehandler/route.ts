@@ -1,9 +1,10 @@
 import { søkPåSaksbehandler } from 'lib/services/oppgaveservice/oppgaveservice';
 import { SaksbehandlerSøkRequest } from 'lib/types/oppgaveTypes';
 import { NextResponse } from 'next/server';
+import { readRequestBody } from 'lib/serverutlis/readRequestBody';
 
 export async function POST(req: Request) {
-  const body: SaksbehandlerSøkRequest = await req.json();
+  const body = await readRequestBody<SaksbehandlerSøkRequest>(req);
 
   const saksbehandlerResponse = await søkPåSaksbehandler({
     søketekst: body.søketekst,
