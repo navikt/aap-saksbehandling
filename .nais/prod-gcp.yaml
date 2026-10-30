@@ -79,9 +79,6 @@ spec:
       rules:
         - application: behandlingsflyt
         - application: oppgave
-        - application: oppgave
-          namespace: oppgavehandtering
-          cluster: prod-fss
         - application: postmottak-backend
         - application: statistikk
         - application: dokumentinnhenting
@@ -92,6 +89,7 @@ spec:
         - application: kodeverk-api
           namespace: team-rocket
       external:
+        - host: oppgave.intern.nav.no
         - host: cdn.nav.no
         - host: aap-unleash-api.nav.cloud.nais.io
         - host: arbeid-og-inntekt.prod-fss-pub.nais.io
