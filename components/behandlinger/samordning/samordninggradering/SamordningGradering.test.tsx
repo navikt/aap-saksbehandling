@@ -1,6 +1,4 @@
 import { render, screen, within } from 'lib/test/CustomRender';
-import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import {
   beregnTidligsteVirkningstidspunkt,
   SamordningGradering,
@@ -576,17 +574,6 @@ describe('kopiering av perioder fra oppslag', () => {
 
     expect(screen.getAllByRole('button', { name: 'Kopier periode' })[0]).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Kopier alle perioder' })).toBeDisabled();
-  });
-
-  test('viser ikke kopier-knapper når kopierPerioder-toggelen er av', () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, kopierPerioder: false }}>
-        <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
-      </FeatureFlagProvider>
-    );
-
-    expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
   });
 
   test('kan legge til ferie i sykepengeperiode via egen modal', async () => {
