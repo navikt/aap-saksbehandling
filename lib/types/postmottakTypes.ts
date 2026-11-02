@@ -1,4 +1,9 @@
-import { components } from './postmottakSchema';
+import { components, paths } from './postmottakSchema';
+import type { RequestBody, ResponseBody } from './openapi';
+
+export type OpprettPostmottakBehandlingRequest = RequestOfPost<'/api/behandling'>;
+export type OpprettPostmottakBehandlingResponse = ResponseOfPost<'/api/behandling'>;
+export type FinnBehandlingerRequest = RequestOfPost<'/api/alle-behandlinger'>;
 
 export type DetaljertBehandlingDto = components['schemas']['no.nav.aap.postmottak.api.flyt.DetaljertBehandlingDto'];
 export type BehandlingFlytOgTilstand =
@@ -70,3 +75,6 @@ export type PostmottakBehandlingInfo = FinnBehandlingerRespons['behandlinger'][n
 export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'];
 
 export type UbehandletJournalpost = components['schemas']['no.nav.aap.postmottak.joarkavstemmer.UavstemtJournalpost'];
+
+type RequestOfPost<Url extends keyof paths> = RequestBody<paths[Url]['post']>;
+type ResponseOfPost<Url extends keyof paths> = ResponseBody<paths[Url]['post']>;

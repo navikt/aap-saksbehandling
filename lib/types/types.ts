@@ -1,4 +1,64 @@
 import { components, paths } from './schema';
+import type { RequestBody, ResponseBody } from './openapi';
+import type { Journalposttype, Journalstatus } from './journalpost';
+
+export type LeggTilInstitusjonsoppholdRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-institusjonsopphold'>;
+export type LeggTilYrkesskadeRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-yrkesskade'>;
+export type LeggTilKravVurderingRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-kravvurdering'>;
+export type PurringLegeerklæringRequest = RequestOfPost<'/api/dokumentinnhenting/paaminnelse/send'>;
+export type OppdaterMottakereRequest = RequestOfPut<'/api/brev/{brevbestillingReferanse}/oppdater-mottakere'>;
+export type SøkPåSakRequest = RequestOfPost<'/api/sak/sok'>;
+export type FinnSakerForIdentRequest = RequestOfPost<'/api/sak/finn'>;
+export type MigrerArenaSakRequest = RequestOfPost<'/api/sak/migrerFraArena'>;
+
+type GeneratedSendHendelseRequest = RequestOfPost<'/api/hendelse/sak/{saksnummer}/send'>;
+
+// OpenAPI beskriver Saksnummer som et objekt og inkluderer beregnede getters i referansen.
+// På wire er saksnummer en streng og referansen inneholder kun type og verdi.
+export type SendHendelseRequest = Omit<GeneratedSendHendelseRequest, 'saksnummer' | 'referanse'> & {
+  saksnummer: string;
+  referanse: Pick<GeneratedSendHendelseRequest['referanse'], 'type' | 'verdi'>;
+};
+
+// Disse endepunktene finnes ikke i det genererte OpenAPI-skjemaet.
+export interface BestillTestBrevRequest {
+  behandlingsreferanse: string;
+}
+
+export interface HentDokumenterPåBrukerRequest {
+  personIdent: string;
+  tema: string[];
+  typer: Journalposttype[];
+  statuser: Journalstatus[];
+}
+
+export interface HentHelsedokumenterPåBrukerRequest {
+  saksnummer: string;
+  personIdent: string;
+}
+
+export interface BehandleroppslagRequest {
+  fritekst: string;
+  saksnummer: string;
+}
+
+export interface KnyttTilAnnenSakRequest {
+  bruker: {
+    id: string;
+    idType: string;
+  };
+  fagsakId: string;
+  fagsaksystem: string;
+  tema?: string | null;
+}
+
+export interface SjekkTilgangRequest {
+  kode: BehandlingsFlytAvklaringsbehovKode;
+}
+
+export interface HentAInntektRedirectUrlRequest {
+  saksnummer: string;
+}
 
 // Grunnlag
 export type StønadsperiodeGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/stonadsperiode'>;
@@ -783,16 +843,8 @@ export enum Roller {
   PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
 
-type Request<Url extends keyof paths, Method extends 'post' & keyof paths[Url]> = NonNullable<
-  Extract<paths[Url][Method], { requestBody?: { content: { 'application/json': unknown } } }>['requestBody']
->['content']['application/json'];
+type ResponseOfGet<Url extends keyof paths> = ResponseBody<paths[Url]['get']>;
 
-type Response<Url extends keyof paths, Method extends ('post' | 'get') & keyof paths[Url]> = Extract<
-  paths[Url][Method],
-  { responses: { 200: { content: { 'application/json': unknown } } } }
->['responses'][200]['content']['application/json'];
-
-type ResponseOfGet<Url extends keyof paths> = Response<Url, 'get'>;
-
-type RequestOfPost<Url extends keyof paths> = Request<Url, 'post'>;
-type ResponseOfPost<Url extends keyof paths> = Response<Url, 'post'>;
+type RequestOfPost<Url extends keyof paths> = RequestBody<paths[Url]['post']>;
+type RequestOfPut<Url extends keyof paths> = RequestBody<paths[Url]['put']>;
+type ResponseOfPost<Url extends keyof paths> = ResponseBody<paths[Url]['post']>;
