@@ -44,6 +44,7 @@ import { Alert } from 'components/alert/Alert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetFormNy';
+import styles from './EtableringAvEgenVirksomhet.module.css';
 
 export type EtableringFase = EtableringEgenVirksomhetVurderingResponse['fase'];
 
@@ -255,18 +256,11 @@ export const EtableringAvEgenVirksomhetNy = ({
           borderRadius="12"
           borderWidth="1"
           borderColor="neutral-subtle"
-          style={{ marginBottom: 'var(--ax-space-12)' }}
+          className={styles.oppholdGruppe}
         >
           {nyeVurderinger.length > 0 && (
             <>
-              <Box
-                background="neutral-soft"
-                padding="space-12"
-                style={{
-                  borderBottom: '1px solid var(--ax-border-neutral-subtle)',
-                  borderRadius: 'var(--ax-radius-12) var(--ax-radius-12) 0 0',
-                }}
-              >
+              <Box background="neutral-soft" padding="space-12" className={styles.oppholdHeader}>
                 <HStack gap="space-16" align="center">
                   <Buildings3Icon title={'Etabler egen virksomhet'} fontSize="1.5rem" aria-hidden />
                   <TextFieldWrapper
