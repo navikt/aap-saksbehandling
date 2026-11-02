@@ -27,7 +27,7 @@ beforeEach(() => {
 });
 describe('Sykepengeerstatning', () => {
   beforeEach(() => {
-    render(<Sykepengeerstatning grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} />);
+    render(<Sykepengeerstatning grunnlag={grunnlag} readOnly={false} behandlingVersjon={0} skalStegVurderes />);
   });
 
   it('har en overskrift', () => {
@@ -40,6 +40,43 @@ describe('Sykepengeerstatning', () => {
 
   it('har felt for krav på sykepengeerstatning', () => {
     expect(screen.getByRole('radiogroup', { name: 'Har brukeren krav på sykepengeerstatning?' })).toBeVisible();
+  });
+
+  it('viser informasjon når sykepengeerstatning ikke kan vurderes', async () => {
+    const ikkeRelevantGrunnlag: SykepengeerstatningGrunnlag = {
+      ...grunnlag,
+      kanVurderes: [{ fom: '2025-01-01', tom: '2026-01-01' }],
+      ikkeRelevantePerioder: [{ fom: '2025-01-01', tom: '2026-01-01' }],
+    };
+
+    render(
+      <Sykepengeerstatning grunnlag={ikkeRelevantGrunnlag} readOnly behandlingVersjon={0} skalStegVurderes={false} />
+    );
+
+    await user.click(screen.getByRole('button', { name: /januar 2025/i }));
+    expect(
+      screen.getByText(
+        'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere sykepengeerstatning etter § 11-13 må brukeren ikke ha rett til ordinær AAP etter §§ 11-5 og 11-6.'
+      )
+    ).toBeVisible();
+  });
+
+  it('viser ikke-vurderbare perioder også når andre perioder kan vurderes', async () => {
+    const blandetGrunnlag: SykepengeerstatningGrunnlag = {
+      ...grunnlag,
+      behøverVurderinger: [{ fom: '2024-01-01', tom: '2025-01-01' }],
+      kanVurderes: [{ fom: '2024-01-01', tom: '2026-01-01' }],
+      ikkeRelevantePerioder: [{ fom: '2025-01-01', tom: '2026-01-01' }],
+    };
+
+    render(<Sykepengeerstatning grunnlag={blandetGrunnlag} readOnly behandlingVersjon={0} skalStegVurderes />);
+
+    await user.click(screen.getByRole('button', { name: /januar 2025/i }));
+    expect(
+      screen.getByText(
+        'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere sykepengeerstatning etter § 11-13 må brukeren ikke ha rett til ordinær AAP etter §§ 11-5 og 11-6.'
+      )
+    ).toBeVisible();
   });
 
   it('skal vise valg for grunn når krav på sykeerstatning er oppfylt', async () => {
@@ -162,6 +199,7 @@ describe('mellomlagring', () => {
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlagUtenVurdering}
+        skalStegVurderes
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -175,6 +213,7 @@ describe('mellomlagring', () => {
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlagUtenVurdering}
+        skalStegVurderes
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -196,6 +235,7 @@ describe('mellomlagring', () => {
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlagUtenVurdering}
+        skalStegVurderes
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -208,7 +248,9 @@ describe('mellomlagring', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(<Sykepengeerstatning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} />);
+    render(
+      <Sykepengeerstatning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedVurdering} skalStegVurderes />
+    );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: 'Vilkårsvurdering',
@@ -223,6 +265,7 @@ describe('mellomlagring', () => {
         readOnly={false}
         behandlingVersjon={0}
         grunnlag={grunnlagUtenVurdering}
+        skalStegVurderes
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -246,6 +289,7 @@ describe('mellomlagring', () => {
         readOnly={true}
         behandlingVersjon={0}
         grunnlag={grunnlagMedVurdering}
+        skalStegVurderes
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
