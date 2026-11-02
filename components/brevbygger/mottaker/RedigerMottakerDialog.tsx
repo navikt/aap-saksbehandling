@@ -14,6 +14,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { MottakerType } from 'components/brevbygger/mottaker/VelgMottakere';
 import { clientHentLandkoderIso2 } from 'lib/clientApi';
 import { isError, isSuccess } from 'lib/utils/api';
+import { storForbokstavIHvertOrd } from 'lib/utils/string';
 
 enum Opplysningstype {
   KUN_IDENT = 'KUN_IDENT',
@@ -108,8 +109,9 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
   const landkoder = isSuccess(landkoderResponse)
     ? Object.entries(landkoderResponse.data.betydninger)
         .map(([kode, betydninger]) => {
-          const beskrivelse = betydninger[0]?.beskrivelser?.nb?.tekst;
-          return { label: `${beskrivelse ?? kode} (${kode})`, value: kode };
+          const beskrivelse = betydninger[0]?.beskrivelser?.nb;
+          const tekst = storForbokstavIHvertOrd(beskrivelse?.tekst ?? beskrivelse?.term);
+          return { label: `${tekst || kode} (${kode})`, value: kode };
         })
         .sort((a, b) => a.label.localeCompare(b.label, 'nb'))
     : [];

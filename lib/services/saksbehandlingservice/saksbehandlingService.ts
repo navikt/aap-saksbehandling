@@ -34,7 +34,6 @@ import {
   FastlegeResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
-  ForeldrepengeperiodeDTO,
   ForeløpigBehandlingsutfall,
   ForeslåVedtakGrunnlag,
   ForeslåVedtakVedtakslengdeGrunnlag,
@@ -56,7 +55,6 @@ import {
   KravGrunnlag,
   KvalitetssikringGrunnlag,
   KvalitetssikringTilgang,
-  LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   ManuellInntektGrunnlag,
@@ -101,7 +99,6 @@ import {
   SykdomsGrunnlag,
   SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
-  SykepengeperiodeDTO,
   SykestipendGrunnlag,
   SøkPåSakInfo,
   TilkjentYtelseGrunnlagMedDiff,
@@ -114,7 +111,6 @@ import {
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
-  YtelseoppslagRequest,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -193,16 +189,6 @@ export const opprettAktivitetspliktBehandling = async (
 export const finnSakerForIdent = async (ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
-};
-
-export const hentForeldrepengeperioder = async (request: YtelseoppslagRequest) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/person/foreldrepengeperioder`;
-  return await apiFetch<ForeldrepengeperiodeDTO[]>(url, saksbehandlingApiScope, 'POST', request);
-};
-
-export const hentSykepengeperioder = async (request: YtelseoppslagRequest) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/person/sykepengeperioder`;
-  return await apiFetch<SykepengeperiodeDTO[]>(url, saksbehandlingApiScope, 'POST', request);
 };
 
 export const migrerArenasak = async (saksnummerArena: string, ident: string) => {
@@ -631,11 +617,6 @@ export const forberedBehandlingOgVentPåProsessering = async (
   );
 };
 
-export const hentAlleDialogmeldingerPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/status/${saksnummer}`;
-  return await apiFetch<LegeerklæringStatus[]>(url, saksbehandlingApiScope, 'GET');
-};
-
 export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}/v2`;
   return await apiFetch<Array<MeldingerResponse>>(url, saksbehandlingApiScope, 'GET');
@@ -666,14 +647,6 @@ export const kanDistribuereBrevV2 = async (
 export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
   return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
-export const sendPåminnelsePåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  saksnummer: string;
-}) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/send`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {

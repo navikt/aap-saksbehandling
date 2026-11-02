@@ -1154,7 +1154,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-
   '/api/drift/person/journalposter/søk': {
     parameters: {
       query?: never;
@@ -1184,6 +1183,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.PersonSøkDriftsinfoDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/journalpost/{referanse}/kopier-journalpost': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.kontrakt.journalpost.JournalpostId'];
           };
         };
       };
@@ -1410,13 +1447,7 @@ export interface components {
       fordelingsresultat?: components['schemas']['no.nav.aap.fordeler.Regelresultat'];
       /** @enum {string|null} */
       innkommendeStatus?:
-        | 'EVALUERT'
-        | 'GOSYS_FDR'
-        | 'GOSYS_JFR'
-        | 'IGNORERT'
-        | 'VIDERESENDT_TIL_ARENA'
-        | 'VIDERSENDT_TIL_KELVIN'
-        | null;
+        'EVALUERT' | 'GOSYS_FDR' | 'GOSYS_JFR' | 'IGNORERT' | 'VIDERESENDT_TIL_ARENA' | 'VIDERSENDT_TIL_KELVIN' | null;
       /** @enum {string|null} */
       journalstatus?:
         | 'AVBRUTT'
@@ -1777,12 +1808,6 @@ export interface components {
       status: string;
       steg: string;
     };
-    'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarFordelingLøsning': {
-      behovstype: string;
-      kommentar?: string | null;
-      /** @enum {string} */
-      valgtSystem: 'ARENA' | 'BEGGE' | 'KELVIN';
-    };
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarOverleveringLøsning': {
       begrunnelse?: string | null;
       behovstype: string;
@@ -1800,10 +1825,39 @@ export interface components {
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarTemaLøsning': {
       behovstype: string;
       skalTilAap: boolean;
-      tema?: string | null;
+      /** @enum {string|null} */
+      tema?:
+        | 'AAP'
+        | 'BAR'
+        | 'BID'
+        | 'DAG'
+        | 'ENF'
+        | 'ERS'
+        | 'EYB'
+        | 'EYO'
+        | 'FEI'
+        | 'FOR'
+        | 'FUL'
+        | 'GEN'
+        | 'GRU'
+        | 'IND'
+        | 'KOM'
+        | 'OMS'
+        | 'OPP'
+        | 'PAI'
+        | 'PEN'
+        | 'SAK'
+        | 'SER'
+        | 'SYK'
+        | 'TIL'
+        | 'TRK'
+        | 'TSO'
+        | 'UFO'
+        | 'UKJENT'
+        | 'YRK'
+        | null;
     };
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklaringsbehovLøsning':
-      | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarFordelingLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarOverleveringLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarSaksnummerLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarTemaLøsning']

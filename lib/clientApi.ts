@@ -17,7 +17,6 @@ import {
   KanDistribuereBrevResponse,
   KanDistribuereBrevV2Request,
   KvalitetssikringTilgang,
-  LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   MeldePerioderMedMEldekortResponse,
@@ -163,10 +162,6 @@ export function clientHentBekreftVurderingerOppfølgingGrunnlag(behandlingsrefer
   );
 }
 
-export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
-  return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
-}
-
 export function clientHentTilgangForKvalitetssikring(referanse: string) {
   return clientFetch<KvalitetssikringTilgang>(
     `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
@@ -256,13 +251,6 @@ export function clientOppdaterMottakere(brevbestillingReferanse: string, mottake
 
 export function clientBestillTestBrev(behandlingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
-}
-
-export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {
-  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingUUID,
-    behandlingsReferanse: behandlingsreferanse,
-  });
 }
 
 export function clientSendHendelse(saksnummer: string, body: Object) {

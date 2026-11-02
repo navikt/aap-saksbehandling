@@ -24,7 +24,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const adressebeskyttelser = utledAdressebeskyttelse(oppgave.oppgavelisteTags.skjermingInfo);
   const ventStatusForTilbakekreving = useFeatureFlag('VentStatusForTilbakekreving');
   const [visUføreTag, settVisUføreTag] = useState(!!oppgave.oppgavelisteTags.uføreVedtak);
-  const visForespørselSendtTilBehandler = useFeatureFlag('ForesporselSendtTilBehandlerFrontend');
+
   return (
     <HStack gap={'space-4'}>
       {oppgave.oppgavelisteTags.påVentInfo &&
@@ -43,10 +43,9 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
             begrunnelse={oppgave.oppgavelisteTags.forrigePåVentInfo.venteBegrunnelse}
           />
         )}
-      {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.harMottattDokument?.dokumentType && (
+      {oppgave.oppgavelisteTags.harMottattDokument?.dokumentType && (
         <SvarFraBehandler dokumentType={oppgave.oppgavelisteTags.harMottattDokument.dokumentType} />
       )}
-      {!visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.harUlesteDokumenter && <SvarFraBehandler />}
       {oppgave.oppgavelisteTags.returInformasjon && (
         <Returboks
           returInformasjon={oppgave.oppgavelisteTags.returInformasjon}
@@ -72,7 +71,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
           resultat={oppgave.oppgavelisteTags.uføreVedtak.resultat}
         />
       )}
-      {visForespørselSendtTilBehandler && oppgave.oppgavelisteTags.forespørselSendtTilBehandler && (
+      {oppgave.oppgavelisteTags.forespørselSendtTilBehandler && (
         <DialogMedBehandlerInfoboks
           påminnelseDato={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseDato}
           påminnelseAvbrutt={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseAvbrutt}
