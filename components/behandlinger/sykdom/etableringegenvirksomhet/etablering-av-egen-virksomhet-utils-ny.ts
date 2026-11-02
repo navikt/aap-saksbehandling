@@ -94,8 +94,7 @@ export function nyVurderingErOppfylt(vurdering?: EtableringAvEgenVirksomhetVurde
     vurdering.eierBrukerVirksomheten === 'NEI' ||
     vurdering.jobberBrukerAktivMedVirksomheten === JaEllerNei.Nei ||
     vurdering.antasDetAtEtableringenFørerTilSelvforsørgelse === JaEllerNei.Nei ||
-    (vurdering.fase === 'OPPSTART' && vurdering.erRegistrertINødvendigeOffentligeRegister === JaEllerNei.Nei) ||
-    vurdering.fase === undefined
+    (vurdering.fase === 'OPPSTART' && vurdering.erRegistrertINødvendigeOffentligeRegister === JaEllerNei.Nei)
   ) {
     return false;
   }

@@ -1,14 +1,14 @@
 'use client';
 
 import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
-import { InfoCard, VStack } from '@navikt/ds-react';
+import { Box, HStack, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { SubmitEventHandler, useState } from 'react';
+import React, { SubmitEventHandler, useState } from 'react';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
   EtableringEgenVirksomhetLøsningDto,
@@ -204,7 +204,6 @@ export const EtableringAvEgenVirksomhetNy = ({
     return sisteDato ? addDays(sisteDato, 1) : null;
   }
 
-
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
@@ -249,47 +248,69 @@ export const EtableringAvEgenVirksomhetNy = ({
             <EtableringEgenVirksomhetTidligereVurderingNy vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
-        {nyeVurderinger.length > 0 && (
-          <InfoCard data-color="neutral">
-            <InfoCard.Header icon={<Buildings3Icon aria-hidden />}>
-              <InfoCard.Title>
-                <TextFieldWrapper
-                  name={'virksomhetNavn'}
-                  control={form.control}
-                  type={'text'}
-                  label={'Virksomheten det søkes for'}
-                  readOnly={formReadOnly}
-                />
-              </InfoCard.Title>
-            </InfoCard.Header>
-            <InfoCard.Content>
-              {nyeVurderinger.map((vurdering, index) => (
-                <NyVurderingExpandableCard
-                  key={vurdering.id}
-                  accordionsSignal={accordionsSignal}
-                  fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-                  vurderingStatus={getErOppfyltEllerIkkeStatus(
-                    erLagretVurdering
-                      ? grunnlag.nyeVurderinger[index]?.oppfylt
-                      : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
-                  )}
-                  nestePeriodeFraDato={sluttdato(index)}
-                  isLast={index === vedtatteVurderinger.length - 1}
-                  vurdering={vurdering}
-                  finnesFeil={finnesFeilForVurdering(index, errorList)}
-                  readonly={formReadOnly}
-                  onSlettVurdering={() => onSlettVurdering(index)}
-                  // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
-                  harTidligereVurderinger={true}
-                  index={index}
-                  initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-                >
-                  <EtableringAvEgenVirksomhetFormInputNy form={form} readOnly={formReadOnly} index={index} />
-                </NyVurderingExpandableCard>
-              ))}
-            </InfoCard.Content>
-          </InfoCard>
-        )}
+
+        <Box
+          background="default"
+          padding="space-0"
+          borderRadius="12"
+          borderWidth="1"
+          borderColor="neutral-subtle"
+          style={{ marginBottom: 'var(--ax-space-12)' }}
+        >
+          {nyeVurderinger.length > 0 && (
+            <>
+              <Box
+                background="neutral-soft"
+                padding="space-12"
+                style={{
+                  borderBottom: '1px solid var(--ax-border-neutral-subtle)',
+                  borderRadius: 'var(--ax-radius-12) var(--ax-radius-12) 0 0',
+                }}
+              >
+                <HStack gap="space-16" align="center">
+                  <Buildings3Icon title={'Etabler egen virksomhet'} fontSize="1.5rem" aria-hidden />
+                  <TextFieldWrapper
+                    name={'virksomhetNavn'}
+                    control={form.control}
+                    type={'text'}
+                    label={'Virksomheten det søkes for'}
+                    size={'medium'}
+                    readOnly={formReadOnly}
+                    rules={{ required: 'Du må skrive inn navnet på virksomheten' }}
+                  />
+                </HStack>
+              </Box>
+              <Box padding="space-16">
+                <VStack gap="space-2">
+                  {nyeVurderinger.map((vurdering, index) => (
+                    <NyVurderingExpandableCard
+                      key={vurdering.id}
+                      accordionsSignal={accordionsSignal}
+                      fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+                      vurderingStatus={getErOppfyltEllerIkkeStatus(
+                        erLagretVurdering
+                          ? grunnlag.nyeVurderinger[index]?.oppfylt
+                          : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
+                      )}
+                      nestePeriodeFraDato={sluttdato(index)}
+                      isLast={index === vedtatteVurderinger.length - 1}
+                      vurdering={vurdering}
+                      finnesFeil={finnesFeilForVurdering(index, errorList)}
+                      readonly={formReadOnly}
+                      onSlettVurdering={() => onSlettVurdering(index)}
+                      // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
+                      harTidligereVurderinger={true}
+                      index={index}
+                      initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+                    >
+                      <EtableringAvEgenVirksomhetFormInputNy form={form} readOnly={formReadOnly} index={index} />
+                    </NyVurderingExpandableCard>
+                  ))}
+                </VStack>
+              </Box>
+            </>
+          )}
+        </Box>
 
         {form.formState.errors.root && <Alert variant={'error'}>{form.formState.errors.root.message}</Alert>}
       </VStack>
