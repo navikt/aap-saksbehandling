@@ -24,9 +24,6 @@ export type LøsAvklaringsbehovPåBehandling<B extends Losninger = Losninger> = 
   'behov'
 > & { behov: B };
 
-export type AvklarFordelingLøsning =
-  components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarFordelingL\u00F8sning'];
-
 export type AvklarOverleveringLøsing =
   components['schemas']['no.nav.aap.postmottak.avklaringsbehov.l\u00F8sning.AvklarOverleveringL\u00F8sning'];
 
