@@ -75,10 +75,7 @@ export const SamordningGradering = ({
   const [success, setSuccess] = useState(false);
   const [visModalForOppfølgingsoppgaveState, setModalForOppfølgingsoppgaveState] = useState<boolean>(false);
 
-  const finnesYtelserEllerVurderinger = !!(
-    grunnlag.ytelser.length > 0 ||
-    (grunnlag.vurdering && grunnlag.vurdering?.vurderinger?.length > 0)
-  );
+  const finnesYtelserEllerVurderinger = !!(grunnlag.ytelser.length > 0 || grunnlag.vurdering);
   const [visForm, setVisForm] = useState<boolean>(finnesYtelserEllerVurderinger);
 
   const { løsAvklaringsbehov, løsAvklaringsbehovStatus, løsAvklaringsbehovIsLoading, løsAvklaringsbehovError } =

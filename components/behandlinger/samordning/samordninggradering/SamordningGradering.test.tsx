@@ -63,6 +63,22 @@ beforeEach(() => {
 });
 
 describe('Samordning gradering', () => {
+  test('viser begrunnelsen når det finnes en vurdering uten perioder og ingen ytelser fra kilder', () => {
+    const grunnlagMedVurderingUtenPerioder: SamordningGraderingGrunnlag = {
+      ...grunnlagMedVurdering,
+      vurdering: {
+        begrunnelse: 'Bruker har ingen andre folketrygdytelser',
+        vurderinger: [],
+        vurderingerMeta: {},
+      },
+    };
+
+    render(<SamordningGradering grunnlag={grunnlagMedVurderingUtenPerioder} behandlingVersjon={1} readOnly={false} />);
+
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    expect(begrunnelse).toBeVisible();
+  });
+
   test('viser relevant informasjon fra søknaden når sykepenger og ferie er oppgitt', () => {
     const grunnlagMedSykepengerOgFerie: SamordningGraderingGrunnlag = {
       ...grunnlagUtenVurdering,
