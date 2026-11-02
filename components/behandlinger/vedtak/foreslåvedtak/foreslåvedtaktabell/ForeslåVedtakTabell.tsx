@@ -1,6 +1,6 @@
 import { ForeslåVedtakGrunnlag, UnderveisAvslagsÅrsak, VilkårsavslagDto } from 'lib/types/types';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { BodyShort, HStack, Table } from '@navikt/ds-react';
+import { Detail, HStack, Table, VStack } from '@navikt/ds-react';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
@@ -18,13 +18,26 @@ interface Props {
 }
 
 const NyTag = () => (
-  <BodyShort size="small" weight="semibold" className={styles.nyTag}>
+  <Detail weight="semibold" className={styles.nyEndretTekstTag}>
     Ny
-  </BodyShort>
+  </Detail>
+);
+
+const EndretTag = () => (
+  <Detail weight="semibold" className={styles.nyEndretTekstTag}>
+    Endret
+  </Detail>
 );
 
 export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
   const sistePeriodeMedRettighetIndex = grunnlag.perioder.findLastIndex((periode) => periode.utfall === 'OPPFYLT');
+
+  const harEndret = grunnlag.perioder.some((periode) => {
+    const vurdering = finnStansOpphørVurdering(periode.periode, grunnlag.stansOpphør);
+    const erNy = periode.utfall === 'OPPFYLT' ? periode.erNy : vurdering?.erNy === true;
+    return !erNy && periode.tidligerePerioder.length > 0;
+  });
+  const tagKolonneKlasse = harEndret ? styles.tagKolonne : `${styles.tagKolonne} ${styles.tagKolonneKunNy}`;
 
   const stansOpphørUtenPeriode = grunnlag.stansOpphør.filter(
     (s) =>
@@ -38,7 +51,7 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
         <Table.Row>
           <Table.HeaderCell>AAP status</Table.HeaderCell>
           <Table.HeaderCell>Periode</Table.HeaderCell>
-          <Table.HeaderCell>Type</Table.HeaderCell>
+          <Table.HeaderCell className={tagKolonneKlasse}>Type</Table.HeaderCell>
           <Table.HeaderCell>Årsak</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -62,35 +75,64 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
           const stansOpphørType = finnStansOpphørType(vedtaksPeriode.periode, grunnlag.stansOpphør);
           const stansOpphørVurdering = finnStansOpphørVurdering(vedtaksPeriode.periode, grunnlag.stansOpphør);
           const erNy = vedtaksPeriode.utfall === 'OPPFYLT' ? vedtaksPeriode.erNy : stansOpphørVurdering?.erNy === true;
+          const erEndret = !erNy && vedtaksPeriode.tidligerePerioder.length > 0;
+          const erStansEllerOpphør =
+            vedtaksPeriode.utfall === 'IKKE_OPPFYLT' && (stansOpphørType === 'STANS' || stansOpphørType === 'OPPHØR');
+          const radKlasse = erNy
+            ? erStansEllerOpphør
+              ? styles.nyAvslag
+              : styles.ny
+            : erEndret
+              ? styles.endret
+              : undefined;
 
           return (
             <Table.Row
               key={`${vedtaksPeriode.utfall}-${vedtaksPeriode.rettighetsType}-${vedtaksPeriode.periode?.fom}`}
-              className={erNy ? styles.ny : undefined}
+              className={radKlasse}
             >
               <Table.DataCell>
-                <HStack gap={'space-8'} align={'center'}>
-                  {erNy && <NyTag />}
+                <HStack gap={'space-8'} align={'center'} wrap={false}>
+                  {(erNy || erEndret) && <span className={tagKolonneKlasse}>{erNy ? <NyTag /> : <EndretTag />}</span>}
                   {vedtaksPeriode.utfall == 'OPPFYLT' ? (
                     <CheckmarkCircleIcon className={styles.godkjentIcon} />
                   ) : (
                     <XMarkOctagonIcon className={styles.avslåttIcon} />
                   )}
-                  {mapUtfallTilTekst(vedtaksPeriode.utfall, stansOpphørType)}
+                  <span className={styles.statusTekst}>
+                    {mapUtfallTilTekst(vedtaksPeriode.utfall, stansOpphørType)}
+                  </span>
                 </HStack>
               </Table.DataCell>
               <Table.DataCell>
-                <HStack gap={'space-4'}>
-                  <span>{formatDatoMedMånedsnavn(vedtaksPeriode.periode.fom)} –</span>
-                  {vedtaksPeriode.tidligereTilOgMed.map((tom) => (
-                    <span key={tom} className={styles.gammelDato}>
-                      {formatDatoMedMånedsnavn(tom)}
-                    </span>
-                  ))}
-                  {!avslagUtenViderePerioder && <span>{formatDatoMedMånedsnavn(vedtaksPeriode.periode.tom)}</span>}
-                </HStack>
+                <VStack gap={'space-2'}>
+                  {vedtaksPeriode.tidligerePerioder
+                    .filter((p) => p.fom !== vedtaksPeriode.periode.fom)
+                    .map((p) => (
+                      <span key={`${p.fom}-${p.tom}`} className={`${styles.periode} ${styles.gammelDato}`}>
+                        {formatDatoMedMånedsnavn(p.fom)} – {formatDatoMedMånedsnavn(p.tom)}
+                      </span>
+                    ))}
+                  <span className={styles.periode}>
+                    {formatDatoMedMånedsnavn(vedtaksPeriode.periode.fom)} –
+                    {vedtaksPeriode.tidligerePerioder
+                      .filter((p) => p.fom === vedtaksPeriode.periode.fom && !vedtaksPeriode.tidligereVarÅpen)
+                      .map((p) => (
+                        <span key={p.tom} className={styles.gammelDato}>
+                          {' '}
+                          {formatDatoMedMånedsnavn(p.tom)}
+                        </span>
+                      ))}
+                    {!avslagUtenViderePerioder && (
+                      <span className={erEndret ? styles.endretDato : undefined}>
+                        {' '}
+                        {formatDatoMedMånedsnavn(vedtaksPeriode.periode.tom)}
+                      </span>
+                    )}
+                  </span>
+                </VStack>
               </Table.DataCell>
-              <Table.DataCell>
+              <Table.DataCell className={styles.periode}>
                 {vedtaksPeriode.utfall == 'OPPFYLT'
                   ? mapRettighetsTypeTilTekst(vedtaksPeriode.rettighetsType)
                   : mapAvslagsÅrsakTilTekst(
@@ -111,11 +153,15 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
           return (
             <Table.Row
               key={`stansopphør-${stansOpphør.stansOpphørFraOgMed}`}
-              className={vurdering?.erNy ? styles.ny : undefined}
+              className={vurdering?.erNy ? styles.nyAvslag : undefined}
             >
               <Table.DataCell>
                 <HStack gap={'space-8'} align={'center'}>
-                  {vurdering?.erNy && <NyTag />}
+                  {vurdering?.erNy && (
+                    <span className={tagKolonneKlasse}>
+                      <NyTag />
+                    </span>
+                  )}
                   <XMarkOctagonIcon className={styles.avslåttIcon} />
                   {mapStansOpphørTilTekst(vurdering?.type)}
                 </HStack>

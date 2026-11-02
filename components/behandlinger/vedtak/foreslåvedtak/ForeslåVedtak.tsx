@@ -1,6 +1,7 @@
 'use client';
 
 import { VStack } from '@navikt/ds-react';
+import { Alert } from 'components/alert/Alert';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
@@ -10,6 +11,7 @@ import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varig
 import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 interface Props {
   behandlingVersjon: number;
@@ -54,6 +56,17 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       formReset={() => {}}
     >
       <VStack gap={'space-20'}>
+        {grunnlag.endretRettighetsperiode && (
+          <Alert variant="info" size="small">
+            Rettighetsperioden er endret:{' '}
+            <s>
+              {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.fom)} –{' '}
+              {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.tom)}
+            </s>{' '}
+            {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.fom)} –{' '}
+            {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.tom)}
+          </Alert>
+        )}
         <ForeslåVedtakTabell grunnlag={grunnlag} />
       </VStack>
     </VilkårskortMedForm>
