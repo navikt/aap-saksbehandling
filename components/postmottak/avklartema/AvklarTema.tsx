@@ -27,6 +27,8 @@ interface Props {
   readOnly: boolean;
 }
 
+type Tema = NonNullable<AvklarTemaLøsning['tema']>;
+
 interface FormFields {
   erTemaAAP: string;
   tema: string;
@@ -113,7 +115,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             behov: {
               behovstype: Behovstype.AVKLAR_TEMA,
               skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
-              ...(velgTema && data.erTemaAAP === JaEllerNei.Nei ? { tema: data.tema } : {}),
+              ...(velgTema && data.erTemaAAP === JaEllerNei.Nei ? { tema: data.tema as Tema } : {}),
             },
             referanse: behandlingsreferanse,
           },

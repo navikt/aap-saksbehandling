@@ -34,7 +34,6 @@ import {
   FastlegeResponse,
   FatteVedtakGrunnlag,
   FlytProsessering,
-  ForeldrepengeperiodeDTO,
   ForeløpigBehandlingsutfall,
   ForeslåVedtakGrunnlag,
   ForeslåVedtakVedtakslengdeGrunnlag,
@@ -100,7 +99,6 @@ import {
   SykdomsGrunnlag,
   SykdomsvurderingBrevGrunnlag,
   SykepengeerstatningGrunnlag,
-  SykepengeperiodeDTO,
   SykestipendGrunnlag,
   SøkPåSakInfo,
   TilkjentYtelseGrunnlagMedDiff,
@@ -113,7 +111,6 @@ import {
   VenteInformasjon,
   YrkeskadeBeregningGrunnlag,
   YrkesskadeVurderingGrunnlag,
-  YtelseoppslagRequest,
 } from 'lib/types/types';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoForBackend } from 'lib/utils/date';
@@ -192,16 +189,6 @@ export const opprettAktivitetspliktBehandling = async (
 export const finnSakerForIdent = async (ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
   return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
-};
-
-export const hentForeldrepengeperioder = async (request: YtelseoppslagRequest) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/person/foreldrepengeperioder`;
-  return await apiFetch<ForeldrepengeperiodeDTO[]>(url, saksbehandlingApiScope, 'POST', request);
-};
-
-export const hentSykepengeperioder = async (request: YtelseoppslagRequest) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/person/sykepengeperioder`;
-  return await apiFetch<SykepengeperiodeDTO[]>(url, saksbehandlingApiScope, 'POST', request);
 };
 
 export const migrerArenasak = async (saksnummerArena: string, ident: string) => {
