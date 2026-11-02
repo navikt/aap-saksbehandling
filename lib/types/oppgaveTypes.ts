@@ -1,6 +1,7 @@
 import { components, paths as oppgavePaths } from './oppgaveSchema';
 import { components as postmottakComponents } from './postmottakSchema';
 import { BehandlingsFlytAvklaringsbehovKode } from 'lib/types/types';
+import type { RequestBody, ResponseBody } from './openapi';
 
 // postmottak
 export type PostmottakAvklaringsbehovKode =
@@ -8,37 +9,36 @@ export type PostmottakAvklaringsbehovKode =
 
 // oppgave
 export type Kø = components['schemas']['no.nav.aap.oppgave.filter.FilterResponse'];
-export type OppgavelisteRequest = components['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRequest'];
-export type OppgavelisteResponse = components['schemas']['no.nav.aap.oppgave.liste.OppgavelisteRespons'];
+export type OppgavelisteRequest = RequestOfPost<'/oppgaveliste'>;
+export type OppgavelisteResponse = ResponseOfPost<'/oppgaveliste'>;
 export type OppgaveMedKontekst = components['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse'];
 export type ReturInformasjon = components['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
 export type SkjermingInfo =
   components['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse']['oppgavelisteTags']['skjermingInfo'];
-export type OppgaverPåSak = components['schemas']['no.nav.aap.oppgave.hent.OppgaverPåSakResponse'];
+export type OppgaverPåSak = ResponseOfGet<'/{saksnummer}/hent-oppgaver-paa-sak'>;
 export type OppgavePåBehandling = components['schemas']['no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse'];
-export type OppgaveVisningsinformasjon =
-  components['schemas']['no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse'];
-export type SaksnummerResponse = components['schemas']['no.nav.aap.oppgave.hent.SaksnummerResponse'];
+export type OppgaveVisningsinformasjon = ResponseOfGet<'/{referanse}/hent-oppgave-visningsinformasjon'>;
+export type SaksnummerResponse = ResponseOfGet<'/{referanse}/hent-saksnummer'>;
 export type Paging = OppgavelisteRequest['paging'];
 export type Enhet = components['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
-export type PlukkOppgaveRequest = components['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveRequest'];
-export type PlukkOppgaveResponse = components['schemas']['no.nav.aap.oppgave.plukk.PlukkOppgaveResponse'];
-export type SøkResponse = components['schemas']['no.nav.aap.oppgave.søk.SøkResponse'];
+export type PlukkOppgaveRequest = RequestOfPost<'/plukk-oppgave'>;
+export type PlukkOppgaveResponse = ResponseOfPost<'/plukk-oppgave'>;
+export type SøkResponse = ResponseOfPost<'/sok'>;
 export type OppgaveInfoTilSøk = components['schemas']['no.nav.aap.oppgave.søk.OppgaveISøkResponse'];
 export type BehandlingskontekstForOppgave = components['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse'];
-export type AvreserverOppgaveDto = components['schemas']['no.nav.aap.oppgave.plukk.AvreserverOppgaveDto'];
+export type AvreserverOppgaveDto = RequestOfPost<'/avreserver-oppgaver'>;
 export type Markering = components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'];
-export type EnhetSynkroniseringOppgave = components['schemas']['no.nav.aap.oppgave.enhet.EnhetSynkroniseringRequest'];
-export type SaksbehandlerSøkRespons = components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkResponse'];
-export type SaksbehandlerSøkRequest = components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkRequest'];
+export type EnhetSynkroniseringOppgave = RequestOfPost<'/synkroniser-enhet-paa-oppgave'>;
+export type SaksbehandlerSøkRespons = ResponseOfPost<'/saksbehandler-sok'>;
+export type SaksbehandlerSøkRequest = RequestOfPost<'/saksbehandler-sok'>;
 export type SaksbehandlerFraSøk = components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerDto'];
-export type TildelOppgaveRequest = components['schemas']['no.nav.aap.oppgave.tildel.TildelOppgaveRequest'];
-export type TildelOppgaveResponse = components['schemas']['no.nav.aap.oppgave.tildel.TildelOppgaveResponse'];
+export type TildelOppgaveRequest = RequestOfPost<'/tildel-oppgaver'>;
+export type TildelOppgaveResponse = ResponseOfPost<'/tildel-oppgaver'>;
 export type TildeltStatus = components['schemas']['no.nav.aap.oppgave.tildel.TildeltStatusDto'];
 export type SakOgAvklaringsbehov = components['schemas']['no.nav.aap.oppgave.SakOgAvklaringsbehov'];
 export type UføreVedtakStatus = components['schemas']['no.nav.aap.oppgave.UførevedtakRespons']['resultat'];
-export type UføreVedtak = components['schemas']['no.nav.aap.oppgave.uføreVedtak.UføreVedtak'];
-export type OppdaterPåminnelseRequest = components['schemas']['no.nav.aap.oppgave.OppdaterPåminnelseRequest'];
+export type UføreVedtak = RequestOfPost<'/fjern-uførevedtak-ikon'>;
+export type OppdaterPåminnelseRequest = RequestOfPost<'/oppdater-paaminnelse'>;
 export type ForespørselSendtTilBehandler = components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
 
 // Typer utledet direkte fra skjemaet (string unions)
@@ -62,4 +62,10 @@ export type MineOppgaverSortOrder = NonNullable<NonNullable<MineOppgaverQueryPar
 
 export type OppgaveAvklaringsbehovKode = BehandlingsFlytAvklaringsbehovKode | PostmottakAvklaringsbehovKode;
 
-export type OpprettMarkeringDto = components['schemas']['no.nav.aap.oppgave.markering.OpprettMarkeringDto'];
+export type OpprettMarkeringDto = RequestOfPost<'/{referanse}/opprett-markering-hendelse'>;
+export type DokumenterLestDto = RequestOfPost<'/mottatt-dokumenter-lest'>;
+export type SøkRequest = RequestOfPost<'/sok'>;
+
+type RequestOfPost<Url extends keyof oppgavePaths> = RequestBody<oppgavePaths[Url]['post']>;
+type ResponseOfPost<Url extends keyof oppgavePaths> = ResponseBody<oppgavePaths[Url]['post']>;
+type ResponseOfGet<Url extends keyof oppgavePaths> = ResponseBody<oppgavePaths[Url]['get']>;

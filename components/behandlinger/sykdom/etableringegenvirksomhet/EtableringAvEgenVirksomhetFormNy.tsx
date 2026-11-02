@@ -10,12 +10,10 @@ import { UseFormReturn } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
 import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { JaEllerNei } from 'lib/utils/form';
-import {
-  EtableringEierBrukerVirksomheten,
-  lagEnumObjektFraUnionType,
-} from 'lib/types/types';
+import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { useEffect } from 'react';
 import { InformationSquareIcon } from '@navikt/aksel-icons';
+import { nyVurderingErOppfylt } from './etablering-av-egen-virksomhet-utils-ny';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -120,8 +118,12 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly }:
           rules={{ required: 'Virksomheten må enten være i utviklings- eller oppstartsfase' }}
           readOnly={readOnly}
         >
-          <Radio value={'UTVIKLING'}>Utviklingsfase</Radio>
-          <Radio value={'OPPSTART'}>Oppstartsfase</Radio>
+          <Radio description={'Maks varighet: 6 måneder'} value={'UTVIKLING'}>
+            Utviklingsfase
+          </Radio>
+          <Radio description={'Maks varighet: 3 måneder'} value={'OPPSTART'}>
+            Oppstartsfase
+          </Radio>
         </RadioGroupWrapper>
       )}
 
@@ -136,19 +138,21 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly }:
         />
       )}
 
-      <InfoCard data-color="info" aria-label={'info alert'} size={'small'}>
-        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-          <InfoCard.Title>Har du husket: </InfoCard.Title>
-        </InfoCard.Header>
-        <InfoCard.Content>
-          <VStack>
-            <ul>
-              <li>{'at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}</li>
-              <li>{'å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</li>
-            </ul>
-          </VStack>
-        </InfoCard.Content>
-      </InfoCard>
+      {nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)) && (
+        <InfoCard data-color="info" aria-label={'info alert'} size={'small'}>
+          <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+            <InfoCard.Title>Har du husket: </InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            <VStack>
+              <ul>
+                <li>{'at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}</li>
+                <li>{'å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</li>
+              </ul>
+            </VStack>
+          </InfoCard.Content>
+        </InfoCard>
+      )}
     </VStack>
   );
 };
