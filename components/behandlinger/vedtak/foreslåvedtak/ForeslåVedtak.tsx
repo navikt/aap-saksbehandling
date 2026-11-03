@@ -1,6 +1,6 @@
 'use client';
 
-import { VStack } from '@navikt/ds-react';
+import { Label, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -12,6 +12,9 @@ import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåved
 import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { StansOpphørTabell } from 'components/behandlinger/vedtak/foreslåvedtak/StansOpphørTabell';
+import { ForeslåVedtakTabellGammel } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabellGammel';
 
 interface Props {
   behandlingVersjon: number;
@@ -26,10 +29,11 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
 
   const { visningActions, visningModus } = useVilkårskortVisning(readOnly, 'FORESLÅ_VEDTAK', undefined);
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
+  const vedtaksperiodeBeslutterEnabled = useFeatureFlag('VedtaksperiodeBeslutter');
 
   return (
     <VilkårskortMedForm
-      heading="Behandlingen medfører følgende rettighetsperiode"
+      heading={vedtaksperiodeBeslutterEnabled ? 'Behandlingen medfører følgende rettighetsperiode' : 'Foreslå vedtak'}
       steg={'FORESLÅ_VEDTAK'}
       vilkårTilhørerNavKontor={false}
       status={løsAvklaringsbehovStatus}
@@ -55,20 +59,30 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
       visningActions={visningActions}
       formReset={() => {}}
     >
-      <VStack gap={'space-20'}>
-        {grunnlag.endretRettighetsperiode && (
-          <Alert variant="info" size="small">
-            Rettighetsperioden er endret:{' '}
-            <s>
-              {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.fom)} –{' '}
-              {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.tom)}
-            </s>{' '}
-            {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.fom)} –{' '}
-            {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.tom)}
-          </Alert>
-        )}
-        <ForeslåVedtakTabell grunnlag={grunnlag} />
-      </VStack>
+      {vedtaksperiodeBeslutterEnabled ? (
+        <VStack gap={'space-20'}>
+          {grunnlag.endretRettighetsperiode && (
+            <Alert variant="info" size="small">
+              Rettighetsperioden er endret:{' '}
+              <s>
+                {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.fom)} –{' '}
+                {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.tom)}
+              </s>{' '}
+              {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.fom)} –{' '}
+              {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.tom)}
+            </Alert>
+          )}
+          <ForeslåVedtakTabell grunnlag={grunnlag} />
+        </VStack>
+      ) : (
+        <VStack gap={'space-16'}>
+          <Label as="p" size={'medium'}>
+            Vedtaket medfører følgende konsekvens for brukeren:
+          </Label>
+          <ForeslåVedtakTabellGammel grunnlag={grunnlag} />
+          <StansOpphørTabell stansOpphør={grunnlag.stansOpphør} />
+        </VStack>
+      )}
     </VilkårskortMedForm>
   );
 };

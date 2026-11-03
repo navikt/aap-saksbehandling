@@ -26,6 +26,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   saksnummer: string;
@@ -35,6 +36,7 @@ interface Props {
 
 export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, children }: Props) => {
   const behandling = await hentBehandling(behandlingsreferanse);
+  const vedtaksperiodeBeslutterEnabled = unleashService.isEnabled('VedtaksperiodeBeslutter');
 
   if (isError(behandling)) {
     return (
@@ -44,7 +46,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
     );
   }
 
-  // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall'
+  // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
   const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat, arenaStatus, rettighetsinfoRes] =
@@ -55,7 +57,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
       hentKabalKlageresultat(behandlingsreferanse),
       hentKlageresultat(behandlingsreferanse),
       hentArenaStatus(saksnummer),
-      hentRettighetsinfo(saksnummer),
+      vedtaksperiodeBeslutterEnabled ? hentRettighetsinfo(saksnummer) : Promise.resolve(null),
     ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgaveVisningsinfo)) {
@@ -73,7 +75,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
 
-  const rettighetsinfo = isSuccess(rettighetsinfoRes) ? rettighetsinfoRes.data : null;
+  const rettighetsinfo = rettighetsinfoRes && isSuccess(rettighetsinfoRes) ? rettighetsinfoRes.data : null;
 
   return (
     <SWRConfig
