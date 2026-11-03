@@ -6,6 +6,8 @@ import { formaterDatoForFrontend, sorterEtterEldsteDato, sorterEtterNyesteDato }
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { GosysOppgave } from 'lib/types/gosysTypes';
 import { useState } from 'react';
+import styles from './GosysTabell.module.css';
+import { OppgaveBeskrivelse } from 'components/oppgaveliste/gosysoppgaver/oppgavebeskrivelse/OppgaveBeskrivelse';
 
 type Sorteringsfelt = 'opprettetTidspunkt' | 'fristFerdigstillelse';
 
@@ -87,7 +89,9 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
                   {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{oppgave.beskrivelse}</Table.DataCell>
+                <Table.DataCell textSize={'small'} className={styles.beskrivelseCelle}>
+                  {oppgave.beskrivelse && <OppgaveBeskrivelse beskrivelse={oppgave.beskrivelse} />}
+                </Table.DataCell>
                 <Table.DataCell textSize={'small'}>
                   {gosysUrl && (
                     <Button
@@ -97,6 +101,7 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
                       target="_blank"
                       variant="secondary"
                       size="xsmall"
+                      className={styles.gosysLenke}
                       icon={<ExternalLinkIcon aria-hidden />}
                     >
                       Åpne i Gosys

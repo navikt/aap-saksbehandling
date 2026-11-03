@@ -45,7 +45,7 @@ function hentBeskrivelser() {
   return within(table)
     .getAllByRole('row')
     .slice(1)
-    .map((row) => within(row).getAllByRole('cell')[4].textContent);
+    .map((row) => within(row).getAllByRole('cell')[4].querySelector('p')?.textContent);
 }
 
 describe('GosysTabell', () => {
@@ -69,10 +69,11 @@ describe('GosysTabell', () => {
     expect(within(rows[0]).getByRole('cell', { name: '10.03.2026' })).toBeVisible();
     expect(within(rows[0]).getByRole('cell', { name: '02.11.2026' })).toBeVisible();
     expect(within(rows[0]).getByRole('cell', { name: 'Z000001' })).toBeVisible();
-    expect(within(rows[0]).getByRole('cell', { name: 'Brukeren må kontaktes.' })).toBeVisible();
+    expect(within(rows[0]).getByText('Brukeren må kontaktes.')).toBeVisible();
     expect(within(rows[1]).getByRole('cell', { name: 'Ikke tildelt' })).toBeVisible();
     expect(within(rows[1]).getAllByRole('cell')[1]).toBeEmptyDOMElement();
     expect(within(rows[1]).getAllByRole('cell')[2]).toBeEmptyDOMElement();
+    expect(within(rows[1]).getAllByRole('cell')[4]).toBeEmptyDOMElement();
   });
 
   it('viser en melding når det ikke finnes oppgaver', () => {
