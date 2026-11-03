@@ -1,6 +1,6 @@
 'use client';
 
-import { HStack, Heading, Tabs, VStack } from '@navikt/ds-react';
+import { Heading, HStack, Tabs, VStack } from '@navikt/ds-react';
 import { TildelOppgaverProvider } from 'context/oppgave/TildelOppgaverContext';
 import { useLagreAktivTab } from 'hooks/oppgave/aktivTabHook';
 import { Enhet } from 'lib/types/oppgaveTypes';
@@ -17,7 +17,7 @@ interface Props {
   gosysUrl?: string;
 }
 
-type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver' | 'Gosys oppgaver';
+type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver' | 'Gosys-oppgaver';
 
 export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
   const { lagreAktivTab, hentAktivTab } = useLagreAktivTab<MenyValg>();
@@ -25,7 +25,7 @@ export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
 
   const visGosysOppgaverIOppgavelisten = useFeatureFlag('VisGosysOppgaverIOppgavelisten');
   const options: MenyValg[] = visGosysOppgaverIOppgavelisten
-    ? ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver', 'Gosys oppgaver']
+    ? ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver', 'Gosys-oppgaver']
     : ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver'];
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
         {selected === 'Mine oppgaver' && <MineOppgaver />}
         {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
         {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
-        {selected === 'Gosys oppgaver' && visGosysOppgaverIOppgavelisten && (
+        {selected === 'Gosys-oppgaver' && visGosysOppgaverIOppgavelisten && (
           <GosysOppgaver enheter={enheter} gosysUrl={gosysUrl} />
         )}
       </TildelOppgaverProvider>
