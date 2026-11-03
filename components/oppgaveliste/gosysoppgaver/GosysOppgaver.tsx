@@ -63,11 +63,8 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   const behandlingstema = gjelder === 'ab0269' || gjelder === 'ae0012' ? gjelder : undefined;
   const behandlingstype = behandlingstema ? 'ae0292' : gjelder;
 
-  const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, lastInnFlere } = useGosysOppgaver(
-    form.watch('enhet'),
-    behandlingstype,
-    behandlingstema
-  );
+  const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
+    useGosysOppgaver(form.watch('enhet'), behandlingstype, behandlingstema);
 
   const visBareOppgaverSomErTildelt = form.watch('visKunTildelteOppgaver');
   const oppgaverSomSkalVises = visBareOppgaverSomErTildelt
@@ -89,11 +86,18 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
             <FormField form={form} formField={formFields.gjelder} />
             <FormField form={form} formField={formFields.visKunTildelteOppgaver} />
           </HStack>
-          <HStack gap={'space-8'} paddingInline={'space-16'} paddingBlock={'space-8'}>
-            <Label as="p" size={'small'}>
-              Beskrivelse av køen:
-            </Label>
-            <BodyShort size={'small'}>Her må vi få inn noe beskrivende</BodyShort>
+          <HStack justify={'space-between'} paddingInline={'space-16'} paddingBlock={'space-8'}>
+            <HStack gap={'space-8'}>
+              <Label as="p" size={'small'}>
+                Beskrivelse av køen:
+              </Label>
+              <BodyShort size={'small'}>{lagBeskrivelseAvKøen(gjelder)}</BodyShort>
+            </HStack>
+            <BodyShort size={'small'}>
+              {visBareOppgaverSomErTildelt
+                ? `Antall oppgaver: ${oppgaverSomSkalVises.length}`
+                : `Viser ${oppgaverSomSkalVises.length} av ${antallTreff} oppgaver`}
+            </BodyShort>
           </HStack>
         </VStack>
       </Box>
@@ -126,3 +130,16 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
     }
   }
 };
+
+function lagBeskrivelseAvKøen(gjelder: GjelderTyper): string {
+  switch (gjelder) {
+    case 'ae0292': // Kelvin
+      return 'Alle oppgaver med behandlingstype Kelvin.';
+    case 'ae0294': // 'Klage - Kelvin'
+      return 'Alle oppgaver med behandlingstype Klage i Kelvin.';
+    case 'ae0012': // Medlemskap | Kelvin
+      return 'Alle oppgaver med behandlingstype Kelvin og behandlingstema Medlemskap.';
+    case 'ab0269': // Avbryt revurdering | Kelvin
+      return 'Alle oppgaver med behandlingstype Kelvin og behandlingstema Avbryt revurdering';
+  }
+}
