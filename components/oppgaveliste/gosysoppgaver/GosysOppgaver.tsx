@@ -21,8 +21,8 @@ interface FormFields {
   visKunTildelteOppgaver: boolean;
 }
 
-// ae0292 og ae0294 er behandlingstyper, mens ab0269 og ae0012 er behandlingstema
-type GjelderTyper = 'ae0292' | 'ae0294' | 'ab0269' | 'ae0012';
+// ae0292 og ae0294 er behandlingstyper, mens ab0269 og ab0570 er behandlingstema
+type GjelderTyper = 'ae0292' | 'ae0294' | 'ab0269' | 'ab0570';
 
 const gjelderOptions: ValuePair<GjelderTyper>[] = [
   {
@@ -31,7 +31,7 @@ const gjelderOptions: ValuePair<GjelderTyper>[] = [
   },
   { value: 'ae0294', label: 'Klage - Kelvin' },
   { value: 'ab0269', label: 'Medlemskap | Kelvin ' },
-  { value: 'ae0012', label: 'Avbryt revurdering | Kelvin ' },
+  { value: 'ab0570', label: 'Avbryt revurdering | Kelvin ' },
 ];
 
 export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
@@ -60,7 +60,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   });
 
   const gjelder = form.watch('gjelder');
-  const behandlingstema = gjelder === 'ab0269' || gjelder === 'ae0012' ? gjelder : undefined;
+  const behandlingstema = gjelder === 'ab0269' || gjelder === 'ab0570' ? gjelder : undefined;
   const behandlingstype = behandlingstema ? 'ae0292' : gjelder;
 
   const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
@@ -137,9 +137,9 @@ function lagBeskrivelseAvKøen(gjelder: GjelderTyper): string {
       return 'Alle oppgaver med behandlingstype Kelvin.';
     case 'ae0294': // 'Klage - Kelvin'
       return 'Alle oppgaver med behandlingstype Klage i Kelvin.';
-    case 'ae0012': // Medlemskap | Kelvin
+    case 'ab0269': // Medlemskap | Kelvin
       return 'Alle oppgaver med behandlingstype Kelvin og behandlingstema Medlemskap.';
-    case 'ab0269': // Avbryt revurdering | Kelvin
+    case 'ab0570': // Avbryt revurdering | Kelvin
       return 'Alle oppgaver med behandlingstype Kelvin og behandlingstema Avbryt revurdering';
   }
 }
