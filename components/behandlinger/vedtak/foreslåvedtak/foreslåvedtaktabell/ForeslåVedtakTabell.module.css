@@ -6,6 +6,68 @@
   color: var(--ax-text-danger-decoration);
 }
 
+.godkjentIcon,
+.avslåttIcon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.tagKolonne {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 3rem;
+}
+
+.tagKolonneKunNy {
+  width: 1.5rem;
+}
+
 .iconSubtle {
   color: var(--ax-text-neutral-subtle);
+}
+
+.ny {
+  background-color: var(--ax-bg-accent-soft);
+}
+
+.endretDato {
+  font-weight: var(--ax-font-weight-bold);
+}
+
+.endret {
+  background-color: var(--ax-bg-warning-soft);
+}
+
+.nyAvslag {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.ny > td:first-of-type,
+.endret > td:first-of-type,
+.nyAvslag > td:first-of-type {
+  padding-left: var(--ax-space-16);
+  box-shadow: inset 5px 0 var(--ax-border-info-strong);
+}
+
+.nyEndretTekstTag {
+  color: var(--ax-text-info);
+  flex-shrink: 0;
+}
+
+.statusTekst {
+  white-space: nowrap;
+}
+
+.gammelDato {
+  text-decoration: line-through;
+  color: var(--ax-text-neutral-subtle);
+}
+
+.periode {
+  white-space: nowrap;
+}
+
+.typeKolonne {
+  min-width: 4rem;
 }

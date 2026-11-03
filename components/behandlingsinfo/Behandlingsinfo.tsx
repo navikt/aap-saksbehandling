@@ -1,5 +1,5 @@
 import { BodyShort, HGrid, Label, VStack } from '@navikt/ds-react';
-import { DetaljertBehandling, Klageresultat, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, Klageresultat, RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { formaterKlageresultat } from 'lib/utils/klageresultat';
@@ -11,9 +11,10 @@ interface Props {
   behandling: DetaljertBehandling;
   sak: SaksInfo;
   klageresultat?: Klageresultat;
+  rettighetsinfo?: RettighetsinfoDto | null;
 }
 
-export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
+export const Behandlingsinfo = ({ behandling, sak, klageresultat, rettighetsinfo }: Props) => {
   const vedtaksdato = behandling.vedtaksdato;
   const erFørstegangsbehandlingEllerRevurdering =
     behandling.type === 'Førstegangsbehandling' || behandling.type === 'Revurdering';
@@ -45,6 +46,14 @@ export const Behandlingsinfo = ({ behandling, sak, klageresultat }: Props) => {
                 ? formaterDatoForFrontend(sak.periode.fom)
                 : formaterDatoForFrontend(behandling.virkningstidspunkt)}
             </BodyShort>
+            {rettighetsinfo?.sisteDagMedRett && (
+              <>
+                <Label as="p" size={'small'}>
+                  AAP maksdato:
+                </Label>
+                <BodyShort size={'small'}>{formaterDatoForFrontend(rettighetsinfo.sisteDagMedRett)}</BodyShort>
+              </>
+            )}
           </>
         )}
         {erSvarFraKabal && behandling.tilhørendeKlagebehandling && (
