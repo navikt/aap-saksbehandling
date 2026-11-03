@@ -97,30 +97,32 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
           </HStack>
         </VStack>
       </Box>
-      {isLoading ? (
-        <Spinner label="Henter Gosys-oppgaver" />
-      ) : error && !harLastetOppgaver ? (
-        <Alert variant="error">Kunne ikke hente Gosys-oppgaver.</Alert>
-      ) : (
-        <>
-          <GosysTabell oppgaver={oppgaverSomSkalVises} gosysUrl={gosysUrl} />
-          {error && <Alert variant="error">Kunne ikke hente flere Gosys-oppgaver. Prøv igjen.</Alert>}
-          {kanLasteFlere && (
-            <HStack justify={'center'}>
-              <Button
-                variant="secondary"
-                size="small"
-                loading={isValidating}
-                disabled={isValidating}
-                onClick={() => lastInnFlere()}
-                className={'fit-content'}
-              >
-                Last inn flere oppgaver
-              </Button>
-            </HStack>
-          )}
-        </>
+      <RenderOppgaveMedStatus />
+      {error && <Alert variant="error">Kunne ikke hente flere Gosys-oppgaver. Prøv igjen.</Alert>}
+      {kanLasteFlere && (
+        <HStack justify={'center'}>
+          <Button
+            variant="secondary"
+            size="small"
+            loading={isValidating}
+            disabled={isValidating}
+            onClick={() => lastInnFlere()}
+            className={'fit-content'}
+          >
+            Last inn flere oppgaver
+          </Button>
+        </HStack>
       )}
     </VStack>
   );
+
+  function RenderOppgaveMedStatus() {
+    if (isLoading) {
+      return <Spinner label="Henter Gosys-oppgaver" />;
+    } else if (error && !harLastetOppgaver) {
+      return <Alert variant="error">Kunne ikke hente Gosys-oppgaver.</Alert>;
+    } else {
+      return <GosysTabell oppgaver={oppgaverSomSkalVises} gosysUrl={gosysUrl} />;
+    }
+  }
 };
