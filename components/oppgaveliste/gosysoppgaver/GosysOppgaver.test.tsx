@@ -55,7 +55,7 @@ describe('GosysOppgaver', () => {
     ['ae0292', 'ae0292', undefined],
     ['ae0294', 'ae0294', undefined],
     ['ab0269', 'ae0292', 'ab0269'],
-    ['ae0012', 'ae0292', 'ae0012'],
+    ['ab0570', 'ae0292', 'ab0570'],
   ])('sender riktig behandlingstype og behandlingstema for %s', async (valg, behandlingstype, behandlingstema) => {
     const user = userEvent.setup();
     render(<GosysOppgaver enheter={enheter} />);
