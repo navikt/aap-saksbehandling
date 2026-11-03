@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Button, VStack } from '@navikt/ds-react';
-import styles from '../gosystabell/GosysTabell.module.css';
+import styles from './OppgaveBeskrivelse.module.css';
 
 interface Props {
   beskrivelse: string;
