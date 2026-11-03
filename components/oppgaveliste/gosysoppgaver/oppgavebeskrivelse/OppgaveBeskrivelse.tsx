@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import { Button, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, VStack } from '@navikt/ds-react';
 import styles from './OppgaveBeskrivelse.module.css';
 
 interface Props {
@@ -29,13 +29,14 @@ export function OppgaveBeskrivelse({ beskrivelse }: Props) {
 
   return (
     <VStack gap="space-4" align="start">
-      <p
+      <BodyShort
+        size={"small"}
         ref={tekstRef}
         id={tekstId}
         className={`${styles.beskrivelse} ${utvidet ? styles.utvidet : styles.forhaandsvisning}`}
       >
         {beskrivelse}
-      </p>
+      </BodyShort>
       {erAvkortet && (
         <Button
           type="button"
