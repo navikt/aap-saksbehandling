@@ -41,7 +41,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
     enhet: {
       type: 'select',
       label: 'Velg enhet',
-      defaultValue: hentLagredeAktiveEnheter()?.[0].value ?? enheter[0].enhetNr,
+      defaultValue: hentLagredeAktiveEnheter()?.[0]?.value ?? enheter[0].enhetNr,
       options: enheter.map((enhet) => {
         return { label: enhet.navn, value: enhet.enhetNr };
       }),
