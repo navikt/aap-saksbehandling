@@ -1,5 +1,6 @@
 import { SortState } from '@navikt/ds-react';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
+import { FinnGosysOppgaverQueryParams } from 'lib/types/gosysTypes';
 import {
   BehandlingskontekstForOppgave,
   MineOppgaverQueryParams,
@@ -15,6 +16,19 @@ export function queryParamsArray(key: string, values: (string | number)[]) {
     return '';
   }
   return values.map((e) => `${key}=${e}`).join('&');
+}
+
+export function gosysOppgaverQueryParams(query: FinnGosysOppgaverQueryParams) {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value === undefined) {
+      continue;
+    }
+    for (const item of Array.isArray(value) ? value : [value]) {
+      params.append(key, String(item));
+    }
+  }
+  return params.toString();
 }
 
 const validSortKeys: Set<SortBy> = new Set([
