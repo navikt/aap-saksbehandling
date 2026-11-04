@@ -9,7 +9,7 @@ export function useGosysOppgaver(
   aktivEnhet: string,
   behandlingstype: string,
   behandlingstema?: string,
-  oppgaveTyper?: string[]
+  oppgaveTyper?: Oppgavetyper[]
 ) {
   const { data, isLoading, isValidating, error, size, setSize, mutate } = useSWRInfinite(
     (pageIndex: number, previousPage: FinnGosysOppgaverResponse | null) => {
