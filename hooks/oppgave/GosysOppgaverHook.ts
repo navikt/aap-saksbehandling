@@ -31,12 +31,12 @@ export function useGosysOppgaver(
         oppgaveTyper,
       ] as const;
     },
-    async ([, offset, enhet, valgtBehandlingstype, valgtBehandlingstema]) => {
+    async ([, offset, enhet, valgtBehandlingstype, valgtBehandlingstema, valgteOppgaveTyper]) => {
       const response = await clientHentGosysOppgaver({
         tema: ['AAP'],
         behandlingstype: valgtBehandlingstype,
         ...(valgtBehandlingstema !== undefined && { behandlingstema: valgtBehandlingstema }),
-        ...(oppgaveTyper !== undefined && { oppgavetype: oppgaveTyper }),
+        ...(valgteOppgaveTyper?.length && { oppgavetype: valgteOppgaveTyper }),
         statuskategori: 'AAPEN',
         tildeltEnhetsnr: enhet,
         limit: OPPGAVER_PER_SIDE,

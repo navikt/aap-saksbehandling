@@ -92,8 +92,11 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   const behandlingstema = gjelder === 'ab0269' || gjelder === 'ab0570' ? gjelder : undefined;
   const behandlingstype = behandlingstema ? 'ae0292' : gjelder;
 
+  const enhet = form.watch('enhet');
+  const oppgaveTyper = form.watch('oppgaveTyper');
+
   const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
-    useGosysOppgaver(form.watch('enhet'), behandlingstype, behandlingstema);
+    useGosysOppgaver(enhet, behandlingstype, behandlingstema, oppgaveTyper);
 
   const visLedigeOppgaver = form.watch('visLedigeOppgaver');
   const oppgaverSomSkalVises = visLedigeOppgaver ? oppgaver.filter((oppgave) => !oppgave.tilordnetRessurs) : oppgaver;
