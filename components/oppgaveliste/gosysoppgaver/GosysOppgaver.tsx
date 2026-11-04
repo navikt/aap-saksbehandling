@@ -93,7 +93,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
             </HStack>
             <BodyShort size={'small'}>
               {visLedigeOppgaver
-                ? `Viser ${oppgaverSomSkalVises.length} ledige blant ${oppgaver.length} innlastede oppgaver`
+                ? `Viser ${oppgaverSomSkalVises.length} av  ${oppgaver.length} oppgaver`
                 : `Viser ${oppgaverSomSkalVises.length} av ${antallTreff} oppgaver`}
             </BodyShort>
           </HStack>

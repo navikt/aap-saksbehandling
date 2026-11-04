@@ -104,7 +104,7 @@ describe('GosysOppgaver', () => {
     vi.mocked(useGosysOppgaver).mockReturnValue({ ...hookResultat, antallTreff: 100 });
     render(<GosysOppgaver enheter={enheter} />);
 
-    expect(screen.getByText('Viser 1 ledige blant 2 innlastede oppgaver')).toBeVisible();
+    expect(screen.getByText('Viser 1 av 2 oppgaver')).toBeVisible();
 
     await user.click(screen.getByRole('checkbox', { name: 'Vis kun ledige oppgaver' }));
 
