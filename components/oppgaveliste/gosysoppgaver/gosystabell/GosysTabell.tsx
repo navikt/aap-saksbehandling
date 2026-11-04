@@ -2,15 +2,13 @@
 
 import { Box, Button, Table } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { formaterDatoForFrontend, sorterEtterEldsteDato, sorterEtterNyesteDato } from 'lib/utils/date';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { GosysOppgave } from 'lib/types/gosysTypes';
 import { useState } from 'react';
 import styles from './GosysTabell.module.css';
 import { OppgaveBeskrivelse } from 'components/oppgaveliste/gosysoppgaver/oppgavebeskrivelse/OppgaveBeskrivelse';
-import { mapOppgaveTypeTilTekst } from 'lib/utils/gosys';
-
-type Sorteringsfelt = 'opprettetTidspunkt' | 'fristFerdigstillelse';
+import { GosysSortering, mapOppgaveTypeTilTekst, sorterGosysOppgaver } from 'lib/utils/gosys';
 
 interface Props {
   oppgaver: GosysOppgave[];
@@ -18,24 +16,8 @@ interface Props {
 }
 
 export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
-  const [sortering, setSortering] = useState<{
-    orderBy: Sorteringsfelt;
-    direction: 'ascending' | 'descending';
-  }>();
-
-  const sorterteOppgaver = sortering
-    ? [...oppgaver].sort((a, b) => {
-        const datoA = a[sortering.orderBy];
-        const datoB = b[sortering.orderBy];
-
-        if (!datoA) return datoB ? 1 : 0;
-        if (!datoB) return -1;
-
-        return sortering.direction === 'ascending'
-          ? sorterEtterEldsteDato(datoA, datoB)
-          : sorterEtterNyesteDato(datoA, datoB);
-      })
-    : oppgaver;
+  const [sortering, setSortering] = useState<GosysSortering>();
+  const sorterteOppgaver = sorterGosysOppgaver(oppgaver, sortering);
 
   return (
     <Box borderColor="neutral-subtle" background={'default'} borderWidth="1" borderRadius={'12'}>

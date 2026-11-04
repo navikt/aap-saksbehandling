@@ -1,3 +1,27 @@
+import { GosysOppgave } from 'lib/types/gosysTypes';
+import { sorterEtterEldsteDato, sorterEtterNyesteDato } from 'lib/utils/date';
+
+export interface GosysSortering {
+  orderBy: 'opprettetTidspunkt' | 'fristFerdigstillelse';
+  direction: 'ascending' | 'descending';
+}
+
+export function sorterGosysOppgaver(oppgaver: GosysOppgave[], sortering?: GosysSortering): GosysOppgave[] {
+  if (!sortering) return oppgaver;
+
+  return [...oppgaver].sort((a, b) => {
+    const datoA = a[sortering.orderBy];
+    const datoB = b[sortering.orderBy];
+
+    if (!datoA) return datoB ? 1 : 0;
+    if (!datoB) return -1;
+
+    return sortering.direction === 'ascending'
+      ? sorterEtterEldsteDato(datoA, datoB)
+      : sorterEtterNyesteDato(datoA, datoB);
+  });
+}
+
 export function mapOppgaveTypeTilTekst(oppgavetype: string): string {
   switch (oppgavetype) {
     case 'KONT_BRUK':
