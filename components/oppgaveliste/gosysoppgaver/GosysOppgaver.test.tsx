@@ -63,7 +63,7 @@ describe('GosysOppgaver', () => {
     await user.selectOptions(screen.getByRole('combobox', { name: 'Gjelder' }), valg);
 
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype,
       behandlingstema,
       oppgaveTyper: undefined,
@@ -77,7 +77,7 @@ describe('GosysOppgaver', () => {
 
     await user.selectOptions(select, 'ab0269');
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: 'ab0269',
       oppgaveTyper: undefined,
@@ -85,7 +85,7 @@ describe('GosysOppgaver', () => {
 
     await user.selectOptions(select, 'ae0294');
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype: 'ae0294',
       behandlingstema: undefined,
       oppgaveTyper: undefined,
@@ -99,7 +99,7 @@ describe('GosysOppgaver', () => {
     await user.click(screen.getByRole('combobox', { name: /Oppgavetyper/ }));
     await user.click(screen.getByRole('option', { name: 'Journalføring' }));
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
       oppgaveTyper: ['JFR'],
@@ -107,7 +107,7 @@ describe('GosysOppgaver', () => {
 
     await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
       oppgaveTyper: ['JFR', 'RETUR'],
@@ -115,7 +115,7 @@ describe('GosysOppgaver', () => {
 
     await user.click(screen.getByRole('option', { name: 'Journalføring' }));
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
       oppgaveTyper: ['RETUR'],
@@ -123,7 +123,7 @@ describe('GosysOppgaver', () => {
 
     await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
-      aktivEnhet: '0300',
+      enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
       oppgaveTyper: [],
