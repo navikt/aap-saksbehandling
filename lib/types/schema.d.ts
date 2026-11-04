@@ -675,6 +675,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/egenskaper': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/forbered': {
     parameters: {
       query?: never;
@@ -12990,6 +13028,10 @@ export interface components {
         | 'ORDINÆRKVOTE_BRUKT_OPP'
       )[];
     };
+    /**
+     * @deprecated
+     * @description Bruk harArenaHistorikk fra GET /api/behandling/{referanse}/egenskaper
+     */
     'no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO': {
       harArenaHistorikk: boolean;
     };
@@ -13013,6 +13055,10 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       relevans: 'IKKE_RELEVANT' | 'RELEVANT';
+    };
+    'no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO': {
+      erMigrertFraArena: boolean;
+      harArenaHistorikk: boolean;
     };
     'no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto': {
       /** @enum {string} */

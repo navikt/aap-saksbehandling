@@ -5,7 +5,13 @@ import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-reac
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
 import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
-import { Arenastatus, DetaljertBehandling, FlytGruppe, FlytVisning, SaksInfo as SaksInfoType } from 'lib/types/types';
+import {
+  BehandlingEgenskaper,
+  DetaljertBehandling,
+  FlytGruppe,
+  FlytVisning,
+  SaksInfo as SaksInfoType,
+} from 'lib/types/types';
 import { Adressebeskyttelsesgrad } from 'lib/utils/adressebeskyttelse';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
@@ -14,6 +20,7 @@ import { useState } from 'react';
 import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/AdressebeskyttelseStatus';
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
+import { MigrertFraArenaStatus } from 'components/migrertfraarenastatus/MigrertFraArenaStatus';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
@@ -31,10 +38,17 @@ interface Props {
   oppgaveVisningsinfo?: OppgaveVisningsinformasjon;
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
-  arenaStatus?: Arenastatus;
+  behandlingEgenskaper?: BehandlingEgenskaper;
 }
 
-export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning, arenaStatus }: Props) => {
+export const SaksinfoBanner = ({
+  sak,
+  behandling,
+  oppgaveVisningsinfo,
+  flyt,
+  visning,
+  behandlingEgenskaper,
+}: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
@@ -146,9 +160,14 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
               />
             </div>
           )}
-          {arenaStatus?.harArenaHistorikk && (
+          {behandlingEgenskaper?.harArenaHistorikk && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
+            </div>
+          )}
+          {behandlingEgenskaper?.erMigrertFraArena && (
+            <div className={styles.oppgavestatus}>
+              <MigrertFraArenaStatus />
             </div>
           )}
           {oppgaveTildelingStatus && (
