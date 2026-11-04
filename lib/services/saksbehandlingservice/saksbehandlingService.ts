@@ -618,7 +618,7 @@ export const forberedBehandlingOgVentPåProsessering = async (
 };
 
 export const hentAlleDialogmeldingerMedDokumentIdPåSak = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}/v2`;
+  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`;
   return await apiFetch<Array<MeldingerResponse>>(url, saksbehandlingApiScope, 'GET');
 };
 
