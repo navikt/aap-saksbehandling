@@ -6,16 +6,24 @@ import { Oppgavetyper } from 'components/oppgaveliste/gosysoppgaver/GosysOppgave
 
 const OPPGAVER_PER_SIDE = 50;
 
-export function useGosysOppgaver(
-  aktivEnhet?: string,
-  behandlingstype?: string,
-  behandlingstema?: string,
-  oppgaveTyper?: Oppgavetyper[],
-  aktoerId?: string
-) {
+interface GosysOppgaverParams {
+  enhet?: string;
+  behandlingstype?: string;
+  behandlingstema?: string;
+  oppgaveTyper?: Oppgavetyper[];
+  aktoerId?: string;
+}
+
+export function useGosysOppgaver({
+  enhet,
+  behandlingstype,
+  behandlingstema,
+  oppgaveTyper,
+  aktoerId,
+}: GosysOppgaverParams) {
   const { data, isLoading, isValidating, error, size, setSize, mutate } = useSWRInfinite(
     (pageIndex: number, previousPage: FinnGosysOppgaverResponse | null) => {
-      if (!aktivEnhet && !aktoerId?.trim()) return null;
+      if (!enhet && !aktoerId?.trim()) return null;
       if (
         previousPage &&
         (!previousPage.oppgaver?.length ||
@@ -28,7 +36,7 @@ export function useGosysOppgaver(
       return [
         '/oppgave/api/gosys',
         pageIndex * OPPGAVER_PER_SIDE,
-        aktivEnhet,
+        enhet,
         behandlingstype,
         behandlingstema,
         oppgaveTyper,

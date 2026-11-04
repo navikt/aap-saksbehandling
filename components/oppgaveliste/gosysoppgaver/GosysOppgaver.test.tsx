@@ -62,7 +62,12 @@ describe('GosysOppgaver', () => {
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Gjelder' }), valg);
 
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', behandlingstype, behandlingstema, undefined);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype,
+      behandlingstema,
+      oppgaveTyper: undefined,
+    });
   });
 
   it('fjerner behandlingstema når brukeren bytter tilbake til en vanlig behandlingstype', async () => {
@@ -71,10 +76,20 @@ describe('GosysOppgaver', () => {
     const select = screen.getByRole('combobox', { name: 'Gjelder' });
 
     await user.selectOptions(select, 'ab0269');
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', 'ab0269', undefined);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype: 'ae0292',
+      behandlingstema: 'ab0269',
+      oppgaveTyper: undefined,
+    });
 
     await user.selectOptions(select, 'ae0294');
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0294', undefined, undefined);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype: 'ae0294',
+      behandlingstema: undefined,
+      oppgaveTyper: undefined,
+    });
   });
 
   it('sender valgte oppgavetyper til hooken og fjerner filteret når alle valg tømmes', async () => {
@@ -83,16 +98,36 @@ describe('GosysOppgaver', () => {
 
     await user.click(screen.getByRole('combobox', { name: /Oppgavetyper/ }));
     await user.click(screen.getByRole('option', { name: 'Journalføring' }));
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, ['JFR']);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype: 'ae0292',
+      behandlingstema: undefined,
+      oppgaveTyper: ['JFR'],
+    });
 
     await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, ['JFR', 'RETUR']);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype: 'ae0292',
+      behandlingstema: undefined,
+      oppgaveTyper: ['JFR', 'RETUR'],
+    });
 
     await user.click(screen.getByRole('option', { name: 'Journalføring' }));
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, ['RETUR']);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype: 'ae0292',
+      behandlingstema: undefined,
+      oppgaveTyper: ['RETUR'],
+    });
 
     await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, []);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith({
+      aktivEnhet: '0300',
+      behandlingstype: 'ae0292',
+      behandlingstema: undefined,
+      oppgaveTyper: [],
+    });
   });
 
   it('viser kun ledige oppgaver som standard og alle oppgaver når bryteren slås av', async () => {

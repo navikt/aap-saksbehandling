@@ -4,5 +4,5 @@ import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
 export function useGosysOppgaverForPerson() {
   const { sak } = useSak();
 
-  return useGosysOppgaver(undefined, undefined, undefined, sak.ident);
+  return useGosysOppgaver({ aktoerId: sak.ident });
 }
