@@ -18,11 +18,11 @@ interface Props {
 interface FormFields {
   enhet: string;
   gjelder: GjelderTyper;
-  oppgaveTyper: string[];
+  oppgaveTyper: Oppgavetyper[];
   visLedigeOppgaver: boolean;
 }
 
-type Oppgavetyper =
+export type Oppgavetyper =
   'RETUR' | 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VURD_NOTAT' | 'VUR_SVAR';
 
 const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [

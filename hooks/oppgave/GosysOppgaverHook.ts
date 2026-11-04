@@ -2,6 +2,7 @@ import useSWRInfinite from 'swr/infinite';
 import { clientHentGosysOppgaver } from 'lib/clientApi';
 import { FinnGosysOppgaverResponse } from 'lib/types/gosysTypes';
 import { isError } from 'lib/utils/api';
+import { Oppgavetyper } from 'components/oppgaveliste/gosysoppgaver/GosysOppgaver';
 
 const OPPGAVER_PER_SIDE = 50;
 
