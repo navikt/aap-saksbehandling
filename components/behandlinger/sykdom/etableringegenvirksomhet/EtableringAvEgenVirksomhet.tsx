@@ -82,7 +82,7 @@ export const EtableringAvEgenVirksomhet = ({
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
   const {
-    løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehov,
     løsAvklaringsbehovIsLoading,
     løsAvklaringsbehovStatus,
     løsAvklaringsbehovError,
@@ -158,7 +158,7 @@ export const EtableringAvEgenVirksomhet = ({
       if (!validering) {
         return;
       }
-      løsPeriodisertAvklaringsbehov(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {

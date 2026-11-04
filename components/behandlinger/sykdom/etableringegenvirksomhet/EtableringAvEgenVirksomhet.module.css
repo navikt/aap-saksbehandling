@@ -6,3 +6,11 @@
   border-bottom: 1px solid var(--ax-border-neutral-subtle);
   border-radius: var(--ax-radius-12) var(--ax-radius-12) 0 0;
 }
+
+.infoKort {
+  padding: var(--ax-space-16);
+}
+
+.maksBredde {
+  max-width: 90ch;
+}
