@@ -24,6 +24,7 @@ import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/Utl
 import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
+import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
 
 interface Props {
   sak: SaksInfoType;
@@ -37,6 +38,7 @@ interface Props {
 export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, visning, arenaStatus }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
+  const { antallTreff } = useGosysOppgaverForPerson();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
@@ -126,6 +128,14 @@ export const SaksinfoBanner = ({ sak, behandling, oppgaveVisningsinfo, flyt, vis
       </div>
       {behandling && (
         <HStack>
+          {antallTreff > 0 && (
+            <div className={styles.oppgavestatus}>
+              <Tag variant="outline" size="small" data-color="brand-beige">
+                Gosys-oppgaver ({antallTreff})
+              </Tag>
+            </div>
+          )}
+
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />

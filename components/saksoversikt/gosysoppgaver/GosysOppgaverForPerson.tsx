@@ -3,17 +3,16 @@
 import { BodyShort, Button, HStack, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { Spinner } from 'components/felles/Spinner';
-import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
+import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
 import { GosysOppgaverForPersonTabell } from './GosysOppgaverForPersonTabell';
 
 interface Props {
-  personident: string;
   gosysUrl?: string;
 }
 
-export const GosysOppgaverForPerson = ({ personident, gosysUrl }: Props) => {
+export const GosysOppgaverForPerson = ({ gosysUrl }: Props) => {
   const { oppgaver, antallTreff, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, lastInnFlere } =
-    useGosysOppgaver(undefined, undefined, undefined, personident);
+    useGosysOppgaverForPerson();
 
   return (
     <VStack gap="space-16">

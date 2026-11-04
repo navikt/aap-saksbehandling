@@ -12,6 +12,7 @@ import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/Mel
 import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import { ArenaSakerListe } from 'components/saksoversikt/ArenaSakerListe';
 import { GosysOppgaverForPerson } from 'components/saksoversikt/gosysoppgaver/GosysOppgaverForPerson';
+import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
@@ -34,6 +35,7 @@ export const SakOversiktContainer = ({
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { antallTreff } = useGosysOppgaverForPerson();
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
 
@@ -49,7 +51,7 @@ export const SakOversiktContainer = ({
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
-            <Tabs.Tab label={`Gosys-oppgaver`} value={Tab.GOSYS_OPPGAVER} icon={<FileTextIcon />} />
+            <Tabs.Tab label={`Gosys-oppgaver (${antallTreff})`} value={Tab.GOSYS_OPPGAVER} icon={<FileTextIcon />} />
             <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
@@ -67,7 +69,7 @@ export const SakOversiktContainer = ({
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.GOSYS_OPPGAVER}>
-              <GosysOppgaverForPerson personident={sak.ident} gosysUrl={gosysUrl} />
+              <GosysOppgaverForPerson gosysUrl={gosysUrl} />
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.MELDEKORT}>

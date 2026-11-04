@@ -50,7 +50,6 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
     >
       <TableStyled
         size="small"
-        zebraStripes
         aria-label="Gosys-oppgaver"
         sort={sortering}
         onSortChange={(sortKey) => {
