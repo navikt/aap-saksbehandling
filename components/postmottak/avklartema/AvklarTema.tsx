@@ -204,7 +204,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           <Alert variant={'info'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}
             {NAV_KLAGEINSTANS_ENHET}. Svar <i>Nei</i> dersom du ønsker å opprette journalføringsoppgave i Gosys for Nav
-            Klageinstans.{velgTema && ' Velg Ukjent for å sende dokumentet til Gosys.'}
+            Klageinstans eller journalføre på annet tema.
           </Alert>
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
