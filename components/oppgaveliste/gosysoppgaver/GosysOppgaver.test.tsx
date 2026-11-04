@@ -77,21 +77,38 @@ describe('GosysOppgaver', () => {
     expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0294', undefined);
   });
 
-  it('viser bare tildelte oppgaver når filteret aktiveres og alle igjen når det deaktiveres', async () => {
+  it('viser kun ledige oppgaver som standard og alle oppgaver når bryteren slås av', async () => {
     const user = userEvent.setup();
     render(<GosysOppgaver enheter={enheter} />);
-    const filter = screen.getByLabelText('Vis kun tildelte oppgaver');
+    const filter = screen.getByRole('checkbox', { name: 'Vis kun ledige oppgaver' });
 
+    expect(filter).toBeChecked();
     expect(screen.getByText('Utildelt oppgave')).toBeVisible();
+    expect(screen.queryByText('Tildelt oppgave')).not.toBeInTheDocument();
+
     await user.click(filter);
 
+    expect(filter).not.toBeChecked();
     expect(screen.getByText('Tildelt oppgave')).toBeVisible();
-    expect(screen.queryByText('Utildelt oppgave')).not.toBeInTheDocument();
+    expect(screen.getByText('Utildelt oppgave')).toBeVisible();
 
     await user.click(filter);
 
-    expect(screen.getByText('Tildelt oppgave')).toBeVisible();
+    expect(filter).toBeChecked();
+    expect(screen.queryByText('Tildelt oppgave')).not.toBeInTheDocument();
     expect(screen.getByText('Utildelt oppgave')).toBeVisible();
+  });
+
+  it('skiller antall ledige blant innlastede oppgaver fra totalt antall treff', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGosysOppgaver).mockReturnValue({ ...hookResultat, antallTreff: 100 });
+    render(<GosysOppgaver enheter={enheter} />);
+
+    expect(screen.getByText('Viser 1 av 2 oppgaver')).toBeVisible();
+
+    await user.click(screen.getByRole('checkbox', { name: 'Vis kun ledige oppgaver' }));
+
+    expect(screen.getByText('Viser 2 av 100 oppgaver')).toBeVisible();
   });
 
   it('laster flere oppgaver når brukeren trykker på knappen', async () => {

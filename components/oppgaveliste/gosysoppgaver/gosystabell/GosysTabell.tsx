@@ -122,9 +122,15 @@ function mapOppgaveTypeTilTekst(oppgavetype: string): string {
     case 'KONT_BRUK':
       return 'Kontakt bruker';
     case 'VUR_KONS_YTE':
-      return 'Vurder ytterligere konsekvens';
+      return 'Vurder konsekvens for ytelse';
     case 'INNH_DOK':
       return 'Innhent dokumentasjon';
+    case 'JFR':
+      return 'Journalføring';
+    case 'VURD_HENV':
+      return 'Vurder henvendelse';
+    case 'BEH_SED':
+      return 'Behandle SED';
     default:
       return oppgavetype;
   }
