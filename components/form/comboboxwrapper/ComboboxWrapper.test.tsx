@@ -2,7 +2,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, test, vi } from 'vitest';
 import { useConfigForm } from '../FormHook';
-import { FormField } from '../FormField';
+import { FormField, ValuePair } from '../FormField';
 import { Button } from '@navikt/ds-react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 
@@ -55,6 +55,50 @@ describe('Combobox', () => {
     await waitFor(() => user.click(screen.getByRole('button', { name: /Send inn/ })));
     expect(screen.queryByText('Du må velge type')).not.toBeInTheDocument();
   });
+
+  test('sender verdien og ikke teksten til det valgte alternativet', async () => {
+    const onSubmit = vi.fn();
+    render(
+      <ComboboxForm
+        options={[
+          { value: 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL', label: 'Revurderingen ble opprettet ved en feil' },
+        ]}
+        onSubmit={onSubmit}
+      />
+    );
+
+    await user.click(screen.getByRole('combobox'));
+    await user.click(screen.getByRole('option', { name: 'Revurderingen ble opprettet ved en feil' }));
+    await user.click(screen.getByRole('button', { name: /Send inn/ }));
+
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({ type: 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL' }),
+        expect.anything()
+      );
+    });
+  });
+
+  test('tømmer verdien og krever et nytt valg når et alternativ fjernes', async () => {
+    const onSubmit = vi.fn();
+    render(
+      <ComboboxForm
+        options={[
+          { value: 'REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL', label: 'Revurderingen ble opprettet ved en feil' },
+        ]}
+        defaultValue="REVURDERINGEN_BLE_OPPRETTET_VED_EN_FEIL"
+        onSubmit={onSubmit}
+      />
+    );
+    expect(within(screen.getByRole('list')).getByText('Revurderingen ble opprettet ved en feil')).toBeVisible();
+
+    await user.click(screen.getByRole('combobox'));
+    await user.keyboard('{Backspace}');
+    await user.click(screen.getByRole('button', { name: /Send inn/ }));
+
+    expect(await screen.findByText('Du må velge type')).toBeVisible();
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 });
 
 interface FormFields {
@@ -63,6 +107,8 @@ interface FormFields {
 
 interface Props {
   defaultValue?: string;
+  options?: ValuePair[];
+  onSubmit?: (data: FormFields) => void;
 }
 
 function ComboboxForm(props: Props) {
@@ -72,12 +118,12 @@ function ComboboxForm(props: Props) {
       label: 'Velg type',
       description: 'Velg en type',
       defaultValue: props.defaultValue,
-      options: ['Alternativ 1', 'Alternativ 2', 'Alternativ 3'],
+      options: props.options ?? ['Alternativ 1', 'Alternativ 2', 'Alternativ 3'],
       rules: { required: 'Du må velge type' },
     },
   });
   return (
-    <form onSubmit={form.handleSubmit(() => vi.fn())}>
+    <form onSubmit={form.handleSubmit(props.onSubmit ?? vi.fn())}>
       <FormField form={form} formField={formFields.type} />
       <Button variant={'primary'}>Send inn</Button>
     </form>
