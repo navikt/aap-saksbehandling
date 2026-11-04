@@ -8923,6 +8923,7 @@ export interface components {
       /** Format: uuid */
       behandlingReferanse: string;
       erNy: boolean;
+      hjemler: string[];
       /** @enum {string} */
       type: 'OPPHEVET' | 'OPPHØR' | 'STANS';
       årsaker: (

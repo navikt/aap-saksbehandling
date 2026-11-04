@@ -11,7 +11,6 @@ import { mapÅrsakTilTekst } from 'components/behandlinger/vedtak/foreslåvedtak
 type StansOpphør = ForeslåVedtakGrunnlag['stansOpphør'][number];
 type StansOpphørType = StansOpphør['historikk'][number]['type'];
 type StansOpphørVurdering = StansOpphør['historikk'][number];
-type StansOpphørÅrsak = StansOpphørVurdering['årsaker'][number];
 
 interface Props {
   grunnlag: ForeslåVedtakGrunnlag;
@@ -51,7 +50,7 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
         <Table.Row>
           <Table.HeaderCell>AAP status</Table.HeaderCell>
           <Table.HeaderCell>Periode</Table.HeaderCell>
-          <Table.HeaderCell className={tagKolonneKlasse}>Type</Table.HeaderCell>
+          <Table.HeaderCell>Type</Table.HeaderCell>
           <Table.HeaderCell>Årsak</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -249,41 +248,11 @@ function mapUnderveisÅrsakTilHjemmel(underveisAvslag: UnderveisAvslagsÅrsak) {
   }
 }
 
-function mapÅrsakTilHjemmel(årsak: StansOpphørÅrsak): string | undefined {
-  switch (årsak) {
-    case 'IKKE_RETT_UNDER_STRAFFEGJENNOMFØRING':
-      return '§ 11-26';
-    case 'ANNEN_FULL_YTELSE':
-      return '§ 11-27';
-    case 'INNTEKTSTAP_DEKKES_ETTER_ANNEN_LOVGIVNING':
-      return '§ 11-29';
-    case 'IKKE_RETT_PA_AAP_UNDER_BEHANDLING_AV_UFORE':
-      return '§ 11-18';
-    case 'VARIGHET_OVERSKREDET_OVERGANG_UFORE':
-      return '§ 11-18 1. ledd';
-    case 'VARIGHET_OVERSKREDET_ARBEIDSSØKER':
-    case 'IKKE_RETT_PA_AAP_I_PERIODE_SOM_ARBEIDSSOKER':
-      return '§ 11-17';
-    case 'BRUDD_PÅ_AKTIVITETSPLIKT_STANS':
-    case 'BRUDD_PÅ_AKTIVITETSPLIKT_OPPHØR':
-      return '§ 11-7';
-    case 'BRUDD_PÅ_OPPHOLDSKRAV_STANS':
-    case 'BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR':
-      return '§ 11-3';
-    case 'ORDINÆRKVOTE_BRUKT_OPP':
-      return '§ 11-12';
-    case 'SYKEPENGEERSTATNINGKVOTE_BRUKT_OPP':
-      return '§ 11-13';
-    default:
-      return undefined;
-  }
-}
-
 function mapÅrsakerTilHjemler(vurdering?: StansOpphørVurdering): string[] {
   if (!vurdering || vurdering.type === 'OPPHEVET') {
     return [];
   }
-  return vurdering.årsaker.map(mapÅrsakTilHjemmel).filter((hjemmel) => hjemmel !== undefined);
+  return vurdering.hjemler;
 }
 
 function mapStansOpphørÅrsakerTilHjemmel(vurdering?: StansOpphørVurdering) {

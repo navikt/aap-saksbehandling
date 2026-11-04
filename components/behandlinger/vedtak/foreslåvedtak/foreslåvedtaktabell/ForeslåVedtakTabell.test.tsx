@@ -80,6 +80,7 @@ const tidligere = [{ fom: '2024-06-12', tom: '2025-03-12' }];
 const stansVurdering = (overstyr: Partial<StansOpphørVurdering> = {}): StansOpphørVurdering => ({
   behandlingReferanse: '2a1d2f0e-1b0c-4a52-a7f0-8d1b6e7c1c11',
   erNy: true,
+  hjemler: ['§ 11-7'],
   type: 'STANS',
   årsaker: ['BRUDD_PÅ_AKTIVITETSPLIKT_STANS'],
   ...overstyr,
@@ -132,7 +133,9 @@ describe('Stans og opphør', () => {
       stansOpphør: [
         {
           stansOpphørFraOgMed: '2025-05-13',
-          historikk: [stansVurdering({ type: 'OPPHØR', årsaker: ['BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'] })],
+          historikk: [
+            stansVurdering({ type: 'OPPHØR', hjemler: ['§ 11-3'], årsaker: ['BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'] }),
+          ],
         },
       ],
     });
