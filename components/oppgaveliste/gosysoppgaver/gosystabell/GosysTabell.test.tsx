@@ -65,7 +65,7 @@ describe('GosysTabell', () => {
     );
 
     const rows = screen.getAllByRole('row').slice(1);
-    expect(within(rows[0]).getByRole('cell', { name: 'JFR' })).toBeVisible();
+    expect(within(rows[0]).getByRole('cell', { name: 'Journalføring' })).toBeVisible();
     expect(within(rows[0]).getByRole('cell', { name: '10.03.2026' })).toBeVisible();
     expect(within(rows[0]).getByRole('cell', { name: '02.11.2026' })).toBeVisible();
     expect(within(rows[0]).getByRole('cell', { name: 'Z000001' })).toBeVisible();
