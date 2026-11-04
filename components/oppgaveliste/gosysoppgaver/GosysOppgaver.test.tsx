@@ -62,7 +62,7 @@ describe('GosysOppgaver', () => {
 
     await user.selectOptions(screen.getByRole('combobox', { name: 'Gjelder' }), valg);
 
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', behandlingstype, behandlingstema);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', behandlingstype, behandlingstema, undefined);
   });
 
   it('fjerner behandlingstema når brukeren bytter tilbake til en vanlig behandlingstype', async () => {
@@ -71,10 +71,28 @@ describe('GosysOppgaver', () => {
     const select = screen.getByRole('combobox', { name: 'Gjelder' });
 
     await user.selectOptions(select, 'ab0269');
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', 'ab0269');
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', 'ab0269', undefined);
 
     await user.selectOptions(select, 'ae0294');
-    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0294', undefined);
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0294', undefined, undefined);
+  });
+
+  it('sender valgte oppgavetyper til hooken og fjerner filteret når alle valg tømmes', async () => {
+    const user = userEvent.setup();
+    render(<GosysOppgaver enheter={enheter} />);
+
+    await user.click(screen.getByRole('combobox', { name: /Oppgavetyper/ }));
+    await user.click(screen.getByRole('option', { name: 'Journalføring' }));
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, ['JFR']);
+
+    await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, ['JFR', 'RETUR']);
+
+    await user.click(screen.getByRole('option', { name: 'Journalføring' }));
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, ['RETUR']);
+
+    await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
+    expect(useGosysOppgaver).toHaveBeenLastCalledWith('0300', 'ae0292', undefined, []);
   });
 
   it('viser kun ledige oppgaver som standard og alle oppgaver når bryteren slås av', async () => {

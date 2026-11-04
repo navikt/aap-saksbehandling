@@ -131,6 +131,14 @@ function mapOppgaveTypeTilTekst(oppgavetype: string): string {
       return 'Vurder henvendelse';
     case 'BEH_SED':
       return 'Behandle SED';
+    case 'RETUR':
+      return 'Behandle returpost';
+    case 'SVAR_IK_MOT':
+      return 'Svar ikke mottatt';
+    case 'VURD_NOTAT':
+      return 'Vurder notat';
+    case 'VUR_SVAR':
+      return 'Vurder svar';
     default:
       return oppgavetype;
   }
