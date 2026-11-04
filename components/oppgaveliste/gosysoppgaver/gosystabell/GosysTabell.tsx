@@ -8,6 +8,7 @@ import { GosysOppgave } from 'lib/types/gosysTypes';
 import { useState } from 'react';
 import styles from './GosysTabell.module.css';
 import { OppgaveBeskrivelse } from 'components/oppgaveliste/gosysoppgaver/oppgavebeskrivelse/OppgaveBeskrivelse';
+import { mapOppgaveTypeTilTekst } from 'lib/utils/gosys';
 
 type Sorteringsfelt = 'opprettetTidspunkt' | 'fristFerdigstillelse';
 
@@ -116,16 +117,3 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
     </Box>
   );
 };
-
-function mapOppgaveTypeTilTekst(oppgavetype: string): string {
-  switch (oppgavetype) {
-    case 'KONT_BRUK':
-      return 'Kontakt bruker';
-    case 'VUR_KONS_YTE':
-      return 'Vurder ytterligere konsekvens';
-    case 'INNH_DOK':
-      return 'Innhent dokumentasjon';
-    default:
-      return oppgavetype;
-  }
-}
