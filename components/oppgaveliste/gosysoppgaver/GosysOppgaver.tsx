@@ -18,8 +18,32 @@ interface Props {
 interface FormFields {
   enhet: string;
   gjelder: GjelderTyper;
+  oppgaveTyper: string[];
   visKunTildelteOppgaver: boolean;
 }
+
+type Oppgavetyper =
+  'RETUR' | 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VURD_NOTAT' | 'VUR_SVAR';
+
+const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [
+  {
+    value: 'RETUR',
+    label: 'Behandle returpost',
+  },
+  {
+    value: 'JFR',
+    label: 'Journalføring',
+  },
+  {
+    value: 'KONT_BRUK',
+    label: 'Kontakt bruker',
+  },
+  { value: 'SVAR_IK_MOT', label: 'Svar ikke mottatt' },
+  { value: 'VURD_HENV', label: 'Vurder henvendelse' },
+  { value: 'VUR_KONS_YTE', label: 'Vurder konsekvens for ytelse' },
+  { value: 'VURD_NOTAT', label: 'Vurder notat' },
+  { value: 'VUR_SVAR', label: 'Vurder svar' },
+];
 
 // ae0292 og ae0294 er behandlingstyper, mens ab0269 og ab0570 er behandlingstema
 type GjelderTyper = 'ae0292' | 'ae0294' | 'ab0269' | 'ab0570';
@@ -51,6 +75,11 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
       label: 'Gjelder',
       defaultValue: 'ae0292',
       options: gjelderOptions,
+    },
+    oppgaveTyper: {
+      type: 'combobox_multiple',
+      label: 'Oppgavetyper',
+      options: oppgaveTypeOptions,
     },
     visKunTildelteOppgaver: {
       type: 'switch',
@@ -84,6 +113,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
           >
             <FormField form={form} formField={formFields.enhet} />
             <FormField form={form} formField={formFields.gjelder} />
+            <FormField form={form} formField={formFields.oppgaveTyper} />
             <FormField form={form} formField={formFields.visKunTildelteOppgaver} />
           </HStack>
           <HStack justify={'space-between'} paddingInline={'space-16'} paddingBlock={'space-8'}>
