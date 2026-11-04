@@ -34,7 +34,6 @@ interface Props {
   behandlingVersjon: number;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
-  visAarsakDropdowns: boolean;
 }
 
 // Kun nedsatt arbeidsevne (ikke ytterligere nedsatt, jf. § 11-28)
@@ -84,13 +83,7 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const FastsettBeregning = ({
-  grunnlag,
-  behandlingVersjon,
-  readOnly,
-  initialMellomlagretVurdering,
-  visAarsakDropdowns,
-}: Props) => {
+export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initialMellomlagretVurdering }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { sak } = useSak();
 
@@ -144,7 +137,7 @@ export const FastsettBeregning = ({
         label: 'Årsak til beregningstidspunkt',
         options: årsakTilBeregningstidspunktOptions,
         defaultValue: defaultValues.årsak,
-        rules: visAarsakDropdowns ? { required: 'Du må velge årsak til beregningstidspunkt.' } : {},
+        rules: { required: 'Du må velge årsak til beregningstidspunkt.' },
       },
       ytterligereNedsattArbeidsevneDatobegrunnelse: {
         type: 'textarea',
@@ -174,7 +167,7 @@ export const FastsettBeregning = ({
         label: 'Årsak til ytterligere nedsatt tidspunkt.',
         options: ÅRSAK_TIL_YTTERLIGERE_NEDSATT_OPTIONS,
         defaultValue: defaultValues.ytterligereNedsattÅrsak,
-        rules: visAarsakDropdowns ? { required: 'Du må velge årsak til ytterligere nedsatt tidspunkt.' } : {},
+        rules: { required: 'Du må velge årsak til ytterligere nedsatt tidspunkt.' },
       },
     },
     { readOnly: formReadOnly }
@@ -204,8 +197,7 @@ export const FastsettBeregning = ({
               ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
               årsak: (data.årsak || undefined) as ÅrsakBeregningstidspunkt | undefined,
               ytterligereNedsattÅrsak: (data.ytterligereNedsattÅrsak || undefined) as
-                | ÅrsakYtterligereNedsatt
-                | undefined,
+                ÅrsakYtterligereNedsatt | undefined,
             },
           },
           referanse: behandlingsreferanse,
@@ -261,7 +253,7 @@ export const FastsettBeregning = ({
       {!!historiskeVurderinger?.length && (
         <TidligereVurderinger
           data={historiskeVurderinger}
-          buildFelter={(vurdering) => byggFelter(vurdering, visAarsakDropdowns)}
+          buildFelter={(vurdering) => byggFelter(vurdering)}
           getErGjeldende={(v) => deepEqual(v, historiskeVurderinger.at(0))}
           getVurdertAvIdent={(v) => v.vurderingerMeta.vurdertAv?.ident ?? ''}
           getVurdertDato={(v) => v.vurderingerMeta.vurdertAv?.dato ?? ''}
@@ -286,17 +278,17 @@ export const FastsettBeregning = ({
           Du har satt beregningsdato etter søknadsdato. Hvis det er korrekt kan du bekrefte vilkåret.
         </Alert>
       )}
-      {visAarsakDropdowns && (
-        <div style={{ maxWidth: '90ch' }}>
-          <FormField form={form} formField={formFields.årsak} />
-        </div>
-      )}
+
+      <div style={{ maxWidth: '90ch' }}>
+        <FormField form={form} formField={formFields.årsak} />
+      </div>
+
       {grunnlag?.skalVurdereYtterligere && (
         <div className={styles.ytterligerenedsattfelter}>
           <Heading size={'small'}>Tidspunktet da arbeidsevnen ble ytterligere nedsatt § 11-28</Heading>
           <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDatobegrunnelse} />
           <FormField form={form} formField={formFields.ytterligereNedsattArbeidsevneDato} />
-          {visAarsakDropdowns && <FormField form={form} formField={formFields.ytterligereNedsattÅrsak} />}
+          <FormField form={form} formField={formFields.ytterligereNedsattÅrsak} />
         </div>
       )}
       {erBeregningsTidspunktEtterVirkningsTidspunkt && (
@@ -337,7 +329,7 @@ function emptyDraftFormFields(): DraftFormFields {
 const finnÅrsakLabel = (options: ValuePair[], value: string | null | undefined): string =>
   options.find((option) => option.value === value)?.label || '-';
 
-const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: boolean): ValuePair[] => [
+const byggFelter = (vurdering: BeregningstidspunktVurderingResponse): ValuePair[] => [
   {
     label: 'Vilkårsvurdering',
     value: vurdering.begrunnelse,
@@ -346,14 +338,10 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
     label: 'Datoen da arbeidsevnen ble nedsatt',
     value: vurdering.nedsattArbeidsevneDato ? formaterDatoForFrontend(vurdering.nedsattArbeidsevneDato) : '-',
   },
-  ...(visAarsak
-    ? [
-        {
-          label: 'Årsak til beregningstidspunkt.',
-          value: finnÅrsakLabel(ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS, vurdering.årsak),
-        },
-      ]
-    : []),
+  {
+    label: 'Årsak til beregningstidspunkt.',
+    value: finnÅrsakLabel(ÅRSAK_TIL_BEREGNINGSTIDSPUNKT_SOLO_OPTIONS, vurdering.årsak),
+  },
   {
     label: 'Vurder når brukeren fikk ytterligere nedsatt arbeidsevne',
     value: vurdering.ytterligereNedsattBegrunnelse || '-',
@@ -364,12 +352,8 @@ const byggFelter = (vurdering: BeregningstidspunktVurderingResponse, visAarsak: 
       ? formaterDatoForFrontend(vurdering.ytterligereNedsattArbeidsevneDato)
       : '-',
   },
-  ...(visAarsak
-    ? [
-        {
-          label: 'Årsak til ytterligere nedsatt tidspunkt.',
-          value: finnÅrsakLabel(ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS, vurdering.ytterligereNedsattÅrsak),
-        },
-      ]
-    : []),
+  {
+    label: 'Årsak til ytterligere nedsatt tidspunkt.',
+    value: finnÅrsakLabel(ALLE_ÅRSAK_TIL_YTTERLIGERE_NEDSATT_LABELS, vurdering.ytterligereNedsattÅrsak),
+  },
 ];
