@@ -19,7 +19,7 @@ interface FormFields {
   enhet: string;
   gjelder: GjelderTyper;
   oppgaveTyper: string[];
-  visKunTildelteOppgaver: boolean;
+  visLedigeOppgaver: boolean;
 }
 
 type Oppgavetyper =
@@ -81,10 +81,10 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
       label: 'Oppgavetyper',
       options: oppgaveTypeOptions,
     },
-    visKunTildelteOppgaver: {
+    visLedigeOppgaver: {
       type: 'switch',
-      defaultValue: false,
-      label: 'Vis kun tildelte oppgaver',
+      defaultValue: true,
+      label: 'Vis kun ledige oppgaver',
     },
   });
 
@@ -95,10 +95,8 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
     useGosysOppgaver(form.watch('enhet'), behandlingstype, behandlingstema);
 
-  const visBareOppgaverSomErTildelt = form.watch('visKunTildelteOppgaver');
-  const oppgaverSomSkalVises = visBareOppgaverSomErTildelt
-    ? oppgaver.filter((oppgave) => oppgave.tilordnetRessurs)
-    : oppgaver;
+  const visLedigeOppgaver = form.watch('visLedigeOppgaver');
+  const oppgaverSomSkalVises = visLedigeOppgaver ? oppgaver.filter((oppgave) => !oppgave.tilordnetRessurs) : oppgaver;
 
   return (
     <VStack gap="space-16">
@@ -114,7 +112,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
             <FormField form={form} formField={formFields.enhet} />
             <FormField form={form} formField={formFields.gjelder} />
             <FormField form={form} formField={formFields.oppgaveTyper} />
-            <FormField form={form} formField={formFields.visKunTildelteOppgaver} />
+            <FormField form={form} formField={formFields.visLedigeOppgaver} />
           </HStack>
           <HStack justify={'space-between'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <HStack gap={'space-8'}>
@@ -124,8 +122,8 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
               <BodyShort size={'small'}>{lagBeskrivelseAvKøen(gjelder)}</BodyShort>
             </HStack>
             <BodyShort size={'small'}>
-              {visBareOppgaverSomErTildelt
-                ? `Antall oppgaver: ${oppgaverSomSkalVises.length}`
+              {visLedigeOppgaver
+                ? `Viser ${oppgaverSomSkalVises.length} av  ${oppgaver.length} oppgaver`
                 : `Viser ${oppgaverSomSkalVises.length} av ${antallTreff} oppgaver`}
             </BodyShort>
           </HStack>
