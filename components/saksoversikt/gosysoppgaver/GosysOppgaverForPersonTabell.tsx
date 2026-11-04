@@ -6,7 +6,7 @@ import { OppgaveBeskrivelse } from 'components/oppgaveliste/gosysoppgaver/oppgav
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { GosysOppgave } from 'lib/types/gosysTypes';
 import { formaterDatoForFrontend, sorterEtterEldsteDato, sorterEtterNyesteDato } from 'lib/utils/date';
-import { mapGosysKategoriTilTekst, mapOppgaveTypeTilTekst } from 'lib/utils/gosys';
+import { mapOppgaveTypeTilTekst } from 'lib/utils/gosys';
 import { useState } from 'react';
 import styles from './GosysOppgaverForPersonTabell.module.css';
 
@@ -95,8 +95,8 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
                   {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
                 </Table.DataCell>
                 <Table.DataCell textSize="small">{mapOppgaveTypeTilTekst(oppgave.oppgavetype)}</Table.DataCell>
-                <Table.DataCell textSize="small">{mapGosysKategoriTilTekst(oppgave.behandlingstema)}</Table.DataCell>
-                <Table.DataCell textSize="small">{mapGosysKategoriTilTekst(oppgave.behandlingstype)}</Table.DataCell>
+                <Table.DataCell textSize="small">{oppgave.behandlingstema}</Table.DataCell>
+                <Table.DataCell textSize="small">{oppgave.behandlingstype}</Table.DataCell>
                 <Table.DataCell textSize="small" className={styles.beskrivelseCelle}>
                   {oppgave.beskrivelse && <OppgaveBeskrivelse beskrivelse={oppgave.beskrivelse} />}
                 </Table.DataCell>
