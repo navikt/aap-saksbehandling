@@ -18,8 +18,32 @@ interface Props {
 interface FormFields {
   enhet: string;
   gjelder: GjelderTyper;
-  visKunTildelteOppgaver: boolean;
+  oppgaveTyper: Oppgavetyper[];
+  visLedigeOppgaver: boolean;
 }
+
+export type Oppgavetyper =
+  'RETUR' | 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VURD_NOTAT' | 'VUR_SVAR';
+
+const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [
+  {
+    value: 'RETUR',
+    label: 'Behandle returpost',
+  },
+  {
+    value: 'JFR',
+    label: 'Journalføring',
+  },
+  {
+    value: 'KONT_BRUK',
+    label: 'Kontakt bruker',
+  },
+  { value: 'SVAR_IK_MOT', label: 'Svar ikke mottatt' },
+  { value: 'VURD_HENV', label: 'Vurder henvendelse' },
+  { value: 'VUR_KONS_YTE', label: 'Vurder konsekvens for ytelse' },
+  { value: 'VURD_NOTAT', label: 'Vurder notat' },
+  { value: 'VUR_SVAR', label: 'Vurder svar' },
+];
 
 // ae0292 og ae0294 er behandlingstyper, mens ab0269 og ab0570 er behandlingstema
 type GjelderTyper = 'ae0292' | 'ae0294' | 'ab0269' | 'ab0570';
@@ -52,10 +76,15 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
       defaultValue: 'ae0292',
       options: gjelderOptions,
     },
-    visKunTildelteOppgaver: {
+    oppgaveTyper: {
+      type: 'combobox_multiple',
+      label: 'Oppgavetyper',
+      options: oppgaveTypeOptions,
+    },
+    visLedigeOppgaver: {
       type: 'switch',
-      defaultValue: false,
-      label: 'Vis kun tildelte oppgaver',
+      defaultValue: true,
+      label: 'Vis kun ledige oppgaver',
     },
   });
 
@@ -63,13 +92,14 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   const behandlingstema = gjelder === 'ab0269' || gjelder === 'ab0570' ? gjelder : undefined;
   const behandlingstype = behandlingstema ? 'ae0292' : gjelder;
 
-  const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
-    useGosysOppgaver(form.watch('enhet'), behandlingstype, behandlingstema);
+  const enhet = form.watch('enhet');
+  const oppgaveTyper = form.watch('oppgaveTyper');
 
-  const visBareOppgaverSomErTildelt = form.watch('visKunTildelteOppgaver');
-  const oppgaverSomSkalVises = visBareOppgaverSomErTildelt
-    ? oppgaver.filter((oppgave) => oppgave.tilordnetRessurs)
-    : oppgaver;
+  const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
+    useGosysOppgaver(enhet, behandlingstype, behandlingstema, oppgaveTyper);
+
+  const visLedigeOppgaver = form.watch('visLedigeOppgaver');
+  const oppgaverSomSkalVises = visLedigeOppgaver ? oppgaver.filter((oppgave) => !oppgave.tilordnetRessurs) : oppgaver;
 
   return (
     <VStack gap="space-16">
@@ -84,7 +114,8 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
           >
             <FormField form={form} formField={formFields.enhet} />
             <FormField form={form} formField={formFields.gjelder} />
-            <FormField form={form} formField={formFields.visKunTildelteOppgaver} />
+            <FormField form={form} formField={formFields.oppgaveTyper} />
+            <FormField form={form} formField={formFields.visLedigeOppgaver} />
           </HStack>
           <HStack justify={'space-between'} paddingInline={'space-16'} paddingBlock={'space-8'}>
             <HStack gap={'space-8'}>
@@ -94,8 +125,8 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
               <BodyShort size={'small'}>{lagBeskrivelseAvKøen(gjelder)}</BodyShort>
             </HStack>
             <BodyShort size={'small'}>
-              {visBareOppgaverSomErTildelt
-                ? `Antall oppgaver: ${oppgaverSomSkalVises.length}`
+              {visLedigeOppgaver
+                ? `Viser ${oppgaverSomSkalVises.length} av  ${oppgaver.length} oppgaver`
                 : `Viser ${oppgaverSomSkalVises.length} av ${antallTreff} oppgaver`}
             </BodyShort>
           </HStack>

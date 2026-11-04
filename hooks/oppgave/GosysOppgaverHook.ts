@@ -2,6 +2,7 @@ import useSWRInfinite from 'swr/infinite';
 import { clientHentGosysOppgaver } from 'lib/clientApi';
 import { FinnGosysOppgaverResponse } from 'lib/types/gosysTypes';
 import { isError } from 'lib/utils/api';
+import { Oppgavetyper } from 'components/oppgaveliste/gosysoppgaver/GosysOppgaver';
 
 const OPPGAVER_PER_SIDE = 50;
 
@@ -9,6 +10,7 @@ export function useGosysOppgaver(
   aktivEnhet?: string,
   behandlingstype?: string,
   behandlingstema?: string,
+  oppgaveTyper?: Oppgavetyper[],
   aktoerId?: string
 ) {
   const { data, isLoading, isValidating, error, size, setSize, mutate } = useSWRInfinite(
@@ -29,14 +31,16 @@ export function useGosysOppgaver(
         aktivEnhet,
         behandlingstype,
         behandlingstema,
+        oppgaveTyper,
         aktoerId,
       ] as const;
     },
-    async ([, offset, enhet, valgtBehandlingstype, valgtBehandlingstema, valgtAktoerId]) => {
+    async ([, offset, enhet, valgtBehandlingstype, valgtBehandlingstema, valgteOppgaveTyper, valgtAktoerId]) => {
       const response = await clientHentGosysOppgaver({
         tema: ['AAP'],
         ...(valgtBehandlingstype !== undefined && { behandlingstype: valgtBehandlingstype }),
         ...(valgtBehandlingstema !== undefined && { behandlingstema: valgtBehandlingstema }),
+        ...(valgteOppgaveTyper?.length && { oppgavetype: valgteOppgaveTyper }),
         statuskategori: 'AAPEN',
         ...(enhet !== undefined && { tildeltEnhetsnr: enhet }),
         ...(valgtAktoerId && { aktoerId: [valgtAktoerId] }),
