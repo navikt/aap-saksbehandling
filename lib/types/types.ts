@@ -459,8 +459,7 @@ export type ErStudentStatus =
 export type SkalGjenopptaStudieStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
-export type IdentifisertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'];
+export type IdentifisertBarn = BarnetilleggGrunnlag['folkeregisterbarn'][number];
 
 export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 
