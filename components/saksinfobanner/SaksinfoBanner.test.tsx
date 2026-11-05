@@ -238,6 +238,19 @@ describe('SaksinfoBanner på behandling siden', () => {
     );
     expect(screen.getByText('Migrert fra Arena')).toBeVisible();
   });
+
+  it('skal ikke vise Arena-tag når behandlingen er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: true }}
+      />
+    );
+    expect(screen.getByText('Migrert fra Arena')).toBeVisible();
+    expect(screen.queryByText('Arenahistorikk')).not.toBeInTheDocument();
+  });
 });
 
 describe('Sak status', () => {

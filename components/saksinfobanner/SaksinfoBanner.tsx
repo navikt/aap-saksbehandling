@@ -160,7 +160,7 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
-          {behandlingEgenskaper?.harArenaHistorikk && (
+          {behandlingEgenskaper?.harArenaHistorikk && !behandlingEgenskaper?.erMigrertFraArena && (
             <div className={styles.oppgavestatus}>
               <ArenaStatus />
             </div>
