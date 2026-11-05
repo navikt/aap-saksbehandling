@@ -5,12 +5,13 @@ import {
 } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { format, subWeeks } from 'date-fns';
 import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
-import { beforeEach, describe, expect, it, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, test, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import * as clientApi from 'lib/clientApi';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -118,6 +119,52 @@ describe('Samordning gradering', () => {
     await user.type(gradering, '60');
 
     expect(gradering).toHaveValue('60');
+  });
+
+  describe('validering og innsending av samordningsgrad', () => {
+    beforeEach(() => {
+      vi.spyOn(clientApi, 'clientLøsBehov').mockResolvedValue({
+        type: 'ERROR',
+        status: 400,
+        apiException: { message: 'Testrespons' },
+      });
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    test('avviser desimaler uten å sende vurderingen', async () => {
+      render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+
+      const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
+      await user.clear(gradering);
+      await user.type(gradering, '36.32');
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+      expect(await screen.findByText('Samordningsgrad må være et heltall')).toBeVisible();
+      expect(gradering).toHaveValue('36.32');
+      expect(clientApi.clientLøsBehov).not.toHaveBeenCalled();
+    });
+
+    test.each([0, 36, 100])('sender samordningsgrad %i som et tall', async (grad) => {
+      render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+
+      const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
+      await user.clear(gradering);
+      await user.type(gradering, String(grad));
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+      expect(clientApi.clientLøsBehov).toHaveBeenCalledWith(
+        expect.objectContaining({
+          behov: expect.objectContaining({
+            vurderingerForSamordning: expect.objectContaining({
+              vurderteSamordningerData: [expect.objectContaining({ gradering: grad })],
+            }),
+          }),
+        })
+      );
+    });
   });
 
   test('ferie i sykepengeperiode kan ikke velges i den vanlige ytelsestype-velgeren', () => {
