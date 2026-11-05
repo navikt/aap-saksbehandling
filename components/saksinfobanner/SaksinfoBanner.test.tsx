@@ -208,11 +208,35 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         oppgaveVisningsinfo={oppgaveVisningsinfo}
-        arenaStatus={{ harArenaHistorikk: true }}
+        behandlingEgenskaper={{ harArenaHistorikk: true, erMigrertFraArena: false }}
       />
     );
     const returTag = screen.queryByText('Arenahistorikk');
     expect(returTag).toBeInTheDocument();
+  });
+
+  it('skal ikke vise migrert-tag når behandlingen ikke er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false }}
+      />
+    );
+    expect(screen.queryByText('Migrert fra Arena')).not.toBeInTheDocument();
+  });
+
+  it('skal vise migrert-tag når behandlingen er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: false }}
+      />
+    );
+    expect(screen.getByText('Migrert fra Arena')).toBeVisible();
   });
 });
 
