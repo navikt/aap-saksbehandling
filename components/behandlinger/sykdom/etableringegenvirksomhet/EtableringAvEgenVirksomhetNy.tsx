@@ -86,12 +86,8 @@ export const EtableringAvEgenVirksomhetNy = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const {
-    løsPeriodisertAvklaringsbehov,
-    løsAvklaringsbehovIsLoading,
-    løsAvklaringsbehovStatus,
-    løsAvklaringsbehovError,
-  } = useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
 
   const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -150,7 +146,7 @@ export const EtableringAvEgenVirksomhetNy = ({
       if (!validering) {
         return;
       }
-      løsPeriodisertAvklaringsbehov(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -249,17 +245,16 @@ export const EtableringAvEgenVirksomhetNy = ({
             <EtableringEgenVirksomhetTidligereVurderingNy vurdering={vurdering} />
           </TidligereVurderingExpandableCard>
         ))}
-
-        <Box
-          background="default"
-          padding="space-0"
-          borderRadius="12"
-          borderWidth="1"
-          borderColor="neutral-subtle"
-          className={styles.oppholdGruppe}
-        >
-          {nyeVurderinger.length > 0 && (
-            <>
+        {nyeVurderinger.length > 0 && (
+          <>
+            <Box
+              background="default"
+              padding="space-0"
+              borderRadius="12"
+              borderWidth="1"
+              borderColor="neutral-subtle"
+              className={styles.oppholdGruppe}
+            >
               <Box background="neutral-soft" padding="space-12" className={styles.oppholdHeader}>
                 <HStack gap="space-16" align="center">
                   <Buildings3Icon title={'Etabler egen virksomhet'} fontSize="1.5rem" aria-hidden />
@@ -268,7 +263,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                     control={form.control}
                     type={'text'}
                     label={'Virksomheten det søkes for'}
-                    size={'medium'}
+                    size={'small'}
                     readOnly={formReadOnly}
                     rules={{ required: 'Du må skrive inn navnet på virksomheten' }}
                   />
@@ -302,9 +297,9 @@ export const EtableringAvEgenVirksomhetNy = ({
                   ))}
                 </VStack>
               </Box>
-            </>
-          )}
-        </Box>
+            </Box>
+          </>
+        )}
 
         {form.formState.errors.root && <Alert variant={'error'}>{form.formState.errors.root.message}</Alert>}
       </VStack>

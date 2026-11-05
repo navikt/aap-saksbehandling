@@ -9,7 +9,7 @@ import {
   AlderGrunnlag,
   ArbeidsevneGrunnlag,
   ArbeidsopptrappingGrunnlagResponse,
-  Arenastatus,
+  BehandlingEgenskaper,
   AutomatiskLovvalgOgMedlemskapVurdering,
   AvbrytAktivitetspliktbehandlingGrunnlag,
   AvbrytRevurderingGrunnlag,
@@ -168,9 +168,16 @@ export const hentSaksHistorikk = async (saksnummer: string) => {
   return await apiFetch<Array<BehandlingsHistorikk>>(url, saksbehandlingApiScope, 'GET');
 };
 
-export const hentArenaStatus = async (saksnummer: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/arena-status`;
-  return await apiFetch<Arenastatus>(url, saksbehandlingApiScope, 'GET');
+export const hentBehandlingEgenskaper = async (
+  behandlingsreferanse: string
+): Promise<BehandlingEgenskaper | undefined> => {
+  const url = `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/egenskaper`;
+  try {
+    const res = await apiFetch<BehandlingEgenskaper>(url, saksbehandlingApiScope, 'GET');
+    return isError(res) ? undefined : res.data;
+  } catch {
+    return undefined;
+  }
 };
 
 export const hentBehandlingPersoninfo = async (behandlingsreferanse: string) => {

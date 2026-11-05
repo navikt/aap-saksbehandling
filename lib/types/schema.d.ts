@@ -675,6 +675,44 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/behandling/{referanse}/egenskaper': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/behandling/{referanse}/forbered': {
     parameters: {
       query?: never;
@@ -2260,7 +2298,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto'];
+            'application/json': components['schemas']['no.nav.aap.barnetillegg.BarnetilleggDto'];
           };
         };
       };
@@ -4778,44 +4816,6 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto'][];
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/dokumentinnhenting/syfo/dialogmeldinger/{saksnummer}/v2': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          /** @description saksnummer */
-          saksnummer: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingerResponse'];
           };
         };
@@ -6732,6 +6732,90 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    'no.nav.aap.barnetillegg.BarnetilleggDto': {
+      barnSomTrengerVurdering: components['schemas']['no.nav.aap.barnetillegg.IdentifiserteBarnDto'][];
+      folkeregisterbarn: components['schemas']['no.nav.aap.barnetillegg.IdentifiserteBarnDto'][];
+      harTilgangTilÅSaksbehandle: boolean;
+      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.barnetillegg.IdentifiserteBarnDto'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      søknadstidspunkt: string;
+      vurderingerMeta?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+      vurderteBarn: components['schemas']['no.nav.aap.barnetillegg.ExtendedVurdertBarnDto'][];
+      vurderteFolkeregisterBarn: components['schemas']['no.nav.aap.barnetillegg.ExtendedVurdertBarnDto'][];
+      vurderteSaksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.barnetillegg.SlettbarVurdertBarnDto'][];
+    };
+    'no.nav.aap.barnetillegg.ExtendedVurdertBarnDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dødsdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fødselsdato?: string | null;
+      ident?: string | null;
+      navn?: string | null;
+      /** @enum {string|null} */
+      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+      vurderinger: components['schemas']['no.nav.aap.barnetillegg.VurderingAvForeldreAnsvarDto'][];
+    };
+    'no.nav.aap.barnetillegg.IdentifiserteBarnDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dodsDato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fodselsDato?: string | null;
+      forsorgerPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      ident?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
+      navn?: string | null;
+      /** @enum {string|null} */
+      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+    };
+    'no.nav.aap.barnetillegg.SlettbarVurdertBarnDto': {
+      erSlettbar: boolean;
+      vurdertBarn: components['schemas']['no.nav.aap.barnetillegg.ExtendedVurdertBarnDto'];
+    };
+    'no.nav.aap.barnetillegg.VurderingAvForeldreAnsvarDto': {
+      begrunnelse: string;
+      erFosterForelder?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fraDato: string;
+      harForeldreAnsvar: boolean;
+    };
+    'no.nav.aap.barnetillegg.VurderingerForBarnetillegg': {
+      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.barnetillegg.VurdertBarnDto'][];
+      vurderteBarn: components['schemas']['no.nav.aap.barnetillegg.VurdertBarnDto'][];
+    };
+    'no.nav.aap.barnetillegg.VurdertBarnDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      dødsdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fødselsdato?: string | null;
+      ident?: string | null;
+      navn?: string | null;
+      /** @enum {string|null} */
+      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
+      vurderinger: components['schemas']['no.nav.aap.barnetillegg.VurderingAvForeldreAnsvarDto'][];
+    };
     'no.nav.aap.behandlingsflyt.InntektPerÅrDto': {
       beløp: components['schemas']['no.nav.aap.komponenter.verdityper.Beløp'];
       /** Format: int32 */
@@ -7336,7 +7420,7 @@ export interface components {
        * @enum {string}
        */
       behovstype: '5009';
-      vurderingerForBarnetillegg: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingerForBarnetillegg'];
+      vurderingerForBarnetillegg: components['schemas']['no.nav.aap.barnetillegg.VurderingerForBarnetillegg'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarBistandsbehovLøsning': {
       /**
@@ -7563,6 +7647,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarYrkesskadeLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftTotalvurderingKlageLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftVurderingerOppfølgingLøsning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.EtableringEgenVirksomhetLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.FastsettBehandlendeEnhetLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.FastsettBeregningstidspunktLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.FastsettFullmektigLøsning']
@@ -7782,7 +7867,6 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarStudentLøsningV2']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarSykdomLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarVedtakslengdeLøsning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.EtableringEgenVirksomhetLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.PeriodisertAvklarSykepengerErstatningLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.PeriodisertFastsettArbeidsevneLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.PeriodisertFritakMeldepliktLøsning'];
@@ -8071,59 +8155,6 @@ export interface components {
       fom: string;
       månedsbeløp: components['schemas']['no.nav.aap.komponenter.verdityper.Beløp'];
       tom?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto': {
-      barnSomTrengerVurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
-      folkeregisterbarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
-      harTilgangTilÅSaksbehandle: boolean;
-      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'][];
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      søknadstidspunkt: string;
-      vurderingerMeta?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
-      vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
-      vurderteFolkeregisterBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'][];
-      vurderteSaksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.SlettbarVurdertBarnDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      dødsdato?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fødselsdato?: string | null;
-      ident?: string | null;
-      navn?: string | null;
-      /** @enum {string|null} */
-      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvarDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      dodsDato?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fodselsDato?: string | null;
-      forsorgerPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
-      ident?: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
-      navn?: string | null;
-      /** @enum {string|null} */
-      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
-    };
-    'no.nav.aap.behandlingsflyt.behandling.barnetillegg.SlettbarVurdertBarnDto': {
-      erSlettbar: boolean;
-      vurdertBarn: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.ExtendedVurdertBarnDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.BehandlerDto': {
       adresse?: string | null;
@@ -12387,37 +12418,6 @@ export interface components {
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.avslag11_27.flate.Avslag11_27VurderingerDto': {
       vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.avslag11_27.flate.Avslag11_27VurderingDto'][];
     };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvarDto': {
-      begrunnelse: string;
-      erFosterForelder?: boolean | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fraDato: string;
-      harForeldreAnsvar: boolean;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingerForBarnetillegg': {
-      saksbehandlerOppgitteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
-      vurderteBarn: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto'][];
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurdertBarnDto': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      dødsdato?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fødselsdato?: string | null;
-      ident?: string | null;
-      navn?: string | null;
-      /** @enum {string|null} */
-      oppgittForeldreRelasjon?: 'FORELDER' | 'FOSTERFORELDER' | null;
-      vurderinger: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barn.VurderingAvForeldreAnsvarDto'][];
-    };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnepensjon.BarnepensjonLøsningDto': {
       begrunnelse: string;
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.barnepensjon.BarnepensjonLøsningPeriodeDto'][];
@@ -12990,6 +12990,10 @@ export interface components {
         | 'ORDINÆRKVOTE_BRUKT_OPP'
       )[];
     };
+    /**
+     * @deprecated
+     * @description Bruk harArenaHistorikk fra GET /api/behandling/{referanse}/egenskaper
+     */
     'no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO': {
       harArenaHistorikk: boolean;
     };
@@ -13013,6 +13017,10 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
       relevans: 'IKKE_RELEVANT' | 'RELEVANT';
+    };
+    'no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO': {
+      erMigrertFraArena: boolean;
+      harArenaHistorikk: boolean;
     };
     'no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto': {
       /** @enum {string} */

@@ -5,8 +5,8 @@ import { OverstyrTildelingContextProvider } from 'context/saksbehandling/Oversty
 import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   auditlog,
-  hentArenaStatus,
   hentBehandling,
+  hentBehandlingEgenskaper,
   hentFlyt,
   hentKabalKlageresultat,
   hentKlageresultat,
@@ -46,14 +46,15 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat, arenaStatus] = await Promise.all([
-    hentOppgaveVisningsinfo(behandlingsreferanse),
-    hentFlyt(behandlingsreferanse),
-    hentSak(saksnummer),
-    hentKabalKlageresultat(behandlingsreferanse),
-    hentKlageresultat(behandlingsreferanse),
-    hentArenaStatus(saksnummer),
-  ]);
+  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat, behandlingEgenskaper] =
+    await Promise.all([
+      hentOppgaveVisningsinfo(behandlingsreferanse),
+      hentFlyt(behandlingsreferanse),
+      hentSak(saksnummer),
+      hentKabalKlageresultat(behandlingsreferanse),
+      hentKlageresultat(behandlingsreferanse),
+      hentBehandlingEgenskaper(behandlingsreferanse),
+    ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgaveVisningsinfo)) {
     return (
@@ -91,7 +92,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               oppgaveVisningsinfo={oppgaveVisningsinfo.data}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
-              arenaStatus={isError(arenaStatus) ? undefined : arenaStatus.data}
+              behandlingEgenskaper={behandlingEgenskaper}
             />
 
             <StegGruppeIndikatorAksel

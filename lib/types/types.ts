@@ -338,7 +338,7 @@ export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simul
 
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
-export type Arenastatus = components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
+export type BehandlingEgenskaper = components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO'];
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytGruppe'];
@@ -459,8 +459,7 @@ export type ErStudentStatus =
 export type SkalGjenopptaStudieStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
-export type IdentifisertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'];
+export type IdentifisertBarn = BarnetilleggGrunnlag['folkeregisterbarn'][number];
 
 export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 
