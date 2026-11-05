@@ -5,7 +5,6 @@ import {
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   AvklarPeriodisertStudentLøsning,
   BistandsbehovLøsning,
-  EtableringEgenVirksomhetLøsningDto,
   LøsPeriodisertBehovPåBehandling,
   OvergangArbeidLøsning,
   OvergangUforeLøsning,
@@ -53,11 +52,6 @@ interface FritakMeldeplikt {
   løsningerForPerioder: PeriodisertFritaksvurderingDto[];
 }
 
-interface EtableringEgenVirksomhet {
-  behovstype: Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE;
-  løsningerForPerioder: EtableringEgenVirksomhetLøsningDto[];
-}
-
 interface Sykepengeerstatning {
   behovstype: Behovstype.VURDER_SYKEPENGEERSTATNING_KODE;
   løsningerForPerioder: SykepengererstatningPeriodeLøsning[];
@@ -100,7 +94,6 @@ type Behov =
   | Bistandsbehov
   | FastsettArbeidsevne
   | FritakMeldeplikt
-  | EtableringEgenVirksomhet
   | Sykepengeerstatning
   | OvergangArbeid
   | Arbeidsopptrapping
