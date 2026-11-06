@@ -5,6 +5,7 @@ import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { isError, isSuccess } from 'lib/utils/api';
 import { hentAlleDialogmeldingerMedDokumentIdPåSak } from 'lib/clientApi';
 import { KommendeMeldingDto, MeldingMedDokumenterDto } from 'lib/types/types';
+import { useRef } from 'react';
 
 export function useMeldingerFraDialog(): {
   meldingerMedDokumentliste?: MeldingMedDokumenterDto[];
@@ -14,6 +15,7 @@ export function useMeldingerFraDialog(): {
   refetchDialogmeldingerClient: () => Promise<unknown>;
 } {
   const params = useParamsMedType();
+  const refreshIntervalRetries = useRef(0);
 
   if (!params.saksnummer) {
     throw new Error('fant ikke saksnummer');
@@ -22,7 +24,35 @@ export function useMeldingerFraDialog(): {
   const { data, mutate, isLoading } = useSWR(
     `api/dokumentinnhenting/syfo/dialogmeldinger/${params.saksnummer}`,
     () => hentAlleDialogmeldingerMedDokumentIdPåSak(params.saksnummer),
-    { revalidateOnFocus: true, shouldRetryOnError: true }
+    {
+      revalidateOnFocus: true,
+      shouldRetryOnError: true,
+      // Når vi sender en forespørsel til behandler kan det ta noe tid før vi får svar tilbake fra syfo.
+      // Vi legger derfor inn en refreshInterval som sjekker om vi har fått inn dokumentIdListe,
+      // sånn at vi får vist dokumentene i dialogvinduet.
+      refreshInterval: (response) => {
+        if (isSuccess(response)) {
+          if (response.data.meldinger.some(({ dokumentIdListe }) => dokumentIdListe.length === 0)) {
+            refreshIntervalRetries.current += 1;
+            console.log('Intervall nummer ' + refreshIntervalRetries.current);
+
+            // Avslutt polling etter 3 forsøk for å unngå uendelig polling hvis vi ikke får dokumentIdListe
+            if (refreshIntervalRetries.current > 3) {
+              return 0;
+            }
+
+            // Refresh hvert sekund hvis vi mangler dokumentIdListe
+            return 1000;
+          } else {
+            // Ingen refresh hvis vi har dokumentIdListe
+            return 0;
+          }
+        }
+
+        // Ingen refresh hvis vi har en error eller ingen response
+        return 0;
+      },
+    }
   );
 
   const response = isSuccess(data) ? data.data : undefined;
