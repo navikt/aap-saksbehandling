@@ -44,6 +44,8 @@ export function mapOppgaveTypeTilTekst(oppgavetype: string): string {
       return 'Vurder notat';
     case 'VUR_SVAR':
       return 'Vurder svar';
+    case 'BEH_HENV':
+      return 'Behandle henvendelse';
     default:
       return oppgavetype;
   }
