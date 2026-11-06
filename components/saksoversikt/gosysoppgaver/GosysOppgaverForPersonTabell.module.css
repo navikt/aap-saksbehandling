@@ -1,0 +1,8 @@
+.beskrivelseCelle {
+  min-width: 16rem;
+  width: 35%;
+}
+
+.gosysLenke {
+  white-space: nowrap;
+}
