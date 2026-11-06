@@ -34,7 +34,6 @@ export function useMeldingerFraDialog(): {
         if (isSuccess(response)) {
           if (response.data.meldinger.some(({ dokumentIdListe }) => dokumentIdListe.length === 0)) {
             refreshIntervalRetries.current += 1;
-            console.log('Intervall nummer ' + refreshIntervalRetries.current);
 
             // Avslutt polling etter 3 forsøk for å unngå uendelig polling hvis vi ikke får dokumentIdListe
             if (refreshIntervalRetries.current > 3) {
