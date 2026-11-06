@@ -34,21 +34,14 @@ export function useMeldingerFraDialog(): {
         if (isSuccess(response)) {
           if (response.data.meldinger.some(({ dokumentIdListe }) => dokumentIdListe.length === 0)) {
             refreshIntervalRetries.current += 1;
-
-            // Avslutt polling etter 3 forsøk for å unngå uendelig polling hvis vi ikke får dokumentIdListe
             if (refreshIntervalRetries.current > 3) {
               return 0;
             }
-
-            // Refresh hvert sekund hvis vi mangler dokumentIdListe
             return 1000;
           } else {
-            // Ingen refresh hvis vi har dokumentIdListe
             return 0;
           }
         }
-
-        // Ingen refresh hvis vi har en error eller ingen response
         return 0;
       },
     }
