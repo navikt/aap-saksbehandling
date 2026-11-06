@@ -29,7 +29,7 @@ export function useMeldingerFraDialog(): {
       shouldRetryOnError: true,
       // Når vi sender en forespørsel til behandler kan det ta noe tid før vi får svar tilbake fra syfo.
       // Vi legger derfor inn en refreshInterval som sjekker om vi har fått inn dokumentIdListe,
-      // sånn at vi får vist dokumentene i dialogvinduet.
+      // sånn at vi kan vise utgående journalført dokument i dialogvinduet.
       refreshInterval: (response) => {
         if (isSuccess(response)) {
           if (response.data.meldinger.some(({ dokumentIdListe }) => dokumentIdListe.length === 0)) {
