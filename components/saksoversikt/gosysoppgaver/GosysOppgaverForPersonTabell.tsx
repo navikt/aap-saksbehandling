@@ -6,7 +6,7 @@ import { OppgaveBeskrivelse } from 'components/oppgaveliste/gosysoppgaver/oppgav
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { GosysOppgave } from 'lib/types/gosysTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { GosysSortering, mapOppgaveTypeTilTekst, sorterGosysOppgaver } from 'lib/utils/gosys';
+import { GosysSortering, mapGjelderTilTekst, mapOppgaveTypeTilTekst, sorterGosysOppgaver } from 'lib/utils/gosys';
 import { useState } from 'react';
 import styles from './GosysOppgaverForPersonTabell.module.css';
 
@@ -56,6 +56,7 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Gjelder</Table.HeaderCell>
             <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
+            <Table.HeaderCell>Behandlingstema</Table.HeaderCell>
             <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
             <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
               Frist
@@ -77,8 +78,9 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
                   {oppgave.opprettetTidspunkt ? formaterDatoForFrontend(oppgave.opprettetTidspunkt) : ''}
                 </Table.DataCell>
                 <Table.DataCell textSize="small">{mapOppgaveTypeTilTekst(oppgave.oppgavetype)}</Table.DataCell>
-                <Table.DataCell textSize="small">{oppgave.behandlingstema}</Table.DataCell>
+                <Table.DataCell textSize="small">{mapGjelderTilTekst(oppgave)}</Table.DataCell>
                 <Table.DataCell textSize="small">{oppgave.behandlingstype}</Table.DataCell>
+                <Table.DataCell textSize="small">{oppgave.behandlingstema}</Table.DataCell>
                 <Table.DataCell textSize="small" className={styles.beskrivelseCelle}>
                   {oppgave.beskrivelse && <OppgaveBeskrivelse beskrivelse={oppgave.beskrivelse} />}
                 </Table.DataCell>
