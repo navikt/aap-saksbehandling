@@ -16,16 +16,21 @@ import {
 export function getDefaultValuesFromGrunnlag(
   grunnlag: EtableringEgenVirksomhetGrunnlagResponse
 ): EtableringAvEgenVirksomhetForm {
+  const virksomhetNavn =
+    grunnlag.nyeVurderinger.find((vurdering) => vurdering.virksomhetNavn)?.virksomhetNavn ||
+    grunnlag.sisteVedtatteVurderinger.find((vurdering) => vurdering.virksomhetNavn)?.virksomhetNavn ||
+    '';
+
   if (grunnlag.behøverVurderinger.length > 0) {
     return {
       ...hentPerioderSomTrengerVurdering(grunnlag, tomEtableringAvEgenVirksomhetVurdering),
-      virksomhetNavn: '',
+      virksomhetNavn,
     };
   }
 
   // Vi har allerede data lagret, vis enten de som er lagret i grunnlaget her eller tom liste
   return {
-    virksomhetNavn: grunnlag.nyeVurderinger.find((e) => e.virksomhetNavn)?.virksomhetNavn || '',
+    virksomhetNavn,
     vurderinger: grunnlag.nyeVurderinger.map((vurdering) => ({
       fraDato: new Dato(vurdering.fom).formaterForFrontend(),
       begrunnelse: vurdering.begrunnelse,
