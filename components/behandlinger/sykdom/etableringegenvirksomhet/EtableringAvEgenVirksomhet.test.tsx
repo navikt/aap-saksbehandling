@@ -7,14 +7,14 @@ import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils';
 import * as clientApi from 'lib/clientApi';
 
-const løsPeriodisertAvklaringsbehov = vi.fn();
+const løsAvklaringsbehov = vi.fn();
 
 vi.mock('hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov', () => ({
   useLøsAvklaringsbehov: () => ({
     løsAvklaringsbehovError: undefined,
     løsAvklaringsbehovStatus: undefined,
     løsAvklaringsbehovIsLoading: false,
-    løsPeriodisertAvklaringsbehov: løsPeriodisertAvklaringsbehov,
+    løsAvklaringsbehov,
   }),
 }));
 
@@ -48,7 +48,7 @@ const avslagFraBackend: EtableringEgenVirksomhetVurderingResponse = {
 describe('EtableringAvEgenVirksomhet', () => {
   beforeEach(() => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'ETABLERING_EGEN_VIRKSOMHET' });
-    løsPeriodisertAvklaringsbehov.mockReset();
+    løsAvklaringsbehov.mockReset();
   });
 
   it('viser backendens avslag for vedtatte vurderinger selv om de gamle grunnvilkårene er oppfylt', () => {
@@ -96,7 +96,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertAvklaringsbehov).toHaveBeenCalledWith(
+    expect(løsAvklaringsbehov).toHaveBeenCalledWith(
       expect.objectContaining({
         behov: expect.objectContaining({
           løsningerForPerioder: [
@@ -180,7 +180,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertAvklaringsbehov).toHaveBeenCalledWith(
+    expect(løsAvklaringsbehov).toHaveBeenCalledWith(
       expect.objectContaining({
         behov: expect.objectContaining({
           løsningerForPerioder: (slettFørste ? ['V1'] : ['V0', 'V1']).map((versjon) =>
@@ -217,6 +217,6 @@ describe('EtableringAvEgenVirksomhet', () => {
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
-    expect(løsPeriodisertAvklaringsbehov).toHaveBeenCalledOnce();
+    expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
   });
 });

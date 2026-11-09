@@ -5,7 +5,6 @@ import type { Journalposttype, Journalstatus } from './journalpost';
 export type LeggTilInstitusjonsoppholdRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-institusjonsopphold'>;
 export type LeggTilYrkesskadeRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-yrkesskade'>;
 export type LeggTilKravVurderingRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-kravvurdering'>;
-export type PurringLegeerklæringRequest = RequestOfPost<'/api/dokumentinnhenting/paaminnelse/send'>;
 export type OppdaterMottakereRequest = RequestOfPut<'/api/brev/{brevbestillingReferanse}/oppdater-mottakere'>;
 export type SøkPåSakRequest = RequestOfPost<'/api/sak/sok'>;
 export type FinnSakerForIdentRequest = RequestOfPost<'/api/sak/finn'>;
@@ -338,7 +337,7 @@ export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simul
 
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
-export type Arenastatus = components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
+export type BehandlingEgenskaper = components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO'];
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytGruppe'];
@@ -349,7 +348,8 @@ export type TypeBehandling =
 type GeneratedLøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
 export type BrevBehovstype =
-  '5050' | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
+  | '5050'
+  | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
 
 type BrevLøsning = {
   behovstype: BrevBehovstype;
@@ -454,13 +454,11 @@ export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['avslagsårsak'];
 
-export type ErStudentStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['erStudentStatus'];
+export type ErStudentStatus = components['schemas']['no.nav.aap.student.OppgittStudent']['erStudentStatus'];
 export type SkalGjenopptaStudieStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
+  components['schemas']['no.nav.aap.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
-export type IdentifisertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'];
+export type IdentifisertBarn = BarnetilleggGrunnlag['folkeregisterbarn'][number];
 
 export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 
@@ -555,11 +553,9 @@ export type tilhørighetVurdering =
 export type VisuellTidslinjeArbeidInntekt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge'];
 
-export type AvklarPeriodisertStudentLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
+export type AvklarPeriodisertStudentLøsning = components['schemas']['no.nav.aap.student.PeriodisertStudentDto'];
 
-export type StudentVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+export type StudentVurderingResponse = components['schemas']['no.nav.aap.student.StudentVurderingResponse'];
 
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];

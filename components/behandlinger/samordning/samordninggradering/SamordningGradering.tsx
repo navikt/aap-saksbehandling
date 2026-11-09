@@ -49,7 +49,7 @@ interface Props {
 export interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
   manuell?: boolean;
-  gradering?: number;
+  gradering?: number | string;
   periode: Periode;
 }
 
@@ -166,7 +166,7 @@ export const SamordningGradering = ({
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>
           vurdertSamordning.ytelseType != null &&
-          !isNullOrUndefined(vurdertSamordning.gradering) &&
+          vurdertSamordning.gradering != null &&
           vurdertSamordning.periode?.fom != null &&
           vurdertSamordning.periode?.tom != null
       );
@@ -189,7 +189,7 @@ export const SamordningGradering = ({
                   (vurdertSamordning) =>
                     ({
                       manuell: vurdertSamordning.manuell,
-                      gradering: vurdertSamordning.gradering!,
+                      gradering: Number(vurdertSamordning.gradering),
                       periode: {
                         fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
                         tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),

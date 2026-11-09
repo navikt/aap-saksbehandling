@@ -5,7 +5,6 @@ export const FLAGS = [
   'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
   'KravManuellVurdering',
-  'BeregningstidspunktAarsak',
   'VentStatusForTilbakekreving',
   'VisMigrereSakFraArenaKnapp',
   'Avslag11_27',
@@ -16,6 +15,7 @@ export const FLAGS = [
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
   'Helseinstitusjon1Manedsregel',
+  'VisGosysOppgaverIOppgavelisten',
   'VedtaksperiodeBeslutter',
 ] as const;
 
@@ -29,7 +29,6 @@ export const mockedFlags: Flags = {
   OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
   KravManuellVurdering: true,
-  BeregningstidspunktAarsak: true,
   VentStatusForTilbakekreving: true,
   VisMigrereSakFraArenaKnapp: true,
   Avslag11_27: true,
@@ -40,5 +39,6 @@ export const mockedFlags: Flags = {
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
   Helseinstitusjon1Manedsregel: true,
+  VisGosysOppgaverIOppgavelisten: true,
   VedtaksperiodeBeslutter: true,
 };

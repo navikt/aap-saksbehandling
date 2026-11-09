@@ -10,7 +10,7 @@ const Page = async () => {
     return <ApiException apiResponses={[enheter]} />;
   }
 
-  return <OppgaveListe enheter={enheter.data} />;
+  return <OppgaveListe enheter={enheter.data} gosysUrl={process.env.GOSYS_URL} />;
 };
 
 export default Page;

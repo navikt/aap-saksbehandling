@@ -24,6 +24,7 @@ import {
   mapFormTilDto,
 } from 'components/behandlinger/sykdom/vurdersykepengeerstatning/sykepengererstatning-utils';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
+import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -37,9 +38,16 @@ interface Props {
   grunnlag: SykepengeerstatningGrunnlag;
   readOnly: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  skalStegVurderes: boolean;
 }
 
-export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, initialMellomlagretVurdering }: Props) => {
+export const Sykepengeerstatning = ({
+  behandlingVersjon,
+  grunnlag,
+  readOnly,
+  initialMellomlagretVurdering,
+  skalStegVurderes,
+}: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const {
     løsPeriodisertAvklaringsbehov,
@@ -171,29 +179,41 @@ export const Sykepengeerstatning = ({ behandlingVersjon, grunnlag, readOnly, ini
         </TidligereVurderingExpandableCard>
       ))}
 
-      {vurderingerFields.map((vurdering, index) => {
-        const erOppfyltFelt = form.watch(`vurderinger.${index}.erOppfylt`);
+      {skalStegVurderes &&
+        vurderingerFields.map((vurdering, index) => {
+          const erOppfyltFelt = form.watch(`vurderinger.${index}.erOppfylt`);
 
-        return (
-          <NyVurderingExpandableCard
-            key={vurdering.id}
-            fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={erOppfyltFelt ? getErOppfyltEllerIkkeStatus(erOppfyltFelt === JaEllerNei.Ja) : undefined}
-            nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
-            isLast={index === vurderingerFields.length - 1}
-            accordionsSignal={accordionsSignal}
-            vurdering={vurdering}
-            finnesFeil={finnesFeilForVurdering(index, errorList)}
-            readonly={formReadOnly}
-            onSlettVurdering={() => remove(index)}
-            harTidligereVurderinger={tidligereVurderinger.length > 0}
-            index={index}
-            initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
-          >
-            <SykepengeerstatningFormInput form={form} readOnly={formReadOnly} index={index} />
-          </NyVurderingExpandableCard>
-        );
-      })}
+          return (
+            <NyVurderingExpandableCard
+              key={vurdering.id}
+              fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
+              vurderingStatus={erOppfyltFelt ? getErOppfyltEllerIkkeStatus(erOppfyltFelt === JaEllerNei.Ja) : undefined}
+              nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
+              isLast={index === vurderingerFields.length - 1}
+              accordionsSignal={accordionsSignal}
+              vurdering={vurdering}
+              finnesFeil={finnesFeilForVurdering(index, errorList)}
+              readonly={formReadOnly}
+              onSlettVurdering={() => remove(index)}
+              harTidligereVurderinger={tidligereVurderinger.length > 0}
+              index={index}
+              initiellEkspandert={skalVæreInitiellEkspandert(vurdering.erNyVurdering, erAktivUtenAvbryt)}
+            >
+              <SykepengeerstatningFormInput form={form} readOnly={formReadOnly} index={index} />
+            </NyVurderingExpandableCard>
+          );
+        })}
+      {grunnlag.ikkeRelevantePerioder.map((periode) => (
+        <IkkeVurderbarPeriode
+          key={periode.fom}
+          fom={parseISO(periode.fom)}
+          tom={periode.tom != null ? parseISO(periode.tom) : null}
+          alertMelding={
+            'Vilkåret kan ikke vurderes for denne perioden. For å kunne vurdere sykepengeerstatning etter § 11-13 må brukeren ikke ha rett til ordinær AAP etter §§ 11-5 og 11-6.'
+          }
+          foersteNyePeriodeFraDato={undefined}
+        />
+      ))}
     </VilkårskortPeriodisert>
   );
 };

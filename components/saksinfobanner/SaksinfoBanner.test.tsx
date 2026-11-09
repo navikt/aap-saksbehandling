@@ -208,11 +208,72 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         oppgaveVisningsinfo={oppgaveVisningsinfo}
-        arenaStatus={{ harArenaHistorikk: true }}
+        behandlingEgenskaper={{ harArenaHistorikk: true, erMigrertFraArena: false, erKantIKantMedArena: false }}
       />
     );
     const returTag = screen.queryByText('Arenahistorikk');
     expect(returTag).toBeInTheDocument();
+  });
+
+  it('skal ikke vise migrert-tag når behandlingen ikke er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.queryByText('Migrert fra Arena')).not.toBeInTheDocument();
+  });
+
+  it('skal vise migrert-tag når behandlingen er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.getByText('Migrert fra Arena')).toBeVisible();
+  });
+
+  it('skal ikke vise Arena-tag når behandlingen er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: true, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.getByText('Migrert fra Arena')).toBeVisible();
+    expect(screen.queryByText('Arenahistorikk')).not.toBeInTheDocument();
+  });
+
+  it('skal vise kant-i-kant-tag når behandlingen er kant i kant med Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: true }}
+      />
+    );
+    expect(screen.getByText('Kant i kant med Arena')).toBeVisible();
+  });
+
+  it('skal ikke vise kant-i-kant-tag når behandlingen ikke er kant i kant med Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.queryByText('Kant i kant med Arena')).not.toBeInTheDocument();
   });
 });
 

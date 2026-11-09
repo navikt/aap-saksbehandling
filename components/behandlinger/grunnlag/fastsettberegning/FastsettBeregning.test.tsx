@@ -85,7 +85,6 @@ describe('Generelt', () => {
       <FastsettBeregning
         readOnly={false}
         behandlingVersjon={0}
-        visAarsakDropdowns={true}
         grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
       />
     );
@@ -94,40 +93,19 @@ describe('Generelt', () => {
   });
 
   it('skal ha korrekt heading for vilkårskortet dersom det skal vurderes ytterligere nedsatt arbeidsevne', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const heading = screen.getByText('§ 11-19 Tidspunktet da arbeidsevnen ble nedsatt, jf. § 11-5 og § 11-28');
     expect(heading).toBeVisible();
   });
 
   it('skal ha en overskrift for ytterlige nedsatt arbeidsevne', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const heading = screen.getByText('Tidspunktet da arbeidsevnen ble ytterligere nedsatt § 11-28');
     expect(heading).toBeVisible();
   });
 
   it('skal vise alert dersom beregningstidspunkt er etter virkningstidspunkt', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const felt = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble nedsatt' });
 
     const imorgen = format(addDays(Date.now(), 1), 'dd.MM.yyyy');
@@ -140,14 +118,7 @@ describe('Generelt', () => {
   });
 
   it('skal ikke vise alert dersom beregningstidspunkt er før virkningstidspunkt', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const felt = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble nedsatt' });
 
     const igår = format(subDays(Date(), 1), 'dd.MM.yyyy');
@@ -162,14 +133,7 @@ describe('Generelt', () => {
   it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'FASTSETT_GRUNNLAG' });
 
-    render(
-      <FastsettBeregning
-        grunnlag={grunnlagMedTidligereVurdering}
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-      />
-    );
+    render(<FastsettBeregning grunnlag={grunnlagMedTidligereVurdering} readOnly={false} behandlingVersjon={0} />);
 
     const endreKnapp = screen.getByRole('button', { name: 'Endre' });
     await user.click(endreKnapp);
@@ -189,41 +153,20 @@ describe('Generelt', () => {
 
 describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
   it('skal være synlig', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const felt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
     expect(felt).toBeVisible();
   });
 
   it('skal vise feilmelding hvis saksbehandler prøver å bekrefte uten å ha skrevet', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     await velgBekreft();
     const feilmelding = screen.getByText('Du må skrive en begrunnelse for når brukeren fikk nedsatt arbeidsevne');
     expect(feilmelding).toBeVisible();
   });
 
   it('skal vise feilmelding hvis satt frem i tid', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
 
     const nedsattDato = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble nedsatt' });
 
@@ -238,27 +181,13 @@ describe('Felt for å skrive begrunnelse for nedsatt arbeidsevne', () => {
 
 describe('Felt for å sette dato for nedsatt arbeidsevne', () => {
   it('skal være synlig', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const felt = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble nedsatt' });
     expect(felt).toBeVisible();
   });
 
   it('skal vise feilmelding hvis ikke besvart', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     await velgBekreft();
     const feilmelding = screen.getAllByText('Du må sette en dato')[0];
     expect(feilmelding).toBeVisible();
@@ -267,27 +196,13 @@ describe('Felt for å sette dato for nedsatt arbeidsevne', () => {
 
 describe('Felt for å skrive begrunnelse for ytterligere nedsatt arbeidsevne', () => {
   it('skal være synlig dersom flagget for å vurdere ytterligere nedsatt arbeidsevne er satt til true', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const felt = screen.getByRole('textbox', { name: 'Vurder når brukeren fikk ytterligere nedsatt arbeidsevne' });
     expect(felt).toBeVisible();
   });
 
   it('skal vise feilmelding hvis ikke besvart', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     await velgBekreft();
     const feilmelding = screen.getByText(
       'Du må skrive en begrunnelse for når brukeren fikk ytterligere nedsatt arbeidsevne'
@@ -297,41 +212,20 @@ describe('Felt for å skrive begrunnelse for ytterligere nedsatt arbeidsevne', (
 });
 describe('Felt for å sette dato for ytterligere nedsatt arbeidsevne', () => {
   it('skal være synlig dersom flagget for å vurdere ytterligere nedsatt arbeidsevne er satt til true', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const felt = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble ytterligere nedsatt' });
     expect(felt).toBeVisible();
   });
 
   it('skal vise feilmelding hvis ikke besvart', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     await velgBekreft();
     const feilmelding = screen.getAllByText('Du må sette en dato')[0];
     expect(feilmelding).toBeVisible();
   });
 
   it('skal vise feilmelding dersom ytterligere nedsatt dato er før datoen arbeidsevnen ble nedsatt', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const nedsattDato = screen.getByRole('textbox', { name: 'Datoen da arbeidsevnen ble nedsatt' });
     await user.type(nedsattDato, '11.11.2011');
 
@@ -378,7 +272,6 @@ describe('mellomlagring', () => {
       <FastsettBeregning
         readOnly={false}
         behandlingVersjon={0}
-        visAarsakDropdowns={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -391,7 +284,6 @@ describe('mellomlagring', () => {
       <FastsettBeregning
         behandlingVersjon={0}
         readOnly={false}
-        visAarsakDropdowns={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -412,7 +304,6 @@ describe('mellomlagring', () => {
       <FastsettBeregning
         behandlingVersjon={0}
         readOnly={false}
-        visAarsakDropdowns={true}
         grunnlag={grunnlagMedVurdering}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
@@ -426,14 +317,7 @@ describe('mellomlagring', () => {
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {
-    render(
-      <FastsettBeregning
-        behandlingVersjon={0}
-        readOnly={false}
-        grunnlag={grunnlagMedVurdering}
-        visAarsakDropdowns={true}
-      />
-    );
+    render(<FastsettBeregning behandlingVersjon={0} readOnly={false} grunnlag={grunnlagMedVurdering} />);
 
     const begrunnelseFelt = screen.getByRole('textbox', {
       name: /vilkårsvurdering/i,
@@ -447,7 +331,6 @@ describe('mellomlagring', () => {
       <FastsettBeregning
         behandlingVersjon={0}
         readOnly={false}
-        visAarsakDropdowns={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
       />
     );
@@ -470,7 +353,6 @@ describe('mellomlagring', () => {
       <FastsettBeregning
         behandlingVersjon={0}
         readOnly={false}
-        visAarsakDropdowns={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={grunnlagMedVurdering}
       />
@@ -496,7 +378,6 @@ describe('mellomlagring', () => {
       <FastsettBeregning
         behandlingVersjon={0}
         readOnly={true}
-        visAarsakDropdowns={true}
         initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
         grunnlag={grunnlagMedVurdering}
       />
@@ -511,52 +392,14 @@ async function velgBekreft() {
   await user.click(bekreftKnapp);
 }
 
-describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
+describe('Årsak til beregningstidspunkt', () => {
   it('skal vise dropdown for årsak til beregningstidspunkt når visAarsakDropdowns er true', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     expect(screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' })).toBeVisible();
   });
 
-  it('skal ikke vise dropdown for årsak til beregningstidspunkt når visAarsakDropdowns er false', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={false}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
-    expect(screen.queryByRole('combobox', { name: 'Årsak til beregningstidspunkt' })).not.toBeInTheDocument();
-  });
-
-  it('skal vise dropdown for årsak til ytterligere nedsatt tidspunkt når toggle er på og det skal vurderes ytterligere', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
-    expect(screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).toBeVisible();
-  });
-
   it('skal tilby Sykemeldingsdato, Kravdato, Dato på legeerklæring, Henvist til behandling, Uføretidspunkt og Annet for årsak til ytterligere nedsatt tidspunkt', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const dropdown = screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' });
     const optionLabels = Array.from(dropdown.querySelectorAll('option')).map((option) => option.textContent);
     expect(optionLabels).toEqual([
@@ -570,26 +413,11 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
     ]);
   });
 
-  it('skal ikke vise dropdown for årsak til ytterligere nedsatt tidspunkt når toggle er av', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={false}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
-    expect(
-      screen.queryByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })
-    ).not.toBeInTheDocument();
-  });
-
   it('skal ikke vise dropdown for årsak til ytterligere nedsatt tidspunkt når det ikke skal vurderes ytterligere', () => {
     render(
       <FastsettBeregning
         readOnly={false}
         behandlingVersjon={0}
-        visAarsakDropdowns={true}
         grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
       />
     );
@@ -599,62 +427,32 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
   });
 
   it('skal vise feilmelding hvis årsak ikke er valgt og toggle er på', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     await velgBekreft();
     expect(screen.getByText('Du må velge årsak til beregningstidspunkt.')).toBeVisible();
   });
 
   it('skal vise feilmelding hvis årsak til ytterligere nedsatt ikke er valgt og toggle er på', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     await velgBekreft();
     expect(screen.getByText('Du må velge årsak til ytterligere nedsatt tidspunkt.')).toBeVisible();
   });
 
   it('skal forhåndsvelge årsak fra eksisterende vurdering', () => {
-    render(
-      <FastsettBeregning readOnly={false} behandlingVersjon={0} visAarsakDropdowns={true} grunnlag={grunnlagMedÅrsak} />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedÅrsak} />);
     expect(screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' })).toHaveValue('UFØRETIDSPUNKT');
     expect(screen.getByRole('combobox', { name: 'Årsak til ytterligere nedsatt tidspunkt.' })).toHaveValue('KRAVDATO');
   });
 
   it('skal la saksbehandler velge en årsak', async () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const dropdown = screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' });
     await user.selectOptions(dropdown, 'UFØRETIDSPUNKT');
     expect(dropdown).toHaveValue('UFØRETIDSPUNKT');
   });
 
   it('skal kun tilby Uføretidspunkt og Annet for beregningstidspunkt når det skal vurderes ytterligere nedsatt', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagUtenVurdering}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagUtenVurdering} />);
     const dropdown = screen.getByRole('combobox', { name: 'Årsak til beregningstidspunkt' });
     const optionLabels = Array.from(dropdown.querySelectorAll('option')).map((option) => option.textContent);
     expect(optionLabels).toEqual(['', 'Uføretidspunkt', 'Annet']);
@@ -665,7 +463,6 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
       <FastsettBeregning
         readOnly={false}
         behandlingVersjon={0}
-        visAarsakDropdowns={true}
         grunnlag={{ ...grunnlagUtenVurdering, skalVurdereYtterligere: false }}
       />
     );
@@ -684,28 +481,8 @@ describe('Årsak til beregningstidspunkt (bak feature toggle)', () => {
   });
 
   it('skal vise valgt årsak med lesbar tekst i tidligere vurderinger når toggle er på', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={true}
-        grunnlag={grunnlagMedHistorikk}
-      />
-    );
+    render(<FastsettBeregning readOnly={false} behandlingVersjon={0} grunnlag={grunnlagMedHistorikk} />);
     expect(screen.getByText('Kravdato', { selector: 'p' })).toBeInTheDocument();
     expect(screen.getByText('Uføretidspunkt', { selector: 'p' })).toBeInTheDocument();
-  });
-
-  it('skal ikke vise årsak i tidligere vurderinger når toggle er av', () => {
-    render(
-      <FastsettBeregning
-        readOnly={false}
-        behandlingVersjon={0}
-        visAarsakDropdowns={false}
-        grunnlag={grunnlagMedHistorikk}
-      />
-    );
-    expect(screen.queryByText('Årsak til beregningstidspunkt')).not.toBeInTheDocument();
-    expect(screen.queryByText('Kravdato')).not.toBeInTheDocument();
   });
 });
