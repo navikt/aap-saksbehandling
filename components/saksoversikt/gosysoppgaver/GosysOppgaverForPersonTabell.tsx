@@ -55,8 +55,6 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
             </Table.ColumnHeader>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Gjelder</Table.HeaderCell>
-            <Table.HeaderCell>Behandlingstype</Table.HeaderCell>
-            <Table.HeaderCell>Behandlingstema</Table.HeaderCell>
             <Table.HeaderCell>Beskrivelse</Table.HeaderCell>
             <Table.ColumnHeader sortKey="fristFerdigstillelse" sortable>
               Frist
@@ -79,8 +77,6 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
                 </Table.DataCell>
                 <Table.DataCell textSize="small">{mapOppgaveTypeTilTekst(oppgave.oppgavetype)}</Table.DataCell>
                 <Table.DataCell textSize="small">{mapGjelderTilTekst(oppgave)}</Table.DataCell>
-                <Table.DataCell textSize="small">{oppgave.behandlingstype}</Table.DataCell>
-                <Table.DataCell textSize="small">{oppgave.behandlingstema}</Table.DataCell>
                 <Table.DataCell textSize="small" className={styles.beskrivelseCelle}>
                   {oppgave.beskrivelse && <OppgaveBeskrivelse beskrivelse={oppgave.beskrivelse} />}
                 </Table.DataCell>

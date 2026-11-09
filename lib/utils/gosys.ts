@@ -51,140 +51,29 @@ export function mapOppgaveTypeTilTekst(oppgavetype: string): string {
   }
 }
 
-export function mapGjelderTilTekst({
-  behandlingstype,
-  behandlingstema,
-}: Pick<GosysOppgave, 'behandlingstype' | 'behandlingstema'>): string {
-  const behandlingstypeTerm =
-    gjelderVerdier.find((verdi) => verdi.behandlingstype === behandlingstype)?.behandlingstypeTerm ?? behandlingstype;
-  const behandlingstemaTerm =
-    gjelderVerdier.find((verdi) => verdi.behandlingstema === behandlingstema)?.behandlingstemaTerm ?? behandlingstema;
-
-  return [behandlingstypeTerm, behandlingstemaTerm].filter(Boolean).join(' - ');
+export function mapGjelderTilTekst({ behandlingstema }: Pick<GosysOppgave, 'behandlingstype' | 'behandlingstema'>) {
+  return gjelderVerdier.find((verdi) => verdi.kode === behandlingstema)?.term ?? behandlingstema;
 }
 
 /**
- * Hentet fra https://github.com/navikt/gosys-oppgavebehandling/blob/6c5932975cb3a9343a206c9651b52092055d5d44/src/__mocks__/kodeverk.ts#L2390
+ * Hentet fra "opprett ny" modal i gosys.
  */
 const gjelderVerdier = [
-  {
-    behandlingstype: 'ae0004',
-    behandlingstypeTerm: 'Behandle vedtak',
-  },
-  {
-    behandlingstema: 'ab0498',
-    behandlingstemaTerm: 'Ferdig avklart mot arbeid',
-  },
-  {
-    behandlingstema: 'ab0499',
-    behandlingstemaTerm: 'Arbeidsutprøving',
-  },
-  {
-    behandlingstema: 'ab0500',
-    behandlingstemaTerm: 'Etablering',
-  },
-  {
-    behandlingstema: 'ab0501',
-    behandlingstemaTerm: 'Lærling',
-  },
-  {
-    behandlingstema: 'ab0502',
-    behandlingstemaTerm: 'Institusjonsopphold',
-  },
-  {
-    behandlingstema: 'ab0504',
-    behandlingstemaTerm: 'Refusjonskrav',
-  },
-  {
-    behandlingstema: 'ab0465',
-    behandlingstemaTerm: 'Etterbetaling ung ufør',
-  },
-  {
-    behandlingstype: 'ae0266',
-    behandlingstypeTerm: 'Samhandling AAP-SP-DP',
-  },
-  {
-    behandlingstype: 'ae0007',
-    behandlingstypeTerm: 'Utbetaling',
-  },
-  {
-    behandlingstype: 'ae0046',
-    behandlingstypeTerm: 'Anke',
-  },
-  {
-    behandlingstype: 'ae0047',
-    behandlingstypeTerm: 'Gjenopptak',
-  },
-  {
-    behandlingstype: 'ae0058',
-    behandlingstypeTerm: 'Klage',
-  },
-  {
-    behandlingstype: 'ae0106',
-    behandlingstypeTerm: 'Utland',
-  },
-  {
-    behandlingstype: 'ae0114',
-    behandlingstypeTerm: 'Tidligere hjemsendt sak',
-  },
-  {
-    behandlingstype: 'ae0115',
-    behandlingstypeTerm: 'Hjemsendt til ny behandling',
-  },
-  {
-    behandlingstype: 'ae0116',
-    behandlingstypeTerm: 'Meldekort',
-  },
-  {
-    behandlingstype: 'ae0124',
-    behandlingstypeTerm: 'Mangler opplysninger',
-  },
-  {
-    behandlingstema: 'ab0269',
-    behandlingstemaTerm: 'Medlemskap',
-  },
-  {
-    behandlingstema: 'ab0297',
-    behandlingstemaTerm: 'Reisestønader til arbeidssøkere',
-  },
-  {
-    behandlingstema: 'ab0339',
-    behandlingstemaTerm: 'Yrkesskade',
-  },
-  {
-    behandlingstema: 'ab0362',
-    behandlingstemaTerm: 'Studentbestemmelsen',
-  },
-  {
-    behandlingstema: 'ab0364',
-    behandlingstemaTerm: 'Sykepengeerstatning',
-  },
-  {
-    behandlingstype: 'ae0032',
-    behandlingstypeTerm: 'Stans',
-  },
-  {
-    behandlingstype: 'ae0224',
-    behandlingstypeTerm: 'Partsinnsyn',
-  },
-  {
-    behandlingstema: 'ab0430',
-    behandlingstemaTerm: 'Papirmeldekort',
-  },
-  {
-    behandlingstype: 'ae0248',
-    behandlingstypeTerm: 'Unntak',
-  },
-  {
-    behandlingstema: 'ab0194',
-    behandlingstemaTerm: 'Uføretrygd',
-  },
-  {
-    behandlingstema: 'ab0507',
-    behandlingstemaTerm: 'Ny maksdato sykepenger',
-  },
-  {
-    behandlingstema: 'ab0048',
-    behandlingstemaTerm: 'Barnetillegg',
-  },
+  { kode: 'ab0499', term: 'Arbeidsutprøving' },
+  { kode: 'ab0570', term: 'Avbryte revurdering' },
+  { kode: 'ab0048', term: 'Barnetillegg' },
+  { kode: 'ab0500', term: 'Etablering' },
+  { kode: 'ab0465', term: 'Etterbetaling ung ufør' },
+  { kode: 'ab0532', term: 'Ferdig avklart mot uføretrygd' },
+  { kode: 'ab0498', term: 'Ferdig avklart til arbeidssøker' },
+  { kode: 'ab0502', term: 'Institusjonsopphold' },
+  { kode: 'ab0269', term: 'Medlemskap' },
+  { kode: 'ab0507', term: 'Ny maksdato sykepenger' },
+  { kode: 'ab0430', term: 'Papirmeldekort' },
+  { kode: 'ab0504', term: 'Refusjonskrav' },
+  { kode: 'ab0297', term: 'Reisestønader til arbeidssøkere' },
+  { kode: 'ab0563', term: 'Sluttavtale' },
+  { kode: 'ab0362', term: 'Studentbestemmelsen' },
+  { kode: 'ab0364', term: 'Sykepengeerstatning' },
+  { kode: 'ab0339', term: 'Yrkesskade' },
 ];
