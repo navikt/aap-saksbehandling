@@ -9,8 +9,6 @@ import styles from 'components/behandlinger/oppholdskrav/oppholdskrav.module.css
 import { VurdertAvAnsattDetail } from 'components/vurdertav/VurdertAvAnsattDetail';
 import { VurderingerMeta } from 'lib/types/types';
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
-import { EtableringFase } from '../../behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
-import { VirksomhetFaseTag } from '../../behandlinger/sykdom/etableringegenvirksomhet/VirksomhetFaseTage';
 
 interface Props {
   fom: Date;
@@ -20,7 +18,7 @@ interface Props {
   vurderingerMeta: VurderingerMeta;
   children: ReactNode;
   defaultCollapsed?: boolean;
-  etableringsFaseTag?: EtableringFase | undefined;
+  customTag?: ReactNode;
 }
 
 export const TidligereVurderingExpandableCard = ({
@@ -31,7 +29,7 @@ export const TidligereVurderingExpandableCard = ({
   vurderingerMeta,
   children,
   defaultCollapsed = false,
-  etableringsFaseTag,
+  customTag,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(defaultCollapsed);
 
@@ -57,14 +55,10 @@ export const TidligereVurderingExpandableCard = ({
             )}
             {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(førsteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          {etableringsFaseTag ? (
-            <HStack gap={'space-8'}>
-              <VirksomhetFaseTag fase={etableringsFaseTag} />
-              <VurderingStatusTag status={vurderingStatus} />
-            </HStack>
-          ) : (
+          <HStack gap={'space-8'}>
+            {customTag && customTag}
             <VurderingStatusTag status={vurderingStatus} />
-          )}
+          </HStack>
         </HStack>
       }
     >

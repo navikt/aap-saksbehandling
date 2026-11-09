@@ -45,6 +45,7 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetFormNy';
 import styles from './EtableringAvEgenVirksomhet.module.css';
+import { VirksomhetFaseTag } from './VirksomhetFaseTage';
 
 export type EtableringFase = EtableringEgenVirksomhetVurderingResponse['fase'];
 
@@ -265,7 +266,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                 {vedtatteVurderinger.map((vurdering) => (
                   <TidligereVurderingExpandableCard
                     key={vurdering.fom}
-                    etableringsFaseTag={vurdering.fase}
+                    customTag={<VirksomhetFaseTag fase={vurdering.fase} />}
                     fom={parseISO(vurdering.fom)}
                     tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
                     førsteNyePeriodeFraDato={
@@ -287,8 +288,8 @@ export const EtableringAvEgenVirksomhetNy = ({
                         ? grunnlag.nyeVurderinger[index]?.oppfylt
                         : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                     )}
-                    etableringsFaseTag={
-                      erLagretVurdering ? grunnlag.nyeVurderinger[index]?.fase : form.watch(`vurderinger.${index}.fase`)
+                    customTag={
+                      erLagretVurdering ? <VirksomhetFaseTag fase={grunnlag.nyeVurderinger[index]?.fase} /> : <VirksomhetFaseTag fase={form.watch(`vurderinger.${index}.fase`)} />
                     }
                     nestePeriodeFraDato={sluttdato(index)}
                     isLast={index === vedtatteVurderinger.length - 1}
