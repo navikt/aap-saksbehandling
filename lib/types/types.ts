@@ -5,7 +5,6 @@ import type { Journalposttype, Journalstatus } from './journalpost';
 export type LeggTilInstitusjonsoppholdRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-institusjonsopphold'>;
 export type LeggTilYrkesskadeRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-yrkesskade'>;
 export type LeggTilKravVurderingRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-kravvurdering'>;
-export type PurringLegeerklæringRequest = RequestOfPost<'/api/dokumentinnhenting/paaminnelse/send'>;
 export type OppdaterMottakereRequest = RequestOfPut<'/api/brev/{brevbestillingReferanse}/oppdater-mottakere'>;
 export type SøkPåSakRequest = RequestOfPost<'/api/sak/sok'>;
 export type FinnSakerForIdentRequest = RequestOfPost<'/api/sak/finn'>;
@@ -455,9 +454,9 @@ export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.fl
 export type AvslagÅrsak = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['avslagsårsak'];
 
 export type ErStudentStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['erStudentStatus'];
+  components['schemas']['no.nav.aap.student.OppgittStudent']['erStudentStatus'];
 export type SkalGjenopptaStudieStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
+  components['schemas']['no.nav.aap.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
 export type IdentifisertBarn = BarnetilleggGrunnlag['folkeregisterbarn'][number];
 
@@ -555,10 +554,10 @@ export type VisuellTidslinjeArbeidInntekt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge'];
 
 export type AvklarPeriodisertStudentLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
+  components['schemas']['no.nav.aap.student.PeriodisertStudentDto'];
 
 export type StudentVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+  components['schemas']['no.nav.aap.student.StudentVurderingResponse'];
 
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];

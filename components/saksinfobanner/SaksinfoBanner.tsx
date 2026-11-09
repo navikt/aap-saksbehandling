@@ -21,6 +21,7 @@ import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/Ad
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import { MigrertFraArenaStatus } from 'components/migrertfraarenastatus/MigrertFraArenaStatus';
+import { KantIKantMedArenaStatus } from 'components/kantikantmedarenastatus/KantIKantMedArenaStatus';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
@@ -179,6 +180,11 @@ export const SaksinfoBanner = ({
           {behandlingEgenskaper?.erMigrertFraArena && (
             <div className={styles.oppgavestatus}>
               <MigrertFraArenaStatus />
+            </div>
+          )}
+          {behandlingEgenskaper?.erKantIKantMedArena && (
+            <div className={styles.oppgavestatus}>
+              <KantIKantMedArenaStatus />
             </div>
           )}
           {oppgaveTildelingStatus && (

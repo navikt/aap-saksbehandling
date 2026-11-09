@@ -656,22 +656,6 @@ export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogm
   return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
-export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  behandlingsReferanse: string;
-}) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/avbryt-automatisk-paaminnelse`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
-export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  behandlingsReferanse: string;
-}) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/gjenoppta-automatisk-paaminnelse`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
 export const hentUnderveisGrunnlagMedDiff = async (behandlingsreferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/behandling/underveis-med-diff/${behandlingsreferanse}`;
   return await apiFetch<UnderveisGrunnlagMedDiff>(url, saksbehandlingApiScope, 'GET');

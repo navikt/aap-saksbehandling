@@ -59,3 +59,19 @@ export async function hentBehandleroppslag(body: object) {
   const url = `${dokumentinnhentingApiBaseUrl}/syfo/behandleroppslag/search`;
   return await apiFetch<Behandler[]>(url, dokumentinnhentingApiScope, 'POST', body);
 }
+
+export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingUuid: string;
+  behandlingsreferanse: string;
+}) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/v2/avbryt-automatisk-paaminnelse`;
+  return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
+};
+
+export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingUuid: string;
+  behandlingsreferanse: string;
+}) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/v2/gjenoppta-automatisk-paaminnelse`;
+  return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
+};
