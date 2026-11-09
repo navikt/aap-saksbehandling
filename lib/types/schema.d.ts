@@ -1388,7 +1388,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
+            'application/json': components['schemas']['no.nav.aap.student.StudentGrunnlagResponse'];
           };
         };
       };
@@ -7580,7 +7580,7 @@ export interface components {
        * @enum {string}
        */
       behovstype: '5037';
-      løsningerForPerioder: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'][];
+      løsningerForPerioder: components['schemas']['no.nav.aap.student.PeriodisertStudentDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarStønadsperiodeLøsning': {
       /**
@@ -10000,6 +10000,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertLovvalgMedlemskapGrunnlagResponse': {
       behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      delvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.KanBehandlesAutomatiskVurdering'];
       harTilgangTilÅSaksbehandle: boolean;
       ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
@@ -10008,6 +10009,7 @@ export interface components {
       sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForLovvalgMedlemskapResponse': {
+      delvurderinger?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.KanBehandlesAutomatiskVurdering'];
       /**
        * Format: date
        * @example 2025-04-01
@@ -10543,42 +10545,6 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto': {
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avbrytrevurdering.flate.AvbrytRevurderingVurderingDto'];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse': {
-      behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      harTilgangTilÅSaksbehandle: boolean;
-      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'][];
-      oppgittStudent?: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent'];
-      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'][];
-    };
-    'no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse': {
-      avbruddMerEnn6Måneder?: boolean | null;
-      avbruttPgaSykdomEllerSkade?: boolean | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      avbruttStudieDato?: string | null;
-      begrunnelse: string;
-      bidiagnoser?: string[] | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      godkjentStudieAvLånekassen?: boolean | null;
-      harAvbruttStudie: boolean;
-      harBehovForBehandling?: boolean | null;
-      hoveddiagnose?: string | null;
-      kodeverk?: string | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom?: string | null;
-      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse': {
       gjeldendeVurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendvurderingResponse'];
@@ -12721,42 +12687,6 @@ export interface components {
        */
       fom?: string | null;
       harKrav: boolean;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      tom?: string | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      avbruttDato?: string | null;
-      /** @enum {string} */
-      erStudentStatus: 'AVBRUTT' | 'JA' | 'NEI';
-      /** Format: int64 */
-      id?: number | null;
-      /** @enum {string|null} */
-      skalGjenopptaStudieStatus?: 'IKKE_OPPGITT' | 'JA' | 'NEI' | 'VET_IKKE' | null;
-    };
-    'no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto': {
-      avbruddMerEnn6Måneder?: boolean | null;
-      avbruttPgaSykdomEllerSkade?: boolean | null;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      avbruttStudieDato?: string | null;
-      begrunnelse: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fom: string;
-      godkjentStudieAvLånekassen?: boolean | null;
-      harAvbruttStudie: boolean;
-      harBehovForBehandling?: boolean | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -16216,6 +16146,78 @@ export interface components {
        * @example 2025-04-01
        */
       fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+    };
+    'no.nav.aap.student.OppgittStudent': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      avbruttDato?: string | null;
+      /** @enum {string} */
+      erStudentStatus: 'AVBRUTT' | 'JA' | 'NEI';
+      /** Format: int64 */
+      id?: number | null;
+      /** @enum {string|null} */
+      skalGjenopptaStudieStatus?: 'IKKE_OPPGITT' | 'JA' | 'NEI' | 'VET_IKKE' | null;
+    };
+    'no.nav.aap.student.PeriodisertStudentDto': {
+      avbruddMerEnn6Måneder?: boolean | null;
+      avbruttPgaSykdomEllerSkade?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      avbruttStudieDato?: string | null;
+      begrunnelse: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      godkjentStudieAvLånekassen?: boolean | null;
+      harAvbruttStudie: boolean;
+      harBehovForBehandling?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom?: string | null;
+    };
+    'no.nav.aap.student.StudentGrunnlagResponse': {
+      behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      harTilgangTilÅSaksbehandle: boolean;
+      ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      nyeVurderinger: components['schemas']['no.nav.aap.student.StudentVurderingResponse'][];
+      oppgittStudent?: components['schemas']['no.nav.aap.student.OppgittStudent'];
+      sisteVedtatteVurderinger: components['schemas']['no.nav.aap.student.StudentVurderingResponse'][];
+    };
+    'no.nav.aap.student.StudentVurderingResponse': {
+      avbruddMerEnn6Måneder?: boolean | null;
+      avbruttPgaSykdomEllerSkade?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      avbruttStudieDato?: string | null;
+      begrunnelse: string;
+      bidiagnoser?: string[] | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      godkjentStudieAvLånekassen?: boolean | null;
+      harAvbruttStudie: boolean;
+      harBehovForBehandling?: boolean | null;
+      hoveddiagnose?: string | null;
+      kodeverk?: string | null;
       /**
        * Format: date
        * @example 2025-04-01
