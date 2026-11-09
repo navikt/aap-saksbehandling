@@ -1,8 +1,8 @@
 import { logError } from 'lib/serverutlis/logger';
-import { gjenopptaPåminnelsePåLegeerklæring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
+import { gjenopptaPåminnelsePåLegeerklæring } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 
 const lokalFakePåminnelseForDokumenter = isLocal();
 export async function POST(req: NextRequest) {
@@ -14,12 +14,12 @@ export async function POST(req: NextRequest) {
     const res = await gjenopptaPåminnelsePåLegeerklæring(body);
     if (isError(res) && res.status !== 403) {
       logError(
-        `/dokumentinnhenting/paaminnelse/gjenoppta ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
+        `/dialogmelding/paaminnelse/v2/gjenoppta-automatisk-paaminnelse${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );
     }
-    return NextResponse.json(res, { status: res.status });
+    return NextResponse.json(res, { status: res.status === 204 ? 200 : res.status });
   } catch (error) {
-    logError(`/dokumentinnhenting/paaminnelse/gjenoppta`, error);
+    logError(`/dialogmelding/paaminnelse/v2/gjenoppta-automatisk-paaminnelse`, error);
     const err: ErrorResponseBody<ApiException> = {
       type: 'ERROR',
       status: 500,
