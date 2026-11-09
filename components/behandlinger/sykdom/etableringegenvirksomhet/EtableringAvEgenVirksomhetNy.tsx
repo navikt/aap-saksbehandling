@@ -265,6 +265,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                 {vedtatteVurderinger.map((vurdering) => (
                   <TidligereVurderingExpandableCard
                     key={vurdering.fom}
+                    etableringsFaseTag={vurdering.fase}
                     fom={parseISO(vurdering.fom)}
                     tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
                     førsteNyePeriodeFraDato={
@@ -286,6 +287,9 @@ export const EtableringAvEgenVirksomhetNy = ({
                         ? grunnlag.nyeVurderinger[index]?.oppfylt
                         : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                     )}
+                    etableringsFaseTag={
+                      erLagretVurdering ? grunnlag.nyeVurderinger[index]?.fase : form.watch(`vurderinger.${index}.fase`)
+                    }
                     nestePeriodeFraDato={sluttdato(index)}
                     isLast={index === vedtatteVurderinger.length - 1}
                     vurdering={vurdering}

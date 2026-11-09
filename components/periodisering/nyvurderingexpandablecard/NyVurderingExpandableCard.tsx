@@ -13,6 +13,8 @@ import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/Vu
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Alert } from 'components/alert/Alert';
 import { useFlyt } from 'hooks/saksbehandling/FlytHook';
+import { EtableringFase } from '../../behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
+import { VirksomhetFaseTag } from '../../behandlinger/sykdom/etableringegenvirksomhet/VirksomhetFaseTage';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -28,6 +30,7 @@ interface Props {
   index: number;
   accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
+  etableringsFaseTag: EtableringFase | undefined;
 }
 
 export const NyVurderingExpandableCard = ({
@@ -44,6 +47,7 @@ export const NyVurderingExpandableCard = ({
   initiellEkspandert = false,
   index,
   accordionsSignal,
+  etableringsFaseTag = undefined,
 }: Props) => {
   const { flyt } = useFlyt();
   const erBeslutterSteg = flyt?.aktivtSteg === 'FATTE_VEDTAK';
@@ -74,7 +78,14 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          <VurderingStatusTag status={vurderingStatus} />
+          {etableringsFaseTag ? (
+            <HStack gap={'space-8'}>
+              <VirksomhetFaseTag fase={etableringsFaseTag} />
+              <VurderingStatusTag status={vurderingStatus} />
+            </HStack>
+          ) : (
+            <VurderingStatusTag status={vurderingStatus} />
+          )}
         </HStack>
       }
     >
