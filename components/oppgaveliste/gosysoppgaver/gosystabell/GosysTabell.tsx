@@ -72,7 +72,7 @@ export const GosysTabell = ({ oppgaver, gosysUrl }: Props) => {
                   {oppgave.fristFerdigstillelse ? formaterDatoForFrontend(oppgave.fristFerdigstillelse) : ''}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>{oppgave.tilordnetRessurs ?? 'Ikke tildelt'}</Table.DataCell>
-                <Table.DataCell textSize={'small'} className={styles.beskrivelseCelle}>
+                <Table.DataCell textSize={'small'}>
                   {oppgave.beskrivelse && <OppgaveBeskrivelse beskrivelse={oppgave.beskrivelse} />}
                 </Table.DataCell>
                 <Table.DataCell textSize={'small'}>

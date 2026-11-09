@@ -77,7 +77,7 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
                 </Table.DataCell>
                 <Table.DataCell textSize="small">{mapOppgaveTypeTilTekst(oppgave.oppgavetype)}</Table.DataCell>
                 <Table.DataCell textSize="small">{mapGjelderTilTekst(oppgave)}</Table.DataCell>
-                <Table.DataCell textSize="small" className={styles.beskrivelseCelle}>
+                <Table.DataCell textSize="small">
                   {oppgave.beskrivelse && <OppgaveBeskrivelse beskrivelse={oppgave.beskrivelse} />}
                 </Table.DataCell>
                 <Table.DataCell textSize="small">
