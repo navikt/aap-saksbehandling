@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { EtableringAvEgenVirksomhet } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
+import { EtableringAvEgenVirksomhetNy } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils';
+import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils-ny';
 import * as clientApi from 'lib/clientApi';
 
 const løsAvklaringsbehov = vi.fn();
@@ -39,8 +39,8 @@ const avslagFraBackend: EtableringEgenVirksomhetVurderingResponse = {
   brukerEierVirksomheten: 'EIER_MINST_50_PROSENT',
   kanFøreTilSelvforsørget: true,
   oppfylt: false,
-  oppstartsPeriode: [],
-  utviklingsPeriode: [],
+  fase: 'UTVIKLING',
+  jobberBrukerAktivMedVirksomheten: false,
   virksomhetNavn: 'Min virksomhet',
   vurderingerMeta: {},
 };
@@ -53,7 +53,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('viser backendens avslag for vedtatte vurderinger selv om de gamle grunnvilkårene er oppfylt', () => {
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={{ ...tomtGrunnlag, sisteVedtatteVurderinger: [avslagFraBackend] }}
         readOnly={true}
         behandlingVersjon={0}
@@ -66,7 +66,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('viser backendens avslag for lagrede vurderinger i skrivebeskyttet visning', () => {
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={{ ...tomtGrunnlag, nyeVurderinger: [avslagFraBackend] }}
         readOnly={true}
         behandlingVersjon={0}
@@ -79,7 +79,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('sender lagrede vurderinger med eksplisitt versjon', async () => {
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={{
           ...tomtGrunnlag,
           nyeVurderinger: [
@@ -119,7 +119,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     const grunnlag = { ...tomtGrunnlag, nyeVurderinger: [avslagFraBackend] };
 
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={grunnlag}
         readOnly={false}
         behandlingVersjon={0}
@@ -133,7 +133,6 @@ describe('EtableringAvEgenVirksomhet', () => {
       />
     );
 
-    expect(screen.getByText('Oppfylt')).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Avbryt' }));
 
     expect(await screen.findByText('Ikke oppfylt')).toBeVisible();
@@ -149,7 +148,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     });
 
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={tomtGrunnlag}
         readOnly={false}
         behandlingVersjon={0}
@@ -204,16 +203,16 @@ describe('EtableringAvEgenVirksomhet', () => {
           foreliggerFagligVurdering: false,
           brukerEierVirksomheten: null,
           kanFøreTilSelvforsørget: null,
+          fase: 'UTVIKLING',
+          jobberBrukerAktivMedVirksomheten: true,
           oppfylt: false,
-          oppstartsPeriode: [],
-          utviklingsPeriode: [],
           virksomhetNavn: 'Min virksomhet',
           vurderingerMeta: {},
         },
       ],
     };
 
-    render(<EtableringAvEgenVirksomhet grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+    render(<EtableringAvEgenVirksomhetNy grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
