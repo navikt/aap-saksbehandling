@@ -39,13 +39,17 @@
   background-color: var(--ax-bg-warning-soft);
 }
 
-.nyAvslag {
+.stansOpphør {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.stansOpphørNy {
   background-color: var(--ax-bg-danger-soft);
 }
 
 .ny > td:first-of-type,
 .endret > td:first-of-type,
-.nyAvslag > td:first-of-type {
+.stansOpphørNy > td:first-of-type {
   padding-left: var(--ax-space-16);
   box-shadow: inset 5px 0 var(--ax-border-info-strong);
 }
