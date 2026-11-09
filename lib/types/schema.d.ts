@@ -13019,6 +13019,7 @@ export interface components {
       relevans: 'IKKE_RELEVANT' | 'RELEVANT';
     };
     'no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO': {
+      erKantIKantMedArena: boolean;
       erMigrertFraArena: boolean;
       harArenaHistorikk: boolean;
     };
