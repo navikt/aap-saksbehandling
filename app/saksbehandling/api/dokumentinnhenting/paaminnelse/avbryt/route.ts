@@ -1,8 +1,8 @@
 import { logError } from 'lib/serverutlis/logger';
-import { avbrytPåminnelsePåLegeerklæring } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isLocal } from 'lib/utils/environment';
 import { NextRequest, NextResponse } from 'next/server';
 import { ApiException, ErrorResponseBody, isError } from 'lib/utils/api';
+import { avbrytPåminnelsePåLegeerklæring } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 
 const lokalFakePåminnelseForDokumenter = isLocal();
 export async function POST(req: NextRequest) {
@@ -14,12 +14,12 @@ export async function POST(req: NextRequest) {
     const res = await avbrytPåminnelsePåLegeerklæring(body);
     if (isError(res) && res.status !== 403) {
       logError(
-        `/dokumentinnhenting/paaminnelse/avbryt ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
+        `/dialogmelding/paaminnelse/v2/avbryt-automatisk-paaminnelse ${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );
     }
-    return NextResponse.json(res, { status: res.status });
+    return NextResponse.json(res, { status: res.status === 204 ? 200 : res.status });
   } catch (error) {
-    logError(`/dokumentinnhenting/paaminnelse/avbryt`, error);
+    logError(`/dialogmelding/paaminnelse/v2/avbryt-automatisk-paaminnelse`, error);
     const err: ErrorResponseBody<ApiException> = {
       type: 'ERROR',
       status: 500,

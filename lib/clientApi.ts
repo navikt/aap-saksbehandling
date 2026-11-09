@@ -180,15 +180,15 @@ export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
 
 export function clientAvbrytPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/avbryt`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingId,
-    behandlingsReferanse: behandlingsreferanse,
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
   });
 }
 
 export function clientGjenopptaPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/gjenoppta`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingId,
-    behandlingsReferanse: behandlingsreferanse,
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
   });
 }
 

@@ -5,7 +5,6 @@ import type { Journalposttype, Journalstatus } from './journalpost';
 export type LeggTilInstitusjonsoppholdRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-institusjonsopphold'>;
 export type LeggTilYrkesskadeRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-yrkesskade'>;
 export type LeggTilKravVurderingRequest = RequestOfPost<'/test/endre/{saksnummer}/legg-til-kravvurdering'>;
-export type PurringLegeerklæringRequest = RequestOfPost<'/api/dokumentinnhenting/paaminnelse/send'>;
 export type OppdaterMottakereRequest = RequestOfPut<'/api/brev/{brevbestillingReferanse}/oppdater-mottakere'>;
 export type SøkPåSakRequest = RequestOfPost<'/api/sak/sok'>;
 export type FinnSakerForIdentRequest = RequestOfPost<'/api/sak/finn'>;
