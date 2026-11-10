@@ -13,6 +13,7 @@ export const oppgaveBehandlingstyper: { label: string; value: Behandlingstype }[
   { label: 'Oppfølgingsoppgave', value: 'OPPFØLGINGSBEHANDLING' },
   { label: 'Aktivitetsplikt', value: 'AKTIVITETSPLIKT' },
   { label: 'Aktivitetsplikt 11-9', value: 'AKTIVITETSPLIKT_11_9' },
+  { label: 'Opphold i utlandet', value: 'UTENLANDSOPPHOLD' },
   { label: 'Fordeling', value: 'FORDELING' },
 ];
 

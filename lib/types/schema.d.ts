@@ -502,7 +502,8 @@ export interface paths {
             | 'OppfølgingsBehandling'
             | 'Revurdering'
             | 'SvarFraAndreinstans'
-            | 'Tilbakekreving';
+            | 'Tilbakekreving'
+            | 'Utenlandsopphold';
         };
       };
       responses: {
@@ -3073,6 +3074,7 @@ export interface paths {
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
+            | 'BEKREFT_BREV_SENDT'
             | 'BEKREFT_VURDERINGER_OPPFØLGING'
             | 'BEREGN_TILKJENT_YTELSE'
             | 'BREV'
@@ -3139,6 +3141,7 @@ export interface paths {
             | 'VURDER_OPPHOLDSKRAV'
             | 'VURDER_RETTIGHETSPERIODE'
             | 'VURDER_SYKEPENGEERSTATNING'
+            | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
             | 'VURDER_YRKESSKADE';
           /** @description Tidligere vurderinger etter */
           etterSteg:
@@ -3153,6 +3156,7 @@ export interface paths {
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
+            | 'BEKREFT_BREV_SENDT'
             | 'BEKREFT_VURDERINGER_OPPFØLGING'
             | 'BEREGN_TILKJENT_YTELSE'
             | 'BREV'
@@ -3219,6 +3223,7 @@ export interface paths {
             | 'VURDER_OPPHOLDSKRAV'
             | 'VURDER_RETTIGHETSPERIODE'
             | 'VURDER_SYKEPENGEERSTATNING'
+            | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
             | 'VURDER_YRKESSKADE';
         };
         header?: never;
@@ -3807,6 +3812,44 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/behandling/{referanse}/grunnlag/soknad-utenlandsopphold': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdGrunnlagResponse'];
           };
         };
       };
@@ -5933,6 +5976,7 @@ export interface paths {
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
+            | 'BEKREFT_BREV_SENDT'
             | 'BEKREFT_VURDERINGER_OPPFØLGING'
             | 'BEREGN_TILKJENT_YTELSE'
             | 'BREV'
@@ -5999,6 +6043,7 @@ export interface paths {
             | 'VURDER_OPPHOLDSKRAV'
             | 'VURDER_RETTIGHETSPERIODE'
             | 'VURDER_SYKEPENGEERSTATNING'
+            | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
             | 'VURDER_YRKESSKADE';
           /** @description Tidligere vurderinger etter */
           etterSteg:
@@ -6013,6 +6058,7 @@ export interface paths {
             | 'AVKLAR_SYKDOM'
             | 'BARNETILLEGG'
             | 'BEHANDLENDE_ENHET'
+            | 'BEKREFT_BREV_SENDT'
             | 'BEKREFT_VURDERINGER_OPPFØLGING'
             | 'BEREGN_TILKJENT_YTELSE'
             | 'BREV'
@@ -6079,6 +6125,7 @@ export interface paths {
             | 'VURDER_OPPHOLDSKRAV'
             | 'VURDER_RETTIGHETSPERIODE'
             | 'VURDER_SYKEPENGEERSTATNING'
+            | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
             | 'VURDER_YRKESSKADE';
         };
         header?: never;
@@ -6870,6 +6917,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -6936,6 +6984,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE'
         | null;
       student: boolean;
@@ -7270,6 +7319,8 @@ export interface components {
         | '4102'
         | '4201'
         | '4301'
+        | '4401'
+        | '4402'
         | '5001'
         | '5002'
         | '5003'
@@ -7576,6 +7627,14 @@ export interface components {
       behovstype: '5013';
       yrkesskadesvurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.YrkesskadevurderingDto'];
     };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftBrevSendtLøsning': {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      behovstype: '4402';
+      bekreftelse: components['schemas']['no.nav.aap.utenlandsopphold.BekreftBrevSendtDto'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftTotalvurderingKlageLøsning': {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -7607,6 +7666,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarSoningsforholdLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarStønadsperiodeLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.AvklarYrkesskadeLøsning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftBrevSendtLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftTotalvurderingKlageLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.BekreftVurderingerOppfølgingLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.EtableringEgenVirksomhetLøsning']
@@ -7648,7 +7708,8 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderKlageKontorLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderKlageNayLøsning']
       | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderKravLøsning']
-      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderRettighetsperiodeLøsning'];
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderRettighetsperiodeLøsning']
+      | components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderSøknadUtenlandsoppholdLøsning'];
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.EtableringEgenVirksomhetLøsning': {
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -8073,6 +8134,14 @@ export interface components {
        */
       behovstype: '5029';
       rettighetsperiodeVurdering: components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.rettighetsperiode.RettighetsperiodeVurderingDTO'];
+    };
+    'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.VurderSøknadUtenlandsoppholdLøsning': {
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      behovstype: '4401';
+      vurdering: components['schemas']['no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.YrkesskadeSakDto': {
       /**
@@ -8637,6 +8706,8 @@ export interface components {
         | '4102'
         | '4201'
         | '4301'
+        | '4401'
+        | '4402'
         | '5001'
         | '5002'
         | '5003'
@@ -9617,7 +9688,8 @@ export interface components {
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
-        | 'Tilbakekreving';
+        | 'Tilbakekreving'
+        | 'Utenlandsopphold';
       /**
        * Format: date
        * @example 2025-04-01
@@ -9644,7 +9716,8 @@ export interface components {
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
-        | 'Tilbakekreving';
+        | 'Tilbakekreving'
+        | 'Utenlandsopphold';
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -9717,6 +9790,7 @@ export interface components {
         | 'SAMORDNING_OG_AVREGNING'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -9751,6 +9825,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
@@ -10071,6 +10146,8 @@ export interface components {
         | '4102'
         | '4201'
         | '4301'
+        | '4401'
+        | '4402'
         | '5001'
         | '5002'
         | '5003'
@@ -10166,6 +10243,8 @@ export interface components {
         | '4102'
         | '4201'
         | '4301'
+        | '4401'
+        | '4402'
         | '5001'
         | '5002'
         | '5003'
@@ -10340,6 +10419,7 @@ export interface components {
         | 'SAMORDNING_OG_AVREGNING'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -10425,6 +10505,7 @@ export interface components {
             | 'SAMORDNING_OG_AVREGNING'
             | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
             | 'SØKNAD_TRUKKET'
+            | 'SØKNAD_UTENLANDSOPPHOLD'
             | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
             | 'UTVID_VEDTAKSLENGDE'
             | 'VEDTAKSLENGDE_MANUELT'
@@ -10762,6 +10843,8 @@ export interface components {
         | '4102'
         | '4201'
         | '4301'
+        | '4401'
+        | '4402'
         | '5001'
         | '5002'
         | '5003'
@@ -11249,6 +11332,7 @@ export interface components {
         | 'SAMORDNING_OG_AVREGNING'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -11283,6 +11367,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
@@ -11443,6 +11528,7 @@ export interface components {
         | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE';
     };
@@ -11570,6 +11656,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -11636,6 +11723,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE';
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$ProsesserBehandling`': {
@@ -13014,6 +13102,7 @@ export interface components {
         | 'SVAR_FRA_ANDREINSTANS'
         | 'SYKDOM'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILKJENT_YTELSE'
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
@@ -13033,6 +13122,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -13099,6 +13189,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE';
       aktivtStegDefinisjon: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'][];
       /** Format: int64 */
@@ -13143,6 +13234,7 @@ export interface components {
         | 'SVAR_FRA_ANDREINSTANS'
         | 'SYKDOM'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILKJENT_YTELSE'
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
@@ -13163,6 +13255,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -13229,6 +13322,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE'
         | null;
     };
@@ -13255,6 +13349,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -13321,6 +13416,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE';
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.flyt.AvklaringsbehovDTO'][];
       /**
@@ -13349,7 +13445,8 @@ export interface components {
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
-        | 'Tilbakekreving';
+        | 'Tilbakekreving'
+        | 'Utenlandsopphold';
       /**
        * Format: date
        * @example 2025-04-01
@@ -13424,6 +13521,7 @@ export interface components {
         | 'SVAR_FRA_ANDREINSTANS'
         | 'SYKDOM'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILKJENT_YTELSE'
         | 'TREKK_KLAGE'
         | 'UDEFINERT'
@@ -13446,6 +13544,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -13512,6 +13611,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE';
     };
     'no.nav.aap.behandlingsflyt.flyt.Prosessering': {
@@ -13662,7 +13762,8 @@ export interface components {
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
-        | 'Tilbakekreving';
+        | 'Tilbakekreving'
+        | 'Utenlandsopphold';
       visBeslutterKort: boolean;
       visBrevkort: boolean;
       visKvalitetssikringKort: boolean;
@@ -13675,6 +13776,8 @@ export interface components {
         | '4102'
         | '4201'
         | '4301'
+        | '4401'
+        | '4402'
         | '5001'
         | '5002'
         | '5003'
@@ -13779,6 +13882,7 @@ export interface components {
         | 'AVKLAR_SYKDOM'
         | 'BARNETILLEGG'
         | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_BREV_SENDT'
         | 'BEKREFT_VURDERINGER_OPPFØLGING'
         | 'BEREGN_TILKJENT_YTELSE'
         | 'BREV'
@@ -13845,6 +13949,7 @@ export interface components {
         | 'VURDER_OPPHOLDSKRAV'
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
         | 'VURDER_YRKESSKADE';
       måRevurderesEtterOpphør: boolean;
       /** @enum {string} */
@@ -14086,6 +14191,7 @@ export interface components {
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -14188,6 +14294,7 @@ export interface components {
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -14351,6 +14458,7 @@ export interface components {
         | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE';
     };
@@ -14526,6 +14634,7 @@ export interface components {
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -14584,6 +14693,7 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.PdlHendelseV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SykepengevedtakV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadUtenlandsoppholdV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FagsysteminfoBehovV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0'];
@@ -14661,6 +14771,7 @@ export interface components {
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -14754,6 +14865,7 @@ export interface components {
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -14836,6 +14948,7 @@ export interface components {
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -14909,6 +15022,7 @@ export interface components {
         | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
         | 'SYKEPENGE_VEDTAK_HENDELSE'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE';
       /**
@@ -14964,6 +15078,20 @@ export interface components {
       erStudent: 'Avbrutt' | 'Ja' | 'Nei';
       /** @enum {string|null} */
       kommeTilbake?: 'Ja' | 'Nei' | 'Vet ikke' | null;
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadUtenlandsopphold': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadUtenlandsoppholdV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadUtenlandsoppholdV0': {
+      fritekst?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      mottattDato: string;
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      meldingType: 'SøknadUtenlandsoppholdV0';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadV0': {
       andreBehandlere?:
@@ -15183,6 +15311,7 @@ export interface components {
         | 'SAMORDNING_OG_AVREGNING'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -15226,6 +15355,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE';
@@ -15345,6 +15475,7 @@ export interface components {
         | 'SAMORDNING_OG_AVREGNING'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -15381,7 +15512,8 @@ export interface components {
         | 'OppfølgingsBehandling'
         | 'Revurdering'
         | 'SvarFraAndreinstans'
-        | 'Tilbakekreving';
+        | 'Tilbakekreving'
+        | 'Utenlandsopphold';
       vurderingsbehov: (
         | 'AKTIVITETSPLIKTBEHANDLING_AVBRUTT'
         | 'AKTIVITETSPLIKT_11_7'
@@ -15444,6 +15576,7 @@ export interface components {
         | 'SAMORDNING_OG_AVREGNING'
         | 'SYKDOM_ARBEVNE_BEHOV_FOR_BISTAND'
         | 'SØKNAD_TRUKKET'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'UTENLANDSOPPHOLD_FOR_SOKNADSTIDSPUNKT'
         | 'UTVID_VEDTAKSLENGDE'
         | 'VEDTAKSLENGDE_MANUELT'
@@ -15478,6 +15611,7 @@ export interface components {
         | 'OPPFØLGINGSOPPGAVE_SAMORDNING_GRADERING'
         | 'SVAR_FRA_KLAGEINSTANS'
         | 'SØKNAD'
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'TILBAKEKREVING_HENDELSE'
         | 'UFØRE_VEDTAK_HENDELSE'
         | 'UTVID_VEDTAKSLENGDE'
@@ -16243,6 +16377,46 @@ export interface components {
       utbetalingsdato: string;
       /** @enum {string} */
       utbetalingsperiodeType: 'ENDRET' | 'NY' | 'UENDRET';
+    };
+    'no.nav.aap.utenlandsopphold.BekreftBrevSendtDto': {
+      brevSendt: boolean;
+    };
+    'no.nav.aap.utenlandsopphold.BekreftBrevSendtResponse': {
+      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
+    };
+    'no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdDokumentDto': {
+      journalpostId: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      mottattDato: string;
+    };
+    'no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdGrunnlagResponse': {
+      bekreftelse?: components['schemas']['no.nav.aap.utenlandsopphold.BekreftBrevSendtResponse'];
+      søknad: components['schemas']['no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdDokumentDto'];
+      vurdering?: components['schemas']['no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdVurderingResponse'];
+    };
+    'no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdVurderingDto': {
+      /** Format: int32 */
+      antallGodkjenteDager?: number | null;
+      begrunnelse: string;
+      godkjentPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      land: string;
+      /** @enum {string} */
+      resultat: 'AVSLÅTT' | 'DELVIS_INNVILGET' | 'INNVILGET';
+      søknadsperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
+    'no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdVurderingResponse': {
+      /** Format: int32 */
+      antallGodkjenteDager?: number | null;
+      begrunnelse: string;
+      godkjentPeriode?: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      land: string;
+      /** @enum {string} */
+      resultat: 'AVSLÅTT' | 'DELVIS_INNVILGET' | 'INNVILGET';
+      søknadsperiode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
     'no.nav.aap.verdityper.dokument.JournalpostId': {
       identifikator: string;
