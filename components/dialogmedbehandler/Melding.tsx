@@ -24,13 +24,17 @@ export const Melding = ({ melding, dokumentInfoIdListe }: Props) => {
     meldingStatus: status,
     journalpostId,
     tekst,
+    bestillerNavn,
+    bestillerNavIdent,
   } = melding;
+
+  const avsenderMottakerNavn =
+    innkommendeUtgående === 'INNKOMMENDE' ? meldingFraNavn : (bestillerNavn ?? bestillerNavIdent ?? 'Nav');
 
   return (
     <VStack gap={'space-4'} align={innkommendeUtgående === 'INNKOMMENDE' ? 'start' : 'end'}>
       <Detail>
-        <b>{innkommendeUtgående === 'INNKOMMENDE' ? meldingFraNavn : 'Nav'}</b>{' '}
-        {formatDatoMedMånedsnavn(opprettetTidspunkt)}
+        <b>{avsenderMottakerNavn}</b> {formatDatoMedMånedsnavn(opprettetTidspunkt)}
       </Detail>
       <Box
         className={
