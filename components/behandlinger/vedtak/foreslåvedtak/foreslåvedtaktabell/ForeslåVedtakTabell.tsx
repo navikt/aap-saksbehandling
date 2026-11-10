@@ -110,22 +110,36 @@ export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
               <Table.DataCell>
                 <VStack gap={'space-2'}>
                   {begge.map((p) => (
-                    <span key={`${p.fom}-${p.tom}`} className={`${styles.periode} ${styles.gammelDato}`}>
-                      {formatDatoMedMånedsnavn(p.fom)} – {formatDatoMedMånedsnavn(p.tom)}
+                    <span key={`${p.fom}-${p.tom}`} className={styles.periode}>
+                      <span className={styles.srOnly}>Tidligere periode: </span>
+                      <del className={styles.gammelDato}>
+                        {formatDatoMedMånedsnavn(p.fom)} – {formatDatoMedMånedsnavn(p.tom)}
+                      </del>
                     </span>
                   ))}
                   <span className={styles.periode}>
                     {kunFomEndret && (
-                      <span className={styles.gammelDato}>{formatDatoMedMånedsnavn(kunFomEndret.fom)} </span>
+                      <>
+                        <span className={styles.srOnly}>Tidligere fra: </span>
+                        <del className={styles.gammelDato}>{formatDatoMedMånedsnavn(kunFomEndret.fom)}</del>{' '}
+                        <span className={styles.srOnly}>Ny fra: </span>
+                      </>
                     )}
                     <span className={kunFomEndret ? styles.endretDato : undefined}>{formatDatoMedMånedsnavn(fom)}</span>{' '}
                     –
                     {kunTomEndret && !vedtaksPeriode.tidligereVarÅpen && (
-                      <span className={styles.gammelDato}> {formatDatoMedMånedsnavn(kunTomEndret.tom)}</span>
+                      <>
+                        {' '}
+                        <span className={styles.srOnly}>Tidligere til: </span>
+                        <del className={styles.gammelDato}>{formatDatoMedMånedsnavn(kunTomEndret.tom)}</del>
+                      </>
                     )}
                     {!avslagUtenViderePerioder && (
                       <span className={kunTomEndret ? styles.endretDato : undefined}>
                         {' '}
+                        {kunTomEndret && !vedtaksPeriode.tidligereVarÅpen && (
+                          <span className={styles.srOnly}>Ny til: </span>
+                        )}
                         {formatDatoMedMånedsnavn(tom)}
                       </span>
                     )}
