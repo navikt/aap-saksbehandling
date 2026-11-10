@@ -28,6 +28,7 @@ interface Props {
   index: number;
   accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
+  customTag?: ReactNode;
 }
 
 export const NyVurderingExpandableCard = ({
@@ -44,6 +45,7 @@ export const NyVurderingExpandableCard = ({
   initiellEkspandert = false,
   index,
   accordionsSignal,
+  customTag,
 }: Props) => {
   const { flyt } = useFlyt();
   const erBeslutterSteg = flyt?.aktivtSteg === 'FATTE_VEDTAK';
@@ -74,7 +76,10 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          <VurderingStatusTag status={vurderingStatus} />
+          <HStack gap={'space-8'}>
+            {customTag && customTag}
+            <VurderingStatusTag status={vurderingStatus} />
+          </HStack>
         </HStack>
       }
     >
