@@ -64,6 +64,10 @@ const resetPostmottakMockFlytResponse = () => {
   postmottakMockFlytResponse = PostmottakFlytResponse;
 };
 
+vi.mock('lib/utils/umami/client', () => ({
+  clientLoggUmamiEvent: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock('swr', () => ({
   default: vi.fn((key) => {
     if (key?.startsWith('api/flyt')) {

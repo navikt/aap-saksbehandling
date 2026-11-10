@@ -32,6 +32,9 @@ import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/Utl
 import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
+import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { GosysOppgaverPopOver } from 'components/saksinfobanner/gosysoppgaverpopover/GosysOppgaverPopOver';
 
 interface Props {
   sak: SaksInfoType;
@@ -52,6 +55,8 @@ export const SaksinfoBanner = ({
 }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
+  const { oppgaver, antallTreff } = useGosysOppgaverForPerson();
+  const visGosysOppgaverForPerson = useFeatureFlag('VisGosysOppgaverForPerson');
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
@@ -141,6 +146,12 @@ export const SaksinfoBanner = ({
       </div>
       {behandling && (
         <HStack>
+          {visGosysOppgaverForPerson && antallTreff > 0 && (
+            <div className={styles.oppgavestatus}>
+              <GosysOppgaverPopOver oppgaver={oppgaver} antallTreff={antallTreff} saksnummer={sak.saksnummer} />
+            </div>
+          )}
+
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />

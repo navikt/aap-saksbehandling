@@ -7,59 +7,43 @@ import {
 } from '@navikt/aksel-icons';
 import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-
+import { DokumentInfoDto, MeldingDto } from 'lib/types/types';
 import styles from './Melding.module.css';
-import { DokumentInfoDto } from 'lib/types/types';
-
-export type DokumentasjonType =
-  | 'L120'
-  | 'L40'
-  | 'L8'
-  | 'MELDING_FRA_NAV'
-  | 'MELDING_FRA_BEHANDLER'
-  | 'PURRING'
-  | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
-  visningType: 'INNKOMMENDE' | 'UTGÅENDE';
-  dokumentasjonType?: DokumentasjonType;
-  meldingFraNavn: string | undefined | null;
-  opprettetTidspunkt: string;
-  status?: 'SENDT' | 'LEVERT' | 'FEILET' | null;
-  journalpostId: string | undefined | null;
+  melding: MeldingDto;
   dokumentInfoIdListe: DokumentInfoDto[];
-  children: React.ReactNode;
 }
 
-export const Melding = ({
-  visningType,
-  dokumentasjonType,
-  meldingFraNavn,
-  opprettetTidspunkt,
-  status,
-  journalpostId,
-  dokumentInfoIdListe,
-  children,
-}: Props) => {
-  /* TODO: Hvilke dokumentasjonstyper skal ikke ha lenkene under, utover MELDING_FRA_BEHANDLER? */
+export const Melding = ({ melding, dokumentInfoIdListe }: Props) => {
+  const {
+    innkommendeUtgående,
+    dokumentasjonsType,
+    meldingFraNavn,
+    opprettetTidspunkt,
+    meldingStatus: status,
+    journalpostId,
+    tekst,
+  } = melding;
 
   return (
-    <VStack gap={'space-4'} align={visningType === 'INNKOMMENDE' ? 'start' : 'end'}>
+    <VStack gap={'space-4'} align={innkommendeUtgående === 'INNKOMMENDE' ? 'start' : 'end'}>
       <Detail>
-        <b>{visningType === 'INNKOMMENDE' ? meldingFraNavn : 'Nav'}</b> {formatDatoMedMånedsnavn(opprettetTidspunkt)}
+        <b>{innkommendeUtgående === 'INNKOMMENDE' ? meldingFraNavn : 'Nav'}</b>{' '}
+        {formatDatoMedMånedsnavn(opprettetTidspunkt)}
       </Detail>
       <Box
         className={
-          visningType === 'INNKOMMENDE'
+          innkommendeUtgående === 'INNKOMMENDE'
             ? styles.meldingboksInnkommende
             : `${styles.meldingboksUtgående} ${status === 'FEILET' && styles.meldingboksFeilet}`
         }
       >
         <VStack gap={'space-8'}>
           <VStack>
-            {visningType === 'UTGÅENDE' && <Detail>{`Til ${meldingFraNavn}`}</Detail>}
-            <Label size={'small'}>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</Label>
-            <BodyShort size={'small'}>{children}</BodyShort>
+            {innkommendeUtgående === 'UTGÅENDE' && <Detail>{`Til ${meldingFraNavn}`}</Detail>}
+            <Label size={'small'}>{mapDokumentasjonTypeTilTekst(dokumentasjonsType)}</Label>
+            <BodyShort size={'small'}>{tekst}</BodyShort>
           </VStack>
           {dokumentInfoIdListe.length > 0 && (
             <Box className={styles.vedleggboks}>
@@ -73,13 +57,13 @@ export const Melding = ({
                 >
                   <HStack align={'center'} gap={'space-8'}>
                     <PaperclipIcon title="Vedlagt fil" fontSize="2rem" className={styles.vedleggikon} />
-                    <BodyShort>{mapDokumentasjonTypeTilTekst(dokumentasjonType)}</BodyShort>
+                    <BodyShort>{mapDokumentasjonTypeTilTekst(dokumentasjonsType)}</BodyShort>
                   </HStack>
                 </Link>
               ))}
             </Box>
           )}
-          {visningType === 'INNKOMMENDE' && dokumentasjonType === 'L40' && (
+          {innkommendeUtgående === 'INNKOMMENDE' && dokumentasjonsType === 'L40' && (
             <HStack gap={'space-20'}>
               <Link>
                 <PlusIcon fontSize="1.5rem" aria-hidden />
@@ -93,14 +77,10 @@ export const Melding = ({
           )}
         </VStack>
       </Box>
-      {visningType === 'UTGÅENDE' && (
+      {innkommendeUtgående === 'UTGÅENDE' && (
         <VStack align={'end'}>
           <HStack gap={'space-2'} align={'center'} className={status === 'FEILET' ? styles.feilmelding : ''}>
-            {status === 'FEILET' ? (
-              <ExclamationmarkTriangleIcon fontSize="1rem" aria-hidden />
-            ) : (
-              <CheckmarkHeavyIcon fontSize="1rem" aria-hidden />
-            )}
+            {mapStatusTilIkon(status)}
             <Detail>{mapStatusTilTekst(status)}</Detail>
           </HStack>
         </VStack>
@@ -109,8 +89,8 @@ export const Melding = ({
   );
 };
 
-const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => {
-  switch (dokumentasjonType) {
+const mapDokumentasjonTypeTilTekst = (dokumentasjonsType?: MeldingDto['dokumentasjonsType']) => {
+  switch (dokumentasjonsType) {
     case 'L120':
       return 'Forespørsel om legeerklæring L120';
     case 'L40':
@@ -119,8 +99,6 @@ const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => 
       return 'Forespørsel om tilleggsopplysninger L8';
     case 'MELDING_FRA_NAV':
       return 'Melding fra NAV';
-    case 'MELDING_FRA_BEHANDLER':
-      return 'Melding fra behandler';
     case 'PURRING':
       return 'Påminnelse til behandler';
     case 'RETUR_LEGEERKLÆRING':
@@ -130,15 +108,28 @@ const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => 
   }
 };
 
-const mapStatusTilTekst = (status: Props['status']) => {
+const mapStatusTilIkon = (status: MeldingDto['meldingStatus']) => {
+  switch (status) {
+    case 'SENDT':
+      return <CheckmarkHeavyIcon title="Sendt" fontSize="1rem" aria-hidden />;
+    case 'LEVERT':
+      return <CheckmarkHeavyIcon title="Sendt" fontSize="1rem" aria-hidden />;
+    case 'FEILET':
+      return <ExclamationmarkTriangleIcon title="Feilet" fontSize="1rem" aria-hidden />;
+    default:
+      return null;
+  }
+};
+
+const mapStatusTilTekst = (status: MeldingDto['meldingStatus']) => {
   switch (status) {
     case 'SENDT':
       return 'Sendt';
     case 'LEVERT':
-      return 'Levert';
+      return 'Sendt';
     case 'FEILET':
       return 'Feilet';
     default:
-      return status;
+      return 'Sender ...';
   }
 };

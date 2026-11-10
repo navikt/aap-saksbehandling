@@ -18,6 +18,7 @@ interface Props {
   vurderingerMeta: VurderingerMeta;
   children: ReactNode;
   defaultCollapsed?: boolean;
+  customTag?: ReactNode;
 }
 
 export const TidligereVurderingExpandableCard = ({
@@ -28,6 +29,7 @@ export const TidligereVurderingExpandableCard = ({
   vurderingerMeta,
   children,
   defaultCollapsed = false,
+  customTag,
 }: Props) => {
   const [cardExpanded, setCardExpanded] = useState<boolean>(defaultCollapsed);
 
@@ -53,7 +55,10 @@ export const TidligereVurderingExpandableCard = ({
             )}
             {nySluttdato && <span> {formatDatoMedMånedsnavn(sub(førsteNyePeriodeFraDato, { days: 1 }))}</span>}
           </BodyShort>
-          <VurderingStatusTag status={vurderingStatus} />
+          <HStack gap={'space-8'}>
+            {customTag && customTag}
+            <VurderingStatusTag status={vurderingStatus} />
+          </HStack>
         </HStack>
       }
     >

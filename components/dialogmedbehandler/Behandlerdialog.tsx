@@ -1,12 +1,10 @@
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import { Label, Link, Loader, VStack } from '@navikt/ds-react';
-
 import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMeldinger';
 import { Melding } from 'components/dialogmedbehandler/Melding';
-
-import styles from './DialogMedBehandler.module.css';
 import { Alert } from '../alert/Alert';
 import { KommendeMeldingDto, MeldingMedDokumenterDto } from '../../lib/types/types';
+import styles from 'components/dialogmedbehandler/Behandlerdialog.module.css';
 
 interface Props {
   behandlingsreferanse: string;
@@ -17,7 +15,7 @@ interface Props {
   refetchDialogmeldingerClient: () => Promise<unknown>;
 }
 
-export const DialogMedBehandler = ({
+export const Behandlerdialog = ({
   behandlingsreferanse,
   meldingerMedDokumentliste,
   kommendeMeldinger,
@@ -48,21 +46,9 @@ export const DialogMedBehandler = ({
           {meldingerMedDokumentliste?.map((meldingMedDokumentliste, index) => (
             <Melding
               key={index}
-              visningType={meldingMedDokumentliste.melding.innkommendeUtgående}
-              // Mangler dokumentasjonstype i mottatt_dialogmelding-tabellen i 'dokumentinnhenting'
-              dokumentasjonType={
-                meldingMedDokumentliste.melding.innkommendeUtgående === 'INNKOMMENDE'
-                  ? 'MELDING_FRA_BEHANDLER'
-                  : meldingMedDokumentliste.melding.dokumentasjonsType!
-              }
-              meldingFraNavn={meldingMedDokumentliste.melding.meldingFraNavn}
-              opprettetTidspunkt={meldingMedDokumentliste.melding.opprettetTidspunkt}
-              status={meldingMedDokumentliste.melding.meldingStatus}
-              journalpostId={meldingMedDokumentliste.melding.journalpostId}
+              melding={meldingMedDokumentliste.melding}
               dokumentInfoIdListe={meldingMedDokumentliste.dokumentIdListe}
-            >
-              {meldingMedDokumentliste.melding.tekst}
-            </Melding>
+            />
           ))}
         </VStack>
       )}

@@ -103,7 +103,7 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   const oppgaveTyper = form.watch('oppgaveTyper');
 
   const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
-    useGosysOppgaver(enhet, behandlingstype, behandlingstema, oppgaveTyper);
+    useGosysOppgaver({ enhet, behandlingstype, behandlingstema, oppgaveTyper });
 
   const visLedigeOppgaver = form.watch('visLedigeOppgaver');
   const oppgaverSomSkalVises = visLedigeOppgaver ? oppgaver.filter((oppgave) => !oppgave.tilordnetRessurs) : oppgaver;
