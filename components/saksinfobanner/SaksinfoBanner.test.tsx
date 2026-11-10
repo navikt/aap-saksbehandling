@@ -3,9 +3,22 @@ import userEvent from '@testing-library/user-event';
 import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
 import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
 import { DetaljertBehandling, FlytVisning, Roller, SaksInfo } from 'lib/types/types';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+
+vi.mock('hooks/oppgave/GosysOppgaverHook', () => ({
+  useGosysOppgaver: vi.fn(() => ({
+    oppgaver: [],
+    antallTreff: 0,
+    kanLasteFlere: false,
+    isLoading: false,
+    isValidating: false,
+    error: undefined,
+    harLastetOppgaver: true,
+    lastInnFlere: vi.fn(),
+  })),
+}));
 
 const user = userEvent.setup();
 
