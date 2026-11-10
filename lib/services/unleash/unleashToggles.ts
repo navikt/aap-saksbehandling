@@ -15,7 +15,6 @@ export const FLAGS = [
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
   'Helseinstitusjon1Manedsregel',
-  'VisGosysOppgaverIOppgavelisten',
   'VisGosysOppgaverForPerson',
 ] as const;
 
@@ -39,6 +38,5 @@ export const mockedFlags: Flags = {
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
   Helseinstitusjon1Manedsregel: true,
-  VisGosysOppgaverIOppgavelisten: true,
   VisGosysOppgaverForPerson: true,
 };
