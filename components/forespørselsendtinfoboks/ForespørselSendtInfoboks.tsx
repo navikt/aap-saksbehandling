@@ -5,7 +5,7 @@ import { BodyShort, Detail, Tag, VStack } from '@navikt/ds-react';
 import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ForespørselSendtTilBehandler } from 'lib/types/oppgaveTypes';
-import styles from './DialogMedBehandlerInfoboks.module.css';
+import styles from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks.module.css';
 
 const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
   if (!påminnelseDato) return false;
@@ -25,7 +25,7 @@ export const erForespørselFør29september2026 = (påminnelseDato: ForespørselS
   return kalkulertForespørseldato.getTime() < new Date('2026-09-29').getTime();
 };
 
-export const DialogMedBehandlerInfoboks = ({ påminnelseDato, påminnelseAvbrutt }: ForespørselSendtTilBehandler) => {
+export const ForespørselSendtInfoboks = ({ påminnelseDato, påminnelseAvbrutt }: ForespørselSendtTilBehandler) => {
   if (!påminnelseDato) return null;
 
   const erPåminnelseSendt = erPåminnelsenIFortiden(påminnelseDato) && !påminnelseAvbrutt;
