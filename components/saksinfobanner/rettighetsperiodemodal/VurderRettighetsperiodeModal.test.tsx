@@ -1,11 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { VurderRettighetsperiodeModal } from './VurderRettighetsperiodeModal';
 
 describe('Vurder rettighetsperiode', () => {
-  beforeEach(() =>
-    render(<VurderRettighetsperiodeModal behandlingReferanse={'213'} saksnummer={'1'} isOpen={true} onClose={vi.fn} />)
-  );
+  beforeEach(async () => {
+    await act(async () => {
+      render(
+        <VurderRettighetsperiodeModal behandlingReferanse={'213'} saksnummer={'1'} isOpen={true} onClose={vi.fn} />
+      );
+    });
+  });
   it('har en overskrift', () => {
     expect(
       screen.getByRole('heading', { name: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett til ytelse' })

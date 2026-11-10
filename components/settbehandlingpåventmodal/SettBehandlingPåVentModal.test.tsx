@@ -1,10 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
 
 describe('settBehandlingPåVentModal', () => {
-  beforeEach(() => {
-    render(<SettBehandlingPåVentModal reservert={true} isOpen={true} onClose={vi.fn} />);
+  beforeEach(async () => {
+    await act(async () => {
+      render(<SettBehandlingPåVentModal reservert={true} isOpen={true} onClose={vi.fn} />);
+    });
   });
 
   it('skal ha en heading', () => {
@@ -31,14 +33,18 @@ describe('settBehandlingPåVentModal', () => {
 describe('settBehandlingPåVentModal viser infoboks om reservert oppgave', () => {
   const expectedText = 'Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.';
 
-  it('skal vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
-    render(<SettBehandlingPåVentModal reservert={false} isOpen={true} onClose={vi.fn} />);
+  it('skal vise infoboks med informasjon om at oppgaven reserveres saksbehandler', async () => {
+    await act(async () => {
+      render(<SettBehandlingPåVentModal reservert={false} isOpen={true} onClose={vi.fn} />);
+    });
     const infoboks = screen.getByText(expectedText);
     expect(infoboks).toBeVisible();
   });
 
-  it('skal ikke vise infoboks med informasjon om at oppgaven reserveres saksbehandler', () => {
-    render(<SettBehandlingPåVentModal reservert={true} isOpen={true} onClose={vi.fn} />);
+  it('skal ikke vise infoboks med informasjon om at oppgaven reserveres saksbehandler', async () => {
+    await act(async () => {
+      render(<SettBehandlingPåVentModal reservert={true} isOpen={true} onClose={vi.fn} />);
+    });
     const infoboks = screen.queryByText(expectedText);
     expect(infoboks).toBeNull();
   });
