@@ -10,7 +10,8 @@ import { BarnepensjonGrunnlag } from 'lib/types/types';
 
 import styles from './Barnepensjon.module.css';
 import { isBefore } from 'date-fns';
-import { useSlettSamordning } from 'components/behandlinger/samordning/useSlettSamordning';
+import { BekreftSlettingModal } from 'components/bekreftslettingmodal/BekreftSlettingModal';
+import { useState } from 'react';
 
 interface Props {
   form: UseFormReturn<BarnepensjonFormFields>;
@@ -20,7 +21,7 @@ interface Props {
 
 export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjonPerioder' });
-  const { slettSamordning, slettSamordningModal } = useSlettSamordning();
+  const [slett, setSlett] = useState<(() => void) | null>(null);
 
   function erVedtattRad(index: number): boolean {
     const rad = form.getValues(`barnepensjonPerioder.${index}`);
@@ -114,7 +115,13 @@ export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) 
                       variant={'tertiary'}
                       type={'button'}
                       icon={<TrashIcon title={'Fjern periode'} fontSize={'1.5rem'} />}
-                      onClick={() => slettSamordning(erVedtattRad(index), () => remove(index))}
+                      onClick={() => {
+                        if (erVedtattRad(index)) {
+                          setSlett(() => () => remove(index));
+                        } else {
+                          remove(index);
+                        }
+                      }}
                     />
                   )}
                 </Table.DataCell>
@@ -142,7 +149,12 @@ export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) 
           </Button>
         </div>
       )}
-      {slettSamordningModal}
+      {slett && (
+        <BekreftSlettingModal heading="Slett samordningsperiode" onSlett={slett} onLukk={() => setSlett(null)}>
+          Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene
+          tilbake i tid.
+        </BekreftSlettingModal>
+      )}
     </VStack>
   );
 };

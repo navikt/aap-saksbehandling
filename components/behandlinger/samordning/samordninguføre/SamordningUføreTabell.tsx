@@ -8,7 +8,8 @@ import { SamordningUføreFormFields } from 'components/behandlinger/samordning/s
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { useSlettSamordning } from 'components/behandlinger/samordning/useSlettSamordning';
+import { BekreftSlettingModal } from 'components/bekreftslettingmodal/BekreftSlettingModal';
+import { useState } from 'react';
 import { SamordningUføreGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
@@ -19,7 +20,7 @@ interface Props {
 }
 export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'vurderteSamordninger', control: form.control });
-  const { slettSamordning, slettSamordningModal } = useSlettSamordning();
+  const [slett, setSlett] = useState<(() => void) | null>(null);
   function erVedtattRad(index: number): boolean {
     const rad = form.getValues(`vurderteSamordninger.${index}`);
     return vedtattePerioder.some(
@@ -83,7 +84,13 @@ export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Pro
                     icon={<TrashIcon title={'Slett'} />}
                     variant={'tertiary'}
                     type={'button'}
-                    onClick={() => slettSamordning(erVedtattRad(index), () => remove(index))}
+                    onClick={() => {
+                      if (erVedtattRad(index)) {
+                        setSlett(() => () => remove(index));
+                      } else {
+                        remove(index);
+                      }
+                    }}
                   />
                 )}
               </Table.DataCell>
@@ -98,7 +105,12 @@ export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Pro
           </Button>
         )}
       </HStack>
-      {slettSamordningModal}
+      {slett && (
+        <BekreftSlettingModal heading="Slett samordningsperiode" onSlett={slett} onLukk={() => setSlett(null)}>
+          Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene
+          tilbake i tid.
+        </BekreftSlettingModal>
+      )}
     </VStack>
   );
 };

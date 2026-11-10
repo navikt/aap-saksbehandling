@@ -19,7 +19,7 @@ import { SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/ty
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { useSlettSamordning } from 'components/behandlinger/samordning/useSlettSamordning';
+import { BekreftSlettingModal } from 'components/bekreftslettingmodal/BekreftSlettingModal';
 import {
   beregnSplittingAvSykepengeperiode,
   slåSammenSplittedeSykepengeperioder,
@@ -80,11 +80,19 @@ type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Props) => {
   const { fields, append, remove, replace } = fieldArray;
-  const { slettSamordning, slettSamordningModal } = useSlettSamordning();
+  const [slett, setSlett] = useState<(() => void) | null>(null);
   const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
   const [ferieFeilmelding, setFerieFeilmelding] = useState<string>();
 
   const rader = form.watch('vurderteSamordninger') ?? [];
+
+  function slettRad(index: number, onSlett: () => void) {
+    if (erVedtattRad(index)) {
+      setSlett(() => onSlett);
+    } else {
+      onSlett();
+    }
+  }
 
   function erVedtattRad(index: number): boolean {
     const rad = form.getValues(`vurderteSamordninger.${index}`);
@@ -195,7 +203,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
                       ytelseLabel={ytelseLabel(field.ytelseType)}
                       readOnly={readOnly}
                       onRediger={() => setModalTilstand({ modus: 'rediger', index: index })}
-                      onSlett={() => slettSamordning(erVedtattRad(index), () => fjerneFerieRad(index))}
+                      onSlett={() => slettRad(index, () => fjerneFerieRad(index))}
                     />
                   );
                 }
@@ -207,7 +215,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
                     index={index}
                     readOnly={readOnly}
                     ytelsesoptioner={ytelsesoptionerUtenFerie}
-                    onSlett={() => slettSamordning(erVedtattRad(index), () => remove(index))}
+                    onSlett={() => slettRad(index, () => remove(index))}
                   />
                 );
               })}
@@ -238,7 +246,12 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
           </HStack>
         </VStack>
       </VStack>
-      {slettSamordningModal}
+      {slett && (
+        <BekreftSlettingModal heading="Slett samordningsperiode" onSlett={slett} onLukk={() => setSlett(null)}>
+          Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene
+          tilbake i tid.
+        </BekreftSlettingModal>
+      )}
       {modalTilstand && (
         <FerieISykepengeperiodeModal
           grunnlag={grunnlag}
