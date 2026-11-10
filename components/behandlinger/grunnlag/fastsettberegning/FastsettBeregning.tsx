@@ -197,8 +197,7 @@ export const FastsettBeregning = ({ grunnlag, behandlingVersjon, readOnly, initi
               ytterligereNedsattBegrunnelse: data?.ytterligereNedsattArbeidsevneDatobegrunnelse,
               årsak: (data.årsak || undefined) as ÅrsakBeregningstidspunkt | undefined,
               ytterligereNedsattÅrsak: (data.ytterligereNedsattÅrsak || undefined) as
-                | ÅrsakYtterligereNedsatt
-                | undefined,
+                ÅrsakYtterligereNedsatt | undefined,
             },
           },
           referanse: behandlingsreferanse,

@@ -348,8 +348,7 @@ export type TypeBehandling =
 type GeneratedLøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
 export type BrevBehovstype =
-  | '5050'
-  | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
+  '5050' | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
 
 type BrevLøsning = {
   behovstype: BrevBehovstype;
@@ -454,7 +453,8 @@ export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['avslagsårsak'];
 
-export type ErStudentStatus = components['schemas']['no.nav.aap.student.OppgittStudent']['erStudentStatus'];
+export type ErStudentStatus =
+  components['schemas']['no.nav.aap.student.OppgittStudent']['erStudentStatus'];
 export type SkalGjenopptaStudieStatus =
   components['schemas']['no.nav.aap.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
@@ -553,9 +553,11 @@ export type tilhørighetVurdering =
 export type VisuellTidslinjeArbeidInntekt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge'];
 
-export type AvklarPeriodisertStudentLøsning = components['schemas']['no.nav.aap.student.PeriodisertStudentDto'];
+export type AvklarPeriodisertStudentLøsning =
+  components['schemas']['no.nav.aap.student.PeriodisertStudentDto'];
 
-export type StudentVurderingResponse = components['schemas']['no.nav.aap.student.StudentVurderingResponse'];
+export type StudentVurderingResponse =
+  components['schemas']['no.nav.aap.student.StudentVurderingResponse'];
 
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];

@@ -81,8 +81,12 @@ export const EtableringAvEgenVirksomhet = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
-    useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
+  const {
+    løsAvklaringsbehov,
+    løsAvklaringsbehovIsLoading,
+    løsAvklaringsbehovStatus,
+    løsAvklaringsbehovError,
+  } = useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
 
   const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)

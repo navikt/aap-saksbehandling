@@ -23,14 +23,7 @@ interface FormFields {
 }
 
 export type Oppgavetyper =
-  | 'RETUR'
-  | 'JFR'
-  | 'KONT_BRUK'
-  | 'SVAR_IK_MOT'
-  | 'VURD_HENV'
-  | 'VUR_KONS_YTE'
-  | 'VURD_NOTAT'
-  | 'VUR_SVAR';
+  'RETUR' | 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VURD_NOTAT' | 'VUR_SVAR';
 
 const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [
   {

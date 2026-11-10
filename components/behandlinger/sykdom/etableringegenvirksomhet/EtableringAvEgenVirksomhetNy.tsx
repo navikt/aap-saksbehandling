@@ -289,11 +289,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                         : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                     )}
                     customTag={
-                      erLagretVurdering ? (
-                        <VirksomhetFaseTag fase={grunnlag.nyeVurderinger[index]?.fase} />
-                      ) : (
-                        <VirksomhetFaseTag fase={form.watch(`vurderinger.${index}.fase`)} />
-                      )
+                      erLagretVurdering ? <VirksomhetFaseTag fase={grunnlag.nyeVurderinger[index]?.fase} /> : <VirksomhetFaseTag fase={form.watch(`vurderinger.${index}.fase`)} />
                     }
                     nestePeriodeFraDato={sluttdato(index)}
                     isLast={index === vedtatteVurderinger.length - 1}
