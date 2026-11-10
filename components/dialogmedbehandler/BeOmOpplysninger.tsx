@@ -5,7 +5,7 @@ import styles from './BeOmOpplysninger.module.css';
 import { InnhentDokumentasjonSkjema } from '../innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { RelevanteDokumenter } from '../innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
 import { useMeldingerFraDialog } from '../../hooks/saksbehandling/SakMeldingerFraDialogHook';
-import { DialogMedBehandler } from './DialogMedBehandler';
+import { Behandlerdialog } from 'components/dialogmedbehandler/Behandlerdialog';
 import { revalidateBehandlingPath } from '../../lib/actions/actions';
 import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 
@@ -27,7 +27,7 @@ export const BeOmOpplysninger = () => {
     <section>
       {!visSkjema && (
         <>
-          <DialogMedBehandler
+          <Behandlerdialog
             behandlingsreferanse={params.behandlingsreferanse}
             meldingerMedDokumentliste={meldingerMedDokumentliste}
             kommendeMeldinger={kommendeMeldinger}
