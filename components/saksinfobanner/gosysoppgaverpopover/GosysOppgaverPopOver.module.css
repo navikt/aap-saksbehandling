@@ -3,11 +3,3 @@
   margin: 0;
   padding: 0;
 }
-
-.gosysOppgave {
-  border-bottom: 1px solid var(--ax-border-neutral-subtle);
-}
-
-.gosysOppgaveFooter {
-  border-top: 1px solid var(--ax-border-neutral-subtle);
-}

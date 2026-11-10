@@ -31,7 +31,13 @@ export const GosysOppgaverPopOver = ({ oppgaver, antallTreff, saksnummer }: Prop
           <Box paddingInline="space-12">
             <VStack as="ul" className={styles.gosysOppgaver}>
               {gosysOppgaverSomSkalVises.map((oppgave) => (
-                <Box as="li" key={oppgave.id} paddingBlock="space-12" className={styles.gosysOppgave}>
+                <Box
+                  as="li"
+                  key={oppgave.id}
+                  paddingBlock="space-12"
+                  borderWidth="0 0 1 0"
+                  borderColor="neutral-subtle"
+                >
                   <VStack gap="space-4">
                     {oppgave.opprettetTidspunkt && (
                       <Detail weight="semibold">{formaterDatoForFrontend(oppgave.opprettetTidspunkt)}</Detail>
@@ -57,7 +63,7 @@ export const GosysOppgaverPopOver = ({ oppgaver, antallTreff, saksnummer }: Prop
               </Box>
             )}
           </Box>
-          <Box padding="space-12" className={styles.gosysOppgaveFooter}>
+          <Box padding="space-12" borderWidth="1 0 0 0" borderColor="neutral-subtle">
             <HStack justify="end">
               <Button
                 as="a"

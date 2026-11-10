@@ -8,7 +8,6 @@ import { GosysOppgave } from 'lib/types/gosysTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { GosysSortering, mapGjelderTilTekst, mapOppgaveTypeTilTekst, sorterGosysOppgaver } from 'lib/utils/gosys';
 import { useState } from 'react';
-import styles from './GosysOppgaverForPersonTabell.module.css';
 
 interface Props {
   oppgaver: GosysOppgave[];
@@ -95,7 +94,7 @@ export const GosysOppgaverForPersonTabell = ({ oppgaver, gosysUrl }: Props) => {
                       rel="noopener noreferrer"
                       variant="secondary"
                       size="xsmall"
-                      className={styles.gosysLenke}
+                      style={{ whiteSpace: 'nowrap' }}
                       icon={<ExternalLinkIcon aria-hidden />}
                     >
                       Åpne i Gosys
