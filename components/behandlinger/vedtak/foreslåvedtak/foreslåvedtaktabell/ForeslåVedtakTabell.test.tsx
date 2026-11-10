@@ -118,7 +118,7 @@ describe('Ny og Endret', () => {
 describe('Stans og opphør', () => {
   it('viser Stans, hjemmel og Ny i avslått periode', () => {
     medGrunnlag({
-      perioder: [ikkeOppfyltPeriode],
+      perioder: [{ ...ikkeOppfyltPeriode, erNy: true }],
       stansOpphør: [{ stansOpphørFraOgMed: '2025-05-13', historikk: [stansVurdering()] }],
     });
     expect(screen.getByText('Stans')).toBeVisible();
