@@ -12,13 +12,7 @@ import styles from './Melding.module.css';
 import { DokumentInfoDto } from 'lib/types/types';
 
 export type DokumentasjonType =
-  | 'L120'
-  | 'L40'
-  | 'L8'
-  | 'MELDING_FRA_NAV'
-  | 'MELDING_FRA_BEHANDLER'
-  | 'PURRING'
-  | 'RETUR_LEGEERKLÆRING';
+  'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'MELDING_FRA_BEHANDLER' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
   visningType: 'INNKOMMENDE' | 'UTGÅENDE';
@@ -96,11 +90,7 @@ export const Melding = ({
       {visningType === 'UTGÅENDE' && (
         <VStack align={'end'}>
           <HStack gap={'space-2'} align={'center'} className={status === 'FEILET' ? styles.feilmelding : ''}>
-            {status === 'FEILET' ? (
-              <ExclamationmarkTriangleIcon fontSize="1rem" aria-hidden />
-            ) : (
-              <CheckmarkHeavyIcon fontSize="1rem" aria-hidden />
-            )}
+            {mapStatusTilIkon(status)}
             <Detail>{mapStatusTilTekst(status)}</Detail>
           </HStack>
         </VStack>
@@ -130,15 +120,28 @@ const mapDokumentasjonTypeTilTekst = (dokumentasjonType?: DokumentasjonType) => 
   }
 };
 
+const mapStatusTilIkon = (status: Props['status']) => {
+  switch (status) {
+    case 'SENDT':
+      return <CheckmarkHeavyIcon title="Sendt" fontSize="1rem" aria-hidden />;
+    case 'LEVERT':
+      return <CheckmarkHeavyIcon title="Sendt" fontSize="1rem" aria-hidden />;
+    case 'FEILET':
+      return <ExclamationmarkTriangleIcon title="Feilet" fontSize="1rem" aria-hidden />;
+    default:
+      return null;
+  }
+};
+
 const mapStatusTilTekst = (status: Props['status']) => {
   switch (status) {
     case 'SENDT':
       return 'Sendt';
     case 'LEVERT':
-      return 'Levert';
+      return 'Sendt';
     case 'FEILET':
       return 'Feilet';
     default:
-      return status;
+      return 'Sender ...';
   }
 };
