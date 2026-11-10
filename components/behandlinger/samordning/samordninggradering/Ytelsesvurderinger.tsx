@@ -246,12 +246,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
           </HStack>
         </VStack>
       </VStack>
-      {slett && (
-        <BekreftSlettingModal heading="Slett samordningsperiode" onSlett={slett} onLukk={() => setSlett(null)}>
-          Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene
-          tilbake i tid.
-        </BekreftSlettingModal>
-      )}
+      {slett && <BekreftSlettingModal onSlett={slett} onLukk={() => setSlett(null)} />}
       {modalTilstand && (
         <FerieISykepengeperiodeModal
           grunnlag={grunnlag}

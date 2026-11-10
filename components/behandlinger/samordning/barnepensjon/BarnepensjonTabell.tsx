@@ -149,12 +149,7 @@ export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) 
           </Button>
         </div>
       )}
-      {slett && (
-        <BekreftSlettingModal heading="Slett samordningsperiode" onSlett={slett} onLukk={() => setSlett(null)}>
-          Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene
-          tilbake i tid.
-        </BekreftSlettingModal>
-      )}
+      {slett && <BekreftSlettingModal onSlett={slett} onLukk={() => setSlett(null)} />}
     </VStack>
   );
 };
