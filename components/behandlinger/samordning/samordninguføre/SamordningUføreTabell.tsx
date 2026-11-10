@@ -8,13 +8,25 @@ import { SamordningUføreFormFields } from 'components/behandlinger/samordning/s
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TableStyled } from 'components/tablestyled/TableStyled';
+import { useSlettSamordning } from 'components/behandlinger/samordning/useSlettSamordning';
+import { SamordningUføreGrunnlag } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 interface Props {
   form: UseFormReturn<SamordningUføreFormFields>;
   readOnly: boolean;
+  vedtattePerioder: SamordningUføreGrunnlag['vedtattePerioder'];
 }
-export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
+export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'vurderteSamordninger', control: form.control });
+  const { slettSamordning, slettSamordningModal } = useSlettSamordning();
+  function erVedtattRad(index: number): boolean {
+    const rad = form.getValues(`vurderteSamordninger.${index}`);
+    return vedtattePerioder.some(
+      (vedtattPeriode) => formaterDatoForFrontend(vedtattPeriode.virkningstidspunkt) === rad.virkningstidspunkt
+    );
+  }
+
   function leggTilRad() {
     append({
       gradering: undefined,
@@ -71,7 +83,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
                     icon={<TrashIcon title={'Slett'} />}
                     variant={'tertiary'}
                     type={'button'}
-                    onClick={() => remove(index)}
+                    onClick={() => slettSamordning(erVedtattRad(index), () => remove(index))}
                   />
                 )}
               </Table.DataCell>
@@ -86,6 +98,7 @@ export const SamordningUføreTabell = ({ form, readOnly }: Props) => {
           </Button>
         )}
       </HStack>
+      {slettSamordningModal}
     </VStack>
   );
 };

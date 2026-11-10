@@ -6,17 +6,28 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BarnepensjonFormFields } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { formaterTilNok } from 'lib/utils/string';
+import { BarnepensjonGrunnlag } from 'lib/types/types';
 
 import styles from './Barnepensjon.module.css';
 import { isBefore } from 'date-fns';
+import { useSlettSamordning } from 'components/behandlinger/samordning/useSlettSamordning';
 
 interface Props {
   form: UseFormReturn<BarnepensjonFormFields>;
   readOnly: boolean;
+  vedtattePerioder: BarnepensjonGrunnlag['vedtattePerioder'];
 }
 
-export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
+export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjonPerioder' });
+  const { slettSamordning, slettSamordningModal } = useSlettSamordning();
+
+  function erVedtattRad(index: number): boolean {
+    const rad = form.getValues(`barnepensjonPerioder.${index}`);
+    return vedtattePerioder.some(
+      (vedtattPeriode) => vedtattPeriode.fom === rad.fom && (vedtattPeriode.tom ?? '') === rad.tom
+    );
+  }
 
   return (
     <VStack gap={'space-8'}>
@@ -103,7 +114,7 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                       variant={'tertiary'}
                       type={'button'}
                       icon={<TrashIcon title={'Fjern periode'} fontSize={'1.5rem'} />}
-                      onClick={() => remove(index)}
+                      onClick={() => slettSamordning(erVedtattRad(index), () => remove(index))}
                     />
                   )}
                 </Table.DataCell>
@@ -130,7 +141,8 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
             Legg til
           </Button>
         </div>
-      )}{' '}
+      )}
+      {slettSamordningModal}
     </VStack>
   );
 };

@@ -22,6 +22,7 @@ const grunnlagMedVurdering: SamordningUføreGrunnlag = {
     },
   ],
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [{ uføregradTilSamordning: 40, virkningstidspunkt: '2025-08-01' }],
@@ -82,6 +83,7 @@ describe('mellomlagring', () => {
       },
     ],
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

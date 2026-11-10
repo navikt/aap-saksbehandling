@@ -18,6 +18,7 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
@@ -40,6 +41,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
 
 const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   ytelser: [
     {
@@ -167,6 +169,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -199,6 +202,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -249,6 +253,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -289,6 +294,7 @@ describe('Samordning gradering', () => {
 
     const grunnlagMedOverlappendeFerieOgSykepenger: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -329,6 +335,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -352,6 +359,7 @@ describe('Samordning gradering', () => {
 describe('kopiering av perioder fra oppslag', () => {
   const grunnlagMedFlereYtelserOgVurdering: SamordningGraderingGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
     feriePerioder: [],
     historiskeVurderinger: [],
     ytelser: [
@@ -386,6 +394,7 @@ describe('kopiering av perioder fra oppslag', () => {
 
   const grunnlagMedFerieISykepengeperiode: SamordningGraderingGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
     feriePerioder: [],
     historiskeVurderinger: [],
     ytelser: [],
@@ -464,6 +473,7 @@ describe('kopiering av perioder fra oppslag', () => {
   test('kopiert periode får samordningsgrad 0 når kilden mangler gradering', async () => {
     const grunnlagMedYtelseUtenGraderingFraKilde: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [
@@ -492,6 +502,7 @@ describe('kopiering av perioder fra oppslag', () => {
   test('kopiert periode får samordningsgrad 0 når kilden har gradering 0', async () => {
     const grunnlagMedGraderingNull: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [
