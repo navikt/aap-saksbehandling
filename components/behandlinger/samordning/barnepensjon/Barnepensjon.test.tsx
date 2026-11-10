@@ -96,7 +96,6 @@ describe('Barnepensjon', () => {
       customRender(<Barnepensjon behandlingVersjon={1} readOnly={false} grunnlag={grunnlagUtenVurdering} />);
       await trykkPåEndreKnapp();
       await trykkPåBekreft();
-      screen.logTestingPlaygroundURL();
       const feilmelding = screen.getByRole('link', { name: 'Du må vurdere samordning med barnepensjon.' });
       expect(feilmelding).toBeVisible();
     });
