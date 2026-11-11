@@ -19,7 +19,7 @@ import { SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/ty
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { BekreftSlettingModal } from 'components/bekreftslettingmodal/BekreftSlettingModal';
+import { BekreftSlettingDialog } from 'components/bekreftslettingdialog/BekreftSlettingDialog';
 import {
   beregnSplittingAvSykepengeperiode,
   slåSammenSplittedeSykepengeperioder,
@@ -246,7 +246,12 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
           </HStack>
         </VStack>
       </VStack>
-      {radSomSkalSlettes !== undefined && <BekreftSlettingModal onSlett={()=>remove(radSomSkalSlettes)} onLukk={() => setRadSomSkalSlettes(undefined)} />}
+      {radSomSkalSlettes !== undefined && (
+        <BekreftSlettingDialog
+          onSlett={() => remove(radSomSkalSlettes)}
+          onLukk={() => setRadSomSkalSlettes(undefined)}
+        />
+      )}
       {modalTilstand && (
         <FerieISykepengeperiodeModal
           grunnlag={grunnlag}

@@ -8,7 +8,7 @@ import { SamordningUføreFormFields } from 'components/behandlinger/samordning/s
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { BekreftSlettingModal } from 'components/bekreftslettingmodal/BekreftSlettingModal';
+import { BekreftSlettingDialog } from 'components/bekreftslettingdialog/BekreftSlettingDialog';
 import { useState } from 'react';
 import { SamordningUføreGrunnlag } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -105,7 +105,12 @@ export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Pro
           </Button>
         )}
       </HStack>
-      {radSomSkalSlettes !== undefined && <BekreftSlettingModal onSlett={()=>remove(radSomSkalSlettes)} onLukk={() => setRadSomSkalSlettes(undefined)} />}
+      {radSomSkalSlettes !== undefined && (
+        <BekreftSlettingDialog
+          onSlett={() => remove(radSomSkalSlettes)}
+          onLukk={() => setRadSomSkalSlettes(undefined)}
+        />
+      )}
     </VStack>
   );
 };

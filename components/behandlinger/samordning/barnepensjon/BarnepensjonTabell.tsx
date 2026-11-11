@@ -10,7 +10,7 @@ import { BarnepensjonGrunnlag } from 'lib/types/types';
 
 import styles from './Barnepensjon.module.css';
 import { isBefore } from 'date-fns';
-import { BekreftSlettingModal } from 'components/bekreftslettingmodal/BekreftSlettingModal';
+import { BekreftSlettingDialog } from 'components/bekreftslettingdialog/BekreftSlettingDialog';
 import { useState } from 'react';
 
 interface Props {
@@ -150,7 +150,10 @@ export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) 
         </div>
       )}
       {radSomSkalSlettes !== undefined && (
-        <BekreftSlettingModal onSlett={() => remove(radSomSkalSlettes)} onLukk={() => setRadSomSkalSlettes(undefined)} />
+        <BekreftSlettingDialog
+          onSlett={() => remove(radSomSkalSlettes)}
+          onLukk={() => setRadSomSkalSlettes(undefined)}
+        />
       )}
     </VStack>
   );
