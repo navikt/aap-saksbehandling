@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Modal, Button, Loader, BodyShort } from '@navikt/ds-react';
+import { Dialog, Button, Loader, BodyShort } from '@navikt/ds-react';
 import styles from './ForhåndsvisBrevModal.module.css';
 
 interface Props {
@@ -40,25 +40,35 @@ export const ForhåndsvisBrevModal = ({ isOpen, brevbestillingReferanse, onClose
   }, [brevbestillingReferanse, isOpen]);
 
   return (
-    <Modal open={isOpen} onClose={onClose} header={{ heading: 'Forhåndsvisning av brev' }} width="medium">
-      <Modal.Body>
-        {isLoading && (
-          <div>
-            <Loader size="xlarge" title="Laster forhåndsvisning av brev..." />
-            <BodyShort spacing>Laster forhåndsvising av brev</BodyShort>
-          </div>
-        )}
-        {dataUri && (
-          <div className={styles.pdf}>
-            <object data={`${dataUri}`} type="application/pdf">
-              <p>Forhåndsvisning av brev</p>
-            </object>
-          </div>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={onClose}>Lukk</Button>
-      </Modal.Footer>
-    </Modal>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>Forhåndsvisning av brev</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          {isLoading && (
+            <div>
+              <Loader size="xlarge" title="Laster forhåndsvisning av brev..." />
+              <BodyShort spacing>Laster forhåndsvising av brev</BodyShort>
+            </div>
+          )}
+          {dataUri && (
+            <div className={styles.pdf}>
+              <object data={`${dataUri}`} type="application/pdf">
+                <p>Forhåndsvisning av brev</p>
+              </object>
+            </div>
+          )}
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button onClick={onClose}>Lukk</Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

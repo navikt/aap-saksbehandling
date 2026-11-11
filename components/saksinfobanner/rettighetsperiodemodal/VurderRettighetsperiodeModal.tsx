@@ -1,10 +1,9 @@
-import { BodyLong, Button, Modal, VStack } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, VStack } from '@navikt/ds-react';
 import { useRouter } from 'next/navigation';
 
 import { DetaljertBehandling, NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
-import styles from './VurderRettighetsperiodeModal.module.css';
 import { Behovstype } from 'lib/utils/form';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
@@ -76,35 +75,38 @@ export const VurderRettighetsperiodeModal = ({
   };
 
   return (
-    <Modal
-      header={{
-        heading: 'Vurder § 22-13 syvende ledd. Første mulige dato med rett til ytelse ',
-      }}
+    <Dialog
       open={isOpen}
-      onClose={onClose}
-      className={styles.modal}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
     >
-      <form onSubmit={onBekreft}>
-        <Modal.Body>
-          <VStack gap="space-16">
-            <BodyLong size="medium">
-              Dersom søker kan ha rett til AAP før søknadstidspunktet kan første mulige dato med rett til ytelse
-              overstyres. NAY får en oppgave for å vurdere riktig dato etter § 22-13 syvende ledd.
-            </BodyLong>
-            <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak.</BodyLong>
-            <FormField form={form} formField={formFields.begrunnelse} size="medium" />
-            {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
-          </VStack>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type={'submit'} className={'fit-content'} loading={isLoading}>
+      <Dialog.Popup width="38.4375rem" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>Vurder § 22-13 syvende ledd. Første mulige dato med rett til ytelse</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <form id="vurder-rettighetsperiode" onSubmit={onBekreft}>
+            <VStack gap="space-16">
+              <BodyLong size="medium">
+                Dersom søker kan ha rett til AAP før søknadstidspunktet kan første mulige dato med rett til ytelse
+                overstyres. NAY får en oppgave for å vurdere riktig dato etter § 22-13 syvende ledd.
+              </BodyLong>
+              <BodyLong>Tilbakedatering av søknadsdato etter § 22-13 5. ledd må gjøres i postmottak.</BodyLong>
+              <FormField form={form} formField={formFields.begrunnelse} size="medium" />
+              {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
+            </VStack>
+          </form>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button type={'submit'} form="vurder-rettighetsperiode" className={'fit-content'} loading={isLoading}>
             Bekreft
           </Button>
           <Button variant={'secondary'} onClick={onClose} type="button">
             Avbryt
           </Button>
-        </Modal.Footer>
-      </form>
-    </Modal>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

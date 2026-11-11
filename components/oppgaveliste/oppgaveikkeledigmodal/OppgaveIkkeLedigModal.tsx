@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
@@ -15,39 +15,35 @@ export const OppgaveIkkeLedigModal = ({
   saksbehandlerNavn,
   revaliderOppgaver,
 }: Props) => {
+  const handleClose = () => {
+    setVisOppgaveIkkeLedigModal(false);
+    revaliderOppgaver();
+  };
+
   return (
-    <Modal
+    <Dialog
       open={visOppgaveIkkeLedigModal}
-      header={{
-        heading: 'Oppgaven er plukket av noen andre',
-        icon: <PadlockLockedFillIcon />,
+      onOpenChange={(open) => {
+        if (!open) handleClose();
       }}
-      onClose={() => {
-        setVisOppgaveIkkeLedigModal(false);
-        revaliderOppgaver();
-      }}
-      onBeforeClose={() => {
-        setVisOppgaveIkkeLedigModal(false);
-        revaliderOppgaver();
-        return true;
-      }}
-      width={'medium'}
     >
-      <Modal.Body>
-        <BodyShort>
-          {`Oppgaven er hos ${saksbehandlerNavn}. Oppdater oppgavelisten for å plukke en annen oppgave.`}
-        </BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type={'button'}
-          onClick={async () => {
-            setVisOppgaveIkkeLedigModal(false);
-          }}
-        >
-          Oppdater oppgavelisten
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <PadlockLockedFillIcon aria-hidden /> Oppgaven er plukket av noen andre
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>
+            {`Oppgaven er hos ${saksbehandlerNavn}. Oppdater oppgavelisten for å plukke en annen oppgave.`}
+          </BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button type={'button'} onClick={handleClose}>
+            Oppdater oppgavelisten
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

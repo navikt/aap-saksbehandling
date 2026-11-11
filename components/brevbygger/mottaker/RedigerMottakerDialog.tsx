@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, HGrid, HStack, Modal, Radio, VStack } from '@navikt/ds-react';
+import { Box, Button, Dialog, HGrid, HStack, Radio, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { Mottaker } from 'lib/types/types';
 import { useEffect } from 'react';
@@ -147,150 +147,159 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
   };
 
   return (
-    <Modal open={true} onClose={() => setIsOpen(false)} header={{ heading: 'Rediger mottaker' }}>
-      <form onSubmit={handleSubmit(lagre)}>
-        <Modal.Body>
-          <VStack gap="space-16">
-            <Box background="neutral-soft" padding="space-16" borderRadius="8" borderColor="neutral" borderWidth="1">
-              <RadioGroupWrapper
-                control={control}
-                name="opplysningstype"
-                label="Hvilke opplysninger vil du registrere?"
-                rules={{ required: 'Du må velge opplysningstype.' }}
-                size="small"
-              >
-                <Radio value={Opplysningstype.KUN_IDENT} description="Det vanligste. Distribusjon går automatisk.">
-                  Kun ident
-                </Radio>
-                <Radio value={Opplysningstype.KUN_ADRESSE} description="Kun hvis ident ikke finnes">
-                  Kun adresse
-                </Radio>
-                <Radio value={Opplysningstype.BEGGE} description="For eksempel dødsbo eller utenlandsk adresse">
-                  Begge deler
-                </Radio>
-              </RadioGroupWrapper>
-            </Box>
-
-            {visIdentfelter && (
-              <HGrid columns={2} gap="space-16">
-                <SelectWrapper
+    <Dialog open={true} onOpenChange={setIsOpen}>
+      <Dialog.Popup closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>Rediger mottaker</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <form id="rediger-mottaker" onSubmit={handleSubmit(lagre)}>
+            <VStack gap="space-16">
+              <Box background="neutral-soft" padding="space-16" borderRadius="8" borderColor="neutral" borderWidth="1">
+                <RadioGroupWrapper
                   control={control}
-                  name="identType"
-                  label="Identtype"
+                  name="opplysningstype"
+                  label="Hvilke opplysninger vil du registrere?"
+                  rules={{ required: 'Du må velge opplysningstype.' }}
                   size="small"
-                  rules={{ required: { value: visIdentfelter, message: 'Du må velge identtype.' } }}
                 >
-                  <option value="">Velg type ident</option>
-                  <option value="FNR">Fødselsnummer</option>
-                  <option value="ORGNR">Orgnr.</option>
-                  {opplysningstype !== Opplysningstype.KUN_IDENT && <option value="UTL_ORG">Utenlandsk orgnr.</option>}
-                </SelectWrapper>
+                  <Radio value={Opplysningstype.KUN_IDENT} description="Det vanligste. Distribusjon går automatisk.">
+                    Kun ident
+                  </Radio>
+                  <Radio value={Opplysningstype.KUN_ADRESSE} description="Kun hvis ident ikke finnes">
+                    Kun adresse
+                  </Radio>
+                  <Radio value={Opplysningstype.BEGGE} description="For eksempel dødsbo eller utenlandsk adresse">
+                    Begge deler
+                  </Radio>
+                </RadioGroupWrapper>
+              </Box>
 
-                <TextFieldWrapper
-                  name="ident"
-                  label="Identifikator"
-                  type="text"
-                  control={control}
-                  rules={{ required: { value: visIdentfelter, message: 'Du må fylle inn identifikator.' } }}
-                />
-              </HGrid>
-            )}
+              {visIdentfelter && (
+                <HGrid columns={2} gap="space-16">
+                  <SelectWrapper
+                    control={control}
+                    name="identType"
+                    label="Identtype"
+                    size="small"
+                    rules={{ required: { value: visIdentfelter, message: 'Du må velge identtype.' } }}
+                  >
+                    <option value="">Velg type ident</option>
+                    <option value="FNR">Fødselsnummer</option>
+                    <option value="ORGNR">Orgnr.</option>
+                    {opplysningstype !== Opplysningstype.KUN_IDENT && (
+                      <option value="UTL_ORG">Utenlandsk orgnr.</option>
+                    )}
+                  </SelectWrapper>
 
-            {visAdressefelter && (
-              <>
-                <TextFieldWrapper
-                  name="navn"
-                  label="Navn"
-                  type="text"
-                  control={control}
-                  rules={{ required: { value: visAdressefelter, message: 'Må oppgi navn når adresse brukes' } }}
-                />
-
-                <ComboboxWrapper
-                  control={control}
-                  name="landkode"
-                  label="Land"
-                  size="small"
-                  rules={{ required: { value: visAdressefelter, message: 'Må oppgi land når adresse brukes' } }}
-                  options={landkoder}
-                />
-                {isError(landkoderResponse) && (
-                  <Alert variant="warning" size="small">
-                    Feil oppsto ved henting av land og landkoder. Prøv å laste siden på nytt.
-                  </Alert>
-                )}
-
-                <VStack gap="space-8">
                   <TextFieldWrapper
-                    name="adresselinje1"
-                    label="Adresselinjer"
-                    placeholder="Adresselinje 1"
+                    name="ident"
+                    label="Identifikator"
                     type="text"
                     control={control}
-                    rules={{
-                      required: { value: visAdressefelter, message: 'Må oppgi adresselinje 1 når adresse brukes' },
-                    }}
+                    rules={{ required: { value: visIdentfelter, message: 'Du må fylle inn identifikator.' } }}
                   />
-                  <TextFieldWrapper
-                    name="adresselinje2"
-                    placeholder="Adresselinje 2"
-                    type="text"
-                    control={control}
-                    hideLabel
-                  />
-                  <TextFieldWrapper
-                    name="adresselinje3"
-                    placeholder="Adresselinje 3"
-                    type="text"
-                    control={control}
-                    hideLabel
-                  />
-                </VStack>
+                </HGrid>
+              )}
 
-                {erNorskAdresse && (
-                  <HGrid columns={'.5fr 1fr'} gap="space-16" align="start">
+              {visAdressefelter && (
+                <>
+                  <TextFieldWrapper
+                    name="navn"
+                    label="Navn"
+                    type="text"
+                    control={control}
+                    rules={{ required: { value: visAdressefelter, message: 'Må oppgi navn når adresse brukes' } }}
+                  />
+
+                  <ComboboxWrapper
+                    control={control}
+                    name="landkode"
+                    label="Land"
+                    size="small"
+                    rules={{ required: { value: visAdressefelter, message: 'Må oppgi land når adresse brukes' } }}
+                    options={landkoder}
+                  />
+                  {isError(landkoderResponse) && (
+                    <Alert variant="warning" size="small">
+                      Feil oppsto ved henting av land og landkoder. Prøv å laste siden på nytt.
+                    </Alert>
+                  )}
+
+                  <VStack gap="space-8">
                     <TextFieldWrapper
-                      name="postnummer"
-                      label="Postnummer"
+                      name="adresselinje1"
+                      label="Adresselinjer"
+                      placeholder="Adresselinje 1"
                       type="text"
                       control={control}
                       rules={{
-                        required: {
-                          value: visAdressefelter && erNorskAdresse,
-                          message: 'Må oppgi postnummer',
-                        },
-                        minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
-                        maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
-                        pattern: { value: /^[0-9]+$/, message: 'Postnummer kan kun inneholde tall' },
+                        required: { value: visAdressefelter, message: 'Må oppgi adresselinje 1 når adresse brukes' },
                       }}
                     />
                     <TextFieldWrapper
-                      name="poststed"
-                      label="Poststed"
+                      name="adresselinje2"
+                      placeholder="Adresselinje 2"
                       type="text"
                       control={control}
-                      rules={{
-                        required: {
-                          value: visAdressefelter && erNorskAdresse,
-                          message: 'Må oppgi poststed',
-                        },
-                      }}
+                      hideLabel
                     />
-                  </HGrid>
-                )}
-              </>
-            )}
-          </VStack>
-        </Modal.Body>
-        <Modal.Footer>
+                    <TextFieldWrapper
+                      name="adresselinje3"
+                      placeholder="Adresselinje 3"
+                      type="text"
+                      control={control}
+                      hideLabel
+                    />
+                  </VStack>
+
+                  {erNorskAdresse && (
+                    <HGrid columns={'.5fr 1fr'} gap="space-16" align="start">
+                      <TextFieldWrapper
+                        name="postnummer"
+                        label="Postnummer"
+                        type="text"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: visAdressefelter && erNorskAdresse,
+                            message: 'Må oppgi postnummer',
+                          },
+                          minLength: { value: 4, message: 'Postnummer må være 4 siffer' },
+                          maxLength: { value: 4, message: 'Postnummer må være 4 siffer' },
+                          pattern: { value: /^[0-9]+$/, message: 'Postnummer kan kun inneholde tall' },
+                        }}
+                      />
+                      <TextFieldWrapper
+                        name="poststed"
+                        label="Poststed"
+                        type="text"
+                        control={control}
+                        rules={{
+                          required: {
+                            value: visAdressefelter && erNorskAdresse,
+                            message: 'Må oppgi poststed',
+                          },
+                        }}
+                      />
+                    </HGrid>
+                  )}
+                </>
+              )}
+            </VStack>
+          </form>
+        </Dialog.Body>
+        <Dialog.Footer>
           <HStack gap="space-16">
             <Button type="button" variant="secondary" onClick={() => setIsOpen(false)}>
               Avbryt
             </Button>
-            <Button type="submit">Lagre</Button>
+            <Button type="submit" form="rediger-mottaker">
+              Lagre
+            </Button>
           </HStack>
-        </Modal.Footer>
-      </form>
-    </Modal>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

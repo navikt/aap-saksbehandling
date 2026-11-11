@@ -1,10 +1,9 @@
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
-import styles from './TrekkKlageModal.module.css';
 import { Alert } from 'components/alert/Alert';
 
 interface Props {
@@ -18,52 +17,56 @@ export const TrekkKlageModal = ({ saksnummer, behandlingReferanse, isOpen, onClo
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
-    <Modal
-      header={{
-        icon: <XMarkOctagonIcon title="" fontSize="1.5rem" />,
-        heading: 'Er du sikker på at du vil trekke klagen?',
-      }}
+    <Dialog
       open={isOpen}
-      onClose={onClose}
-      className={styles.modal}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
     >
-      <Modal.Body>
-        <BodyLong>Når du trekker klagen vil klagen avsluttes og eventuelle vurderinger bli slettet.</BodyLong>
-        {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type={'button'}
-          className={'fit-content'}
-          onClick={async () => {
-            sendHendelseOgVentPåProsessering(
-              saksnummer,
-              {
-                saksnummer: saksnummer,
-                referanse: {
-                  type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
-                  verdi: crypto.randomUUID(),
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <XMarkOctagonIcon aria-hidden /> Er du sikker på at du vil trekke klagen?
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyLong>Når du trekker klagen vil klagen avsluttes og eventuelle vurderinger bli slettet.</BodyLong>
+          {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            type={'button'}
+            className={'fit-content'}
+            onClick={async () => {
+              sendHendelseOgVentPåProsessering(
+                saksnummer,
+                {
+                  saksnummer: saksnummer,
+                  referanse: {
+                    type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+                    verdi: crypto.randomUUID(),
+                  },
+                  type: 'NY_ÅRSAK_TIL_BEHANDLING',
+                  kanal: 'DIGITAL',
+                  mottattTidspunkt: new Date().toISOString(),
+                  melding: {
+                    meldingType: 'NyÅrsakTilBehandlingV0',
+                    årsakerTilBehandling: ['KLAGE_TRUKKET'],
+                    behandlingReferanse: behandlingReferanse,
+                  } satisfies NyÅrsakTilBehandlingV0,
                 },
-                type: 'NY_ÅRSAK_TIL_BEHANDLING',
-                kanal: 'DIGITAL',
-                mottattTidspunkt: new Date().toISOString(),
-                melding: {
-                  meldingType: 'NyÅrsakTilBehandlingV0',
-                  årsakerTilBehandling: ['KLAGE_TRUKKET'],
-                  behandlingReferanse: behandlingReferanse,
-                } satisfies NyÅrsakTilBehandlingV0,
-              },
-              onClose
-            );
-          }}
-          loading={isLoading}
-        >
-          Trekk klage
-        </Button>
-        <Button variant={'secondary'} onClick={onClose} type="button">
-          Avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+                onClose
+              );
+            }}
+            loading={isLoading}
+          >
+            Trekk klage
+          </Button>
+          <Button variant={'secondary'} onClick={onClose} type="button">
+            Avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

@@ -1,26 +1,38 @@
-import { RefObject } from 'react';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
-  ref: RefObject<HTMLDialogElement | null>;
+  isOpen: boolean;
+  onClose: () => void;
   onSlettVurdering: () => void;
 }
 
-export const SlettVurderingModal = ({ ref, onSlettVurdering }: Props) => {
+export const SlettVurderingModal = ({ isOpen, onClose, onSlettVurdering }: Props) => {
   return (
-    <Modal ref={ref} header={{ heading: 'Slett vurdering', icon: <TrashFillIcon /> }}>
-      <Modal.Body>
-        <BodyShort>Når du sletter vurderingen vil svarene dine bli borte.</BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button type={'button'} onClick={() => onSlettVurdering()}>
-          Slett
-        </Button>
-        <Button type={'button'} variant={'tertiary'} onClick={() => ref.current?.close()}>
-          Avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <Dialog.Popup closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <TrashFillIcon aria-hidden /> Slett vurdering
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>Når du sletter vurderingen vil svarene dine bli borte.</BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button type={'button'} onClick={() => onSlettVurdering()}>
+            Slett
+          </Button>
+          <Button type={'button'} variant={'tertiary'} onClick={onClose}>
+            Avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

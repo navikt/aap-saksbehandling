@@ -1,7 +1,7 @@
 'use client';
 
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
-import { Box, Button, Modal, VStack } from '@navikt/ds-react';
+import { Box, Button, Dialog, VStack } from '@navikt/ds-react';
 import { FlytProsesseringServerSentEvent } from 'app/saksbehandling/api/behandling/hent/[referanse]/prosessering/route';
 import { parse } from 'date-fns';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -17,8 +17,6 @@ import { SubmitEventHandler, useState } from 'react';
 import { Alert } from 'components/alert/Alert';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-
-import styles from './SettBehandlingPåVentModal.module.css';
 
 interface Props {
   reservert: boolean;
@@ -122,7 +120,7 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
         // Simuler en delay for å vise loading state før modalen lukkes
         setTimeout(() => {
           setIsLoading(false);
-          onClose();
+          onCloseClick();
         }, 1000);
       }
       if (eventData.status === 'FEILET') {
@@ -143,39 +141,46 @@ export const SettBehandlingPåVentModal = ({ reservert, isOpen, onClose }: Props
   }
 
   return (
-    <Modal
+    <Dialog
       open={isOpen}
-      onClose={onCloseClick}
-      header={{ heading: 'Sett behandling på vent', icon: <HourglassBottomFilledIcon /> }}
-      className={styles.settBehandlingPåVentModal}
+      onOpenChange={(open) => {
+        if (!open) onCloseClick();
+      }}
     >
-      <Modal.Body>
-        <VStack gap={'space-16'}>
-          {isOpen && (
-            <form id={'settBehandlingPåVent'} onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
-              {!reservert && (
-                <Box marginBlock={'space-0 space-8'}>
-                  <Alert variant={'info'}>
-                    Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.
-                  </Alert>
-                </Box>
-              )}
-              <FormField form={form} formField={formFields.begrunnelse} />
-              <FormField form={form} formField={formFields.frist} />
-              <FormField form={form} formField={formFields.grunn} />
-            </form>
-          )}
-          {error && <Alert variant={'error'}>{error}</Alert>}
-        </VStack>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button form={'settBehandlingPåVent'} className={'fit-content'} loading={isLoading}>
-          Sett på vent
-        </Button>
-        <Button variant={'secondary'} onClick={onCloseClick}>
-          Avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <HourglassBottomFilledIcon aria-hidden /> Sett behandling på vent
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <VStack gap={'space-16'}>
+            {isOpen && (
+              <form id={'settBehandlingPåVent'} onSubmit={handleSubmit} className={'flex-column'} autoComplete={'off'}>
+                {!reservert && (
+                  <Box marginBlock={'space-0 space-8'}>
+                    <Alert variant={'info'}>
+                      Behandlingen er ikke tildelt deg. Den tildeles deg når du setter den på vent.
+                    </Alert>
+                  </Box>
+                )}
+                <FormField form={form} formField={formFields.begrunnelse} />
+                <FormField form={form} formField={formFields.frist} />
+                <FormField form={form} formField={formFields.grunn} />
+              </form>
+            )}
+            {error && <Alert variant={'error'}>{error}</Alert>}
+          </VStack>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button form={'settBehandlingPåVent'} className={'fit-content'} loading={isLoading}>
+            Sett på vent
+          </Button>
+          <Button variant={'secondary'} onClick={onCloseClick}>
+            Avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
