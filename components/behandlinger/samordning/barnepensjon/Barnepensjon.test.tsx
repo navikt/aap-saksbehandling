@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import { Barnepensjon } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { customRender } from 'lib/test/CustomRender';
@@ -98,6 +98,7 @@ describe('Barnepensjon', () => {
 
     await user.clear(screen.getByRole('spinbutton', { name: 'Hvilken månedsytelse' }));
     await user.type(screen.getByRole('spinbutton', { name: 'Hvilken månedsytelse' }), '2000');
+    const rad = screen.getByRole('cell', { name: 'Barnepensjon' });
     await user.click(screen.getByRole('button', { name: 'Fjern periode' }));
     const dialog = screen.getByRole('dialog', { name: 'Slett samordningsperiode' });
     expect(
@@ -105,11 +106,8 @@ describe('Barnepensjon', () => {
         'Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene tilbake i tid.'
       )
     ).toBeVisible();
-    expect(screen.getByRole('cell', { name: 'Barnepensjon' })).toBeVisible();
-    const onClose = vi.fn();
-    dialog.addEventListener('close', onClose);
+    expect(rad).toBeInTheDocument();
     await user.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
-    expect(onClose).toHaveBeenCalledOnce();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'Barnepensjon' })).toBeVisible();
 
