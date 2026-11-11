@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { clientOpprettDummySak, clientOpprettSak } from 'lib/clientApi';
+import { clientOpprettDummySak, clientOpprettSak, clientSendPåminnelsePåLegeerklæring } from 'lib/clientApi';
 import { OpprettDummySakDto, OpprettTestcase } from 'lib/types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
 import { FetchResponse, isError, isSuccess } from 'lib/utils/api';
@@ -72,6 +72,20 @@ export function useOpprettDummySak(): {
   }
 
   return { opprettSak: opprettSakMethod, isLoading, data, error };
+}
+
+export function useSendPåminnelsePåDialogmelding(): {
+  sendPåminnelsePåDialogmelding: (dialogmeldingUuid: string, behandlingsreferanse: string) => Promise<{ ok: boolean }>;
+  isLoading: boolean;
+  error?: string;
+} {
+  const { method, isLoading, error } = useFetch(clientSendPåminnelsePåLegeerklæring);
+
+  async function sendPåminnelse(dialogmeldingUuid: string, behandlingsreferanse: string) {
+    return await method(dialogmeldingUuid, behandlingsreferanse);
+  }
+
+  return { sendPåminnelsePåDialogmelding: sendPåminnelse, isLoading, error };
 }
 
 export function useMottattDokumenterLest(): {

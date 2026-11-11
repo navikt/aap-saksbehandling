@@ -48,6 +48,7 @@ export const Behandlerdialog = ({
               key={index}
               melding={meldingMedDokumentliste.melding}
               dokumentInfoIdListe={meldingMedDokumentliste.dokumentIdListe}
+              behandlingsreferanse={behandlingsreferanse}
             />
           ))}
         </VStack>
