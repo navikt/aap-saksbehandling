@@ -64,7 +64,7 @@ export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
   dialogmeldingUuid: string;
   behandlingsreferanse: string;
 }) => {
-  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/v2/avbryt-automatisk-paaminnelse`;
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/avbryt-automatisk-paaminnelse`;
   return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
 };
 
@@ -72,6 +72,6 @@ export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
   dialogmeldingUuid: string;
   behandlingsreferanse: string;
 }) => {
-  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/v2/gjenoppta-automatisk-paaminnelse`;
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/gjenoppta-automatisk-paaminnelse`;
   return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
 };
