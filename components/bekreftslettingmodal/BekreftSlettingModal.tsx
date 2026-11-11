@@ -9,6 +9,7 @@ interface Props {
 export function BekreftSlettingModal({ onSlett, onLukk }: Props) {
   const modalRef = useRef<HTMLDialogElement>(null);
 
+
   return (
     <Modal ref={modalRef} open onClose={onLukk} header={{ heading: 'Slett samordningsperiode' }}>
       <Modal.Body>

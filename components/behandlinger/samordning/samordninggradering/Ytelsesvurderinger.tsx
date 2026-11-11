@@ -80,7 +80,7 @@ type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Props) => {
   const { fields, append, remove, replace } = fieldArray;
-  const [slett, setSlett] = useState<(() => void) | null>(null);
+  const [radSomSkalSlettes, setRadSomSkalSlettes] = useState<number>();
   const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
   const [ferieFeilmelding, setFerieFeilmelding] = useState<string>();
 
@@ -88,7 +88,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
 
   function slettRad(index: number, onSlett: () => void) {
     if (erVedtattRad(index)) {
-      setSlett(() => onSlett);
+      setRadSomSkalSlettes(index);
     } else {
       onSlett();
     }
@@ -246,7 +246,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
           </HStack>
         </VStack>
       </VStack>
-      {slett && <BekreftSlettingModal onSlett={slett} onLukk={() => setSlett(null)} />}
+      {radSomSkalSlettes !== undefined && <BekreftSlettingModal onSlett={()=>remove(radSomSkalSlettes)} onLukk={() => setRadSomSkalSlettes(undefined)} />}
       {modalTilstand && (
         <FerieISykepengeperiodeModal
           grunnlag={grunnlag}

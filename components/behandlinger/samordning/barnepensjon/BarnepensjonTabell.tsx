@@ -21,7 +21,7 @@ interface Props {
 
 export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjonPerioder' });
-  const [slett, setSlett] = useState<(() => void) | null>(null);
+  const [radSomSkalSlettes, setRadSomSkalSlettes] = useState<number>();
 
   function erVedtattRad(index: number): boolean {
     const rad = form.getValues(`barnepensjonPerioder.${index}`);
@@ -117,7 +117,7 @@ export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) 
                       icon={<TrashIcon title={'Fjern periode'} fontSize={'1.5rem'} />}
                       onClick={() => {
                         if (erVedtattRad(index)) {
-                          setSlett(() => () => remove(index));
+                          setRadSomSkalSlettes(index);
                         } else {
                           remove(index);
                         }
@@ -149,7 +149,9 @@ export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) 
           </Button>
         </div>
       )}
-      {slett && <BekreftSlettingModal onSlett={slett} onLukk={() => setSlett(null)} />}
+      {radSomSkalSlettes !== undefined && (
+        <BekreftSlettingModal onSlett={() => remove(radSomSkalSlettes)} onLukk={() => setRadSomSkalSlettes(undefined)} />
+      )}
     </VStack>
   );
 };

@@ -20,7 +20,7 @@ interface Props {
 }
 export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, append, remove } = useFieldArray({ name: 'vurderteSamordninger', control: form.control });
-  const [slett, setSlett] = useState<(() => void) | null>(null);
+  const [radSomSkalSlettes, setRadSomSkalSlettes] = useState<number>();
   function erVedtattRad(index: number): boolean {
     const rad = form.getValues(`vurderteSamordninger.${index}`);
     return vedtattePerioder.some(
@@ -86,7 +86,7 @@ export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Pro
                     type={'button'}
                     onClick={() => {
                       if (erVedtattRad(index)) {
-                        setSlett(() => () => remove(index));
+                        setRadSomSkalSlettes(index);
                       } else {
                         remove(index);
                       }
@@ -105,7 +105,7 @@ export const SamordningUføreTabell = ({ form, readOnly, vedtattePerioder }: Pro
           </Button>
         )}
       </HStack>
-      {slett && <BekreftSlettingModal onSlett={slett} onLukk={() => setSlett(null)} />}
+      {radSomSkalSlettes !== undefined && <BekreftSlettingModal onSlett={()=>remove(radSomSkalSlettes)} onLukk={() => setRadSomSkalSlettes(undefined)} />}
     </VStack>
   );
 };
