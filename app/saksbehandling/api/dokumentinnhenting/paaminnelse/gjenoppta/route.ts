@@ -14,12 +14,12 @@ export async function POST(req: NextRequest) {
     const res = await gjenopptaPåminnelsePåLegeerklæring(body);
     if (isError(res) && res.status !== 403) {
       logError(
-        `/dialogmelding/paaminnelse/v2/gjenoppta-automatisk-paaminnelse${res.status} - ${res.apiException.code}: ${res.apiException.message}`
+        `/dialogmelding/paaminnelse/gjenoppta-automatisk-paaminnelse${res.status} - ${res.apiException.code}: ${res.apiException.message}`
       );
     }
     return NextResponse.json(res, { status: res.status === 204 ? 200 : res.status });
   } catch (error) {
-    logError(`/dialogmelding/paaminnelse/v2/gjenoppta-automatisk-paaminnelse`, error);
+    logError(`/dialogmelding/paaminnelse/gjenoppta-automatisk-paaminnelse`, error);
     const err: ErrorResponseBody<ApiException> = {
       type: 'ERROR',
       status: 500,
