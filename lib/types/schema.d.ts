@@ -8031,6 +8031,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonGrunnlagDto': {
       harTilgangTilÅSaksbehandle: boolean;
       historiskeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto'][];
+      vedtattePerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingPeriodeDto'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto': {
@@ -9064,6 +9065,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingGrunnlagDTO': {
       grunnlag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreGrunnlagDTO'][];
       harTilgangTilÅSaksbehandle: boolean;
+      vedtattePerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingPeriodeDTO'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingDTO'];
     };
     'no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingPeriodeDTO': {
@@ -9123,6 +9125,7 @@ export interface components {
       tpYtelser?:
         | components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.tjenestepensjon.TjenestePensjonForhold'][]
         | null;
+      vedtattePerioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningVurderingDTO'][];
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO'];
       ytelser: components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO'][];
     };

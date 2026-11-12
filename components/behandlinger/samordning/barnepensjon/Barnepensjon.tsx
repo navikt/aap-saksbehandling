@@ -130,7 +130,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
           <BarnepensjonTidligereVurdering vurderinger={grunnlag.historiskeVurderinger} />
         )}
         <FormField form={form} formField={formFields.begrunnelse} />
-        <BarnepensjonTabell form={form} readOnly={formReadOnly} />
+        <BarnepensjonTabell form={form} readOnly={formReadOnly} vedtattePerioder={grunnlag.vedtattePerioder} />
 
         {feilmeldinger && feilmeldinger.length > 0 && <FormErrorSummary errorList={feilmeldinger} />}
       </VStack>

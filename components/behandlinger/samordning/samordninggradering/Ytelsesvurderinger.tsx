@@ -16,9 +16,14 @@ import { useState } from 'react';
 import { Alert } from 'components/alert/Alert';
 import { ValuePair } from 'components/form/FormField';
 import { SamordningGraderingGrunnlag, SamordningYtelsestype } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import { TableStyled } from 'components/tablestyled/TableStyled';
-import { beregnSplittingAvSykepengeperiode, slåSammenSplittedeSykepengeperioder } from 'components/behandlinger/samordning/samordninggradering/beregnSplittingAvSykepengeperiode';
+import { BekreftSlettingDialog } from 'components/bekreftslettingdialog/BekreftSlettingDialog';
+import {
+  beregnSplittingAvSykepengeperiode,
+  slåSammenSplittedeSykepengeperioder,
+} from 'components/behandlinger/samordning/samordninggradering/beregnSplittingAvSykepengeperiode';
 
 interface Props {
   form: UseFormReturn<SamordningGraderingFormfields>;
@@ -75,10 +80,29 @@ type ModalTilstand = { modus: 'ny' } | { modus: 'rediger'; index: number };
 
 export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Props) => {
   const { fields, append, remove, replace } = fieldArray;
+  const [radSomSkalSlettes, setRadSomSkalSlettes] = useState<number>();
   const [modalTilstand, setModalTilstand] = useState<ModalTilstand | null>(null);
   const [ferieFeilmelding, setFerieFeilmelding] = useState<string>();
 
   const rader = form.watch('vurderteSamordninger') ?? [];
+
+  function slettRad(index: number, onSlett: () => void) {
+    if (erVedtattRad(index)) {
+      setRadSomSkalSlettes(index);
+    } else {
+      onSlett();
+    }
+  }
+
+  function erVedtattRad(index: number): boolean {
+    const rad = form.getValues(`vurderteSamordninger.${index}`);
+    return grunnlag.vedtattePerioder.some((vedtattRad) => {
+      const sammeYtelse = vedtattRad.ytelseType === rad.ytelseType;
+      const sammeFraDato = formaterDatoForFrontend(vedtattRad.periode.fom) === rad.periode.fom;
+      const sammeTilDato = formaterDatoForFrontend(vedtattRad.periode.tom) === rad.periode.tom;
+      return sammeYtelse && sammeFraDato && sammeTilDato;
+    });
+  }
 
   function leggTilRad() {
     append({
@@ -179,7 +203,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
                       ytelseLabel={ytelseLabel(field.ytelseType)}
                       readOnly={readOnly}
                       onRediger={() => setModalTilstand({ modus: 'rediger', index: index })}
-                      onSlett={() => fjerneFerieRad(index)}
+                      onSlett={() => slettRad(index, () => fjerneFerieRad(index))}
                     />
                   );
                 }
@@ -191,7 +215,7 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
                     index={index}
                     readOnly={readOnly}
                     ytelsesoptioner={ytelsesoptionerUtenFerie}
-                    onSlett={() => remove(index)}
+                    onSlett={() => slettRad(index, () => remove(index))}
                   />
                 );
               })}
@@ -222,6 +246,12 @@ export const Ytelsesvurderinger = ({ form, readOnly, fieldArray, grunnlag }: Pro
           </HStack>
         </VStack>
       </VStack>
+      {radSomSkalSlettes !== undefined && (
+        <BekreftSlettingDialog
+          onSlett={() => remove(radSomSkalSlettes)}
+          onLukk={() => setRadSomSkalSlettes(undefined)}
+        />
+      )}
       {modalTilstand && (
         <FerieISykepengeperiodeModal
           grunnlag={grunnlag}

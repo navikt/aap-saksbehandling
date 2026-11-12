@@ -6,17 +6,29 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { BarnepensjonFormFields } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { formaterTilNok } from 'lib/utils/string';
+import { BarnepensjonGrunnlag } from 'lib/types/types';
 
 import styles from './Barnepensjon.module.css';
 import { isBefore } from 'date-fns';
+import { BekreftSlettingDialog } from 'components/bekreftslettingdialog/BekreftSlettingDialog';
+import { useState } from 'react';
 
 interface Props {
   form: UseFormReturn<BarnepensjonFormFields>;
   readOnly: boolean;
+  vedtattePerioder: BarnepensjonGrunnlag['vedtattePerioder'];
 }
 
-export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
+export const BarnepensjonTabell = ({ form, readOnly, vedtattePerioder }: Props) => {
   const { fields, remove, append } = useFieldArray({ control: form.control, name: 'barnepensjonPerioder' });
+  const [radSomSkalSlettes, setRadSomSkalSlettes] = useState<number>();
+
+  function erVedtattRad(index: number): boolean {
+    const rad = form.getValues(`barnepensjonPerioder.${index}`);
+    return vedtattePerioder.some(
+      (vedtattPeriode) => vedtattPeriode.fom === rad.fom && (vedtattPeriode.tom ?? '') === rad.tom
+    );
+  }
 
   return (
     <VStack gap={'space-8'}>
@@ -103,7 +115,13 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
                       variant={'tertiary'}
                       type={'button'}
                       icon={<TrashIcon title={'Fjern periode'} fontSize={'1.5rem'} />}
-                      onClick={() => remove(index)}
+                      onClick={() => {
+                        if (erVedtattRad(index)) {
+                          setRadSomSkalSlettes(index);
+                        } else {
+                          remove(index);
+                        }
+                      }}
                     />
                   )}
                 </Table.DataCell>
@@ -130,7 +148,13 @@ export const BarnepensjonTabell = ({ form, readOnly }: Props) => {
             Legg til
           </Button>
         </div>
-      )}{' '}
+      )}
+      {radSomSkalSlettes !== undefined && (
+        <BekreftSlettingDialog
+          onSlett={() => remove(radSomSkalSlettes)}
+          onLukk={() => setRadSomSkalSlettes(undefined)}
+        />
+      )}
     </VStack>
   );
 };

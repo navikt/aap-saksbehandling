@@ -152,7 +152,7 @@ export const SamordningUføre = ({ grunnlag, behandlingVersjon, readOnly, initia
           </TableStyled>
         </VStack>
       )}
-      <SamordningUføreTabell form={form} readOnly={formReadOnly} />
+      <SamordningUføreTabell form={form} readOnly={formReadOnly} vedtattePerioder={grunnlag.vedtattePerioder} />
     </VilkårskortMedFormOgMellomlagring>
   );
 };
