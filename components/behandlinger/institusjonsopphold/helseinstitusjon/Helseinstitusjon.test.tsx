@@ -8,8 +8,6 @@ import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
 
 import { Helseinstitusjon } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
-import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -350,25 +348,12 @@ describe('sammenhengende opphold med delperioder', () => {
     vurderinger: [],
   };
 
-  const renderMedFlagg = (ui: React.ReactElement, flags = mockedFlags) =>
-    render(<FeatureFlagProvider flags={flags}>{ui}</FeatureFlagProvider>);
+  it('viser start- og sluttdato for hver delperiode i en sammenhengende kjede', () => {
+    render(<Helseinstitusjon grunnlag={kjedetOpphold} behandlingVersjon={0} readOnly={false} />);
 
-  // TODO Thao: Fjern denne testen når feature toggles SammenhengendeInstitusjonsopphold fjernes
-  it('viser ikke delperioder når toggle er avslått', () => {
-    renderMedFlagg(<Helseinstitusjon grunnlag={kjedetOpphold} behandlingVersjon={0} readOnly={false} />, {
-      ...mockedFlags,
-      SammenhengendeInstitusjonsopphold: false,
-    });
-    expect(screen.queryByText(/St\. Mungos Hospital: /i)).not.toBeInTheDocument();
+    expect(screen.getByText(/St\. Mungos Hospital: 1\. januar 2025 – 1\. mai 2025/i)).toBeVisible();
+    expect(screen.getByText(/Helgelandssykehus Dialyse: 2\. mai 2025 – 1\. august 2025/i)).toBeVisible();
   });
-
-  // TODO Thao: Legg denne testen tilbake når renderMedFlagg fjernes (eller feature toggles SammenhengendeInstitusjonsopphold fjernes)
-  /*it('viser start- og sluttdato for hver delperiode i en sammenhengende kjede', () => {
-     render(<Helseinstitusjon grunnlag={kjedetOpphold} behandlingVersjon={0} readOnly={false} />);
-
-     expect(screen.getByText(/St\. Mungos Hospital: 1\. januar 2025 – 1\. mai 2025/i)).toBeVisible();
-     expect(screen.getByText(/Helgelandssykehus Dialyse: 2\. mai 2025 – 1\. august 2025/i)).toBeVisible();
-   });*/
 
   it('viser ikke delperioder når oppholdet kun har én delperiode', () => {
     render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
@@ -645,7 +630,7 @@ describe('handleSubmit - historiske vurderinger og gap', () => {
   });
 });
 
-describe('Helseinstitusjon1Manedsregel - toggle', () => {
+describe('én-månedsregelen for sammenhengende opphold', () => {
   const kysthaven: HelseinstitusjonGrunnlag['opphold'][0] = {
     oppholdId: 'kysthaven',
     institusjonstype: 'Helseinstitusjon',
@@ -680,31 +665,14 @@ describe('Helseinstitusjon1Manedsregel - toggle', () => {
   const enManedsTekst =
     'Innleggelsesmåned: november 2025. Reduksjonen bør som regel starte 1. desember 2025 ved reduksjon i forrige opphold. Det finnes likevel unntak.';
 
-  const renderMedToggle = (aktiv: boolean) =>
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, Helseinstitusjon1Manedsregel: aktiv }}>
-        <Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />
-      </FeatureFlagProvider>
-    );
-
   async function svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon() {
     await svarPåSpørsmålOmFriKostOgLosji(true, 1);
     await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
     await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, 0);
   }
 
-  it('toggle av: foreslår 1-månedsregel selv om forrige opphold ikke har reduksjon', async () => {
-    renderMedToggle(false);
-
-    await svarIkkeReduksjon(0);
-    await svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon();
-
-    expect(screen.getByText(enManedsTekst)).toBeVisible();
-    expect(screen.queryByText(/for kort til at det rekker å bli reduksjon/)).not.toBeInTheDocument();
-  });
-
-  it('toggle på: gir samme forslag når forrige opphold har reduksjon', async () => {
-    renderMedToggle(true);
+  it('foreslår én-månedsregelen når forrige opphold har reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
 
     await svarReduksjon(0);
     await svarReduksjon(1);
@@ -713,8 +681,8 @@ describe('Helseinstitusjon1Manedsregel - toggle', () => {
     expect(screen.queryByText(/for kort til at det rekker å bli reduksjon/)).not.toBeInTheDocument();
   });
 
-  it('toggle på: bruker standard dato og varsler om for kort opphold når forrige opphold ikke har reduksjon', async () => {
-    renderMedToggle(true);
+  it('bruker standard dato og varsler om for kort opphold når forrige opphold ikke har reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
 
     await svarIkkeReduksjon(0);
     await svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon();
@@ -788,11 +756,7 @@ describe('handleSubmit - gap mellom vedtatt og ny vurdering', () => {
   };
 
   it('fyller gap mellom vedtatt tom og ny vurdering med siste vedtatte vurdering', async () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, Helseinstitusjon1Manedsregel: true }}>
-        <Helseinstitusjon grunnlag={grunnlagMedVedtattDelperiode} behandlingVersjon={0} readOnly={false} />
-      </FeatureFlagProvider>
-    );
+    render(<Helseinstitusjon grunnlag={grunnlagMedVedtattDelperiode} behandlingVersjon={0} readOnly={false} />);
 
     await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
     await svarIkkeReduksjon(0);
@@ -851,34 +815,21 @@ describe('vedtatt reduksjon etter oppholdets nye sluttdato', () => {
     ],
   };
 
-  const renderMedToggle = (grunnlag: HelseinstitusjonGrunnlag, aktiv: boolean) =>
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, Helseinstitusjon1Manedsregel: aktiv }}>
-        <Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />
-      </FeatureFlagProvider>
-    );
-
-  it('toggle på: viser vedtatt reduksjon som starter etter oppholdets slutt som overskrevet', () => {
-    renderMedToggle(grunnlagMedReduksjonEtterSlutt, true);
+  it('viser vedtatt reduksjon som starter etter oppholdets slutt som overskrevet', () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedReduksjonEtterSlutt} behandlingVersjon={0} readOnly={false} />);
 
     expect(screen.getByRole('button', { name: /1\. mars 2026.*overskrevet/i })).toBeVisible();
   });
 
-  it('toggle på: viser kun fra-dato og ikke den åpne sluttdatoen', () => {
-    renderMedToggle(grunnlagMedReduksjonEtterSlutt, true);
+  it('viser kun fra-dato og ikke den åpne sluttdatoen', () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedReduksjonEtterSlutt} behandlingVersjon={0} readOnly={false} />);
 
     const kort = screen.getByRole('button', { name: /1\. mars 2026/i });
     expect(kort).not.toHaveTextContent(/2999/);
     expect(kort).not.toHaveTextContent('–');
   });
 
-  it('toggle av: skjuler vedtatt reduksjon som starter etter oppholdets slutt', () => {
-    renderMedToggle(grunnlagMedReduksjonEtterSlutt, false);
-
-    expect(screen.queryByRole('button', { name: /1\. mars 2026/i })).not.toBeInTheDocument();
-  });
-
-  it('toggle på: markerer ikke vedtatt reduksjon innenfor oppholdet som overskrevet', () => {
+  it('marker ikke vedtatt reduksjon innenfor oppholdet som overskrevet', () => {
     const grunnlagInnenfor: HelseinstitusjonGrunnlag = {
       ...grunnlagMedReduksjonEtterSlutt,
       vedtatteVurderinger: [
@@ -895,7 +846,7 @@ describe('vedtatt reduksjon etter oppholdets nye sluttdato', () => {
       ],
     };
 
-    renderMedToggle(grunnlagInnenfor, true);
+    render(<Helseinstitusjon grunnlag={grunnlagInnenfor} behandlingVersjon={0} readOnly={false} />);
 
     const kort = screen.getByRole('button', { name: /1\. januar 2026/i });
     expect(kort).toBeVisible();
