@@ -35,6 +35,7 @@ import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/Uføreved
 import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { GosysOppgaverPopOver } from 'components/saksinfobanner/gosysoppgaverpopover/GosysOppgaverPopOver';
+import { ForespørselSendtInfoboks } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 interface Props {
   sak: SaksInfoType;
@@ -224,6 +225,11 @@ export const SaksinfoBanner = ({
                 virkningsdato={oppgaveVisningsinfo.uførevedtakinfo.virkningsdato}
                 resultat={oppgaveVisningsinfo.uførevedtakinfo.resultat}
               />
+            </div>
+          )}
+          {oppgaveVisningsinfo?.forespørselSendtTilBehandler && (
+            <div className={styles.oppgavestatus}>
+              <ForespørselSendtInfoboks />
             </div>
           )}
           {!behandlingErAvsluttet && (
