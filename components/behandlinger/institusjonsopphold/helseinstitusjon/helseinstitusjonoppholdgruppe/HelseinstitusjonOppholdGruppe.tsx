@@ -35,10 +35,8 @@ import { HelseinstitusjonTidligereVurdering } from 'components/behandlinger/inst
 import { CustomExpandableCard } from 'components/customexpandablecard/CustomExpandableCard';
 import { addDays } from 'date-fns';
 import { Alert } from 'components/alert/Alert';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
 import { TidligereVurderingKortMedGap } from 'components/periodisering/tidligerevurderingkortmedgap/TidligereVurderingKortMedGap';
-import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -81,21 +79,17 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const oppholdAvsluttetDato = new Dato(opphold.avsluttetDato).dato;
   const [cardExpanded, setCardExpanded] = useState<boolean>(true);
-  const visSammenhengendeOpphold = useFeatureFlag('SammenhengendeInstitusjonsopphold');
-  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
 
   const { reduksjonErMulig } = beregnReduksjonskjede(
     form.watch('helseinstitusjonsvurderinger'),
     grupperVedtattePerOppholdId(vedtatteVurderinger),
-    enManedsregelEnabled,
     oppholdIndex
   )[oppholdIndex];
 
-  const erLagretHistorisk = (v: HelseInstiusjonVurdering) =>
-    enManedsregelEnabled && v.erHistoriskUtenReduksjonsberegning;
+  const erLagretHistorisk = (v: HelseInstiusjonVurdering) => v.erHistoriskUtenReduksjonsberegning;
 
   const erEtterOppholdSlutt = (v: HelseInstiusjonVurdering) =>
-    enManedsregelEnabled && !v.erHistoriskUtenReduksjonsberegning && v.periode.fom > opphold.avsluttetDato;
+    !v.erHistoriskUtenReduksjonsberegning && v.periode.fom > opphold.avsluttetDato;
 
   const tidligereVurderingerForVisning = tidligereVurderinger
     ?.filter((v) => {
@@ -111,8 +105,7 @@ export const HelseinstitusjonOppholdGruppe = ({
   const foersteNyeVurdering =
     vurderinger.length > 0 ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.0`) : null;
 
-  const foersteNyeErHistorisk =
-    !!foersteNyeVurdering && erVurderingHistorisk(foersteNyeVurdering, reduksjonErMulig, enManedsregelEnabled);
+  const foersteNyeErHistorisk = !!foersteNyeVurdering && erVurderingHistorisk(foersteNyeVurdering, reduksjonErMulig);
 
   // Når ny vurdering er historisk (reduksjon rekker ikke innenfor oppholdet), lagres den av
   // backend som gjeldende for HELE oppholdets periode - ikke kun fra den inntastede datoen.
@@ -134,8 +127,7 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const standardTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.oppholdFra);
   const liveVurderinger = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
-  const erHistoriskVurdering = (v: (typeof liveVurderinger)[number]) =>
-    erVurderingHistorisk(v, reduksjonErMulig, enManedsregelEnabled);
+  const erHistoriskVurdering = (v: (typeof liveVurderinger)[number]) => erVurderingHistorisk(v, reduksjonErMulig);
 
   const harKorrigertEgenVurdering = harKorrigertReduksjonsdato(liveVurderinger, standardTidligsteReduksjonsdato);
 
@@ -150,7 +142,6 @@ export const HelseinstitusjonOppholdGruppe = ({
     .at(-1);
 
   const visOppdateringsvarsel =
-    enManedsregelEnabled &&
     !!sisteTidligereVurdering &&
     erReduksjonUtIFraVurdering(sisteTidligereVurdering) &&
     forrigeHarIngenReduksjonLengre &&
@@ -172,11 +163,6 @@ export const HelseinstitusjonOppholdGruppe = ({
         <HStack gap="space-16" align="center">
           <Buildings3Icon title={`Helseinstitusjon${opphold.kildeinstitusjon}`} fontSize="1.5rem" aria-hidden />
           <div>
-            {!visSammenhengendeOpphold && (
-              <BodyShort className={styles.detailgray}>
-                {opphold.kildeinstitusjon} - {opphold.oppholdstype}
-              </BodyShort>
-            )}
             <Label size="medium">
               Vurder perioden {formatDatoMedMånedsnavn(opphold.oppholdFra)} -{' '}
               {!datoErUendeligSlutt(opphold.avsluttetDato)
@@ -186,7 +172,7 @@ export const HelseinstitusjonOppholdGruppe = ({
             {opphold.delperioder.length === 1 && (
               <BodyShort className={styles.detailgray}>{storForbokstavIHvertOrd(opphold.kildeinstitusjon)}</BodyShort>
             )}
-            {visSammenhengendeOpphold && opphold.delperioder.length > 1 && (
+            {opphold.delperioder.length > 1 && (
               <VStack gap="space-2" className={styles.delperioder}>
                 {opphold.delperioder.map((delperiode, i) => (
                   <BodyShort key={delperiode.institusjonsnavn + i} size="small" className={styles.detailgray}>
@@ -222,21 +208,6 @@ export const HelseinstitusjonOppholdGruppe = ({
                 ? oppholdAvsluttetDato
                 : new Dato(vurdering.periode.tom).dato;
 
-            if (!visSammenhengendeOpphold) {
-              return (
-                <TidligereVurderingExpandableCard
-                  key={vurdering.periode.fom}
-                  fom={new Dato(vurdering.periode.fom).dato}
-                  tom={justertTomDato}
-                  førsteNyePeriodeFraDato={erHistorisk ? null : foersteNyePeriodeFraDatoForVisning}
-                  vurderingStatus={getReduksjonsstatus(erReduksjonUtIFraVurdering(vurdering), erHistorisk)}
-                  vurderingerMeta={vurdering.vurderingerMeta}
-                >
-                  <HelseinstitusjonTidligereVurdering vurdering={vurdering} />
-                </TidligereVurderingExpandableCard>
-              );
-            }
-
             return (
               <TidligereVurderingKortMedGap
                 key={vurdering.periode.fom}
@@ -258,11 +229,7 @@ export const HelseinstitusjonOppholdGruppe = ({
             );
             const reduksjon = erReduksjonUtIFraFormFields(liveVurdering);
 
-            const erHistoriskUtenReduksjonsberegning = erVurderingHistorisk(
-              liveVurdering,
-              reduksjonErMulig,
-              enManedsregelEnabled
-            );
+            const erHistoriskUtenReduksjonsberegning = erVurderingHistorisk(liveVurdering, reduksjonErMulig);
 
             const vurderingFom = form.watch(
               `helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex}.periode.fom`
