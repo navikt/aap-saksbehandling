@@ -11,7 +11,7 @@ import {
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
-import { SubmitEventHandler } from 'react';
+import { SubmitEventHandler, useState } from 'react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereVurderinger';
@@ -22,6 +22,7 @@ import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilk
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
 import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { Dokumentreferanser } from './dokumentreferanser/Dokumentreferanser';
 
 interface Props {
   foreløpigBehandlingsutfall: ForeløpigBehandlingsutfall;
@@ -47,6 +48,10 @@ export const SykdomsvurderingBrev = ({
   initialMellomlagretVurdering,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
+  const [valgteDokumentIder, setValgteDokumentIder] = useState<string[]>([]);
+  const [bekreftedeDokumentIder, setBekreftedeDokumentIder] = useState<string[]>([]);
+  const [dokumentnavn, setDokumentnavn] = useState<Record<string, string>>({});
+  const [bekreftedeDokumentnavn, setBekreftedeDokumentnavn] = useState<Record<string, string>>({});
 
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
     useLøsAvklaringsbehov('SYKDOMSVURDERING_BREV');
@@ -91,6 +96,8 @@ export const SykdomsvurderingBrev = ({
           },
         },
         () => {
+          setBekreftedeDokumentIder(valgteDokumentIder);
+          setBekreftedeDokumentnavn(dokumentnavn);
           loggUmamiVarighet('STEG_SYKDOMSVURDERING_BREV_VARIGHET', umamiStartTidspunkt, Date.now());
           visningActions.onBekreftClick();
           nullstillMellomlagretVurdering();
@@ -123,7 +130,11 @@ export const SykdomsvurderingBrev = ({
       visningModus={visningModus}
       visningActions={visningActions}
       knappTekst={'Bekreft'}
-      formReset={() => form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined)}
+      formReset={() => {
+        form.reset(mellomlagretVurdering ? JSON.parse(mellomlagretVurdering.data) : undefined);
+        setValgteDokumentIder(bekreftedeDokumentIder);
+        setDokumentnavn(bekreftedeDokumentnavn);
+      }}
     >
       <VStack gap={'space-16'}>
         <>
@@ -191,6 +202,13 @@ export const SykdomsvurderingBrev = ({
           defaultOpen={false}
         />
         <FormField form={form} formField={formFields.vurdering} />
+        <Dokumentreferanser
+          valgteDokumentIder={valgteDokumentIder}
+          dokumentnavn={dokumentnavn}
+          onChange={setValgteDokumentIder}
+          onEndreNavn={(id, navn) => setDokumentnavn((gjeldende) => ({ ...gjeldende, [id]: navn }))}
+          readOnly={formReadOnly}
+        />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>
   );

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { userEvent } from '@testing-library/user-event';
 import { MellomlagretVurderingResponse, SykdomsvurderingBrevGrunnlag } from 'lib/types/types';
 import { SykdomsvurderingBrev } from 'components/behandlinger/sykdom/sykdomsvurderingbrev/SykdomsvurderingBrev';
@@ -23,6 +23,45 @@ beforeEach(() => {
 });
 
 describe('sykdomsvurdering for brev', () => {
+  it('kan velge dokumentreferanser uten å bekrefte vurderingen', async () => {
+    render(
+      <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
+        grunnlag={grunnlag}
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly={false}
+        behandlingVersjon={0}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Legg til' }));
+    const dokumentvelger = within(screen.getByRole('dialog', { name: 'Velg dokumenter' }));
+    await user.click(dokumentvelger.getByRole('checkbox', { name: 'Velg Legeerklæring' }));
+    await user.click(dokumentvelger.getByRole('button', { name: 'Bekreft' }));
+
+    expect(screen.getByRole('button', { name: 'Legeerklæring' })).toBeVisible();
+    expect(screen.queryByText('Du må skrive en individuell begrunnelse')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Derfor får du AAP / Derfor får du ikke AAP' })).not.toHaveAttribute(
+      'readonly'
+    );
+  });
+
+  it('viser ikke legg til dokumenter når vurderingen er skrivebeskyttet', () => {
+    render(
+      <SykdomsvurderingBrev
+        foreløpigBehandlingsutfall={{ tidligereVurderinger: [] }}
+        grunnlag={grunnlag}
+        typeBehandling={'Førstegangsbehandling'}
+        readOnly
+        behandlingVersjon={0}
+      />
+    );
+
+    expect(screen.getByRole('heading', { name: 'Dokumenter brukt i vurderingen' })).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Legg til' })).not.toBeInTheDocument();
+  });
+
   it('Skal vise vurderingsfelt', async () => {
     render(
       <SykdomsvurderingBrev
@@ -99,6 +138,18 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
   await user.type(begrunnelseFelt, 'Dette er en ny begrunnelse');
   expect(begrunnelseFelt).toHaveValue('Dette er en ny begrunnelse');
 
+  await user.click(screen.getByRole('button', { name: 'Legg til' }));
+  const dokumentvelger = within(screen.getByRole('dialog', { name: 'Velg dokumenter' }));
+  await user.click(dokumentvelger.getByRole('checkbox', { name: 'Velg Legeerklæring' }));
+  await user.click(dokumentvelger.getByRole('button', { name: 'Bekreft' }));
+  expect(screen.getByRole('button', { name: 'Legeerklæring' })).toBeVisible();
+
+  await user.click(screen.getByRole('button', { name: 'Rediger navn på Legeerklæring' }));
+  await user.clear(screen.getByRole('textbox', { name: 'Dokumentnavn' }));
+  await user.type(screen.getByRole('textbox', { name: 'Dokumentnavn' }), 'Endret dokumentnavn');
+  await user.click(screen.getByRole('button', { name: 'Lagre navn' }));
+  expect(await screen.findByRole('button', { name: 'Endret dokumentnavn' })).toBeVisible();
+
   const avbrytKnapp = screen.getByRole('button', { name: 'Avbryt' });
   await user.click(avbrytKnapp);
 
@@ -106,6 +157,15 @@ it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
     name: 'Derfor får du AAP / Derfor får du ikke AAP',
   });
   expect(begrunnelseFeltEtterAvbryt).toHaveValue('Dette er min vurdering som er bekreftet');
+  expect(screen.queryByRole('button', { name: 'Legeerklæring' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Endret dokumentnavn' })).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole('button', { name: 'Endre' }));
+  await user.click(screen.getByRole('button', { name: 'Legg til' }));
+  const dokumentvelgerEtterAvbryt = within(screen.getByRole('dialog', { name: 'Velg dokumenter' }));
+  await user.click(dokumentvelgerEtterAvbryt.getByRole('checkbox', { name: 'Velg Legeerklæring' }));
+  await user.click(dokumentvelgerEtterAvbryt.getByRole('button', { name: 'Bekreft' }));
+  expect(screen.getByRole('button', { name: 'Legeerklæring' })).toBeVisible();
 });
 
 describe('mellomlagring', () => {
