@@ -8,6 +8,7 @@ const user = userEvent.setup();
 
 const grunnlag: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   ytelser: [],
   historiskeVurderinger: [],

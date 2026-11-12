@@ -27,7 +27,7 @@ const sak: SaksInfo = {
   behandlinger: [],
   opprettetTidspunkt: '12. mai',
   saksnummer: '12345',
-  status: 'OPPRETTET',
+  status: 'UTREDES',
   periode: { fom: '12 mai', tom: '27 mai' },
 };
 
@@ -36,7 +36,7 @@ const avsluttetSak: SaksInfo = {
   behandlinger: [],
   opprettetTidspunkt: '12. mai',
   saksnummer: '12345',
-  status: 'AVSLUTTET',
+  status: 'UTREDES',
   periode: { fom: '12 mai', tom: '27 mai' },
 };
 

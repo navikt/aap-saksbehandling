@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { DialogMedBehandlerInfoboks } from './DialogMedBehandlerInfoboks';
+import { ForespørselSendtInfoboks } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 describe('DialogMedBehandlerInfoboks', () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('DialogMedBehandlerInfoboks', () => {
   it('viser at påminnelsen skal sendes på gitt dato', () => {
     const datoIFremtiden = '2026-10-23';
 
-    render(<DialogMedBehandlerInfoboks påminnelseDato={datoIFremtiden} påminnelseAvbrutt={false} />);
+    render(<ForespørselSendtInfoboks påminnelseDato={datoIFremtiden} påminnelseAvbrutt={false} />);
 
     fireEvent.click(screen.getByRole('button', { name: /Forespørsel sendt/i }));
 
@@ -26,7 +26,7 @@ describe('DialogMedBehandlerInfoboks', () => {
   });
 
   it('viser at påminnelsen er avbrutt', () => {
-    render(<DialogMedBehandlerInfoboks påminnelseDato={'2026-10-23'} påminnelseAvbrutt={true} />);
+    render(<ForespørselSendtInfoboks påminnelseDato={'2026-10-23'} påminnelseAvbrutt={true} />);
 
     fireEvent.click(screen.getByRole('button', { name: /Forespørsel sendt/i }));
 
@@ -37,7 +37,7 @@ describe('DialogMedBehandlerInfoboks', () => {
   it.skip('viser at påminnelsen er sendt', () => {
     const datoIFortiden = '2026-10-22';
 
-    render(<DialogMedBehandlerInfoboks påminnelseDato={datoIFortiden} påminnelseAvbrutt={false} />);
+    render(<ForespørselSendtInfoboks påminnelseDato={datoIFortiden} påminnelseAvbrutt={false} />);
 
     fireEvent.click(screen.getByRole('button', { name: /Påminnelse sendt$/i }));
 
@@ -48,7 +48,7 @@ describe('DialogMedBehandlerInfoboks', () => {
   it.skip('viser ikke påminnelse for forespørsler sendt før 29. september 2026', () => {
     const datoIFortiden = '2026-10-15';
 
-    render(<DialogMedBehandlerInfoboks påminnelseDato={datoIFortiden} påminnelseAvbrutt={false} />);
+    render(<ForespørselSendtInfoboks påminnelseDato={datoIFortiden} påminnelseAvbrutt={false} />);
 
     fireEvent.click(screen.getByRole('button', { name: /Forespørsel sendt$/i }));
 
