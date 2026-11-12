@@ -19,7 +19,10 @@ import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getReduksjonsstatus, VurderingStatus } from 'components/periodisering/VurderingStatusTag';
 import { Dato } from 'lib/types/Dato';
-import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import {
+  HelseinstitusjonsFormFields,
+  OppholdVurdering,
+} from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Helseinstitusjonsvurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/helseinstitusjonvurdering/HelseinstitusjonVurdering';
 import {
   beregnReduksjonskjede,
@@ -127,7 +130,7 @@ export const HelseinstitusjonOppholdGruppe = ({
 
   const standardTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(opphold.oppholdFra);
   const liveVurderinger = form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger`);
-  const erHistoriskVurdering = (v: (typeof liveVurderinger)[number]) => erVurderingHistorisk(v, reduksjonErMulig);
+  const erHistoriskVurdering = (vurdering: OppholdVurdering) => erVurderingHistorisk(vurdering, reduksjonErMulig);
 
   const harKorrigertEgenVurdering = harKorrigertReduksjonsdato(liveVurderinger, standardTidligsteReduksjonsdato);
 
