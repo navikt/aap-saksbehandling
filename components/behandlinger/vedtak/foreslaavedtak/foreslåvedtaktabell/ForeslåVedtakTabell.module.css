@@ -1,0 +1,67 @@
+.godkjentIcon {
+  color: var(--ax-text-success-decoration);
+}
+
+.avslåttIcon {
+  color: var(--ax-text-danger-decoration);
+}
+
+.godkjentIcon,
+.avslåttIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.tagKolonne {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 3rem;
+}
+
+.tagKolonneKunNy {
+  width: 1.5rem;
+}
+
+.ny {
+  background-color: var(--ax-bg-accent-soft);
+}
+
+.endretDato {
+  font-weight: var(--ax-font-weight-bold);
+}
+
+.endret {
+  background-color: var(--ax-bg-warning-soft);
+}
+
+.stansOpphør {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.stansOpphørNy {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.ny > td:first-of-type,
+.endret > td:first-of-type,
+.stansOpphørNy > td:first-of-type {
+  padding-left: var(--ax-space-16);
+  box-shadow: inset 5px 0 var(--ax-border-info-strong);
+}
+
+.nyEndretTekstTag {
+  color: var(--ax-text-info);
+}
+
+.statusTekst {
+  white-space: nowrap;
+}
+
+.gammelDato {
+  text-decoration: line-through;
+  color: var(--ax-text-neutral-subtle);
+}
+
+.periode {
+  white-space: nowrap;
+}

@@ -14,6 +14,7 @@ export const FLAGS = [
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
   'VisGosysOppgaverForPerson',
+  'VedtaksperiodeBeslutter',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -35,4 +36,5 @@ export const mockedFlags: Flags = {
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
   VisGosysOppgaverForPerson: true,
+  VedtaksperiodeBeslutter: true,
 };
