@@ -5784,7 +5784,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadeDriftsinfoDto'][];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadeGrunnlagDriftsinfoDto'];
           };
         };
       };
@@ -6287,7 +6287,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.utbetal.simulering.SimuleringDto'];
+            'application/json': components['schemas']['no.nav.aap.utbetal.simuleringv2.SimuleringsresponseDto'];
           };
         };
       };
@@ -8109,6 +8109,7 @@ export interface components {
       /** @enum {string} */
       innkommendeUtgående: 'INNKOMMENDE' | 'UTGÅENDE';
       journalpostId?: string | null;
+      kanSendeManuellPåminnelse: boolean;
       meldingFraNavn?: string | null;
       /** @enum {string|null} */
       meldingStatus?: 'FEILET' | 'LEVERT' | 'SENDT' | null;
@@ -8118,6 +8119,11 @@ export interface components {
        */
       opprettetTidspunkt: string;
       påminnelseAvbrutt?: boolean | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      sisteForespørselSendt?: string | null;
       tekst?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto': {
@@ -11347,6 +11353,15 @@ export interface components {
     'no.nav.aap.behandlingsflyt.drift.PersonSøkDriftsinfoDto': {
       saker: components['schemas']['no.nav.aap.behandlingsflyt.drift.SaksnummerOgRettighetsperiode'][];
     };
+    'no.nav.aap.behandlingsflyt.drift.RelevantYrkesskadeSakDriftsinfoDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      manuellYrkesskadeDato?: string | null;
+      referanse?: string | null;
+      referanseSkjermet: boolean;
+    };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       andreSakerPåBruker: string[];
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];
@@ -11439,6 +11454,17 @@ export interface components {
        * @example 2025-04-01
        */
       vedtaksdato?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.drift.YrkesskadeGrunnlagDriftsinfoDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadevurderingDriftsinfoDto'];
+      yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadeDriftsinfoDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.drift.YrkesskadevurderingDriftsinfoDto': {
+      /** Format: int32 */
+      andelAvNedsettelsen?: number | null;
+      erÅrsakssammenheng: boolean;
+      harBegrunnelse: boolean;
+      relevanteSaker: components['schemas']['no.nav.aap.behandlingsflyt.drift.RelevantYrkesskadeSakDriftsinfoDto'][];
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$AvbrytBrevBody`': {
       begrunnelse: string;
@@ -16150,6 +16176,58 @@ export interface components {
     'no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto': {
       simuleringDto: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringDto'];
       utbetalingDto: components['schemas']['no.nav.aap.utbetaling.UtbetalingDto'];
+    };
+    'no.nav.aap.utbetal.simuleringv2.InfoDto': {
+      fagsystem: string;
+      message: string;
+      /** @enum {string} */
+      status: 'FEILET' | 'OK_UTEN_ENDRING' | 'UGYLDIG_REQUEST' | 'UTILGJENGELIG';
+    };
+    'no.nav.aap.utbetal.simuleringv2.PosteringDto': {
+      /** Format: int32 */
+      beløp: number;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      klassekode: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+      type: string;
+    };
+    'no.nav.aap.utbetal.simuleringv2.SimuleringDto': {
+      perioder: components['schemas']['no.nav.aap.utbetal.simuleringv2.SimuleringsperiodeDto'][];
+    };
+    'no.nav.aap.utbetal.simuleringv2.SimuleringsperiodeDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+      utbetalinger: components['schemas']['no.nav.aap.utbetal.simuleringv2.SimulertUtbetalingDto'][];
+    };
+    'no.nav.aap.utbetal.simuleringv2.SimuleringsresponseDto':
+      | components['schemas']['no.nav.aap.utbetal.simuleringv2.InfoDto']
+      | components['schemas']['no.nav.aap.utbetal.simuleringv2.SimuleringDto'];
+    'no.nav.aap.utbetal.simuleringv2.SimulertUtbetalingDto': {
+      fagsystem: string;
+      /** Format: int32 */
+      nyttBeløp: number;
+      posteringer: components['schemas']['no.nav.aap.utbetal.simuleringv2.PosteringDto'][];
+      sakId: string;
+      stønadstype: string;
+      /** Format: int32 */
+      tidligereUtbetalt: number;
+      utbetalesTil: string;
     };
     'no.nav.aap.utbetaling.UtbetalingDto': {
       perioder: components['schemas']['no.nav.aap.utbetaling.UtbetalingsperiodeDto'][];
