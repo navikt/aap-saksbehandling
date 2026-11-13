@@ -70,6 +70,7 @@ describe('Trekk søknad', () => {
           opprettetTidspunkt: 'I går',
           påminnelseAvbrutt: false,
           tekst: 'Hei, kan du sende legeerklæring for bruker?',
+          kanSendeManuellPåminnelse: false,
         },
       ];
       render(
