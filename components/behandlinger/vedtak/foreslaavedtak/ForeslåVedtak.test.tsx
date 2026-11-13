@@ -4,7 +4,7 @@ import { FeatureFlagProvider } from 'context/UnleashContext';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { customRender } from 'lib/test/CustomRender';
-import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
+import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslaavedtak/ForeslåVedtak';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 
 vi.mock('hooks/saksbehandling/BehandlingHook', () => ({

@@ -6,7 +6,7 @@ import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
-import { mapÅrsakTilTekst } from 'components/behandlinger/vedtak/foreslåvedtak/StansOpphørTabell';
+import { mapÅrsakTilTekst } from 'components/behandlinger/vedtak/foreslaavedtak/StansOpphørTabell';
 
 type StansOpphør = ForeslåVedtakGrunnlag['stansOpphør'][number];
 type StansOpphørType = StansOpphør['historikk'][number]['type'];

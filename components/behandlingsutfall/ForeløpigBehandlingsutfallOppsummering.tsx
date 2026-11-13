@@ -2,7 +2,7 @@ import { ForeløpigBehandlingsutfall } from 'lib/types/types';
 import { HStack, Table } from '@navikt/ds-react';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { CheckmarkCircleIcon, QuestionmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import styles from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell.module.css';
+import styles from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/ForeslåVedtakTabell.module.css';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
 

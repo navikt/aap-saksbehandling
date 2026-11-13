@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import { ForeslåVedtakGrunnlag } from 'lib/types/types';
-import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
+import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { customRender } from 'lib/test/CustomRender';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 

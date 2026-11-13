@@ -8,13 +8,13 @@ import { ForeslåVedtakGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
-import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
+import { ForeslåVedtakTabell } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/ForeslåVedtakTabell';
 import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { StansOpphørTabell } from 'components/behandlinger/vedtak/foreslåvedtak/StansOpphørTabell';
-import { ForeslåVedtakTabellGammel } from 'components/behandlinger/vedtak/foreslåvedtak/foreslåvedtaktabell/ForeslåVedtakTabellGammel';
+import { StansOpphørTabell } from 'components/behandlinger/vedtak/foreslaavedtak/StansOpphørTabell';
+import { ForeslåVedtakTabellGammel } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/ForeslåVedtakTabellGammel';
 
 interface Props {
   behandlingVersjon: number;
