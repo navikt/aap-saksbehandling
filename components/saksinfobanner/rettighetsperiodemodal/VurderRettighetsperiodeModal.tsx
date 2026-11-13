@@ -81,7 +81,7 @@ export const VurderRettighetsperiodeModal = ({
         if (!open) onClose();
       }}
     >
-      <Dialog.Popup width="38.4375rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Vurder § 22-13 syvende ledd. Første mulige dato med rett til ytelse</Dialog.Title>
         </Dialog.Header>

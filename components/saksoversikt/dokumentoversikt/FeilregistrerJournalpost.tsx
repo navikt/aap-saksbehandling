@@ -43,7 +43,7 @@ export const FeilregistrerJournalpostModal = ({
           if (!open) onClose();
         }}
       >
-        <Dialog.Popup closeOnOutsideClick={false}>
+        <Dialog.Popup width="large" closeOnOutsideClick={false}>
           <Dialog.Header>
             <Dialog.Title>Opphev feilregistrert sakstilknytning</Dialog.Title>
           </Dialog.Header>
@@ -76,7 +76,7 @@ export const FeilregistrerJournalpostModal = ({
         if (!open) onClose();
       }}
     >
-      <Dialog.Popup closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Feilregistrer sakstilknytning</Dialog.Title>
         </Dialog.Header>

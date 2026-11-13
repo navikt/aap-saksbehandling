@@ -229,7 +229,7 @@ export const SamordningGradering = ({
     <>
       {visModalForOppfølgingsoppgaveState && (
         <Dialog onOpenChange={setModalForOppfølgingsoppgaveState} open={true}>
-          <Dialog.Popup closeOnOutsideClick={false}>
+          <Dialog.Popup width="large" closeOnOutsideClick={false}>
             <Dialog.Header>
               <Dialog.Title>Vurder konsekvens</Dialog.Title>
             </Dialog.Header>

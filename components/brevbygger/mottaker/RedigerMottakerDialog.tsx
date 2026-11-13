@@ -148,7 +148,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
 
   return (
     <Dialog open={true} onOpenChange={setIsOpen}>
-      <Dialog.Popup closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Rediger mottaker</Dialog.Title>
         </Dialog.Header>

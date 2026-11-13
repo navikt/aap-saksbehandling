@@ -46,7 +46,7 @@ export const ForhåndsvisBrevModal = ({ isOpen, brevbestillingReferanse, onClose
         if (!open) onClose();
       }}
     >
-      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Forhåndsvisning av brev</Dialog.Title>
         </Dialog.Header>

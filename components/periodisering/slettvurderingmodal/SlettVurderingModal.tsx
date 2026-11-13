@@ -15,7 +15,7 @@ export const SlettVurderingModal = ({ isOpen, onClose, onSlettVurdering }: Props
         if (!open) onClose();
       }}
     >
-      <Dialog.Popup closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
             <HStack as={'span'} gap={'space-4'} align={'center'}>

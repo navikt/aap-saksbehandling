@@ -89,7 +89,7 @@ export const TildelOppgaveModal = ({ revalidateFunction }: Props) => {
         if (!open) lukkOgResetModal();
       }}
     >
-      <Dialog.Popup width="31.25rem" closeOnOutsideClick={false} className={styles.tildelOppgaveModal}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false} className={styles.tildelOppgaveModal}>
         <Dialog.Header>
           <Dialog.Title>Tildel</Dialog.Title>
         </Dialog.Header>

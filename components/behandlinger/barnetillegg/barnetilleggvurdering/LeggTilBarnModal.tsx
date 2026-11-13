@@ -8,7 +8,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Dato } from '../../../../lib/types/Dato';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   readOnly: boolean;
@@ -85,7 +85,7 @@ export const LeggTilBarnModal = ({ readOnly, åpne, avbryt, onLagreNyttBarn, all
         if (!open) handleAvbryt();
       }}
     >
-      <Dialog.Popup width="28.125rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Legg til barn</Dialog.Title>
         </Dialog.Header>

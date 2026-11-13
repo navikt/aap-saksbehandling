@@ -12,7 +12,7 @@ interface Props {
 export const ManglerTilgangModal = ({ isModalOpen, setIsModalOpen, revalidateFunction }: Props) => {
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header withClosebutton={false}>
           <Dialog.Title>Du har ikke tilgang til saken</Dialog.Title>
         </Dialog.Header>

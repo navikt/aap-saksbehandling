@@ -22,7 +22,7 @@ export const IkkeSendBrevModal = ({ isOpen, onClose, onDelete }: Props) => {
         if (!open) onClose();
       }}
     >
-      <Dialog.Popup closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Ikke send brev</Dialog.Title>
         </Dialog.Header>

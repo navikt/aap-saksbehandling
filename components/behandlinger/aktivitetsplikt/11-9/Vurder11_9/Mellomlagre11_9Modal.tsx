@@ -19,7 +19,7 @@ export const Mellomlagre11_9Modal = ({ valgtRad, lagre, avbryt }: Props) => {
         if (!open) avbryt();
       }}
     >
-      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>{valgtRad?.id ? 'Endre brudd § 11-9' : 'Registrer brudd § 11-9'}</Dialog.Title>
         </Dialog.Header>

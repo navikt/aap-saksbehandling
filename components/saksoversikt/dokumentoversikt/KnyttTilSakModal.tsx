@@ -67,7 +67,7 @@ export const KnyttTilSakModal = ({
         if (!open) onClose();
       }}
     >
-      <Dialog.Popup closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Knytt til sak</Dialog.Title>
         </Dialog.Header>

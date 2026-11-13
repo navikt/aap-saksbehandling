@@ -27,7 +27,7 @@ export const OppgaveIkkeLedigModal = ({
         if (!open) handleClose();
       }}
     >
-      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
             <HStack as={'span'} gap={'space-4'} align={'center'}>

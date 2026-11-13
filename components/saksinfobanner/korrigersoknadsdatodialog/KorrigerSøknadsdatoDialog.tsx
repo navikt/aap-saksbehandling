@@ -48,7 +48,7 @@ export const KorrigerSKnadsdatoDialog = ({ saksnummer, isOpen, onClose }: Props)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose} size={'medium'}>
-      <Dialog.Popup>
+      <Dialog.Popup width="large">
         <Dialog.Header>
           <Dialog.Title>Opprett vurdering av korriger søknadsdato § 22-13 femte ledd</Dialog.Title>
         </Dialog.Header>

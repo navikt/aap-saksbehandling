@@ -164,7 +164,7 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       }
     >
       <Dialog open={visModal} onOpenChange={setVisModal}>
-        <Dialog.Popup closeOnOutsideClick={false}>
+        <Dialog.Popup width="large" closeOnOutsideClick={false}>
           <Dialog.Header>
             <Dialog.Title>
               <HStack as={'span'} gap={'space-4'} align={'center'}>

@@ -82,7 +82,7 @@ export const RegistrerMeldedatoModal = ({ isOpen, setIsOpen }: Props) => {
       }}
       size={'medium'}
     >
-      <Dialog.Popup width={'medium'} closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>Registrer at brukeren har meldt seg på annet vis enn meldekort</Dialog.Title>
         </Dialog.Header>

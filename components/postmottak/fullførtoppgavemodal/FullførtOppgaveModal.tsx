@@ -22,7 +22,7 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
     : 'Gå tilbake til oppgavelisten for å starte på neste oppgave.';
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-      <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
             <CheckmarkCircleIcon aria-hidden fontSize="inherit" /> {heading}
