@@ -1,7 +1,7 @@
 'use client';
 
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BehandlingFlytOgTilstand } from 'lib/types/postmottakTypes';
@@ -21,38 +21,41 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
     ? 'Dokumentet er journalført og det har blitt opprettet en ny oppgave for å digitalisere dokumentet. Start digitalisering for å fullføre hele dokumenthåndteringen. '
     : 'Gå tilbake til oppgavelisten for å starte på neste oppgave.';
   return (
-    <Modal
-      open={isModalOpen}
-      header={{
-        heading: heading,
-        icon: <CheckmarkCircleIcon fontSize={'inherit'} />,
-      }}
-      onClose={() => {
-        setIsModalOpen(false);
-      }}
-      onBeforeClose={() => {
-        setIsModalOpen(false);
-        return true;
-      }}
-      width={'medium'}
-    >
-      <Modal.Body>
-        <BodyShort>{message}</BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        {nesteBehandlingId ? (
-          <>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <CheckmarkCircleIcon aria-hidden fontSize="inherit" /> {heading}
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>{message}</BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          {nesteBehandlingId ? (
+            <>
+              <Button
+                type={'button'}
+                onClick={async () => {
+                  setIsModalOpen(false);
+                  router.push(`/postmottak/${nesteBehandlingId}`);
+                }}
+              >
+                Start digitalisering av dokumentet
+              </Button>
+              <Button
+                variant={'secondary'}
+                type={'button'}
+                onClick={async () => {
+                  setIsModalOpen(false);
+                  router.push('/oppgave');
+                }}
+              >
+                Gå til oppgavelisten
+              </Button>
+            </>
+          ) : (
             <Button
-              type={'button'}
-              onClick={async () => {
-                setIsModalOpen(false);
-                router.push(`/postmottak/${nesteBehandlingId}`);
-              }}
-            >
-              Start digitalisering av dokumentet
-            </Button>
-            <Button
-              variant={'secondary'}
               type={'button'}
               onClick={async () => {
                 setIsModalOpen(false);
@@ -61,19 +64,9 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
             >
               Gå til oppgavelisten
             </Button>
-          </>
-        ) : (
-          <Button
-            type={'button'}
-            onClick={async () => {
-              setIsModalOpen(false);
-              router.push('/oppgave');
-            }}
-          >
-            Gå til oppgavelisten
-          </Button>
-        )}
-      </Modal.Footer>
-    </Modal>
+          )}
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

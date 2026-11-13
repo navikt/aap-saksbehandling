@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { useState } from 'react';
 import { SettBehandlingPåVentModal } from 'components/settbehandlingpåventmodal/SettBehandlingPåVentModal';
 
 describe('settBehandlingPåVentModal', () => {
@@ -47,5 +49,48 @@ describe('settBehandlingPåVentModal viser infoboks om reservert oppgave', () =>
     });
     const infoboks = screen.queryByText(expectedText);
     expect(infoboks).toBeNull();
+  });
+});
+
+describe('Sett behandling på vent – lukkeatferd', () => {
+  it.each(['Avbryt', 'Lukk', 'Escape'])('tilbakestiller skjemaet ved %s', async (lukking) => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    const DialogMedState = () => {
+      const [isOpen, setIsOpen] = useState(true);
+      return (
+        <>
+          <button onClick={() => setIsOpen(true)}>Åpne på nytt</button>
+          <SettBehandlingPåVentModal
+            reservert={true}
+            isOpen={isOpen}
+            onClose={() => {
+              onClose();
+              setIsOpen(false);
+            }}
+          />
+        </>
+      );
+    };
+    await act(async () => {
+      render(<DialogMedState />);
+    });
+    expect(screen.getByRole('dialog', { name: 'Sett behandling på vent' })).toBeVisible();
+    await user.type(screen.getByRole('textbox', { name: /begrunnelse/i }), 'Midlertidig begrunnelse');
+
+    fireEvent.pointerDown(document.body);
+    fireEvent.click(document.body);
+    expect(onClose).not.toHaveBeenCalled();
+    expect(screen.getByRole('dialog', { name: 'Sett behandling på vent' })).toBeVisible();
+
+    if (lukking === 'Escape') {
+      await user.keyboard('{Escape}');
+    } else {
+      await user.click(screen.getByRole('button', { name: lukking }));
+    }
+    expect(onClose).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    await user.click(screen.getByRole('button', { name: 'Åpne på nytt' }));
+    expect(screen.getByRole('textbox', { name: /begrunnelse/i })).toHaveValue('');
   });
 });

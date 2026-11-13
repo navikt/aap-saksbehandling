@@ -6,7 +6,7 @@ import {
   HStack,
   InlineMessage,
   Label,
-  Modal,
+  Dialog,
   Search,
   Tag,
   VStack,
@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { Spinner } from 'components/felles/Spinner';
-import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 
 type Props = {
   isOpen: boolean;
@@ -94,70 +93,79 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
   };
 
   return (
-    <Modal
-      header={{
-        heading: 'Migrer sak fra Arena',
-        icon: <MigrationIcon />,
-      }}
+    <Dialog
       open={isOpen}
-      onClose={handleClose}
-      className={styles.modal}
+      onOpenChange={(open) => {
+        if (!open) handleClose();
+      }}
     >
-      <Modal.Body>
-        <VStack gap="space-24">
-          <InlineMessage status="info">Det skal kun migreres saker med status &quot;Aktiv&quot; i Arena</InlineMessage>
-          <form role="search" onSubmit={(e) => e.preventDefault()}>
-            <Search
-              id="search"
-              label="Sak du ønsker å migrere"
-              description="Oppgi saksnummer fra Arena"
-              variant="primary"
-              placeholder="xxxx-xxxxxx"
-              value={saksnummer}
-              onSearchClick={handleSearch}
-              onChange={(val) => {
-                setSaksnummer(val);
-                setError(null);
-                setSubmitError(null);
-                setArenasak(null);
-              }}
-              error={error}
-            />
-          </form>
-          {isLoading && <Spinner label="Henter arenasak..." size="small" />}
-          {submitError != null && <InlineMessage status="error">{submitError}</InlineMessage>}
-          {arenasak != null && (
-            <VStack gap="space-16">
-              <HStack gap="space-12">
-                <BodyLong>
-                  Saksnr. {arenasak.opprettetAar}-{arenasak.lopenr}
-                </BodyLong>
-                <Tag
-                  variant="moderate"
-                  data-color={arenasak.statuskode === 'AKTIV' ? 'success' : 'neutral'}
-                  size="small"
-                >
-                  {arenasak.statusnavn}
-                </Tag>
-              </HStack>
-              <HStack gap="space-8">
-                <Label>
-                  {arenasak.person.fornavn} {arenasak.person.etternavn},
-                </Label>
-                <BodyShort>fnr: {arenasak.person.fodselsnummer}</BodyShort>
-              </HStack>
-            </VStack>
-          )}
-        </VStack>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button type={'button'} className={'fit-content'} onClick={handleSubmit} loading={isLoading || isSubmitting}>
-          Migrer saken
-        </Button>
-        <Button type="button" variant="secondary" onClick={handleClose}>
-          Avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <MigrationIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Migrer sak fra Arena</span>
+            </HStack>
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <VStack gap="space-24">
+            <InlineMessage status="info">
+              Det skal kun migreres saker med status &quot;Aktiv&quot; i Arena
+            </InlineMessage>
+            <form role="search" onSubmit={(e) => e.preventDefault()}>
+              <Search
+                id="search"
+                label="Sak du ønsker å migrere"
+                description="Oppgi saksnummer fra Arena"
+                variant="primary"
+                placeholder="xxxx-xxxxxx"
+                value={saksnummer}
+                onSearchClick={handleSearch}
+                onChange={(val) => {
+                  setSaksnummer(val);
+                  setError(null);
+                  setSubmitError(null);
+                  setArenasak(null);
+                }}
+                error={error}
+              />
+            </form>
+            {isLoading && <Spinner label="Henter arenasak..." size="small" />}
+            {submitError != null && <InlineMessage status="error">{submitError}</InlineMessage>}
+            {arenasak != null && (
+              <VStack gap="space-16">
+                <HStack gap="space-12">
+                  <BodyLong>
+                    Saksnr. {arenasak.opprettetAar}-{arenasak.lopenr}
+                  </BodyLong>
+                  <Tag
+                    variant="moderate"
+                    data-color={arenasak.statuskode === 'AKTIV' ? 'success' : 'neutral'}
+                    size="small"
+                  >
+                    {arenasak.statusnavn}
+                  </Tag>
+                </HStack>
+                <HStack gap="space-8">
+                  <Label>
+                    {arenasak.person.fornavn} {arenasak.person.etternavn},
+                  </Label>
+                  <BodyShort>fnr: {arenasak.person.fodselsnummer}</BodyShort>
+                </HStack>
+              </VStack>
+            )}
+          </VStack>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button type={'button'} className={'fit-content'} onClick={handleSubmit} loading={isLoading || isSubmitting}>
+            Migrer saken
+          </Button>
+          <Button type="button" variant="secondary" onClick={handleClose}>
+            Avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

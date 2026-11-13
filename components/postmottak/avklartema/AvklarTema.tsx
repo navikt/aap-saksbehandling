@@ -6,7 +6,7 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { AvklarTemaGrunnlag, AvklarTemaLøsning } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
@@ -163,42 +163,39 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         })
       }
     >
-      <Modal
-        open={visModal}
-        header={{
-          heading: 'Dokumentet er sendt til Gosys for journalføring',
-          icon: <CheckmarkCircleIcon fontSize={'inherit'} />,
-        }}
-        onClose={() => {
-          setVisModal(false);
-        }}
-        onBeforeClose={() => {
-          setVisModal(false);
-          return true;
-        }}
-      >
-        <Modal.Body>
-          <BodyShort spacing>
-            Gå til Gosys for å journalføre dokumentet.{' '}
-            {settesPåVent && (
-              <>
-                Oppgaven settes på vent inntil tema er endret i Gosys. Om den går av vent, trykk <i>Neste</i> igjen
-              </>
-            )}
-          </BodyShort>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type={'button'}
-            onClick={() => {
-              window.location.replace(config?.gosysUrl ?? '');
-              setVisModal(false);
-            }}
-          >
-            Gå til Gosys
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Dialog open={visModal} onOpenChange={setVisModal}>
+        <Dialog.Popup width="large" closeOnOutsideClick={false}>
+          <Dialog.Header>
+            <Dialog.Title>
+              <HStack as={'span'} gap={'space-4'} align={'center'}>
+                <CheckmarkCircleIcon fontSize={'1.5rem'} aria-hidden />
+                <span>Dokumentet er sendt til Gosys for journalføring</span>
+              </HStack>
+            </Dialog.Title>
+          </Dialog.Header>
+          <Dialog.Body>
+            <BodyShort spacing>
+              Gå til Gosys for å journalføre dokumentet.{' '}
+              {settesPåVent && (
+                <>
+                  Oppgaven settes på vent inntil tema er endret i Gosys. Om den går av vent, trykk <i>Neste</i> igjen
+                </>
+              )}
+            </BodyShort>
+          </Dialog.Body>
+          <Dialog.Footer>
+            <Button
+              type={'button'}
+              onClick={() => {
+                window.location.replace(config?.gosysUrl ?? '');
+                setVisModal(false);
+              }}
+            >
+              Gå til Gosys
+            </Button>
+          </Dialog.Footer>
+        </Dialog.Popup>
+      </Dialog>
       <VStack gap={'space-24'}>
         {skalViseKlageEttersendelseInfo && (
           <Alert variant={'info'}>

@@ -54,7 +54,7 @@ export const NyVurderingKortMedSlett = ({
     sisteAccordionSignalVersion.current = accordionsSignal.version;
   }
 
-  const ref = useRef<HTMLDialogElement>(null);
+  const [visSlettVurdering, setVisSlettVurdering] = useState(false);
 
   return (
     <CustomExpandableCard
@@ -93,10 +93,15 @@ export const NyVurderingKortMedSlett = ({
                 variant="tertiary"
                 size="small"
                 icon={<TrashFillIcon />}
-                onClick={() => ref.current?.showModal()}
+                onClick={() => setVisSlettVurdering(true)}
+                aria-haspopup="dialog"
                 type="button"
               />
-              <SlettVurderingModal ref={ref} onSlettVurdering={onSlettVurdering} />
+              <SlettVurderingModal
+                isOpen={visSlettVurdering}
+                onClose={() => setVisSlettVurdering(false)}
+                onSlettVurdering={onSlettVurdering}
+              />
             </VStack>
           )}
         </HGrid>

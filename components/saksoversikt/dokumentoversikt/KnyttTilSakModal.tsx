@@ -1,4 +1,4 @@
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { useState } from 'react';
 import { isError, isSuccess } from 'lib/utils/api';
 import { clientKnyttTilAnnenSak } from 'lib/dokumentClientApi';
@@ -61,21 +61,31 @@ export const KnyttTilSakModal = ({
   };
 
   return (
-    <Modal open={isOpen} header={{ heading: 'Knytt til sak' }} onClose={onClose}>
-      <Modal.Body>
-        <BodyShort spacing>Er du sikker på at du vil knytte journalposten til sak {saksnummer}?</BodyShort>
-      </Modal.Body>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>Knytt til sak</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort spacing>Er du sikker på at du vil knytte journalposten til sak {saksnummer}?</BodyShort>
+        </Dialog.Body>
 
-      {error && <Alert variant="error">{error}</Alert>}
+        {error && <Alert variant="error">{error}</Alert>}
 
-      <Modal.Footer>
-        <Button type={'button'} onClick={knyttTilAktivSak} loading={isLoading}>
-          Ja, knytt til sak
-        </Button>
-        <Button variant="secondary" disabled={isLoading} onClick={onClose}>
-          Nei, avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        <Dialog.Footer>
+          <Button type={'button'} onClick={knyttTilAktivSak} loading={isLoading}>
+            Ja, knytt til sak
+          </Button>
+          <Button variant="secondary" disabled={isLoading} onClick={onClose}>
+            Nei, avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

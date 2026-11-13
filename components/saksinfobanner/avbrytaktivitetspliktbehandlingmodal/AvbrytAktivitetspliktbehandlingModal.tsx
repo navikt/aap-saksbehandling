@@ -1,7 +1,6 @@
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, HStack } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
-import styles from 'components/saksinfobanner/avbrytrevurderingmodal/AvbrytRevurderingModal.module.css';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 import { Alert } from 'components/alert/Alert';
 
@@ -23,50 +22,57 @@ export const AvbrytAktivitetspliktbehandlingModal = ({
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
-    <Modal
-      header={{
-        icon: <XMarkOctagonIcon title="" fontSize="1.5rem" />,
-        heading: 'Er du sikker på at du vil avbryte behandlingen?',
-      }}
+    <Dialog
       open={isOpen}
-      onClose={onClose}
-      className={styles.modal}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
     >
-      <Modal.Body>
-        <BodyLong>Behandlingen vil avsluttes og ingen endringer vil bli lagret på saken.</BodyLong>
-        {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type={'button'}
-          className={'fit-content'}
-          onClick={async () => {
-            sendHendelseOgVentPåProsessering(
-              saksnummer,
-              {
-                saksnummer: saksnummer,
-                referanse: {
-                  type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
-                  verdi: crypto.randomUUID(),
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <XMarkOctagonIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Er du sikker på at du vil avbryte behandlingen?</span>
+            </HStack>
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyLong>Behandlingen vil avsluttes og ingen endringer vil bli lagret på saken.</BodyLong>
+          {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            type={'button'}
+            className={'fit-content'}
+            onClick={async () => {
+              sendHendelseOgVentPåProsessering(
+                saksnummer,
+                {
+                  saksnummer: saksnummer,
+                  referanse: {
+                    type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+                    verdi: crypto.randomUUID(),
+                  },
+                  type: 'NY_ÅRSAK_TIL_BEHANDLING',
+                  kanal: 'DIGITAL',
+                  mottattTidspunkt: new Date().toISOString(),
+                  melding: {
+                    meldingType: 'NyÅrsakTilBehandlingV0',
+                    årsakerTilBehandling: ['AKTIVITETSPLIKTBEHANDLING_AVBRUTT'],
+                    behandlingReferanse: behandlingReferanse,
+                    reserverTilBruker: navIdent ?? null,
+                  } satisfies NyÅrsakTilBehandlingV0,
                 },
-                type: 'NY_ÅRSAK_TIL_BEHANDLING',
-                kanal: 'DIGITAL',
-                mottattTidspunkt: new Date().toISOString(),
-                melding: {
-                  meldingType: 'NyÅrsakTilBehandlingV0',
-                  årsakerTilBehandling: ['AKTIVITETSPLIKTBEHANDLING_AVBRUTT'],
-                  behandlingReferanse: behandlingReferanse,
-                  reserverTilBruker: navIdent ?? null,
-                } satisfies NyÅrsakTilBehandlingV0,
-              },
-              onClose
-            );
-          }}
-          loading={isLoading}
-        >
-          Avbryt behandling
-        </Button>
-      </Modal.Footer>
-    </Modal>
+                onClose
+              );
+            }}
+            loading={isLoading}
+          >
+            Avbryt behandling
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

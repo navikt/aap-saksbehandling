@@ -10,7 +10,7 @@ export const FjernMottakerDialog = ({
   fjernMottaker: () => void;
 }) => (
   <Dialog open={open} onOpenChange={setOpen}>
-    <Dialog.Popup id="dialog-fjern-kopimottaker">
+    <Dialog.Popup width="large" id="dialog-fjern-kopimottaker">
       <Dialog.Header>
         <Dialog.Title>Fjern kopimottaker</Dialog.Title>
       </Dialog.Header>
