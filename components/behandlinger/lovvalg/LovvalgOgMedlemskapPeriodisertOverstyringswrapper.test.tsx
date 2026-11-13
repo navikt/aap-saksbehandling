@@ -16,6 +16,7 @@ const tomtGrunnlag: PeriodisertLovvalgMedlemskapGrunnlag = {
   harTilgangTilÅSaksbehandle: false,
   kanVurderes: [],
   nyeVurderinger: [],
+  delvurderinger: automatiskLovvalgOgMedlemskapVurdering,
   overstyrt: false,
   sisteVedtatteVurderinger: [],
 };
