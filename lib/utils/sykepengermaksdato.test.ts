@@ -10,20 +10,22 @@ describe('utledMaksdatoFraSykepenger', () => {
     expect(utledMaksdatoFraSykepenger({ grunnlag: 'VEDTAK_I_NY_LØSNING', maksdato: '2025-04-01' })).toBe('01.04.2025');
   });
 
-  test('returnerer "SP i Infotrygd" når siste utbetaling er i Infotrygd', () => {
-    expect(utledMaksdatoFraSykepenger({ grunnlag: 'SISTE_UTBETALING_I_INFOTRYGD' })).toBe('SP i Infotrygd');
+  test('returnerer tekst for grunnlaget når vedtak er i ny løsning men maksdato mangler', () => {
+    expect(utledMaksdatoFraSykepenger({ grunnlag: 'VEDTAK_I_NY_LØSNING' })).toBe('Vedtak i ny løsning');
   });
 
-  test('returnerer "SP i Infotrygd" selv om maksdato er satt', () => {
+  test.each([
+    ['INGEN_SYKEPENGER_SISTE_26_UKER', 'Ingen sykepenger siste 26 uker'],
+    ['MAKSDATO_I_INFOTRYGD', 'Maksdato i Infotrygd'],
+    ['MANGLER_MAKSDATO_I_INFOTRYGD', 'Mangler maksdato i Infotrygd'],
+    ['SISTE_UTBETALING_I_INFOTRYGD', 'Siste utbetaling i Infotrygd'],
+  ] as const)('returnerer tekst for grunnlag %s', (grunnlag, forventet) => {
+    expect(utledMaksdatoFraSykepenger({ grunnlag })).toBe(forventet);
+  });
+
+  test('ignorerer maksdato når grunnlaget ikke er vedtak i ny løsning', () => {
     expect(utledMaksdatoFraSykepenger({ grunnlag: 'SISTE_UTBETALING_I_INFOTRYGD', maksdato: '2025-04-01' })).toBe(
-      'SP i Infotrygd'
+      'Siste utbetaling i Infotrygd'
     );
   });
-
-  test.each(['INGEN_SYKEPENGER_SISTE_26_UKER', 'MAKSDATO_I_INFOTRYGD', 'MANGLER_MAKSDATO_I_INFOTRYGD'] as const)(
-    'returnerer undefined for grunnlag %s',
-    (grunnlag) => {
-      expect(utledMaksdatoFraSykepenger({ grunnlag, maksdato: '2025-04-01' })).toBeUndefined();
-    }
-  );
 });
