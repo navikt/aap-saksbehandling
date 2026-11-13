@@ -1,6 +1,6 @@
 'use client';
 
-import { Label, VStack } from '@navikt/ds-react';
+import { BodyShort, Label, VStack } from '@navikt/ds-react';
 import { Alert } from 'components/alert/Alert';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
@@ -64,10 +64,10 @@ export const ForeslåVedtak = ({ behandlingVersjon, readOnly, grunnlag }: Props)
           {grunnlag.endretRettighetsperiode && (
             <Alert variant="info" size="small">
               Rettighetsperioden er endret:{' '}
-              <s>
+              <BodyShort as="s">
                 {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.fom)} –{' '}
                 {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.fra.tom)}
-              </s>{' '}
+              </BodyShort>{' '}
               {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.fom)} –{' '}
               {formatDatoMedMånedsnavn(grunnlag.endretRettighetsperiode.til.tom)}
             </Alert>

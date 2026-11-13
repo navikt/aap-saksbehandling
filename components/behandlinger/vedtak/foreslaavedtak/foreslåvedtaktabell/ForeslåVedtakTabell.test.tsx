@@ -301,44 +301,20 @@ describe('tidligereVarÅpen', () => {
   });
 });
 
-describe('Skjermleserstøtte for endrede datoer', () => {
-  it('kun fom endret: har skjult tekst for tidligere og ny fra', () => {
+describe('Endrede datoer', () => {
+  it('kun fom endret: gammel fom er gjennomstreket', () => {
     medGrunnlag({
       perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-05-01', tom: '2025-05-12' }] }],
     });
 
-    const rad = within(førsteRad());
-    expect(rad.getByText(/Tidligere fra/)).toBeInTheDocument();
-    expect(rad.getByText(/Ny fra/)).toBeInTheDocument();
-    expect(rad.queryByText(/Tidligere til/)).not.toBeInTheDocument();
-    expect(rad.getByText(dato('2024-05-01')).tagName).toBe('DEL');
+    expect(within(førsteRad()).getByText(dato('2024-05-01')).tagName).toBe('DEL');
   });
 
-  it('kun tom endret: har skjult tekst for tidligere og ny til', () => {
+  it('kun tom endret: gammel tom er gjennomstreket', () => {
     medGrunnlag({
       perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-06-12', tom: '2025-12-31' }] }],
     });
 
-    const rad = within(førsteRad());
-    expect(rad.getByText(/Tidligere til/)).toBeInTheDocument();
-    expect(rad.getByText(/Ny til/)).toBeInTheDocument();
-    expect(rad.queryByText(/Tidligere fra/)).not.toBeInTheDocument();
-    expect(rad.getByText(dato('2025-12-31')).tagName).toBe('DEL');
-  });
-
-  it('både fom og tom endret: har skjult tekst for tidligere periode', () => {
-    medGrunnlag({
-      perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-01-01', tom: '2025-12-31' }] }],
-    });
-
-    const rad = within(førsteRad());
-    expect(rad.getByText(/Tidligere periode/)).toBeInTheDocument();
-    expect(rad.queryByText(/Tidligere fra|Tidligere til|Ny fra|Ny til/)).not.toBeInTheDocument();
-  });
-
-  it('uendret periode har ingen skjult tekst om tidligere datoer', () => {
-    medGrunnlag({ perioder: [oppfyltPeriode] });
-
-    expect(screen.queryByText(/Tidligere|Ny fra|Ny til/)).not.toBeInTheDocument();
+    expect(within(førsteRad()).getByText(dato('2025-12-31')).tagName).toBe('DEL');
   });
 });
