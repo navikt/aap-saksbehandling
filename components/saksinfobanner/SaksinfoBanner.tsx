@@ -5,6 +5,7 @@ import { BodyShort, CopyButton, HStack, Label, Link, Tag } from '@navikt/ds-reac
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useSakPersonInformasjon } from 'hooks/saksbehandling/SakPersoninformasjonHook';
 import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
+import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import {
   BehandlingEgenskaper,
   DetaljertBehandling,
@@ -44,6 +45,7 @@ interface Props {
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
   behandlingEgenskaper?: BehandlingEgenskaper;
+  kantIKantArenaSak?: ArenaSakOppsummeringKontrakt;
 }
 
 export const SaksinfoBanner = ({
@@ -53,6 +55,7 @@ export const SaksinfoBanner = ({
   flyt,
   visning,
   behandlingEgenskaper,
+  kantIKantArenaSak,
 }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
@@ -185,7 +188,7 @@ export const SaksinfoBanner = ({
           )}
           {behandlingEgenskaper?.erKantIKantMedArena && (
             <div className={styles.oppgavestatus}>
-              <KantIKantMedArenaStatus />
+              <KantIKantMedArenaStatus arenaSak={kantIKantArenaSak} />
             </div>
           )}
           {oppgaveTildelingStatus && (

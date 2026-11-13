@@ -3,6 +3,7 @@ import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/l
 import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
+import { hentSisteArenaSakForPerson } from 'lib/services/apiinternservice/apiInternService';
 import {
   auditlog,
   hentBehandling,
@@ -64,6 +65,10 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
     );
   }
 
+  const kantIKantArenaSak = behandlingEgenskaper?.erKantIKantMedArena
+    ? await hentSisteArenaSakForPerson(sak.ident)
+    : undefined;
+
   const stegGrupperSomSkalVises: StegGruppe[] = flytResponse.data.flyt
     .filter((steg) => steg.skalVises)
     .map((stegSomSkalVises) => stegSomSkalVises.stegGruppe);
@@ -93,6 +98,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
               behandlingEgenskaper={behandlingEgenskaper}
+              kantIKantArenaSak={kantIKantArenaSak}
             />
 
             <StegGruppeIndikatorAksel

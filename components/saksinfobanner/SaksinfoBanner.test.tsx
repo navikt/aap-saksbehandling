@@ -277,6 +277,44 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(screen.getByText('Kant i kant med Arena')).toBeVisible();
   });
 
+  it('skal lenke kant-i-kant-tag til Arena-saken i visningsklienten', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: true }}
+        kantIKantArenaSak={{
+          sakId: '044245',
+          lopenummer: 100241,
+          aar: 2024,
+          antallVedtak: 2,
+          sakstype: 'AAP',
+          regDato: '2024-01-15',
+          avsluttetDato: null,
+          statuskode: 'AKTIV',
+          statusnavn: 'Aktiv',
+        }}
+      />
+    );
+    const lenke = screen.getByRole('link', { name: /Kant i kant med Arena/ });
+    expect(lenke).toHaveAttribute('href', expect.stringMatching(/sak\/2024-100241$/));
+    expect(lenke).toHaveAttribute('target', '_blank');
+  });
+
+  it('skal ikke lenke kant-i-kant-tag når Arena-saken ikke er kjent', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: true }}
+      />
+    );
+    expect(screen.getByText('Kant i kant med Arena')).toBeVisible();
+    expect(screen.queryByRole('link', { name: /Kant i kant med Arena/ })).not.toBeInTheDocument();
+  });
+
   it('skal ikke vise kant-i-kant-tag når behandlingen ikke er kant i kant med Arena', () => {
     customRender(
       <SaksinfoBanner
