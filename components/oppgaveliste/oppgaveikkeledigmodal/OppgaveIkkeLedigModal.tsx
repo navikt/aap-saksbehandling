@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { BodyShort, Button, Dialog } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack } from '@navikt/ds-react';
 import { PadlockLockedFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
@@ -30,7 +30,10 @@ export const OppgaveIkkeLedigModal = ({
       <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            <PadlockLockedFillIcon aria-hidden /> Oppgaven er plukket av noen andre
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <PadlockLockedFillIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Oppgaven er plukket av noen andre</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>

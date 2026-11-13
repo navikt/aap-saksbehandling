@@ -102,7 +102,10 @@ export const MigrerSakModal = ({ isOpen, onClose }: Props) => {
       <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            <MigrationIcon aria-hidden /> Migrer sak fra Arena
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <MigrationIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Migrer sak fra Arena</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>

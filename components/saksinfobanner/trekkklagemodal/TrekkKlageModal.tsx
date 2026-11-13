@@ -1,4 +1,4 @@
-import { BodyLong, Button, Dialog } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, HStack } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
@@ -26,7 +26,10 @@ export const TrekkKlageModal = ({ saksnummer, behandlingReferanse, isOpen, onClo
       <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            <XMarkOctagonIcon aria-hidden /> Er du sikker på at du vil trekke klagen?
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <XMarkOctagonIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Er du sikker på at du vil trekke klagen?</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>

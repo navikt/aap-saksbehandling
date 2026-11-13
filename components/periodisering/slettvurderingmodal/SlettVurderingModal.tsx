@@ -1,4 +1,4 @@
-import { BodyShort, Button, Dialog } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack } from '@navikt/ds-react';
 import { TrashFillIcon } from '@navikt/aksel-icons';
 
 interface Props {
@@ -18,7 +18,10 @@ export const SlettVurderingModal = ({ isOpen, onClose, onSlettVurdering }: Props
       <Dialog.Popup closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            <TrashFillIcon aria-hidden /> Slett vurdering
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <TrashFillIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Slett vurdering</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>

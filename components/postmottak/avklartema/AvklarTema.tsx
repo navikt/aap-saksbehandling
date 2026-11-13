@@ -6,7 +6,7 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { AvklarTemaGrunnlag, AvklarTemaLøsning } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { BodyShort, Button, Dialog, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
@@ -167,7 +167,10 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         <Dialog.Popup closeOnOutsideClick={false}>
           <Dialog.Header>
             <Dialog.Title>
-              <CheckmarkCircleIcon aria-hidden fontSize="inherit" /> Dokumentet er sendt til Gosys for journalføring
+              <HStack as={'span'} gap={'space-4'} align={'center'}>
+                <CheckmarkCircleIcon fontSize={'1.5rem'} aria-hidden />
+                <span>Dokumentet er sendt til Gosys for journalføring</span>
+              </HStack>
             </Dialog.Title>
           </Dialog.Header>
           <Dialog.Body>

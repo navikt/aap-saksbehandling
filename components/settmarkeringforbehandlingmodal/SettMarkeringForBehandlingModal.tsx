@@ -1,5 +1,5 @@
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { Button, Dialog, VStack } from '@navikt/ds-react';
+import { Button, Dialog, HStack, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
@@ -65,7 +65,10 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
       <Dialog.Popup width="large" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            {overskrift.icon} {overskrift.heading}
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              {overskrift.icon}
+              <span>{overskrift.heading}</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>
@@ -131,8 +134,10 @@ const markeringTypeTilEnum = (type: MarkeringType) => {
 const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
-      return { heading: 'Marker behandling som haster', icon: <ExclamationmarkTriangleIcon aria-hidden /> };
+      return { heading: 'Marker behandling som haster',
+        icon: <ExclamationmarkTriangleIcon fontSize={'1.5rem'} aria-hidden />, };
     default:
-      return { heading: 'Sett markering på behandling', icon: <ExclamationmarkTriangleIcon aria-hidden /> };
+      return { heading: 'Sett markering på behandling',
+        icon: <ExclamationmarkTriangleIcon fontSize={'1.5rem'} aria-hidden />, };
   }
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Dialog } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack } from '@navikt/ds-react';
 import { Dispatch, SetStateAction } from 'react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 
@@ -15,8 +15,10 @@ export const SynkroniserEnhetModal = ({ visSynkroniserEnhetModal, setVisSynkroni
       <Dialog.Popup width="43.75rem" closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            <CheckmarkCircleFillIcon aria-hidden color="var(--ax-text-success-decoration)" /> Kontortilhørigheten er
-            sjekket
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <CheckmarkCircleFillIcon fontSize={'1.5rem'} aria-hidden color="var(--ax-text-success-decoration)" />
+              <span>Kontortilhørigheten er sjekket</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>

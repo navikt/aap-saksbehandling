@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Dialog } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack } from '@navikt/ds-react';
 import { useRouter } from 'next/navigation';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
 import { useIngenFlereOppgaverModal } from 'hooks/saksbehandling/IngenFlereOppgaverModalHook';
@@ -14,7 +14,10 @@ export const IngenFlereOppgaverModal = () => {
       <Dialog.Popup closeOnOutsideClick={false}>
         <Dialog.Header>
           <Dialog.Title>
-            <CheckmarkCircleIcon aria-hidden fontSize="inherit" /> Du har fullført oppgaven
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <CheckmarkCircleIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Du har fullført oppgaven</span>
+            </HStack>
           </Dialog.Title>
         </Dialog.Header>
         <Dialog.Body>
