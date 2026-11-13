@@ -14,6 +14,7 @@ import {
   AvbrytAktivitetspliktbehandlingGrunnlag,
   AvbrytRevurderingGrunnlag,
   AvklarOppfolgingsoppgaveGrunnlagResponse,
+  SøknadUtenlandsoppholdGrunnlagResponse,
   Avslag11_27Grunnlag,
   BarnepensjonGrunnlag,
   BarnetilleggGrunnlag,
@@ -707,6 +708,13 @@ export const hentForhåndsvisningBrev = async (brevbestillingReferanse: string):
 export const hentBrevmalPreview = async (brevbestillingReferanse: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/brev/${brevbestillingReferanse}/brevmal-preview`;
   return await apiFetch(url, saksbehandlingApiScope, 'GET');
+};
+
+export const hentSøknadUtenlandsoppholdGrunnlag = async (behandlingsreferanse: string) => {
+  return apiFetch<SøknadUtenlandsoppholdGrunnlagResponse>(
+    `${saksbehandlingApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/soknad-utenlandsopphold`,
+    saksbehandlingApiScope
+  );
 };
 
 export const hentOppfølgingsoppgaveGrunnlag = async (behandlingsreferanse: string) => {

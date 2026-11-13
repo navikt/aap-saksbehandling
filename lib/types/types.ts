@@ -672,6 +672,12 @@ export type KorrigerSøknadsdatoV0 =
 export type AvklarOppfolgingsoppgaveGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppfolgingsbehandling.AvklarOppfolgingsoppgaveGrunnlagResponse'];
 
+export type SøknadUtenlandsoppholdGrunnlagResponse =
+  components['schemas']['no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdGrunnlagResponse'];
+
+export type SøknadUtenlandsoppholdVurderingDto =
+  components['schemas']['no.nav.aap.utenlandsopphold.SøknadUtenlandsoppholdVurderingDto'];
+
 export const OppfølgingoppgaveV0 = 'OppfølgingsoppgaveV0';
 
 export type OppfølgingsoppgaveV0 =
