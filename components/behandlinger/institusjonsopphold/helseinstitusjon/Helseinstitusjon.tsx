@@ -20,7 +20,6 @@ import { HelseinstitusjonOppholdGruppe } from 'components/behandlinger/institusj
 import { useConfigForm } from 'components/form/FormHook';
 import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
-import { useFeatureFlag } from 'context/UnleashContext';
 import {
   beregnReduksjonskjede,
   erVurderingHistorisk,
@@ -94,11 +93,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     form
   );
 
-  const sammenhengendeOppholdEnabled = useFeatureFlag('SammenhengendeInstitusjonsopphold');
-  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
-
   const validerManglendeKorrigeringAvReduksjonsdato = (data: HelseinstitusjonsFormFields): boolean => {
-    if (!enManedsregelEnabled) return false;
     let harValideringsfeil = false;
 
     data.helseinstitusjonsvurderinger.forEach((opphold, oppholdIndex) => {
@@ -137,7 +132,6 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
     const kjede = beregnReduksjonskjede(
       data.helseinstitusjonsvurderinger,
       grupperVedtattePerOppholdId(grunnlag.vedtatteVurderinger),
-      enManedsregelEnabled,
       data.helseinstitusjonsvurderinger.length - 1
     );
 
@@ -152,7 +146,7 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
 
       const vurderingerMedStatus = opphold.vurderinger.map((vurdering) => ({
         vurdering,
-        erHistorisk: erVurderingHistorisk(vurdering, reduksjonErMulig, enManedsregelEnabled),
+        erHistorisk: erVurderingHistorisk(vurdering, reduksjonErMulig),
       }));
 
       const nyeVurderinger = vurderingerMedStatus.map(({ vurdering, erHistorisk }, index) => {
@@ -186,11 +180,10 @@ export const Helseinstitusjon = ({ grunnlag, readOnly, behandlingVersjon, initia
       const førsteNyeFom = nyeVurderinger.find((v) => !v.erHistoriskUtenReduksjonsberegning)?.periode.fom;
 
       const finnesGap =
-        sammenhengendeOppholdEnabled &&
         sisteVedtatteVurdering &&
         sisteVedtatteTom &&
         førsteNyeFom &&
-        (!enManedsregelEnabled || isBefore(new Dato(sisteVedtatteTom).dato, new Dato(opphold.periode.tom).dato)) &&
+        isBefore(new Dato(sisteVedtatteTom).dato, new Dato(opphold.periode.tom).dato) &&
         isAfter(new Dato(førsteNyeFom).dato, addDays(new Dato(sisteVedtatteTom).dato, 1));
 
       const gapVurdering = finnesGap
