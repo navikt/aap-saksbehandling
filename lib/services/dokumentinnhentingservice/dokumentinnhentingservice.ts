@@ -64,7 +64,7 @@ export const sendManuellPåminnelsePåLegeerklæring = async (requestBody: {
   dialogmeldingUuid: string;
   behandlingsreferanse: string;
 }) => {
-  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/v2/send`;
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/send`;
   return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
 };
 
