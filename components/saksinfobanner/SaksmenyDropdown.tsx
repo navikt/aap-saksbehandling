@@ -7,7 +7,7 @@ import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { BrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { MarkeringType } from 'lib/types/oppgaveTypes';
-import { DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
+import { BehandlingEgenskaper, DetaljertBehandling, FlytGruppe, FlytVisning } from 'lib/types/types';
 import { brukerErBeslutter, brukerKanSaksbehandle } from 'lib/utils/innloggetBruker';
 import { useState } from 'react';
 
@@ -29,12 +29,14 @@ export const SaksmenyDropdown = ({
   brukerInformasjon,
   behandling,
   reservertAvIdent,
+  behandlingEgenskaper,
 }: {
   flyt?: FlytGruppe[];
   visning?: FlytVisning;
   brukerInformasjon?: BrukerInformasjon;
   behandling: DetaljertBehandling;
   reservertAvIdent?: string | null;
+  behandlingEgenskaper?: BehandlingEgenskaper;
 }) => {
   const { saksnummer } = useParamsMedType();
   const innloggetBruker = useInnloggetBruker();
@@ -100,7 +102,11 @@ export const SaksmenyDropdown = ({
     behandlingErIkkeAvsluttet &&
     behandling?.type === 'Klage';
 
+  const erKantIKantEllerMigrertFraArena =
+    !!behandlingEgenskaper?.erKantIKantMedArena || !!behandlingEgenskaper?.erMigrertFraArena;
+
   const visValgForÅOverstyreStarttidspunkt =
+    !erKantIKantEllerMigrertFraArena &&
     innloggetBrukerKanSaksbehandle &&
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     behandlingErIkkeAvsluttet &&
@@ -118,7 +124,7 @@ export const SaksmenyDropdown = ({
     (behandlingErRevurdering || behandlingErFørstegangsbehandling) &&
     !harAlleredeValgtAvslag1127;
 
-  const kanKorrigereSøknadsdato = useFeatureFlag('KravManuellVurdering');
+  const kanKorrigereSøknadsdato = useFeatureFlag('KravManuellVurdering') && !erKantIKantEllerMigrertFraArena;
 
   return (
     <div className={styles.saksmeny}>
