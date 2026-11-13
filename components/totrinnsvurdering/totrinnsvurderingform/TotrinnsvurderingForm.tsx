@@ -1,6 +1,7 @@
 'use client';
 
-import { BodyShort, Button, Detail, HStack, InfoCard, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, HStack, InfoCard, Link, Modal, VStack } from '@navikt/ds-react';
+import { useState } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
@@ -126,92 +127,123 @@ export const TotrinnsvurderingForm = ({
 
   const finnesUnderkjentVilkår =
     form.watch('totrinnsvurderinger').find((vurdering) => vurdering.godkjent === JaEllerNei.Nei) !== undefined;
+  const [visBekreftVedtakModal, setVisBekreftVedtakModal] = useState(false);
+
+  const validerVurderinger = (data: FormFieldsToTrinnsVurdering) => {
+    const manglerVurderingAvHastemarkering =
+      data.skalHastemarkeringBeholdes === undefined && skalFjerningAvHastemarkeringVurderes;
+    let isError = false;
+
+    data.totrinnsvurderinger.forEach((vurdering, i) => {
+      if (vurdering.godkjent === JaEllerNei.Ja) {
+        const neste = data.totrinnsvurderinger[i + 1];
+        if (neste && !neste.godkjent) {
+          form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
+            type: 'validate',
+            message: 'Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.',
+          });
+          isError = true;
+          return;
+        }
+      }
+    });
+    if (
+      manglerVurderingAvHastemarkering &&
+      data.totrinnsvurderinger.every((vurdering) => vurdering.godkjent === JaEllerNei.Ja)
+    ) {
+      form.setError(`skalHastemarkeringBeholdes`, {
+        type: 'validate',
+        message: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.',
+      });
+      isError = true;
+    }
+    return !isError;
+  };
+
+  const sendInn = (data: FormFieldsToTrinnsVurdering) => {
+    const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
+    if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
+      clientOpprettMarkeringHendelse(behandlingsreferanse, {
+        markeringType: 'HASTER',
+        hendelseType: 'FJERNET',
+      });
+    }
+
+    const behovParams: LøsAvklaringsbehovPåBehandling = {
+      behandlingVersjon: behandlingsversjon,
+      behov: {
+        behovstype: erKvalitetssikring ? '5097' : '5099',
+        vurderinger: assessedFields.map((vurdering) => {
+          if (vurdering.godkjent === JaEllerNei.Ja) {
+            return {
+              definisjon: vurdering.definisjon,
+              godkjent: true,
+            };
+          } else {
+            return {
+              definisjon: vurdering.definisjon,
+              godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
+              grunner: vurdering.grunner?.map((grunn) => {
+                return {
+                  årsak: grunn,
+                  årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
+                };
+              }),
+              begrunnelse: vurdering.begrunnelse,
+            };
+          }
+        }),
+      },
+      referanse: behandlingsreferanse,
+    };
+
+    const onSuccessLøsBehovCallback = () => {
+      loggUmamiVarighet(
+        erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
+        umamiStartTidspunkt,
+        Date.now()
+      );
+      if (!erKvalitetssikring) {
+        loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
+      } else {
+        clientFjernHelseopplysningIkon(behandlingsreferanse);
+      }
+
+      nullstillMellomlagretVurdering();
+    };
+
+    løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
+  };
+
+  const bekreftVedtak = async () => {
+    if (!visBekreftVedtakModal || readOnly || løsAvklaringsbehovIsLoading) {
+      return;
+    }
+    await form.handleSubmit(
+      (data) => {
+        setVisBekreftVedtakModal(false);
+        if (validerVurderinger(data)) {
+          sendInn(data);
+        }
+      },
+      () => setVisBekreftVedtakModal(false)
+    )();
+  };
 
   return (
     <form
-      onSubmit={form.handleSubmit(async (data) => {
-        const assessedFields = data.totrinnsvurderinger.filter((vurdering) => vurdering.godkjent !== undefined);
-        const manglerVurderingAvHastemarkering =
-          data.skalHastemarkeringBeholdes === undefined && skalFjerningAvHastemarkeringVurderes;
-        let isError = false;
-
-        data.totrinnsvurderinger.forEach((vurdering, i) => {
-          if (vurdering.godkjent === JaEllerNei.Ja) {
-            const neste = data.totrinnsvurderinger[i + 1];
-            if (neste && !neste.godkjent) {
-              form.setError(`totrinnsvurderinger.${i + 1}.godkjent`, {
-                type: 'validate',
-                message: 'Du må ta stilling til alle vilkårsvurderinger hvis du ikke underkjenner.',
-              });
-              isError = true;
-              return;
-            }
-          }
-        });
-        if (
-          manglerVurderingAvHastemarkering &&
-          data.totrinnsvurderinger.every((vurdering) => vurdering.godkjent === JaEllerNei.Ja)
-        ) {
-          form.setError(`skalHastemarkeringBeholdes`, {
-            type: 'validate',
-            message: 'Du må ta stilling til om hastemarkeringen skal følge behandlingen videre.',
-          });
-          isError = true;
-        }
-        if (data.skalHastemarkeringBeholdes === JaEllerNei.Nei) {
-          clientOpprettMarkeringHendelse(behandlingsreferanse, {
-            markeringType: 'HASTER',
-            hendelseType: 'FJERNET',
-          });
-        }
-        if (isError) {
+      onSubmit={form.handleSubmit((data) => {
+        if (readOnly || løsAvklaringsbehovIsLoading || !validerVurderinger(data)) {
           return;
         }
-
-        const behovParams: LøsAvklaringsbehovPåBehandling = {
-          behandlingVersjon: behandlingsversjon,
-          behov: {
-            behovstype: erKvalitetssikring ? '5097' : '5099',
-            vurderinger: assessedFields.map((vurdering) => {
-              if (vurdering.godkjent === JaEllerNei.Ja) {
-                return {
-                  definisjon: vurdering.definisjon,
-                  godkjent: true,
-                };
-              } else {
-                return {
-                  definisjon: vurdering.definisjon,
-                  godkjent: getTrueFalseEllerUndefined(vurdering.godkjent),
-                  grunner: vurdering.grunner?.map((grunn) => {
-                    return {
-                      årsak: grunn,
-                      årsakFritekst: grunn === 'ANNET' ? vurdering.årsakFritekst : undefined,
-                    };
-                  }),
-                  begrunnelse: vurdering.begrunnelse,
-                };
-              }
-            }),
-          },
-          referanse: behandlingsreferanse,
-        };
-
-        const onSuccessLøsBehovCallback = () => {
-          loggUmamiVarighet(
-            erKvalitetssikring ? 'STEG_BESLUTTER_VARIGHET' : 'STEG_KVALITETSSIKRER_VARIGHET',
-            umamiStartTidspunkt,
-            Date.now()
-          );
-          if (!erKvalitetssikring) {
-            loggUmamiVarighetHendelser(varighetHendelseRef.current, hendelseSerieRef.current);
-          } else {
-            clientFjernHelseopplysningIkon(behandlingsreferanse);
-          }
-
-          nullstillMellomlagretVurdering();
-        };
-
-        løsAvklaringsbehov(behovParams, onSuccessLøsBehovCallback);
+        if (
+          skalViseKvalitetssikrerFatterVedtakBoks &&
+          !data.totrinnsvurderinger.some((vurdering) => vurdering.godkjent === JaEllerNei.Nei)
+        ) {
+          setVisBekreftVedtakModal(true);
+          return;
+        }
+        sendInn(data);
       })}
       className={'flex-column'}
       autoComplete={'off'}
@@ -290,9 +322,30 @@ export const TotrinnsvurderingForm = ({
       />
       {!readOnly && (
         <VStack gap="space-8">
-          <Button size={'medium'} className={'fit-content'} loading={løsAvklaringsbehovIsLoading}>
+          <Button type="submit" size={'medium'} className={'fit-content'} loading={løsAvklaringsbehovIsLoading}>
             {utledKnappetekst(finnesUnderkjentVilkår, skalViseKvalitetssikrerFatterVedtakBoks)}
           </Button>
+
+          <Modal
+            open={visBekreftVedtakModal}
+            onClose={() => setVisBekreftVedtakModal(false)}
+            header={{ heading: 'Send vedtak om avslag til bruker' }}
+          >
+            <Modal.Body>
+              <BodyShort>
+                Når du trykker «Send vedtak om avslag», fatter du vedtaket og sender brevet direkte til bruker uten at
+                beslutter er innom saken. Du er den siste personen som ser på saken.
+              </BodyShort>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="button" onClick={bekreftVedtak} loading={løsAvklaringsbehovIsLoading}>
+                Send vedtak om avslag
+              </Button>
+              <Button type="button" variant="secondary" onClick={() => setVisBekreftVedtakModal(false)}>
+                Avbryt
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
           {isLocal() && <TotrinnsvurderingDevtools form={form} />}
 
