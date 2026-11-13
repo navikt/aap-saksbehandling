@@ -239,6 +239,7 @@ export const SaksinfoBanner = ({
               behandling={behandling}
               reservertAvIdent={oppgaveVisningsinfo?.reservertAvIdent}
               brukerInformasjon={brukerInformasjon}
+              behandlingEgenskaper={behandlingEgenskaper}
             />
           )}
         </HStack>
