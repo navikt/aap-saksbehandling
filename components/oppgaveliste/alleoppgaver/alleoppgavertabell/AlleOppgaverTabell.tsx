@@ -20,6 +20,7 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
+import { utledMaksdatoFraSykepenger } from 'lib/utils/sykepengermaksdato';
 
 interface Props {
   oppgaver: OppgaveMedKontekst[];
@@ -94,6 +95,9 @@ export const AlleOppgaverTabell = ({
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
+            </Table.ColumnHeader>
+            <Table.ColumnHeader sortKey={'MAKSDATO_SP'} sortable={true}>
+              Maksdato SP
             </Table.ColumnHeader>
             <Table.ColumnHeader sortKey={'RESERVERT_AV'} sortable={true}>
               Tildelt
@@ -175,6 +179,9 @@ export const AlleOppgaverTabell = ({
               </Table.DataCell>
               <Table.DataCell textSize={'small'}>
                 {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
+              </Table.DataCell>
+              <Table.DataCell textSize={'small'}>
+                {utledMaksdatoFraSykepenger(oppgave.gjenståendeSykedager)}
               </Table.DataCell>
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>

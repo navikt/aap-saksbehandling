@@ -15,6 +15,7 @@ import { memo } from 'react';
 
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
+import { utledMaksdatoFraSykepenger } from 'lib/utils/sykepengermaksdato';
 
 const OppgaveRad = ({
   oppgave,
@@ -84,6 +85,7 @@ const OppgaveRad = ({
       <Table.DataCell textSize={'small'}>
         {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
       </Table.DataCell>
+      <Table.DataCell textSize={'small'}>{utledMaksdatoFraSykepenger(oppgave.gjenståendeSykedager)}</Table.DataCell>
       <Table.DataCell textSize={'small'}>
         <OppgaveInformasjon oppgave={oppgave} />
       </Table.DataCell>
