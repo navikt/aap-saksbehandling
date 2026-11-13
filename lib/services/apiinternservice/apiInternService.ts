@@ -1,9 +1,14 @@
 import 'server-only';
 
 import { apiFetch } from 'lib/services/apiFetch';
-import { FetchResponse } from 'lib/utils/api';
+import { FetchResponse, isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
-import { ArenaoppslagSakerRequestV1, ArenaSakMedVedtakResponse, SakerResponse } from './apiInternServiceDTOs';
+import {
+  ArenaoppslagSakerRequestV1,
+  ArenaSakMedVedtakResponse,
+  ArenaSakOppsummeringKontrakt,
+  SakerResponse,
+} from './apiInternServiceDTOs';
 import { dummySakerResponse, getDummyArenaSakMedVedtakResponse } from './apiInternServiceMock';
 
 const apiInternBaseUrl = process.env.API_INTERN_BASE_URL;
@@ -17,6 +22,20 @@ export const hentArenaSakerForPerson = async (personidentifikator: string): Prom
   const url = `${apiInternBaseUrl}/arena/person/saker`;
   const body: ArenaoppslagSakerRequestV1 = { personidentifikator };
   return await apiFetch<SakerResponse>(url, apiInternScope, 'POST', body);
+};
+
+export const hentSisteArenaSakForPerson = async (
+  personidentifikator: string
+): Promise<ArenaSakOppsummeringKontrakt | undefined> => {
+  try {
+    const res = await hentArenaSakerForPerson(personidentifikator);
+    if (!isSuccess(res)) {
+      return undefined;
+    }
+    return [...res.data.saker].sort((a, b) => b.regDato.localeCompare(a.regDato))[0];
+  } catch {
+    return undefined;
+  }
 };
 
 export const hentArenaSakMedVedtak = async (sakId: string): Promise<FetchResponse<ArenaSakMedVedtakResponse>> => {
