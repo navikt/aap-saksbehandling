@@ -22,7 +22,6 @@ import { useMemo } from 'react';
 import { HelseinstitusjonsFormFields } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 import { Dato } from 'lib/types/Dato';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   form: UseFormReturn<HelseinstitusjonsFormFields>;
@@ -55,17 +54,14 @@ export const Helseinstitusjonsvurdering = ({
       ? form.watch(`helseinstitusjonsvurderinger.${oppholdIndex}.vurderinger.${vurderingIndex - 1}`)
       : undefined;
 
-  const enManedsregelEnabled = useFeatureFlag('Helseinstitusjon1Manedsregel');
   const { bruker1Månedsregelen, effektivTidligsteReduksjonsdato, reduksjonErMulig } = beregnReduksjonskjede(
     form.watch('helseinstitusjonsvurderinger'),
     grupperVedtattePerOppholdId(vedtatteVurderinger),
-    enManedsregelEnabled,
     oppholdIndex
   )[oppholdIndex];
 
   const erFørsteVurdering = vurderingIndex === 0;
-  const forrigeErHistorisk =
-    !!forrigeVurdering && erVurderingHistorisk(forrigeVurdering, reduksjonErMulig, enManedsregelEnabled);
+  const forrigeErHistorisk = !!forrigeVurdering && erVurderingHistorisk(forrigeVurdering, reduksjonErMulig);
 
   const skalViseDatoFeltForStoppAvReduksjon =
     !erReduksjon && (finnesTidligereVurderinger || !erFørsteVurdering) && !forrigeErHistorisk;

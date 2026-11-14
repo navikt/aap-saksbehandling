@@ -11,11 +11,8 @@ export const FLAGS = [
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
   'NyFlytEtablerEgenVirksomhet',
-  'SammenhengendeInstitusjonsopphold',
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
-  'Helseinstitusjon1Manedsregel',
-  'VisGosysOppgaverForPerson',
   'VedtaksperiodeBeslutter',
 ] as const;
 
@@ -35,10 +32,7 @@ export const mockedFlags: Flags = {
   HoppOverBeslutterVedAvslagSykdom: true,
   KanVurdereRefusjonIRevurdering: true,
   NyFlytEtablerEgenVirksomhet: true,
-  SammenhengendeInstitusjonsopphold: true,
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
-  Helseinstitusjon1Manedsregel: true,
-  VisGosysOppgaverForPerson: true,
   VedtaksperiodeBeslutter: true,
 };
