@@ -65,6 +65,13 @@ describe('ForeslåVedtak toggle', () => {
     expect(alert).toHaveTextContent(formatDatoMedMånedsnavn('2025-06-30'));
   });
 
+  it('viser gammel rettighetsperiode som gjennomstreket', () => {
+    renderMedFlagg(true, { ...grunnlag, endretRettighetsperiode });
+    expect(
+      screen.getByText(`${formatDatoMedMånedsnavn('2025-01-01')} – ${formatDatoMedMånedsnavn('2025-12-31')}`).tagName
+    ).toBe('S');
+  });
+
   it('viser ikke alert når endretRettighetsperiode er null', () => {
     renderMedFlagg(true);
     expect(screen.queryByText(/Rettighetsperioden er endret/)).not.toBeInTheDocument();
@@ -73,5 +80,50 @@ describe('ForeslåVedtak toggle', () => {
   it('viser ikke alert når toggelen er av', () => {
     renderMedFlagg(false, { ...grunnlag, endretRettighetsperiode });
     expect(screen.queryByText(/Rettighetsperioden er endret/)).not.toBeInTheDocument();
+  });
+});
+
+describe('ForeslåVedtak tabellrader', () => {
+  const medRader: ForeslåVedtakGrunnlag = {
+    ...grunnlag,
+    perioder: [
+      {
+        periode: { fom: '2024-06-12', tom: '2025-05-12' },
+        utfall: 'OPPFYLT',
+        rettighetsType: 'BISTANDSBEHOV',
+        avslagsårsak: { underveisavslag: null, vilkårsavslag: [] },
+        erNy: true,
+        tidligerePerioder: [],
+        tidligereVarÅpen: false,
+      },
+    ],
+    stansOpphør: [
+      {
+        stansOpphørFraOgMed: '2026-01-01',
+        historikk: [
+          {
+            behandlingReferanse: '2a1d2f0e-1b0c-4a52-a7f0-8d1b6e7c1c11',
+            erNy: false,
+            hjemler: ['§ 11-7'],
+            type: 'STANS',
+            årsaker: ['BRUDD_PÅ_AKTIVITETSPLIKT_STANS'],
+          },
+        ],
+      },
+    ],
+  };
+
+  it('viser rad for periode og rad for stans utenfor periodene når toggelen er på', () => {
+    renderMedFlagg(true, medRader);
+    expect(screen.getByText('AAP innvilget')).toBeVisible();
+    expect(screen.getByText('Ny')).toBeVisible();
+    expect(screen.getByText('Stans')).toBeVisible();
+    expect(screen.getByText('§ 11-7')).toBeVisible();
+  });
+
+  it('viser ikke ny tabell når toggelen er av', () => {
+    renderMedFlagg(false, medRader);
+    expect(screen.queryByText('Ny')).not.toBeInTheDocument();
+    expect(screen.queryByText('Endret')).not.toBeInTheDocument();
   });
 });

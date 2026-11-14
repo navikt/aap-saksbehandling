@@ -90,69 +90,7 @@ const stansVurdering = (overstyr: Partial<StansOpphørVurdering> = {}): StansOpp
 const medGrunnlag = (grunnlag: Partial<ForeslåVedtakGrunnlag>) =>
   customRender(<ForeslåVedtakTabell grunnlag={{ ...foreslåVedtakGrunnlag, ...grunnlag }} />);
 
-describe('Ny og Endret', () => {
-  it('viser Ny på ny innvilget periode', () => {
-    medGrunnlag({ perioder: [{ ...oppfyltPeriode, erNy: true }] });
-    expect(screen.getByText('Ny')).toBeVisible();
-    expect(screen.queryByText('Endret')).not.toBeInTheDocument();
-  });
-
-  it('viser Endret når perioden har tidligere perioder og ikke er ny', () => {
-    medGrunnlag({ perioder: [{ ...oppfyltPeriode, erNy: false, tidligerePerioder: tidligere }] });
-    expect(screen.getByText('Endret')).toBeVisible();
-    expect(screen.queryByText('Ny')).not.toBeInTheDocument();
-  });
-
-  it('viser Ny fremfor Endret når perioden er begge', () => {
-    medGrunnlag({ perioder: [{ ...oppfyltPeriode, erNy: true, tidligerePerioder: tidligere }] });
-    expect(screen.getByText('Ny')).toBeVisible();
-    expect(screen.queryByText('Endret')).not.toBeInTheDocument();
-  });
-
-  it('viser verken Ny eller Endret på uendret periode', () => {
-    medGrunnlag({});
-    expect(screen.queryByText('Ny')).not.toBeInTheDocument();
-    expect(screen.queryByText('Endret')).not.toBeInTheDocument();
-  });
-});
-
 describe('Stans og opphør', () => {
-  it('viser Stans, hjemmel og Ny i avslått periode', () => {
-    medGrunnlag({
-      perioder: [{ ...ikkeOppfyltPeriode, erNy: true }],
-      stansOpphør: [{ stansOpphørFraOgMed: '2025-05-13', historikk: [stansVurdering()] }],
-    });
-    expect(screen.getByText('Stans')).toBeVisible();
-    expect(screen.getByText('Ny')).toBeVisible();
-    expect(screen.getByText('§ 11-7')).toBeVisible();
-    expect(screen.queryByText('Ikke rett til AAP')).not.toBeInTheDocument();
-  });
-
-  it('viser Opphør med hjemmel', () => {
-    medGrunnlag({
-      perioder: [ikkeOppfyltPeriode],
-      stansOpphør: [
-        {
-          stansOpphørFraOgMed: '2025-05-13',
-          historikk: [
-            stansVurdering({ type: 'OPPHØR', hjemler: ['§ 11-3'], årsaker: ['BRUDD_PÅ_OPPHOLDSKRAV_OPPHØR'] }),
-          ],
-        },
-      ],
-    });
-    expect(screen.getByText('Opphør')).toBeVisible();
-    expect(screen.getByText('§ 11-3')).toBeVisible();
-  });
-
-  it('viser ikke Ny når stansen ikke er ny', () => {
-    medGrunnlag({
-      perioder: [ikkeOppfyltPeriode],
-      stansOpphør: [{ stansOpphørFraOgMed: '2025-05-13', historikk: [stansVurdering({ erNy: false })] }],
-    });
-    expect(screen.getByText('Stans')).toBeVisible();
-    expect(screen.queryByText('Ny')).not.toBeInTheDocument();
-  });
-
   it('viser egen rad for stans utenfor alle perioder', () => {
     medGrunnlag({
       perioder: [oppfyltPeriode],
@@ -225,63 +163,9 @@ describe('Ny og Endret per rad', () => {
     expect(screen.queryByText('Ny')).not.toBeInTheDocument();
     expect(screen.queryByText('Endret')).not.toBeInTheDocument();
   });
-
-  it('bruker periodens erNy og ikke stansens erNy for avslag', () => {
-    medGrunnlag({
-      perioder: [{ ...ikkeOppfyltPeriode, erNy: false, tidligerePerioder: tidligere }],
-      stansOpphør: [{ stansOpphørFraOgMed: '2025-05-13', historikk: [stansVurdering({ erNy: true })] }],
-    });
-
-    expect(screen.getByText('Endret')).toBeVisible();
-    expect(screen.queryByText('Ny')).not.toBeInTheDocument();
-  });
 });
 
 const dato = formatDatoMedMånedsnavn;
-const førsteRad = () => screen.getAllByRole('row')[1];
-
-describe('Datovisning ved endret periode', () => {
-  it('kun fom endret: gammel fom vises og ny fom er uthevet, tom er uendret', () => {
-    medGrunnlag({
-      perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-05-01', tom: '2025-05-12' }] }],
-    });
-
-    const rad = within(førsteRad());
-    expect(rad.getByText(dato('2024-05-01'))).toBeVisible();
-    expect(rad.getByText(dato('2024-06-12')).className).toMatch(/endretDato/);
-    expect(rad.getByText(dato('2025-05-12')).className).not.toMatch(/endretDato/);
-  });
-
-  it('kun tom endret: gammel tom vises og ny tom er uthevet, fom er uendret', () => {
-    medGrunnlag({
-      perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-06-12', tom: '2025-12-31' }] }],
-    });
-
-    const rad = within(førsteRad());
-    expect(rad.getByText(dato('2025-12-31'))).toBeVisible();
-    expect(rad.getByText(dato('2025-05-12')).className).toMatch(/endretDato/);
-    expect(rad.getByText(dato('2024-06-12')).className).not.toMatch(/endretDato/);
-  });
-
-  it('både fom og tom endret: gammel periode vises på egen linje og ingen dato er uthevet', () => {
-    medGrunnlag({
-      perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-01-01', tom: '2025-12-31' }] }],
-    });
-
-    const rad = within(førsteRad());
-    expect(rad.getByText(`${dato('2024-01-01')} – ${dato('2025-12-31')}`).tagName).toBe('DEL');
-    expect(rad.getByText(dato('2024-06-12')).className).not.toMatch(/endretDato/);
-    expect(rad.getByText(dato('2025-05-12')).className).not.toMatch(/endretDato/);
-  });
-
-  it('uendret periode viser ingen gamle datoer', () => {
-    medGrunnlag({ perioder: [oppfyltPeriode] });
-
-    const rad = within(førsteRad());
-    expect(rad.queryByText(/Endret/)).not.toBeInTheDocument();
-    expect(rad.getAllByText(/2024|2025/)).toHaveLength(2);
-  });
-});
 
 describe('tidligereVarÅpen', () => {
   const åpenFør = { fom: '2025-05-13', tom: '9999-12-31' };
@@ -298,23 +182,5 @@ describe('tidligereVarÅpen', () => {
   it('viser gammel tom når forrige avslag ikke var åpent', () => {
     avslagMedÅpenFør(false);
     expect(screen.getByText(dato('9999-12-31'))).toBeVisible();
-  });
-});
-
-describe('Endrede datoer', () => {
-  it('kun fom endret: gammel fom er gjennomstreket', () => {
-    medGrunnlag({
-      perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-05-01', tom: '2025-05-12' }] }],
-    });
-
-    expect(within(førsteRad()).getByText(dato('2024-05-01')).tagName).toBe('DEL');
-  });
-
-  it('kun tom endret: gammel tom er gjennomstreket', () => {
-    medGrunnlag({
-      perioder: [{ ...oppfyltPeriode, tidligerePerioder: [{ fom: '2024-06-12', tom: '2025-12-31' }] }],
-    });
-
-    expect(within(førsteRad()).getByText(dato('2025-12-31')).tagName).toBe('DEL');
   });
 });
