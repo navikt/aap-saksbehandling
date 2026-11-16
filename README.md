@@ -25,7 +25,7 @@ Dette oppsettet forutsetter at du har følgende programvare installert:
        ```
      - Legg inn følgende i `~/.bashrc` eller `~/.zshrc`:
        ```env
-       export NODE_AUTH_TOKEN=$(security find-generic-password -w -a "$USER" -s "NODE_AUTH_TOKEN")
+       export NODE_AUTH_TOKEN=$(security find-generic-password -wasd -a "$USER" -s "NODE_AUTH_TOKEN")
        ```
    - **Uten Keychain**:\
      Legg inn følgende i `~/.bashrc` eller `~/.zshrc`:
