@@ -5,7 +5,7 @@ import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
-import { erPåminnelsenIFortiden } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
+import { erPåminnelsenIFortiden } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 const oppgaveStatus = {
   VENT: (oppgave: OppgaveMedKontekst) => !!oppgave.oppgavelisteTags?.påVentInfo?.påVentTil,
