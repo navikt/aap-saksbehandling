@@ -4,7 +4,7 @@ import {
   hentOppfølgingsoppgaveGrunnlag,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
-import { ApiException } from '../../saksbehandling/apiexception/ApiException';
+import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { Behovstype } from 'lib/utils/form';
 
 interface Props {

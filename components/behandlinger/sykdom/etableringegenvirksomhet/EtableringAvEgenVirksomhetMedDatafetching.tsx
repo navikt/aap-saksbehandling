@@ -8,7 +8,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { StegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { Behovstype } from 'lib/utils/form';
 import { EtableringAvEgenVirksomhetNy } from './EtableringAvEgenVirksomhetNy';
-import { unleashService } from '../../../../lib/services/unleash/unleashService';
+import { unleashService } from '/lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
