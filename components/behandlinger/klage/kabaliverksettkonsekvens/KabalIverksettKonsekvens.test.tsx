@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '/lib/test/CustomRender';
+import { render, screen } from 'lib/test/CustomRender';
 import { KabalIverksettKonsekvens } from 'components/behandlinger/klage/kabaliverksettkonsekvens/KabalIverksettKonsekvens';
 
 describe('KabalIverksettKonsekvens', () => {

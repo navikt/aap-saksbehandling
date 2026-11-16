@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '/lib/test/CustomRender';
+import { render, screen } from 'lib/test/CustomRender';
 import { BehandlendeEnhet } from './BehandlendeEnhet';
 import { BehandlendeEnhetGrunnlag, MellomlagretVurderingResponse } from 'lib/types/types';
 import { within } from '@testing-library/react';
