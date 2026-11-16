@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Detail, HStack, InfoCard, Link, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Dialog, HStack, InfoCard, Link, VStack } from '@navikt/ds-react';
 import { useState } from 'react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
@@ -326,26 +326,32 @@ export const TotrinnsvurderingForm = ({
             {utledKnappetekst(finnesUnderkjentVilkår, skalViseKvalitetssikrerFatterVedtakBoks)}
           </Button>
 
-          <Modal
+          <Dialog
             open={visBekreftVedtakModal}
-            onClose={() => setVisBekreftVedtakModal(false)}
-            header={{ heading: 'Send vedtak om avslag til bruker' }}
+            onOpenChange={(open) => {
+              if (!open) setVisBekreftVedtakModal(false);
+            }}
           >
-            <Modal.Body>
-              <BodyShort>
-                Når du trykker «Send vedtak om avslag», fatter du vedtaket og sender brevet direkte til bruker uten at
-                beslutter er innom saken. Du er den siste personen som ser på saken.
-              </BodyShort>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button type="button" onClick={bekreftVedtak} loading={løsAvklaringsbehovIsLoading}>
-                Send vedtak om avslag
-              </Button>
-              <Button type="button" variant="secondary" onClick={() => setVisBekreftVedtakModal(false)}>
-                Avbryt
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            <Dialog.Popup closeOnOutsideClick={false}>
+              <Dialog.Header>
+                <Dialog.Title>Send vedtak om avslag til bruker</Dialog.Title>
+              </Dialog.Header>
+              <Dialog.Body>
+                <BodyShort>
+                  Når du trykker «Send vedtak om avslag», fatter du vedtaket og sender brevet direkte til bruker uten at
+                  beslutter er innom saken. Du er den siste personen som ser på saken.
+                </BodyShort>
+              </Dialog.Body>
+              <Dialog.Footer>
+                <Button type="button" onClick={bekreftVedtak} loading={løsAvklaringsbehovIsLoading}>
+                  Send vedtak om avslag
+                </Button>
+                <Button type="button" variant="secondary" onClick={() => setVisBekreftVedtakModal(false)}>
+                  Avbryt
+                </Button>
+              </Dialog.Footer>
+            </Dialog.Popup>
+          </Dialog>
 
           {isLocal() && <TotrinnsvurderingDevtools form={form} />}
 
