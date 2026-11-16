@@ -817,6 +817,34 @@ describe('yrkesskade', () => {
 });
 
 describe('vurderinger uten viss varighet', () => {
+  it('skjuler 30-prosentspørsmålet ved ja på minst halvparten etter rettighetsperiodens start', async () => {
+    render(
+      <Sykdomsvurdering
+        diagnoseDefaultOptions={diagnoserDefaultOptions}
+        grunnlag={grunnlagMedYrkesskade}
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Revurdering'}
+        erOvergangArbeid={false}
+        erRevurderingStudent={false}
+        studentgrunnlag={studentgrunnlag}
+      />
+    );
+    await skrivInnDatoForNårVurderingenGjelderFra(format(addDays(new Date(), 10), 'ddMMyy'));
+    await velgAtBrukerHarNedsattArbeidsevne();
+    const halvparten = screen.getByRole('radiogroup', { name: /er arbeidsevnen nedsatt med minst halvparten\?/i });
+    const yrkesskadeSpørsmål = 'Er arbeidsevnen nedsatt med minst 30 prosent?';
+
+    expect(screen.getByRole('radiogroup', { name: yrkesskadeSpørsmål })).toBeVisible();
+    await velgNeiIGruppe(halvparten);
+    await velgNeiIGruppe(screen.getByRole('radiogroup', { name: yrkesskadeSpørsmål }));
+    await velgJaIGruppe(halvparten);
+    expect(screen.queryByRole('radiogroup', { name: yrkesskadeSpørsmål })).not.toBeInTheDocument();
+
+    await velgNeiIGruppe(halvparten);
+    expect(screen.getByRole('radiogroup', { name: yrkesskadeSpørsmål })).toBeVisible();
+  });
+
   it('viser datofelt får når vurderingen gjelder fra', () => {
     render(
       <Sykdomsvurdering

@@ -38,6 +38,9 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   );
 
   const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
+  const erMinstHalvparten =
+    !erÅrsakssammenhengYrkesskade &&
+    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja;
   return (
     <>
       {!erÅrsakssammenhengYrkesskade && (
@@ -57,7 +60,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         form={form}
         index={index}
         readonly={readonly}
-        skalVurdereYrkesskade={skalVurdereYrkesskade}
+        skalVurdereYrkesskade={skalVurdereYrkesskade && !erMinstHalvparten}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
 
