@@ -40,6 +40,8 @@ export type UføreVedtakStatus = components['schemas']['no.nav.aap.oppgave.Ufør
 export type UføreVedtak = RequestOfPost<'/fjern-uførevedtak-ikon'>;
 export type OppdaterPåminnelseRequest = RequestOfPost<'/oppdater-paaminnelse'>;
 export type ForespørselSendtTilBehandler = components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
+export type GjenståendeSykedager = components['schemas']['no.nav.aap.oppgave.GjenståendeSykedagerDto'];
+
 
 // Typer utledet direkte fra skjemaet (string unions)
 export type Behandlingstype =

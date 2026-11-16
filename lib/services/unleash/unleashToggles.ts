@@ -2,7 +2,6 @@ export const FLAGS = [
   'BrevUtsendingsinfo',
   'RedigerMottakerBrevbygger',
   'ArenasakerLenkeTilVisninsklient',
-  'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
   'KravManuellVurdering',
   'VentStatusForTilbakekreving',
@@ -14,6 +13,7 @@ export const FLAGS = [
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
   'KnappForManuellPaaminnelse',
+  'MaksdatoSykepenger',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -23,7 +23,6 @@ export const mockedFlags: Flags = {
   BrevUtsendingsinfo: true,
   RedigerMottakerBrevbygger: true,
   ArenasakerLenkeTilVisninsklient: true,
-  OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
   KravManuellVurdering: true,
   VentStatusForTilbakekreving: true,
@@ -35,4 +34,5 @@ export const mockedFlags: Flags = {
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
   KnappForManuellPaaminnelse: true,
+  MaksdatoSykepenger: true,
 };
