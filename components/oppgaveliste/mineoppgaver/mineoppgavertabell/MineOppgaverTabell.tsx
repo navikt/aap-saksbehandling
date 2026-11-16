@@ -1,4 +1,5 @@
 import { SortState, Table, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { MineOppgaverSortBy } from 'lib/types/oppgaveTypes';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { useState } from 'react';
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, sort }: Props) => {
+  const visMaksdatoSykepenger = useFeatureFlag('MaksdatoSykepenger');
   const [feilmelding, setFeilmelding] = useState<string | undefined>();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -60,9 +62,11 @@ export const MineOppgaverTabell = ({ oppgaver, revalidateFunction, setSortBy, so
             <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'MAKSDATO_SP'} sortable={true}>
-              Maksdato SP
-            </Table.ColumnHeader>
+            {visMaksdatoSykepenger && (
+              <Table.ColumnHeader sortKey={'MAKSDATO_SP'} sortable={true}>
+                Maksdato SP
+              </Table.ColumnHeader>
+            )}
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>

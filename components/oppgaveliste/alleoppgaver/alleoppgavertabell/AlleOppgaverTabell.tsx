@@ -1,4 +1,5 @@
 import { Link as AkselLink, BodyShort, Checkbox, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 import { OppgaveMedKontekst, SortBy } from 'lib/types/oppgaveTypes';
@@ -43,6 +44,7 @@ export const AlleOppgaverTabell = ({
   aktivKø,
   visBeløpKolonne,
 }: Props) => {
+  const visMaksdatoSykepenger = useFeatureFlag('MaksdatoSykepenger');
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
 
   const toggleValgtRad = (oppgaveId: number) => {
@@ -96,9 +98,11 @@ export const AlleOppgaverTabell = ({
             <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
-            <Table.ColumnHeader sortKey={'MAKSDATO_SP'} sortable={true}>
-              Maksdato SP
-            </Table.ColumnHeader>
+            {visMaksdatoSykepenger && (
+              <Table.ColumnHeader sortKey={'MAKSDATO_SP'} sortable={true}>
+                Maksdato SP
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader sortKey={'RESERVERT_AV'} sortable={true}>
               Tildelt
             </Table.ColumnHeader>
@@ -180,9 +184,11 @@ export const AlleOppgaverTabell = ({
               <Table.DataCell textSize={'small'}>
                 {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
               </Table.DataCell>
-              <Table.DataCell textSize={'small'}>
-                {utledMaksdatoFraSykepenger(oppgave.gjenståendeSykedager)}
-              </Table.DataCell>
+              {visMaksdatoSykepenger && (
+                <Table.DataCell textSize={'small'}>
+                  {utledMaksdatoFraSykepenger(oppgave.gjenståendeSykedager)}
+                </Table.DataCell>
+              )}
               <Table.DataCell style={{ maxWidth: '150px' }} textSize={'small'}>
                 <Tooltip content={(oppgave.reservertAvNavn ?? oppgave.reservertAv) || 'Ledig'}>
                   <BodyShort truncate size={'small'}>
