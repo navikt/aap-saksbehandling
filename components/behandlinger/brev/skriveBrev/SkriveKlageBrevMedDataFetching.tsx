@@ -84,13 +84,11 @@ export const SkriveKlageBrevMedDataFetching = async ({
 
   return (
     <div className={styles.flex}>
-      {!brukNyBrevbygger && (
-        <KlagesaksopplysningerKolonne
-          formkravGrunnlag={formkrav.data}
-          klagebehandlingKontorGrunnlag={klagebehandlingKontor.data}
-          klagebehandlingNayGrunnlag={klagebehandlingNay.data}
-        />
-      )}
+      <KlagesaksopplysningerKolonne
+        formkravGrunnlag={formkrav.data}
+        klagebehandlingKontorGrunnlag={klagebehandlingKontor.data}
+        klagebehandlingNayGrunnlag={klagebehandlingNay.data}
+      />
       {brukNyBrevbygger && (
         <Brevbygger
           brevmal={brev.brevmal}
