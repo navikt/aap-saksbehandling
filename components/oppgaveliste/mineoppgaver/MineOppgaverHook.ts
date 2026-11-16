@@ -5,6 +5,7 @@ import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { erPåminnelsenIFortiden } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
 
 const oppgaveStatus = {
   VENT: (oppgave: OppgaveMedKontekst) => !!oppgave.oppgavelisteTags?.påVentInfo?.påVentTil,
@@ -19,6 +20,15 @@ const oppgaveStatus = {
   ER_HASTESAK: (oppgave: OppgaveMedKontekst) =>
     oppgave.oppgavelisteTags.markeringer?.some((it) => it.markeringType === 'HASTER') ?? false,
   VENTEFRIST_UTLØPT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.forrigePåVentInfo != null,
+  // TODO: Ta i bruk påminnelseshistorikk her nå det er klart
+  FORESPØRSEL_SENDT: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.forespørselSendtTilBehandler != null &&
+    !erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato),
+  // TODO: Ta i bruk påminnelseshistorikk her nå det er klart
+  PÅMINNELSE_SENDT: (oppgave: OppgaveMedKontekst) =>
+    erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato) &&
+    !oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseAvbrutt,
+  SVAR_MOTTATT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.harMottattDokument != null,
 } as const;
 
 interface Props {
