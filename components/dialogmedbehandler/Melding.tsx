@@ -60,9 +60,7 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
     }
   };
 
-  const kanSendePåminnelse = () => {
-    return melding.kanSendeManuellPåminnelse && !påminnelseSendt;
-  };
+  const kanSendePåminnelse = melding.kanSendeManuellPåminnelse && !påminnelseSendt;
 
   return (
     <VStack gap={'space-4'} align={innkommendeUtgående === 'INNKOMMENDE' ? 'start' : 'end'}>
@@ -102,7 +100,7 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
           )}
           {viseKnappManuellPåminnelse && innkommendeUtgående === 'UTGÅENDE' && dokumentasjonsType === 'L40' && (
             <HStack gap={'space-8'} justify="start">
-              {kanSendePåminnelse() && (
+              {kanSendePåminnelse && (
                 <Button size={'small'} variant={'tertiary'} onClick={() => settErModalÅpen(true)}>
                   Send påminnelse
                 </Button>
@@ -114,7 +112,7 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
 
               {
                 <BekreftManuellPåminnelseModal
-                  navnPåMottaker={meldingFraNavn}
+                  navnPåMottaker={meldingFraNavn ?? ''} // Bør ikke være null i praksis
                   erModalÅpen={erModalÅpen}
                   bekreft={handlePåminnelseClick}
                   avbryt={() => settErModalÅpen(false)}

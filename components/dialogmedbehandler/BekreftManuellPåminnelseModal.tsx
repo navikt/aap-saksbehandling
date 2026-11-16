@@ -3,14 +3,14 @@
 import { BodyShort, Button, Modal } from '@navikt/ds-react';
 
 interface Props {
-  navnPåMottaker: string | null | undefined;
+  navnPåMottaker: string;
   erModalÅpen: boolean;
   bekreft: () => void;
   avbryt: () => void;
 }
 
 export const BekreftManuellPåminnelseModal = ({ navnPåMottaker, erModalÅpen, bekreft, avbryt }: Props) => {
-  const heading = 'Send påminnelse til ' + (navnPåMottaker ?? '');
+  const heading = 'Send påminnelse til ' + navnPåMottaker;
   const message = 'Påminnelsen sendes til behandler med en gang. Du kan bare sende én påminnelse per dag.';
 
   return (
@@ -20,11 +20,9 @@ export const BekreftManuellPåminnelseModal = ({ navnPåMottaker, erModalÅpen, 
         heading: heading,
       }}
       onClose={() => {
-        console.log('Modal.onClose()');
         avbryt();
       }}
       onBeforeClose={() => {
-        console.log('Modal.onBeforeClose()');
         avbryt();
         return true;
       }}
