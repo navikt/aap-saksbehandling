@@ -1,7 +1,7 @@
 import { HStack, Table } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-import { NyEndretTag } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/NyEndretTag';
+import { NyEndretTag } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/nyendrettag/NyEndretTag';
 import {
   mapStansOpphørTilTekst,
   mapStansOpphørÅrsakerTilHjemmel,

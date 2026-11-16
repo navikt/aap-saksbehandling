@@ -3,8 +3,8 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { HStack, Table } from '@navikt/ds-react';
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './ForeslåVedtakTabell.module.css';
-import { VedtaksPeriodeRad } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/VedtaksPeriodeRad';
-import { StansOpphørUtenPeriodeRad } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/StansOpphørUtenPeriodeRad';
+import { VedtaksPeriodeRad } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/vedtaksperioderad/VedtaksPeriodeRad';
+import { StansOpphørUtenPeriodeRad } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/stansopphørutenperioderad/StansOpphørUtenPeriodeRad';
 import { mapUtfallTilTekst } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/foreslaaVedtakRadTekster';
 
 interface Props {

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
 import { customRender } from 'lib/test/CustomRender';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-import { StansOpphørUtenPeriodeRad } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/StansOpphørUtenPeriodeRad';
+import { StansOpphørUtenPeriodeRad } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/stansopphørutenperioderad/StansOpphørUtenPeriodeRad';
 import {
   StansOpphør,
   StansOpphørVurdering,

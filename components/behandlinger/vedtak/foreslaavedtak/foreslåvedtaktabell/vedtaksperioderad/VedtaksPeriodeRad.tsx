@@ -2,7 +2,7 @@ import { BodyShort, HStack, Table, VStack } from '@navikt/ds-react';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
-import { NyEndretTag } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/NyEndretTag';
+import { NyEndretTag } from 'components/behandlinger/vedtak/foreslaavedtak/foreslåvedtaktabell/nyendrettag/NyEndretTag';
 import {
   mapStansOpphørÅrsakerTilTekst,
   mapUtfallTilTekst,
