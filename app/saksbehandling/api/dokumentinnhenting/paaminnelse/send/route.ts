@@ -15,13 +15,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const res = await sendManuellPåminnelsePåLegeerklæring(body);
     if (isError(res) && res.status !== 403) {
-      logError(
-        `/dialogmelding/paaminnelse/v2/send${res.status} - ${res.apiException.code}: ${res.apiException.message}`
-      );
+      logError(`/dialogmelding/paaminnelse/send${res.status} - ${res.apiException.code}: ${res.apiException.message}`);
     }
     return NextResponse.json(res, { status: res.status === 204 ? 200 : res.status });
   } catch (error) {
-    logError('`/dialogmelding/paaminnelse/v2/send', error);
+    logError('`/dialogmelding/paaminnelse/send', error);
     const err: ErrorResponseBody<ApiException> = {
       type: 'ERROR',
       status: 500,

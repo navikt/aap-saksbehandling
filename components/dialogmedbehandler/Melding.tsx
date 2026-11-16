@@ -14,7 +14,7 @@ import { useSendPåminnelsePåDialogmelding } from 'hooks/FetchHook';
 import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
-import { BekreftManuellPåminnelseModal } from 'components/dialogmedbehandler/BekreftManuellPåminnelseModal';
+import { BekreftManuellPåminnelseDialog } from 'components/dialogmedbehandler/BekreftManuellPåminnelseDialog';
 
 export type DokumentasjonType =
   'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'MELDING_FRA_BEHANDLER' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
@@ -44,15 +44,13 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
 
   const viseKnappManuellPåminnelse = useFeatureFlag('KnappForManuellPaaminnelse');
   const [påminnelseSendt, settPåminnelseSendt] = useState(false);
-  const [erModalÅpen, settErModalÅpen] = useState(false);
+  const [erDialogÅpen, settErDialogÅpen] = useState(false);
   const { sendPåminnelsePåDialogmelding, error } = useSendPåminnelsePåDialogmelding();
 
-  // TODO: Burde ikke skje i praksis for sendte dialogmeldinger, men hvordan skal eventuelt manglende ID-er
-  // i sjekkene under håndteres?
   const handlePåminnelseClick = async () => {
     if (dialogmeldingId && behandlingsreferanse && !påminnelseSendt) {
       settPåminnelseSendt(true);
-      settErModalÅpen(false);
+      settErDialogÅpen(false);
 
       await sendPåminnelsePåDialogmelding(dialogmeldingId, behandlingsreferanse);
 
@@ -100,8 +98,8 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
           )}
           {viseKnappManuellPåminnelse && innkommendeUtgående === 'UTGÅENDE' && dokumentasjonsType === 'L40' && (
             <HStack gap={'space-8'} justify="start">
-              {kanSendePåminnelse && (
-                <Button size={'small'} variant={'tertiary'} onClick={() => settErModalÅpen(true)}>
+              {kanSendePåminnelse && meldingFraNavn !== null && (
+                <Button size={'small'} variant={'tertiary'} onClick={() => settErDialogÅpen(true)}>
                   Send påminnelse
                 </Button>
               )}
@@ -110,14 +108,14 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
 
               {error && <Alert variant="error">{error}</Alert>}
 
-              {
-                <BekreftManuellPåminnelseModal
-                  navnPåMottaker={meldingFraNavn ?? ''} // Bør ikke være null i praksis
-                  erModalÅpen={erModalÅpen}
+              {meldingFraNavn !== null && (
+                <BekreftManuellPåminnelseDialog
+                  navnPåMottaker={meldingFraNavn ?? 'Ukjent'} // For å unngå klaging fra typesystemet
+                  erÅpen={erDialogÅpen}
+                  settErÅpen={(verdi) => settErDialogÅpen(verdi)}
                   bekreft={handlePåminnelseClick}
-                  avbryt={() => settErModalÅpen(false)}
                 />
-              }
+              )}
             </HStack>
           )}
           {innkommendeUtgående === 'INNKOMMENDE' && dokumentasjonsType === 'L40' && (
