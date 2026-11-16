@@ -15,7 +15,7 @@ import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { KlagesaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/KlagesaksopplysningerKolonne';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
-import { Brevbygger } from '../../../brevbygger/Brevbygger';
+import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsreferanse,
