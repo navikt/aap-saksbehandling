@@ -3,7 +3,6 @@ import { Dato } from 'lib/types/Dato';
 
 /**
  * Vis dato hvis sykepenger er i Speil.
- * Vis "SP i Infotrygd" hvis sykepenger er i Infotrygd
  * Maksdato er kun satt dersom grunnlaget er VEDTAK_I_NY_LØSNING, https://spokelse.intern.nav.no/swagger
  */
 export function utledMaksdatoFraSykepenger(gjenståendeSykedager?: GjenståendeSykedager): string | undefined {
