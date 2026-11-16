@@ -63,7 +63,14 @@ describe('Klage - vurdering nay', () => {
   });
 
   it('Skal vise valideringsfeil når man velger en ikke-implementert hjemmel', async () => {
-    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
 
     // Fyll ut obligatoriske felt og velg hjemme 11-31 i dropdown, denne er ikke implementert enda
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder klage' });
@@ -86,7 +93,14 @@ describe('Klage - vurdering nay', () => {
   });
 
   it('Skal ikke vise valideringsfeil når man velger en implementert hjemmel', async () => {
-    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
 
     // Fyll ut obligatoriske felt og velg en hjemme som er implementert i dropdownen (11-5)
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder klage' });
@@ -106,6 +120,72 @@ describe('Klage - vurdering nay', () => {
 
     expect(screen.queryByText(/Det er ikke mulig å opprette revurdering på/)).not.toBeInTheDocument();
     expect(combobox).not.toHaveAttribute('aria-invalid');
+  });
+});
+
+describe('Klage - vurdering ukjent påklaget vedtak', () => {
+  const grunnlagUtenType = { harTilgangTilÅSaksbehandle: true, påklagetVedtakType: null };
+  const løsSpy = () => {
+    const løs = vi.fn();
+    vi.spyOn(løsAvklaringsbehovHook, 'useLøsAvklaringsbehov').mockReturnValue({
+      løsAvklaringsbehov: løs,
+      løsAvklaringsbehovStatus: undefined,
+      løsAvklaringsbehovIsLoading: false,
+      løsAvklaringsbehovError: undefined,
+    } as unknown as ReturnType<typeof løsAvklaringsbehovHook.useLøsAvklaringsbehov>);
+    return løs;
+  };
+
+  it('Skal vise veiledning og ikke feile når påklaget vedtak er null', () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagUtenType}
+      />
+    );
+    expect(screen.getByText('Velg påklaget vedtak før du sender inn klagevurderingen.')).toBeVisible();
+  });
+
+  it('Skal ikke vise veiledning når skjemaet er skrivebeskyttet', () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={true}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagUtenType}
+      />
+    );
+    expect(screen.queryByText('Velg påklaget vedtak før du sender inn klagevurderingen.')).not.toBeInTheDocument();
+  });
+
+  it.each(['Vedtak opprettholdes', 'Vedtak omgjøres', 'Delvis omgjøring'])(
+    'Skal ikke sende inn når påklaget vedtak er null og valget er %s',
+    async (valg) => {
+      const løs = løsSpy();
+      render(
+        <KlagebehandlingVurderingNay
+          readOnly={false}
+          behandlingVersjon={0}
+          typeBehandling={'Klage'}
+          grunnlag={grunnlagUtenType}
+        />
+      );
+      await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Test begrunnelse');
+      await user.click(screen.getByRole('radio', { name: valg }));
+      const form = screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form');
+      fireEvent.submit(form!);
+      expect(løs).not.toHaveBeenCalled();
+    }
+  );
+
+  it('Skal også blokkere innsending når grunnlag mangler helt', async () => {
+    const løs = løsSpy();
+    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Test begrunnelse');
+    fireEvent.submit(screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form')!);
+    expect(løs).not.toHaveBeenCalled();
   });
 });
 

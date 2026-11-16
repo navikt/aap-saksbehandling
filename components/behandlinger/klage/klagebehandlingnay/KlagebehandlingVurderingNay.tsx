@@ -132,6 +132,8 @@ export const KlagebehandlingVurderingNay = ({
 
   const innstilling = form.watch('innstilling');
 
+  const manglerPåklagetVedtak = grunnlag?.påklagetVedtakType == null;
+
   const erOmgjøringValgtForTilbakekreving =
     grunnlag?.påklagetVedtakType === 'TILBAKEKREVING' && ['OMGJØR', 'DELVIS_OMGJØR'].includes(innstilling);
 
@@ -144,7 +146,7 @@ export const KlagebehandlingVurderingNay = ({
   }, [form, innstilling]);
 
   const handleSubmit = (event: SubmitEvent) => {
-    if (erOmgjøringValgtForTilbakekreving) {
+    if (manglerPåklagetVedtak || erOmgjøringValgtForTilbakekreving) {
       event.preventDefault();
       return;
     }
@@ -198,6 +200,9 @@ export const KlagebehandlingVurderingNay = ({
       <FormField form={form} formField={formFields.vurdering} />
       <FormField form={form} formField={formFields.notat} />
       <FormField form={form} formField={formFields.innstilling} />
+      {manglerPåklagetVedtak && !readOnly && (
+        <Alert variant="info">Velg påklaget vedtak før du sender inn klagevurderingen.</Alert>
+      )}
       {erOmgjøringValgtForTilbakekreving && (
         <Alert variant="error">Omgjøring av § 22-15 er ikke støttet enda. Meld sak i porten.</Alert>
       )}
