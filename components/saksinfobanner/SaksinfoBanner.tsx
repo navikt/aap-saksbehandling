@@ -33,7 +33,6 @@ import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
 import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { GosysOppgaverPopOver } from 'components/saksinfobanner/gosysoppgaverpopover/GosysOppgaverPopOver';
 import { ForespørselSendtInfoboks } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
@@ -57,7 +56,6 @@ export const SaksinfoBanner = ({
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
   const { oppgaver, antallTreff } = useGosysOppgaverForPerson();
-  const visGosysOppgaverForPerson = useFeatureFlag('VisGosysOppgaverForPerson');
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
@@ -147,7 +145,7 @@ export const SaksinfoBanner = ({
       </div>
       {behandling && (
         <HStack>
-          {visGosysOppgaverForPerson && antallTreff > 0 && (
+          {antallTreff > 0 && (
             <div className={styles.oppgavestatus}>
               <GosysOppgaverPopOver oppgaver={oppgaver} antallTreff={antallTreff} saksnummer={sak.saksnummer} />
             </div>

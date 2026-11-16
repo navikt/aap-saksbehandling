@@ -25,3 +25,9 @@ export const OppgaveStatuser: ValuePair[] = [
   { label: 'Hastesak', value: 'ER_HASTESAK' },
   { label: 'Ventefrist utløpt', value: 'VENTEFRIST_UTLØPT' },
 ];
+
+export const Tilleggsstatuser: ValuePair[] = [
+  { label: 'Forespørsel sendt', value: 'FORESPØRSEL_SENDT' },
+  { label: 'Påminnelse sendt', value: 'PÅMINNELSE_SENDT' },
+  { label: 'Svar mottatt', value: 'SVAR_MOTTATT' },
+];
