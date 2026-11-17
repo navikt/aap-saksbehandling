@@ -29,7 +29,6 @@ interface Props {
   behandlingVersjon: number;
   initialMellomlagretVurdering?: MellomlagretVurdering;
   ubesvarteForespørslerEllerUndefinedVedFeil: MeldingDto[] | undefined;
-  viseVentendeLEToggle: boolean;
 }
 
 type TrukketSøknadÅrsak = TrukketSøknadVurdering['aarsak'];
@@ -48,7 +47,6 @@ export const TrekkSøknad = ({
   behandlingVersjon,
   initialMellomlagretVurdering,
   ubesvarteForespørslerEllerUndefinedVedFeil,
-  viseVentendeLEToggle,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
@@ -99,12 +97,9 @@ export const TrekkSøknad = ({
   );
 
   const harValgtAtSoknadTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
-  const skalViseVentendeLegeerklæringFeilmelding =
-    viseVentendeLEToggle && ubesvarteForespørslerEllerUndefinedVedFeil === undefined;
+  const skalViseVentendeLegeerklæringFeilmelding = ubesvarteForespørslerEllerUndefinedVedFeil === undefined;
   const skalViseVentendeLegeerklæringBeskjed =
-    viseVentendeLEToggle &&
-    ubesvarteForespørslerEllerUndefinedVedFeil !== undefined &&
-    ubesvarteForespørslerEllerUndefinedVedFeil.length > 0;
+    ubesvarteForespørslerEllerUndefinedVedFeil !== undefined && ubesvarteForespørslerEllerUndefinedVedFeil.length > 0;
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
