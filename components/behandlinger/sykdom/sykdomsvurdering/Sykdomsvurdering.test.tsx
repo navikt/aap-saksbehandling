@@ -5,7 +5,6 @@ import { customRenderWithSøknadstidspunkt, render, screen, within } from 'lib/t
 import { Dato } from 'lib/types/Dato';
 import { MellomlagretVurderingResponse, StudentGrunnlag, SykdomsGrunnlag, Sykdomvurdering } from 'lib/types/types';
 import { FetchResponse } from 'lib/utils/api';
-import { formaterDatoForBackend } from 'lib/utils/date';
 import { JaNeiEllerForbigåendeTekst } from 'lib/utils/form';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
@@ -717,6 +716,27 @@ describe('yrkesskade', () => {
       expect(screen.getByRole('textbox', { name: '§ 11-22 AAP ved yrkesskade' }));
     });
 
+    it('viser ikke felter for yrkesskade hvis arbeidsevnen er tilstrekkelig nedsatt', async () => {
+      render(
+        <Sykdomsvurdering
+          diagnoseDefaultOptions={diagnoserDefaultOptions}
+          grunnlag={grunnlagMedYrkesskade}
+          readOnly={false}
+          behandlingVersjon={0}
+          typeBehandling={'Førstegangsbehandling'}
+          erOvergangArbeid={false}
+          erRevurderingStudent={false}
+          studentgrunnlag={studentgrunnlag}
+        />
+      );
+      await velgAtBrukerHarSykdomSkadeLyte();
+      await velgJaIGruppe(screen.getByRole('radiogroup', { name: 'Har brukeren nedsatt arbeidsevne?' }));
+      await velgJaIGruppe(screen.getByLabelText(/er arbeidsevnen nedsatt med minst halvparten\?/i));
+
+      expect(screen.queryByText('§ 11-22 AAP ved yrkesskade')).not.toBeInTheDocument();
+      expect(screen.queryByText('/nedsatt med minst 30 prosent?')).not.toBeInTheDocument();
+    });
+
     it('skal vise description', async () => {
       render(
         <Sykdomsvurdering
@@ -932,7 +952,7 @@ describe('vurderinger uten viss varighet', () => {
     expect(screen.queryByText('Vurderingen kan ikke gjelde fra før starttidspunktet')).not.toBeInTheDocument();
   });
 
-  it('viser spørsmål om den nedsatte arbeidsevnen er minst 40 prosent når det ikke skal vurderes mot yrkesskade', async () => {
+  it('viser spørsmål om den nedsatte arbeidsevnen er minst halvparten når det ikke skal vurderes mot yrkesskade', async () => {
     const søknadstidspunkt = subDays(new Date(), 14);
     customRenderWithSøknadstidspunkt(
       <Sykdomsvurdering
@@ -954,42 +974,6 @@ describe('vurderinger uten viss varighet', () => {
     expect(
       screen.queryByRole('radiogroup', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' })
     ).not.toBeInTheDocument();
-  });
-
-  it('viser spørsmål om den nedsatte arbeidsevnen er minst 30 prosent når det skal vurderes mot yrkesskade', async () => {
-    const søknadstidspunkt = subDays(new Date(), 14);
-    const grunnlagMedYrkesskadeOgÅrsakssammenheng: SykdomsGrunnlag = {
-      ikkeRelevantePerioder: [],
-      behøverVurderinger: [],
-      kanVurderes: [{ fom: formaterDatoForBackend(søknadstidspunkt), tom: '' }],
-      nyeVurderinger: [],
-      sisteVedtatteVurderinger: [],
-      harTilgangTilÅSaksbehandle: true,
-      skalVurdereYrkesskade: true,
-      erÅrsakssammenhengYrkesskade: true,
-      opplysninger: { innhentedeYrkesskader: [], oppgittYrkesskadeISøknad: true },
-    };
-
-    customRenderWithSøknadstidspunkt(
-      <Sykdomsvurdering
-        diagnoseDefaultOptions={diagnoserDefaultOptions}
-        grunnlag={grunnlagMedYrkesskadeOgÅrsakssammenheng}
-        readOnly={false}
-        behandlingVersjon={0}
-        typeBehandling={'Revurdering'}
-        erOvergangArbeid={false}
-        erRevurderingStudent={false}
-        studentgrunnlag={studentgrunnlag}
-      />,
-      format(søknadstidspunkt, 'yyyy-MM-dd')
-    );
-    await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
-    await velgAtBrukerHarSykdomSkadeLyte();
-    await velgAtBrukerHarNedsattArbeidsevne();
-    expect(
-      screen.queryByRole('radiogroup', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' })
-    ).not.toBeInTheDocument();
-    expect(screen.getByRole('radiogroup', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' })).toBeVisible();
   });
 
   it('viser ikke felt for en viss varighet når det gjøres en revurdering', async () => {
