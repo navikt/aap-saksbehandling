@@ -26,21 +26,26 @@ export function vurderingFraDatoErSammeSomRettighetsperiodeStart(
 }
 export function utledVurderingStatus(
   vurdering: Sykdomsvurdering,
-  skalVurdereYrkesskade: boolean
+  skalVurdereYrkesskade: boolean,
+  erÅrsakssammenhengYrkesskade: boolean
 ): VurderingStatus | undefined {
+  const skalBrukeYrkesskadeSvar =
+    skalVurdereYrkesskade &&
+    (erÅrsakssammenhengYrkesskade || vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten !== JaEllerNei.Ja);
+
   if (
     vurdering.harSkadeSykdomEllerLyte === JaEllerNei.Nei ||
     vurdering.harNedsattArbeidsevne == 'NEI' ||
     vurdering.harNedsattArbeidsevne == 'JA_FORBIGÅENDE_PROBLEMER' ||
     (!skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnHalvparten === JaEllerNei.Nei) ||
     vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Nei ||
-    vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei
+    (skalBrukeYrkesskadeSvar && vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense === JaEllerNei.Nei)
   ) {
     return VurderingStatus.IkkeOppfylt;
   }
 
   if (vurdering.erSkadeSykdomEllerLyteVesentligdel === JaEllerNei.Ja) {
-    if (skalVurdereYrkesskade && vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) {
+    if (skalBrukeYrkesskadeSvar && vurdering.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense) {
       return VurderingStatus.OppfyltVedÅrsakssammenheng;
     }
     return VurderingStatus.Oppfylt;

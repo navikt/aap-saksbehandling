@@ -38,6 +38,9 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
   );
 
   const harSkadeSykdomEllerLyte = form.watch(`vurderinger.${index}.harSkadeSykdomEllerLyte`) === JaEllerNei.Ja;
+  const erMinstHalvparten =
+    !erÅrsakssammenhengYrkesskade &&
+    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Ja;
   return (
     <>
       {!erÅrsakssammenhengYrkesskade && (
@@ -57,7 +60,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         form={form}
         index={index}
         readonly={readonly}
-        skalVurdereYrkesskade={skalVurdereYrkesskade}
+        skalVurdereYrkesskade={skalVurdereYrkesskade && !erMinstHalvparten}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
 
@@ -92,10 +95,7 @@ const SykdomsvurderingYrkesskade = ({
   vurderingDatoSammeSomRettighetsperiodeStart: boolean;
   skalVurdereYrkesskade: boolean;
 }) => {
-  const kanBegrunneYrkesskade =
-    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Nei;
-
-  if (!skalVurdereYrkesskade || !kanBegrunneYrkesskade) {
+  if (!skalVurdereYrkesskade) {
     return null;
   }
 
@@ -108,7 +108,14 @@ const SykdomsvurderingYrkesskade = ({
    *
    * I påfølgende behandlinger skal saksbehandler kun bekrefte om den fremdeles er 30 prosent.
    */
-  if (!vurderingDatoSammeSomRettighetsperiodeStart) {
+  if (vurderingDatoSammeSomRettighetsperiodeStart) {
+    const kanBegrunneYrkesskade =
+      form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Nei;
+
+    if (!kanBegrunneYrkesskade) {
+      return null;
+    }
+
     return (
       <>
         <TextAreaWrapper
