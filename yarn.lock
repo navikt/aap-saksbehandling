@@ -1484,12 +1484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aap-felles-prettier@npm:6.11.0":
-  version: 6.11.0
-  resolution: "@navikt/aap-felles-prettier@npm:6.11.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F6.11.0%2Fbe0729c9b900c2abde6800a3b7189532da10514c"
+"@navikt/aap-felles-prettier@npm:6.12.0":
+  version: 6.12.0
+  resolution: "@navikt/aap-felles-prettier@npm:6.12.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Faap-felles-prettier%2F6.12.0%2F0224731f839f3d20441c9459949fa192e3e9c3b3"
   dependencies:
     prettier: "npm:^3.9.5"
-  checksum: 10c0/e33afeab7b61a9c5ba7c22a1462381627435dfd69606f53ad5e12612225c58c393bfe7f2cc67c348989d514e5856929d944812a26f2ab9a6e0163f54417f5c4b
+  checksum: 10c0/1df729377561209ade0596b616a8d7be680effe2aebac0b8b280a4aa17abd0a41157fb60b883591a1df5b7dc10083b426c2c22b38d7bd4bf6d531e5c6c083dd1
   languageName: node
   linkType: hard
 
@@ -1613,9 +1613,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/eslint-config-aap@npm:6.6.0":
-  version: 6.6.0
-  resolution: "@navikt/eslint-config-aap@npm:6.6.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F6.6.0%2Fd2cb1194187bb651b9930330ba845738e7e3a158"
+"@navikt/eslint-config-aap@npm:6.11.0":
+  version: 6.11.0
+  resolution: "@navikt/eslint-config-aap@npm:6.11.0::__archiveUrl=https%3A%2F%2Fnpm.pkg.github.com%2Fdownload%2F%40navikt%2Feslint-config-aap%2F6.11.0%2F6d4674757d98cbb231b3f0a458fa030a35af7640"
   dependencies:
     "@eslint/compat": "npm:^2.1.0"
     globals: "npm:^17.8.0"
@@ -1628,7 +1628,7 @@ __metadata:
     eslint-plugin-jsx-a11y: ^6.7.1
     eslint-plugin-react: ^7.34.1
     eslint-plugin-react-hooks: ^7.0.0
-  checksum: 10c0/9961289ceab30c5f48c756392c76598306e787f950b9207a2605c6f0d55448977ca325fdd23f7ae79dae4ff2f9075de1e2aaa3dffe6eb111197b7b51b4e9a97d
+  checksum: 10c0/be6d70da816b0c620bb29bed47e147d136d7e980e5ae3ef9c172afa27b6fabc07127d1f1fc79f200e361db4e9783eebf150dc4adf2127099af6c80d9b2757e84
   languageName: node
   linkType: hard
 
@@ -1658,13 +1658,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/eslint-plugin-next@npm:16.4.3":
-  version: 16.4.3
-  resolution: "@next/eslint-plugin-next@npm:16.4.3"
+"@next/eslint-plugin-next@npm:16.4.6":
+  version: 16.4.6
+  resolution: "@next/eslint-plugin-next@npm:16.4.6"
   dependencies:
     "@eslint-community/eslint-utils": "npm:4.9.1"
     fast-glob: "npm:3.3.1"
-  checksum: 10c0/0e97b976d593838f76d8354a39936f2deb6c2d7efd901a43ab60d4718aceb7db03120fb96f6733a63abdc15be623ea86e62d8fd7f7030cba4277af3d6bba35c6
+  checksum: 10c0/e8b6b3835f04b632e7a85703a175869fc8c573c15c6883210ea2bcf05d3fcfffcf8667ca16608d3aefd0b869d4c306f5821f3548cab8ad519ee25d250182bb54
   languageName: node
   linkType: hard
 
@@ -2965,14 +2965,14 @@ __metadata:
     "@grafana/faro-web-tracing": "npm:2.14.0"
     "@navikt/aap-breveditor": "npm:0.13.0"
     "@navikt/aap-breveditor-css": "npm:0.6.0"
-    "@navikt/aap-felles-prettier": "npm:6.11.0"
+    "@navikt/aap-felles-prettier": "npm:6.12.0"
     "@navikt/aksel": "npm:8.23.0"
     "@navikt/aksel-icons": "npm:8.23.0"
     "@navikt/diagnosekoder": "npm:1.2026.0"
     "@navikt/ds-css": "npm:8.23.0"
     "@navikt/ds-react": "npm:8.23.0"
     "@navikt/endringslogg": "npm:2.0.1"
-    "@navikt/eslint-config-aap": "npm:6.6.0"
+    "@navikt/eslint-config-aap": "npm:6.11.0"
     "@navikt/oasis": "npm:4.2.2"
     "@opentelemetry/api": "npm:1.10.0"
     "@opentelemetry/api-logs": "npm:0.223.0"
@@ -2994,9 +2994,9 @@ __metadata:
     "@vitest/coverage-v8": "npm:4.1.12"
     date-fns: "npm:4.4.0"
     eslint: "npm:9.39.5"
-    eslint-config-next: "npm:16.4.3"
+    eslint-config-next: "npm:16.4.6"
     eslint-config-standard: "npm:17.1.0"
-    eslint-plugin-jest: "npm:29.17.0"
+    eslint-plugin-jest: "npm:29.17.1"
     eslint-plugin-jsx-a11y: "npm:6.10.2"
     eslint-plugin-n: "npm:17.24.0"
     eslint-plugin-promise: "npm:7.3.0"
@@ -3015,7 +3015,7 @@ __metadata:
     openapi-typescript: "npm:7.13.0"
     pino: "npm:10.4.0"
     pino-pretty: "npm:13.2.0"
-    prettier: "npm:3.9.10"
+    prettier: "npm:3.10.1"
     react: "npm:19.3.1"
     react-dom: "npm:19.3.1"
     react-hook-form: "npm:7.92.0"
@@ -4286,11 +4286,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-next@npm:16.4.3":
-  version: 16.4.3
-  resolution: "eslint-config-next@npm:16.4.3"
+"eslint-config-next@npm:16.4.6":
+  version: 16.4.6
+  resolution: "eslint-config-next@npm:16.4.6"
   dependencies:
-    "@next/eslint-plugin-next": "npm:16.4.3"
+    "@next/eslint-plugin-next": "npm:16.4.6"
     eslint-import-resolver-node: "npm:^0.3.6"
     eslint-import-resolver-typescript: "npm:^3.5.2"
     eslint-plugin-import: "npm:^2.32.0"
@@ -4305,7 +4305,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/ccedc28ab6b608406a09406fc5d36a5c7d0b95ad0b10b69842342cf480887b50f7b7c03dc549d48a4a542e354bd2ebfa60a29fe493349976e724a213ebc68699
+  checksum: 10c0/e67ac6339eb0cedd1101192f342dddf22911f8dc645bed17c20dab604a4a04604f69dca067ddd171cae7d25083a374ffe1578d31d0332d6c0c59f8cb228f7638
   languageName: node
   linkType: hard
 
@@ -4410,9 +4410,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:29.17.0":
-  version: 29.17.0
-  resolution: "eslint-plugin-jest@npm:29.17.0"
+"eslint-plugin-jest@npm:29.17.1":
+  version: 29.17.1
+  resolution: "eslint-plugin-jest@npm:29.17.1"
   dependencies:
     "@typescript-eslint/utils": "npm:^8.0.0"
   peerDependencies:
@@ -4427,7 +4427,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/2ac9e40361f0e2593c71cac05c676b6a03957946806fb3286e704cadaf534ad68eddfb7f792080fad5fd806c6dd41f249ecf14af9ae6227542e61c5552a23844
+  checksum: 10c0/0565452b5a2808444e2a7410b0e115d4c6610107bbd53e3633a28267133efda75b1c2714750480b6380658f8d0018cf47fe546502eeb0983e2091a46aa06c18b
   languageName: node
   linkType: hard
 
@@ -7315,12 +7315,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.9.10":
-  version: 3.9.10
-  resolution: "prettier@npm:3.9.10"
+"prettier@npm:3.10.1":
+  version: 3.10.1
+  resolution: "prettier@npm:3.10.1"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/0b3531593aa6fb36ac6baf629cb058bda472c59a6938774f931fe55283a07c62e6f56e621b043a82d8a3e21fc284c08c34f9e539fc70072635f79b7bae1a1067
+  checksum: 10c0/e8c03ea575a30e15afa75a3700e94609050502980d7c906374aea4cf623eef4dce0816100126207e675cc1ed54b7dfce60f02dbee8d61ec27dc69ce5df6c3723
   languageName: node
   linkType: hard
 
