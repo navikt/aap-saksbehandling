@@ -1,5 +1,5 @@
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { Button, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Link, Modal, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
@@ -55,6 +55,8 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
     onClose();
   }
 
+  const avtaltMellomLedereValgt = form.watch('hasteBegrunnelse') === 'Avtalt mellom ledere';
+
   return (
     <Modal
       open={isOpen}
@@ -88,10 +90,29 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
               className={'flex-column'}
               autoComplete={'off'}
             >
+              {markeringsType === 'HASTER' && (
+                <BodyShort>
+                  Det er viktig at behandlingen ikke blir markert som “haster” for tidlig, altså før brukeren fyller
+                  kriteriene i rutinene:{' '}
+                  <Link
+                    href={
+                      'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Rutine-for-Kelvin---Trekke-s%C3%B8knad.aspx'
+                    }
+                  >
+                    Marker som haster (Navet)
+                  </Link>
+                </BodyShort>
+              )}
               {markeringsType === 'HASTER' ? (
                 <FormField form={form} formField={formFields.hasteBegrunnelse} />
               ) : (
                 <FormField form={form} formField={formFields.begrunnelse} />
+              )}
+              {avtaltMellomLedereValgt && (
+                <Alert variant={'warning'}>
+                  Før du markerer oppgaven med haster med årsak “Avtalt mellom ledere” skal leder på Nav-kontoret og i
+                  Nav arbeid og ytelser ha snakket sammen og avtalt dette.
+                </Alert>
               )}
             </form>
           )}
