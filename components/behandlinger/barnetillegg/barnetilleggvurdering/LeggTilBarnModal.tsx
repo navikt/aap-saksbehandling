@@ -8,7 +8,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { formaterDatoForFrontend } from 'lib/utils/date';
-import { Dato } from '../../../../lib/types/Dato';
+import { Dato } from 'lib/types/Dato';
 
 interface Props {
   readOnly: boolean;

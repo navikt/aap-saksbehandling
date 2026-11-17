@@ -389,6 +389,9 @@ export function mapStatusTilTekst(
     | 'RETUR_FRA_VEILEDER'
     | 'RETUR_FRA_SAKSBEHANDLER'
     | 'AVSLAG_11_5'
+    | 'FORESPØRSEL_SENDT'
+    | 'PÅMINNELSE_SENDT'
+    | 'SVAR_MOTTATT'
 ): string {
   switch (status) {
     case 'VENT':
@@ -407,5 +410,11 @@ export function mapStatusTilTekst(
       return 'Retur fra saksbehandler';
     case 'AVSLAG_11_5':
       return 'Avslag § 11-5';
+    case 'FORESPØRSEL_SENDT':
+      return 'Forespørsel sendt';
+    case 'PÅMINNELSE_SENDT':
+      return 'Påminnelse sendt';
+    case 'SVAR_MOTTATT':
+      return 'Svar mottatt';
   }
 }

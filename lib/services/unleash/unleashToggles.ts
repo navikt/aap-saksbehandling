@@ -2,7 +2,6 @@ export const FLAGS = [
   'BrevUtsendingsinfo',
   'RedigerMottakerBrevbygger',
   'ArenasakerLenkeTilVisninsklient',
-  'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
   'KravManuellVurdering',
   'VentStatusForTilbakekreving',
@@ -13,6 +12,8 @@ export const FLAGS = [
   'NyFlytEtablerEgenVirksomhet',
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
+  'KnappForManuellPaaminnelse',
+  'MaksdatoSykepenger',
   'VedtaksperiodeBeslutter',
 ] as const;
 
@@ -23,7 +24,6 @@ export const mockedFlags: Flags = {
   BrevUtsendingsinfo: true,
   RedigerMottakerBrevbygger: true,
   ArenasakerLenkeTilVisninsklient: true,
-  OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
   KravManuellVurdering: true,
   VentStatusForTilbakekreving: true,
@@ -34,5 +34,7 @@ export const mockedFlags: Flags = {
   NyFlytEtablerEgenVirksomhet: true,
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
+  KnappForManuellPaaminnelse: true,
+  MaksdatoSykepenger: true,
   VedtaksperiodeBeslutter: true,
 };
