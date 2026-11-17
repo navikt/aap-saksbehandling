@@ -25,7 +25,6 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={1}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
       expect(screen.getByRole('heading', { name: 'Trekk søknad', level: 3 })).toBeVisible();
@@ -38,7 +37,6 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={1}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
       expect(screen.getByRole('textbox', { name: 'Begrunnelse' })).toBeVisible();
@@ -51,7 +49,6 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={1}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
       await user.click(screen.getByRole('button', { name: 'Bekreft' }));
@@ -78,7 +75,6 @@ describe('Trekk søknad', () => {
           readOnly={false}
           behandlingVersjon={1}
           ubesvarteForespørslerEllerUndefinedVedFeil={ubesvarteForespørsler}
-          viseVentendeLEToggle={true}
         />
       );
       await user.click(screen.getAllByRole('radio', { name: /ja/i })[0]);
@@ -115,7 +111,6 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
@@ -165,7 +160,6 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
       const tekst = screen.getByText('Utkast lagret 21.08.2025 12:00 (Jan T. Loven)');
@@ -180,7 +174,6 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
@@ -203,7 +196,6 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
@@ -221,7 +213,6 @@ describe('Trekk søknad', () => {
           behandlingVersjon={0}
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
@@ -240,7 +231,6 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagUtenVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
@@ -265,7 +255,6 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
@@ -292,7 +281,6 @@ describe('Trekk søknad', () => {
           grunnlag={trukketSøknadGrunnlagMedVurdering}
           initialMellomlagretVurdering={mellomlagring.mellomlagretVurdering}
           ubesvarteForespørslerEllerUndefinedVedFeil={[]}
-          viseVentendeLEToggle={false}
         />
       );
 
