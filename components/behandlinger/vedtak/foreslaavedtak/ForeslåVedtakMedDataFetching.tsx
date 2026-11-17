@@ -1,4 +1,4 @@
-import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtak';
+import { ForeslåVedtak } from 'components/behandlinger/vedtak/foreslaavedtak/ForeslåVedtak';
 import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { hentForeslåVedtakGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';

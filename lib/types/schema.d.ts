@@ -8793,16 +8793,24 @@ export interface components {
         | null;
       vilkårsavslag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VilkårsavslagDto'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.EndretRettighetsperiodeDto': {
+      fra: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      til: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakDto': {
       avslagsårsak: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.AvslagsårsakDto'];
+      erNy: boolean;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetsType?:
         'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
+      tidligerePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      tidligereVarÅpen: boolean;
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse': {
+      endretRettighetsperiode?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.EndretRettighetsperiodeDto'];
       harTilgangTilÅSaksbehandle: boolean;
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakDto'][];
       stansOpphør: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørDto'][];
@@ -8824,6 +8832,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørVurderingDto': {
       /** Format: uuid */
       behandlingReferanse: string;
+      erNy: boolean;
+      hjemler: string[];
       /** @enum {string} */
       type: 'OPPHEVET' | 'OPPHØR' | 'STANS';
       årsaker: (
