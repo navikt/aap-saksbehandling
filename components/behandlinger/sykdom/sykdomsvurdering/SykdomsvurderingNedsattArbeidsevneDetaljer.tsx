@@ -113,9 +113,9 @@ const SykdomsvurderingYrkesskade = ({
    *
    * I påfølgende behandlinger skal saksbehandler kun bekrefte om den fremdeles er 30 prosent.
    */
-  if (vurderingDatoSammeSomRettighetsperiodeStart) {
-    return (
-      <>
+  return (
+    <>
+      {vurderingDatoSammeSomRettighetsperiodeStart && (
         <TextAreaWrapper
           name={`vurderinger.${index}.yrkesskadeBegrunnelse`}
           control={form.control}
@@ -129,20 +129,7 @@ const SykdomsvurderingYrkesskade = ({
           readOnly={readonly}
           shouldUnregister={false}
         />
-        <RadioGroupJaNei
-          name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
-          control={form.control}
-          label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-          horisontal={true}
-          rules={{
-            required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
-          }}
-          readOnly={readonly}
-        />
-      </>
-    );
-  } else {
-    return (
+      )}
       <RadioGroupJaNei
         name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
         control={form.control}
@@ -153,6 +140,6 @@ const SykdomsvurderingYrkesskade = ({
         }}
         readOnly={readonly}
       />
-    );
-  }
+    </>
+  );
 };
