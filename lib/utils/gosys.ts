@@ -1,4 +1,4 @@
-import { GosysOppgave } from 'lib/types/gosysTypes';
+import { GosysOppgave, GosysOppgavetype } from 'lib/types/gosysTypes';
 import { sorterEtterEldsteDato, sorterEtterNyesteDato } from 'lib/utils/date';
 
 export interface GosysSortering {
@@ -24,28 +24,30 @@ export function sorterGosysOppgaver(oppgaver: GosysOppgave[], sortering?: GosysS
 
 export function mapOppgaveTypeTilTekst(oppgavetype: string): string {
   switch (oppgavetype) {
-    case 'KONT_BRUK':
+    case GosysOppgavetype.KONTAKT_BRUKER:
       return 'Kontakt bruker';
-    case 'VUR_KONS_YTE':
+    case GosysOppgavetype.VURDER_KONSEKVENS_FOR_YTELSE:
       return 'Vurder konsekvens for ytelse';
-    case 'INNH_DOK':
+    case GosysOppgavetype.INNHENT_DOKUMENTASJON:
       return 'Innhent dokumentasjon';
-    case 'JFR':
+    case GosysOppgavetype.JOURNALFOERING:
       return 'Journalføring';
-    case 'VURD_HENV':
+    case GosysOppgavetype.VURDER_HENVENDELSE:
       return 'Vurder henvendelse';
-    case 'BEH_SED':
+    case GosysOppgavetype.BEHANDLE_SED:
       return 'Behandle SED';
-    case 'RETUR':
+    case GosysOppgavetype.BEHANDLE_RETURPOST:
       return 'Behandle returpost';
-    case 'SVAR_IK_MOT':
+    case GosysOppgavetype.SVAR_IKKE_MOTTATT:
       return 'Svar ikke mottatt';
-    case 'VURD_NOTAT':
+    case GosysOppgavetype.VURDER_NOTAT:
       return 'Vurder notat';
-    case 'VUR_SVAR':
+    case GosysOppgavetype.VURDER_SVAR:
       return 'Vurder svar';
-    case 'BEH_HENV':
+    case GosysOppgavetype.BEHANDLE_HENVENDELSE:
       return 'Behandle henvendelse';
+    case GosysOppgavetype.KONTROLLER_UTGAAENDE_SKANNEDE_DOKUMENTER:
+      return 'Kontroller utgående skannede dokumenter';
     default:
       return oppgavetype;
   }

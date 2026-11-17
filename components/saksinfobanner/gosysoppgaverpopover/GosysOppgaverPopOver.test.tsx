@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { GosysOppgave } from 'lib/types/gosysTypes';
+import { GosysOppgave, GosysOppgavetype } from 'lib/types/gosysTypes';
 import { describe, expect, it } from 'vitest';
 import { GosysOppgaverPopOver } from './GosysOppgaverPopOver';
 
@@ -8,7 +8,7 @@ function lagOppgave(overrides: Partial<GosysOppgave> = {}): GosysOppgave {
   return {
     id: 1,
     tema: 'AAP',
-    oppgavetype: 'JFR',
+    oppgavetype: GosysOppgavetype.JOURNALFOERING,
     tildeltEnhetsnr: '0300',
     status: 'OPPRETTET',
     versjon: 1,
@@ -57,7 +57,11 @@ describe('GosysOppgaverPopOver', () => {
   it('viser oppgaver uten opprettelsesdato', async () => {
     const user = userEvent.setup();
     render(
-      <GosysOppgaverPopOver oppgaver={[lagOppgave({ oppgavetype: 'KONT_BRUK' })]} antallTreff={1} saksnummer="123" />
+      <GosysOppgaverPopOver
+        oppgaver={[lagOppgave({ oppgavetype: GosysOppgavetype.KONTAKT_BRUKER })]}
+        antallTreff={1}
+        saksnummer="123"
+      />
     );
 
     await user.click(screen.getByRole('button', { name: 'Gosys-oppgaver (1)' }));
