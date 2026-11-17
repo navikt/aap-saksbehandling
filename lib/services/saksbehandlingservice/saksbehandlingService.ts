@@ -193,11 +193,6 @@ export const opprettAktivitetspliktBehandling = async (
   return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', data);
 };
 
-export const finnSakerForIdent = async (ident: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
-  return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
-};
-
 export const migrerArenasak = async (saksnummerArena: string, ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/migrerFraArena`;
   return await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'POST', { ident, saksnummerArena });
