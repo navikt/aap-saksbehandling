@@ -6,6 +6,8 @@
   color: var(--ax-text-danger-decoration);
 }
 
-.iconSubtle {
-  color: var(--ax-text-neutral-subtle);
+.godkjentIcon,
+.avslåttIcon {
+  width: 1.5rem;
+  height: 1.5rem;
 }

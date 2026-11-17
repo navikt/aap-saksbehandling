@@ -7,7 +7,7 @@ import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ForespørselSendtTilBehandler } from 'lib/types/oppgaveTypes';
 import styles from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks.module.css';
 
-const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
+export const erPåminnelsenIFortiden = (påminnelseDato: ForespørselSendtTilBehandler['påminnelseDato']) => {
   if (!påminnelseDato) return false;
 
   if (erForespørselFør29september2026(påminnelseDato)) {

@@ -6,7 +6,7 @@ import { useMineOppgaver } from 'hooks/oppgave/OppgaveHook';
 import { useLagreAktivUtvidetFilter } from 'hooks/oppgave/aktivUtvidetFilterHook';
 import { MineOppgaverSortBy } from 'lib/types/oppgaveTypes';
 import { oppgaveAvklaringsbehov } from 'lib/utils/avklaringsbehov';
-import { OppgaveStatuser, oppgaveBehandlingstyper } from 'lib/utils/behandlingstyper';
+import { OppgaveStatuser, oppgaveBehandlingstyper, Tilleggsstatuser } from 'lib/utils/behandlingstyper';
 import { alleVurderingsbehovOptions } from 'lib/utils/vurderingsbehovOptions';
 import { useEffect } from 'react';
 
@@ -85,7 +85,7 @@ export const MineOppgaver = () => {
       statuser: {
         type: 'checkbox',
         label: 'Markering',
-        options: OppgaveStatuser,
+        options: [...OppgaveStatuser, ...Tilleggsstatuser],
         defaultValue: lagretUtvidetFilter?.statuser ?? [],
       },
       saksbehandlere: {

@@ -19,6 +19,7 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
@@ -41,6 +42,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
 
 const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   ytelser: [
     {
@@ -62,6 +64,46 @@ beforeEach(() => {
 });
 
 describe('Samordning gradering', () => {
+  test('krever bekreftelse ved sletting av vedtatte perioder, men ikke nye perioder', async () => {
+    const vedtattPeriode = {
+      ytelseType: 'SYKEPENGER' as const,
+      gradering: 20,
+      manuell: true,
+      periode: { fom: '2025-01-01', tom: '2025-01-31' },
+    };
+    render(
+      <SamordningGradering
+        grunnlag={{
+          ...grunnlagMedVurdering,
+          vedtattePerioder: [vedtattPeriode],
+          vurdering: {
+            begrunnelse: 'Samordning med sykepenger',
+            vurderingerMeta: {},
+            vurderinger: [vedtattPeriode, { ...vedtattPeriode, periode: { fom: '2026-01-01', tom: '2026-01-31' } }],
+          },
+        }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+
+    await user.click(screen.getAllByRole('button', { name: 'Slett' })[1]);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Slett' })).toHaveLength(1);
+
+    await user.click(screen.getByRole('button', { name: 'Slett' }));
+    const dialog = screen.getByRole('dialog', { name: 'Slett samordningsperiode' });
+    expect(within(dialog).getByText(/Merk at dette vilkåret gjelder for hele saksperioden/)).toBeVisible();
+    await user.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2025');
+
+    await user.click(screen.getByRole('button', { name: 'Slett' }));
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Slett' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Slett' })).not.toBeInTheDocument();
+  });
+
   test('viser begrunnelsen når det finnes en vurdering uten perioder og ingen ytelser fra kilder', () => {
     const grunnlagMedVurderingUtenPerioder: SamordningGraderingGrunnlag = {
       ...grunnlagMedVurdering,
@@ -214,6 +256,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -246,6 +289,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -296,6 +340,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -336,6 +381,7 @@ describe('Samordning gradering', () => {
 
     const grunnlagMedOverlappendeFerieOgSykepenger: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -376,6 +422,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -399,6 +446,7 @@ describe('Samordning gradering', () => {
 describe('kopiering av perioder fra oppslag', () => {
   const grunnlagMedFlereYtelserOgVurdering: SamordningGraderingGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
     feriePerioder: [],
     historiskeVurderinger: [],
     ytelser: [
@@ -433,6 +481,7 @@ describe('kopiering av perioder fra oppslag', () => {
 
   const grunnlagMedFerieISykepengeperiode: SamordningGraderingGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
     feriePerioder: [],
     historiskeVurderinger: [],
     ytelser: [],
@@ -511,6 +560,7 @@ describe('kopiering av perioder fra oppslag', () => {
   test('kopiert periode får samordningsgrad 0 når kilden mangler gradering', async () => {
     const grunnlagMedYtelseUtenGraderingFraKilde: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [
@@ -539,6 +589,7 @@ describe('kopiering av perioder fra oppslag', () => {
   test('kopiert periode får samordningsgrad 0 når kilden har gradering 0', async () => {
     const grunnlagMedGraderingNull: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [

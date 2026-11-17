@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { ForespørselSendtInfoboks } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
-describe('DialogMedBehandlerInfoboks', () => {
+describe('ForespørselSendtInfoboks', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-10-22T00:00:00Z'));

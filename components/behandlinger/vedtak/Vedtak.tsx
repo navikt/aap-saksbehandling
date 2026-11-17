@@ -1,5 +1,5 @@
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
-import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslåvedtak/ForeslåVedtakMedDataFetching';
+import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslaavedtak/ForeslåVedtakMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
 

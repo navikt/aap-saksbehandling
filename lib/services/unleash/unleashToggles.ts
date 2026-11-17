@@ -2,7 +2,6 @@ export const FLAGS = [
   'BrevUtsendingsinfo',
   'RedigerMottakerBrevbygger',
   'ArenasakerLenkeTilVisninsklient',
-  'OppgavelisteMedBelopISaksbehandling',
   'KravSteg',
   'KravManuellVurdering',
   'VentStatusForTilbakekreving',
@@ -11,11 +10,11 @@ export const FLAGS = [
   'HoppOverBeslutterVedAvslagSykdom',
   'KanVurdereRefusjonIRevurdering',
   'NyFlytEtablerEgenVirksomhet',
-  'SammenhengendeInstitusjonsopphold',
   'VisInfoTrekkSoknadForesporselOmLe',
   'PostmottakVelgTema',
-  'Helseinstitusjon1Manedsregel',
-  'VisGosysOppgaverForPerson',
+  'KnappForManuellPaaminnelse',
+  'MaksdatoSykepenger',
+  'VedtaksperiodeBeslutter',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -25,7 +24,6 @@ export const mockedFlags: Flags = {
   BrevUtsendingsinfo: true,
   RedigerMottakerBrevbygger: true,
   ArenasakerLenkeTilVisninsklient: true,
-  OppgavelisteMedBelopISaksbehandling: true,
   KravSteg: true,
   KravManuellVurdering: true,
   VentStatusForTilbakekreving: true,
@@ -34,9 +32,9 @@ export const mockedFlags: Flags = {
   HoppOverBeslutterVedAvslagSykdom: true,
   KanVurdereRefusjonIRevurdering: true,
   NyFlytEtablerEgenVirksomhet: true,
-  SammenhengendeInstitusjonsopphold: true,
   VisInfoTrekkSoknadForesporselOmLe: true,
   PostmottakVelgTema: false,
-  Helseinstitusjon1Manedsregel: true,
-  VisGosysOppgaverForPerson: true,
+  KnappForManuellPaaminnelse: true,
+  MaksdatoSykepenger: true,
+  VedtaksperiodeBeslutter: true,
 };

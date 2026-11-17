@@ -196,7 +196,7 @@ describe('beregnReduksjonskjede - forrige opphold uten vurderinger i skjemaet', 
   ];
 
   it('vedtatt reduksjon i forrige opphold gir 1-månedsregel og ingen historikk', () => {
-    const kjede = beregnReduksjonskjede(opphold, { kysthaven: [vedtattReduksjon] }, true, 1);
+    const kjede = beregnReduksjonskjede(opphold, { kysthaven: [vedtattReduksjon] }, 1);
 
     expect(kjede[0].girReduksjon).toBe(true);
     expect(kjede[1].bruker1Månedsregelen).toBe(true);
@@ -205,7 +205,7 @@ describe('beregnReduksjonskjede - forrige opphold uten vurderinger i skjemaet', 
   });
 
   it('uten vedtatt reduksjon i forrige opphold gir 3-månedersregel og historikk', () => {
-    const kjede = beregnReduksjonskjede(opphold, {}, true, 1);
+    const kjede = beregnReduksjonskjede(opphold, {}, 1);
 
     expect(kjede[0].girReduksjon).toBe(false);
     expect(kjede[1].reduksjonErMulig).toBe(false);
@@ -374,66 +374,41 @@ describe('getReduksjonsstatus', () => {
 describe('beregnEffektivTidligsteReduksjonsdatoFraSkjema', () => {
   const base = {
     oppholdFra: '2025-11-01',
-    tidligsteReduksjonsdato: '2026-03-01',
     forrigeOppholdAvsluttetDato: '2025-09-01',
   };
 
-  it('toggle av: bruker 1-månedsregel når oppholdet er innen 3 måneder, uavhengig av reduksjon', () => {
-    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
-      ...base,
-      forrigeOppholdVurderinger: [ikkeReduksjon('01.08.2025')],
-      enManedsregelEnabled: false,
-    });
-    expect(res).toEqual({ bruker1Månedsregelen: true, effektivTidligsteReduksjonsdato: '2025-12-01' });
-  });
-
-  it('toggle på: bruker 1-månedsregel når forrige opphold gir reduksjon', () => {
+  it('bruker 1-månedsregel når forrige opphold gir reduksjon', () => {
     const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
       ...base,
       forrigeOppholdVurderinger: [reduksjon('01.08.2025')],
-      enManedsregelEnabled: true,
     });
     expect(res).toEqual({ bruker1Månedsregelen: true, effektivTidligsteReduksjonsdato: '2025-12-01' });
   });
 
-  it('toggle på: bruker standard dato når forrige opphold har mistet reduksjon', () => {
+  it('bruker standard dato når forrige opphold har mistet reduksjon', () => {
     const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
       ...base,
       forrigeOppholdVurderinger: [ikkeReduksjon('01.08.2025')],
       forrigeOppholdVedtatteVurderinger: [vedtattReduksjon],
-      enManedsregelEnabled: true,
     });
     expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
   });
 
-  it('toggle på: bruker standard dato i stedet for backend-dato når 1-månedsregel ikke gjelder', () => {
+  it('bruker standard dato når 1-månedsregel ikke gjelder', () => {
     const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
       ...base,
       forrigeOppholdAvsluttetDato: '2025-01-01',
-      enManedsregelEnabled: true,
     });
     expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-03-01' });
   });
 
-  it('toggle på: ignorerer utdatert backend-dato', () => {
+  it('beregner standard dato når 1-månedsregel ikke gjelder', () => {
     const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
       oppholdFra: '2026-02-01',
-      tidligsteReduksjonsdato: '2026-03-01',
       forrigeOppholdAvsluttetDato: '2026-01-15',
       forrigeGirReduksjon: false,
-      enManedsregelEnabled: true,
     });
     expect(res).toEqual({ bruker1Månedsregelen: false, effektivTidligsteReduksjonsdato: '2026-06-01' });
-  });
-
-  it('toggle av: bruker backend-dato', () => {
-    const res = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
-      oppholdFra: '2026-02-01',
-      tidligsteReduksjonsdato: '2026-03-01',
-      forrigeOppholdAvsluttetDato: '2025-01-01',
-      enManedsregelEnabled: false,
-    });
-    expect(res.effektivTidligsteReduksjonsdato).toBe('2026-03-01');
   });
 });
 
@@ -444,23 +419,19 @@ describe('erVurderingHistorisk', () => {
     ...overrides,
   });
 
-  it('returnerer false når toggle er av', () => {
-    expect(erVurderingHistorisk(reduksjon('01.04.2026'), false, false)).toBe(false);
-  });
-
   it('returnerer true for ny reduksjon når reduksjon ikke er mulig', () => {
-    expect(erVurderingHistorisk(reduksjon('01.04.2026'), false, true)).toBe(true);
+    expect(erVurderingHistorisk(reduksjon('01.04.2026'), false)).toBe(true);
   });
 
   it('returnerer true for lagret reduksjon når reduksjon ikke er mulig', () => {
-    expect(erVurderingHistorisk(lagret(), false, true)).toBe(true);
+    expect(erVurderingHistorisk(lagret(), false)).toBe(true);
   });
 
   it('returnerer false for lagret historisk vurdering når reduksjon blir mulig igjen', () => {
-    expect(erVurderingHistorisk(lagret({ erHistoriskUtenReduksjonsberegning: true }), true, true)).toBe(false);
+    expect(erVurderingHistorisk(lagret({ erHistoriskUtenReduksjonsberegning: true }), true)).toBe(false);
   });
 
   it('returnerer false for vurdering uten reduksjon', () => {
-    expect(erVurderingHistorisk(ikkeReduksjon('01.04.2026'), false, true)).toBe(false);
+    expect(erVurderingHistorisk(ikkeReduksjon('01.04.2026'), false)).toBe(false);
   });
 });
