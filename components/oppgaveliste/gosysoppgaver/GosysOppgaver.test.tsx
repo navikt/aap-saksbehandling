@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
 import { useGosysOppgaver } from 'hooks/oppgave/GosysOppgaverHook';
-import { GosysOppgave } from 'lib/types/gosysTypes';
+import { GosysOppgave, GosysOppgavetype } from 'lib/types/gosysTypes';
 import { Enhet } from 'lib/types/oppgaveTypes';
 import { GosysOppgaver } from './GosysOppgaver';
 
@@ -15,7 +15,7 @@ const enheter: Enhet[] = [{ enhetNr: '0300', navn: 'Enhet A' }];
 const tildeltOppgave: GosysOppgave = {
   id: 1,
   tema: 'AAP',
-  oppgavetype: 'JFR',
+  oppgavetype: GosysOppgavetype.JOURNALFOERING,
   tildeltEnhetsnr: '0300',
   status: 'OPPRETTET',
   versjon: 1,
@@ -102,7 +102,7 @@ describe('GosysOppgaver', () => {
       enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
-      oppgaveTyper: ['JFR'],
+      oppgaveTyper: [GosysOppgavetype.JOURNALFOERING],
     });
 
     await user.click(screen.getByRole('option', { name: 'Kontakt bruker' }));
@@ -110,7 +110,7 @@ describe('GosysOppgaver', () => {
       enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
-      oppgaveTyper: ['JFR', 'KONT_BRUK'],
+      oppgaveTyper: [GosysOppgavetype.JOURNALFOERING, GosysOppgavetype.KONTAKT_BRUKER],
     });
 
     await user.click(screen.getByRole('option', { name: 'Journalføring' }));
@@ -118,7 +118,7 @@ describe('GosysOppgaver', () => {
       enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
-      oppgaveTyper: ['KONT_BRUK'],
+      oppgaveTyper: [GosysOppgavetype.KONTAKT_BRUKER],
     });
 
     await user.click(screen.getByRole('option', { name: 'Kontakt bruker' }));
