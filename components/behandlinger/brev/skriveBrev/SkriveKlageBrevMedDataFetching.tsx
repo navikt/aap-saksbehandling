@@ -87,7 +87,7 @@ export const SkriveKlageBrevMedDataFetching = async ({
           klagebehandlingNayGrunnlag={klagebehandlingNay.data}
         />
       )}
-      {brukNyBrevbygger && (
+      {!brukNyBrevbygger && (
         <Brevbygger
           brevmal={brev.brevmal}
           brevdata={brev.brevdata}
