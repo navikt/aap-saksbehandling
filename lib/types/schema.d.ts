@@ -6999,8 +6999,7 @@ export interface components {
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
       /** @enum {string} */
       årsak:
-        | 'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL'
-        | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
+        'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL' | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
     };
     'no.nav.aap.behandlingsflyt.behandling.aktivitetsplikt.brudd_11_7.Aktivitetsplikt11_7GrunnlagDto': {
       harSendtForhåndsvarsel: boolean;
@@ -7873,11 +7872,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.TrekkSøknadLøsning': {
       /** @enum {string|null} */
       aarsak?:
-        | 'ANNET'
-        | 'BRUKER_ONSKER_IKKE_SOKE_LENGER'
-        | 'BRUKER_SOKTE_FEIL_YTELSE'
-        | 'BRUKER_SOKTE_FOR_TIDLIG'
-        | null;
+        'ANNET' | 'BRUKER_ONSKER_IKKE_SOKE_LENGER' | 'BRUKER_SOKTE_FEIL_YTELSE' | 'BRUKER_SOKTE_FOR_TIDLIG' | null;
       begrunnelse: string;
       /**
        * @description discriminator enum property added by openapi-typescript
@@ -8808,12 +8803,7 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetsType?:
-        | 'ARBEIDSSØKER'
-        | 'BISTANDSBEHOV'
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | null;
+        'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
       tidligerePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       tidligereVarÅpen: boolean;
       /** @enum {string} */
@@ -8828,8 +8818,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåvedtakVedtakslengdeRespons': {
       harTilgangTilÅSaksbehandle: boolean;
       perioder?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakDto'][]
-        | null;
+        components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VedtakslengdeVedtakDto'][] | null;
       stansOpphør: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørDto'][];
     };
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørDto': {
@@ -8884,12 +8873,7 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetsType?:
-        | 'ARBEIDSSØKER'
-        | 'BISTANDSBEHOV'
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | null;
+        'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
@@ -10596,11 +10580,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto': {
       /** @enum {string|null} */
       aarsak?:
-        | 'ANNET'
-        | 'BRUKER_ONSKER_IKKE_SOKE_LENGER'
-        | 'BRUKER_SOKTE_FEIL_YTELSE'
-        | 'BRUKER_SOKTE_FOR_TIDLIG'
-        | null;
+        'ANNET' | 'BRUKER_ONSKER_IKKE_SOKE_LENGER' | 'BRUKER_SOKTE_FEIL_YTELSE' | 'BRUKER_SOKTE_FOR_TIDLIG' | null;
       begrunnelse: string;
       journalpostId: string;
       skalTrekkes: boolean;
@@ -10609,21 +10589,11 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.tidligerevurderinger.TidligereVurderingDto': {
       /** @enum {string|null} */
       muligRettighetstypeFraNavkontor?:
-        | 'ARBEIDSSØKER'
-        | 'BISTANDSBEHOV'
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | null;
+        'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetstype?:
-        | 'ARBEIDSSØKER'
-        | 'BISTANDSBEHOV'
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | null;
+        'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
       /** @enum {string} */
       utfall: 'IKKE_BEHANDLINGSGRUNNLAG' | 'POTENSIELT_OPPFYLT' | 'UUNNGÅELIG_AVSLAG';
     };
@@ -10900,8 +10870,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.BestemtArbeidsgruppeINorgeGrunnlag': {
       ansettelsesDetaljer?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.AsettelsesDetalj'][]
-        | null;
+        components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.AsettelsesDetalj'][] | null;
       /**
        * Format: date
        * @example 2025-04-01
@@ -11042,15 +11011,13 @@ export interface components {
       resultat: boolean;
       utenlandsAddresserGrunnlag?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.UtenlandsAdresserGrunnlag'];
       vedtakImedlGrunnlag?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.VedtakIMEDLGrunnlag'][]
-        | null;
+        components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.VedtakIMEDLGrunnlag'][] | null;
       visuellTidslinje: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.VisuellTidslinjeArbeidInntektINorge'][];
       vurdertPeriode: string;
     };
     'no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.UtenlandsAdresserGrunnlag': {
       adresser?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.UtenlandskAdresseDto'][]
-        | null;
+        components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.UtenlandskAdresseDto'][] | null;
       personStatus?:
         | components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.FolkeregisterStatusDto'][]
         | null;
@@ -11304,11 +11271,7 @@ export interface components {
         | null;
       /** @enum {string|null} */
       innvilgelsesårsak?:
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | 'YRKESSKADE_ÅRSAKSSAMMENHENG'
-        | null;
+        'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | 'YRKESSKADE_ÅRSAKSSAMMENHENG' | null;
       manuellVurdering: boolean;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
@@ -11614,20 +11577,10 @@ export interface components {
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetstypeGrunnlag?:
-        | 'ARBEIDSSØKER'
-        | 'BISTANDSBEHOV'
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | null;
+        'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
       /** @enum {string|null} */
       rettighetstypeUnderveis?:
-        | 'ARBEIDSSØKER'
-        | 'BISTANDSBEHOV'
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | null;
+        'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$StansOpphørDTO`': {
       /**
@@ -11671,8 +11624,7 @@ export interface components {
       opprettetTidspunkt?: string | null;
       /** @enum {string} */
       årsak:
-        | 'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL'
-        | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
+        'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL' | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
     };
     'no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingDto': {
       begrunnelse: string;
@@ -11790,11 +11742,7 @@ export interface components {
       begrunnelse?: string | null;
       /** @enum {string|null} */
       innvilgelsesårsak?:
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | 'YRKESSKADE_ÅRSAKSSAMMENHENG'
-        | null;
+        'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | 'YRKESSKADE_ÅRSAKSSAMMENHENG' | null;
       manuellVurdering: boolean;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
@@ -13586,11 +13534,7 @@ export interface components {
       begrunnelse?: string | null;
       /** @enum {string|null} */
       innvilgelsesårsak?:
-        | 'STUDENT'
-        | 'SYKEPENGEERSTATNING'
-        | 'VURDERES_FOR_UFØRETRYGD'
-        | 'YRKESSKADE_ÅRSAKSSAMMENHENG'
-        | null;
+        'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | 'YRKESSKADE_ÅRSAKSSAMMENHENG' | null;
       manuellVurdering: boolean;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string} */
@@ -14918,8 +14862,7 @@ export interface components {
       harBoddINorgeSiste5År?: string | null;
       iTilleggArbeidUtenforNorge?: string | null;
       utenlandsOpphold?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UtenlandsPeriodeDto'][]
-        | null;
+        components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UtenlandsPeriodeDto'][] | null;
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadStudentDto': {
       /** @enum {string} */
@@ -14929,8 +14872,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadV0': {
       andreBehandlere?:
-        | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.BehandlerDto'][]
-        | null;
+        components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.BehandlerDto'][] | null;
       andreUtbetalinger?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.AndreUtbetalingerDto'];
       fastlege?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FastlegeDto'][] | null;
       ferie?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadFerieDto'];
@@ -15659,9 +15601,7 @@ export interface components {
     'no.nav.aap.behandlingsflyt.test.modell.TestPerson.Dagpenger': {
       /** @enum {string} */
       dagpengerYtelseType:
-        | 'DAGPENGER_ARBEIDSSOKER_ORDINAER'
-        | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI'
-        | 'DAGPENGER_PERMITTERING_ORDINAER';
+        'DAGPENGER_ARBEIDSSOKER_ORDINAER' | 'DAGPENGER_PERMITTERING_FISKEINDUSTRI' | 'DAGPENGER_PERMITTERING_ORDINAER';
       /** @enum {string} */
       kilde: 'ARENA' | 'DP_SAK';
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];

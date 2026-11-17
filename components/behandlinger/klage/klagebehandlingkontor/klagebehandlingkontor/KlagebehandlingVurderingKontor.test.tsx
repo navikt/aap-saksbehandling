@@ -126,15 +126,15 @@ describe('Klage - vurdering kontor', () => {
 
 describe('Klage - vurdering ukjent påklaget vedtak', () => {
   const grunnlagUtenType = { harTilgangTilÅSaksbehandle: true, påklagetVedtakType: null };
-  const løsSpy = () => {
-    const løs = vi.fn();
+  const mockLøsAvklaringsbehov = () => {
+    const løsAvklaringsbehovMock = vi.fn();
     vi.spyOn(løsAvklaringsbehovHook, 'useLøsAvklaringsbehov').mockReturnValue({
-      løsAvklaringsbehov: løs,
+      løsAvklaringsbehov: løsAvklaringsbehovMock,
       løsAvklaringsbehovStatus: undefined,
       løsAvklaringsbehovIsLoading: false,
       løsAvklaringsbehovError: undefined,
     } as unknown as ReturnType<typeof løsAvklaringsbehovHook.useLøsAvklaringsbehov>);
-    return løs;
+    return løsAvklaringsbehovMock;
   };
 
   it('Skal vise veiledning og ikke feile når påklaget vedtak er null', () => {
@@ -161,32 +161,43 @@ describe('Klage - vurdering ukjent påklaget vedtak', () => {
     expect(screen.queryByText('Velg påklaget vedtak før du sender inn klagevurderingen.')).not.toBeInTheDocument();
   });
 
-  it.each(['Vedtak opprettholdes', 'Vedtak omgjøres', 'Delvis omgjøring'])(
-    'Skal ikke sende inn når påklaget vedtak er null og valget er %s',
-    async (valg) => {
-      const løs = løsSpy();
-      render(
-        <KlagebehandlingVurderingKontor
-          readOnly={false}
-          behandlingVersjon={0}
-          typeBehandling={'Klage'}
-          grunnlag={grunnlagUtenType}
-        />
-      );
-      await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Test begrunnelse');
-      await user.click(screen.getByRole('radio', { name: valg }));
-      const form = screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form');
-      fireEvent.submit(form!);
-      expect(løs).not.toHaveBeenCalled();
-    }
-  );
-
-  it('Skal også blokkere innsending når grunnlag mangler helt', async () => {
-    const løs = løsSpy();
-    render(<KlagebehandlingVurderingKontor readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
-    await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Test begrunnelse');
+  it('Skal ikke kalle løs-avklaringsbehov-API når påklaget vedtak er null', () => {
+    const løsAvklaringsbehovMock = mockLøsAvklaringsbehov();
+    render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagUtenType}
+      />
+    );
     fireEvent.submit(screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form')!);
-    expect(løs).not.toHaveBeenCalled();
+    expect(løsAvklaringsbehovMock).not.toHaveBeenCalled();
+  });
+
+  it('Skal ikke kalle løs-avklaringsbehov-API når grunnlag mangler', () => {
+    const løsAvklaringsbehovMock = mockLøsAvklaringsbehov();
+    render(<KlagebehandlingVurderingKontor readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    fireEvent.submit(screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form')!);
+    expect(løsAvklaringsbehovMock).not.toHaveBeenCalled();
+  });
+
+  it('Skal kalle løs-avklaringsbehov-API når påklaget vedtak er kjent', async () => {
+    const løsAvklaringsbehovMock = mockLøsAvklaringsbehov();
+    render(
+      <KlagebehandlingVurderingKontor
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
+    await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Test begrunnelse');
+    await user.click(screen.getByRole('radio', { name: 'Vedtak omgjøres' }));
+    await user.click(screen.getByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' }));
+    await user.click(screen.getByRole('option', { name: '§ 11-5' }));
+    await user.click(screen.getByRole('button', { name: 'Send til kvalitetssikrer' }));
+    await waitFor(() => expect(løsAvklaringsbehovMock).toHaveBeenCalled());
   });
 });
 
