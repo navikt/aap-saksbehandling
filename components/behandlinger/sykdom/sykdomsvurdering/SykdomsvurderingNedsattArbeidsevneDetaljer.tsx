@@ -92,6 +92,13 @@ const SykdomsvurderingYrkesskade = ({
   vurderingDatoSammeSomRettighetsperiodeStart: boolean;
   skalVurdereYrkesskade: boolean;
 }) => {
+  const kanBegrunneYrkesskade =
+    form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Nei;
+
+  if (!skalVurdereYrkesskade || !kanBegrunneYrkesskade) {
+    return null;
+  }
+
   /*
    * Logikken for yrkesskade er litt kronglete.
    * Parameter [vurderingDatoSammeSomRettighetsperiodeStart] brukes midlertidig siden vi ikke har en enkel/god måte å
@@ -101,42 +108,22 @@ const SykdomsvurderingYrkesskade = ({
    *
    * I påfølgende behandlinger skal saksbehandler kun bekrefte om den fremdeles er 30 prosent.
    */
-  if (vurderingDatoSammeSomRettighetsperiodeStart) {
-    const kanBegrunneYrkesskade =
-      form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Nei;
+  if (!vurderingDatoSammeSomRettighetsperiodeStart) {
     return (
-      skalVurdereYrkesskade &&
-      kanBegrunneYrkesskade && (
-        <>
-          <TextAreaWrapper
-            name={`vurderinger.${index}.yrkesskadeBegrunnelse`}
-            control={form.control}
-            label={yrkesskadeBegrunnelse}
-            description={
-              'Brukeren har en yrkesskade som kan ha betydning for retten til AAP. Du må derfor vurdere om arbeidsevnen er nedsatt med minst 30 prosent. NAY vil vurdere om arbeidsevnen er nedsatt på grunn av yrkesskaden.'
-            }
-            rules={{
-              required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med minst 30 prosent',
-            }}
-            readOnly={readonly}
-            shouldUnregister={false}
-          />
-          <RadioGroupJaNei
-            name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
-            control={form.control}
-            label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-            horisontal={true}
-            rules={{
-              required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
-            }}
-            readOnly={readonly}
-          />
-        </>
-      )
-    );
-  } else {
-    return (
-      skalVurdereYrkesskade && (
+      <>
+        <TextAreaWrapper
+          name={`vurderinger.${index}.yrkesskadeBegrunnelse`}
+          control={form.control}
+          label={yrkesskadeBegrunnelse}
+          description={
+            'Brukeren har en yrkesskade som kan ha betydning for retten til AAP. Du må derfor vurdere om arbeidsevnen er nedsatt med minst 30 prosent. NAY vil vurdere om arbeidsevnen er nedsatt på grunn av yrkesskaden.'
+          }
+          rules={{
+            required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med minst 30 prosent',
+          }}
+          readOnly={readonly}
+          shouldUnregister={false}
+        />
         <RadioGroupJaNei
           name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
           control={form.control}
@@ -147,7 +134,20 @@ const SykdomsvurderingYrkesskade = ({
           }}
           readOnly={readonly}
         />
-      )
+      </>
+    );
+  } else {
+    return (
+      <RadioGroupJaNei
+        name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
+        control={form.control}
+        label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+        horisontal={true}
+        rules={{
+          required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+        }}
+        readOnly={readonly}
+      />
     );
   }
 };
