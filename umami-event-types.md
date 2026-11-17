@@ -1,6 +1,6 @@
 # Umami-hendelsestyper i denne kodebasen
 
-`UmamiKelvinEvent` (`lib/utils/umami/kelvinEvent.ts`) er en diskriminert union på `type`-feltet, med varianter definert i egne filer under `lib/utils/umami/`.
+`UmamiKelvinEvent` (`lib/utils/umami/kelvinEvent.ts`) er en diskriminert union på `name`-feltet, med varianter definert i egne filer under `lib/utils/umami/`. Payloaden er `{ name, data }`, og `data` sendes ferdig strukturert fra hjelpefunksjonene.
 
 ```mermaid
 classDiagram
@@ -8,36 +8,36 @@ classDiagram
     <<union>>
   }
   class UmamiVarighetEvent {
-    type: "VARIGHET"
     name: UmamiStegVarighetTag
-    varighet_sekunder: number
-    brevtype?: string
+    data: object
+    data.varighet_sekunder: number
+    data.brevtype?: string
   }
   class UmamiHendelserVarighetEvent {
-    type: "HENDELSER_VARIGHET"
     name: UmamiHendelserSerieNavn
-    hendelser_serie: string
-    hendelser_serie_id: string
-    delhendelse: string
-    varighet_sekunder: number
-    varighet_siden_forrige: number|null
-    tidsstempel: number
+    data: object
+    data.hendelser_serie: string
+    data.hendelser_serie_id: string
+    data.delhendelse: string
+    data.varighet_sekunder: number
+    data.varighet_sekunder_siden_forrige?: number
+    data.tidsstempel: number
   }
   class UmamiLenkeKlikkEvent {
-    type: "LENKE_KLIKK"
     name: "EKSTERN_LENKE_KLIKK"
-    lenketekst: string
-    steg?: StegType
+    data: object
+    data.lenketekst: string
+    data.steg?: StegType
   }
   class UmamiNavigeringEvent {
-    type: "NAVIGERING"
     name: UmamiNavigeringNavn
-    inngang: Behandling/Saksoversikt/Oppgave
-    reserverer?: boolean
+    data: object
+    data.inngang: Behandling/Saksoversikt/Oppgave
+    data.reserverer?: "true"
   }
   class UmamiBehandlerdialogEvent {
-    type: "BEHANDLERDIALOG"
     name: UMAMI_BEHANDLERDIALOG_NAVN
+    data: {}
   }
   UmamiKelvinEvent <|-- UmamiVarighetEvent : STEG_..._VARIGHET
   UmamiKelvinEvent <|-- UmamiHendelserVarighetEvent : ..._HENDELSER_VARIGHET
@@ -52,13 +52,13 @@ classDiagram
 - **`UmamiNavigeringEvent`** (`navigering.ts`) — navigasjon/oppgavehandling, tag `GÅ_TIL_<MÅL>` eller `<HANDLING>_OPPGAVE`.
 - **`UmamiBehandlerdialogEvent`** (`behandlerdialog.ts`) — brukerinitierte handlinger i dialog med behandler, tag `BEHANDLERDIALOG_<HANDLING>_KLIKK`.
 
-Alle sendes via `clientLoggUmamiEvent` (`client.ts`) → `POST /api/umami` (`app/api/umami/route.ts`) → `@umami/node`.
+Alle sendes via `clientLoggUmamiEvent(name, data)` (`client.ts`) → `POST /api/umami` (`app/api/umami/route.ts`) → `@umami/node`.
 
 ## Dialog med behandler
 
-`loggUmamiBehandlerdialogKlikk(name)` sender kun hendelsesnavn og type, uten saks- eller personopplysninger:
+`loggUmamiBehandlerdialogKlikk(name)` sender kun hendelsesnavn, uten saks- eller personopplysninger:
 
-- `BEHANDLERDIALOG_ÅPNE_SEND_FORESPØRSEL` — innsending av bestilling/dialogmelding etter skjemavalidering.
+- `BEHANDLERDIALOG_GÅ_TIL_SEND_FORESPØRSEL` — innsending av bestilling/dialogmelding etter skjemavalidering.
 - `BEHANDLERDIALOG_SEND_FORESPØRSEL` — send purring.
 - `BEHANDLERDIALOG_AVBRYT_PÅMINNELSE` — avbryt automatisk påminnelse.
 - `BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE` — gjenoppta automatisk påminnelse.
