@@ -98,7 +98,7 @@ const SykdomsvurderingYrkesskade = ({
   const nedsettelseMerEnnHalvparten = form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`);
   const kanBegrunneYrkesskade = vurderingDatoSammeSomRettighetsperiodeStart
     ? nedsettelseMerEnnHalvparten === JaEllerNei.Nei
-    : erÅrsakssammenhengYrkesskade || nedsettelseMerEnnHalvparten !== JaEllerNei.Ja;
+    : erÅrsakssammenhengYrkesskade || nedsettelseMerEnnHalvparten === JaEllerNei.Nei;
 
   if (!skalVurdereYrkesskade || !kanBegrunneYrkesskade) {
     return null;
