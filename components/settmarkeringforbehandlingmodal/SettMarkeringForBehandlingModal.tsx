@@ -1,5 +1,5 @@
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { BodyShort, Button, Link, Dialog, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack, Link, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientOpprettMarkeringHendelse } from 'lib/clientApi';
@@ -30,6 +30,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
   const overskrift = markeringTypeTilOverskrift(type);
   const { saksnummer, behandlingsreferanse } = useParamsMedType();
 
+  const avtaltMellomLedereLabel = 'Avtalt mellom ledere';
   const { form, formFields } = useConfigForm<FormFields>({
     begrunnelse: {
       type: 'textarea',
@@ -43,7 +44,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
         { label: '', value: '' },
         'Brukeren har ikke statlig livsoppholdsytelse',
         'Vedtak er omgjort etter klage',
-        'Avtalt mellom ledere',
+        avtaltMellomLedereLabel,
       ],
       rules: { required: 'Du må velge en årsak' },
     },
@@ -55,7 +56,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
     onClose();
   }
 
-  const avtaltMellomLedereValgt = form.watch('hasteBegrunnelse') === 'Avtalt mellom ledere';
+  const avtaltMellomLedereValgt = form.watch('hasteBegrunnelse') === avtaltMellomLedereLabel;
 
   return (
     <Dialog
@@ -119,8 +120,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 )}
                 {avtaltMellomLedereValgt && (
                   <Alert variant={'warning'}>
-                    Før du markerer oppgaven med haster med årsak “Avtalt mellom ledere” skal leder på Nav-kontoret og i
-                    Nav arbeid og ytelser ha snakket sammen og avtalt dette.
+                    {`Før du markerer oppgaven med haster med årsak “${avtaltMellomLedereLabel}” skal leder på Nav-kontoret og i Nav arbeid og ytelser ha snakket sammen og avtalt dette.`}
                   </Alert>
                 )}
               </form>
@@ -155,10 +155,14 @@ const markeringTypeTilEnum = (type: MarkeringType) => {
 const markeringTypeTilOverskrift = (type: MarkeringType) => {
   switch (type) {
     case 'HASTER':
-      return { heading: 'Marker behandling som haster',
-        icon: <ExclamationmarkTriangleIcon fontSize={'1.5rem'} aria-hidden />, };
+      return {
+        heading: 'Marker behandling som haster',
+        icon: <ExclamationmarkTriangleIcon fontSize={'1.5rem'} aria-hidden />,
+      };
     default:
-      return { heading: 'Sett markering på behandling',
-        icon: <ExclamationmarkTriangleIcon fontSize={'1.5rem'} aria-hidden />, };
+      return {
+        heading: 'Sett markering på behandling',
+        icon: <ExclamationmarkTriangleIcon fontSize={'1.5rem'} aria-hidden />,
+      };
   }
 };
