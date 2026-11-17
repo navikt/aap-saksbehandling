@@ -14,7 +14,6 @@ import { avreserverOppgaveClient } from 'lib/oppgaveClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { useTildelOppgaver } from 'context/oppgave/TildelOppgaverContext';
 import { SaksbehandlerFilterSøk } from 'components/oppgaveliste/filtrering/alleoppgaverfiltrering/SaksbehandlerFilterSøk';
-import { hasProperty } from '@vitest/expect';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 
 interface Props {
@@ -123,7 +122,7 @@ export const AlleOppgaverFiltrering = ({
                           if (Array.isArray(values)) {
                             const arrayUtenValgtFilter = values.filter((value) => {
                               // sjekk om filterelementet er ValuePair eller string
-                              return typeof value === 'object' && hasProperty(value, 'value')
+                              return typeof value === 'object' && value !== null && 'value' in value
                                 ? value.value !== filter.value
                                 : value !== filter.value;
                             });
