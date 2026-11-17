@@ -6287,7 +6287,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.utbetal.simulering.SimuleringDto'];
+            'application/json': components['schemas']['no.nav.aap.utbetal.simuleringv2.SimuleringsresponseDto'];
           };
         };
       };
@@ -10582,7 +10582,7 @@ export interface components {
       aarsak?:
         'ANNET' | 'BRUKER_ONSKER_IKKE_SOKE_LENGER' | 'BRUKER_SOKTE_FEIL_YTELSE' | 'BRUKER_SOKTE_FOR_TIDLIG' | null;
       begrunnelse: string;
-      journalpostId: string;
+      journalpostId?: string | null;
       skalTrekkes: boolean;
       vurderingerMeta: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vurdering.VurderingerMetaResponse'];
     };
@@ -11076,6 +11076,86 @@ export interface components {
       kilde: 'AUTOMATISK' | 'MIGRERT_FRA_ARENA' | 'SAKSBEHANDLER';
     };
     'no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo': {
+      /** @enum {string} */
+      aktivtSteg:
+        | 'ARBEIDSOPPTRAPPING'
+        | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
+        | 'AVBRYT_REVURDERING'
+        | 'AVKLAR_MIGRERINGSDATO'
+        | 'AVKLAR_OPPFØLGING'
+        | 'AVKLAR_STUDENT'
+        | 'AVKLAR_STUDENT_V2'
+        | 'AVKLAR_STØNADSPERIODE'
+        | 'AVKLAR_SYKDOM'
+        | 'BARNETILLEGG'
+        | 'BEHANDLENDE_ENHET'
+        | 'BEKREFT_VURDERINGER_OPPFØLGING'
+        | 'BEREGN_TILKJENT_YTELSE'
+        | 'BREV'
+        | 'DU_ER_ET_ANNET_STED'
+        | 'EFFEKTUER_11_7'
+        | 'ETABLERING_EGEN_VIRKSOMHET'
+        | 'FASTSETT_ARBEIDSEVNE'
+        | 'FASTSETT_BEREGNINGSTIDSPUNKT'
+        | 'FASTSETT_GRUNNLAG'
+        | 'FASTSETT_MELDEPERIODER'
+        | 'FASTSETT_RETTIGHETSTYPE'
+        | 'FASTSETT_SYKDOMSVILKÅRET'
+        | 'FASTSETT_UTTAK'
+        | 'FASTSETT_VEDTAKSLENGDE'
+        | 'FATTE_VEDTAK'
+        | 'FORESLÅ_VEDTAK'
+        | 'FORESLÅ_VEDTAK_VEDTAKSLENGDE'
+        | 'FORMKRAV'
+        | 'FRITAK_MELDEPLIKT'
+        | 'FULLMEKTIG'
+        | 'IKKE_OPPFYLT_MELDEPLIKT'
+        | 'IVERKSETT_BRUDD'
+        | 'IVERKSETT_KONSEKVENS'
+        | 'IVERKSETT_VEDTAK'
+        | 'KLAGEBEHANDLING_KONTOR'
+        | 'KLAGEBEHANDLING_NAY'
+        | 'KLAGEBEHANDLING_OPPSUMMERING'
+        | 'KRAV'
+        | 'KVALITETSSIKRING'
+        | 'MANGLENDE_LIGNING'
+        | 'OMGJØRING'
+        | 'OPPRETTHOLDELSE'
+        | 'OPPRETT_REVURDERING'
+        | 'OVERGANG_ARBEID'
+        | 'OVERGANG_UFORE'
+        | 'PÅKLAGET_BEHANDLING'
+        | 'REFUSJON_KRAV'
+        | 'SAMORDNING_ANDRE_STATLIGE_YTELSER'
+        | 'SAMORDNING_ARBEIDSGIVER'
+        | 'SAMORDNING_AVSLAG'
+        | 'SAMORDNING_BARNEPENSJON'
+        | 'SAMORDNING_GRADERING'
+        | 'SAMORDNING_SYKESTIPEND'
+        | 'SAMORDNING_TJENESTEPENSJON_REFUSJONSKRAV'
+        | 'SAMORDNING_UFØRE'
+        | 'SEND_FORVALTNINGSMELDING'
+        | 'SIMULERING'
+        | 'START_BEHANDLING'
+        | 'START_OPPFØLGINGSBEHANDLING'
+        | 'SVAR_FRA_ANDREINSTANS'
+        | 'SYKDOMSVURDERING_BREV'
+        | 'SØKNAD'
+        | 'TREKK_KLAGE'
+        | 'UDEFINERT'
+        | 'VIS_GRUNNLAG'
+        | 'VURDER_AKTIVITETSPLIKT_11_7'
+        | 'VURDER_AKTIVITETSPLIKT_11_9'
+        | 'VURDER_ALDER'
+        | 'VURDER_AVSLAG_11_27'
+        | 'VURDER_BISTANDSBEHOV'
+        | 'VURDER_INNTEKTSBORTFALL'
+        | 'VURDER_LOVVALG'
+        | 'VURDER_MEDLEMSKAP'
+        | 'VURDER_OPPHOLDSKRAV'
+        | 'VURDER_RETTIGHETSPERIODE'
+        | 'VURDER_SYKEPENGEERSTATNING'
+        | 'VURDER_YRKESSKADE';
       avklaringsbehov: components['schemas']['no.nav.aap.behandlingsflyt.drift.ForenkletAvklaringsbehov'][];
       /**
        * Format: date-time
@@ -16186,6 +16266,68 @@ export interface components {
     'no.nav.aap.utbetal.simulering.UtbetalingOgSimuleringDto': {
       simuleringDto: components['schemas']['no.nav.aap.utbetal.simulering.SimuleringDto'];
       utbetalingDto: components['schemas']['no.nav.aap.utbetaling.UtbetalingDto'];
+    };
+    'no.nav.aap.utbetal.simuleringv2.InfoDto': {
+      fagsystem: string;
+      message: string;
+      /** @enum {string} */
+      status: 'FEILET' | 'OK_UTEN_ENDRING' | 'UGYLDIG_REQUEST' | 'UTILGJENGELIG';
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      type: 'info';
+    };
+    'no.nav.aap.utbetal.simuleringv2.PosteringDto': {
+      /** Format: int32 */
+      beløp: number;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      klassekode: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+      type: string;
+    };
+    'no.nav.aap.utbetal.simuleringv2.SimuleringDto': {
+      perioder: components['schemas']['no.nav.aap.utbetal.simuleringv2.SimuleringsperiodeDto'][];
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      type: 'simulering';
+    };
+    'no.nav.aap.utbetal.simuleringv2.SimuleringsperiodeDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      fom: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      tom: string;
+      utbetalinger: components['schemas']['no.nav.aap.utbetal.simuleringv2.SimulertUtbetalingDto'][];
+    };
+    'no.nav.aap.utbetal.simuleringv2.SimuleringsresponseDto':
+      | components['schemas']['no.nav.aap.utbetal.simuleringv2.InfoDto']
+      | components['schemas']['no.nav.aap.utbetal.simuleringv2.SimuleringDto'];
+    'no.nav.aap.utbetal.simuleringv2.SimulertUtbetalingDto': {
+      fagsystem: string;
+      /** Format: int32 */
+      nyttBeløp: number;
+      posteringer: components['schemas']['no.nav.aap.utbetal.simuleringv2.PosteringDto'][];
+      sakId: string;
+      stønadstype: string;
+      /** Format: int32 */
+      tidligereUtbetalt: number;
+      utbetalesTil: string;
     };
     'no.nav.aap.utbetaling.UtbetalingDto': {
       perioder: components['schemas']['no.nav.aap.utbetaling.UtbetalingsperiodeDto'][];
