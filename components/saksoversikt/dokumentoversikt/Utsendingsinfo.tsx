@@ -38,7 +38,7 @@ export const UtsendingsinfoDialog = ({ journalpostId }: { journalpostId: string 
       />
 
       <Dialog open={visDialog} onOpenChange={setVisDialog} aria-label="Utsendingsinfo">
-        <Dialog.Popup>
+        <Dialog.Popup width="large">
           <Dialog.Header>
             <Heading size="small">Utsendingsinfo</Heading>
           </Dialog.Header>

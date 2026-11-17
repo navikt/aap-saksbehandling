@@ -5,20 +5,31 @@ import {
   PaperclipIcon,
   PlusIcon,
 } from '@navikt/aksel-icons';
-import { BodyShort, Box, Detail, HStack, Label, Link, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Detail, HStack, InlineMessage, Label, Link, VStack } from '@navikt/ds-react';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { DokumentInfoDto, MeldingDto } from 'lib/types/types';
 import styles from './Melding.module.css';
+import { useState } from 'react';
+import { useSendPåminnelsePåDialogmelding } from 'hooks/FetchHook';
+import { Alert } from 'components/alert/Alert';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
+import { BekreftManuellPåminnelseDialog } from 'components/dialogmedbehandler/BekreftManuellPåminnelseDialog';
+
+export type DokumentasjonType =
+  'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'MELDING_FRA_BEHANDLER' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
   melding: MeldingDto;
   dokumentInfoIdListe: DokumentInfoDto[];
+  behandlingsreferanse: string;
 }
 
-export const Melding = ({ melding, dokumentInfoIdListe }: Props) => {
+export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: Props) => {
   const {
     innkommendeUtgående,
     dokumentasjonsType,
+    dialogmeldingId,
     meldingFraNavn,
     opprettetTidspunkt,
     meldingStatus: status,
@@ -30,6 +41,24 @@ export const Melding = ({ melding, dokumentInfoIdListe }: Props) => {
 
   const avsenderMottakerNavn =
     innkommendeUtgående === 'INNKOMMENDE' ? meldingFraNavn : (bestillerNavn ?? bestillerNavIdent ?? 'Nav');
+
+  const viseKnappManuellPåminnelse = useFeatureFlag('KnappForManuellPaaminnelse');
+  const [påminnelseSendt, settPåminnelseSendt] = useState(false);
+  const [erDialogÅpen, settErDialogÅpen] = useState(false);
+  const { sendPåminnelsePåDialogmelding, error } = useSendPåminnelsePåDialogmelding();
+
+  const handlePåminnelseClick = async () => {
+    if (dialogmeldingId && behandlingsreferanse && !påminnelseSendt) {
+      settPåminnelseSendt(true);
+      settErDialogÅpen(false);
+
+      await sendPåminnelsePåDialogmelding(dialogmeldingId, behandlingsreferanse);
+
+      loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_SEND_MANUELL_PÅMINNELSE');
+    }
+  };
+
+  const kanSendePåminnelse = melding.kanSendeManuellPåminnelse && !påminnelseSendt;
 
   return (
     <VStack gap={'space-4'} align={innkommendeUtgående === 'INNKOMMENDE' ? 'start' : 'end'}>
@@ -66,6 +95,28 @@ export const Melding = ({ melding, dokumentInfoIdListe }: Props) => {
                 </Link>
               ))}
             </Box>
+          )}
+          {viseKnappManuellPåminnelse && innkommendeUtgående === 'UTGÅENDE' && dokumentasjonsType === 'L40' && (
+            <HStack gap={'space-8'} justify="start">
+              {kanSendePåminnelse && meldingFraNavn !== null && (
+                <Button size={'small'} variant={'tertiary'} onClick={() => settErDialogÅpen(true)}>
+                  Send påminnelse
+                </Button>
+              )}
+
+              {påminnelseSendt && !error && <InlineMessage status="success">Påminnelse sendt</InlineMessage>}
+
+              {error && <Alert variant="error">{error}</Alert>}
+
+              {meldingFraNavn !== null && (
+                <BekreftManuellPåminnelseDialog
+                  navnPåMottaker={meldingFraNavn ?? 'Ukjent'} // For å unngå klaging fra typesystemet
+                  erÅpen={erDialogÅpen}
+                  settErÅpen={(verdi) => settErDialogÅpen(verdi)}
+                  bekreft={handlePåminnelseClick}
+                />
+              )}
+            </HStack>
           )}
           {innkommendeUtgående === 'INNKOMMENDE' && dokumentasjonsType === 'L40' && (
             <HStack gap={'space-20'}>

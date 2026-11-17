@@ -1,11 +1,10 @@
-import { BodyLong, Button, Modal } from '@navikt/ds-react';
+import { BodyLong, Button, Dialog, HStack } from '@navikt/ds-react';
 
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { NyÅrsakTilBehandlingV0 } from 'lib/types/types';
 
 import { useSendHendelseOgVentPåProsessering } from 'hooks/saksbehandling/SendHendelseOgVentPåProsessering';
 
-import styles from './TrekkSøknadModal.module.css';
 import { Alert } from 'components/alert/Alert';
 
 interface Props {
@@ -20,58 +19,65 @@ export const TrekkSøknadModal = ({ saksnummer, isOpen, onClose, behandlingRefer
   const { isLoading, sendHendelseOgVentPåProsessering, sendHendelseError } = useSendHendelseOgVentPåProsessering();
 
   return (
-    <Modal
-      header={{
-        icon: <XMarkOctagonIcon title="" fontSize="1.5rem" />,
-        heading: 'Er du sikker på at du vil trekke søknaden?',
-      }}
+    <Dialog
       open={isOpen}
-      onClose={onClose}
-      className={styles.modal}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
     >
-      <Modal.Body>
-        <BodyLong>
-          Når du trekker søknaden vil saken avsluttes og alle vurderinger vil bli slettet. Saken kan ikke åpnes igjen
-          etter søknaden er trukket.
-        </BodyLong>
-        {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          data-color="danger"
-          type={'button'}
-          className={'fit-content'}
-          variant={'primary'}
-          onClick={async () => {
-            sendHendelseOgVentPåProsessering(
-              saksnummer,
-              {
-                saksnummer: saksnummer,
-                referanse: {
-                  type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
-                  verdi: crypto.randomUUID(),
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <XMarkOctagonIcon fontSize={'1.5rem'} aria-hidden />
+              <span>Er du sikker på at du vil trekke søknaden?</span>
+            </HStack>
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyLong>
+            Når du trekker søknaden vil saken avsluttes og alle vurderinger vil bli slettet. Saken kan ikke åpnes igjen
+            etter søknaden er trukket.
+          </BodyLong>
+          {sendHendelseError && <Alert variant={'error'}>{sendHendelseError.message}</Alert>}
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            data-color="danger"
+            type={'button'}
+            className={'fit-content'}
+            variant={'primary'}
+            onClick={async () => {
+              sendHendelseOgVentPåProsessering(
+                saksnummer,
+                {
+                  saksnummer: saksnummer,
+                  referanse: {
+                    type: 'SAKSBEHANDLER_KELVIN_REFERANSE',
+                    verdi: crypto.randomUUID(),
+                  },
+                  type: 'NY_ÅRSAK_TIL_BEHANDLING',
+                  kanal: 'DIGITAL',
+                  mottattTidspunkt: new Date().toISOString(),
+                  melding: {
+                    meldingType: 'NyÅrsakTilBehandlingV0',
+                    årsakerTilBehandling: ['SØKNAD_TRUKKET'],
+                    behandlingReferanse: behandlingReferanse,
+                    reserverTilBruker: navIdent ?? null,
+                  } satisfies NyÅrsakTilBehandlingV0,
                 },
-                type: 'NY_ÅRSAK_TIL_BEHANDLING',
-                kanal: 'DIGITAL',
-                mottattTidspunkt: new Date().toISOString(),
-                melding: {
-                  meldingType: 'NyÅrsakTilBehandlingV0',
-                  årsakerTilBehandling: ['SØKNAD_TRUKKET'],
-                  behandlingReferanse: behandlingReferanse,
-                  reserverTilBruker: navIdent ?? null,
-                } satisfies NyÅrsakTilBehandlingV0,
-              },
-              onClose
-            );
-          }}
-          loading={isLoading}
-        >
-          Trekk søknad
-        </Button>
-        <Button variant={'secondary'} onClick={onClose} type="button">
-          Avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+                onClose
+              );
+            }}
+            loading={isLoading}
+          >
+            Trekk søknad
+          </Button>
+          <Button variant={'secondary'} onClick={onClose} type="button">
+            Avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

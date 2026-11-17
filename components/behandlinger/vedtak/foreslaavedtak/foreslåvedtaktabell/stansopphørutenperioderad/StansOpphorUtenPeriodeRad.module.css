@@ -1,0 +1,18 @@
+.avslåttIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--ax-text-danger-decoration);
+}
+
+.stansOpphør {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.stansOpphørNy {
+  background-color: var(--ax-bg-danger-soft);
+}
+
+.stansOpphørNy > td:first-of-type {
+  padding-left: var(--ax-space-16);
+  box-shadow: inset 5px 0 var(--ax-border-info-strong);
+}
