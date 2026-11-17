@@ -66,10 +66,6 @@ export const SkriveKlageBrevMedDataFetching = async ({
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
 
-  if (!brev?.brev) {
-    return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
-  }
-
   const brukNyBrevbygger = !!brev?.brevmal && !!brev?.brevdata;
 
   if (!brev?.brev && !brukNyBrevbygger) {
