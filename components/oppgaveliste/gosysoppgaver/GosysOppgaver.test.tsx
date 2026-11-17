@@ -105,12 +105,12 @@ describe('GosysOppgaver', () => {
       oppgaveTyper: ['JFR'],
     });
 
-    await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
+    await user.click(screen.getByRole('option', { name: 'Kontakt bruker' }));
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
       enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
-      oppgaveTyper: ['JFR', 'RETUR'],
+      oppgaveTyper: ['JFR', 'KONT_BRUK'],
     });
 
     await user.click(screen.getByRole('option', { name: 'Journalføring' }));
@@ -118,10 +118,10 @@ describe('GosysOppgaver', () => {
       enhet: '0300',
       behandlingstype: 'ae0292',
       behandlingstema: undefined,
-      oppgaveTyper: ['RETUR'],
+      oppgaveTyper: ['KONT_BRUK'],
     });
 
-    await user.click(screen.getByRole('option', { name: 'Behandle returpost' }));
+    await user.click(screen.getByRole('option', { name: 'Kontakt bruker' }));
     expect(useGosysOppgaver).toHaveBeenLastCalledWith({
       enhet: '0300',
       behandlingstype: 'ae0292',

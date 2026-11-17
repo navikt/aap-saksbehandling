@@ -22,14 +22,9 @@ interface FormFields {
   visLedigeOppgaver: boolean;
 }
 
-export type Oppgavetyper =
-  'RETUR' | 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VURD_NOTAT' | 'VUR_SVAR';
+export type Oppgavetyper = 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VUR_SVAR';
 
 const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [
-  {
-    value: 'RETUR',
-    label: 'Behandle returpost',
-  },
   {
     value: 'JFR',
     label: 'Journalføring',
@@ -41,7 +36,6 @@ const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [
   { value: 'SVAR_IK_MOT', label: 'Svar ikke mottatt' },
   { value: 'VURD_HENV', label: 'Vurder henvendelse' },
   { value: 'VUR_KONS_YTE', label: 'Vurder konsekvens for ytelse' },
-  { value: 'VURD_NOTAT', label: 'Vurder notat' },
   { value: 'VUR_SVAR', label: 'Vurder svar' },
 ];
 
@@ -99,7 +93,15 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
     useGosysOppgaver({ enhet, behandlingstype, behandlingstema, oppgaveTyper });
 
   const visLedigeOppgaver = form.watch('visLedigeOppgaver');
-  const oppgaverSomSkalVises = visLedigeOppgaver ? oppgaver.filter((oppgave) => !oppgave.tilordnetRessurs) : oppgaver;
+
+  const bestemteOppgaveTyper = ['KON_UTG_SCA_DOK', 'VURD_NOTAT', 'RETUR'];
+  const oppgaverUtenBestemteOppgavetyper = oppgaver.filter(
+    (oppgave) => !bestemteOppgaveTyper.includes(oppgave.oppgavetype)
+  );
+
+  const oppgaverSomSkalVises = visLedigeOppgaver
+    ? oppgaverUtenBestemteOppgavetyper.filter((oppgave) => !oppgave.tilordnetRessurs)
+    : oppgaverUtenBestemteOppgavetyper;
 
   return (
     <VStack gap="space-16">
