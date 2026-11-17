@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { EtableringAvEgenVirksomhet } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
+import { EtableringAvEgenVirksomhetNy } from './EtableringAvEgenVirksomhetNy';
 import { EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
@@ -49,6 +50,37 @@ describe('EtableringAvEgenVirksomhet', () => {
   beforeEach(() => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'ETABLERING_EGEN_VIRKSOMHET' });
     løsAvklaringsbehov.mockReset();
+  });
+
+  describe.each([
+    { navn: 'gammel flyt', Komponent: EtableringAvEgenVirksomhet },
+    { navn: 'ny flyt', Komponent: EtableringAvEgenVirksomhetNy },
+  ])('$navn', ({ Komponent }) => {
+    it.each([{}, { vurderinger: null }])('kan åpne og bekrefte et utkast uten vurderinger: %j', async (data) => {
+      render(
+        <Komponent
+          grunnlag={tomtGrunnlag}
+          readOnly={false}
+          behandlingVersjon={0}
+          initialMellomlagretVurdering={{
+            avklaringsbehovkode: '5058',
+            behandlingId: { id: 1 },
+            data: JSON.stringify(data),
+            vurdertAv: 'Saksbehandler',
+            vurdertDato: '2025-02-01T12:00:00',
+          }}
+        />
+      );
+
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+      expect(løsAvklaringsbehov).toHaveBeenCalledWith(
+        expect.objectContaining({
+          behov: expect.objectContaining({ løsningerForPerioder: [] }),
+        }),
+        expect.any(Function)
+      );
+    });
   });
 
   it('viser backendens avslag for vedtatte vurderinger selv om de gamle grunnvilkårene er oppfylt', () => {
