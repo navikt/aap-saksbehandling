@@ -42,7 +42,6 @@ export type OppdaterPåminnelseRequest = RequestOfPost<'/oppdater-paaminnelse'>;
 export type ForespørselSendtTilBehandler = components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
 export type GjenståendeSykedager = components['schemas']['no.nav.aap.oppgave.GjenståendeSykedagerDto'];
 
-
 // Typer utledet direkte fra skjemaet (string unions)
 export type Behandlingstype =
   components['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse']['behandlingstype'];

@@ -70,8 +70,8 @@ export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingFormMe
 
 type Versjon = EtableringEgenVirksomhetLøsningDto['versjon'];
 
-const versjonerFra = (form: EtableringAvEgenVirksomhetForm): Versjon[] =>
-  form.vurderinger.map((vurdering) => vurdering.versjon ?? 'V1');
+const versjonerFra = (form: Partial<EtableringAvEgenVirksomhetForm>): Versjon[] =>
+  form.vurderinger?.map((vurdering) => vurdering.versjon ?? 'V1') ?? [];
 
 export interface EtableringAvEgenVirksomhetForm {
   vurderinger: EtableringAvEgenVirksomhetVurderingForm[];
@@ -289,7 +289,11 @@ export const EtableringAvEgenVirksomhetNy = ({
                         : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                     )}
                     customTag={
-                      erLagretVurdering ? <VirksomhetFaseTag fase={grunnlag.nyeVurderinger[index]?.fase} /> : <VirksomhetFaseTag fase={form.watch(`vurderinger.${index}.fase`)} />
+                      erLagretVurdering ? (
+                        <VirksomhetFaseTag fase={grunnlag.nyeVurderinger[index]?.fase} />
+                      ) : (
+                        <VirksomhetFaseTag fase={form.watch(`vurderinger.${index}.fase`)} />
+                      )
                     }
                     nestePeriodeFraDato={sluttdato(index)}
                     isLast={index === vedtatteVurderinger.length - 1}

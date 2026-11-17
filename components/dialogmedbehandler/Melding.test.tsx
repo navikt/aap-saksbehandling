@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'lib/test/CustomRender';
 import { describe, expect, it } from 'vitest';
 
 import { Melding } from './Melding';
@@ -15,6 +15,7 @@ describe('viser riktig tekst (og ikon) for de forskjellige statusene', () => {
     opprettetTidspunkt: '2026-11-09T12:00:00',
     påminnelseAvbrutt: false,
     tekst: 'Hei, kan dere sende over legeerklæring for pasienten?',
+    kanSendeManuellPåminnelse: false,
   };
 
   it.each([
@@ -24,7 +25,9 @@ describe('viser riktig tekst (og ikon) for de forskjellige statusene', () => {
     { status: null, expectedText: 'Sender ...', expectedIcon: null },
     { status: undefined, expectedText: 'Sender ...', expectedIcon: null },
   ] as const)('renders "$expectedText" for status $status', ({ status, expectedText, expectedIcon }) => {
-    render(<Melding melding={{ ...melding, meldingStatus: status }} dokumentInfoIdListe={[]} />);
+    render(
+      <Melding melding={{ ...melding, meldingStatus: status }} dokumentInfoIdListe={[]} behandlingsreferanse="456" />
+    );
 
     expect(screen.getByText(expectedText, { ignore: 'script, style, title' })).toBeVisible();
     expect(screen.queryAllByTitle('Sendt')).toHaveLength(expectedIcon === 'Sendt' ? 1 : 0);

@@ -2,7 +2,7 @@
 
 import { BodyShort, Button, Heading, HStack, Label, Radio, Table, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
-import { validerDato } from 'lib/validation/dateValidation';
+import { erDatoFoerDato, validerDato } from 'lib/validation/dateValidation';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
@@ -174,7 +174,16 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                               control={form.control}
                               rules={{
                                 required: 'Du må velge en dato vurderingen gjelder til',
-                                validate: (value) => validerDato(value as string),
+                                validate: (value) => {
+                                  const tomDato = value as string;
+                                  const datoValidering = validerDato(tomDato);
+                                  if (datoValidering) return datoValidering;
+
+                                  const fomDato = form.getValues(`vurderinger.${index}.utviklingsperioder.${i}.fom`);
+                                  if (!fomDato || validerDato(fomDato)) return true;
+
+                                  return erDatoFoerDato(fomDato, tomDato) || 'Til-dato kan ikke være før fra-dato';
+                                },
                               }}
                             />
                           </HStack>
@@ -252,7 +261,7 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                               name={`vurderinger.${index}.oppstartsperioder.${i}.fom`}
                               control={form.control}
                               rules={{
-                                required: 'Du må velge en dato vurderingen gjelder til',
+                                required: 'Du må velge en dato vurderingen gjelder fra',
                                 validate: (value) => validerDato(value as string),
                               }}
                             />
@@ -262,8 +271,17 @@ export const EtableringAvEgenVirksomhetFormInput = ({ index, form, readOnly, gru
                               name={`vurderinger.${index}.oppstartsperioder.${i}.tom`}
                               control={form.control}
                               rules={{
-                                required: 'Du må velge en dato vurderingen gjelder fra',
-                                validate: (value) => validerDato(value as string),
+                                required: 'Du må velge en dato vurderingen gjelder til',
+                                validate: (value) => {
+                                  const tomDato = value as string;
+                                  const datoValidering = validerDato(tomDato);
+                                  if (datoValidering) return datoValidering;
+
+                                  const fomDato = form.getValues(`vurderinger.${index}.oppstartsperioder.${i}.fom`);
+                                  if (!fomDato || validerDato(fomDato)) return true;
+
+                                  return erDatoFoerDato(fomDato, tomDato) || 'Til-dato kan ikke være før fra-dato';
+                                },
                               }}
                             />
                           </HStack>

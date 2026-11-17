@@ -1,6 +1,5 @@
-import { Button, Loader, Modal } from '@navikt/ds-react';
+import { Button, Dialog, Loader } from '@navikt/ds-react';
 import { clientForhåndsvisDialogmelding } from 'lib/clientApi';
-import { useRef } from 'react';
 import useSWR from 'swr';
 import { isError, isSuccess } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
@@ -14,7 +13,6 @@ type Props = {
 };
 
 export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, visModal, onClose }: Props) => {
-  const modalRef = useRef<HTMLDialogElement>(null);
   const { data, isLoading } = useSWR(
     `forhåndsvisDialogmelding/${saksnummer}`,
     () =>
@@ -27,29 +25,31 @@ export const Forhåndsvisning = ({ saksnummer, fritekst, dokumentasjonsType, vis
   );
 
   return (
-    <Modal
-      header={{ heading: 'Forhåndsvisning av melding' }}
-      ref={modalRef}
+    <Dialog
       open={visModal}
-      onClose={() => {
-        modalRef.current?.close();
-        onClose();
+      onOpenChange={(open) => {
+        if (!open) onClose();
       }}
     >
-      <Modal.Body>
-        {isLoading && <Loader />}
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>Forhåndsvisning av melding</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          {isLoading && <Loader />}
 
-        {!isLoading && isSuccess(data) && <p style={{ whiteSpace: 'pre-wrap' }}>{data.data.konstruertBrev}</p>}
+          {!isLoading && isSuccess(data) && <p style={{ whiteSpace: 'pre-wrap' }}>{data.data.konstruertBrev}</p>}
 
-        {isError(data) && (
-          <Alert variant="error">{data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}</Alert>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button type="button" variant="secondary" onClick={() => modalRef.current?.close()}>
-          Lukk forhåndsvisning
-        </Button>
-      </Modal.Footer>
-    </Modal>
+          {isError(data) && (
+            <Alert variant="error">{data.apiException.message || 'En ukjent feil oppsto ved forhåndsvisning'}</Alert>
+          )}
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button type="button" variant="secondary" onClick={onClose}>
+            Lukk forhåndsvisning
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };
