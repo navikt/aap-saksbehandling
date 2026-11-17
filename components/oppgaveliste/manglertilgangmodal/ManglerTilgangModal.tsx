@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog } from '@navikt/ds-react';
 import { Dispatch, SetStateAction } from 'react';
 
 interface Props {
@@ -11,38 +11,29 @@ interface Props {
 
 export const ManglerTilgangModal = ({ isModalOpen, setIsModalOpen, revalidateFunction }: Props) => {
   return (
-    <Modal
-      open={isModalOpen}
-      header={{
-        heading: 'Du har ikke tilgang til saken',
-        closeButton: false,
-      }}
-      onClose={() => {
-        setIsModalOpen(false);
-      }}
-      onBeforeClose={() => {
-        setIsModalOpen(false);
-        return true;
-      }}
-      width={'medium'}
-    >
-      <Modal.Body>
-        <BodyShort>
-          Saken har blitt flyttet til en annen enhet og er ikke lenger tilgjengelig for deg. Oppdater oppgavelisten for
-          å se hvilke saker du kan behandle.
-        </BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type={'button'}
-          onClick={async () => {
-            setIsModalOpen(false);
-            revalidateFunction();
-          }}
-        >
-          Oppdater oppgavelisten
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header withClosebutton={false}>
+          <Dialog.Title>Du har ikke tilgang til saken</Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>
+            Saken har blitt flyttet til en annen enhet og er ikke lenger tilgjengelig for deg. Oppdater oppgavelisten
+            for å se hvilke saker du kan behandle.
+          </BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            type={'button'}
+            onClick={async () => {
+              setIsModalOpen(false);
+              revalidateFunction();
+            }}
+          >
+            Oppdater oppgavelisten
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

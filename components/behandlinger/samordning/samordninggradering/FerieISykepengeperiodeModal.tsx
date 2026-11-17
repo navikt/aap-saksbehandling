@@ -57,7 +57,7 @@ export const FerieISykepengeperiodeModal = ({ initialValues, onLagre, onLukk, gr
 
   return (
     <Dialog open onOpenChange={onLukk} size={'medium'}>
-      <Dialog.Popup width={'large'}>
+      <Dialog.Popup width="large">
         <Dialog.Header>
           <Dialog.Title>
             {initialValues ? 'Rediger ferie i sykepengeperiode' : 'Legg til ferie i sykepengeperiode'}
