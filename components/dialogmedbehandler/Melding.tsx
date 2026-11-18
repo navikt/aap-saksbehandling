@@ -16,9 +16,6 @@ import { useFeatureFlag } from 'context/UnleashContext';
 import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 import { BekreftManuellPåminnelseDialog } from 'components/dialogmedbehandler/BekreftManuellPåminnelseDialog';
 
-export type DokumentasjonType =
-  'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'MELDING_FRA_BEHANDLER' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
-
 interface Props {
   melding: MeldingDto;
   dokumentInfoIdListe: DokumentInfoDto[];
