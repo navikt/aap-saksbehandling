@@ -15,6 +15,7 @@ import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { KlagesaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/KlagesaksopplysningerKolonne';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
 import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
+import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsreferanse,
@@ -65,7 +66,9 @@ export const SkriveKlageBrevMedDataFetching = async ({
     (x) => x.status === 'AVBRUTT' && x.brev != null && x.avklaringsbehovKode === '5050'
   );
 
-  if (!brev?.brev) {
+  const brukNyBrevbygger = !!brev?.brevmal && !!brev?.brevdata;
+
+  if (!brev?.brev && !brukNyBrevbygger) {
     return <BrevOppsummering sendteBrev={sendteBrev} avbrutteBrev={avbrytteBrev} />;
   }
 
@@ -77,26 +80,45 @@ export const SkriveKlageBrevMedDataFetching = async ({
 
   return (
     <div className={styles.flex}>
-      <KlagesaksopplysningerKolonne
-        formkravGrunnlag={formkrav.data}
-        klagebehandlingKontorGrunnlag={klagebehandlingKontor.data}
-        klagebehandlingNayGrunnlag={klagebehandlingNay.data}
-      />
-      <SkriveBrev
-        status={brev.status}
-        referanse={brev.brevbestillingReferanse}
-        behovstype={behovstype}
-        grunnlag={brev.brev}
-        bruker={brev.bruker}
-        mottaker={brev.mottaker}
-        kopimottaker={brev.kopimottaker}
-        readOnly={readOnlyBrev}
-        signaturer={brev.signaturer}
-        fullmektigMottaker={fullmektig}
-        brukerMottaker={bruker}
-        behandlingVersjon={behandlingVersjon}
-        brevtype={brev.brevtype}
-      />
+      {!brukNyBrevbygger && (
+        <KlagesaksopplysningerKolonne
+          formkravGrunnlag={formkrav.data}
+          klagebehandlingKontorGrunnlag={klagebehandlingKontor.data}
+          klagebehandlingNayGrunnlag={klagebehandlingNay.data}
+        />
+      )}
+      {brukNyBrevbygger && (
+        <Brevbygger
+          brevmal={brev.brevmal}
+          brevdata={brev.brevdata}
+          referanse={brev.brevbestillingReferanse}
+          behovstype={behovstype}
+          bruker={brev.bruker}
+          mottaker={brev.mottaker}
+          kopimottaker={brev.kopimottaker}
+          fullmektig={fullmektig}
+          behandlingVersjon={behandlingVersjon}
+          readOnly={readOnlyBrev}
+          brevtype={brev?.brevtype}
+        />
+      )}
+      {!brukNyBrevbygger && brev.brev && (
+        <SkriveBrev
+          status={brev.status}
+          referanse={brev.brevbestillingReferanse}
+          behovstype={behovstype}
+          grunnlag={brev.brev}
+          bruker={brev.bruker}
+          mottaker={brev.mottaker}
+          kopimottaker={brev.kopimottaker}
+          readOnly={readOnlyBrev}
+          signaturer={brev.signaturer}
+          fullmektigMottaker={fullmektig}
+          brukerMottaker={bruker}
+          behandlingVersjon={behandlingVersjon}
+          brevtype={brev.brevtype}
+        />
+      )}
     </div>
   );
 };

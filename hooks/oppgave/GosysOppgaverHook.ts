@@ -1,8 +1,7 @@
 import useSWRInfinite from 'swr/infinite';
 import { clientHentGosysOppgaver } from 'lib/clientApi';
-import { FinnGosysOppgaverResponse } from 'lib/types/gosysTypes';
+import { FinnGosysOppgaverResponse, GosysOppgavetype } from 'lib/types/gosysTypes';
 import { isError } from 'lib/utils/api';
-import { Oppgavetyper } from 'components/oppgaveliste/gosysoppgaver/GosysOppgaver';
 
 const OPPGAVER_PER_SIDE = 50;
 
@@ -10,7 +9,7 @@ interface GosysOppgaverParams {
   enhet?: string;
   behandlingstype?: string;
   behandlingstema?: string;
-  oppgaveTyper?: Oppgavetyper[];
+  oppgaveTyper?: GosysOppgavetype[];
   aktoerId?: string;
 }
 

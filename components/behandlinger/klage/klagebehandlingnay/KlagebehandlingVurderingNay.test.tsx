@@ -63,7 +63,14 @@ describe('Klage - vurdering nay', () => {
   });
 
   it('Skal vise valideringsfeil når man velger en ikke-implementert hjemmel', async () => {
-    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
 
     // Fyll ut obligatoriske felt og velg hjemme 11-31 i dropdown, denne er ikke implementert enda
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder klage' });
@@ -86,7 +93,14 @@ describe('Klage - vurdering nay', () => {
   });
 
   it('Skal ikke vise valideringsfeil når man velger en implementert hjemmel', async () => {
-    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
 
     // Fyll ut obligatoriske felt og velg en hjemme som er implementert i dropdownen (11-5)
     const begrunnelse = screen.getByRole('textbox', { name: 'Vurder klage' });
@@ -106,6 +120,83 @@ describe('Klage - vurdering nay', () => {
 
     expect(screen.queryByText(/Det er ikke mulig å opprette revurdering på/)).not.toBeInTheDocument();
     expect(combobox).not.toHaveAttribute('aria-invalid');
+  });
+});
+
+describe('Klage - vurdering ukjent påklaget vedtak', () => {
+  const grunnlagUtenType = { harTilgangTilÅSaksbehandle: true, påklagetVedtakType: null };
+  const mockLøsAvklaringsbehov = () => {
+    const løsAvklaringsbehovMock = vi.fn();
+    vi.spyOn(løsAvklaringsbehovHook, 'useLøsAvklaringsbehov').mockReturnValue({
+      løsAvklaringsbehov: løsAvklaringsbehovMock,
+      løsAvklaringsbehovStatus: undefined,
+      løsAvklaringsbehovIsLoading: false,
+      løsAvklaringsbehovError: undefined,
+    } as unknown as ReturnType<typeof løsAvklaringsbehovHook.useLøsAvklaringsbehov>);
+    return løsAvklaringsbehovMock;
+  };
+
+  it('Skal vise veiledning og ikke feile når påklaget vedtak er null', () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagUtenType}
+      />
+    );
+    expect(screen.getByText('Velg påklaget vedtak før du sender inn klagevurderingen.')).toBeVisible();
+  });
+
+  it('Skal ikke vise veiledning når skjemaet er skrivebeskyttet', () => {
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={true}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagUtenType}
+      />
+    );
+    expect(screen.queryByText('Velg påklaget vedtak før du sender inn klagevurderingen.')).not.toBeInTheDocument();
+  });
+
+  it('Skal ikke kalle løs-avklaringsbehov-API når påklaget vedtak er null', () => {
+    const løsAvklaringsbehovMock = mockLøsAvklaringsbehov();
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={grunnlagUtenType}
+      />
+    );
+    fireEvent.submit(screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form')!);
+    expect(løsAvklaringsbehovMock).not.toHaveBeenCalled();
+  });
+
+  it('Skal ikke kalle løs-avklaringsbehov-API når grunnlag mangler', () => {
+    const løsAvklaringsbehovMock = mockLøsAvklaringsbehov();
+    render(<KlagebehandlingVurderingNay readOnly={false} behandlingVersjon={0} typeBehandling={'Klage'} />);
+    fireEvent.submit(screen.getByRole('textbox', { name: 'Vurder klage' }).closest('form')!);
+    expect(løsAvklaringsbehovMock).not.toHaveBeenCalled();
+  });
+
+  it('Skal kalle løs-avklaringsbehov-API når påklaget vedtak er kjent', async () => {
+    const løsAvklaringsbehovMock = mockLøsAvklaringsbehov();
+    render(
+      <KlagebehandlingVurderingNay
+        readOnly={false}
+        behandlingVersjon={0}
+        typeBehandling={'Klage'}
+        grunnlag={{ harTilgangTilÅSaksbehandle: true, påklagetVedtakType: 'KELVIN_BEHANDLING' }}
+      />
+    );
+    await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Test begrunnelse');
+    await user.click(screen.getByRole('radio', { name: 'Vedtak omgjøres' }));
+    await user.click(screen.getByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' }));
+    await user.click(screen.getByRole('option', { name: '§ 11-5' }));
+    await user.click(screen.getByRole('button', { name: 'Send til beslutter' }));
+    await waitFor(() => expect(løsAvklaringsbehovMock).toHaveBeenCalled());
   });
 });
 

@@ -198,6 +198,54 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
   });
 
+  it('menyvalg for § 22-13 vises når behandlingen ikke er kant i kant eller migrert fra Arena', async () => {
+    customRenderMedRoller(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        visning={visning}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Korriger søknadsdato (§ 22-13 femte ledd)' })).toBeVisible();
+  });
+
+  it('menyvalg for § 22-13 vises ikke når behandlingen er kant i kant med Arena', async () => {
+    customRenderMedRoller(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        visning={visning}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: true }}
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Korriger søknadsdato (§ 22-13 femte ledd)' })).not.toBeInTheDocument();
+  });
+
+  it('menyvalg for § 22-13 vises ikke når behandlingen er migrert fra Arena', async () => {
+    customRenderMedRoller(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        visning={visning}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Korriger søknadsdato (§ 22-13 femte ledd)' })).not.toBeInTheDocument();
+  });
+
   it('menyvalg for å sette markeringer på behandling vises', async () => {
     customRenderMedRoller(
       <SaksinfoBanner sak={sak} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,

@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyShort, Button, Modal } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack } from '@navikt/ds-react';
 import { Dispatch, SetStateAction } from 'react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 
@@ -11,37 +11,33 @@ interface Props {
 
 export const SynkroniserEnhetModal = ({ visSynkroniserEnhetModal, setVisSynkroniserEnhetModal }: Props) => {
   return (
-    <Modal
-      open={visSynkroniserEnhetModal}
-      header={{
-        heading: 'Kontortilhørigheten er sjekket',
-        icon: <CheckmarkCircleFillIcon color={'green'} />,
-      }}
-      onClose={() => {
-        setVisSynkroniserEnhetModal(false);
-      }}
-      onBeforeClose={() => {
-        setVisSynkroniserEnhetModal(false);
-        return true;
-      }}
-      width={'medium'}
-    >
-      <Modal.Body>
-        <BodyShort>
-          Systemet har sjekket om oppgaven fortsatt hører til det registrerte kontoret. Hvis tilhørigheten er endret, er
-          den flyttet til riktig kontor.
-        </BodyShort>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type={'button'}
-          onClick={async () => {
-            setVisSynkroniserEnhetModal(false);
-          }}
-        >
-          Lukk
-        </Button>
-      </Modal.Footer>
-    </Modal>
+    <Dialog open={visSynkroniserEnhetModal} onOpenChange={setVisSynkroniserEnhetModal}>
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <HStack as={'span'} gap={'space-4'} align={'center'}>
+              <CheckmarkCircleFillIcon fontSize={'1.5rem'} aria-hidden color="var(--ax-text-success-decoration)" />
+              <span>Kontortilhørigheten er sjekket</span>
+            </HStack>
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          <BodyShort>
+            Systemet har sjekket om oppgaven fortsatt hører til det registrerte kontoret. Hvis tilhørigheten er endret,
+            er den flyttet til riktig kontor.
+          </BodyShort>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button
+            type={'button'}
+            onClick={async () => {
+              setVisSynkroniserEnhetModal(false);
+            }}
+          >
+            Lukk
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

@@ -1,4 +1,5 @@
 import { Link as AkselLink, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { VurderingsbehovIntern, ÅrsakTilOpprettelse } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -15,6 +16,7 @@ import { memo } from 'react';
 
 import { MineOppgaverMeny } from 'components/oppgaveliste/mineoppgaver/mineoppgavermeny/MineOppgaverMeny';
 import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/OppgaveInformasjon';
+import { utledMaksdatoFraSykepenger } from 'lib/utils/sykepengermaksdato';
 
 const OppgaveRad = ({
   oppgave,
@@ -27,6 +29,8 @@ const OppgaveRad = ({
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   revalidateFunction: () => void;
 }) => {
+  const visMaksdatoSykepenger = useFeatureFlag('MaksdatoSykepenger');
+
   return (
     <Table.Row key={oppgave.behandlingskontekst.saksnummer || oppgave.behandlingskontekst.journalpostId}>
       <Table.DataCell textSize={'small'}>
@@ -84,6 +88,9 @@ const OppgaveRad = ({
       <Table.DataCell textSize={'small'}>
         {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
       </Table.DataCell>
+      {visMaksdatoSykepenger && (
+        <Table.DataCell textSize={'small'}>{utledMaksdatoFraSykepenger(oppgave.gjenståendeSykedager)}</Table.DataCell>
+      )}
       <Table.DataCell textSize={'small'}>
         <OppgaveInformasjon oppgave={oppgave} />
       </Table.DataCell>

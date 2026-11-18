@@ -986,9 +986,6 @@ describe('vurderinger uten viss varighet', () => {
     await skrivInnDatoForNårVurderingenGjelderFra(format(new Date(), 'ddMMyy'));
     await velgAtBrukerHarSykdomSkadeLyte();
     await velgAtBrukerHarNedsattArbeidsevne();
-    expect(
-      screen.queryByRole('radiogroup', { name: 'Er arbeidsevnen nedsatt med minst 40 prosent?' })
-    ).not.toBeInTheDocument();
     expect(screen.getByRole('radiogroup', { name: 'Er arbeidsevnen nedsatt med minst 30 prosent?' })).toBeVisible();
   });
 

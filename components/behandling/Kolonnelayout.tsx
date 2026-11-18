@@ -4,7 +4,7 @@ import { HGrid } from '@navikt/ds-react';
 import { ReactNode, useState } from 'react';
 import { Saksbehandlingsoversikt } from 'components/saksbehandlingsoversikt/Saksbehandlingsoversikt';
 import { FetchResponse } from 'lib/utils/api';
-import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, KabalKlageResultat, Klageresultat, RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 
 interface Props {
   hovedkolonneInnhold: ReactNode;
@@ -14,6 +14,7 @@ interface Props {
   sak: SaksInfo;
   klageresultat?: Klageresultat;
   kabalKlageresultat: FetchResponse<KabalKlageResultat>;
+  rettighetsinfo: RettighetsinfoDto | null;
 }
 
 export const Kolonnelayout = ({
@@ -24,6 +25,7 @@ export const Kolonnelayout = ({
   sak,
   klageresultat,
   kabalKlageresultat,
+  rettighetsinfo,
 }: Props) => {
   const [erSaksbehandlingsoversiktExpanded, setErSaksbehandlingsoversiktExpanded] = useState(true);
 
@@ -48,6 +50,7 @@ export const Kolonnelayout = ({
           kabalKlageresultat={kabalKlageresultat}
           expanded={erSaksbehandlingsoversiktExpanded}
           onExpandedChange={setErSaksbehandlingsoversiktExpanded}
+          rettighetsinfo={rettighetsinfo}
         />
       </aside>
     </HGrid>
