@@ -51,7 +51,7 @@ export const BehandlingsHendelse = ({ hendelse }: Props) => {
           {hendelse.begrunnelse && (
             <VStack>
               <Detail weight={'semibold'}>Begrunnelse</Detail>
-              <Detail>{hendelse.begrunnelse}</Detail>
+              <Detail style={{ whiteSpace: 'pre-wrap' }}>{hendelse.begrunnelse}</Detail>
             </VStack>
           )}
         </VStack>

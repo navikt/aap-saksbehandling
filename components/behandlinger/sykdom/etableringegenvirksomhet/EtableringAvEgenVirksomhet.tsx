@@ -64,13 +64,14 @@ export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingFormMe
 
 type Versjon = EtableringEgenVirksomhetLøsningDto['versjon'];
 
-const versjonerFra = (form: EtableringAvEgenVirksomhetForm): Versjon[] =>
-  form.vurderinger.map((vurdering) => vurdering.versjon ?? 'V0');
+const versjonerFra = (form: Partial<EtableringAvEgenVirksomhetForm>): Versjon[] =>
+  form.vurderinger?.map((vurdering) => vurdering.versjon ?? 'V0') ?? [];
 
 export interface EtableringAvEgenVirksomhetForm {
   vurderinger: EtableringAvEgenVirksomhetVurderingForm[];
   virksomhetNavn: string | undefined;
 }
+
 export const EtableringAvEgenVirksomhet = ({
   readOnly,
   initialMellomlagretVurdering,
@@ -81,12 +82,8 @@ export const EtableringAvEgenVirksomhet = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const {
-    løsAvklaringsbehov,
-    løsAvklaringsbehovIsLoading,
-    løsAvklaringsbehovStatus,
-    løsAvklaringsbehovError,
-  } = useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
 
   const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -151,7 +148,7 @@ export const EtableringAvEgenVirksomhet = ({
         return;
       }
       const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
-        nyeVurderinger: data.vurderinger,
+        nyeVurderinger: data.vurderinger ?? [],
         form,
         grunnlag,
       });

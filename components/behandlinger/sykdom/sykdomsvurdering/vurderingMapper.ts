@@ -36,7 +36,8 @@ function mapArbeidsevneOgYrkesskade(
   const yrkesskadeBegrunnelse = skalBegrunneYrkesskaden ? data?.yrkesskadeBegrunnelse : undefined;
 
   const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense =
-    skalBegrunneYrkesskaden || (skalVurdereYrkesskade && !vurderingDatoSammeSomRettighetsperiodeStart)
+    erNedsettelseIArbeidsevneMerEnnHalvparten !== true &&
+    (skalBegrunneYrkesskaden || (skalVurdereYrkesskade && !vurderingDatoSammeSomRettighetsperiodeStart))
       ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
       : undefined;
 

@@ -3,7 +3,7 @@ import { TableStyled } from 'components/tablestyled/TableStyled';
 import { HStack, Table } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { CheckmarkCircleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import styles from './ForeslåVedtakTabell.module.css';
+import styles from './ForeslåVedtakTabellGammel.module.css';
 import { exhaustiveCheck } from 'lib/utils/typescript';
 import { mapRettighetsTypeTilTekst } from 'lib/utils/rettighetstype';
 
@@ -11,7 +11,7 @@ interface Props {
   grunnlag: ForeslåVedtakGrunnlag;
 }
 
-export const ForeslåVedtakTabell = ({ grunnlag }: Props) => {
+export const ForeslåVedtakTabellGammel = ({ grunnlag }: Props) => {
   const sistePeriodeMedRettighetIndex = grunnlag.perioder.findLastIndex((periode) => periode.utfall === 'OPPFYLT');
 
   return (

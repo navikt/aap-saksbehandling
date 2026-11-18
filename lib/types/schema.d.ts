@@ -5784,7 +5784,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadeDriftsinfoDto'][];
+            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadeGrunnlagDriftsinfoDto'];
           };
         };
       };
@@ -8109,6 +8109,7 @@ export interface components {
       /** @enum {string} */
       innkommendeUtgående: 'INNKOMMENDE' | 'UTGÅENDE';
       journalpostId?: string | null;
+      kanSendeManuellPåminnelse: boolean;
       meldingFraNavn?: string | null;
       /** @enum {string|null} */
       meldingStatus?: 'FEILET' | 'LEVERT' | 'SENDT' | null;
@@ -8118,6 +8119,11 @@ export interface components {
        */
       opprettetTidspunkt: string;
       påminnelseAvbrutt?: boolean | null;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      sisteForespørselSendt?: string | null;
       tekst?: string | null;
     };
     'no.nav.aap.behandlingsflyt.behandling.behandlerdialog.MeldingMedDokumenterDto': {
@@ -8787,16 +8793,24 @@ export interface components {
         | null;
       vilkårsavslag: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.VilkårsavslagDto'][];
     };
+    'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.EndretRettighetsperiodeDto': {
+      fra: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+      til: components['schemas']['no.nav.aap.komponenter.type.Periode'];
+    };
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakDto': {
       avslagsårsak: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.AvslagsårsakDto'];
+      erNy: boolean;
       periode: components['schemas']['no.nav.aap.komponenter.type.Periode'];
       /** @enum {string|null} */
       rettighetsType?:
         'ARBEIDSSØKER' | 'BISTANDSBEHOV' | 'STUDENT' | 'SYKEPENGEERSTATNING' | 'VURDERES_FOR_UFØRETRYGD' | null;
+      tidligerePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
+      tidligereVarÅpen: boolean;
       /** @enum {string} */
       utfall: 'IKKE_OPPFYLT' | 'IKKE_RELEVANT' | 'IKKE_VURDERT' | 'OPPFYLT';
     };
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakResponse': {
+      endretRettighetsperiode?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.EndretRettighetsperiodeDto'];
       harTilgangTilÅSaksbehandle: boolean;
       perioder: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.ForeslåVedtakDto'][];
       stansOpphør: components['schemas']['no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørDto'][];
@@ -8818,6 +8832,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.behandling.foreslåvedtak.StansOpphørVurderingDto': {
       /** Format: uuid */
       behandlingReferanse: string;
+      erNy: boolean;
+      hjemler: string[];
       /** @enum {string} */
       type: 'OPPHEVET' | 'OPPHØR' | 'STANS';
       årsaker: (
@@ -9335,14 +9351,14 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingKontorGrunnlagDto': {
       harTilgangTilÅSaksbehandle: boolean;
-      /** @enum {string} */
-      påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
+      /** @enum {string|null} */
+      påklagetVedtakType?: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING' | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingKontorDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingNayGrunnlagDto': {
       harTilgangTilÅSaksbehandle: boolean;
-      /** @enum {string} */
-      påklagetVedtakType: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING';
+      /** @enum {string|null} */
+      påklagetVedtakType?: 'ARENA_VEDTAK' | 'KELVIN_BEHANDLING' | 'TILBAKEKREVING' | null;
       vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingNayDto'];
     };
     'no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagevurderingKontorDto': {
@@ -11347,6 +11363,15 @@ export interface components {
     'no.nav.aap.behandlingsflyt.drift.PersonSøkDriftsinfoDto': {
       saker: components['schemas']['no.nav.aap.behandlingsflyt.drift.SaksnummerOgRettighetsperiode'][];
     };
+    'no.nav.aap.behandlingsflyt.drift.RelevantYrkesskadeSakDriftsinfoDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      manuellYrkesskadeDato?: string | null;
+      referanse?: string | null;
+      referanseSkjermet: boolean;
+    };
     'no.nav.aap.behandlingsflyt.drift.SakDriftsinfoDTO': {
       andreSakerPåBruker: string[];
       behandlinger: components['schemas']['no.nav.aap.behandlingsflyt.drift.BehandlingDriftsinfo'][];
@@ -11439,6 +11464,17 @@ export interface components {
        * @example 2025-04-01
        */
       vedtaksdato?: string | null;
+    };
+    'no.nav.aap.behandlingsflyt.drift.YrkesskadeGrunnlagDriftsinfoDto': {
+      vurdering?: components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadevurderingDriftsinfoDto'];
+      yrkesskader: components['schemas']['no.nav.aap.behandlingsflyt.drift.YrkesskadeDriftsinfoDto'][];
+    };
+    'no.nav.aap.behandlingsflyt.drift.YrkesskadevurderingDriftsinfoDto': {
+      /** Format: int32 */
+      andelAvNedsettelsen?: number | null;
+      erÅrsakssammenheng: boolean;
+      harBegrunnelse: boolean;
+      relevanteSaker: components['schemas']['no.nav.aap.behandlingsflyt.drift.RelevantYrkesskadeSakDriftsinfoDto'][];
     };
     'no.nav.aap.behandlingsflyt.drift.`DriftApiKt$driftApi$1$AvbrytBrevBody`': {
       begrunnelse: string;

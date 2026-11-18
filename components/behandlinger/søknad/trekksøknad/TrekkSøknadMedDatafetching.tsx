@@ -7,7 +7,6 @@ import {
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -22,13 +21,9 @@ export const TrekkSøknadMedDatafetching = async ({
   behandlingVersjon,
   erIkkePåVent,
 }: Props) => {
-  const viseVentendeLEToggle = unleashService.isEnabled('VisInfoTrekkSoknadForesporselOmLe');
-
   const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
 
-  const ubesvarteForespørslerResponse = viseVentendeLEToggle
-    ? await hentUbesvarteForespørslerLegeerklæring(behandlingsreferanse)
-    : undefined;
+  const ubesvarteForespørslerResponse = await hentUbesvarteForespørslerLegeerklæring(behandlingsreferanse);
 
   if (isError(trukketSøknadGrunnlag)) {
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
@@ -53,7 +48,6 @@ export const TrekkSøknadMedDatafetching = async ({
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
       ubesvarteForespørslerEllerUndefinedVedFeil={ubesvarteForespørslerEllerUndefinedVedFeil}
-      viseVentendeLEToggle={viseVentendeLEToggle}
     />
   );
 };

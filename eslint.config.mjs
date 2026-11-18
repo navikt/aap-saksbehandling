@@ -85,6 +85,11 @@ const config = [
               importNames: ['Alert'],
               message: 'Bruk Alert fra components/alert/Alert i stedet for Alert fra @navikt/ds-react.',
             },
+            {
+              name: '@navikt/ds-react',
+              importNames: ['Modal'],
+              message: 'Bruk Dialog i stedet for Modal fra @navikt/ds-react, Modal er deprekert fra 2027.',
+            },
           ],
         },
       ],
