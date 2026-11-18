@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Label, List, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import {
   ForeløpigBehandlingsutfall,
@@ -173,23 +173,6 @@ export const SykdomsvurderingBrev = ({
           defaultOpen={false}
         />
 
-        <Veiledning
-          header={'Hvor står denne teksten i brevet?'}
-          tekst={
-            <Box>
-              <BodyLong size={'small'}>Før avsnittet du skriver, står dette avsnittet:</BodyLong>
-              <Box marginBlock={'space-12 space-0'}>
-                <Heading size={'xsmall'}>Hvem kan få AAP?</Heading>
-                <BodyLong size={'small'}>
-                  For å ha rett til arbeidsavklaringspenger må arbeidsevnen din være nedsatt med minst halvparten på
-                  grunn av sykdom eller skade, og du trenger behandling eller bistand fra Nav for å bedre arbeidsevnen
-                  din. Dette går fram av folketrygdloven § 11-5 og § 11-6.
-                </BodyLong>
-              </Box>
-            </Box>
-          }
-          defaultOpen={false}
-        />
         <FormField form={form} formField={formFields.vurdering} />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

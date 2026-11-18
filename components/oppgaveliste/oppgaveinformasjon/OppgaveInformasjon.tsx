@@ -14,7 +14,7 @@ import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefrist
 import { Returboks } from '../returboks/Returboks';
 import { UførevedtakInfoBoks } from '../uførevedtakBoks/UførevedtakInfoBoks';
 import { useState } from 'react';
-import { DialogMedBehandlerInfoboks } from 'components/dialogmedbehandlerinfoboks/DialogMedBehandlerInfoboks';
+import { ForespørselSendtInfoboks } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 interface Props {
   oppgave: OppgaveMedKontekst;
@@ -72,7 +72,7 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
         />
       )}
       {oppgave.oppgavelisteTags.forespørselSendtTilBehandler && (
-        <DialogMedBehandlerInfoboks
+        <ForespørselSendtInfoboks
           påminnelseDato={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseDato}
           påminnelseAvbrutt={oppgave.oppgavelisteTags.forespørselSendtTilBehandler.påminnelseAvbrutt}
         />

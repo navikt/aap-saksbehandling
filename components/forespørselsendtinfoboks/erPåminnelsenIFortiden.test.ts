@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { erForespørselFør29september2026 } from './DialogMedBehandlerInfoboks';
+import { erForespørselFør29september2026 } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 // Forespørsler gjort før 29. september 2026 skal ikke sende ut automatiske påminnelser
 describe('erForespørselFør29september2026', () => {

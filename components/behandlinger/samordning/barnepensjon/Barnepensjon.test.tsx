@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { Barnepensjon } from 'components/behandlinger/samordning/barnepensjon/Barnepensjon';
 import { customRender } from 'lib/test/CustomRender';
 import userEvent from '@testing-library/user-event';
@@ -8,6 +8,7 @@ import { BarnepensjonGrunnlag } from 'lib/types/types';
 const grunnlagUtenVurdering: BarnepensjonGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
   historiskeVurderinger: [],
+  vedtattePerioder: [],
 };
 
 describe('Barnepensjon', () => {
@@ -39,6 +40,81 @@ describe('Barnepensjon', () => {
     await user.click(fjernKnapp);
 
     expect(screen.queryByRole('cell', { name: 'Barnepensjon' })).not.toBeInTheDocument();
+  });
+
+  it('Skal kreve bekreftelse før en vedtatt rad slettes, men ikke for nye rader', async () => {
+    const tidligereVurdering = {
+      begrunnelse: 'Tidligere vedtatt samordning',
+      perioder: [{ fom: '2025-01', tom: '2025-12', månedsbeløp: { verdi: 1000 } }],
+      vurderingerMeta: {},
+    };
+    const { unmount } = customRender(
+      <Barnepensjon
+        behandlingVersjon={1}
+        readOnly={false}
+        grunnlag={{
+          ...grunnlagUtenVurdering,
+          vurdering: tidligereVurdering,
+          vedtattePerioder: tidligereVurdering.perioder,
+        }}
+      />
+    );
+    await trykkPåEndreKnapp();
+    await leggTilNyPeriode();
+    await user.click(screen.getAllByRole('button', { name: 'Fjern periode' })[1]);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('cell', { name: 'Barnepensjon' })).toHaveLength(1);
+
+    const tilOgMed = screen.getByRole('textbox', { name: 'Til og med dato for barnepensjon' });
+    await user.clear(tilOgMed);
+    await user.type(tilOgMed, '06.2025');
+    await user.tab();
+    await user.click(screen.getByRole('button', { name: 'Fjern periode' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('cell', { name: 'Barnepensjon' })).not.toBeInTheDocument();
+
+    unmount();
+    customRender(
+      <Barnepensjon
+        behandlingVersjon={2}
+        readOnly={false}
+        grunnlag={{
+          ...grunnlagUtenVurdering,
+          vedtattePerioder: tidligereVurdering.perioder,
+          vurdering: {
+            ...tidligereVurdering,
+            perioder: [
+              ...tidligereVurdering.perioder,
+              { fom: '2026-01', tom: '2026-12', månedsbeløp: { verdi: 2000 } },
+            ],
+          },
+        }}
+      />
+    );
+    await trykkPåEndreKnapp();
+    await user.click(screen.getAllByRole('button', { name: 'Fjern periode' })[1]);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('cell', { name: 'Barnepensjon' })).toHaveLength(1);
+
+    await user.clear(screen.getByRole('spinbutton', { name: 'Hvilken månedsytelse' }));
+    await user.type(screen.getByRole('spinbutton', { name: 'Hvilken månedsytelse' }), '2000');
+    const rad = screen.getByRole('cell', { name: 'Barnepensjon' });
+    await user.click(screen.getByRole('button', { name: 'Fjern periode' }));
+    const dialog = screen.getByRole('dialog', { name: 'Slett samordningsperiode' });
+    expect(
+      within(dialog).getByText(
+        'Merk at dette vilkåret gjelder for hele saksperioden. Ikke slett perioder som fremdeles skal være gjeldene tilbake i tid.'
+      )
+    ).toBeVisible();
+    expect(rad).toBeInTheDocument();
+    await user.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'Barnepensjon' })).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: 'Fjern periode' }));
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Slett' }));
+    expect(screen.queryByRole('cell', { name: 'Barnepensjon' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('Skal ha et felt for å sette fra og med dato for barnepensjon', async () => {

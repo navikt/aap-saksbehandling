@@ -3,7 +3,7 @@ import { Label, Link, Loader, VStack } from '@navikt/ds-react';
 import { KommendeMeldinger } from 'components/dialogmedbehandler/KommendeMeldinger';
 import { Melding } from 'components/dialogmedbehandler/Melding';
 import { Alert } from '../alert/Alert';
-import { KommendeMeldingDto, MeldingMedDokumenterDto } from '../../lib/types/types';
+import { KommendeMeldingDto, MeldingMedDokumenterDto } from '/lib/types/types';
 import styles from 'components/dialogmedbehandler/Behandlerdialog.module.css';
 
 interface Props {
@@ -48,6 +48,7 @@ export const Behandlerdialog = ({
               key={index}
               melding={meldingMedDokumentliste.melding}
               dokumentInfoIdListe={meldingMedDokumentliste.dokumentIdListe}
+              behandlingsreferanse={behandlingsreferanse}
             />
           ))}
         </VStack>

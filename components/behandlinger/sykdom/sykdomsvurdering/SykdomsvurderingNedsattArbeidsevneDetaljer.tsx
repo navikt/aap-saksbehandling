@@ -58,6 +58,7 @@ export const SykdomsvurderingNedsattArbeidsevneDetaljer = ({
         index={index}
         readonly={readonly}
         skalVurdereYrkesskade={skalVurdereYrkesskade}
+        erÅrsakssammenhengYrkesskade={erÅrsakssammenhengYrkesskade}
         vurderingDatoSammeSomRettighetsperiodeStart={vurderingDatoSammeSomRettighetsperiodeStart}
       />
 
@@ -83,6 +84,7 @@ const SykdomsvurderingYrkesskade = ({
   form,
   vurderingDatoSammeSomRettighetsperiodeStart,
   skalVurdereYrkesskade,
+  erÅrsakssammenhengYrkesskade,
   index,
   readonly,
 }: {
@@ -91,7 +93,17 @@ const SykdomsvurderingYrkesskade = ({
   readonly: boolean;
   vurderingDatoSammeSomRettighetsperiodeStart: boolean;
   skalVurdereYrkesskade: boolean;
+  erÅrsakssammenhengYrkesskade: boolean;
 }) => {
+  const nedsettelseMerEnnHalvparten = form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`);
+  const kanBegrunneYrkesskade =
+    nedsettelseMerEnnHalvparten === JaEllerNei.Nei ||
+    (!vurderingDatoSammeSomRettighetsperiodeStart && erÅrsakssammenhengYrkesskade);
+
+  if (!skalVurdereYrkesskade || !kanBegrunneYrkesskade) {
+    return null;
+  }
+
   /*
    * Logikken for yrkesskade er litt kronglete.
    * Parameter [vurderingDatoSammeSomRettighetsperiodeStart] brukes midlertidig siden vi ikke har en enkel/god måte å
@@ -101,53 +113,33 @@ const SykdomsvurderingYrkesskade = ({
    *
    * I påfølgende behandlinger skal saksbehandler kun bekrefte om den fremdeles er 30 prosent.
    */
-  if (vurderingDatoSammeSomRettighetsperiodeStart) {
-    const kanBegrunneYrkesskade =
-      form.watch(`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnHalvparten`) === JaEllerNei.Nei;
-    return (
-      skalVurdereYrkesskade &&
-      kanBegrunneYrkesskade && (
-        <>
-          <TextAreaWrapper
-            name={`vurderinger.${index}.yrkesskadeBegrunnelse`}
-            control={form.control}
-            label={yrkesskadeBegrunnelse}
-            description={
-              'Brukeren har en yrkesskade som kan ha betydning for retten til AAP. Du må derfor vurdere om arbeidsevnen er nedsatt med minst 30 prosent. NAY vil vurdere om arbeidsevnen er nedsatt på grunn av yrkesskaden.'
-            }
-            rules={{
-              required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med minst 30 prosent',
-            }}
-            readOnly={readonly}
-            shouldUnregister={false}
-          />
-          <RadioGroupJaNei
-            name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
-            control={form.control}
-            label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-            horisontal={true}
-            rules={{
-              required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
-            }}
-            readOnly={readonly}
-          />
-        </>
-      )
-    );
-  } else {
-    return (
-      skalVurdereYrkesskade && (
-        <RadioGroupJaNei
-          name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
+  return (
+    <>
+      {vurderingDatoSammeSomRettighetsperiodeStart && (
+        <TextAreaWrapper
+          name={`vurderinger.${index}.yrkesskadeBegrunnelse`}
           control={form.control}
-          label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
-          horisontal={true}
+          label={yrkesskadeBegrunnelse}
+          description={
+            'Brukeren har en yrkesskade som kan ha betydning for retten til AAP. Du må derfor vurdere om arbeidsevnen er nedsatt med minst 30 prosent. NAY vil vurdere om arbeidsevnen er nedsatt på grunn av yrkesskaden.'
+          }
           rules={{
-            required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+            required: 'Du må skrive en begrunnelse for om arbeidsevnen er nedsatt med minst 30 prosent',
           }}
           readOnly={readonly}
+          shouldUnregister={false}
         />
-      )
-    );
-  }
+      )}
+      <RadioGroupJaNei
+        name={`vurderinger.${index}.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense`}
+        control={form.control}
+        label={erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense}
+        horisontal={true}
+        rules={{
+          required: 'Du må svare på om den nedsatte arbeidsevnen er nedsatt med minst 30 prosent.',
+        }}
+        readOnly={readonly}
+      />
+    </>
+  );
 };

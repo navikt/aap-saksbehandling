@@ -41,6 +41,7 @@ const validSortKeys: Set<SortBy> = new Set([
   'SAKSNUMMER',
   'TILBAKEKREVINGS_BELOP',
   'ÅRSAK_TIL_OPPRETTELSE',
+  'MAKSDATO_SP',
 ]);
 
 /**

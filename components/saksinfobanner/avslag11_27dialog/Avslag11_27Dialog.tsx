@@ -54,7 +54,7 @@ export const Avslag11_27Dialog = ({ saksnummer, isOpen, onClose, behandlingRefer
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose} size={'medium'}>
-      <Dialog.Popup>
+      <Dialog.Popup width="large">
         <Dialog.Header>
           <Dialog.Title>
             Opprett vurdering av mulig avslag fordi brukeren har annen full folketrygdytelse § 11-27
