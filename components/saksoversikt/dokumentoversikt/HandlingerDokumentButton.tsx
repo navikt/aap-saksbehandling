@@ -3,7 +3,7 @@
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
-import { Journalpost, Variantformat } from 'lib/types/journalpost';
+import { Journalpost } from 'lib/types/journalpost';
 import { SaksInfo } from 'lib/types/types';
 import { erFerdigstilt } from 'lib/utils/journalpost';
 import { useState } from 'react';
