@@ -187,7 +187,6 @@ const eventTypes = [
       'loggUmamiGåTilBehandling(inngang)',
       'loggUmamiGåTilBehandlingOgReserver(inngang)',
       'loggUmamiGåTilSaksoversikt(inngang)',
-      'loggUmamiReserverOppgave(inngang)',
       'loggUmamiFrigiOppgave(inngang)',
       'loggUmamiTildelOppgave(inngang)',
     ],

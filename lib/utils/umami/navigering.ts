@@ -32,9 +32,6 @@ export const loggUmamiGåTilBehandlingOgReserver = (inngang: BehandlingInngang) 
 export const loggUmamiGåTilSaksoversikt = (inngang: SaksoversiktInngang) =>
   clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'GÅ_TIL_SAKSOVERSIKT', inngang });
 
-export const loggUmamiReserverOppgave = (inngang: BehandlingInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'RESERVER_OPPGAVE', inngang });
-
 export const loggUmamiFrigiOppgave = (inngang: OppgaveInngang) =>
   clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'FRIGI_OPPGAVE', inngang });
 
