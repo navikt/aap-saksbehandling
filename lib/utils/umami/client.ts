@@ -1,11 +1,9 @@
 import type { UmamiKelvinEvent } from 'lib/utils/umami/kelvinEvent';
-import { UmamiEventData } from '@umami/node';
 
-export interface UmamiEvent {
-  name: UmamiKelvinEvent['name'];
-  data?: UmamiEventData;
-}
-
+/**
+ * Behandler hver event-type separat, slik at navn og data hører sammen.
+ * Gjør data valgfritt når et tomt objekt er gyldig.
+ */
 type UmamiEventArguments<TEvent extends UmamiKelvinEvent = UmamiKelvinEvent> = TEvent extends UmamiKelvinEvent
   ? {} extends TEvent['data']
     ? [name: TEvent['name'], data?: TEvent['data']]

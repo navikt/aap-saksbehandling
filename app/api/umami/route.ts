@@ -2,7 +2,6 @@ import umami from '@umami/node';
 import { logWarning } from 'lib/serverutlis/logger';
 import { isDev, isProd } from 'lib/utils/environment';
 import { NextResponse } from 'next/server';
-import { UmamiEvent } from 'lib/utils/umami/client';
 
 const umamiSporingskodeDev = 'ebb233f3-6c6d-4b9f-b84d-9a11a3c2f16f';
 const umamiSporingskodeProd = 'b2b87dc6-5a1c-4212-ac64-818f80fd12f2';
@@ -20,7 +19,7 @@ if (isProd()) {
 }
 
 export async function POST(req: Request) {
-  const payload: UmamiEvent = await req.json();
+  const payload = await req.json();
 
   try {
     await umami.track(payload.name, payload.data);
