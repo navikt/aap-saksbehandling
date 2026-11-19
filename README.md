@@ -13,7 +13,7 @@ Dette oppsettet forutsetter at du har følgende programvare installert:
 ### Sett opp GitHub token
 
 > ⚠️ **OBS:** Dette steget er nødvendig for å kunne installere avhengigheter fra Navikt Github Package Registry.
-> Hvis noe feiler med `unauthorized` eller `403`, sjekk at du har et gyldig token og at det er lagt inn i `~/.npmrc`.
+> Hvis noe feiler med `unauthorized` eller `403`, sjekk at du har et gyldig token og oppsett.
 
 Du finner bruksanvisning for oppsett av GitHub token her:
 [AAP Sysdoc - Frontend](https://aap-sysdoc.ansatt.nav.no/teknisk/frontend)
