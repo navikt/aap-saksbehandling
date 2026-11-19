@@ -26,8 +26,7 @@ import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupW
 import { Alert } from 'components/alert/Alert';
 
 export type KravBoksInnhold =
-  | { kilde: 'EKSISTERENDE'; krav: KravVurderingForSøknad }
-  | { kilde: 'NY_SØKNAD'; søknad: SøknadUtenKrav };
+  { kilde: 'EKSISTERENDE'; krav: KravVurderingForSøknad } | { kilde: 'NY_SØKNAD'; søknad: SøknadUtenKrav };
 
 interface Props {
   innhold: KravBoksInnhold;
