@@ -1,4 +1,5 @@
 import { clientLoggUmamiEvent } from 'lib/utils/umami/client';
+import { UmamiEventData } from '@umami/node';
 
 export const UMAMI_BEHANDLERDIALOG_NAVN = [
   'BEHANDLERDIALOG_GÅ_TIL_SEND_FORESPØRSEL',
@@ -9,10 +10,10 @@ export const UMAMI_BEHANDLERDIALOG_NAVN = [
 ] as const;
 
 export interface UmamiBehandlerdialogEvent {
-  type: 'BEHANDLERDIALOG';
   name: (typeof UMAMI_BEHANDLERDIALOG_NAVN)[number];
+  data: UmamiEventData;
 }
 
 export function loggUmamiBehandlerdialogKlikk(name: UmamiBehandlerdialogEvent['name']) {
-  clientLoggUmamiEvent({ type: 'BEHANDLERDIALOG', name });
+  clientLoggUmamiEvent(name);
 }

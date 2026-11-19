@@ -33,6 +33,8 @@ function validerSortByQueryParamEnum(str: string): MineOppgaverSortBy | null {
       return 'OPPRETTET_TIDSPUNKT';
     case 'SAKSNUMMER':
       return 'SAKSNUMMER';
+    case 'MAKSDATO_SP':
+      return 'MAKSDATO_SP';
   }
   logError(`Mapping feilet for sortby queryparam ${str}`);
   return null;

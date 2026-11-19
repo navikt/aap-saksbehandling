@@ -11,10 +11,11 @@ import { useEffect, useState } from 'react';
 export type UmamiStegVarighetTag = `STEG_${UmamiSteg}_VARIGHET`;
 
 export interface UmamiVarighetEvent {
-  type: 'VARIGHET';
   name: UmamiStegVarighetTag;
-  varighet_sekunder: number;
-  brevtype?: string;
+  data: {
+    varighet_sekunder: number;
+    brevtype?: string;
+  };
 }
 
 export function loggUmamiBrevVarighet(
@@ -23,18 +24,14 @@ export function loggUmamiBrevVarighet(
   stop: number,
   brevtype: BrevGrunnlagBrev['brevtype']
 ) {
-  clientLoggUmamiEvent({
-    type: 'VARIGHET',
-    name: hendelse,
+  clientLoggUmamiEvent(hendelse, {
     varighet_sekunder: Math.floor((stop - start) / 1000),
-    brevtype,
+    ...(brevtype ? { brevtype } : {}),
   });
 }
 
 export function loggUmamiVarighet(hendelse: UmamiStegVarighetTag, start: number, stop: number) {
-  clientLoggUmamiEvent({
-    type: 'VARIGHET',
-    name: hendelse,
+  clientLoggUmamiEvent(hendelse, {
     varighet_sekunder: Math.floor((stop - start) / 1000),
   });
 }
