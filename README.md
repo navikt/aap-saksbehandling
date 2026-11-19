@@ -12,27 +12,11 @@ Dette oppsettet forutsetter at du har følgende programvare installert:
 
 ### Sett opp GitHub token
 
-1. Gå inn på GitHub under brukeren din på Settings -> Developer settings
-2. Velg Personal access tokens -> Tokens (classic) -> Generate new token (classic)
-3. Gi token et navn, sett utløpsdato og huk av for `read:packages`-rettighet
-4. Klikk Generate token og kopier tokenet (Det forsvinner fra siden)
-5. Klikk Configure SSO -> Authorize for navikt-organisasjonen
-6. Opprett miljøvariabel med token i `~/.bashrc` eller `~/.zshrc`:
-   - **Med Keychain på Mac (anbefalt)**:
-     - Kjør kommando (med faktisk passord, ikke dummyverdi)
-       ```shell
-       security add-generic-password -a "$USER" -s "NODE_AUTH_TOKEN" -w "<PASSWORD>"
-       ```
-     - Legg inn følgende i `~/.bashrc` eller `~/.zshrc`:
-       ```env
-       export NODE_AUTH_TOKEN=$(security find-generic-password -w -a "$USER" -s "NODE_AUTH_TOKEN")
-       ```
-   - **Uten Keychain**:\
-     Legg inn følgende i `~/.bashrc` eller `~/.zshrc`:
-     ```env
-     export NODE_AUTH_TOKEN=<token-her>
-     ```
-7. Til slutt kan du kjøre `source ~/.bashrc` eller `source ~/.zshrc` for å laste inn endringene (ev. restart terminalen/shellet).
+> ⚠️ **OBS:** Dette steget er nødvendig for å kunne installere avhengigheter fra Navikt Github Package Registry.
+> Hvis noe feiler med `unauthorized` eller `403`, sjekk at du har et gyldig token og at det er lagt inn i `~/.npmrc`.
+
+Du finner bruksanvisning for oppsett av GitHub token her:
+[AAP Sysdoc - Frontend](https://aap-sysdoc.ansatt.nav.no/teknisk/frontend)
 
 ### Prettier og linting
 
