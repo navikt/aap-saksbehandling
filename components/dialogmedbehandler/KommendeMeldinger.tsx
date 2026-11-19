@@ -10,6 +10,7 @@ import { isError } from 'lib/utils/api';
 import { clientOppdaterPåminnelseForForepørsel } from 'lib/oppgaveClientApi';
 import React from 'react';
 import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
+import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 export const KommendeMeldinger = ({
   kommendeMeldinger,
@@ -22,12 +23,19 @@ export const KommendeMeldinger = ({
 }) => {
   const [loading, setLoading] = useState<string | null>(null);
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
+  const brukerInformasjon = useInnloggetBruker();
+  const brukerNavIdent = brukerInformasjon.NAVident;
 
   const avbrytPåminnelse = async (kommendeMelding: KommendeMeldingDto) => {
     loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE');
     setLoading(kommendeMelding.bestillingId);
     try {
-      const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
+      const res = await clientAvbrytPåminnelsePåLegeerklæring(
+        kommendeMelding.bestillingId,
+        behandlingsreferanse,
+        brukerNavIdent
+      );
+
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
         return;
@@ -53,7 +61,8 @@ export const KommendeMeldinger = ({
     loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE');
     setLoading(bestillingId);
     try {
-      const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
+      const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse, brukerNavIdent);
+
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
         return;

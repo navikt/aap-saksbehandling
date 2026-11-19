@@ -75,14 +75,18 @@ export function useOpprettDummySak(): {
 }
 
 export function useSendPåminnelsePåDialogmelding(): {
-  sendPåminnelsePåDialogmelding: (dialogmeldingUuid: string, behandlingsreferanse: string) => Promise<{ ok: boolean }>;
+  sendPåminnelsePåDialogmelding: (
+    dialogmeldingUuid: string,
+    behandlingsreferanse: string,
+    brukerNavIdent: string
+  ) => Promise<{ ok: boolean }>;
   isLoading: boolean;
   error?: string;
 } {
   const { method, isLoading, error } = useFetch(clientSendPåminnelsePåLegeerklæring);
 
-  async function sendPåminnelse(dialogmeldingUuid: string, behandlingsreferanse: string) {
-    return await method(dialogmeldingUuid, behandlingsreferanse);
+  async function sendPåminnelse(dialogmeldingUuid: string, behandlingsreferanse: string, brukerNavIdent: string) {
+    return await method(dialogmeldingUuid, behandlingsreferanse, brukerNavIdent);
   }
 
   return { sendPåminnelsePåDialogmelding: sendPåminnelse, isLoading, error };
