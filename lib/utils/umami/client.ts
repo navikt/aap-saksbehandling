@@ -6,11 +6,17 @@ export interface UmamiEvent {
   data?: UmamiEventData;
 }
 
+type UmamiEventArguments<TEvent extends UmamiKelvinEvent = UmamiKelvinEvent> = TEvent extends UmamiKelvinEvent
+  ? {} extends TEvent['data']
+    ? [name: TEvent['name'], data?: TEvent['data']]
+    : [name: TEvent['name'], data: TEvent['data']]
+  : never;
+
 /**
  * Sender en umami-hendelse til `/api/umami`. Feiler stille (logger til konsoll) i
  * stedet for å kaste.
  */
-export async function clientLoggUmamiEvent(name: UmamiKelvinEvent['name'], data?: UmamiEvent['data']) {
+export async function clientLoggUmamiEvent(...[name, data]: UmamiEventArguments) {
   if (typeof window === 'undefined') return;
 
   try {
