@@ -11,12 +11,6 @@ export enum JaNeiIkkeOppgitt {
   IKKE_OPPGITT = 'Ikke oppgitt',
 }
 
-export const JaNeiEllerIkkeOppgittOptions: ValuePair[] = [
-  { label: 'Ja', value: JaNeiIkkeOppgitt.JA },
-  { label: 'Nei', value: JaNeiIkkeOppgitt.NEI },
-  { label: 'Ikke oppgitt', value: JaNeiIkkeOppgitt.IKKE_OPPGITT },
-];
-
 export enum JaNeiVetIkke {
   JA = 'Ja',
   NEI = 'Nei',
