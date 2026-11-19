@@ -102,9 +102,9 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
 
               {error && <Alert variant="error">{error}</Alert>}
 
-              {meldingFraNavn !== null && (
+              {meldingFraNavn && (
                 <BekreftManuellPåminnelseDialog
-                  navnPåMottaker={meldingFraNavn ?? 'Ukjent'} // For å unngå klaging fra typesystemet
+                  navnPåMottaker={meldingFraNavn}
                   erÅpen={erDialogÅpen}
                   settErÅpen={(verdi) => settErDialogÅpen(verdi)}
                   bekreft={handlePåminnelseClick}
