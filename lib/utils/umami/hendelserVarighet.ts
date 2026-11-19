@@ -29,15 +29,16 @@ type BeslutterFeltHandling = 'LINK' | 'GODKJENT' | 'RETUR_BEGRUNNELSE' | 'RETUR_
 export type BeslutterFeltTag = `${string}_${BeslutterFeltHandling}`;
 
 export interface UmamiHendelserVarighetEvent {
-  type: 'HENDELSER_VARIGHET';
   name: UmamiHendelserSerieNavn;
-  hendelser_serie: string;
-  hendelser_serie_id: string;
-  /** Hvilken delhendelse i serien dette er, f.eks. et feltnavn eller en handling. */
-  delhendelse: string;
-  varighet_sekunder: number;
-  varighet_sekunder_siden_forrige: number | null;
-  tidsstempel: number;
+  data: {
+    hendelser_serie: string;
+    hendelser_serie_id: string;
+    /** Hvilken delhendelse i serien dette er, f.eks. et feltnavn eller en handling. */
+    delhendelse: string;
+    varighet_sekunder: number;
+    varighet_sekunder_siden_forrige?: number;
+    tidsstempel: number;
+  };
 }
 
 interface UmamiHendelserSerie {
@@ -60,14 +61,14 @@ export function loggUmamiVarighetHendelser<THendelse extends string>(
   if (!hendelseSerie) return;
 
   hendelser.forEach((hendelse) =>
-    clientLoggUmamiEvent({
-      type: 'HENDELSER_VARIGHET',
-      name: hendelseSerie.hendelse_serie,
+    clientLoggUmamiEvent(hendelseSerie.hendelse_serie, {
       hendelser_serie_id: hendelseSerie.hendelse_serie_id,
       hendelser_serie: hendelseSerie.hendelse_serie,
       delhendelse: hendelse.delhendelse,
       varighet_sekunder: hendelse.varighet_sekunder,
-      varighet_sekunder_siden_forrige: hendelse.varighet_sekunder_siden_forrige,
+      ...(hendelse.varighet_sekunder_siden_forrige !== null
+        ? { varighet_sekunder_siden_forrige: hendelse.varighet_sekunder_siden_forrige }
+        : {}),
       tidsstempel: hendelse.tidsstempel,
     })
   );

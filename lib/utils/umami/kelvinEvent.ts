@@ -6,8 +6,8 @@ import { UmamiSykdomsvurderingEvent } from 'lib/utils/umami/sykdomsvurdering';
 import type { UmamiBehandlerdialogEvent } from 'lib/utils/umami/behandlerdialog';
 
 /**
- * `UmamiKelvinEvent` er en diskriminert union på `type`-feltet — hver variant har kun de feltene
- * den faktisk trenger. Feltnavnene i payloaden til `/api/umami` (`hendelser_serie`, `delhendelse`,
+ * `UmamiKelvinEvent` er en diskriminert union på `name`-feltet — hver variant har kun de feltene
+ * den faktisk trenger. Feltnavnene i `data` til `/api/umami` (`hendelser_serie`, `delhendelse`,
  * `lenketekst`, `inngang` osv.) er *ikke* reservert av Umami — vi eier dem selv og velger et navn
  * som beskriver hva feltet faktisk inneholder for den aktuelle hendelse-typen, i stedet for å
  * gjenbruke et generisk feltnavn på tvers av alle typer.
