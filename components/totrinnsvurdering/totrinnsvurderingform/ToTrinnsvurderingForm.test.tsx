@@ -567,10 +567,7 @@ describe('mellomlagring', () => {
   it('Skal bare bruke mellomlagrede vurderinger som finnes i grunnlaget, og ta med nye vurderinger fra grunnlaget', () => {
     const grunnlagMedNyVurdering = {
       ...grunnlagMedVurdering,
-      vurderinger: [
-        ...grunnlagMedVurdering.vurderinger,
-        { definisjon: Behovstype.AVKLAR_BISTANDSBEHOV_KODE },
-      ],
+      vurderinger: [...grunnlagMedVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_BISTANDSBEHOV_KODE }],
     };
     const mellomlagringMedUtdatertVurdering = {
       ...mellomlagring.mellomlagretVurdering!,

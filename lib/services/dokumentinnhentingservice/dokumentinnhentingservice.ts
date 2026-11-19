@@ -31,6 +31,10 @@ export const hentDokument = async (journalPostId: string, dokumentInfoId: string
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
   return await apiFetchPdf(url, dokumentinnhentingApiScope);
 };
+export const hentDokumentOriginal = async (journalPostId: string, dokumentInfoId: string) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}/ORIGINAL`;
+  return await apiFetch(url, dokumentinnhentingApiScope);
+};
 
 export const hentUtsendingsinfo = async (journalPostId: string) => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/utsendingsinfo`;
