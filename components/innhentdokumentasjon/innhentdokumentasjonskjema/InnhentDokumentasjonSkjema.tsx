@@ -116,9 +116,11 @@ export const InnhentDokumentasjonSkjema = ({ onCancel, onSuccess }: Props) => {
   });
 
   const handleSubmit: SubmitEventHandler = (event) => {
-    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_SEND_FORESPØRSEL');
-
     form.handleSubmit(async (data) => {
+      loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_SEND_FORESPØRSEL', {
+        dokumentasjonstype: data.dokumentasjonstype,
+      });
+
       const isFastlegeValgt = fastlegeDto && data.behandlerValg === 'fastlege';
       const behandlerNavn = isFastlegeValgt
         ? `${fastlegeDto.navn}${fastlegeDto.kontor ? ` – ${fastlegeDto.kontor}` : ''}`
