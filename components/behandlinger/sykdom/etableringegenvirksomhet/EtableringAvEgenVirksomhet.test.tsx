@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { EtableringAvEgenVirksomhetNy } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
+import { EtableringAvEgenVirksomhet } from './EtableringAvEgenVirksomhet';
 import { EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils-ny';
+import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils';
 import * as clientApi from 'lib/clientApi';
 
 const løsAvklaringsbehov = vi.fn();
@@ -53,7 +53,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('viser backendens avslag for vedtatte vurderinger selv om de gamle grunnvilkårene er oppfylt', () => {
     render(
-      <EtableringAvEgenVirksomhetNy
+      <EtableringAvEgenVirksomhet
         grunnlag={{ ...tomtGrunnlag, sisteVedtatteVurderinger: [avslagFraBackend] }}
         readOnly={true}
         behandlingVersjon={0}
@@ -66,7 +66,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('viser backendens avslag for lagrede vurderinger i skrivebeskyttet visning', () => {
     render(
-      <EtableringAvEgenVirksomhetNy
+      <EtableringAvEgenVirksomhet
         grunnlag={{ ...tomtGrunnlag, nyeVurderinger: [avslagFraBackend] }}
         readOnly={true}
         behandlingVersjon={0}
@@ -79,7 +79,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('sender lagrede vurderinger med eksplisitt versjon', async () => {
     render(
-      <EtableringAvEgenVirksomhetNy
+      <EtableringAvEgenVirksomhet
         grunnlag={{
           ...tomtGrunnlag,
           nyeVurderinger: [
@@ -119,7 +119,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     const grunnlag = { ...tomtGrunnlag, nyeVurderinger: [avslagFraBackend] };
 
     render(
-      <EtableringAvEgenVirksomhetNy
+      <EtableringAvEgenVirksomhet
         grunnlag={grunnlag}
         readOnly={false}
         behandlingVersjon={0}
@@ -148,7 +148,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     });
 
     render(
-      <EtableringAvEgenVirksomhetNy
+      <EtableringAvEgenVirksomhet
         grunnlag={tomtGrunnlag}
         readOnly={false}
         behandlingVersjon={0}
@@ -212,7 +212,7 @@ describe('EtableringAvEgenVirksomhet', () => {
       ],
     };
 
-    render(<EtableringAvEgenVirksomhetNy grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+    render(<EtableringAvEgenVirksomhet grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
