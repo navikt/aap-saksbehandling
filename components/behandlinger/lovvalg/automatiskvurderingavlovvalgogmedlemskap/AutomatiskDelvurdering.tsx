@@ -8,8 +8,7 @@ interface Props {
 
 export const AutomatiskDelvurdering = ({ delvurdering }: Props) => {
   if (!delvurdering) {
-    return <div>Intet her</div>;
-    // return null;
+    return null;
   }
 
   return (

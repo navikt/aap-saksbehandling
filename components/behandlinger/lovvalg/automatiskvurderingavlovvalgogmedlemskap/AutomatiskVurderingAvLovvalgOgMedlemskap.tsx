@@ -21,7 +21,6 @@ export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
   visOverstyringsBehov,
 }: Props) => {
   const delvurderingerNyesteFørst = [...delvurderinger].sort((a, b) => b.relevantDato.localeCompare(a.relevantDato));
-
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
       <VStack gap={'space-28'} paddingBlock={'space-4'}>
