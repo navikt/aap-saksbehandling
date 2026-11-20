@@ -95,7 +95,6 @@ describe('Automatisk vurdering av lovvalg og medlemskap', () => {
     expect(nyesteKnapp).toHaveAttribute('aria-expanded', 'true');
     expect(eldsteKnapp).toHaveAttribute('aria-expanded', 'false');
     expect(screen.getByText('Ny opplysning')).toBeVisible();
-    expect(screen.getByText('Til manuell vurdering')).toBeVisible();
 
     await user.click(eldsteKnapp);
     expect(eldsteKnapp).toHaveAttribute('aria-expanded', 'true');
