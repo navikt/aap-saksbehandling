@@ -14,6 +14,6 @@ export interface UmamiBehandlerdialogEvent {
   data: UmamiEventData;
 }
 
-export function loggUmamiBehandlerdialogKlikk(name: UmamiBehandlerdialogEvent['name']) {
-  clientLoggUmamiEvent(name);
+export function loggUmamiBehandlerdialogKlikk(name: UmamiBehandlerdialogEvent['name'], data?: UmamiEventData) {
+  clientLoggUmamiEvent(name, data);
 }
