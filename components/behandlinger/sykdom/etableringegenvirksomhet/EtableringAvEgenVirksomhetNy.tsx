@@ -128,7 +128,7 @@ export const EtableringAvEgenVirksomhetNy = ({
             validerTidsplan = false;
             form.setError('root', {
               type: 'custom',
-              message: 'Det må være minst en periode lagt i oppstartperiode eller uviklingsperiode.',
+              message: 'Det må være minst en periode lagt i oppstartperiode eller utviklingsperiode.',
             });
           }
         }
@@ -182,6 +182,7 @@ export const EtableringAvEgenVirksomhetNy = ({
   function nullstillSkjema() {
     const verdier = getDefaultValuesFromGrunnlag(grunnlag);
     form.reset(verdier);
+    form.resetField('virksomhetNavn');
     setVersjoner(versjonerFra(verdier));
   }
 
@@ -209,6 +210,7 @@ export const EtableringAvEgenVirksomhetNy = ({
   const vedtatteVurderinger = grunnlag.sisteVedtatteVurderinger;
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
+  const ikkeForsteVurdering =  vedtatteVurderinger.length > 0 || nyeVurderinger.length > 1;
 
   return (
     <VilkårskortPeriodisert
@@ -238,7 +240,7 @@ export const EtableringAvEgenVirksomhetNy = ({
             foersteNyePeriodeFraDato={undefined}
           ></IkkeVurderbarPeriode>
         ))}
-        {(vedtatteVurderinger.length > 0 || nyeVurderinger.length > 0 || !!form.watch('virksomhetNavn')) && (
+        {(vedtatteVurderinger.length > 0 || nyeVurderinger.length > 0) && (
           <Box
             background="default"
             padding="space-0"
@@ -256,7 +258,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                   type={'text'}
                   label={'Virksomheten det søkes for'}
                   size={'small'}
-                  readOnly={formReadOnly}
+                  readOnly={formReadOnly || ikkeForsteVurdering}
                   rules={{ required: nyeVurderinger.length > 0 && 'Du må skrive inn navnet på virksomheten' }}
                 />
               </HStack>
