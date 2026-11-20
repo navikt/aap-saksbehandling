@@ -23,11 +23,13 @@ const oppgaveStatus = {
   // TODO: Ta i bruk påminnelseshistorikk her nå det er klart
   FORESPØRSEL_SENDT: (oppgave: OppgaveMedKontekst) =>
     oppgave.oppgavelisteTags.forespørselSendtTilBehandler != null &&
-    !erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato),
+    !erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato) &&
+    oppgave.oppgavelisteTags.harMottattDokument == null,
   // TODO: Ta i bruk påminnelseshistorikk her nå det er klart
   PÅMINNELSE_SENDT: (oppgave: OppgaveMedKontekst) =>
     erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato) &&
-    !oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseAvbrutt,
+    !oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseAvbrutt &&
+    oppgave.oppgavelisteTags.harMottattDokument == null,
   SVAR_MOTTATT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.harMottattDokument != null,
 } as const;
 
