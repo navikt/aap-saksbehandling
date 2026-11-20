@@ -13,11 +13,6 @@ interface Props {
 }
 
 export const StønadsperiodeTabell = ({ grunnlag }: Props) => {
-  const rader = [
-    ...grunnlag.vedtatteVurderinger.map((vedtatt) => ({ status: 'Vedtatt', ...vedtatt })),
-    ...grunnlag.nyeVurderinger.map((ny) => ({ status: 'Ny', ...ny })),
-  ];
-
   return (
     <VStack gap={'space-16'}>
       <Heading size={'xsmall'}>Brukerens krav om AAP</Heading>
@@ -25,16 +20,14 @@ export const StønadsperiodeTabell = ({ grunnlag }: Props) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell>Relevant krav</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Vurderes fra</Table.HeaderCell>
             <Table.HeaderCell>Vurdert av</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {rader.map((rad, index) => (
+          {grunnlag.gjeldendeVurderinger.map((rad, index) => (
             <Table.ExpandableRow key={index} content={<ExpandableRowContent rad={rad} />}>
-              <Table.DataCell textSize={'small'}>{rad.referanse}</Table.DataCell>
               <Table.DataCell>
                 <KravTag type={rad.relevantKravType.type} />
               </Table.DataCell>
@@ -54,7 +47,6 @@ const ExpandableRowContent = ({ rad }: { rad: StønadsperiodeVurdering }) => {
   return (
     <VStack gap={'space-16'}>
       <VStack>
-        <LabelValueHorizontal value={rad.referanse} label={'Referanse'} />
         <LabelValueHorizontal value={formaterDatoForFrontend(rad.opprettet)} label={'Opprettet'} />
         <LabelValueHorizontal value={rad.vurdertAv} label={'Vurdert av'} />
       </VStack>

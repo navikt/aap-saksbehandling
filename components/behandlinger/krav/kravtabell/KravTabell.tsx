@@ -1,12 +1,9 @@
 import { Button, Heading, Table, Tag } from '@navikt/ds-react';
-import { KravGrunnlag, KravVurdering, KravVurderingLøsning } from 'lib/types/types';
+import { KravGrunnlag, KravVurdering, KravVurderingForSøknad } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
 import {
-  finnOverstyrMuligRettFra,
-  finnOverstyrMuligRettFraFraLøsning,
-  finnSøknadsdato,
-  finnSøknadsdatoFraLøsning,
+  finnMuligRettFra,
   formaterKravtype,
   getKravVurderingerForSøknad,
   hentOriginaleFormFelter,
@@ -14,6 +11,7 @@ import {
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { KravFormFields } from 'components/behandlinger/krav/vurderkrav/VurderKrav';
+import { KravTabellRadInnhold } from 'components/behandlinger/krav/kravtabell/KravTabellRadInnhold';
 
 interface Props {
   grunnlag: KravGrunnlag;
@@ -51,79 +49,35 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
           <Table.Row>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell>JournalpostId</Table.HeaderCell>
-            <Table.HeaderCell>Journalpost mottatt</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
-            <Table.HeaderCell>Søknadsdato</Table.HeaderCell>
             <Table.HeaderCell>Mulig rett fra</Table.HeaderCell>
             <Table.HeaderCell>Vurdert av</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
-            <Table.HeaderCell>Valg</Table.HeaderCell>
+            {!readOnly && <Table.HeaderCell>Valg</Table.HeaderCell>}
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {nyeVurderinger.map((vurdering) => {
-            const journalpost = grunnlag.søknader.find(
-              (søknad) => søknad.journalpostId.identifikator === vurdering.journalpostId.identifikator
-            );
+          {nyeVurderinger.map((vurdering) => (
+            <KravRad
+              key={vurdering.referanse}
+              vurdering={vurdering}
+              status={'Ny'}
+              readOnly={readOnly}
+              erValgt={valgteKrav.includes(vurdering.referanse)}
+              onToggle={toggleValgtKrav}
+            />
+          ))}
 
-            return (
-              <Table.ExpandableRow content={vurdering.begrunnelse} key={vurdering.referanse}>
-                <Table.DataCell textSize={'small'}>{vurdering.journalpostId.identifikator}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  {journalpost ? formaterDatoForFrontend(journalpost.mottattTidspunkt) : '-'}
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterKravtype(vurdering.type)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterSøknadsdatoRad(vurdering)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterOverstyrMuligRettFraRad(vurdering)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <Tag variant="alt1" size="small">
-                    Ny
-                  </Tag>
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <Button
-                    type="button"
-                    size="small"
-                    variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(vurdering.referanse)}
-                    disabled={readOnly}
-                  >
-                    {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
-                  </Button>
-                </Table.DataCell>
-              </Table.ExpandableRow>
-            );
-          })}
-
-          {vedtatteVurderinger.map((vurdering) => {
-            return (
-              <Table.ExpandableRow content={vurdering.begrunnelse} key={vurdering.referanse}>
-                <Table.DataCell textSize={'small'}>{vurdering.journalpostId.identifikator}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>mottat tidspunkt på journalpost</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterKravtype(vurdering.type)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterSøknadsdatoRad(vurdering)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterOverstyrMuligRettFraRad(vurdering)}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <Tag variant="success" size="small">
-                    Vedtatt
-                  </Tag>
-                </Table.DataCell>
-                <Table.DataCell textSize={'small'}>
-                  <Button
-                    type="button"
-                    size="small"
-                    variant={valgteKrav.includes(vurdering.referanse) ? 'primary' : 'secondary'}
-                    onClick={() => toggleValgtKrav(vurdering.referanse)}
-                    disabled={readOnly}
-                  >
-                    {valgteKrav.includes(vurdering.referanse) ? 'Lukk' : 'Endre'}
-                  </Button>
-                </Table.DataCell>
-              </Table.ExpandableRow>
-            );
-          })}
+          {vedtatteVurderinger.map((vurdering) => (
+            <KravRad
+              key={vurdering.referanse}
+              vurdering={vurdering}
+              status={'Vedtatt'}
+              readOnly={readOnly}
+              erValgt={valgteKrav.includes(vurdering.referanse)}
+              onToggle={toggleValgtKrav}
+            />
+          ))}
 
           {grunnlag.søknaderUtenKravvurdering.map((søknad) => {
             const referanse = søknad.journalpostId.identifikator;
@@ -131,9 +85,7 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
             return (
               <Table.ExpandableRow content="Søknaden har ikke en kravvurdering ennå." key={referanse}>
                 <Table.DataCell textSize={'small'}>{søknad.journalpostId.identifikator}</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(søknad.mottattTidspunkt)}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>-</Table.DataCell>
-                <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(søknad.mottattTidspunkt)}</Table.DataCell>
                 <Table.DataCell textSize={'small'}>-</Table.DataCell>
                 <Table.DataCell textSize={'small'}>-</Table.DataCell>
                 <Table.DataCell textSize={'small'}>
@@ -141,7 +93,7 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
                     Må vurderes
                   </Tag>
                 </Table.DataCell>
-                <Table.DataCell textSize={'small'}></Table.DataCell>
+                {!readOnly && <Table.DataCell textSize={'small'}></Table.DataCell>}
               </Table.ExpandableRow>
             );
           })}
@@ -151,12 +103,41 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
   );
 };
 
-function formaterSøknadsdatoRad(vurdering: KravVurdering, løsning?: KravVurderingLøsning) {
-  const dato = løsning ? finnSøknadsdatoFraLøsning(løsning)?.dato : finnSøknadsdato(vurdering)?.dato;
-  return dato ? formaterDatoForFrontend(dato) : '-';
+interface KravRadProps {
+  vurdering: KravVurderingForSøknad;
+  status: 'Ny' | 'Vedtatt';
+  readOnly: boolean;
+  erValgt: boolean;
+  onToggle: (referanse: string) => void;
 }
 
-function formaterOverstyrMuligRettFraRad(vurdering: KravVurdering, løsning?: KravVurderingLøsning) {
-  const dato = løsning ? finnOverstyrMuligRettFraFraLøsning(løsning)?.dato : finnOverstyrMuligRettFra(vurdering)?.dato;
+const KravRad = ({ vurdering, status, readOnly, erValgt, onToggle }: KravRadProps) => (
+  <Table.ExpandableRow content={<KravTabellRadInnhold rad={vurdering} />}>
+    <Table.DataCell textSize={'small'}>{vurdering.journalpostId.identifikator}</Table.DataCell>
+    <Table.DataCell textSize={'small'}>{formaterKravtype(vurdering.type)}</Table.DataCell>
+    <Table.DataCell textSize={'small'}>{formaterOverstyrMuligRettFraRad(vurdering)}</Table.DataCell>
+    <Table.DataCell textSize={'small'}>{vurdering.vurdertAv}</Table.DataCell>
+    <Table.DataCell textSize={'small'}>
+      <Tag variant={status === 'Ny' ? 'alt1' : 'success'} size="small">
+        {status}
+      </Tag>
+    </Table.DataCell>
+    {!readOnly && (
+      <Table.DataCell textSize={'small'}>
+        <Button
+          type="button"
+          size="small"
+          variant={erValgt ? 'primary' : 'secondary'}
+          onClick={() => onToggle(vurdering.referanse)}
+        >
+          {erValgt ? 'Lukk' : 'Endre'}
+        </Button>
+      </Table.DataCell>
+    )}
+  </Table.ExpandableRow>
+);
+
+function formaterOverstyrMuligRettFraRad(vurdering: KravVurdering) {
+  const dato = finnMuligRettFra(vurdering);
   return dato ? formaterDatoForFrontend(dato) : '-';
 }

@@ -36,14 +36,13 @@ export function finnOverstyrMuligRettFra(vurdering: KravVurdering): OverstyrMuli
   }
 }
 
-export function finnSøknadsdatoFraLøsning(løsning: KravVurderingLøsning): Søknadsdato | null {
-  if (løsning.kravType === 'RELEVANT_KRAV') return løsning.søknadsdato;
-  return null;
-}
-
-export function finnOverstyrMuligRettFraFraLøsning(løsning: KravVurderingLøsning): OverstyrMuligRettFra | null {
-  if (løsning.kravType === 'RELEVANT_KRAV') return løsning.overstyrMuligRettFra ?? null;
-  return null;
+export function finnMuligRettFra(vurder: KravVurdering): string | null {
+  switch (vurder.type) {
+    case 'RELEVANT_KRAV':
+      return (vurder as RelevantKrav).muligRettFra ?? null;
+    default:
+      return null;
+  }
 }
 
 export function kravVurderingIsKravVurderingForSøknad(
