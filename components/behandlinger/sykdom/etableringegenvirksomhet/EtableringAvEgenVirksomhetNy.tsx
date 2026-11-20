@@ -30,10 +30,10 @@ import {
   nyVurderingErOppfylt,
   tidligereVurderingErOppfylt,
   tomEtableringAvEgenVirksomhetVurdering,
-} from './etablering-av-egen-virksomhet-utils';
+} from 'components/behandlinger/sykdom/etableringegenvirksomhet/etablering-av-egen-virksomhet-utils-ny';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EtableringEgenVirksomhetTidligereVurderingNy } from './EtableringAvEgenVirksomhetTidligereVurdering';
+import { EtableringEgenVirksomhetTidligereVurderingNy } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetTidligereVurderingNy';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { addDays, parseISO } from 'date-fns';
 import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
@@ -43,9 +43,9 @@ import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelen
 import { Alert } from 'components/alert/Alert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { Buildings3Icon } from '@navikt/aksel-icons';
-import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetForm';
+import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetFormNy';
 import styles from './EtableringAvEgenVirksomhet.module.css';
-import { VirksomhetFaseTag } from './VirksomhetFaseTag';
+import { VirksomhetFaseTag } from './VirksomhetFaseTage';
 
 export type EtableringFase = EtableringEgenVirksomhetVurderingResponse['fase'];
 
@@ -77,7 +77,7 @@ export interface EtableringAvEgenVirksomhetForm {
   vurderinger: EtableringAvEgenVirksomhetVurderingForm[];
   virksomhetNavn: string | undefined;
 }
-export const EtableringAvEgenVirksomhet = ({
+export const EtableringAvEgenVirksomhetNy = ({
   readOnly,
   initialMellomlagretVurdering,
   grunnlag,

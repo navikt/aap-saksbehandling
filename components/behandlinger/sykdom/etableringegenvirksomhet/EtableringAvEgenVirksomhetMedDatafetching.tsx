@@ -6,7 +6,7 @@ import { isError } from 'lib/utils/api';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { StegData, skalViseStegForPeriodisertGrunnlag } from 'lib/utils/steg';
 import { Behovstype } from 'lib/utils/form';
-import { EtableringAvEgenVirksomhet } from './EtableringAvEgenVirksomhet';
+import { EtableringAvEgenVirksomhetNy } from './EtableringAvEgenVirksomhetNy';
 
 interface Props {
   behandlingsreferanse: string;
@@ -33,7 +33,7 @@ export const EtableringAvEgenVirksomhetMedDatafetching = async ({ behandlingsref
   );
 
   return (
-    <EtableringAvEgenVirksomhet
+    <EtableringAvEgenVirksomhetNy
       grunnlag={grunnlag.data}
       readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}

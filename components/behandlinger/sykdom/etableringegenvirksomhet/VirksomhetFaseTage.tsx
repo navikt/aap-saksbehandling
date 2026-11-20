@@ -1,7 +1,7 @@
 'use client';
 
 import { Tag } from '@navikt/ds-react';
-import { EtableringFase } from './EtableringAvEgenVirksomhet';
+import { EtableringFase } from './EtableringAvEgenVirksomhetNy';
 
 interface Props {
   fase?: EtableringFase | null;

@@ -7,12 +7,12 @@ import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper
 import { RadioGroupJaNei } from 'components/form/radiogroupjanei/RadioGroupJaNei';
 import { UseFormReturn } from 'react-hook-form';
 import { RadioGroupWrapper } from 'components/form/radiogroupwrapper/RadioGroupWrapper';
-import { EtableringAvEgenVirksomhetForm } from './EtableringAvEgenVirksomhet';
+import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { useEffect } from 'react';
 import { InformationSquareIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
-import { nyVurderingErOppfylt } from './etablering-av-egen-virksomhet-utils';
+import { nyVurderingErOppfylt } from './etablering-av-egen-virksomhet-utils-ny';
 import styles from './EtableringAvEgenVirksomhet.module.css';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
