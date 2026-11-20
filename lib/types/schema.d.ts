@@ -9858,6 +9858,14 @@ export interface components {
       beskrivelse?: string | null;
       kode: string;
     };
+    'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.DelvurderingForKrav': {
+      delvurdering: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.KanBehandlesAutomatiskVurdering'];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      relevantDato: string;
+    };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.LovvalgResponse': {
       begrunnelse: string;
       /** @enum {string} */
@@ -9902,7 +9910,7 @@ export interface components {
     };
     'no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertLovvalgMedlemskapGrunnlagResponse': {
       behøverVurderinger: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
-      delvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilkår.medlemskap.KanBehandlesAutomatiskVurdering'];
+      delvurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.DelvurderingForKrav'][];
       harTilgangTilÅSaksbehandle: boolean;
       ikkeRelevantePerioder: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
       kanVurderes: components['schemas']['no.nav.aap.komponenter.type.Periode'][];
