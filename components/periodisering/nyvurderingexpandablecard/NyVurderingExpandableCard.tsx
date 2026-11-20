@@ -28,6 +28,7 @@ interface Props {
   index: number;
   accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
+  customTag?: ReactNode;
 }
 
 export const NyVurderingExpandableCard = ({
@@ -44,6 +45,7 @@ export const NyVurderingExpandableCard = ({
   initiellEkspandert = false,
   index,
   accordionsSignal,
+  customTag,
 }: Props) => {
   const { flyt } = useFlyt();
   const erBeslutterSteg = flyt?.aktivtSteg === 'FATTE_VEDTAK';
@@ -56,7 +58,7 @@ export const NyVurderingExpandableCard = ({
     sisteAccordionSignalVersion.current = accordionsSignal.version;
   }
 
-  const ref = useRef<HTMLDialogElement>(null);
+  const [visSlettVurdering, setVisSlettVurdering] = useState(false);
 
   return (
     <CustomExpandableCard
@@ -74,7 +76,10 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          <VurderingStatusTag status={vurderingStatus} />
+          <HStack gap={'space-8'}>
+            {customTag && customTag}
+            <VurderingStatusTag status={vurderingStatus} />
+          </HStack>
         </HStack>
       }
     >
@@ -95,10 +100,15 @@ export const NyVurderingExpandableCard = ({
                 variant="tertiary"
                 size="small"
                 icon={<TrashFillIcon />}
-                onClick={() => ref.current?.showModal()}
+                onClick={() => setVisSlettVurdering(true)}
+                aria-haspopup="dialog"
                 type="button"
               />
-              <SlettVurderingModal ref={ref} onSlettVurdering={onSlettVurdering} />
+              <SlettVurderingModal
+                isOpen={visSlettVurdering}
+                onClose={() => setVisSlettVurdering(false)}
+                onSlettVurdering={onSlettVurdering}
+              />
             </VStack>
           )}
         </HGrid>

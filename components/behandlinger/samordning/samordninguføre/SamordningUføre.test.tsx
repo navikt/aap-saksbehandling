@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MellomlagretVurderingResponse, SamordningUføreGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
-import { render, screen } from 'lib/test/CustomRender';
+import { render, screen, within } from 'lib/test/CustomRender';
 import { FetchResponse } from 'lib/utils/api';
 import userEvent from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
@@ -22,6 +22,7 @@ const grunnlagMedVurdering: SamordningUføreGrunnlag = {
     },
   ],
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
     vurderingPerioder: [{ uføregradTilSamordning: 40, virkningstidspunkt: '2025-08-01' }],
@@ -37,6 +38,41 @@ const grunnlagMedVurdering: SamordningUføreGrunnlag = {
 
 beforeEach(() => {
   setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'SAMORDNING_UFØRE' });
+});
+
+it('krever bekreftelse ved sletting av vedtatte perioder, men ikke nye perioder', async () => {
+  const vedtattPeriode = { virkningstidspunkt: '2025-08-01', uføregradTilSamordning: 40 };
+  render(
+    <SamordningUføre
+      grunnlag={{
+        ...grunnlagMedVurdering,
+        vedtattePerioder: [vedtattPeriode],
+        vurdering: {
+          begrunnelse: 'Samordning med uføretrygd',
+          vurderingerMeta: {},
+          vurderingPerioder: [vedtattPeriode, { virkningstidspunkt: '2026-01-01', uføregradTilSamordning: 50 }],
+        },
+      }}
+      readOnly={false}
+      behandlingVersjon={0}
+    />
+  );
+
+  await user.click(screen.getAllByRole('button', { name: 'Slett' })[1]);
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(screen.getAllByRole('button', { name: 'Slett' })).toHaveLength(1);
+
+  await user.click(screen.getByRole('button', { name: 'Slett' }));
+  const dialog = screen.getByRole('dialog', { name: 'Slett samordningsperiode' });
+  expect(within(dialog).getByText(/Merk at dette vilkåret gjelder for hele saksperioden/)).toBeVisible();
+  await user.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(screen.getByDisplayValue('01.08.2025')).toBeVisible();
+
+  await user.click(screen.getByRole('button', { name: 'Slett' }));
+  await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Slett' }));
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Slett' })).not.toBeInTheDocument();
 });
 
 it('skal resette state i felt dersom Avbryt-knappen blir trykket', async () => {
@@ -82,6 +118,7 @@ describe('mellomlagring', () => {
       },
     ],
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
   };
 
   it('Skal vise en tekst om hvem som har gjort vurderingen dersom det finnes en mellomlagring', () => {

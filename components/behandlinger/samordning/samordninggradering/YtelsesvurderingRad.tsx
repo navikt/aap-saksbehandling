@@ -95,6 +95,9 @@ export const YtelsesvurderingRad = ({ form, index, readOnly, ytelsesoptioner, on
             if (Number(value) > 100) {
               return 'Samordningsgrad kan ikke være mer enn 100%';
             }
+            if (!Number.isInteger(Number(value))) {
+              return 'Samordningsgrad må være et heltall';
+            }
           },
         }}
       />

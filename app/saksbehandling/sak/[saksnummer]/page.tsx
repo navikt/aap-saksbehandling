@@ -45,7 +45,12 @@ const Page = async (props: { params: Promise<{ saksnummer: string }> }) => {
       <br />
 
       <Suspense>
-        <SakOversiktContainer sak={sak} rettighetsinfo={rettighetsinfo} arenaSaker={arenaSaker} />
+        <SakOversiktContainer
+          sak={sak}
+          rettighetsinfo={rettighetsinfo}
+          arenaSaker={arenaSaker}
+          gosysUrl={process.env.GOSYS_URL}
+        />
       </Suspense>
     </Box>
   );

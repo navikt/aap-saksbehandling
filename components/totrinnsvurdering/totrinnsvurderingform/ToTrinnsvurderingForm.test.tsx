@@ -116,6 +116,35 @@ describe('totrinnsvurderingform', () => {
     expect(knapp).toBeVisible();
   });
 
+  it('skal åpne bekreftelsesmodalen når kvalitetssikrer fatter vedtak og alle vilkår er godkjent', async () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={{ ...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: true }}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Send vedtak om avslag' }));
+    expect(await screen.findByRole('dialog', { name: 'Send vedtak om avslag til bruker' })).toBeVisible();
+  });
+
+  it('skal ikke åpne bekreftelsesmodalen når kvalitetssikrer underkjenner et vilkår', async () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={{ ...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: false }}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Godkjenn' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
     render(
       <TotrinnsvurderingForm
@@ -538,10 +567,7 @@ describe('mellomlagring', () => {
   it('Skal bare bruke mellomlagrede vurderinger som finnes i grunnlaget, og ta med nye vurderinger fra grunnlaget', () => {
     const grunnlagMedNyVurdering = {
       ...grunnlagMedVurdering,
-      vurderinger: [
-        ...grunnlagMedVurdering.vurderinger,
-        { definisjon: Behovstype.AVKLAR_BISTANDSBEHOV_KODE },
-      ],
+      vurderinger: [...grunnlagMedVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_BISTANDSBEHOV_KODE }],
     };
     const mellomlagringMedUtdatertVurdering = {
       ...mellomlagring.mellomlagretVurdering!,

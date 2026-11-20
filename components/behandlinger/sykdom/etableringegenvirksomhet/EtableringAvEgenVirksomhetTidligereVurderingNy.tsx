@@ -31,7 +31,10 @@ export const EtableringEgenVirksomhetTidligereVurderingNy = ({ vurdering }: Prop
         <SpørsmålOgSvar spørsmål="Er virksomheten ny?" svar={getJaNeiEllerUndefined(vurdering.virksomhetErNy)!} />
       )}
       {vurdering.brukerEierVirksomheten != null && (
-        <SpørsmålOgSvar spørsmål="Eier brukeren virksomheten?" svar={vurdering.brukerEierVirksomheten} />
+        <SpørsmålOgSvar
+          spørsmål="Eier brukeren virksomheten?"
+          svar={getSvarEllerUndefined(vurdering.brukerEierVirksomheten)!}
+        />
       )}
       {vurdering.kanFøreTilSelvforsørget != null && (
         <SpørsmålOgSvar
@@ -50,3 +53,17 @@ export const EtableringEgenVirksomhetTidligereVurderingNy = ({ vurdering }: Prop
     </VStack>
   );
 };
+
+type EierVirksomhet = EtableringEgenVirksomhetVurderingResponse['brukerEierVirksomheten'];
+
+function getSvarEllerUndefined(value: EierVirksomhet) {
+  if (value == null || value == undefined) return undefined;
+  switch (value) {
+    case 'EIER_MINST_50_PROSENT':
+      return 'Ja, bruker eier minst 50% av virksomheten';
+    case 'EIER_MINST_50_PROSENT_MED_FLER':
+      return 'Ja, bruker eier minst 50% av virksomheten sammen med andre';
+    case 'NEI':
+      return 'Nei';
+  }
+}

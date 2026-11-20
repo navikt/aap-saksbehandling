@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Button, Heading, HStack, Modal, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Button, Dialog, Heading, HStack, VStack } from '@navikt/ds-react';
 import { addDays, format, isValid, parse } from 'date-fns';
 import { useSak } from 'hooks/SakHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
@@ -21,7 +21,7 @@ import { Behovstype } from 'lib/utils/form';
 import { storForbokstavOgMellomromForUnderstrek } from 'lib/utils/string';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { isNullOrUndefined } from 'lib/utils/validering';
-import { SubmitEventHandler, useEffect, useRef, useState } from 'react';
+import { SubmitEventHandler, useEffect, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 
 import { Alert } from 'components/alert/Alert';
@@ -49,7 +49,7 @@ interface Props {
 export interface SamordnetYtelse {
   ytelseType?: SamordningYtelsestype;
   manuell?: boolean;
-  gradering?: number;
+  gradering?: number | string;
   periode: Periode;
 }
 
@@ -69,7 +69,6 @@ export const SamordningGradering = ({
 }: Props) => {
   const sak = useSak();
   const { behandlingsreferanse } = useParamsMedType();
-  const ref = useRef<HTMLDialogElement>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState(false);
@@ -166,7 +165,7 @@ export const SamordningGradering = ({
       const erVurderteSamordningerGyldige = data.vurderteSamordninger.every(
         (vurdertSamordning) =>
           vurdertSamordning.ytelseType != null &&
-          !isNullOrUndefined(vurdertSamordning.gradering) &&
+          vurdertSamordning.gradering != null &&
           vurdertSamordning.periode?.fom != null &&
           vurdertSamordning.periode?.tom != null
       );
@@ -189,7 +188,7 @@ export const SamordningGradering = ({
                   (vurdertSamordning) =>
                     ({
                       manuell: vurdertSamordning.manuell,
-                      gradering: vurdertSamordning.gradering!,
+                      gradering: Number(vurdertSamordning.gradering),
                       periode: {
                         fom: formaterDatoForBackend(parse(vurdertSamordning.periode.fom, 'dd.MM.yyyy', new Date())),
                         tom: formaterDatoForBackend(parse(vurdertSamordning.periode.tom, 'dd.MM.yyyy', new Date())),
@@ -229,23 +228,23 @@ export const SamordningGradering = ({
   return (
     <>
       {visModalForOppfølgingsoppgaveState && (
-        <Modal
-          ref={ref}
-          header={{ heading: 'Vurder konsekvens' }}
-          onClose={() => setModalForOppfølgingsoppgaveState(false)}
-          open={true}
-        >
-          <Modal.Body>
-            <OpprettOppfølgingsBehandling
-              behovsType={Behovstype.AVKLAR_SAMORDNING_GRADERING}
-              behandlingsreferanse={behandlingsreferanse}
-              saksnummer={sak.sak.saksnummer}
-              modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
-              successfullOpprettelse={() => setSuccess(true)}
-              finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt}
-            />
-          </Modal.Body>
-        </Modal>
+        <Dialog onOpenChange={setModalForOppfølgingsoppgaveState} open={true}>
+          <Dialog.Popup width="large" closeOnOutsideClick={false}>
+            <Dialog.Header>
+              <Dialog.Title>Vurder konsekvens</Dialog.Title>
+            </Dialog.Header>
+            <Dialog.Body>
+              <OpprettOppfølgingsBehandling
+                behovsType={Behovstype.AVKLAR_SAMORDNING_GRADERING}
+                behandlingsreferanse={behandlingsreferanse}
+                saksnummer={sak.sak.saksnummer}
+                modalOnClose={() => setModalForOppfølgingsoppgaveState(false)}
+                successfullOpprettelse={() => setSuccess(true)}
+                finnTidligsteVirkningstidspunkt={finnTidligsteVirkningstidspunkt}
+              />
+            </Dialog.Body>
+          </Dialog.Popup>
+        </Dialog>
       )}
       <VilkårskortMedFormOgMellomlagring
         heading="§§ 11-27 / 11-28 Forholdet til andre fulle eller reduserte folketrygdytelser"

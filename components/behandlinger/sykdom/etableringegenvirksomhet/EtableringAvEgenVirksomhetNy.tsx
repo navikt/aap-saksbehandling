@@ -45,6 +45,7 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetFormNy';
 import styles from './EtableringAvEgenVirksomhet.module.css';
+import { VirksomhetFaseTag } from './VirksomhetFaseTage';
 
 export type EtableringFase = EtableringEgenVirksomhetVurderingResponse['fase'];
 
@@ -69,8 +70,8 @@ export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingFormMe
 
 type Versjon = EtableringEgenVirksomhetLøsningDto['versjon'];
 
-const versjonerFra = (form: EtableringAvEgenVirksomhetForm): Versjon[] =>
-  form.vurderinger.map((vurdering) => vurdering.versjon ?? 'V1');
+const versjonerFra = (form: Partial<EtableringAvEgenVirksomhetForm>): Versjon[] =>
+  form.vurderinger?.map((vurdering) => vurdering.versjon ?? 'V1') ?? [];
 
 export interface EtableringAvEgenVirksomhetForm {
   vurderinger: EtableringAvEgenVirksomhetVurderingForm[];
@@ -127,7 +128,7 @@ export const EtableringAvEgenVirksomhetNy = ({
             validerTidsplan = false;
             form.setError('root', {
               type: 'custom',
-              message: 'Det må være minst en periode lagt i oppstartperiode eller uviklingsperiode.',
+              message: 'Det må være minst en periode lagt i oppstartperiode eller utviklingsperiode.',
             });
           }
         }
@@ -181,6 +182,7 @@ export const EtableringAvEgenVirksomhetNy = ({
   function nullstillSkjema() {
     const verdier = getDefaultValuesFromGrunnlag(grunnlag);
     form.reset(verdier);
+    form.resetField('virksomhetNavn');
     setVersjoner(versjonerFra(verdier));
   }
 
@@ -208,6 +210,7 @@ export const EtableringAvEgenVirksomhetNy = ({
   const vedtatteVurderinger = grunnlag.sisteVedtatteVurderinger;
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
+  const ikkeForsteVurdering =  vedtatteVurderinger.length > 0 || nyeVurderinger.length > 1;
 
   return (
     <VilkårskortPeriodisert
@@ -237,7 +240,7 @@ export const EtableringAvEgenVirksomhetNy = ({
             foersteNyePeriodeFraDato={undefined}
           ></IkkeVurderbarPeriode>
         ))}
-        {(vedtatteVurderinger.length > 0 || nyeVurderinger.length > 0 || !!form.watch('virksomhetNavn')) && (
+        {(vedtatteVurderinger.length > 0 || nyeVurderinger.length > 0) && (
           <Box
             background="default"
             padding="space-0"
@@ -255,7 +258,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                   type={'text'}
                   label={'Virksomheten det søkes for'}
                   size={'small'}
-                  readOnly={formReadOnly}
+                  readOnly={formReadOnly || ikkeForsteVurdering}
                   rules={{ required: nyeVurderinger.length > 0 && 'Du må skrive inn navnet på virksomheten' }}
                 />
               </HStack>
@@ -265,6 +268,7 @@ export const EtableringAvEgenVirksomhetNy = ({
                 {vedtatteVurderinger.map((vurdering) => (
                   <TidligereVurderingExpandableCard
                     key={vurdering.fom}
+                    customTag={<VirksomhetFaseTag fase={vurdering.fase} />}
                     fom={parseISO(vurdering.fom)}
                     tom={vurdering.tom != null ? parseISO(vurdering.tom) : null}
                     førsteNyePeriodeFraDato={
@@ -286,6 +290,13 @@ export const EtableringAvEgenVirksomhetNy = ({
                         ? grunnlag.nyeVurderinger[index]?.oppfylt
                         : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
                     )}
+                    customTag={
+                      erLagretVurdering ? (
+                        <VirksomhetFaseTag fase={grunnlag.nyeVurderinger[index]?.fase} />
+                      ) : (
+                        <VirksomhetFaseTag fase={form.watch(`vurderinger.${index}.fase`)} />
+                      )
+                    }
                     nestePeriodeFraDato={sluttdato(index)}
                     isLast={index === vedtatteVurderinger.length - 1}
                     vurdering={vurdering}

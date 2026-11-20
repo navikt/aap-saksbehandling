@@ -63,13 +63,13 @@ const eventTypes = [
     kilde: 'lib/utils/umami/behandlerdialog.ts',
     funksjoner: ['loggUmamiBehandlerdialogKlikk(name)'],
     felter: [
-      { navn: 'type', typ: "'BEHANDLERDIALOG'", pkt: 'Ja', beskrivelse: 'Diskriminator for event-varianten.' },
       {
         navn: 'name',
         typ: '(typeof UMAMI_BEHANDLERDIALOG_NAVN)[number]',
         pkt: 'Ja',
         beskrivelse: 'Hvilken handling brukeren utførte.',
       },
+      { navn: 'data', typ: '{}', pkt: 'Ja', beskrivelse: 'Tomt objekt; denne hendelsen har ingen datafelter.' },
     ],
     gyldigeNavn: behandlerdialogNavn,
   },
@@ -82,16 +82,15 @@ const eventTypes = [
     kilde: 'lib/utils/umami/varighet.ts',
     funksjoner: ['loggUmamiVarighet(hendelse, start, stop)', 'loggUmamiBrevVarighet(hendelse, start, stop, brevtype)'],
     felter: [
-      { navn: 'type', typ: "'VARIGHET'", pkt: 'Ja', beskrivelse: 'Diskriminator for event-varianten.' },
       { navn: 'name', typ: 'STEG_<STEG>_VARIGHET', pkt: 'Ja', beskrivelse: 'Hvilket behandlingssteg som ble målt.' },
       {
-        navn: 'varighet_sekunder',
+        navn: 'data.varighet_sekunder',
         typ: 'number',
         pkt: 'Ja',
         beskrivelse: 'Antall sekunder brukt på steget (stop − start).',
       },
       {
-        navn: 'brevtype',
+        navn: 'data.brevtype',
         typ: 'string',
         pkt: 'Nei',
         beskrivelse: 'Kun satt via loggUmamiBrevVarighet — hvilken brevtype som ble skrevet.',
@@ -110,7 +109,6 @@ const eventTypes = [
       'useUmamiVarighetHendelser(hendelseSerieNavn)',
     ],
     felter: [
-      { navn: 'type', typ: "'HENDELSER_VARIGHET'", pkt: 'Ja', beskrivelse: 'Diskriminator for event-varianten.' },
       {
         navn: 'name',
         typ: '<KONTEKST>_HENDELSER_VARIGHET',
@@ -118,37 +116,38 @@ const eventTypes = [
         beskrivelse: 'Hvilken hendelsesserie-kontekst dette er en del av.',
       },
       {
-        navn: 'hendelser_serie',
+        navn: 'data.hendelser_serie',
         typ: 'string',
         pkt: 'Ja',
         beskrivelse: 'Samme verdi som `name` — navnet på serien delhendelsen tilhører.',
       },
       {
-        navn: 'hendelser_serie_id',
+        navn: 'data.hendelser_serie_id',
         typ: 'string (UUID)',
         pkt: 'Ja',
         beskrivelse: 'Unik id (crypto.randomUUID()) som knytter alle delhendelser i én serie sammen.',
       },
       {
-        navn: 'delhendelse',
+        navn: 'data.delhendelse',
         typ: 'string',
         pkt: 'Ja',
         beskrivelse: 'Hvilken delhendelse i serien dette er, f.eks. et feltnavn eller en handling.',
       },
       {
-        navn: 'varighet_sekunder',
+        navn: 'data.varighet_sekunder',
         typ: 'number',
         pkt: 'Ja',
         beskrivelse: 'Sekunder siden serien startet.',
       },
       {
-        navn: 'varighet_sekunder_siden_forrige',
-        typ: 'number | null',
-        pkt: 'Ja',
-        beskrivelse: 'Sekunder siden forrige delhendelse i serien (null for den første).',
+        navn: 'data.varighet_sekunder_siden_forrige',
+        typ: 'number',
+        pkt: 'Nei',
+        beskrivelse:
+          'Sekunder siden forrige delhendelse i serien. Utelates når internverdien er null, for første delhendelse.',
       },
       {
-        navn: 'tidsstempel',
+        navn: 'data.tidsstempel',
         typ: 'number (epoch ms)',
         pkt: 'Ja',
         beskrivelse: 'Tidspunktet delhendelsen ble registrert.',
@@ -162,16 +161,15 @@ const eventTypes = [
     kilde: 'lib/utils/umami/lenkeKlikk.ts',
     funksjoner: ['loggUmamiEksternLenkeKlikk(steg, lenketekst)'],
     felter: [
-      { navn: 'type', typ: "'LENKE_KLIKK'", pkt: 'Ja', beskrivelse: 'Diskriminator for event-varianten.' },
       {
         navn: 'name',
         typ: "'EKSTERN_LENKE_KLIKK'",
         pkt: 'Ja',
         beskrivelse: 'Fast verdi — kun én lenke-klikk-hendelse finnes i dag.',
       },
-      { navn: 'lenketekst', typ: 'string', pkt: 'Ja', beskrivelse: 'Synlig tekst på lenken som ble klikket.' },
+      { navn: 'data.lenketekst', typ: 'string', pkt: 'Ja', beskrivelse: 'Synlig tekst på lenken som ble klikket.' },
       {
-        navn: 'steg',
+        navn: 'data.steg',
         typ: 'StegType',
         pkt: 'Nei',
         beskrivelse: 'Hvilket behandlingssteg/vilkårskort lenken ble klikket fra.',
@@ -187,12 +185,10 @@ const eventTypes = [
       'loggUmamiGåTilBehandling(inngang)',
       'loggUmamiGåTilBehandlingOgReserver(inngang)',
       'loggUmamiGåTilSaksoversikt(inngang)',
-      'loggUmamiReserverOppgave(inngang)',
       'loggUmamiFrigiOppgave(inngang)',
       'loggUmamiTildelOppgave(inngang)',
     ],
     felter: [
-      { navn: 'type', typ: "'NAVIGERING'", pkt: 'Ja', beskrivelse: 'Diskriminator for event-varianten.' },
       {
         navn: 'name',
         typ: 'GÅ_TIL_<MÅL> | <HANDLING>_OPPGAVE',
@@ -200,16 +196,16 @@ const eventTypes = [
         beskrivelse: 'Navigasjonsmålet, eller hvilken oppgavehandling som ble utført.',
       },
       {
-        navn: 'inngang',
+        navn: 'data.inngang',
         typ: 'BehandlingInngang | SaksoversiktInngang | OppgaveInngang',
         pkt: 'Ja',
         beskrivelse: 'Hvor brukeren navigerte fra (f.eks. SAKSOVERSIKT, MINE_OPPGAVER, SØK_PERSON).',
       },
       {
-        navn: 'reserverer',
-        typ: 'boolean',
+        navn: 'data.reserverer',
+        typ: "'true'",
         pkt: 'Nei',
-        beskrivelse: 'true når navigasjon til behandling samtidig reserverer oppgaven for saksbehandler.',
+        beskrivelse: "'true' når navigasjon til behandling samtidig reserverer oppgaven for saksbehandler.",
       },
     ],
     gyldigeNavn: navigeringNavn,
@@ -248,8 +244,9 @@ lines.push(
 );
 lines.push('');
 lines.push(
-  'Alle hendelser sendes via `clientLoggUmamiEvent` → `POST /api/umami` → Umami, typet som en ' +
-    'diskriminert union `UmamiKelvinEvent` på feltet `type`. Navnekonvensjon: ' +
+  'Alle hendelser sendes via `clientLoggUmamiEvent(name, data)` → `POST /api/umami` → Umami, typet som en ' +
+    'diskriminert union `UmamiKelvinEvent` på feltet `name`. Payloaden er `{ name, data }`, ' +
+    'og `data` sendes ferdig strukturert fra hjelpefunksjonene. Navnekonvensjon: ' +
     '`<KONTEKST>_<HANDLING>[_<DETALJ>]` i `SCREAMING_SNAKE_CASE`.'
 );
 lines.push('');
@@ -284,7 +281,7 @@ for (const eventType of eventTypes) {
 
 lines.push('## Inngang-verdier');
 lines.push('');
-lines.push('Gyldige verdier for `inngang`-feltet på `NAVIGERING`-eventer, gruppert etter type:');
+lines.push('Gyldige verdier for `data.inngang`-feltet på `NAVIGERING`-eventer, gruppert etter type:');
 lines.push('');
 for (const [type, verdier] of Object.entries(inngangVerdier)) {
   lines.push(`**${type}:**`);

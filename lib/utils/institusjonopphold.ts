@@ -168,19 +168,15 @@ export const validerDatoErInnenforOpphold = (
 
 export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
   oppholdFra,
-  tidligsteReduksjonsdato,
   forrigeOppholdAvsluttetDato,
   forrigeOppholdVurderinger,
   forrigeGirReduksjon,
-  enManedsregelEnabled,
 }: {
   oppholdFra: string;
-  tidligsteReduksjonsdato?: string | null;
   forrigeOppholdAvsluttetDato?: string | null;
   forrigeOppholdVurderinger?: OppholdVurdering[];
   forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
   forrigeGirReduksjon?: boolean;
-  enManedsregelEnabled: boolean;
 }): { effektivTidligsteReduksjonsdato: string | null | undefined; bruker1Månedsregelen: boolean } {
   const forrigeGaReduksjonNå =
     forrigeGirReduksjon ?? forrigeOppholdVurderinger?.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
@@ -189,7 +185,7 @@ export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
     !!forrigeOppholdAvsluttetDato &&
     erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdAvsluttetDato, oppholdFra);
 
-  const bruker1Månedsregelen = enManedsregelEnabled ? forrigeGaReduksjonNå && innenforTreMåneder : innenforTreMåneder;
+  const bruker1Månedsregelen = forrigeGaReduksjonNå && innenforTreMåneder;
 
   if (bruker1Månedsregelen) {
     return {
@@ -198,14 +194,10 @@ export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
     };
   }
 
-  if (enManedsregelEnabled) {
-    return {
-      bruker1Månedsregelen,
-      effektivTidligsteReduksjonsdato: beregnStandardTidligsteReduksjonsdato(oppholdFra),
-    };
-  }
-
-  return { bruker1Månedsregelen, effektivTidligsteReduksjonsdato: tidligsteReduksjonsdato };
+  return {
+    bruker1Månedsregelen,
+    effektivTidligsteReduksjonsdato: beregnStandardTidligsteReduksjonsdato(oppholdFra),
+  };
 }
 
 export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, tidligsteReduksjonsdato?: string | null) => {
@@ -257,12 +249,8 @@ export function erNyttOppholdInnenfor3MaanederEtterSistOpphold(utskrevetDato: st
   return nyttOpphold <= treMndEtterUtskrivelse;
 }
 
-export function erVurderingHistorisk(
-  vurdering: OppholdVurdering,
-  reduksjonErMulig: boolean,
-  enManedsregelEnabled: boolean
-): boolean {
-  return enManedsregelEnabled && erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
+export function erVurderingHistorisk(vurdering: OppholdVurdering, reduksjonErMulig: boolean): boolean {
+  return erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
 }
 
 export function grupperVedtattePerOppholdId(
@@ -285,12 +273,11 @@ export interface OppholdReduksjonsstatus {
 function girOppholdReduksjon(
   opphold: OppholdMedVurderinger,
   vedtatte: HelseInstiusjonVurdering[] | undefined,
-  reduksjonErMulig: boolean,
-  enManedsregelEnabled: boolean
+  reduksjonErMulig: boolean
 ): boolean {
   if (opphold.vurderinger.length > 0) {
     return opphold.vurderinger.some(
-      (v) => erReduksjonUtIFraFormFields(v) && !erVurderingHistorisk(v, reduksjonErMulig, enManedsregelEnabled)
+      (v) => erReduksjonUtIFraFormFields(v) && !erVurderingHistorisk(v, reduksjonErMulig)
     );
   }
 
@@ -306,7 +293,6 @@ function girOppholdReduksjon(
 export function beregnReduksjonskjede(
   opphold: OppholdMedVurderinger[],
   vedtattePerOppholdId: Record<string, HelseInstiusjonVurdering[]>,
-  enManedsregelEnabled: boolean,
   tilOgMedIndex: number
 ): OppholdReduksjonsstatus[] {
   const resultat: OppholdReduksjonsstatus[] = [];
@@ -316,23 +302,15 @@ export function beregnReduksjonskjede(
 
     const { effektivTidligsteReduksjonsdato, bruker1Månedsregelen } = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
       oppholdFra: o.periode.fom,
-      tidligsteReduksjonsdato: o.tidligsteReduksjonsdato,
       forrigeOppholdAvsluttetDato: forrige?.periode.tom,
       forrigeOppholdVurderinger: forrige?.vurderinger,
       forrigeOppholdVedtatteVurderinger: forrige ? vedtattePerOppholdId[forrige.oppholdId] : undefined,
       forrigeGirReduksjon: i > 0 ? resultat[i - 1].girReduksjon : undefined,
-      enManedsregelEnabled,
     });
 
-    const reduksjonErMulig =
-      !enManedsregelEnabled || erReduksjonMuligForOpphold(o.periode.tom, effektivTidligsteReduksjonsdato);
+    const reduksjonErMulig = erReduksjonMuligForOpphold(o.periode.tom, effektivTidligsteReduksjonsdato);
 
-    const girReduksjon = girOppholdReduksjon(
-      o,
-      vedtattePerOppholdId[o.oppholdId],
-      reduksjonErMulig,
-      enManedsregelEnabled
-    );
+    const girReduksjon = girOppholdReduksjon(o, vedtattePerOppholdId[o.oppholdId], reduksjonErMulig);
 
     resultat.push({ effektivTidligsteReduksjonsdato, bruker1Månedsregelen, reduksjonErMulig, girReduksjon });
   });

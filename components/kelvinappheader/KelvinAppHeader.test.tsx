@@ -6,6 +6,10 @@ import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
 import { render, screen } from 'lib/test/CustomRender';
 
+vi.mock('@navikt/endringslogg', () => ({
+  default: () => null,
+}));
+
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 

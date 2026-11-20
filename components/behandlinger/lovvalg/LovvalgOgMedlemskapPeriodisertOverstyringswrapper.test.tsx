@@ -12,6 +12,7 @@ const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurde
 const tomtGrunnlag: PeriodisertLovvalgMedlemskapGrunnlag = {
   ikkeRelevantePerioder: [],
   behøverVurderinger: [],
+  delvurderinger: [],
   harTilgangTilÅSaksbehandle: false,
   kanVurderes: [],
   nyeVurderinger: [],

@@ -432,41 +432,6 @@ describe('Førstegangsbehandling', () => {
     expect(finnGruppeForBokstavC()).toBeVisible();
   });
 
-  /* TODO skippes inntil backend er klar */
-  it.skip('viser felt for når vurderingen gjelder fra dersom det er en revurdering', () => {
-    render(
-      <Bistandsbehov
-        readOnly={false}
-        behandlingVersjon={0}
-        grunnlag={grunnlagTomt}
-        erRevurderingAvOvergangUføre={false}
-      />
-    );
-    expect(screen.getByRole('textbox', { name: 'Vurderingen gjelder fra' })).toBeVisible();
-  });
-
-  /* TODO Skippes inntil backend er klar. Mangler å avgjøre hvordan steget skal vite om 11-5 er oppfylt eller ei */
-  it.skip('viser spørsmål for om brukeren skal vurderes for AAP i overgang til arbeid hvis det er en revurdering og det er avslag på både 11-5 og 11-6', async () => {
-    render(
-      <Bistandsbehov
-        readOnly={false}
-        behandlingVersjon={0}
-        grunnlag={grunnlagTomt}
-        erRevurderingAvOvergangUføre={false}
-      />
-    );
-    await velgNei(finnGruppeForBokstavA());
-    await velgNei(finnGruppeForBokstavB());
-    const gruppeC = screen.getByRole('radiogroup', {
-      name: 'c: Kan brukeren anses for å ha en viss mulighet for å komme i arbeid, ved å få annen oppfølging fra Nav?',
-    });
-    await velgNei(gruppeC);
-    expect(screen.getByRole('heading', { name: '§ 11-17 AAP i perioden som arbeidssøker', level: 3 })).toBeVisible();
-    expect(
-      screen.getByRole('radiogroup', { name: 'Har brukeren rett til AAP i perioden som arbeidssøker?' })
-    ).toBeVisible();
-  });
-
   it('Skal vise feilmelding dersom feltet for begrunnelse ikke er besvart', async () => {
     render(
       <Bistandsbehov

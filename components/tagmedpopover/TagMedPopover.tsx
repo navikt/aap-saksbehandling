@@ -6,11 +6,12 @@ import { ReactNode, useRef, useState } from 'react';
 import styles from 'components/tagmedpopover/TagMedPopover.module.css';
 
 interface Props {
-  ikon: ReactNode;
+  ikon?: ReactNode;
   dataColor: TagProps['data-color'];
   popoverContent: ReactNode;
   størrelse?: 'xsmall' | 'small';
   tagContent?: ReactNode;
+  tagVariant?: TagProps['variant'];
 }
 
 /**
@@ -18,7 +19,14 @@ interface Props {
  * Wrapper en Tag i en Button for å beholde riktig tastatur-/skjermleser-oppførsel,
  * mens Tag står for selve den visuelle stilen (farge, radius osv.).
  */
-export const TagMedPopover = ({ ikon, dataColor, størrelse = 'xsmall', tagContent = '', popoverContent }: Props) => {
+export const TagMedPopover = ({
+  ikon,
+  dataColor,
+  størrelse = 'xsmall',
+  tagContent = '',
+  tagVariant = 'moderate',
+  popoverContent,
+}: Props) => {
   const buttonRef = useRef(null);
   const [popoverIsOpen, setPopoverIsOpen] = useState(false);
 
@@ -30,7 +38,7 @@ export const TagMedPopover = ({ ikon, dataColor, størrelse = 'xsmall', tagConte
         onClick={() => setPopoverIsOpen(!popoverIsOpen)}
         className={styles.knapp}
       >
-        <Tag icon={ikon} variant={'moderate'} data-color={dataColor} size={størrelse} className={styles.triggerTag}>
+        <Tag icon={ikon} variant={tagVariant} data-color={dataColor} size={størrelse} className={styles.triggerTag}>
           {tagContent}
         </Tag>
       </Button>

@@ -21,6 +21,7 @@ import { AdressebeskyttelseStatus } from 'components/adressebeskyttelsestatus/Ad
 import { ArenaStatus } from 'components/arenastatus/ArenaStatus';
 import { Behandlingsstatus } from 'components/behandlingsstatus/Behandlingsstatus';
 import { MigrertFraArenaStatus } from 'components/migrertfraarenastatus/MigrertFraArenaStatus';
+import { KantIKantMedArenaStatus } from 'components/kantikantmedarenastatus/KantIKantMedArenaStatus';
 import { MarkeringInfoboks } from 'components/markeringinfoboks/MarkeringInfoboks';
 import { OppgaveStatus, OppgaveStatusType } from 'components/oppgavestatus/OppgaveStatus';
 import { ReturStatus } from 'components/returstatus/ReturStatus';
@@ -31,6 +32,9 @@ import { UtløptVentefristBoks } from '../oppgaveliste/utløptventefristboks/Utl
 import styles from './SaksinfoBanner.module.css';
 import { kalkulerAlder } from 'components/behandlinger/alder/Alder';
 import { UførevedtakInfoBoks } from '../oppgaveliste/uførevedtakBoks/UførevedtakInfoBoks';
+import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
+import { GosysOppgaverPopOver } from 'components/saksinfobanner/gosysoppgaverpopover/GosysOppgaverPopOver';
+import { ForespørselSendtInfoboks } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 interface Props {
   sak: SaksInfoType;
@@ -51,6 +55,7 @@ export const SaksinfoBanner = ({
 }: Props) => {
   const brukerInformasjon = useInnloggetBruker();
   const { personInformasjon: personInformasjon } = useSakPersonInformasjon();
+  const { oppgaver, antallTreff } = useGosysOppgaverForPerson();
   const [visHarUlesteDokumenter, settVisHarUlesteDokumenter] = useState(!!oppgaveVisningsinfo?.harUlesteDokumenter);
   const erReservertAvInnloggetBruker = brukerInformasjon?.NAVident === oppgaveVisningsinfo?.reservertAvIdent;
   const [uføreTagSkjult, settUføreTagSkjult] = useState(false);
@@ -140,6 +145,12 @@ export const SaksinfoBanner = ({
       </div>
       {behandling && (
         <HStack>
+          {antallTreff > 0 && (
+            <div className={styles.oppgavestatus}>
+              <GosysOppgaverPopOver oppgaver={oppgaver} antallTreff={antallTreff} saksnummer={sak.saksnummer} />
+            </div>
+          )}
+
           {adressebeskyttelser?.map((adressebeskyttelse) => (
             <div key={adressebeskyttelse} className={styles.oppgavestatus}>
               <AdressebeskyttelseStatus adressebeskyttelsesGrad={adressebeskyttelse} />
@@ -168,6 +179,11 @@ export const SaksinfoBanner = ({
           {behandlingEgenskaper?.erMigrertFraArena && (
             <div className={styles.oppgavestatus}>
               <MigrertFraArenaStatus />
+            </div>
+          )}
+          {behandlingEgenskaper?.erKantIKantMedArena && (
+            <div className={styles.oppgavestatus}>
+              <KantIKantMedArenaStatus />
             </div>
           )}
           {oppgaveTildelingStatus && (
@@ -209,6 +225,11 @@ export const SaksinfoBanner = ({
               />
             </div>
           )}
+          {oppgaveVisningsinfo?.forespørselSendtTilBehandler && (
+            <div className={styles.oppgavestatus}>
+              <ForespørselSendtInfoboks />
+            </div>
+          )}
           {!behandlingErAvsluttet && (
             <SaksmenyDropdown
               flyt={flyt}
@@ -216,6 +237,7 @@ export const SaksinfoBanner = ({
               behandling={behandling}
               reservertAvIdent={oppgaveVisningsinfo?.reservertAvIdent}
               brukerInformasjon={brukerInformasjon}
+              behandlingEgenskaper={behandlingEgenskaper}
             />
           )}
         </HStack>

@@ -178,17 +178,24 @@ export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
   return clientFetch<MeldingerResponse>(`${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`, 'GET');
 }
 
+export function clientSendPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/send`, 'POST', {
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
+  });
+}
+
 export function clientAvbrytPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/avbryt`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingId,
-    behandlingsReferanse: behandlingsreferanse,
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
   });
 }
 
 export function clientGjenopptaPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/gjenoppta`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingId,
-    behandlingsReferanse: behandlingsreferanse,
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
   });
 }
 

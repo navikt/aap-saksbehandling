@@ -9,6 +9,7 @@ import { GosysTabell } from 'components/oppgaveliste/gosysoppgaver/gosystabell/G
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField, ValuePair } from 'components/form/FormField';
 import { useLagreAktiveEnheter } from 'hooks/oppgave/aktiveEnheterHook';
+import { GosysOppgavetype } from 'lib/types/gosysTypes';
 
 interface Props {
   enheter: Enhet[];
@@ -18,31 +19,23 @@ interface Props {
 interface FormFields {
   enhet: string;
   gjelder: GjelderTyper;
-  oppgaveTyper: Oppgavetyper[];
+  oppgaveTyper: GosysOppgavetype[];
   visLedigeOppgaver: boolean;
 }
 
-export type Oppgavetyper =
-  'RETUR' | 'JFR' | 'KONT_BRUK' | 'SVAR_IK_MOT' | 'VURD_HENV' | 'VUR_KONS_YTE' | 'VURD_NOTAT' | 'VUR_SVAR';
-
-const oppgaveTypeOptions: ValuePair<Oppgavetyper>[] = [
+const oppgaveTypeOptions: ValuePair<GosysOppgavetype>[] = [
   {
-    value: 'RETUR',
-    label: 'Behandle returpost',
-  },
-  {
-    value: 'JFR',
+    value: GosysOppgavetype.JOURNALFOERING,
     label: 'Journalføring',
   },
   {
-    value: 'KONT_BRUK',
+    value: GosysOppgavetype.KONTAKT_BRUKER,
     label: 'Kontakt bruker',
   },
-  { value: 'SVAR_IK_MOT', label: 'Svar ikke mottatt' },
-  { value: 'VURD_HENV', label: 'Vurder henvendelse' },
-  { value: 'VUR_KONS_YTE', label: 'Vurder konsekvens for ytelse' },
-  { value: 'VURD_NOTAT', label: 'Vurder notat' },
-  { value: 'VUR_SVAR', label: 'Vurder svar' },
+  { value: GosysOppgavetype.SVAR_IKKE_MOTTATT, label: 'Svar ikke mottatt' },
+  { value: GosysOppgavetype.VURDER_HENVENDELSE, label: 'Vurder henvendelse' },
+  { value: GosysOppgavetype.VURDER_KONSEKVENS_FOR_YTELSE, label: 'Vurder konsekvens for ytelse' },
+  { value: GosysOppgavetype.VURDER_SVAR, label: 'Vurder svar' },
 ];
 
 // ae0292 og ae0294 er behandlingstyper, mens ab0269 og ab0570 er behandlingstema
@@ -96,10 +89,22 @@ export const GosysOppgaver = ({ enheter, gosysUrl }: Props) => {
   const oppgaveTyper = form.watch('oppgaveTyper');
 
   const { oppgaver, kanLasteFlere, isLoading, isValidating, error, harLastetOppgaver, antallTreff, lastInnFlere } =
-    useGosysOppgaver(enhet, behandlingstype, behandlingstema, oppgaveTyper);
+    useGosysOppgaver({ enhet, behandlingstype, behandlingstema, oppgaveTyper });
 
   const visLedigeOppgaver = form.watch('visLedigeOppgaver');
-  const oppgaverSomSkalVises = visLedigeOppgaver ? oppgaver.filter((oppgave) => !oppgave.tilordnetRessurs) : oppgaver;
+
+  const bestemteOppgaveTyper = [
+    GosysOppgavetype.KONTROLLER_UTGAAENDE_SKANNEDE_DOKUMENTER,
+    GosysOppgavetype.VURDER_NOTAT,
+    GosysOppgavetype.BEHANDLE_RETURPOST,
+  ];
+  const oppgaverUtenBestemteOppgavetyper = oppgaver.filter(
+    (oppgave) => !bestemteOppgaveTyper.some((oppgavetype) => oppgavetype === oppgave.oppgavetype)
+  );
+
+  const oppgaverSomSkalVises = visLedigeOppgaver
+    ? oppgaverUtenBestemteOppgavetyper.filter((oppgave) => !oppgave.tilordnetRessurs)
+    : oppgaverUtenBestemteOppgavetyper;
 
   return (
     <VStack gap="space-16">

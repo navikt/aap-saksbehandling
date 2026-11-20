@@ -289,8 +289,12 @@ describe('beregnForhåndsvisning', () => {
 
     // Forhåndsvisningen beregnes hver gang direkte fra de faktiske radene i skjemaet,
     // så det finnes ingen "forrige splitt" å regne seg tilbake fra.
-    expect(beregnSplittingAvSykepengeperiode(opprinneligeRader)).not.toEqual(beregnSplittingAvSykepengeperiode(medRettetFerie));
-    expect(beregnSplittingAvSykepengeperiode(medRettetFerie).map((r) => r.periode)).toEqual(forventetPerioderEtterRettetFerie);
+    expect(beregnSplittingAvSykepengeperiode(opprinneligeRader)).not.toEqual(
+      beregnSplittingAvSykepengeperiode(medRettetFerie)
+    );
+    expect(beregnSplittingAvSykepengeperiode(medRettetFerie).map((r) => r.periode)).toEqual(
+      forventetPerioderEtterRettetFerie
+    );
   });
 
   test('skyver sykepengeperiodene tilbake når en ferie fjernes, uten å endre antall sykepengedager', () => {
@@ -356,7 +360,9 @@ describe('beregnForhåndsvisning', () => {
       rad('SYKEPENGER', '01.09.2025', '30.09.2025'),
     ];
 
-    expect(beregnSplittingAvSykepengeperiode(sykepengeperioderMedUdekketMellomrom)).toEqual(sykepengeperioderMedUdekketMellomrom);
+    expect(beregnSplittingAvSykepengeperiode(sykepengeperioderMedUdekketMellomrom)).toEqual(
+      sykepengeperioderMedUdekketMellomrom
+    );
   });
 
   test('gir samme resultat om forhåndsvisningen beregnes på nytt fra sitt eget resultat (idempotent)', () => {
@@ -372,7 +378,7 @@ describe('beregnForhåndsvisning', () => {
   });
 });
 
-function antallVirkedager(rader: Rad[]): number {
+function antallVirkedager(rader: Pick<Rad, 'periode'>[]): number {
   return rader.reduce((sum, r) => {
     const fom = parseDatoFraDatePicker(r.periode.fom);
     const tom = parseDatoFraDatePicker(r.periode.tom);

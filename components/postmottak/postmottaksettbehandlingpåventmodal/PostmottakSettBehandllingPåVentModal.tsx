@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useTransition } from 'react';
-import { Button, Modal } from '@navikt/ds-react';
+import { Button, Dialog } from '@navikt/ds-react';
 import styles from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandlingPåVentModal.module.css';
 import { HourglassBottomFilledIcon } from '@navikt/aksel-icons';
 import { PostmottakSettPåVentÅrsaker } from 'lib/types/postmottakTypes';
@@ -71,47 +71,54 @@ export const PostmottakSettBehandllingPVentModal = ({
   }
 
   return (
-    <Modal
+    <Dialog
       open={isOpen}
-      onClose={onCloseClick}
-      header={{ heading: 'Sett behandling på vent', icon: <HourglassBottomFilledIcon /> }}
-      className={styles.settBehandlingPåVentModal}
+      onOpenChange={(open) => {
+        if (!open) onCloseClick();
+      }}
     >
-      <Modal.Body>
-        {error && <Alert variant={'error'}>{error}</Alert>}
-        {isOpen && (
-          <form
-            id={'settBehandlingPåVent'}
-            onSubmit={form.handleSubmit(async (data) => {
-              startTransition(async () => {
-                const res = await postmottakSettPåVent(behandlingsreferanse, {
-                  begrunnelse: data.begrunnelse,
-                  behandlingVersjon: behandlingVersjon,
-                  frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
-                  grunn: data.grunn,
+      <Dialog.Popup width="large" closeOnOutsideClick={false}>
+        <Dialog.Header>
+          <Dialog.Title>
+            <HourglassBottomFilledIcon aria-hidden /> Sett behandling på vent
+          </Dialog.Title>
+        </Dialog.Header>
+        <Dialog.Body>
+          {error && <Alert variant={'error'}>{error}</Alert>}
+          {isOpen && (
+            <form
+              id={'settBehandlingPåVent'}
+              onSubmit={form.handleSubmit(async (data) => {
+                startTransition(async () => {
+                  const res = await postmottakSettPåVent(behandlingsreferanse, {
+                    begrunnelse: data.begrunnelse,
+                    behandlingVersjon: behandlingVersjon,
+                    frist: formaterDatoForBackend(parse(data.frist, 'dd.MM.yyyy', new Date())),
+                    grunn: data.grunn,
+                  });
+                  if (res.ok) {
+                    await revalidatePostMottakBehandling(behandlingsreferanse);
+                    onCloseClick();
+                  }
                 });
-                if (res.ok) {
-                  await revalidatePostMottakBehandling(behandlingsreferanse);
-                  onClose();
-                }
-              });
-            })}
-            className={styles.settBehandlingPåVentModalForm}
-          >
-            <FormField form={form} formField={formFields.begrunnelse} />
-            <FormField form={form} formField={formFields.frist} />
-            <FormField form={form} formField={formFields.grunn} />
-          </form>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button form={'settBehandlingPåVent'} loading={isPending}>
-          Sett på vent
-        </Button>
-        <Button variant={'secondary'} onClick={onCloseClick}>
-          Avbryt
-        </Button>
-      </Modal.Footer>
-    </Modal>
+              })}
+              className={styles.settBehandlingPåVentModalForm}
+            >
+              <FormField form={form} formField={formFields.begrunnelse} />
+              <FormField form={form} formField={formFields.frist} />
+              <FormField form={form} formField={formFields.grunn} />
+            </form>
+          )}
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Button form={'settBehandlingPåVent'} loading={isPending}>
+            Sett på vent
+          </Button>
+          <Button variant={'secondary'} onClick={onCloseClick}>
+            Avbryt
+          </Button>
+        </Dialog.Footer>
+      </Dialog.Popup>
+    </Dialog>
   );
 };

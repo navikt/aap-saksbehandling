@@ -1,4 +1,5 @@
 import { Link as AkselLink, BodyShort, CopyButton, Table, Tooltip } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { ScopedBackendSortState } from 'hooks/oppgave/BackendSorteringHook';
 import { AktivKø } from 'hooks/oppgave/aktivkøHook';
 import { OppgaveMedKontekst, SortBy } from 'lib/types/oppgaveTypes';
@@ -23,6 +24,7 @@ import { OppgaveInformasjon } from 'components/oppgaveliste/oppgaveinformasjon/O
 import { SynkroniserEnhetModal } from 'components/oppgaveliste/synkroniserenhetmodal/SynkroniserEnhetModal';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 import { TildelOppgaveModal } from 'components/tildeloppgavemodal/TildelOppgaveModal';
+import { utledMaksdatoFraSykepenger } from 'lib/utils/sykepengermaksdato';
 
 interface Props {
   oppgaver: OppgaveMedKontekst[];
@@ -41,6 +43,7 @@ export const LedigeOppgaverTabell = ({
   aktivKø,
   visBeløpKolonne,
 }: Props) => {
+  const visMaksdatoSykepenger = useFeatureFlag('MaksdatoSykepenger');
   const [feilmelding, setFeilmelding] = useState<string>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visSynkroniserEnhetModal, setVisSynkroniserEnhetModal] = useState<boolean>(false);
@@ -101,6 +104,11 @@ export const LedigeOppgaverTabell = ({
             <Table.ColumnHeader sortKey={'OPPRETTET_TIDSPUNKT'} sortable={true}>
               Oppg. opprettet
             </Table.ColumnHeader>
+            {visMaksdatoSykepenger && (
+              <Table.ColumnHeader sortKey={'MAKSDATO_SP'} sortable={true}>
+                Maksdato SP
+              </Table.ColumnHeader>
+            )}
             {visBeløpKolonne && (
               <Table.ColumnHeader sortKey={'TILBAKEKREVINGS_BELOP'} sortable={true}>
                 Beløp
@@ -173,6 +181,11 @@ export const LedigeOppgaverTabell = ({
               <Table.DataCell textSize={'small'}>
                 {formaterDatoForFrontend(oppgave.oppgaveMetadata.opprettetTidspunkt)}
               </Table.DataCell>
+              {visMaksdatoSykepenger && (
+                <Table.DataCell textSize={'small'}>
+                  {utledMaksdatoFraSykepenger(oppgave.gjenståendeSykedager)}
+                </Table.DataCell>
+              )}
 
               {visBeløpKolonne && (
                 <Table.DataCell textSize={'small'}>

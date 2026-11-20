@@ -5,6 +5,7 @@ import { mapGrunnTilString, mapTilVenteÅrsakTekst } from 'lib/utils/oversettels
 import { formaterVurderingsbehov } from 'lib/utils/vurderingsbehov';
 
 import { mapEventTilIkon, mapEventTilString } from 'components/sakshistorikk/oversettelser';
+import styles from './BehandlingsHendelse.module.css';
 
 interface Props {
   hendelse: BehandlingsHistorikk['hendelser'][number];
@@ -51,7 +52,7 @@ export const BehandlingsHendelse = ({ hendelse }: Props) => {
           {hendelse.begrunnelse && (
             <VStack>
               <Detail weight={'semibold'}>Begrunnelse</Detail>
-              <Detail>{hendelse.begrunnelse}</Detail>
+              <Detail className={styles.begrunnelse}>{hendelse.begrunnelse}</Detail>
             </VStack>
           )}
         </VStack>

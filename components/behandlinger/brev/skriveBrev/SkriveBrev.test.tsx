@@ -1,67 +1,72 @@
 import { describe, expect, it, vi } from 'vitest';
-import { render, screen } from 'lib/test/CustomRender';
+import { act, render, screen } from 'lib/test/CustomRender';
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import createFetchMock from 'vitest-fetch-mock';
 import { Behovstype } from 'lib/utils/form';
 
+vi.mock('@navikt/aap-breveditor/', () => ({
+  BrevbyggerBeta: () => null,
+}));
+
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 
-// TODO Skip testene her da vi snart skal bytte ut denne komponentnen
-describe.skip('Skriv brev', () => {
-  it('skal vise action meny hvis det ikke er readonly', () => {
+describe('Skriv brev', () => {
+  it('skal vise action meny hvis det ikke er readonly', async () => {
     mockMellomLagring();
-    renderSkrivBrev(false);
+    await renderSkrivBrev(false);
 
-    const actionMenu = screen.getByText('Andre handlinger');
+    const actionMenu = screen.getByRole('button', { name: 'Andre handlinger' });
     expect(actionMenu).toBeVisible();
   });
 
-  it('skal vise knapp for å sende brev hvis det ikke er readonly', () => {
+  it('skal vise knapp for å ferdigstille brev hvis det ikke er readonly', async () => {
     mockMellomLagring();
-    renderSkrivBrev(false);
+    await renderSkrivBrev(false);
 
-    const sendBrevKnapp = screen.getByRole('button', { name: 'Send brev' });
-    expect(sendBrevKnapp).toBeVisible();
+    const ferdigstillBrevKnapp = screen.getByRole('button', { name: 'Ferdigstill brev' });
+    expect(ferdigstillBrevKnapp).toBeVisible();
   });
 
-  it('skal ikke vise action meny hvis det er readonly', () => {
+  it('skal ikke vise action meny hvis det er readonly', async () => {
     mockMellomLagring();
-    renderSkrivBrev(true);
+    await renderSkrivBrev(true);
 
-    const actionMenu = screen.queryByText('Andre handlinger');
+    const actionMenu = screen.queryByRole('button', { name: 'Andre handlinger' });
     expect(actionMenu).not.toBeInTheDocument();
   });
 
-  it('skal ikke vise knapp for å sende brev hvis det er readonly', () => {
+  it('skal ikke vise knapp for å ferdigstille brev hvis det er readonly', async () => {
     mockMellomLagring();
-    renderSkrivBrev(true);
+    await renderSkrivBrev(true);
 
-    const sendBrevKnapp = screen.queryByRole('button', { name: 'Send brev' });
-    expect(sendBrevKnapp).not.toBeInTheDocument();
+    const ferdigstillBrevKnapp = screen.queryByRole('button', { name: 'Ferdigstill brev' });
+    expect(ferdigstillBrevKnapp).not.toBeInTheDocument();
   });
 });
 
-function renderSkrivBrev(readOnly: boolean) {
-  render(
-    <SkriveBrev
-      referanse={'123'}
-      behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-      bruker={{ ident: '123', navn: 'Iren Panikk' }}
-      mottaker={{ ident: 'hei', navn: 'Iren Panikk' }}
-      behandlingVersjon={1}
-      grunnlag={{
-        overskrift: 'Brev',
-        kanOverstyreBrevtittel: false,
-        tekstbolker: [],
-        journalpostTittel: 'hello pello',
-      }}
-      signaturer={[]}
-      status={'FORHÅNDSVISNING_KLAR'}
-      readOnly={readOnly}
-      brevtype={'INNVILGELSE'}
-    />
-  );
+async function renderSkrivBrev(readOnly: boolean) {
+  await act(async () => {
+    render(
+      <SkriveBrev
+        referanse={'123'}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        bruker={{ ident: '123', navn: 'Iren Panikk' }}
+        mottaker={{ ident: 'hei', navn: 'Iren Panikk' }}
+        behandlingVersjon={1}
+        grunnlag={{
+          overskrift: 'Brev',
+          kanOverstyreBrevtittel: false,
+          tekstbolker: [],
+          journalpostTittel: 'hello pello',
+        }}
+        signaturer={[]}
+        status={'FORHÅNDSVISNING_KLAR'}
+        readOnly={readOnly}
+        brevtype={'INNVILGELSE'}
+      />
+    );
+  });
 }
 
 function mockMellomLagring() {

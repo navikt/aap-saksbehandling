@@ -49,8 +49,6 @@ export interface OpprettSakFormFields {
   kravVurderinger?: KravVurderingOppføring[];
 }
 
-export type SamordningType = 'SYKEPENGER' | 'DAGPENGER' | 'TILTAKSPENGER';
-
 type SamordningPeriode = { fom: string; tom: string };
 
 type SamordningSykepenger = {

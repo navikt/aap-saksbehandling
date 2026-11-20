@@ -2,6 +2,7 @@
 
 import { MenuElipsisVerticalIcon } from '@navikt/aksel-icons';
 import { ActionMenu, Button } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { Journalpost } from 'lib/types/journalpost';
 import { SaksInfo } from 'lib/types/types';
 import { erFerdigstilt } from 'lib/utils/journalpost';
@@ -11,8 +12,13 @@ import { FeilregistrerJournalpostModal } from 'components/saksoversikt/dokumento
 import { KnyttTilSakModal } from 'components/saksoversikt/dokumentoversikt/KnyttTilSakModal';
 
 export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; journalpost: Journalpost }) => {
+  const visOriginalDokumentVariant = useFeatureFlag('SeOriginalDokumentVariant');
   const [knyttTilSakOpen, setKnyttTilSakOpen] = useState(false);
   const [feilregistrerOpen, setFeilregistrerOpen] = useState(false);
+
+  const originalDokument = journalpost.dokumenter.find((dokument) =>
+    dokument.dokumentvarianter.find((variant) => variant.variantformat === 'ORIGINAL')
+  );
 
   return (
     <>
@@ -49,6 +55,22 @@ export const HandlingerDokumentButton = ({ sak, journalpost }: { sak: SaksInfo; 
                   </ActionMenu.Item>
                 )}
               </>
+            )}
+            {visOriginalDokumentVariant && originalDokument && (
+              <ActionMenu.Item
+                key={originalDokument.dokumentInfoId}
+                as="a"
+                href={`/saksbehandling/api/dokumenter/${journalpost.journalpostId}/${originalDokument.dokumentInfoId}/ORIGINAL`}
+                target="_blank"
+                rel="noreferrer noopener"
+                disabled={
+                  !originalDokument.dokumentvarianter.find(
+                    (variant) => variant.variantformat === 'ORIGINAL' && variant.saksbehandlerHarTilgang
+                  )
+                }
+              >
+                {'Original'}
+              </ActionMenu.Item>
             )}
           </ActionMenu.Group>
         </ActionMenu.Content>

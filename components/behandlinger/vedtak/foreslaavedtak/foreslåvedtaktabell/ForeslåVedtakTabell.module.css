@@ -1,0 +1,13 @@
+.godkjentIcon {
+  color: var(--ax-text-success-decoration);
+}
+
+.avslåttIcon {
+  color: var(--ax-text-danger-decoration);
+}
+
+.godkjentIcon,
+.avslåttIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

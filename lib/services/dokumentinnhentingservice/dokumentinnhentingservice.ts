@@ -31,6 +31,10 @@ export const hentDokument = async (journalPostId: string, dokumentInfoId: string
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}`;
   return await apiFetchPdf(url, dokumentinnhentingApiScope);
 };
+export const hentDokumentOriginal = async (journalPostId: string, dokumentInfoId: string) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/${dokumentInfoId}/ORIGINAL`;
+  return await apiFetch(url, dokumentinnhentingApiScope);
+};
 
 export const hentUtsendingsinfo = async (journalPostId: string) => {
   const url = `${dokumentinnhentingApiBaseUrl}/api/dokumenter/${journalPostId}/utsendingsinfo`;
@@ -59,3 +63,27 @@ export async function hentBehandleroppslag(body: object) {
   const url = `${dokumentinnhentingApiBaseUrl}/syfo/behandleroppslag/search`;
   return await apiFetch<Behandler[]>(url, dokumentinnhentingApiScope, 'POST', body);
 }
+
+export const sendManuellPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingUuid: string;
+  behandlingsreferanse: string;
+}) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/send`;
+  return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
+};
+
+export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingUuid: string;
+  behandlingsreferanse: string;
+}) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/avbryt-automatisk-paaminnelse`;
+  return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
+};
+
+export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
+  dialogmeldingUuid: string;
+  behandlingsreferanse: string;
+}) => {
+  const url = `${dokumentinnhentingApiBaseUrl}/dialogmelding/paaminnelse/gjenoppta-automatisk-paaminnelse`;
+  return await apiFetch<void>(url, dokumentinnhentingApiScope, 'POST', requestBody);
+};

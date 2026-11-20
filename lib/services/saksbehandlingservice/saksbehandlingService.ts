@@ -193,11 +193,6 @@ export const opprettAktivitetspliktBehandling = async (
   return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', data);
 };
 
-export const finnSakerForIdent = async (ident: string) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/sak/finn`;
-  return await apiFetch<SaksInfo[]>(url, saksbehandlingApiScope, 'POST', { ident });
-};
-
 export const migrerArenasak = async (saksnummerArena: string, ident: string) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/migrerFraArena`;
   return await apiFetch<SaksInfo>(url, saksbehandlingApiScope, 'POST', { ident, saksnummerArena });
@@ -654,22 +649,6 @@ export const kanDistribuereBrevV2 = async (
 export const forhåndsvisDialogmelding = async (requestBody: ForhåndsvisDialogmelding) => {
   const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/syfo/brevpreview`;
   return await apiFetch<ForhåndsvisDialogmeldingResponse>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
-export const avbrytPåminnelsePåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  behandlingsReferanse: string;
-}) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/avbryt-automatisk-paaminnelse`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
-};
-
-export const gjenopptaPåminnelsePåLegeerklæring = async (requestBody: {
-  dialogmeldingPurringUUID: string;
-  behandlingsReferanse: string;
-}) => {
-  const url = `${saksbehandlingApiBaseUrl}/api/dokumentinnhenting/paaminnelse/gjenoppta-automatisk-paaminnelse`;
-  return await apiFetch<void>(url, saksbehandlingApiScope, 'POST', requestBody);
 };
 
 export const hentUnderveisGrunnlagMedDiff = async (behandlingsreferanse: string) => {

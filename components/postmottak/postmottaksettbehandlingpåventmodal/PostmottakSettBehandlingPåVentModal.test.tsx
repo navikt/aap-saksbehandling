@@ -1,17 +1,19 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { PostmottakSettBehandllingPVentModal } from 'components/postmottak/postmottaksettbehandlingpåventmodal/PostmottakSettBehandllingPåVentModal';
 
 describe('settBehandlingPåVentModal', () => {
-  beforeEach(() => {
-    render(
-      <PostmottakSettBehandllingPVentModal
-        behandlingsreferanse={'123'}
-        behandlingVersjon={1}
-        isOpen={true}
-        onClose={vi.fn}
-      />
-    );
+  beforeEach(async () => {
+    await act(async () => {
+      render(
+        <PostmottakSettBehandllingPVentModal
+          behandlingsreferanse={'123'}
+          behandlingVersjon={1}
+          isOpen={true}
+          onClose={vi.fn}
+        />
+      );
+    });
   });
   it('skal ha en heading', () => {
     const heading = screen.getByText('Sett behandling på vent');

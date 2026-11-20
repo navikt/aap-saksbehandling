@@ -1,14 +1,14 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
-import { GosysOppgave } from 'lib/types/gosysTypes';
+import { GosysOppgave, GosysOppgavetype } from 'lib/types/gosysTypes';
 import { GosysTabell } from './GosysTabell';
 
 function lagOppgave(overrides: Partial<GosysOppgave> = {}): GosysOppgave {
   return {
     id: 1,
     tema: 'AAP',
-    oppgavetype: 'JFR',
+    oppgavetype: GosysOppgavetype.JOURNALFOERING,
     tildeltEnhetsnr: '0300',
     status: 'OPPRETTET',
     versjon: 1,

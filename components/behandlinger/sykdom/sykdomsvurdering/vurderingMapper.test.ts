@@ -233,19 +233,20 @@ describe('mapTilPeriodisertVurdering', () => {
           expect(result.yrkesskadeBegrunnelse).toBeUndefined();
         });
 
-        it('skal sette yrkesskade-felt selv når skalVurdereYrkesskade er true', () => {
+        it('skal ikke sette yrkesskade-felt når arbeidsevnen er nedsatt med minst halvparten', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
             fraDato: fraDatoEtterRettighetsperiodeStart,
           };
           const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart);
-          expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
+          expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
         });
 
         it('skal sette yrkesskade-felt når skalVurdereYrkesskade er true', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
             fraDato: fraDatoEtterRettighetsperiodeStart,
+            erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
           };
           const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart);
           expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);

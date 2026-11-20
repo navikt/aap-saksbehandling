@@ -29,7 +29,7 @@ export const VedtattStudentVurderinger = ({ vurdering }: Props) => {
       )}
       {vurdering.avbruttPgaSykdomEllerSkade !== null && (
         <SpørsmålOgSvar
-          spørsmål={'Er studie avbrutt pga sykdom eller skade?'}
+          spørsmål={'Er studiet avbrutt pga sykdom eller skade?'}
           svar={getJaNeiEllerIkkeBesvart(vurdering.avbruttPgaSykdomEllerSkade)}
         />
       )}

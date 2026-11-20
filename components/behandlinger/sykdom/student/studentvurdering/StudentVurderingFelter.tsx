@@ -66,7 +66,7 @@ export const StudentVurderingFelter = ({ index, readOnly }: Props) => {
         <RadioGroupWrapper
           name={`vurderinger.${index}.avbruttPgaSykdomEllerSkade`}
           control={form.control}
-          label={'Er studie avbrutt pga sykdom eller skade?'}
+          label={'Er studiet avbrutt pga sykdom eller skade?'}
           rules={{ required: 'Du må svare på om brukeren har avbrutt studie på grunn av sykdom eller skade.' }}
           readOnly={readOnly}
         >
