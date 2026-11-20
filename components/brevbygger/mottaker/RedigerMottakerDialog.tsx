@@ -203,7 +203,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                     rules={{
                       required: { value: visIdentfelter, message: 'Du må fylle inn identifikator.' },
                       validate: (value) => {
-                        if (/\D/.test(value ?? '')) {
+                        if ((identType === 'FNR' || identType === 'ORGNR') && /\D/.test(value ?? '')) {
                           return 'Kan kun inneholde tall';
                         } else if (identType === 'FNR' && (!value || !erGyldigFødselsnummer(value))) {
                           return 'Fødselsnummeret er ikke gyldig';
