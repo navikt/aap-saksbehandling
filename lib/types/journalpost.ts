@@ -70,7 +70,7 @@ enum Datotype {
   DATO_LEST = 'DATO_LEST',
 }
 
-enum Variantformat {
+export enum Variantformat {
   ARKIV = 'ARKIV',
   FULLVERSJON = 'FULLVERSJON',
   PRODUKSJON = 'PRODUKSJON',

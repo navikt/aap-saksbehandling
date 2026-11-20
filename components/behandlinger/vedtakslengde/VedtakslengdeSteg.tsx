@@ -6,7 +6,6 @@ import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import {
   MellomlagretVurdering,
   VedtakslengdeGrunnlag,
@@ -90,12 +89,8 @@ export const VedtakslengdeSteg = ({
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
 
-  const {
-    løsPeriodisertAvklaringsbehov,
-    løsAvklaringsbehovIsLoading,
-    løsAvklaringsbehovStatus,
-    løsAvklaringsbehovError,
-  } = useLøsAvklaringsbehov('FASTSETT_VEDTAKSLENGDE');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('FASTSETT_VEDTAKSLENGDE');
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
@@ -155,7 +150,7 @@ export const VedtakslengdeSteg = ({
   function onSubmit(data: VedtakslengdeForm) {
     const manuelleVurderinger = data.vurderinger.filter((v) => v.manuellVurdering);
 
-    const løsning: LøsningerForPerioder = {
+    const løsning = {
       behandlingVersjon: behandlingVersjon,
       referanse: behandlingsreferanse,
       behov: {
@@ -174,7 +169,7 @@ export const VedtakslengdeSteg = ({
       },
     };
 
-    løsPeriodisertAvklaringsbehov(løsning, () => {
+    løsAvklaringsbehov(løsning, () => {
       loggUmamiVarighet('STEG_VEDTAKSLENGDE_VARIGHET', umamiStartTidspunkt, Date.now());
       closeAllAccordions();
       visningActions.onBekreftClick();

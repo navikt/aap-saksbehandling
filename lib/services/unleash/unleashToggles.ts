@@ -14,6 +14,7 @@ export const FLAGS = [
   'PostmottakVelgTema',
   'KnappForManuellPaaminnelse',
   'MaksdatoSykepenger',
+  'SeOriginalDokumentVariant',
   'VedtaksperiodeBeslutter',
 ] as const;
 
@@ -36,5 +37,6 @@ export const mockedFlags: Flags = {
   PostmottakVelgTema: false,
   KnappForManuellPaaminnelse: true,
   MaksdatoSykepenger: true,
+  SeOriginalDokumentVariant: true,
   VedtaksperiodeBeslutter: true,
 };

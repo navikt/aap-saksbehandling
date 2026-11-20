@@ -130,7 +130,8 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly }:
         <RadioGroupJaNei
           name={`vurderinger.${index}.erRegistrertINødvendigeOffentligeRegister`}
           control={form.control}
-          label={'Er det dokumentert at virksomheten er registrert i de nødvendige offentlige registrene'}
+          label={'Er det dokumentert at virksomheten er registrert i de nødvendige offentlige registrene?'}
+          description={'Enhetsregisteret og merverdiavgiftsregisteret'}
           horisontal={true}
           rules={{ required: 'Du må svare på om virksomheten er registrert i offentlige registre' }}
           readOnly={readOnly}

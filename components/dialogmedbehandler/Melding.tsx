@@ -1,10 +1,4 @@
-import {
-  ArrowUndoIcon,
-  CheckmarkHeavyIcon,
-  ExclamationmarkTriangleIcon,
-  PaperclipIcon,
-  PlusIcon,
-} from '@navikt/aksel-icons';
+import { CheckmarkHeavyIcon, ExclamationmarkTriangleIcon, PaperclipIcon } from '@navikt/aksel-icons';
 import { BodyShort, Box, Button, Detail, HStack, InlineMessage, Label, Link, VStack } from '@navikt/ds-react';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
 import { DokumentInfoDto, MeldingDto } from 'lib/types/types';
@@ -15,9 +9,6 @@ import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 import { BekreftManuellPåminnelseDialog } from 'components/dialogmedbehandler/BekreftManuellPåminnelseDialog';
-
-export type DokumentasjonType =
-  'L120' | 'L40' | 'L8' | 'MELDING_FRA_NAV' | 'MELDING_FRA_BEHANDLER' | 'PURRING' | 'RETUR_LEGEERKLÆRING';
 
 interface Props {
   melding: MeldingDto;
@@ -116,18 +107,6 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
                   bekreft={handlePåminnelseClick}
                 />
               )}
-            </HStack>
-          )}
-          {innkommendeUtgående === 'INNKOMMENDE' && dokumentasjonsType === 'L40' && (
-            <HStack gap={'space-20'}>
-              <Link>
-                <PlusIcon fontSize="1.5rem" aria-hidden />
-                <BodyShort size={'small'}>Tilleggsopplysninger</BodyShort>
-              </Link>
-              <Link>
-                <ArrowUndoIcon fontSize="1.5rem" aria-hidden />
-                <BodyShort size={'small'}>Send i retur</BodyShort>
-              </Link>
             </HStack>
           )}
         </VStack>
