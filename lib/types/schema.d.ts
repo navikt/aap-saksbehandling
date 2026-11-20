@@ -10007,7 +10007,10 @@ export interface components {
       meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
-      /** Format: date */
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
       meldedato?: string | null;
       /**
        * Format: date
