@@ -51,6 +51,9 @@ export const MeldekortTabellRow = ({ meldePeriodeMedMeldekort, setSelectedMeldek
         {meldepliktStatusTilString(meldePeriodeMedMeldekort.meldepliktStatus)}
       </Table.DataCell>
       <Table.DataCell textSize={'small'}>
+        {meldePeriodeMedMeldekort.meldedato ? formaterDatoForFrontend(meldePeriodeMedMeldekort.meldedato) : '-'}
+      </Table.DataCell>
+      <Table.DataCell textSize={'small'}>
         {meldePeriodeMedMeldekort.meldekort?.oppdatertTidspunkt
           ? formaterDatoForFrontend(meldePeriodeMedMeldekort.meldekort?.oppdatertTidspunkt)
           : '-'}
