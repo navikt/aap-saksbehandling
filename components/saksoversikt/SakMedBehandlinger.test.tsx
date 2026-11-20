@@ -12,7 +12,7 @@ export const lagBehandling = (
   vurderingsbehov: [],
   årsakTilOpprettelse: 'SØKNAD',
   ...overrides,
-  erGjeldende: true
+  erGjeldende: true,
 });
 
 export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo => ({
