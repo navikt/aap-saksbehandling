@@ -1,5 +1,5 @@
 import { JaEllerNei } from 'lib/utils/form';
-import { VurderingFormMeta } from 'lib/types/types';
+import { AutomatiskLovvalgOgMedlemskapVurdering, VurderingFormMeta } from 'lib/types/types';
 
 export type LovOgMedlemskapVurderingForm = {
   vurderinger: LovvalgOgMedlemskapManuellVurderingForm[];
@@ -16,6 +16,7 @@ export interface LovvalgOgMedlemskapManuellVurderingForm extends VurderingFormMe
     varMedlemIFolketrygd: JaEllerNei;
   };
   fraDato: string;
+  delvurderinger?: AutomatiskLovvalgOgMedlemskapVurdering; // Kun for visning, ikke for innsending
 }
 
 // TODO denne er midlertidig inntil alle mellomlagrede vurderinger har blitt periodisert (https://jira.adeo.no/browse/FAGSYSTEM-405014)
