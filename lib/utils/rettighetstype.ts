@@ -1,12 +1,6 @@
 export function mapRettighetsTypeTilTekst(
   rettighetsType:
-    | 'BISTANDSBEHOV'
-    | 'SYKEPENGEERSTATNING'
-    | 'STUDENT'
-    | 'ARBEIDSSØKER'
-    | 'VURDERES_FOR_UFØRETRYGD'
-    | null
-    | undefined
+    'BISTANDSBEHOV' | 'SYKEPENGEERSTATNING' | 'STUDENT' | 'ARBEIDSSØKER' | 'VURDERES_FOR_UFØRETRYGD' | null | undefined
 ) {
   switch (rettighetsType) {
     case 'BISTANDSBEHOV':

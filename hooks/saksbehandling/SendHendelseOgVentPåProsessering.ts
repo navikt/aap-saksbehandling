@@ -8,10 +8,7 @@ import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 
 export type SendHendelseOgVentPåProsesseringStatus =
-  | FlytProsesseringStatus
-  | 'CLIENT_ERROR'
-  | 'CLIENT_CONFLICT'
-  | undefined;
+  FlytProsesseringStatus | 'CLIENT_ERROR' | 'CLIENT_CONFLICT' | undefined;
 
 export const useSendHendelseOgVentPåProsessering = (): {
   status: SendHendelseOgVentPåProsesseringStatus;
