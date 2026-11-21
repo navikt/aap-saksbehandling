@@ -2,6 +2,7 @@ import { BehandlingFlytOgTilstand, StegGruppe } from 'lib/types/types';
 
 import { Aktivitetsplikt11_7 } from 'components/behandlinger/aktivitetsplikt/11-7/Aktivitetsplikt11_7';
 import { Aktivitetsplikt11_9 } from 'components/behandlinger/aktivitetsplikt/11-9/Aktivitetsplikt11_9';
+import { Utenlandsopphold } from 'components/behandlinger/utenlandsopphold/Utenlandsopphold';
 import { AvbrytAktivitetspliktbehandling } from 'components/behandlinger/aktivitetsplikt/avbryt/vurdering/AvbrytAktivitetspliktbehandling';
 import { AlderMedDataFetching } from 'components/behandlinger/alder/AlderMedDataFetching';
 import { Barnetillegg } from 'components/behandlinger/barnetillegg/Barnetillegg';
@@ -122,6 +123,10 @@ export const OppgaveKolonne = async ({ behandlingsreferanse, aktivGruppe, classN
     )}
     {aktivGruppe === 'AKTIVITETSPLIKT_11_9' && (
       <Aktivitetsplikt11_9 behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
+    )}
+    {/* Søknad om AAP under opphold i utlandet */}
+    {aktivGruppe === 'SØKNAD_UTENLANDSOPPHOLD' && (
+      <Utenlandsopphold behandlingsreferanse={behandlingsreferanse} flyt={flyt} />
     )}
     {aktivGruppe === 'AVBRYT_AKTIVITETSPLIKTBEHANDLING' && (
       <AvbrytAktivitetspliktbehandling behandlingsreferanse={behandlingsreferanse} flyt={flyt} />

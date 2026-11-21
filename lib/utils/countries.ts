@@ -35,6 +35,17 @@ export const alleLandUtenNorge: ValuePair[] = [
     .sort((code, name) => code.label.localeCompare(name.label, 'no')),
 ];
 
+export const alleLandUtenNorgeAlpha2: ValuePair[] = [
+  { value: '', label: '' },
+  ...countryList
+    .filter((country) => country.alpha2 !== 'NO')
+    .map((country) => ({
+      value: country.alpha2,
+      label: countries.getName(country.alpha2, 'no', { select: 'official' }) || '',
+    }))
+    .sort((code, name) => code.label.localeCompare(name.label, 'no')),
+];
+
 export const landMedTrygdesamarbeid: ValuePair[] = [
   { value: '', label: '' },
   ...filteredEeaCountries.sort((code, name) => code.label.localeCompare(name.label, 'no')),
