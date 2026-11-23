@@ -13,12 +13,11 @@ export const VirksomhetFaseTag = ({ fase }: Props) => {
   }
 
   return (
-    <Tag size="xsmall" data-color={'neutral'} variant='neutral-moderate'>
+    <Tag size="xsmall" data-color={'neutral'} variant="neutral-moderate">
       {mapFaseToFaseTekst(fase)}
     </Tag>
   );
 };
-
 
 function mapFaseToFaseTekst(fase: EtableringFase): string | undefined {
   switch (fase) {
