@@ -15,6 +15,7 @@ import { MottakerType } from 'components/brevbygger/mottaker/VelgMottakere';
 import { clientHentLandkoderIso2 } from 'lib/clientApi';
 import { isError, isSuccess } from 'lib/utils/api';
 import { storForbokstavIHvertOrd } from 'lib/utils/string';
+import { erGyldigFødselsnummer } from 'lib/utils/fnr';
 
 enum Opplysningstype {
   KUN_IDENT = 'KUN_IDENT',
@@ -72,8 +73,8 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
 
   const { control, handleSubmit, setValue } = useForm<RedigerMottakerFields>({
     defaultValues: tilFormFields(mottaker),
-    shouldUnregister: true,
   });
+  const identType = useWatch({ control, name: 'identType' });
   const opplysningstype = useWatch({ control, name: 'opplysningstype' });
   const valgtLandkode = useWatch({ control, name: 'landkode' });
   const visIdentfelter = !!opplysningstype && opplysningstype !== Opplysningstype.KUN_ADRESSE;
@@ -134,8 +135,10 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
           },
         };
 
+    const ident = brukerKunAdresse ? undefined : felter.ident || undefined;
+
     onLagre(target, {
-      ident: brukerKunAdresse ? undefined : felter.ident || undefined,
+      ident,
       identType: brukerKunAdresse
         ? undefined
         : felter.identType
@@ -176,7 +179,7 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
               </Box>
 
               {visIdentfelter && (
-                <HGrid columns={2} gap="space-16">
+                <HGrid columns={2} gap="space-16" align="start">
                   <SelectWrapper
                     control={control}
                     name="identType"
@@ -197,7 +200,16 @@ export const RedigerMottakerDialog = ({ target, setIsOpen, mottaker, onLagre }: 
                     label="Identifikator"
                     type="text"
                     control={control}
-                    rules={{ required: { value: visIdentfelter, message: 'Du må fylle inn identifikator.' } }}
+                    rules={{
+                      required: { value: visIdentfelter, message: 'Du må fylle inn identifikator.' },
+                      validate: (value) => {
+                        if ((identType === 'FNR' || identType === 'ORGNR') && /\D/.test(value ?? '')) {
+                          return 'Kan kun inneholde tall';
+                        } else if (identType === 'FNR' && (!value || !erGyldigFødselsnummer(value))) {
+                          return 'Fødselsnummeret er ikke gyldig';
+                        }
+                      },
+                    }}
                   />
                 </HGrid>
               )}
