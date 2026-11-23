@@ -13,6 +13,7 @@ import {
   byggMigrertKravLøsningFraSkjema,
   emptyMigrertKravFormFields,
   finnKravVurderingByReferanse,
+  finnMuligRettFra,
   finnSøknadUtenKravByReferanse,
   hentOriginaleFormFelter,
   kravVurderingTilFormFields,
@@ -66,15 +67,38 @@ function migrertKrav(overrides: Partial<MigrertKravVurdering> = {}): MigrertKrav
 }
 
 function grunnlag(overrides: Partial<KravGrunnlag> = {}): KravGrunnlag {
+  const nyeVurderinger = overrides.nyeVurderinger ?? [];
+  const vedtatteVurderinger = overrides.vedtatteVurderinger ?? [];
+
   return {
     harTilgangTilÅSaksbehandle: true,
-    nyeVurderinger: [],
-    vedtatteVurderinger: [],
+    nyeVurderinger,
+    vedtatteVurderinger,
+    gjeldendeVurderinger: [...nyeVurderinger, ...vedtatteVurderinger],
     søknader: [],
     søknaderUtenKravvurdering: [],
     ...overrides,
   };
 }
+
+describe('finnMuligRettFra', () => {
+  it('returnerer muligRettFra for et RELEVANT_KRAV', () => {
+    expect(finnMuligRettFra(relevantKrav({ muligRettFra: '2025-04-15' }))).toBe('2025-04-15');
+  });
+
+  it.each(['KLAGE', 'TILLEGGSOPPLYSNING', 'TRUKKET_SØKNAD'] as const)('returnerer null for %s', (type) => {
+    const krav: KravVurdering = {
+      type,
+      referanse: 'krav-2',
+      journalpostId: { identifikator: 'jp-2' },
+      begrunnelse: 'Begrunnelse',
+      opprettet: '2025-04-01T10:30:00Z',
+      vurdertAv: bruker,
+      vurdertIBehandling: behandlingId,
+    };
+    expect(finnMuligRettFra(krav)).toBeNull();
+  });
+});
 
 describe('kravVurderingTilFormFields og søknadUtenKravTilFormFields', () => {
   it('mapper felter fra et RELEVANT_KRAV korrekt, inkludert formattert søknadsdato', () => {
@@ -261,14 +285,15 @@ describe('byggKravVurderingerFraSkjema', () => {
     const løsninger = byggKravVurderingerFraSkjema(uendretGrunnlag, vurderinger);
 
     expect(løsninger).toHaveLength(2);
-    expect(løsninger.map((l) => l.referanse)).toEqual(
-      expect.arrayContaining(['krav-uendret-1', 'krav-uendret-2'])
-    );
+    expect(løsninger.map((l) => l.referanse)).toEqual(expect.arrayContaining(['krav-uendret-1', 'krav-uendret-2']));
   });
 
   it('bekreft uten endring: inkluderer ikke vedtatteVurderinger eller søknaderUtenKravvurdering, kun nyeVurderinger', () => {
     const nyttKrav = relevantKrav({ referanse: 'krav-nytt-uendret' });
-    const vedtattKrav = relevantKrav({ referanse: 'krav-vedtatt-uendret', journalpostId: { identifikator: 'jp-vedtatt' } });
+    const vedtattKrav = relevantKrav({
+      referanse: 'krav-vedtatt-uendret',
+      journalpostId: { identifikator: 'jp-vedtatt' },
+    });
     const søknad = søknadUtenKrav({ journalpostId: { identifikator: 'jp-utkast-uendret' } });
     const uendretGrunnlag = grunnlag({
       nyeVurderinger: [nyttKrav],

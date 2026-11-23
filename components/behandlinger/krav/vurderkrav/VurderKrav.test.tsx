@@ -39,10 +39,14 @@ function søknadUtenKrav(overrides: Partial<SøknadUtenKrav> = {}): SøknadUtenK
 }
 
 function grunnlag(overrides: Partial<KravGrunnlag> = {}): KravGrunnlag {
+  const nyeVurderinger = overrides.nyeVurderinger ?? [];
+  const vedtatteVurderinger = overrides.vedtatteVurderinger ?? [];
+
   return {
     harTilgangTilÅSaksbehandle: true,
-    nyeVurderinger: [],
-    vedtatteVurderinger: [],
+    nyeVurderinger,
+    vedtatteVurderinger,
+    gjeldendeVurderinger: [...nyeVurderinger, ...vedtatteVurderinger],
     søknader: [],
     søknaderUtenKravvurdering: [],
     ...overrides,
