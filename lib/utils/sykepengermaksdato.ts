@@ -3,15 +3,24 @@ import { Dato } from 'lib/types/Dato';
 
 /**
  * Vis dato hvis sykepenger er i Speil.
- * Maksdato er kun satt dersom grunnlaget er VEDTAK_I_NY_LØSNING, https://spokelse.intern.nav.no/swagger
+ * Maksdato er kun satt dersom grunnlaget er VEDTAK_I_NY_LØSNING, MAKSDATO_I_INFOTRYGD eller SISTE_UTBETALING_I_INFOTRYGD, https://spokelse.intern.nav.no/swagger
  */
+
+const grunnlagMedMaksdato: GjenståendeSykedager['grunnlag'][] = [
+  'VEDTAK_I_NY_LØSNING',
+  'MAKSDATO_I_INFOTRYGD',
+  'SISTE_UTBETALING_I_INFOTRYGD',
+];
+
 export function utledMaksdatoFraSykepenger(gjenståendeSykedager?: GjenståendeSykedager): string | undefined {
   if (!gjenståendeSykedager) {
     return undefined;
   }
 
-  if (gjenståendeSykedager.grunnlag === 'VEDTAK_I_NY_LØSNING' && gjenståendeSykedager.maksdato) {
+  if (grunnlagMedMaksdato.includes(gjenståendeSykedager.grunnlag) && gjenståendeSykedager.maksdato) {
     return new Dato(gjenståendeSykedager.maksdato).formaterForFrontend();
+  } else if (gjenståendeSykedager.grunnlag === 'INGEN_SYKEPENGER_SISTE_26_UKER') {
+    return '';
   } else {
     return mapGrunnlagTilTekst(gjenståendeSykedager.grunnlag);
   }
