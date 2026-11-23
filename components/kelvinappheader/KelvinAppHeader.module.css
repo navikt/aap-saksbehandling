@@ -15,3 +15,15 @@
 .kelvinOppgavesokForm {
   padding-top: var(--ax-space-8);
 }
+
+.søkOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  background: var(--ax-bg-overlay);
+}
+
+.childrenWrapper {
+  position: relative;
+  z-index: 0;
+}

@@ -1,6 +1,6 @@
 import './app.css';
 
-import { KelvinAppHeader } from 'components/kelvinappheader/KelvinAppHeader';
+import { KelvinAppHeaderWrapper } from 'components/kelvinappheader/KelvinAppHeaderWrapper';
 import { hentInnloggetBrukerInformasjon } from 'lib/services/azure/azureUserService';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { FeatureFlagProvider } from 'context/UnleashContext';
@@ -22,8 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Faro collectorUrl={process.env.NAIS_FRONTEND_TELEMETRY_COLLECTOR_URL} />
         <FeatureFlagProvider flags={getAllFlags(brukerInformasjon.NAVident)}>
           <InnloggetBrukerContextProvider bruker={brukerInformasjon}>
-            <KelvinAppHeader />
-            {children}
+            <KelvinAppHeaderWrapper>{children}</KelvinAppHeaderWrapper>
           </InnloggetBrukerContextProvider>
         </FeatureFlagProvider>
       </body>

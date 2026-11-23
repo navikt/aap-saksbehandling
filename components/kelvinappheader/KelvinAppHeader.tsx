@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useEffectEvent, useState } from 'react';
 import {
   ActionMenu,
   BodyShort,
@@ -88,12 +88,36 @@ function finnEndringslogg(): HTMLElement {
 }
 
 const lokalLenkeTilSaksoversikt = isLocal();
-export const KelvinAppHeader = () => {
+export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<SetStateAction<boolean>> }) => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
   const [migrerSakModalÅpen, setMigrerSakModalÅpen] = useState<boolean>(false);
   const brukerInformasjon = useInnloggetBruker();
   const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
+  const visSøkOverlay = useFeatureFlag('SokOverlayFrontend');
+
+  useEffect(() => {
+    if (visSøkOverlay) {
+      setSøkOverlay(Boolean(søkeresultat));
+    }
+  }, [søkeresultat]);
+
+  const handleEscape = useEffectEvent(() => {
+    if (søkeresultat) {
+      setSøkeresultat(undefined);
+    }
+  });
+
+  useEffect(() => {
+    const handleDocumentKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !event.defaultPrevented) {
+        handleEscape();
+      }
+    };
+
+    document.addEventListener('keydown', handleDocumentKeyDown);
+    return () => document.removeEventListener('keydown', handleDocumentKeyDown);
+  }, []);
 
   return (
     <div className={styles.stickyHeader}>
