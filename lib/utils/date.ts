@@ -10,6 +10,7 @@ export const DATO_FORMATER = {
   ddMM: 'dd.MM.',
   dMMMMyyyy: 'd. MMMM yyyy', // 1. februar 2026
   LLLL_yyyy: 'LLLL yyyy', // februar 2026
+  yyyyMMdd_THHmmss: "yyyy-MM-dd'T'HH:mm:ss", // 2026-02-01T00:00:00 (LocalDateTime uten tidssone)
 };
 
 export const uendeligSluttString = '2999-01-01';
@@ -54,6 +55,14 @@ export function formaterDatoMedMånedOgÅr(dato: string | Date): string {
 
 export const formaterDatoForBackend = (dato: Date) => {
   return format(dato, 'yyyy-MM-dd');
+};
+
+/**
+ * Formaterer til LocalDateTime for backend i lokal tid. I motsetning til toISOString() konverteres ikke til UTC,
+ * så midnatt lokal tid forblir på samme dato.
+ */
+export const formaterDatoTidForBackend = (dato: Date) => {
+  return format(dato, DATO_FORMATER.yyyyMMdd_THHmmss);
 };
 
 export const stringToDate = (value?: string | null, format: string = 'yyyy-MM-dd') => {

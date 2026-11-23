@@ -2,7 +2,7 @@ import { BodyShort, Button, VStack } from '@navikt/ds-react';
 import { clientSendHendelse } from 'lib/clientApi';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { formaterDatoForFrontend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { formaterDatoForFrontend, formaterDatoTidForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerDato } from 'lib/validation/dateValidation';
 
 interface FormFields {
@@ -59,7 +59,7 @@ export const SendNySoknad = ({ saksid }: { saksid: string }) => {
         version: 1,
         etterspurtDokumentasjon: [],
       },
-      mottattTidspunkt: mottatt.toISOString(),
+      mottattTidspunkt: formaterDatoTidForBackend(mottatt),
       referanse: {
         type: 'JOURNALPOST',
         verdi: crypto.randomUUID(),
