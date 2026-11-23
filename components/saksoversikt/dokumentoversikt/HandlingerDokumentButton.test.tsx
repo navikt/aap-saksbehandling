@@ -76,7 +76,6 @@ describe('Original dokumentvariant', () => {
 
     await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
 
-    screen.logTestingPlaygroundURL();
     expect(screen.getByRole('menuitem', { name: 'Original' })).toHaveAttribute('aria-disabled', 'true');
   });
 });
