@@ -100,7 +100,7 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
     if (visSøkOverlay) {
       setSøkOverlay(Boolean(søkeresultat));
     }
-  }, [søkeresultat]);
+  }, [søkeresultat, setSøkOverlay]);
 
   const handleEscape = useEffectEvent(() => {
     if (søkeresultat) {
