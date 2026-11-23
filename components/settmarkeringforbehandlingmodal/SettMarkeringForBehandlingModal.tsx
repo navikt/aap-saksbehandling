@@ -108,6 +108,8 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                       href={
                         'https://navno.sharepoint.com/sites/fag-og-ytelser-arbeid-arbeidsavklaringspenger/SitePages/Rutine-for-Kelvin---Trekke-s%C3%B8knad.aspx'
                       }
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       Marker som haster (Navet)
                     </Link>
@@ -120,7 +122,7 @@ export const SettMarkeringForBehandlingModal = ({ referanse, type, isOpen, onClo
                 )}
                 {avtaltMellomLedereValgt && (
                   <Alert variant={'warning'}>
-                    {`Før du markerer oppgaven med haster med årsak “${avtaltMellomLedereLabel}” skal leder på Nav-kontoret og i Nav arbeid og ytelser ha snakket sammen og avtalt dette.`}
+                    {`Før du markerer oppgaven som haster med årsak “${avtaltMellomLedereLabel}” skal leder på Nav-kontoret og i Nav arbeid og ytelser ha snakket sammen og avtalt dette.`}
                   </Alert>
                 )}
               </form>
