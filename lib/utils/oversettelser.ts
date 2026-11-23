@@ -14,6 +14,8 @@ const behovskodeMap = {
   '4101': '§ 11-7 Aktivitetsplikt',
   '4102': 'Venter på uttalelse fra brukeren på forhåndsvarsel aktivitetsplikt § 11-7',
   '4201': '§ 11-9 Aktivitetsplikt',
+  '4401': 'Vurder søknad om AAP under opphold i utlandet',
+  '4402': 'Bekreft at brev er sendt',
   '4301': 'Avbryt behandling',
   '5001': '§ 11-14 Student',
   '5002': '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt',
@@ -235,6 +237,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return '§ 11-7 Aktivitetsplikt';
     case 'AKTIVITETSPLIKT_11_9':
       return '§ 11-9 Aktivitetsplikt';
+    case 'SØKNAD_UTENLANDSOPPHOLD':
+      return 'Vurder søknad om opphold i utlandet';
     case 'UDEFINERT':
       return 'Udefinert';
     case 'OPPHOLDSKRAV':
@@ -270,6 +274,8 @@ export function mapTilOppgaveBehandlingstypeTekst(behandlingsType: OppgaveBehand
       return 'Aktivitetsplikt § 11-7';
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'UTENLANDSOPPHOLD':
+      return 'Opphold i utlandet';
     case 'FORDELING':
       return 'Fordeling';
   }
@@ -372,6 +378,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-7';
     case 'Aktivitetsplikt11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'Utenlandsopphold':
+      return 'Opphold i utlandet';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
     default:

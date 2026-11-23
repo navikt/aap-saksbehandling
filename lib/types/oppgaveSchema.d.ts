@@ -1654,6 +1654,8 @@ export interface components {
     'no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon': {
       /** @enum {string} */
       kode:
+        | '4401'
+        | '4402'
         | '4101'
         | '4102'
         | '4201'
@@ -1751,6 +1753,8 @@ export interface components {
       )[];
       /** @enum {string} */
       løsesISteg:
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
+        | 'BEKREFT_BREV_SENDT'
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
@@ -1878,6 +1882,8 @@ export interface components {
       aktivtAvklaringsbehov?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       /** @enum {string|null} */
       aktivtSteg?:
+        | 'VURDER_SØKNAD_UTENLANDSOPPHOLD'
+        | 'BEKREFT_BREV_SENDT'
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
@@ -1962,6 +1968,7 @@ export interface components {
       behandlingMetadata?: 'AVSLAG_11_5_FØRSTEGANGSBEHANDLING' | null;
       /** @enum {string} */
       behandlingType:
+        | 'Utenlandsopphold'
         | 'Aktivitetsplikt'
         | 'Aktivitetsplikt11_9'
         | 'Førstegangsbehandling'
@@ -2003,6 +2010,7 @@ export interface components {
       vurderingsbehov: string[];
       /** @enum {string} */
       årsakTilOpprettelse:
+        | 'SØKNAD_UTENLANDSOPPHOLD'
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
@@ -2263,6 +2271,7 @@ export interface components {
       behandlingsreferanse: string;
       /** @enum {string} */
       behandlingstype:
+        | 'UTENLANDSOPPHOLD'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
         | 'DOKUMENT_HÅNDTERING'
@@ -2384,6 +2393,7 @@ export interface components {
     'no.nav.aap.oppgave.drift.FilterDriftRequest': {
       avklaringsbehovKoder: string[];
       behandlingstyper: (
+        | 'UTENLANDSOPPHOLD'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
         | 'DOKUMENT_HÅNDTERING'
@@ -2408,6 +2418,7 @@ export interface components {
     'no.nav.aap.oppgave.drift.FilterDriftResponse': {
       avklaringsbehov: components['schemas']['no.nav.aap.oppgave.drift.AvklaringsbehovDto'][];
       behandlingstyper: (
+        | 'UTENLANDSOPPHOLD'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
         | 'DOKUMENT_HÅNDTERING'
@@ -2699,6 +2710,7 @@ export interface components {
       oppgaver: components['schemas']['no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse'][];
       sattFilterBehandlingstyper?:
         | (
+            | 'UTENLANDSOPPHOLD'
             | 'AKTIVITETSPLIKT'
             | 'AKTIVITETSPLIKT_11_9'
             | 'DOKUMENT_HÅNDTERING'
@@ -2745,6 +2757,7 @@ export interface components {
     'no.nav.aap.oppgave.liste.UtvidetOppgavelisteFilter': {
       avklaringsbehovKoder: string[];
       behandlingstyper: (
+        | 'UTENLANDSOPPHOLD'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
         | 'DOKUMENT_HÅNDTERING'
