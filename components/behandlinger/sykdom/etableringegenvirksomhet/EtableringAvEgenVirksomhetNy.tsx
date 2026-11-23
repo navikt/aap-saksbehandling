@@ -45,7 +45,7 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetFormNy';
 import styles from './EtableringAvEgenVirksomhet.module.css';
-import { VirksomhetFaseTag } from './VirksomhetFaseTag';
+import { VirksomhetFaseTag } from './VirksomhetFaseTage';
 
 export type EtableringFase = EtableringEgenVirksomhetVurderingResponse['fase'];
 
@@ -210,7 +210,7 @@ export const EtableringAvEgenVirksomhetNy = ({
   const vedtatteVurderinger = grunnlag.sisteVedtatteVurderinger;
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
   const errorList = hentFeilmeldingerForForm(form.formState.errors);
-  const ikkeForsteVurdering = vedtatteVurderinger.length > 0 || nyeVurderinger.length > 1;
+  const ikkeForsteVurdering =  vedtatteVurderinger.length > 0 || nyeVurderinger.length > 1;
 
   return (
     <VilkårskortPeriodisert

@@ -30,7 +30,7 @@ export function OppgaveBeskrivelse({ beskrivelse }: Props) {
   return (
     <VStack gap="space-4" align="start">
       <BodyShort
-        size={'small'}
+        size={"small"}
         ref={tekstRef}
         id={tekstId}
         className={`${styles.beskrivelse} ${utvidet ? styles.utvidet : styles.forhaandsvisning}`}
