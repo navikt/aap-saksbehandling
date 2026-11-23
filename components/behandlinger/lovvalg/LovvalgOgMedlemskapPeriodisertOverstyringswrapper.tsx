@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  AutomatiskLovvalgOgMedlemskapVurdering,
-  MellomlagretVurdering,
-  PeriodisertLovvalgMedlemskapGrunnlag,
-} from 'lib/types/types';
+import { DelvurderingForKrav, MellomlagretVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { ReactNode, useState } from 'react';
 import { AutomatiskVurderingAvLovvalgOgMedlemskap } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskVurderingAvLovvalgOgMedlemskap';
 import { Behovstype } from 'lib/utils/form';
@@ -15,7 +11,7 @@ interface Props {
   grunnlag: PeriodisertLovvalgMedlemskapGrunnlag;
   behandlingVersjon: number;
   readOnly: boolean;
-  automatiskVurdering: AutomatiskLovvalgOgMedlemskapVurdering;
+  delvurderinger: DelvurderingForKrav[];
   harAvklaringsbehov: boolean;
   visOverstyrKnapp?: boolean;
   initialMellomlagretVurdering?: MellomlagretVurdering;
@@ -26,7 +22,7 @@ interface Props {
 export const LovvalgOgMedlemskapPeriodisertOverstyringswrapper = ({
   children,
   grunnlag,
-  automatiskVurdering,
+  delvurderinger,
   harAvklaringsbehov,
   behandlingVersjon,
   readOnly,
@@ -39,7 +35,7 @@ export const LovvalgOgMedlemskapPeriodisertOverstyringswrapper = ({
   return (
     <>
       <AutomatiskVurderingAvLovvalgOgMedlemskap
-        vurdering={automatiskVurdering}
+        delvurderinger={delvurderinger}
         setOverstyring={setOverstyring}
         visOverstyrKnapp={visOverstyrKnapp}
         visOverstyringsBehov={overstyring}

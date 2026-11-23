@@ -1,6 +1,5 @@
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import {
-  hentAutomatiskLovvalgOgMedlemskapVurdering,
   hentLovvalgMedlemskapGrunnlag,
   hentMellomlagring,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
@@ -19,13 +18,10 @@ interface Props {
 }
 
 export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) => {
-  const [vurderingAutomatisk, grunnlag] = await Promise.all([
-    hentAutomatiskLovvalgOgMedlemskapVurdering(behandlingsreferanse),
-    hentLovvalgMedlemskapGrunnlag(behandlingsreferanse),
-  ]);
+  const grunnlag = await hentLovvalgMedlemskapGrunnlag(behandlingsreferanse);
 
-  if (isError(vurderingAutomatisk) || isError(grunnlag)) {
-    return <ApiException apiResponses={[vurderingAutomatisk, grunnlag]} />;
+  if (isError(grunnlag)) {
+    return <ApiException apiResponses={[grunnlag]} />;
   }
 
   const vurderLovvalgSteg = getStegData('LOVVALG', 'VURDER_LOVVALG', flyt);
@@ -38,16 +34,15 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) 
   );
 
   const behandlingsVersjon = flyt.behandlingVersjon;
+  const nyesteDelvurdering = [...grunnlag.data.delvurderinger]
+    .sort((a, b) => a.relevantDato.localeCompare(b.relevantDato))
+    .at(-1)?.delvurdering;
+  const kanBehandlesAutomatisk = nyesteDelvurdering?.kanBehandlesAutomatisk ?? false;
   const erOverstyrtTilbakeførtVurdering =
-    vurderingAutomatisk.data.kanBehandlesAutomatisk &&
-    (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
+    kanBehandlesAutomatisk && (grunnlag.data.nyeVurderinger.length === 0 || grunnlag.data.overstyrt);
 
   const visManuellVurdering = skalViseStegForPeriodisertGrunnlag(vurderLovvalgSteg.avklaringsbehov, grunnlag.data);
-  const visOverstyrKnapp = kanViseOverstyrKnapp(
-    vurderingAutomatisk.data.kanBehandlesAutomatisk,
-    readOnly,
-    vurderLovvalgSteg.avklaringsbehov
-  );
+  const visOverstyrKnapp = kanViseOverstyrKnapp(kanBehandlesAutomatisk, readOnly, vurderLovvalgSteg.avklaringsbehov);
 
   const erOverstyrt = grunnlag?.data.overstyrt || erOverstyrtTilbakeførtVurdering;
 
@@ -65,7 +60,7 @@ export const LovvalgPeriodisert = async ({ behandlingsreferanse, flyt }: Props) 
       aktivtSteg={flyt.aktivtSteg}
     >
       <LovvalgOgMedlemskapPeriodisertOverstyringswrapper
-        automatiskVurdering={vurderingAutomatisk.data}
+        delvurderinger={grunnlag.data.delvurderinger}
         harAvklaringsbehov={vurderLovvalgSteg.avklaringsbehov.length > 0}
         behandlingsreferanse={behandlingsreferanse}
         behandlingVersjon={behandlingsVersjon}

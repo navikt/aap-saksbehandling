@@ -1,18 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { screen } from '@testing-library/react';
-import { AutomatiskLovvalgOgMedlemskapVurdering, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
+import { DelvurderingForKrav, PeriodisertLovvalgMedlemskapGrunnlag } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { customRender } from 'lib/test/CustomRender';
 import { LovvalgOgMedlemskapPeriodisertOverstyringswrapper } from 'components/behandlinger/lovvalg/LovvalgOgMedlemskapPeriodisertOverstyringswrapper';
 
-const automatiskLovvalgOgMedlemskapVurdering: AutomatiskLovvalgOgMedlemskapVurdering = {
-  tilhørighetVurdering: [],
-  kanBehandlesAutomatisk: true,
-};
+const delvurderinger: DelvurderingForKrav[] = [
+  { relevantDato: '2025-01-01', delvurdering: { tilhørighetVurdering: [], kanBehandlesAutomatisk: true } },
+];
 const tomtGrunnlag: PeriodisertLovvalgMedlemskapGrunnlag = {
   ikkeRelevantePerioder: [],
   behøverVurderinger: [],
-  delvurderinger: [],
+  delvurderinger,
   harTilgangTilÅSaksbehandle: false,
   kanVurderes: [],
   nyeVurderinger: [],
@@ -28,7 +27,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         behandlingsreferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
-        automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
+        delvurderinger={delvurderinger}
         harAvklaringsbehov={false}
         initialMellomlagretVurdering={{
           data: '{"lovvalgBegrunnelse":"Dette er min vurdering som er mellomlagret"}',
@@ -57,7 +56,7 @@ describe('Lovvalg og medlemskap wrapper', () => {
         behandlingsreferanse={'123'}
         behandlingVersjon={1}
         readOnly={false}
-        automatiskVurdering={automatiskLovvalgOgMedlemskapVurdering}
+        delvurderinger={delvurderinger}
         harAvklaringsbehov={false}
         behovstype={Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP}
       >
