@@ -4,15 +4,18 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Search } from '@navikt/ds-react';
 import styles from 'components/kelvinappheader/KelvinAppHeader.module.css';
 import { SøkeResultat } from 'app/api/kelvinsok/route';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   setSøkeresultat: Dispatch<SetStateAction<SøkeResultat | undefined>>;
+  setSøkOverlay: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
+export const Kelvinsøk = ({ setSøkeresultat, setSøkOverlay }: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const visSøkOverlay = useFeatureFlag('SokOverlayFrontend');
 
-  async function utførSøk(søketekst: string) {
+  async function utførSøk(søketekst: string, setSøkOverlay: Props['setSøkOverlay']) {
     setIsLoading(true);
     let søkedata: SøkeResultat = {} as SøkeResultat;
     try {
@@ -32,6 +35,9 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
     };
 
     setSøkeresultat(cleanedSøkedata);
+    if (visSøkOverlay) {
+      setSøkOverlay(Boolean(cleanedSøkedata));
+    }
 
     setIsLoading(false);
   }
@@ -44,7 +50,7 @@ export const Kelvinsøk = ({ setSøkeresultat }: Props) => {
       onSubmit={(e) => {
         const input = e.currentTarget.elements?.[0] as HTMLInputElement;
         if (input.value) {
-          utførSøk(input.value);
+          utførSøk(input.value, setSøkOverlay);
         }
         e.preventDefault();
       }}

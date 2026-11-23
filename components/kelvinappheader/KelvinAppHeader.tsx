@@ -94,17 +94,15 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
   const [migrerSakModalÅpen, setMigrerSakModalÅpen] = useState<boolean>(false);
   const brukerInformasjon = useInnloggetBruker();
   const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
-  const visSøkOverlay = useFeatureFlag('SokOverlayFrontend');
 
-  useEffect(() => {
-    if (visSøkOverlay) {
-      setSøkOverlay(Boolean(søkeresultat));
-    }
-  }, [søkeresultat, setSøkOverlay]);
+  const lukkSøkeresultat = () => {
+    setSøkeresultat(undefined);
+    setSøkOverlay(false);
+  };
 
   const handleEscape = useEffectEvent(() => {
     if (søkeresultat) {
-      setSøkeresultat(undefined);
+      lukkSøkeresultat();
     }
   });
 
@@ -125,7 +123,7 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
         <HStack gap="space-16" marginInline="space-16">
-          <Kelvinsøk setSøkeresultat={setSøkeresultat} />
+          <Kelvinsøk setSøkeresultat={setSøkeresultat} setSøkOverlay={setSøkOverlay} />
           <Link data-color={'neutral'} href={`/oppgave/`}>
             Oppgaveliste
           </Link>
@@ -196,7 +194,7 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
                   variant={'primary'}
                   size={'small'}
                   icon={<XMarkIcon />}
-                  onClick={() => setSøkeresultat(undefined)}
+                  onClick={lukkSøkeresultat}
                 >
                   Lukk
                 </Button>
