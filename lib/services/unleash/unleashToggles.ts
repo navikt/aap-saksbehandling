@@ -26,7 +26,7 @@ export const mockedFlags: Flags = {
   RedigerMottakerBrevbygger: true,
   ArenasakerLenkeTilVisninsklient: true,
   KravSteg: true,
-  KravManuellVurdering: false,
+  KravManuellVurdering: true,
   VentStatusForTilbakekreving: true,
   VisMigrereSakFraArenaKnapp: true,
   Avslag11_27: true,
