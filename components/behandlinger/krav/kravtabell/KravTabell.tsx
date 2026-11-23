@@ -38,8 +38,8 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
     setValue('valgteKrav', nyeValgteKrav);
   };
 
-  const nyeVurderinger = getKravVurderingerForSøknad(grunnlag.nyeVurderinger);
-  const vedtatteVurderinger = getKravVurderingerForSøknad(grunnlag.vedtatteVurderinger);
+  const gjeldendeVurderinger = getKravVurderingerForSøknad(grunnlag.gjeldendeVurderinger);
+  const nyeVurderingerReferanser = new Set(getKravVurderingerForSøknad(grunnlag.nyeVurderinger).map((v) => v.referanse));
 
   return (
     <>
@@ -57,22 +57,11 @@ export const KravTabell = ({ grunnlag, readOnly }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {nyeVurderinger.map((vurdering) => (
+          {gjeldendeVurderinger.map((vurdering) => (
             <KravRad
               key={vurdering.referanse}
               vurdering={vurdering}
-              status={'Ny'}
-              readOnly={readOnly}
-              erValgt={valgteKrav.includes(vurdering.referanse)}
-              onToggle={toggleValgtKrav}
-            />
-          ))}
-
-          {vedtatteVurderinger.map((vurdering) => (
-            <KravRad
-              key={vurdering.referanse}
-              vurdering={vurdering}
-              status={'Vedtatt'}
+              status={nyeVurderingerReferanser.has(vurdering.referanse) ? 'Ny' : 'Vedtatt'}
               readOnly={readOnly}
               erValgt={valgteKrav.includes(vurdering.referanse)}
               onToggle={toggleValgtKrav}

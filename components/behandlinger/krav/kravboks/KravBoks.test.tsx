@@ -64,6 +64,7 @@ function KravBoksWrapper({ innhold, onLukk = vi.fn() }: { innhold: KravBoksInnho
         harTilgangTilÅSaksbehandle: true,
         nyeVurderinger: vurdering ? [vurdering] : [],
         vedtatteVurderinger: [],
+        gjeldendeVurderinger: vurdering ? [vurdering] : [],
         søknader: [],
         søknaderUtenKravvurdering: søknad ? [søknad] : [],
       }),

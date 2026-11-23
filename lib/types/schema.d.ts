@@ -9780,6 +9780,7 @@ export interface components {
       vurdertIBehandling: components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.behandling.BehandlingId'];
     };
     'no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto': {
+      gjeldendeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
       harTilgangTilÅSaksbehandle: boolean;
       nyeVurderinger: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'][];
       søknader: components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.SøknadUtenKravDto'][];
@@ -10007,7 +10008,10 @@ export interface components {
       meldekortProsesseringStatus: 'KLAR' | 'PROSESSERER_MELDEKORT';
     };
     'no.nav.aap.behandlingsflyt.behandling.meldekort.MeldeperiodeMedMeldekortDto': {
-      /** Format: date */
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
       meldedato?: string | null;
       /**
        * Format: date
