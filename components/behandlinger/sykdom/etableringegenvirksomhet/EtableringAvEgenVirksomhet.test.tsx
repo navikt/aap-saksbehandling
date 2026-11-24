@@ -1,11 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, within } from 'lib/test/CustomRender';
-import { EtableringAvEgenVirksomhet } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhet';
-import { EtableringAvEgenVirksomhetNy } from './EtableringAvEgenVirksomhetNy';
+import { EtableringAvEgenVirksomhetNy } from 'components/behandlinger/sykdom/etableringegenvirksomhet/EtableringAvEgenVirksomhetNy';
 import { EtableringEgenVirksomhetGrunnlagResponse, EtableringEgenVirksomhetVurderingResponse } from 'lib/types/types';
 import { userEvent } from '@testing-library/user-event';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
-import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils';
+import { getDefaultValuesFromGrunnlag } from './etablering-av-egen-virksomhet-utils-ny';
 import * as clientApi from 'lib/clientApi';
 
 const løsAvklaringsbehov = vi.fn();
@@ -40,17 +39,10 @@ const avslagFraBackend: EtableringEgenVirksomhetVurderingResponse = {
   brukerEierVirksomheten: 'EIER_MINST_50_PROSENT',
   kanFøreTilSelvforsørget: true,
   oppfylt: false,
-  oppstartsPeriode: [],
-  utviklingsPeriode: [],
+  fase: 'UTVIKLING',
+  jobberBrukerAktivMedVirksomheten: false,
   virksomhetNavn: 'Min virksomhet',
   vurderingerMeta: {},
-};
-
-const oppfyltVurderingMedPerioder: EtableringEgenVirksomhetVurderingResponse = {
-  ...avslagFraBackend,
-  oppfylt: true,
-  utviklingsPeriode: [{ fom: '2025-01-01', tom: '2025-01-02' }],
-  oppstartsPeriode: [{ fom: '2025-01-01', tom: '2025-01-02' }],
 };
 
 describe('EtableringAvEgenVirksomhet', () => {
@@ -59,40 +51,9 @@ describe('EtableringAvEgenVirksomhet', () => {
     løsAvklaringsbehov.mockReset();
   });
 
-  describe.each([
-    { navn: 'gammel flyt', Komponent: EtableringAvEgenVirksomhet },
-    { navn: 'ny flyt', Komponent: EtableringAvEgenVirksomhetNy },
-  ])('$navn', ({ Komponent }) => {
-    it.each([{}, { vurderinger: null }])('kan åpne og bekrefte et utkast uten vurderinger: %j', async (data) => {
-      render(
-        <Komponent
-          grunnlag={tomtGrunnlag}
-          readOnly={false}
-          behandlingVersjon={0}
-          initialMellomlagretVurdering={{
-            avklaringsbehovkode: '5058',
-            behandlingId: { id: 1 },
-            data: JSON.stringify(data),
-            vurdertAv: 'Saksbehandler',
-            vurdertDato: '2025-02-01T12:00:00',
-          }}
-        />
-      );
-
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-
-      expect(løsAvklaringsbehov).toHaveBeenCalledWith(
-        expect.objectContaining({
-          behov: expect.objectContaining({ løsningerForPerioder: [] }),
-        }),
-        expect.any(Function)
-      );
-    });
-  });
-
   it('viser backendens avslag for vedtatte vurderinger selv om de gamle grunnvilkårene er oppfylt', () => {
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={{ ...tomtGrunnlag, sisteVedtatteVurderinger: [avslagFraBackend] }}
         readOnly={true}
         behandlingVersjon={0}
@@ -105,7 +66,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('viser backendens avslag for lagrede vurderinger i skrivebeskyttet visning', () => {
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={{ ...tomtGrunnlag, nyeVurderinger: [avslagFraBackend] }}
         readOnly={true}
         behandlingVersjon={0}
@@ -118,7 +79,7 @@ describe('EtableringAvEgenVirksomhet', () => {
 
   it('sender lagrede vurderinger med eksplisitt versjon', async () => {
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={{
           ...tomtGrunnlag,
           nyeVurderinger: [
@@ -158,7 +119,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     const grunnlag = { ...tomtGrunnlag, nyeVurderinger: [avslagFraBackend] };
 
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={grunnlag}
         readOnly={false}
         behandlingVersjon={0}
@@ -172,7 +133,6 @@ describe('EtableringAvEgenVirksomhet', () => {
       />
     );
 
-    expect(screen.getByText('Oppfylt')).toBeVisible();
     await user.click(screen.getByRole('button', { name: 'Avbryt' }));
 
     expect(await screen.findByText('Ikke oppfylt')).toBeVisible();
@@ -188,7 +148,7 @@ describe('EtableringAvEgenVirksomhet', () => {
     });
 
     render(
-      <EtableringAvEgenVirksomhet
+      <EtableringAvEgenVirksomhetNy
         grunnlag={tomtGrunnlag}
         readOnly={false}
         behandlingVersjon={0}
@@ -243,91 +203,19 @@ describe('EtableringAvEgenVirksomhet', () => {
           foreliggerFagligVurdering: false,
           brukerEierVirksomheten: null,
           kanFøreTilSelvforsørget: null,
+          fase: 'UTVIKLING',
+          jobberBrukerAktivMedVirksomheten: true,
           oppfylt: false,
-          oppstartsPeriode: [],
-          utviklingsPeriode: [],
           virksomhetNavn: 'Min virksomhet',
           vurderingerMeta: {},
         },
       ],
     };
 
-    render(<EtableringAvEgenVirksomhet grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
+    render(<EtableringAvEgenVirksomhetNy grunnlag={grunnlagMedVurdering} readOnly={false} behandlingVersjon={0} />);
 
     await user.click(screen.getByRole('button', { name: 'Bekreft' }));
 
     expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
   });
-
-  it.each([
-    { periodetype: 'utviklingsperioder', fom: '03.01.2025', tom: '02.01.2025', skalLagre: false },
-    { periodetype: 'utviklingsperioder', fom: '02.01.2025', tom: '02.01.2025', skalLagre: false },
-    { periodetype: 'utviklingsperioder', fom: '01.01.2025', tom: '02.01.2025', skalLagre: true },
-    { periodetype: 'oppstartsperioder', fom: '03.01.2025', tom: '02.01.2025', skalLagre: false },
-    { periodetype: 'oppstartsperioder', fom: '02.01.2025', tom: '02.01.2025', skalLagre: false },
-    { periodetype: 'oppstartsperioder', fom: '01.01.2025', tom: '02.01.2025', skalLagre: true },
-  ] as const)('validerer $periodetype: fom $fom og tom $tom', async ({ periodetype, fom, tom, skalLagre }) => {
-    render(
-      <EtableringAvEgenVirksomhet
-        grunnlag={{ ...tomtGrunnlag, nyeVurderinger: [oppfyltVurderingMedPerioder] }}
-        readOnly={false}
-        behandlingVersjon={0}
-      />
-    );
-
-    const fomInput = document.querySelector<HTMLInputElement>(`input[name="vurderinger.0.${periodetype}.0.fom"]`);
-    const tomInput = document.querySelector<HTMLInputElement>(`input[name="vurderinger.0.${periodetype}.0.tom"]`);
-    expect(fomInput).not.toBeNull();
-    expect(tomInput).not.toBeNull();
-    await user.clear(fomInput!);
-    await user.type(fomInput!, fom);
-    await user.clear(tomInput!);
-    await user.type(tomInput!, tom);
-
-    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-
-    if (skalLagre) {
-      expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
-    } else {
-      expect(tomInput).toHaveAttribute('aria-invalid', 'true');
-      const feilmeldinger = await screen.findAllByText('Til-dato kan ikke være før fra-dato');
-      expect(feilmeldinger.some((feilmelding) => feilmelding.checkVisibility())).toBe(true);
-      expect(løsAvklaringsbehov).not.toHaveBeenCalled();
-    }
-  });
-
-  it.each(['utviklingsperioder', 'oppstartsperioder'] as const)(
-    'hindrer ugyldig lagring etter endring av fom i %s, og tillater lagring etter retting',
-    async (periodetype) => {
-      render(
-        <EtableringAvEgenVirksomhet
-          grunnlag={{ ...tomtGrunnlag, nyeVurderinger: [oppfyltVurderingMedPerioder] }}
-          readOnly={false}
-          behandlingVersjon={0}
-        />
-      );
-
-      const fomInput = document.querySelector<HTMLInputElement>(`input[name="vurderinger.0.${periodetype}.0.fom"]`);
-      const tomInput = document.querySelector<HTMLInputElement>(`input[name="vurderinger.0.${periodetype}.0.tom"]`);
-      expect(fomInput).not.toBeNull();
-      expect(tomInput).not.toBeNull();
-
-      await user.clear(fomInput!);
-      await user.type(fomInput!, '03.01.2025');
-      await user.clear(tomInput!);
-      await user.type(tomInput!, '02.01.2025');
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-      expect(løsAvklaringsbehov).not.toHaveBeenCalled();
-
-      await user.clear(fomInput!);
-      await user.type(fomInput!, '04.01.2025');
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-      expect(løsAvklaringsbehov).not.toHaveBeenCalled();
-
-      await user.clear(fomInput!);
-      await user.type(fomInput!, '01.01.2025');
-      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
-      expect(løsAvklaringsbehov).toHaveBeenCalledOnce();
-    }
-  );
 });

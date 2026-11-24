@@ -45,7 +45,7 @@ import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov
 import { Buildings3Icon } from '@navikt/aksel-icons';
 import { EtableringAvEgenVirksomhetFormInputNy } from './EtableringAvEgenVirksomhetFormNy';
 import styles from './EtableringAvEgenVirksomhet.module.css';
-import { VirksomhetFaseTag } from './VirksomhetFaseTage';
+import { VirksomhetFaseTag } from './VirksomhetFaseTag';
 
 export type EtableringFase = EtableringEgenVirksomhetVurderingResponse['fase'];
 
