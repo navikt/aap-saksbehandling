@@ -94,6 +94,7 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
   const [migrerSakModalÅpen, setMigrerSakModalÅpen] = useState<boolean>(false);
   const brukerInformasjon = useInnloggetBruker();
   const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
+  const visSøkOverlay = useFeatureFlag('SokOverlayFrontend');
 
   const lukkSøkeresultat = () => {
     setSøkeresultat(undefined);
@@ -119,6 +120,7 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
 
   return (
     <div className={styles.stickyHeader}>
+      {visSøkOverlay && søkeresultat && <div className={styles.sokOverlay} aria-hidden="true" />}
       <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
