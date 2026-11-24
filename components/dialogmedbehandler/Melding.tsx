@@ -89,7 +89,7 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
           )}
           {viseKnappManuellPåminnelse && innkommendeUtgående === 'UTGÅENDE' && dokumentasjonsType === 'L40' && (
             <HStack gap={'space-8'} justify="start">
-              {kanSendePåminnelse && meldingFraNavn !== null && (
+              {kanSendePåminnelse && meldingFraNavn && (
                 <Button size={'small'} variant={'tertiary'} onClick={() => settErDialogÅpen(true)}>
                   Send påminnelse
                 </Button>
