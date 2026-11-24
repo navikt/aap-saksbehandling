@@ -1,60 +1,49 @@
 'use client';
 
+import { Accordion, Button, Detail, HStack, VStack } from '@navikt/ds-react';
 import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
-import { BodyShort, Button, Detail, HStack, VStack } from '@navikt/ds-react';
-import { AutomatiskLovvalgOgMedlemskapVurdering } from 'lib/types/types';
-import { TilhørighetsVurderingTabell } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabell';
+import { DelvurderingForKrav } from 'lib/types/types';
+import { formaterDatoForFrontend } from 'lib/utils/date';
+import { TilhørighetsVurderingTabeller } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/TilhørighetsVurderingTabeller';
 import { Dispatch, SetStateAction } from 'react';
 import { Alert } from 'components/alert/Alert';
 
 interface Props {
-  vurdering: AutomatiskLovvalgOgMedlemskapVurdering;
+  delvurderinger: DelvurderingForKrav[];
   setOverstyring: Dispatch<SetStateAction<boolean>>;
   visOverstyrKnapp?: boolean;
   visOverstyringsBehov?: boolean;
 }
 export const AutomatiskVurderingAvLovvalgOgMedlemskap = ({
-  vurdering,
+  delvurderinger,
   setOverstyring,
   visOverstyrKnapp,
   visOverstyringsBehov,
 }: Props) => {
+  const delvurderingerNyesteFørst = [...delvurderinger].sort((a, b) => b.relevantDato.localeCompare(a.relevantDato));
   return (
     <VilkårsKort heading={'Automatisk vurdering av lovvalg og medlemskap'} steg={'VURDER_LOVVALG'}>
-      <VStack gap={'space-28'} paddingBlock={'space-12'}>
-        {!vurdering.kanBehandlesAutomatisk && (
-          <Alert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
-            Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og medlemskap
-            må vurderes manuelt.
-          </Alert>
+      <VStack gap={'space-28'} paddingBlock={'space-4'}>
+        {delvurderingerNyesteFørst.length > 0 && (
+          <Accordion size={'small'} indent={false}>
+            {delvurderingerNyesteFørst.map(({ relevantDato, delvurdering }, index) => (
+              <Accordion.Item key={`${relevantDato}-${index}`} defaultOpen={index === 0}>
+                <Accordion.Header>Gjelder fra {formaterDatoForFrontend(relevantDato)}</Accordion.Header>
+                <Accordion.Content>
+                  <VStack gap={'space-28'} paddingBlock={'space-12'}>
+                    {!delvurdering.kanBehandlesAutomatisk && (
+                      <Alert variant={'warning'} title={'Til manuell vurdering'} className={'fit-content'}>
+                        Opplysningene tilsier at det kan være utenlandsk lovvalg eller manglende medlemskap. Lovvalg og
+                        medlemskap må vurderes manuelt.
+                      </Alert>
+                    )}
+                    <TilhørighetsVurderingTabeller vurdering={delvurdering} />
+                  </VStack>
+                </Accordion.Content>
+              </Accordion.Item>
+            ))}
+          </Accordion>
         )}
-
-        <div>
-          <BodyShort spacing size={'small'} weight={'semibold'}>
-            Indikasjoner på tilhørighet til Norge
-          </BodyShort>
-
-          <TilhørighetsVurderingTabell
-            vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'I_NORGE')}
-            oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren oppfyller kravene til medlemskap?'}
-            oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
-              .filter((e) => e.indikasjon === 'I_NORGE')
-              .some((x) => x.resultat)}
-          />
-        </div>
-        <div>
-          <BodyShort spacing size={'small'} weight={'semibold'}>
-            Indikasjoner på tilhørighet utenfor Norge
-          </BodyShort>
-          <TilhørighetsVurderingTabell
-            vurdering={vurdering.tilhørighetVurdering.filter((e) => e.indikasjon === 'UTENFOR_NORGE')}
-            oppfyllerOpplysningeneKraveneTekst={'Tilsier opplysningene at brukeren har tilhørighet til Norge?'}
-            oppfyllerOpplysningeneKravene={vurdering.tilhørighetVurdering
-              .filter((e) => e.indikasjon === 'UTENFOR_NORGE')
-              .every((x) => !x.resultat)}
-          />
-        </div>
-
         {visOverstyrKnapp && (
           <HStack justify={'space-between'} align={'end'}>
             {visOverstyringsBehov ? (

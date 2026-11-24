@@ -1,6 +1,6 @@
 'use client';
 
-import { InfoCard, Radio, VStack } from '@navikt/ds-react';
+import { Radio, VStack } from '@navikt/ds-react';
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { validerDato } from 'lib/validation/dateValidation';
 import { TextAreaWrapper } from 'components/form/textareawrapper/TextAreaWrapper';
@@ -11,9 +11,9 @@ import { EtableringAvEgenVirksomhetForm } from 'components/behandlinger/sykdom/e
 import { JaEllerNei } from 'lib/utils/form';
 import { EtableringEierBrukerVirksomheten, lagEnumObjektFraUnionType } from 'lib/types/types';
 import { useEffect } from 'react';
-import { InformationSquareIcon, ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 import { nyVurderingErOppfylt } from './etablering-av-egen-virksomhet-utils-ny';
 import styles from './EtableringAvEgenVirksomhet.module.css';
+import { Alert } from '../../../alert/Alert';
 
 const EierBrukerVirsomheten = lagEnumObjektFraUnionType<NonNullable<EtableringEierBrukerVirksomheten>>({
   EIER_MINST_50_PROSENT: 'EIER_MINST_50_PROSENT',
@@ -139,29 +139,21 @@ export const EtableringAvEgenVirksomhetFormInputNy = ({ index, form, readOnly }:
       )}
 
       {valgtFase !== undefined && (
-        <InfoCard data-color="warning" aria-label={'info alert'} size={'small'} className={styles.maksBredde}>
-          <InfoCard.Header icon={<ExclamationmarkTriangleIcon aria-hidden />} className={styles.infoKort}>
-            Sluttdatoen settes automatisk basert på maksimal varighet for fasen bedriften er i, minus tiden som allerede
-            er brukt. Ønsker du å sette en tidligere sluttdato, må du velge «Legg til ny vurdering».
-          </InfoCard.Header>
-        </InfoCard>
+        <Alert variant={'warning'} className={styles.maksBredde}>
+          {
+            'Sluttdatoen settes automatisk basert på maksimal varighet for fasen bedriften er i, minus tiden som allerede er brukt. Ønsker du å sette en tidligere sluttdato, må du velge «Legg til ny vurdering».'
+          }
+        </Alert>
       )}
 
       {nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)) && (
-        <InfoCard data-color="info" aria-label={'info alert'} size={'small'} className={styles.maksBredde}>
-          <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-            <InfoCard.Title>Har du husket: </InfoCard.Title>
-          </InfoCard.Header>
-          <InfoCard.Content>
-            <VStack>
-              <ul>
-                <li>{'at når AAP under etablering er vedtatt skal det registreres i aktivitetsplanen?'}</li>
-                <li>{'å opprette en oppfølgingsoppgave før utgangen av neste periode?'}</li>
-              </ul>
-            </VStack>
-          </InfoCard.Content>
-        </InfoCard>
+        <Alert variant={'info'} className={styles.maksBredde}>
+          {
+            'Husk å opprette aktivitetskort for den aktuelle etableringsfasen i aktivitetsplanen og fastsett oppfølgingspunkter i dialogen/samtalereferat. Når brukeren går over på ordinær AAP skal du revurdere §§ 11-5 og 11-6'
+          }
+        </Alert>
       )}
     </VStack>
   );
 };
+
