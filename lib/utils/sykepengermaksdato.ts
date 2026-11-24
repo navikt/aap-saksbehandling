@@ -1,5 +1,6 @@
 import { GjenståendeSykedager } from 'lib/types/oppgaveTypes';
 import { Dato } from 'lib/types/Dato';
+import { addDays, isWeekend } from 'date-fns';
 
 /**
  * Vis dato hvis sykepenger er i Speil.
@@ -18,11 +19,11 @@ export function utledMaksdatoFraSykepenger(gjenståendeSykedager?: GjenståendeS
   }
 
   if (grunnlagMedMaksdato.includes(gjenståendeSykedager.grunnlag)) {
-    if (gjenståendeSykedager.maksdato) {
-      return new Dato(gjenståendeSykedager.maksdato).formaterForFrontend();
-    } else {
-      return mapGrunnlagTilTekst(gjenståendeSykedager.grunnlag);
-    }
+    const maksdato = gjenståendeSykedager.maksdato
+      ? new Dato(gjenståendeSykedager.maksdato)
+      : utledMaksdato(gjenståendeSykedager.gjenståendeDager, gjenståendeSykedager.vurdertTilOgMed);
+
+    return maksdato ? maksdato.formaterForFrontend() : mapGrunnlagTilTekst(gjenståendeSykedager.grunnlag);
   } else {
     return '';
   }
@@ -41,4 +42,27 @@ function mapGrunnlagTilTekst(grunnlag: GjenståendeSykedager['grunnlag']): strin
     case 'VEDTAK_I_NY_LØSNING':
       return 'Vedtak i ny løsning';
   }
+}
+
+/**
+ * Vi har tilfeller hvor vi ikke har utledet maksdato i backend da vi var på en tidligere versjon av api-et fra sykepenger.
+ * Må utlede på nytt her da vi har feltene gjenståendeDager og vurdertTilOgMed.
+ * Teller kun mandag–fredag fra dagen etter vurdertTilOgMed. Helligdager på hverdager telles som vanlige hverdager.
+ *
+ * Denne er midlertidig og kan fjernes på et tidspunkt.
+ */
+function utledMaksdato(gjenståendeDager?: number | null, vurdertTilOgMed?: string | null): Dato | null {
+  if (gjenståendeDager == null || !vurdertTilOgMed) {
+    return null;
+  }
+
+  let dato = new Dato(vurdertTilOgMed).dato;
+  let gjenstående = gjenståendeDager;
+  while (gjenstående > 0) {
+    dato = addDays(dato, 1);
+    if (!isWeekend(dato)) {
+      gjenstående--;
+    }
+  }
+  return new Dato(dato);
 }
