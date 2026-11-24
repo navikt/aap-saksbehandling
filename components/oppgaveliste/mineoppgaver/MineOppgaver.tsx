@@ -15,6 +15,7 @@ import { ValuePair } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { MineOppgaverFiltrering } from 'components/oppgaveliste/filtrering/mineoppgaverfiltrering/MineOppgaverFiltrering';
 import styles from 'components/oppgaveliste/mineoppgaver/MineOppgaver.module.css';
+import { MineOppgaverDataGridTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverDataGridTabell';
 import { MineOppgaverTabell } from 'components/oppgaveliste/mineoppgaver/mineoppgavertabell/MineOppgaverTabell';
 import { TabellSkeleton } from 'components/oppgaveliste/tabellskeleton/TabellSkeleton';
 
@@ -32,7 +33,14 @@ export interface FormFieldsFilter {
   saksbehandlere?: ValuePair[];
 }
 
-export const MineOppgaver = () => {
+interface Props {
+  /** Brukes til å sammenligne gammel Table med ny DataGrid. */
+  visning?: 'table' | 'datagrid';
+}
+
+export const MineOppgaver = ({ visning = 'table' }: Props) => {
+  const Tabell = visning === 'datagrid' ? MineOppgaverDataGridTabell : MineOppgaverTabell;
+
   const { sort, setSort } = useBackendSortering<MineOppgaverSortBy>('mine-oppgaver-backendsort');
 
   const { oppgaver, mutate, isLoading, error } = useMineOppgaver(sort);
@@ -126,12 +134,7 @@ export const MineOppgaver = () => {
 
       {!isLoading &&
         (filtrerteOppgaver?.length > 0 ? (
-          <MineOppgaverTabell
-            oppgaver={filtrerteOppgaver}
-            revalidateFunction={mutate}
-            sort={sort}
-            setSortBy={setSort}
-          />
+          <Tabell oppgaver={filtrerteOppgaver} revalidateFunction={mutate} sort={sort} setSortBy={setSort} />
         ) : (
           <BodyShort className={styles.ingenreserverteoppgaver}>Ingen reserverte oppgaver.</BodyShort>
         ))}

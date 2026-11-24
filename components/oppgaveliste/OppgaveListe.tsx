@@ -16,13 +16,19 @@ interface Props {
   gosysUrl?: string;
 }
 
-type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Alle oppgaver' | 'Gosys-oppgaver';
+type MenyValg = 'Ledige oppgaver' | 'Mine oppgaver' | 'Mine oppgaver (DataGrid)' | 'Alle oppgaver' | 'Gosys-oppgaver';
 
 export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
   const { lagreAktivTab, hentAktivTab } = useLagreAktivTab<MenyValg>();
   const [selected, setSelected] = useState<MenyValg>('Mine oppgaver');
 
-  const options: MenyValg[] = ['Ledige oppgaver', 'Mine oppgaver', 'Alle oppgaver', 'Gosys-oppgaver'];
+  const options: MenyValg[] = [
+    'Ledige oppgaver',
+    'Mine oppgaver',
+    'Mine oppgaver (DataGrid)',
+    'Alle oppgaver',
+    'Gosys-oppgaver',
+  ];
 
   useEffect(() => {
     const lagretTab = hentAktivTab();
@@ -54,6 +60,7 @@ export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
         </HStack>
 
         {selected === 'Mine oppgaver' && <MineOppgaver />}
+        {selected === 'Mine oppgaver (DataGrid)' && <MineOppgaver visning="datagrid" />}
         {selected === 'Ledige oppgaver' && <LedigeOppgaver enheter={enheter} />}
         {selected === 'Alle oppgaver' && <AlleOppgaver enheter={enheter} />}
         {selected === 'Gosys-oppgaver' && <GosysOppgaver enheter={enheter} gosysUrl={gosysUrl} />}
