@@ -52,12 +52,12 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
     },
     mndSlutt: {
       type: 'date',
-      label: 'Månedslutt',
+      label: 'Måned slutt',
       defaultValue: mndSlutt,
     },
     mndStart: {
       type: 'date',
-      label: 'Månedstart',
+      label: 'Måned start',
       defaultValue: mndStart,
     },
     sendtDato: {
