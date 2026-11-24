@@ -17,12 +17,14 @@ export function utledMaksdatoFraSykepenger(gjenståendeSykedager?: GjenståendeS
     return undefined;
   }
 
-  if (grunnlagMedMaksdato.includes(gjenståendeSykedager.grunnlag) && gjenståendeSykedager.maksdato) {
-    return new Dato(gjenståendeSykedager.maksdato).formaterForFrontend();
-  } else if (gjenståendeSykedager.grunnlag === 'INGEN_SYKEPENGER_SISTE_26_UKER') {
-    return '';
+  if (grunnlagMedMaksdato.includes(gjenståendeSykedager.grunnlag)) {
+    if (gjenståendeSykedager.maksdato) {
+      return new Dato(gjenståendeSykedager.maksdato).formaterForFrontend();
+    } else {
+      return mapGrunnlagTilTekst(gjenståendeSykedager.grunnlag);
+    }
   } else {
-    return mapGrunnlagTilTekst(gjenståendeSykedager.grunnlag);
+    return '';
   }
 }
 
