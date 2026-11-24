@@ -58,6 +58,9 @@ function utledMaksdato(gjenståendeDager?: number | null, vurdertTilOgMed?: stri
 
   let dato = new Dato(vurdertTilOgMed).dato;
   let gjenstående = gjenståendeDager;
+
+  // Går én kalenderdag frem om gangen, og teller ned kun for hverdager.
+  // Startdatoen teller ikke, og ved 0 dager returneres den uendret.
   while (gjenstående > 0) {
     dato = addDays(dato, 1);
     if (!isWeekend(dato)) {
