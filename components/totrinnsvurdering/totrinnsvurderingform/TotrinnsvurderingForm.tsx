@@ -40,7 +40,6 @@ import { TotrinnsvurderingDevtools } from 'components/totrinnsvurdering/totrinns
 import { TotrinnnsvurderingFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnnsvurderingFelter';
 import { TotrinnsvurderingHastemarkering } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingHastemarkering';
 import { TotrinnsvurderingVedtaksbrevFelter } from 'components/totrinnsvurdering/totrinnsvurderingform/beslutterform/TotrinnsvurderingVedtaksbrevFelter';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { EnvelopeClosedIcon, ExternalLinkIcon } from '@navikt/aksel-icons';
 
 interface Props {
@@ -89,9 +88,7 @@ export const TotrinnsvurderingForm = ({
   const erBehandlingHastemarkert = hastemarkering !== undefined;
   const skalFjerningAvHastemarkeringVurderes = erBehandlingHastemarkert && erKvalitetssikring;
   const skalViseKvalitetssikrerFatterVedtakBoks =
-    useFeatureFlag('HoppOverBeslutterVedAvslagSykdom') &&
-    'kvalitetssikrerFatterVedtak' in grunnlag &&
-    grunnlag.kvalitetssikrerFatterVedtak;
+    'kvalitetssikrerFatterVedtak' in grunnlag && grunnlag.kvalitetssikrerFatterVedtak;
 
   const { form } = useConfigForm<FormFieldsToTrinnsVurdering>({
     totrinnsvurderinger: {
