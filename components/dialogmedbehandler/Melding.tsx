@@ -9,7 +9,6 @@ import { Alert } from 'components/alert/Alert';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 import { BekreftManuellPåminnelseDialog } from 'components/dialogmedbehandler/BekreftManuellPåminnelseDialog';
-import { useInnloggetBruker } from 'hooks/BrukerHook';
 
 interface Props {
   melding: MeldingDto;
@@ -38,15 +37,13 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
   const [påminnelseSendt, settPåminnelseSendt] = useState(false);
   const [erDialogÅpen, settErDialogÅpen] = useState(false);
   const { sendPåminnelsePåDialogmelding, error } = useSendPåminnelsePåDialogmelding();
-  const brukerInformasjon = useInnloggetBruker();
-  const brukerNavIdent = brukerInformasjon.NAVident;
 
   const handlePåminnelseClick = async () => {
-    if (dialogmeldingId && behandlingsreferanse && brukerNavIdent && !påminnelseSendt) {
+    if (dialogmeldingId && behandlingsreferanse && !påminnelseSendt) {
       settPåminnelseSendt(true);
       settErDialogÅpen(false);
 
-      await sendPåminnelsePåDialogmelding(dialogmeldingId, behandlingsreferanse, brukerNavIdent);
+      await sendPåminnelsePåDialogmelding(dialogmeldingId, behandlingsreferanse);
 
       loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_SEND_MANUELL_PÅMINNELSE');
     }
