@@ -28,6 +28,7 @@ export const KommendeMeldinger = ({
     setLoading(kommendeMelding.bestillingId);
     try {
       const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
+
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
         return;
@@ -54,6 +55,7 @@ export const KommendeMeldinger = ({
     setLoading(bestillingId);
     try {
       const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
+
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
         return;

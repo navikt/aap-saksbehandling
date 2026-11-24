@@ -89,7 +89,7 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
           )}
           {viseKnappManuellPåminnelse && innkommendeUtgående === 'UTGÅENDE' && dokumentasjonsType === 'L40' && (
             <HStack gap={'space-8'} justify="start">
-              {kanSendePåminnelse && meldingFraNavn !== null && (
+              {kanSendePåminnelse && meldingFraNavn && (
                 <Button size={'small'} variant={'tertiary'} onClick={() => settErDialogÅpen(true)}>
                   Send påminnelse
                 </Button>
@@ -99,9 +99,9 @@ export const Melding = ({ melding, dokumentInfoIdListe, behandlingsreferanse }: 
 
               {error && <Alert variant="error">{error}</Alert>}
 
-              {meldingFraNavn !== null && (
+              {meldingFraNavn && (
                 <BekreftManuellPåminnelseDialog
-                  navnPåMottaker={meldingFraNavn ?? 'Ukjent'} // For å unngå klaging fra typesystemet
+                  navnPåMottaker={meldingFraNavn}
                   erÅpen={erDialogÅpen}
                   settErÅpen={(verdi) => settErDialogÅpen(verdi)}
                   bekreft={handlePåminnelseClick}
