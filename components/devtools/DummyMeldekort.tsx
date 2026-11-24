@@ -1,4 +1,4 @@
-import { BodyShort, Button } from '@navikt/ds-react';
+import { BodyShort, Button, VStack } from '@navikt/ds-react';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { clientSendHendelse } from 'lib/clientApi';
@@ -47,18 +47,22 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
   const { formFields, form } = useConfigForm<DummyMeldekortForm>({
     timerArbeidet: {
       type: 'number',
+      label: 'Timer arbeidet',
       defaultValue: '25.0',
     },
     mndSlutt: {
       type: 'date',
+      label: 'Månedslutt',
       defaultValue: mndSlutt,
     },
     mndStart: {
       type: 'date',
+      label: 'Månedstart',
       defaultValue: mndStart,
     },
     sendtDato: {
       type: 'date',
+      label: 'Dato meldekortet ble sendt inn',
       defaultValue: new Date(),
     },
   });
@@ -70,15 +74,15 @@ export function DummyMeldekort({ saksid }: { saksid: string }) {
           await postMeldekort(saksid, data);
         })}
       >
-        <Button>Send inn et meldekort</Button>
-        <details>
+        <VStack gap={'space-16'}>
           <FormField form={form} formField={formFields.sendtDato} />
-          <FormField form={form} formField={formFields.timerArbeidet} />
+          <FormField form={form} formField={formFields.timerArbeidet} className={'fit-content'} />
           <FormField form={form} formField={formFields.mndStart} />
           <FormField form={form} formField={formFields.mndSlutt} />
-        </details>
+          <Button className={'fit-content'}>Send inn meldekortet</Button>
+          <BodyShort size={'small'}>(Refresh siden for å se om det gikk bra)</BodyShort>
+        </VStack>
       </form>
-      <BodyShort size={'small'}>(Refresh siden for å se om det gikk bra)</BodyShort>
     </div>
   );
 }

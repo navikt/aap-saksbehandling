@@ -77,7 +77,7 @@ export const LeggTilKravVurdering = ({ saksnummer }: { saksnummer: string }) => 
         feil kobling og registrering av data.
       </ReadMore>
       {fields.map((field, index) => (
-        <HStack key={field.id} gap="space-8" align="end" wrap={false}>
+        <HStack key={field.id} gap="space-8" align="end">
           <SelectWrapper
             label="Kravtype"
             size="small"
