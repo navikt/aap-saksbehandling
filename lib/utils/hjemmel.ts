@@ -42,10 +42,10 @@ export const hjemmelMap: Partial<Record<Hjemmel, string>> = {
   FOLKETRYGDLOVEN_11_31: '§ 11-31',
   FOLKETRYGDLOVEN_21_3: '§ 21-3',
   FOLKETRYGDLOVEN_21_7: '§ 21-7',
-  FOLKETRYGDLOVEN_22_7: '§ 22-7',
-  FOLKETRYGDLOVEN_22_8: '§ 22-8',
+  FOLKETRYGDLOVEN_22_7: '§ 22-7 - Utsatt utbetaling',
+  FOLKETRYGDLOVEN_22_8: '§ 22-8 - Fradrag ved etterbetaling av pensjon o.l.',
   FOLKETRYGDLOVEN_22_13: '§ 22-13',
-  FOLKETRYGDLOVEN_22_14_FJERDE_LEDD: '§ 22-14 fjerde ledd',
+  FOLKETRYGDLOVEN_22_14_FJERDE_LEDD: '§ 22-14 fjerde ledd - Særskilte foreldelsesregler',
   FOLKETRYGDLOVEN_22_15: '§ 22-15',
   FOLKETRYGDLOVEN_22_17: '§ 22-17',
   ANDRE_TRYGDEAVTALER: 'Andre bilaterale avtaler (lovvalg / medlemskap)',
@@ -75,7 +75,16 @@ export const hjemmelalternativerOpprettholdelse = Object.entries(hjemmelMap).map
 }));
 
 export const hjemmelalternativerOmgjøring = Object.entries(hjemmelMap)
-  .filter(([k]) => !['FOLKETRYGDLOVEN_21_12', 'FVL_31'].includes(k))
+  .filter(
+    ([k]) =>
+      ![
+        'FOLKETRYGDLOVEN_21_12',
+        'FVL_31',
+        'FOLKETRYGDLOVEN_22_7',
+        'FOLKETRYGDLOVEN_22_8',
+        'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD',
+      ].includes(k)
+  )
   .map(([k, v]) => ({
     value: k,
     label: v,
