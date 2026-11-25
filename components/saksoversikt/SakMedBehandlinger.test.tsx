@@ -63,7 +63,7 @@ describe('SakMedBehandlinger', () => {
   });
 
   describe('knapp for å opprette utenlandsopphold-behandling', () => {
-    const knappenavn = 'Utenalandsopphold';
+    const knappenavn = 'Utenlandsopphold';
     const renderMedToggle = (erPå: boolean, behandlinger: BehandlingInfo[] = []) =>
       render(
         <FeatureFlagProvider flags={{ ...mockedFlags, UtenlandsoppholdBehandling: erPå }}>
