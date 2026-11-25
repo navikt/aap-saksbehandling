@@ -3,10 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/OverstyrTildelingModal';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
-import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
+import { postmottakHentFlyt, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { AvklarSaksnummerLøsning, LøsAvklaringsbehovPåBehandling } from 'lib/types/postmottakTypes';
 import { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { PostmottakFlytResponse } from 'vitestSetup';
 
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from './PostmottakLøsBehovOgGåTilNesteStegHook';
 
@@ -15,6 +16,7 @@ vi.mock('lib/oppgaveClientApi', () => ({
 }));
 
 vi.mock('lib/postmottakClientApi', () => ({
+  postmottakHentFlyt: vi.fn(),
   postmottakLøsBehovClient: vi.fn(),
 }));
 
@@ -89,6 +91,7 @@ describe('usePostmottakLøsBehovOgGåTilNesteSteg', () => {
       expect(postmottakLøsBehovClient).toHaveBeenCalledExactlyOnceWith(behov);
     });
     expect(hentTildeltStatusClient).toHaveBeenCalledExactlyOnceWith('456');
+    expect(postmottakHentFlyt).not.toHaveBeenCalled();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
@@ -126,5 +129,81 @@ describe('usePostmottakLøsBehovOgGåTilNesteSteg', () => {
       expect(result.current.løsBehovOgGåTilNesteStegError).toEqual({ message: 'Kunne ikke lagre løsningen' });
     });
     expect(result.current.isLoading).toBe(false);
+    expect(postmottakHentFlyt).not.toHaveBeenCalled();
+    expect(EventSource).not.toHaveBeenCalled();
+  });
+
+  test('versjonskonflikt henter siste versjon og sender samme løsning på nytt før prosessering', async () => {
+    vi.mocked(postmottakLøsBehovClient).mockResolvedValueOnce({
+      type: 'ERROR',
+      status: 409,
+      apiException: { message: 'Behandlingen har blitt oppdatert' },
+    });
+    vi.mocked(postmottakHentFlyt).mockResolvedValue({
+      type: 'SUCCESS',
+      data: { ...PostmottakFlytResponse, behandlingVersjon: 2 },
+    });
+    const { result, løsBehov, bekreftOverstyring } = setupTest();
+
+    await løsBehov(behov);
+    await bekreftOverstyring();
+
+    await waitFor(() => {
+      expect(EventSource).toHaveBeenCalledTimes(1);
+    });
+    expect(postmottakHentFlyt).toHaveBeenCalledExactlyOnceWith(behov.referanse);
+    expect(postmottakLøsBehovClient).toHaveBeenCalledTimes(2);
+    expect(postmottakLøsBehovClient).toHaveBeenNthCalledWith(1, behov);
+    expect(postmottakLøsBehovClient).toHaveBeenNthCalledWith(2, { ...behov, behandlingVersjon: 2 });
+    expect(behov.behandlingVersjon).toBe(1);
+    expect(result.current.løsBehovOgGåTilNesteStegError).toBeUndefined();
+  });
+
+  test('feil ved henting av siste versjon vises uten ny innsending eller prosessering', async () => {
+    vi.mocked(postmottakLøsBehovClient).mockResolvedValueOnce({
+      type: 'ERROR',
+      status: 409,
+      apiException: { message: 'Behandlingen har blitt oppdatert' },
+    });
+    const apiException = { message: 'Kunne ikke hente behandlingen' };
+    vi.mocked(postmottakHentFlyt).mockResolvedValue({ type: 'ERROR', status: 500, apiException });
+    const { result, løsBehov, bekreftOverstyring } = setupTest();
+
+    await løsBehov(behov);
+    await bekreftOverstyring();
+
+    await waitFor(() => {
+      expect(result.current.løsBehovOgGåTilNesteStegError).toEqual(apiException);
+    });
+    expect(result.current.isLoading).toBe(false);
+    expect(postmottakLøsBehovClient).toHaveBeenCalledTimes(1);
+    expect(EventSource).not.toHaveBeenCalled();
+  });
+
+  test.each([409, 500])('feil %s ved nytt forsøk vises uten flere forsøk eller prosessering', async (status) => {
+    const apiException = { message: 'Kunne ikke lagre løsningen på nytt' };
+    vi.mocked(postmottakLøsBehovClient)
+      .mockResolvedValueOnce({
+        type: 'ERROR',
+        status: 409,
+        apiException: { message: 'Behandlingen har blitt oppdatert' },
+      })
+      .mockResolvedValueOnce({ type: 'ERROR', status, apiException });
+    vi.mocked(postmottakHentFlyt).mockResolvedValue({
+      type: 'SUCCESS',
+      data: { ...PostmottakFlytResponse, behandlingVersjon: 2 },
+    });
+    const { result, løsBehov, bekreftOverstyring } = setupTest();
+
+    await løsBehov(behov);
+    await bekreftOverstyring();
+
+    await waitFor(() => {
+      expect(result.current.løsBehovOgGåTilNesteStegError).toEqual(apiException);
+    });
+    expect(result.current.isLoading).toBe(false);
+    expect(postmottakLøsBehovClient).toHaveBeenCalledTimes(2);
+    expect(postmottakHentFlyt).toHaveBeenCalledTimes(1);
+    expect(EventSource).not.toHaveBeenCalled();
   });
 });

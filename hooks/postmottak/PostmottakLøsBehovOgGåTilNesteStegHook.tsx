@@ -5,7 +5,7 @@ import {
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
-import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
+import { postmottakHentFlyt, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { Losninger, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { isLocal } from 'lib/utils/environment';
@@ -72,7 +72,21 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
       } // Hvis henting av tildelt-status feiler, la saksbehandler fortsette
     }
 
-    const løsbehovRes = await postmottakLøsBehovClient(behov);
+    let løsbehovRes = await postmottakLøsBehovClient(behov);
+    if (isError(løsbehovRes) && løsbehovRes.status === 409) {
+      const flytResponse = await postmottakHentFlyt(behov.referanse);
+      if (isError(flytResponse)) {
+        setError(flytResponse.apiException);
+        setIsLoading(false);
+        return;
+      }
+
+      løsbehovRes = await postmottakLøsBehovClient({
+        ...behov,
+        behandlingVersjon: flytResponse.data.behandlingVersjon,
+      });
+    }
+
     if (isError(løsbehovRes)) {
       setError(løsbehovRes.apiException);
       setIsLoading(false);
