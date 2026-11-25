@@ -62,8 +62,8 @@ describe('SakMedBehandlinger', () => {
     expect(within(dataRows[3]).getByText('Iverksettes')).toBeInTheDocument();
   });
 
-  describe('knapp for å opprette søknad om opphold i utlandet', () => {
-    const knappenavn = 'Opprett søknad om opphold i utlandet';
+  describe('knapp for å opprette utenlandsopphold-behandling', () => {
+    const knappenavn = 'Utenalandsopphold';
     const renderMedToggle = (erPå: boolean, behandlinger: BehandlingInfo[] = []) =>
       render(
         <FeatureFlagProvider flags={{ ...mockedFlags, UtenlandsoppholdBehandling: erPå }}>
@@ -81,7 +81,7 @@ describe('SakMedBehandlinger', () => {
       expect(screen.queryByRole('button', { name: knappenavn })).not.toBeInTheDocument();
     });
 
-    it('vises ikke når saken har en åpen behandling av søknad om opphold i utlandet', () => {
+    it('vises ikke når saken har en åpen behandling av Søknad om å beholde AAP i utlandet', () => {
       renderMedToggle(true, [
         lagBehandling({
           status: 'UTREDES',

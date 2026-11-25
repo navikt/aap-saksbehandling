@@ -130,7 +130,7 @@ export const SakMedBehandlinger = ({
                   size="small"
                   onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/utenlandsopphold`)}
                 >
-                  Opprett søknad om opphold i utlandet
+                  Utenlandsopphold
                 </Button>
               )}
 

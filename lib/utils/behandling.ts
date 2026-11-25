@@ -58,7 +58,7 @@ export function formatterÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: Års
     case 'AKTIVITETSPLIKT_11_9':
       return 'Aktivitetsplikt 11-9';
     case 'SØKNAD_UTENLANDSOPPHOLD':
-      return 'Søknad om opphold i utlandet';
+      return 'Søknad om å beholde AAP i utlandet';
     case 'TILBAKEKREVING_HENDELSE':
       return 'Mulig feilutbetaling';
     case 'UTVID_VEDTAKSLENGDE':

@@ -12,7 +12,7 @@ const user = userEvent.setup();
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 
-describe('Opprett behandling av søknad om opphold i utlandet', () => {
+describe('Opprett behandling av utenlandsopphold', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
     fetchMock.mockResponse(JSON.stringify({ type: 'SUCCESS', status: 200, data: {} }));

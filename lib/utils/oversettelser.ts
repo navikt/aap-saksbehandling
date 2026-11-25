@@ -237,7 +237,7 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
     case 'AKTIVITETSPLIKT_11_9':
       return '§ 11-9 Aktivitetsplikt';
     case 'SØKNAD_UTENLANDSOPPHOLD':
-      return 'Søknad om opphold i utlandet';
+      return 'Søknad om å beholde AAP i utlandet';
     case 'UDEFINERT':
       return 'Udefinert';
     case 'OPPHOLDSKRAV':
@@ -315,6 +315,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Utvid vedtaksperiode';
     case 'MIGRERING_FRA_ARENA':
       return 'Migrering';
+    case 'SØKNAD_UTENLANDSOPPHOLD':
+      return 'Søknad om å beholde AAP i utlandet';
   }
 }
 

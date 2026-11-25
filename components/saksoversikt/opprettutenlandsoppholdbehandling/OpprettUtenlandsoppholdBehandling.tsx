@@ -49,7 +49,7 @@ export const OpprettUtenlandsoppholdBehandling = ({ saksnummer }: { saksnummer: 
     <Page.Block width="md">
       <form onSubmit={form.handleSubmit(opprett)}>
         <VStack gap="space-16">
-          <Kort heading="Opprett behandling av søknad om opphold i utlandet">
+          <Kort heading="Opprett behandling av utenlandsopphold">
             <FormField form={form} formField={formFields.beskrivelse} size="medium" />
           </Kort>
 
