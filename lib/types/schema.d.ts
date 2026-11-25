@@ -7743,8 +7743,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -9440,8 +9443,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -9481,8 +9487,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -9529,8 +9538,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -9570,8 +9582,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -10620,8 +10635,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -11339,6 +11357,7 @@ export interface components {
       gradBehov?: 'FRIVILLIG' | 'PÅKREVD' | null;
       perioderKreverVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       perioderUgyldigVurdering?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
+      perioderVilkåretErRelevant?: components['schemas']['no.nav.aap.komponenter.type.Periode'][] | null;
       /** @enum {string} */
       status:
         | 'AVBRUTT'
@@ -11989,8 +12008,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12030,8 +12052,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12077,8 +12102,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12118,8 +12146,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12175,8 +12206,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12216,8 +12250,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12268,8 +12305,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
@@ -12313,8 +12353,11 @@ export interface components {
         | 'FOLKETRYGDLOVEN_21_3'
         | 'FOLKETRYGDLOVEN_21_7'
         | 'FOLKETRYGDLOVEN_22_13'
+        | 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD'
         | 'FOLKETRYGDLOVEN_22_15'
         | 'FOLKETRYGDLOVEN_22_17'
+        | 'FOLKETRYGDLOVEN_22_7'
+        | 'FOLKETRYGDLOVEN_22_8'
         | 'FOLKETRYGDLOVEN_KAPITTEL_2'
         | 'FVL_31'
       )[];
