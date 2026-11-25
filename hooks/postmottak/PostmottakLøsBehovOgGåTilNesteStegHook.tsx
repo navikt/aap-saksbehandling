@@ -31,7 +31,8 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
-  const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
+  const { setVisOverstyrModal, setBekreftOverstyring, setAvbrytOverstyring, setReservertAvNavn } =
+    useOverstyrTildelingHook();
 
   const erLokal = isLocal();
   const sisteBehovRef = useRef<{
@@ -61,7 +62,10 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
               nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent
           );
           setIsLoading(false);
-          setCallback(() => bekreftOgFortsett);
+          setBekreftOverstyring(() => bekreftOgFortsett);
+          setAvbrytOverstyring(() => () => {
+            sisteBehovRef.current = null;
+          });
           sisteBehovRef.current = { behov, onSuccess };
           return;
         }
