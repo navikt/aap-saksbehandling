@@ -19,6 +19,7 @@ permissions:
   packages: read
 
 env:
+  NODE_VERSION: '26'
   NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
   SKIP_YARN_COREPACK_CHECK: true
 
@@ -30,12 +31,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 26
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://npm.pkg.github.com
-          cache: yarn
+          package-manager-cache: false
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: |
+          cache_folder=$(yarn config get cacheFolder)
+          printf 'folder=%s\n' "$cache_folder" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Yarn packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ steps.yarn-cache.outputs.folder }}
+          key: ${{ runner.os }}-${{ runner.arch }}-yarn-v2-node${{ env.NODE_VERSION }}-${{ hashFiles('yarn.lock', 'package.json', '.yarnrc.yml') }}
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -45,6 +58,15 @@ jobs:
 
       - name: Typecheck
         run: yarn typecheck
+
+      - name: Cache Next.js verification build
+        if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'workflow_dispatch') }}
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-${{ runner.arch }}-nextjs-node${{ env.NODE_VERSION }}-verify-${{ hashFiles('yarn.lock') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-${{ runner.arch }}-nextjs-node${{ env.NODE_VERSION }}-verify-${{ hashFiles('yarn.lock') }}-
 
       - name: Build without publishing
         if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'workflow_dispatch') }}
@@ -61,12 +83,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 26
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://npm.pkg.github.com
-          cache: yarn
+          package-manager-cache: false
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: |
+          cache_folder=$(yarn config get cacheFolder)
+          printf 'folder=%s\n' "$cache_folder" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Yarn packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ steps.yarn-cache.outputs.folder }}
+          key: ${{ runner.os }}-${{ runner.arch }}-yarn-v2-node${{ env.NODE_VERSION }}-${{ hashFiles('yarn.lock', 'package.json', '.yarnrc.yml') }}
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -93,12 +127,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 26
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://npm.pkg.github.com
-          cache: yarn
+          package-manager-cache: false
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: |
+          cache_folder=$(yarn config get cacheFolder)
+          printf 'folder=%s\n' "$cache_folder" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Yarn packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ steps.yarn-cache.outputs.folder }}
+          key: ${{ runner.os }}-${{ runner.arch }}-yarn-v2-node${{ env.NODE_VERSION }}-${{ hashFiles('yarn.lock', 'package.json', '.yarnrc.yml') }}
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -129,12 +175,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 26
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: https://npm.pkg.github.com
-          cache: yarn
+          package-manager-cache: false
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: |
+          cache_folder=$(yarn config get cacheFolder)
+          printf 'folder=%s\n' "$cache_folder" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Yarn packages
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ steps.yarn-cache.outputs.folder }}
+          key: ${{ runner.os }}-${{ runner.arch }}-yarn-v2-node${{ env.NODE_VERSION }}-${{ hashFiles('yarn.lock', 'package.json', '.yarnrc.yml') }}
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -143,9 +201,9 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ matrix.cluster }}-${{ hashFiles('yarn.lock') }}-${{ github.sha }}
+          key: ${{ runner.os }}-${{ runner.arch }}-nextjs-node${{ env.NODE_VERSION }}-${{ matrix.cluster }}-${{ hashFiles('yarn.lock') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ matrix.cluster }}-${{ hashFiles('yarn.lock') }}-
+            ${{ runner.os }}-${{ runner.arch }}-nextjs-node${{ env.NODE_VERSION }}-${{ matrix.cluster }}-${{ hashFiles('yarn.lock') }}-
 
       - name: Copy env-file
         run: cp ".nais/${{ matrix.cluster }}.env" .env
