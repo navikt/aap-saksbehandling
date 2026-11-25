@@ -116,6 +116,8 @@ export const formaterVurderingsbehov = (vurderingsbehov: Vurderingsbehov | Vurde
       return '§ 11-3 Oppholdskrav';
     case 'AVVIST_SOKNAD_OM_AAP_UNDER_OPPHOLD_I_UTLANDET':
       return 'Avslag søknad om AAP under opphold i utlandet';
+    case 'SØKNAD_UTENLANDSOPPHOLD':
+      return 'Søknad om å beholde AAP under opphold i utlandet';
     case 'DØDSFALL_BARN':
       return 'Dødsfall barn';
     case 'DØDSFALL_BRUKER':

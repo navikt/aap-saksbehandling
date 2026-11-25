@@ -612,6 +612,9 @@ export type Aktivitetsplikt11_7Vurdering =
 export type OpprettAktivitetspliktBehandlingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettAktivitetspliktBehandlingDto'];
 
+export type OpprettUtenlandsoppholdBehandlingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettUtenlandsoppholdBehandlingDto'];
+
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokument['årsakerTilBehandling'][number];
 
 export type BehandlingInfo =

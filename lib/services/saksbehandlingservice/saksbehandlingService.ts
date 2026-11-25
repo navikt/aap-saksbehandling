@@ -70,6 +70,7 @@ import {
   OppfølgningOppgaveOpprinnelseResponse,
   OppholdskravGrunnlagResponse,
   OpprettAktivitetspliktBehandlingDto,
+  OpprettUtenlandsoppholdBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
   OvergangArbeidGrunnlag,
@@ -190,6 +191,14 @@ export const opprettAktivitetspliktBehandling = async (
   data: OpprettAktivitetspliktBehandlingDto
 ) => {
   const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`;
+  return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', data);
+};
+
+export const opprettUtenlandsoppholdBehandling = async (
+  saksnummer: string,
+  data: OpprettUtenlandsoppholdBehandlingDto
+) => {
+  const url = `${saksbehandlingApiBaseUrl}/api/sak/${saksnummer}/opprettUtenlandsoppholdBehandling`;
   return await apiFetch<{}>(url, saksbehandlingApiScope, 'POST', data);
 };
 
