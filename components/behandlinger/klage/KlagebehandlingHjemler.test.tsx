@@ -9,9 +9,12 @@ import { KlagebehandlingVurderingKontor } from './klagebehandlingkontor/klagebeh
 import * as løsAvklaringsbehovHook from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 const hjemler: { hjemmel: Hjemmel; label: string }[] = [
-  { hjemmel: 'FOLKETRYGDLOVEN_22_7', label: '§ 22-7' },
-  { hjemmel: 'FOLKETRYGDLOVEN_22_8', label: '§ 22-8' },
-  { hjemmel: 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD', label: '§ 22-14 fjerde ledd' },
+  { hjemmel: 'FOLKETRYGDLOVEN_22_7', label: '§ 22-7 - Utsatt utbetaling' },
+  { hjemmel: 'FOLKETRYGDLOVEN_22_8', label: '§ 22-8 - Fradrag ved etterbetaling av pensjon o.l.' },
+  {
+    hjemmel: 'FOLKETRYGDLOVEN_22_14_FJERDE_LEDD',
+    label: '§ 22-14 fjerde ledd - Særskilte foreldelsesregler',
+  },
 ];
 
 async function velgHjemmel(user: ReturnType<typeof userEvent.setup>, feltnavn: string, hjemmel: string) {
@@ -107,12 +110,7 @@ describe.each([
       }
     );
 
-    it.each(
-      hjemler.flatMap(({ label }) => [
-        { label, radio: 'Vedtak omgjøres', delvisOmgjøring: false },
-        { label, radio: 'Delvis omgjøring', delvisOmgjøring: true },
-      ])
-    )('Skal blokkere omgjøring av $label ved $radio', async ({ label, radio, delvisOmgjøring }) => {
+    it('Skal ikke tilby de nye hjemlene for omgjøring', async () => {
       const user = userEvent.setup();
       render(
         <Komponent
@@ -123,23 +121,13 @@ describe.each([
         />
       );
 
-      await user.type(screen.getByRole('textbox', { name: 'Vurder klage' }), 'Vurderer omgjøring');
-      await user.click(screen.getByRole('radio', { name: radio }));
-      const omgjorteHjemler = await velgHjemmel(user, 'Hvilke vilkår skal omgjøres?', label);
+      await user.click(screen.getByRole('radio', { name: 'Vedtak omgjøres' }));
+      await user.click(screen.getByRole('combobox', { name: 'Hvilke vilkår skal omgjøres?' }));
 
-      if (delvisOmgjøring) {
-        await velgHjemmel(user, 'Hvilke vilkår er blitt vurdert til å opprettholdes?', '§ 11-5');
+      expect(screen.getByRole('option', { name: '§ 11-5' })).toBeVisible();
+      for (const { label } of hjemler) {
+        expect(screen.queryByRole('option', { name: new RegExp(`^${label}(?: -|$)`) })).not.toBeInTheDocument();
       }
-
-      await user.click(screen.getByRole('button', { name: knappOmgjøring }));
-
-      expect(
-        await screen.findByText(
-          `Det er ikke mulig å opprette revurdering på ${label} enda. Sett klagen på vent og ta kontakt med team AAP.`
-        )
-      ).toBeVisible();
-      expect(omgjorteHjemler).toHaveAttribute('aria-invalid', 'true');
-      expect(løsAvklaringsbehov).not.toHaveBeenCalled();
     });
   }
 );
