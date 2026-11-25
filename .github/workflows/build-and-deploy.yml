@@ -2,6 +2,11 @@ name: Bygg og deploy
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
   push:
     branches:
       - main
@@ -9,54 +14,196 @@ on:
       - '**.md'
       - '.gitignore'
 
+permissions:
+  contents: read
+  packages: read
+
+env:
+  NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+  SKIP_YARN_COREPACK_CHECK: true
+
 jobs:
-  buildDev:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@848e942ab051c813412787e94817e589cda06d17 # main
+  verify:
+    name: Lint and typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          cache: yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Build without publishing
+        if: ${{ github.ref != 'refs/heads/main' || (github.event_name != 'push' && github.event_name != 'workflow_dispatch') }}
+        run: yarn run build
+
+  tests:
+    name: Tests (shard ${{ matrix.shardIndex }}/${{ strategy.job-total }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          cache: yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run tests
+        run: yarn test --reporter=blob --shard=${{ matrix.shardIndex }}/${{ strategy.job-total }}
+
+      - name: Upload blob report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: .vitest-reports/*
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-reports:
+    name: Merge test reports
+    if: ${{ !cancelled() }}
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          cache: yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Download blob reports
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          path: .vitest-reports
+          pattern: blob-report-*
+          merge-multiple: true
+
+      - name: Merge reports
+        run: yarn vitest --merge-reports
+
+  build:
+    needs: [verify, tests, merge-reports]
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cluster: ${{ fromJSON(github.event_name == 'workflow_dispatch' && '["dev-gcp"]' || '["dev-gcp", "prod-gcp"]') }}
     permissions:
       contents: read
       id-token: write
       packages: write
-    secrets: inherit
-    with:
-      cluster: dev-gcp
-      appname: 'aap-saksbehandling'
-      playwright: false
-      cdn: true
-  buildProd:
-    uses: navikt/aap-workflows/.github/workflows/frontend-next-build.yml@848e942ab051c813412787e94817e589cda06d17 # main
-    permissions:
-      contents: read
-      id-token: write
-      packages: write
-    if: github.ref == 'refs/heads/main'
-    secrets: inherit
-    with:
-      cluster: prod-gcp
-      appname: 'aap-saksbehandling'
-      playwright: false
-      cdn: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          cache: yarn
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Cache Next.js build cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ matrix.cluster }}-${{ hashFiles('yarn.lock') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ matrix.cluster }}-${{ hashFiles('yarn.lock') }}-
+
+      - name: Copy env-file
+        run: cp ".nais/${{ matrix.cluster }}.env" .env
+
+      - name: Build
+        run: yarn run build
+
+      - name: Upload static files to NAV CDN
+        uses: nais/deploy/actions/cdn-upload/v2@427e29c94d911626a023a76f402f6dcae1f840b7 # master
+        with:
+          team: aap
+          source: ./.next/static
+          destination: /aap-saksbehandling/_next
+
+      - uses: nais/docker-build-push@588f76a6f45aeb1e75d5e8417ec6ef6d79b2b39f # v0
+        with:
+          team: aap
+          image_suffix: ${{ matrix.cluster }}
+          tag: ${{ github.sha }}
 
   deployDev:
-    needs: buildDev
-    uses: navikt/aap-workflows/.github/workflows/deploy.yml@848e942ab051c813412787e94817e589cda06d17 # main
+    needs: build
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch') }}
+    runs-on: ubuntu-latest
+    environment: dev-gcp
     permissions:
       contents: read
       id-token: write
-    secrets: inherit
-    with:
-      cluster: dev-gcp
-      manifest: .nais/dev-gcp.yaml
-      imageSuffix: -dev-gcp
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: nais/login@40b72a35a18ddf2ad74b632461139ab838cc2a2f # v0
+        id: login
+        with:
+          team: aap
+      - uses: nais/deploy/actions/deploy@427e29c94d911626a023a76f402f6dcae1f840b7 # v3
+        env:
+          PRINT_PAYLOAD: true
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/dev-gcp.yaml
+          VAR: image=${{ steps.login.outputs.registry }}/aap-saksbehandling-dev-gcp:${{ github.sha }}
 
   deployProd:
-    needs: [buildProd, deployDev]
-    uses: navikt/aap-workflows/.github/workflows/deploy.yml@848e942ab051c813412787e94817e589cda06d17 # main
+    needs: [build, deployDev]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: prod-gcp
     permissions:
       contents: read
       id-token: write
-    if: github.ref == 'refs/heads/main'
-    secrets: inherit
-    with:
-      cluster: prod-gcp
-      manifest: .nais/prod-gcp.yaml
-      imageSuffix: -prod-gcp
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: nais/login@40b72a35a18ddf2ad74b632461139ab838cc2a2f # v0
+        id: login
+        with:
+          team: aap
+      - uses: nais/deploy/actions/deploy@427e29c94d911626a023a76f402f6dcae1f840b7 # v3
+        env:
+          PRINT_PAYLOAD: true
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/prod-gcp.yaml
+          VAR: image=${{ steps.login.outputs.registry }}/aap-saksbehandling-prod-gcp:${{ github.sha }}
