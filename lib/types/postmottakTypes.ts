@@ -73,5 +73,8 @@ export type PostmottakTypeBehandling = PostmottakBehandlingInfo['typeBehandling'
 
 export type UbehandletJournalpost = components['schemas']['no.nav.aap.postmottak.joarkavstemmer.UavstemtJournalpost'];
 
+export type SimulerJournalpostHendelseRequest =
+  components['schemas']['no.nav.aap.postmottak.SimulerJournalpostHendelseRequest'];
+
 type RequestOfPost<Url extends keyof paths> = RequestBody<paths[Url]['post']>;
 type ResponseOfPost<Url extends keyof paths> = ResponseBody<paths[Url]['post']>;

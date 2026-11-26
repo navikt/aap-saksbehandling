@@ -139,9 +139,14 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
           </Link>
 
           {lokalLenkeTilSaksoversikt && (
-            <Link data-color={'neutral'} href={`/saksbehandling/saksoversikt`}>
-              Saksoversikt
-            </Link>
+            <>
+              <Link data-color={'neutral'} href={`/saksbehandling/saksoversikt`}>
+                Saksoversikt
+              </Link>
+              <Link data-color={'neutral'} href="/postmottak">
+                Postmottak-behandlinger
+              </Link>
+            </>
           )}
         </HStack>
 
