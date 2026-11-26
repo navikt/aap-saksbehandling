@@ -120,7 +120,9 @@ export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<S
 
   return (
     <div className={styles.stickyHeader}>
-      {visSøkOverlay && søkeresultat && <div className={styles.sokOverlay} aria-hidden="true" />}
+      {visSøkOverlay && søkeresultat && (
+        <div className={styles.sokOverlay} onClick={lukkSøkeresultat} aria-hidden="true" />
+      )}
       <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
