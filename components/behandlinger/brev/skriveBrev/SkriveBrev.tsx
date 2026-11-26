@@ -50,6 +50,7 @@ export const SkriveBrev = ({
   status,
   readOnly,
   brevtype,
+  visGReguleringInfoboks = true,
 }: {
   referanse: string;
   behovstype: BrevBehovstype;
@@ -65,6 +66,7 @@ export const SkriveBrev = ({
   status: BrevStatus;
   readOnly: boolean;
   brevtype: BrevGrunnlagBrev['brevtype'];
+  visGReguleringInfoboks?: boolean;
 }) => {
   const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
@@ -210,24 +212,26 @@ export const SkriveBrev = ({
         </HStack>
 
         <VStack gap={'space-16'}>
-          <LocalAlert status={'warning'} size={'small'} style={{ maxWidth: '210mm' }}>
-            <LocalAlert.Header>
-              <LocalAlert.Title>G-regulering for AAP i Kelvin 2026</LocalAlert.Title>
-            </LocalAlert.Header>
-            <LocalAlert.Content>
-              <BodyShort size={'small'}>
-                Se over om bruker har fått innvilget AAP i en periode før 1. mai. Hvis virkningstidspunktet er før 1.
-                mai 2026, må beslutter i dagens løsning
-              </BodyShort>
-              <List as={'ul'} size={'small'}>
-                <List.Item>Manuelt skrive inn den nye dagsatsen som gjelder fra 1. mai 2026.</List.Item>
-                <List.Item>Dagsatsen på virkningstidspunktet kommer automatisk i brevet.</List.Item>
-              </List>
-              <BodyShort size={'small'} style={{ marginTop: 'var(--ax-space-8)' }}>
-                Begge satsene finnes i steget «Tilkjent ytelse».
-              </BodyShort>
-            </LocalAlert.Content>
-          </LocalAlert>
+          {visGReguleringInfoboks && (
+            <LocalAlert status={'warning'} size={'small'} style={{ maxWidth: '210mm' }}>
+              <LocalAlert.Header>
+                <LocalAlert.Title>G-regulering for AAP i Kelvin 2026</LocalAlert.Title>
+              </LocalAlert.Header>
+              <LocalAlert.Content>
+                <BodyShort size={'small'}>
+                  Se over om bruker har fått innvilget AAP i en periode før 1. mai. Hvis virkningstidspunktet er før 1.
+                  mai 2026, må beslutter i dagens løsning
+                </BodyShort>
+                <List as={'ul'} size={'small'}>
+                  <List.Item>Manuelt skrive inn den nye dagsatsen som gjelder fra 1. mai 2026.</List.Item>
+                  <List.Item>Dagsatsen på virkningstidspunktet kommer automatisk i brevet.</List.Item>
+                </List>
+                <BodyShort size={'small'} style={{ marginTop: 'var(--ax-space-8)' }}>
+                  Begge satsene finnes i steget «Tilkjent ytelse».
+                </BodyShort>
+              </LocalAlert.Content>
+            </LocalAlert>
+          )}
           <BrevbyggerBeta
             brevmal={brev}
             mottaker={{ ident: mottaker.ident || 'Mangler', navn: mottaker.navn || 'Mangler' }}

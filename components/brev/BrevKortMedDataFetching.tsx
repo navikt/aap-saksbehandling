@@ -1,7 +1,7 @@
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { hentBrevGrunnlag, hentFullmektigGrunnlag } from 'lib/services/saksbehandlingservice/saksbehandlingService';
-import { AvklaringsbehovKode, BrevBehovstype, StegType } from 'lib/types/types';
+import { AvklaringsbehovKode, BrevBehovstype, StegType, TypeBehandling } from 'lib/types/types';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
@@ -12,6 +12,7 @@ interface Props {
   behandlingVersjon: number;
   visAvbryt?: boolean;
   aktivtSteg: StegType;
+  behandlingstype: TypeBehandling;
 }
 
 export const BrevKortMedDataFetching = async ({
@@ -19,6 +20,7 @@ export const BrevKortMedDataFetching = async ({
   behandlingVersjon,
   aktivtSteg,
   visAvbryt = true,
+  behandlingstype,
 }: Props) => {
   const [grunnlagene, fullmektigGrunnlag] = await Promise.all([
     hentBrevGrunnlag(behandlingReferanse),
@@ -63,6 +65,7 @@ export const BrevKortMedDataFetching = async ({
           signaturer={grunnlag.signaturer}
           readOnly={readOnly}
           brevtype={grunnlag.brevtype}
+          visGReguleringInfoboks={behandlingstype !== 'Revurdering'}
         />
       )}
     </VilkårsKort>

@@ -142,6 +142,7 @@ export const SkriveBrevMedDataFetching = async ({
           signaturer={brev.signaturer}
           behandlingVersjon={behandlingVersjon}
           brevtype={brev?.brevtype}
+          visGReguleringInfoboks={behandlingstype !== 'Revurdering'}
         />
       )}
     </div>
