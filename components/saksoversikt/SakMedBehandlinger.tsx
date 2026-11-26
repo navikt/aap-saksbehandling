@@ -1,6 +1,7 @@
 'use client';
 
 import { BodyShort, Button, Chips, HStack, Heading, Table, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { useHentOppgaverForSak } from 'hooks/oppgave/OppgaverPåSakHook';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { Dato } from 'lib/types/Dato';
@@ -77,6 +78,13 @@ export const SakMedBehandlinger = ({
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
 
+  const utenlandsoppholdBehandlingErEnablet = useFeatureFlag('UtenlandsoppholdBehandling');
+  const harÅpenUtenlandsoppholdBehandling = sak.behandlinger.some(
+    (behandling) => behandling.typeBehandling === 'Utenlandsopphold' && !erAvsluttet(behandling)
+  );
+  const kanOppretteUtenlandsoppholdBehandling =
+    utenlandsoppholdBehandlingErEnablet && !harÅpenUtenlandsoppholdBehandling;
+
   const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b.behandling));
 
   const avsluttede = alleBehandlinger?.filter((b) => erAvsluttet(b.behandling));
@@ -113,6 +121,16 @@ export const SakMedBehandlinger = ({
                   onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
                 >
                   Vurder aktivitetsplikt
+                </Button>
+              )}
+
+              {kanOppretteUtenlandsoppholdBehandling && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/utenlandsopphold`)}
+                >
+                  Utenlandsopphold
                 </Button>
               )}
 
