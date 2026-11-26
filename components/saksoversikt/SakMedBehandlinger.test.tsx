@@ -1,3 +1,5 @@
+import { FeatureFlagProvider } from 'context/UnleashContext';
+import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { render, screen, within } from 'lib/test/CustomRender';
 import { BehandlingInfo, SaksInfo } from 'lib/types/types';
 import { describe, expect, it } from 'vitest';
@@ -12,7 +14,7 @@ export const lagBehandling = (
   vurderingsbehov: [],
   årsakTilOpprettelse: 'SØKNAD',
   ...overrides,
-  erGjeldende: true
+  erGjeldende: true,
 });
 
 export const lagSak = (behandlinger: BehandlingInfo[]): SaksInfo => ({
@@ -58,5 +60,37 @@ describe('SakMedBehandlinger', () => {
     // Avsluttede behandlinger (AVSLUTTET, IVERKSETTES) skal komme sist
     expect(within(dataRows[2]).getByText('Avsluttet')).toBeInTheDocument();
     expect(within(dataRows[3]).getByText('Iverksettes')).toBeInTheDocument();
+  });
+
+  describe('knapp for å opprette utenlandsopphold-behandling', () => {
+    const knappenavn = 'Utenlandsopphold';
+    const renderMedToggle = (erPå: boolean, behandlinger: BehandlingInfo[] = []) =>
+      render(
+        <FeatureFlagProvider flags={{ ...mockedFlags, UtenlandsoppholdBehandling: erPå }}>
+          <SakMedBehandlinger sak={lagSak(behandlinger)} rettighetsinfo={null} />
+        </FeatureFlagProvider>
+      );
+
+    it('vises når togglen er på', () => {
+      renderMedToggle(true);
+      expect(screen.getByRole('button', { name: knappenavn })).toBeVisible();
+    });
+
+    it('vises ikke når togglen er av', () => {
+      renderMedToggle(false);
+      expect(screen.queryByRole('button', { name: knappenavn })).not.toBeInTheDocument();
+    });
+
+    it('vises ikke når saken har en åpen behandling av Søknad om å beholde AAP i utlandet', () => {
+      renderMedToggle(true, [
+        lagBehandling({
+          status: 'UTREDES',
+          referanse: 'utenlandsopphold-1',
+          erGjeldende: true,
+          typeBehandling: 'Utenlandsopphold',
+        }),
+      ]);
+      expect(screen.queryByRole('button', { name: knappenavn })).not.toBeInTheDocument();
+    });
   });
 });

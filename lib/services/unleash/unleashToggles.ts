@@ -16,6 +16,7 @@ export const FLAGS = [
   'SeOriginalDokumentVariant',
   'VedtaksperiodeBeslutter',
   'SokOverlayFrontend',
+  'UtenlandsoppholdBehandling',
 ] as const;
 
 export type FlagNames = (typeof FLAGS)[number];
@@ -39,4 +40,5 @@ export const mockedFlags: Flags = {
   SeOriginalDokumentVariant: true,
   VedtaksperiodeBeslutter: true,
   SokOverlayFrontend: true,
+  UtenlandsoppholdBehandling: true,
 };

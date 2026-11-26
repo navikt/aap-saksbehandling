@@ -1,10 +1,10 @@
 import { hentHelsedokumenterPåBruker } from 'lib/services/dokumentinnhentingservice/dokumentinnhentingservice';
 import { NextRequest, NextResponse } from 'next/server';
-import { isLocal } from 'lib/utils/environment';
+import { skalMockeBackend } from 'lib/utils/environment';
 import { mockResponseHelsedokumenter } from 'lib/test/local/mockResponseHelsedokumenter';
 
 export async function POST(req: NextRequest) {
-  if (isLocal()) {
+  if (skalMockeBackend('dokumentinnhenting')) {
     return NextResponse.json(mockResponseHelsedokumenter, { status: 200 });
   }
 

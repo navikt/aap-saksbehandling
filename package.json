@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo | pino-pretty",
+    "dev": "LOCAL_BACKENDS=behandlingsflyt next dev --turbo | pino-pretty",
+    "dev:oppgave": "LOCAL_BACKENDS=behandlingsflyt,oppgave next dev --turbo | pino-pretty",
+    "dev:postmottak": "LOCAL_BACKENDS=behandlingsflyt,postmottak next dev --turbo | pino-pretty",
+    "dev:all": "LOCAL_BACKENDS=behandlingsflyt,postmottak,oppgave next dev --turbo | pino-pretty",
     "build": "next build",
     "typecheck": "tsc --noEmit",
     "test": "vitest --run",

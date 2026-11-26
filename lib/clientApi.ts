@@ -29,6 +29,7 @@ import {
   OppdaterMeldekortRequest,
   OppdaterMeldekortResponse,
   OpprettAktivitetspliktBehandlingDto,
+  OpprettUtenlandsoppholdBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
   RegistrerMeldedatoRequest,
@@ -136,6 +137,13 @@ export function clientKanDistribuereBrevV2(brevbestillingReferanse: string, requ
 
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {
   return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`, 'POST', data);
+}
+
+export function clientOpprettUtenlandsoppholdBehandling(
+  saksnummer: string,
+  data: OpprettUtenlandsoppholdBehandlingDto
+) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettUtenlandsoppholdBehandling`, 'POST', data);
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {

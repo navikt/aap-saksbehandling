@@ -1,6 +1,0 @@
-.ellipsis {
-  max-width: 50ch;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
