@@ -18,6 +18,7 @@ export interface TextFieldProps<FormFieldValues extends FieldValues> {
   className?: string;
   autocomplete?: HTMLInputAutoCompleteAttribute;
   onChangeCustom?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
 }
 
 export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
@@ -34,6 +35,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
   hideErrorMessage,
   autocomplete,
   onChangeCustom,
+  placeholder,
 }: TextFieldProps<FormFieldValues>) => (
   <Controller
     name={name}
@@ -62,6 +64,7 @@ export const TextFieldWrapper = <FormFieldValues extends FieldValues>({
           readOnly={readOnly}
           className={className}
           autoComplete={autocomplete}
+          placeholder={placeholder}
         />
       );
     }}

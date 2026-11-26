@@ -7,10 +7,18 @@ import { useDebounce } from 'hooks/DebounceHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import { Brev, BrevGrunnlagBrev, BrevMottaker, BrevStatus, Mottaker, Signatur } from 'lib/types/types';
+import {
+  Brev,
+  BrevBehovstype,
+  BrevGrunnlagBrev,
+  BrevMottaker,
+  BrevStatus,
+  IdentOgNavn,
+  Mottaker,
+  Signatur,
+} from 'lib/types/types';
 import { isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
-import { Behovstype } from 'lib/utils/form';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import NavLogo from 'public/nav_logo.png';
 import { useCallback, useEffect, useState } from 'react';
@@ -23,13 +31,18 @@ import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { VelgMottakere_SkriveBrev } from 'components/brevbygger/mottaker/VelgMottakere_SkriveBrev';
 
 export const SkriveBrev = ({
   referanse,
   behovstype,
   behandlingVersjon,
   mottaker,
+  kopimottaker,
   fullmektigMottaker,
+  bruker,
   brukerMottaker,
   grunnlag,
   signaturer,
@@ -39,9 +52,11 @@ export const SkriveBrev = ({
   brevtype,
 }: {
   referanse: string;
-  behovstype: Behovstype;
+  behovstype: BrevBehovstype;
   mottaker: BrevMottaker;
+  kopimottaker?: BrevMottaker;
   fullmektigMottaker?: Mottaker;
+  bruker: IdentOgNavn;
   brukerMottaker?: Mottaker;
   behandlingVersjon: number;
   grunnlag: Brev;
@@ -51,6 +66,7 @@ export const SkriveBrev = ({
   readOnly: boolean;
   brevtype: BrevGrunnlagBrev['brevtype'];
 }) => {
+  const [visFerdigstillBrevDialog, settVisFerdigstillBrevDialog] = useState(false);
   const { behandlingsreferanse, saksnummer } = useParamsMedType();
   const [brev, setBrev] = useState<Brev>(grunnlag);
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
@@ -61,6 +77,7 @@ export const SkriveBrev = ({
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
   const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
+  const redigerMottakerBrevbygger = useFeatureFlag('RedigerMottakerBrevbygger');
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
@@ -105,18 +122,50 @@ export const SkriveBrev = ({
     settIkkeSendBrevModalOpen(false);
   };
 
+  const sendBrev = async () => {
+    await clientMellomlagreBrev(referanse, brev);
+    const flyt = await clientHentFlyt(behandlingsreferanse);
+    if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
+      setKanMellomlagreBrev(false);
+      løsAvklaringsbehov(
+        {
+          behandlingVersjon: flyt.data.behandlingVersjon,
+          behov: {
+            behovstype: behovstype,
+            brevbestillingReferanse: referanse,
+            mottakere: valgteMottakere,
+            handling: 'FERDIGSTILL',
+          },
+          referanse: behandlingsreferanse,
+        },
+        () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
+      );
+    }
+  };
+
   return (
     <>
-      {fullmektigMottaker && brukerMottaker && (
+      {!redigerMottakerBrevbygger && fullmektigMottaker && brukerMottaker && (
         <VelgeMottakere
           setMottakere={setMottakere}
           readOnly={readOnly}
-          brukerNavn={mottaker.navn}
+          brukerNavn={mottaker.navn || 'Mangler'}
           bruker={brukerMottaker}
           fullmektig={fullmektigMottaker}
         />
       )}
       <div>
+        {redigerMottakerBrevbygger && (
+          <VelgMottakere_SkriveBrev
+            bestillingsreferanse={referanse}
+            readOnly={readOnly}
+            bruker={bruker}
+            initellMottaker={mottaker}
+            initiellKopimottaker={kopimottaker}
+            fullmektig={fullmektigMottaker}
+          />
+        )}
+
         <HStack gap="space-16" justify="space-between" wrap={false} align="center" marginBlock="space-0 space-16">
           <HStack gap="space-8">
             {sistLagret && <Label as="p">Sist lagret: {formaterDatoMedTidspunktForFrontend(sistLagret)}</Label>}
@@ -181,7 +230,7 @@ export const SkriveBrev = ({
           </LocalAlert>
           <BrevbyggerBeta
             brevmal={brev}
-            mottaker={mottaker}
+            mottaker={{ ident: mottaker.ident || 'Mangler', navn: mottaker.navn || 'Mangler' }}
             saksnummer={saksnummer}
             onBrevChange={onChange}
             logo={NavLogo}
@@ -201,33 +250,25 @@ export const SkriveBrev = ({
             brukerMottaker={brukerMottaker}
           />
           {!readOnly && (
-            <Button
-              disabled={status !== 'FORHÅNDSVISNING_KLAR' || !!distribusjonssjekkFeil}
-              onClick={async () => {
-                await clientMellomlagreBrev(referanse, brev);
-                const flyt = await clientHentFlyt(behandlingsreferanse);
-                if (isSuccess(flyt) && flyt.data.behandlingVersjon) {
-                  setKanMellomlagreBrev(false);
-                  løsAvklaringsbehov(
-                    {
-                      behandlingVersjon: flyt.data.behandlingVersjon,
-                      behov: {
-                        behovstype: behovstype,
-                        brevbestillingReferanse: referanse,
-                        mottakere: valgteMottakere,
-                        handling: 'FERDIGSTILL',
-                      },
-                      referanse: behandlingsreferanse,
-                    },
-                    () => loggUmamiBrevVarighet('STEG_SKRIVBREV_VARIGHET', umamiStartTidspunkt, Date.now(), brevtype)
-                  );
-                }
-              }}
-              className={'fit-content'}
-              loading={løsAvklaringsbehovIsLoading}
-            >
-              Send brev
-            </Button>
+            <HStack justify="end">
+              <Button
+                type="button"
+                onClick={() => settVisFerdigstillBrevDialog(true)}
+                disabled={status !== 'FORHÅNDSVISNING_KLAR' || !!distribusjonssjekkFeil}
+              >
+                Ferdigstill brev
+              </Button>
+
+              <FerdigstillBrevDialog
+                referanse={referanse}
+                isOpen={visFerdigstillBrevDialog}
+                onClose={() => settVisFerdigstillBrevDialog(false)}
+                sendBrev={sendBrev}
+                senderBrev={løsAvklaringsbehovIsLoading}
+                løsBehovStatus={løsAvklaringsbehovStatus}
+                løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
+              />
+            </HStack>
           )}
         </VStack>
 

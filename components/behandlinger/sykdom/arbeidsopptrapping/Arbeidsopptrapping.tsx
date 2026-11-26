@@ -31,8 +31,8 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -72,8 +72,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
   );
   const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
-  const nyeVurderinger = grunnlag?.nyeVurderinger ?? [];
-
   const defaultValues = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
     : getDefaultValuesFromGrunnlag(grunnlag);
@@ -112,11 +110,6 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
       tidligsteDatoMåMatcheMedRettighetsperiode: false,
     });
     if (!erPerioderGyldige) {
-      return;
-    }
-
-    if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
-      visningActions.avbrytEndringClick();
       return;
     }
 
@@ -195,7 +188,7 @@ export const Arbeidsopptrapping = ({ behandlingVersjon, readOnly, grunnlag, init
                 svar={getJaNeiEllerUndefined(vurdering.reellMulighetTilOpptrapping)!}
               />
               <SpørsmålOgSvar
-                spørsmål="Har brukeren rett på AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
+                spørsmål="Har brukeren rett til AAP i arbeidsopptrapping etter § 11-23 6. ledd?"
                 svar={getJaNeiEllerUndefined(vurdering.rettPaaAAPIOpptrapping)!}
               />
             </VStack>

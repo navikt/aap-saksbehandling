@@ -44,8 +44,9 @@ export const UførevedtakInfoBoks = ({ behandlingsReferanse, virkningsdato, resu
             </Tag>
             <Box padding={'space-8'}>
               <BodyLong size={'small'}>
-                <Detail textColor="subtle">Begrunnelse</Detail>
-                Det er fattet et vedtak om uføre med {resultat && mapTilResultat(resultat)}{' '}
+                <Detail textColor="subtle">Status</Detail>
+                {resultat && mapTilResultat(resultat)}
+                <Detail textColor="subtle">Virkningsdato</Detail>
                 {formaterDatoForFrontend(virkningsdato)}
               </BodyLong>
             </Box>

@@ -1,18 +1,17 @@
 import { render, screen, within } from 'lib/test/CustomRender';
-import { FeatureFlagProvider } from 'context/UnleashContext';
-import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import {
   beregnTidligsteVirkningstidspunkt,
   SamordningGradering,
 } from 'components/behandlinger/samordning/samordninggradering/SamordningGradering';
 import { format, subWeeks } from 'date-fns';
 import { MellomlagretVurderingResponse, SamordningGraderingGrunnlag } from 'lib/types/types';
-import { beforeEach, describe, expect, it, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, test, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { Behovstype } from 'lib/utils/form';
 import { FetchResponse } from 'lib/utils/api';
 import createFetchMock from 'vitest-fetch-mock';
 import { defaultFlytResponse, setMockFlytResponse } from 'vitestSetup';
+import * as clientApi from 'lib/clientApi';
 
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
@@ -20,6 +19,7 @@ const user = userEvent.setup();
 
 const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   vurdering: {
     begrunnelse: 'Dette er min vurdering som er bekreftet',
@@ -42,6 +42,7 @@ const grunnlagMedVurdering: SamordningGraderingGrunnlag = {
 
 const grunnlagUtenVurdering: SamordningGraderingGrunnlag = {
   harTilgangTilÅSaksbehandle: true,
+  vedtattePerioder: [],
   feriePerioder: [],
   ytelser: [
     {
@@ -63,6 +64,62 @@ beforeEach(() => {
 });
 
 describe('Samordning gradering', () => {
+  test('krever bekreftelse ved sletting av vedtatte perioder, men ikke nye perioder', async () => {
+    const vedtattPeriode = {
+      ytelseType: 'SYKEPENGER' as const,
+      gradering: 20,
+      manuell: true,
+      periode: { fom: '2025-01-01', tom: '2025-01-31' },
+    };
+    render(
+      <SamordningGradering
+        grunnlag={{
+          ...grunnlagMedVurdering,
+          vedtattePerioder: [vedtattPeriode],
+          vurdering: {
+            begrunnelse: 'Samordning med sykepenger',
+            vurderingerMeta: {},
+            vurderinger: [vedtattPeriode, { ...vedtattPeriode, periode: { fom: '2026-01-01', tom: '2026-01-31' } }],
+          },
+        }}
+        behandlingVersjon={1}
+        readOnly={false}
+      />
+    );
+
+    await user.click(screen.getAllByRole('button', { name: 'Slett' })[1]);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: 'Slett' })).toHaveLength(1);
+
+    await user.click(screen.getByRole('button', { name: 'Slett' }));
+    const dialog = screen.getByRole('dialog', { name: 'Slett samordningsperiode' });
+    expect(within(dialog).getByText(/Merk at dette vilkåret gjelder for hele saksperioden/)).toBeVisible();
+    await user.click(within(dialog).getByRole('button', { name: 'Avbryt' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2025');
+
+    await user.click(screen.getByRole('button', { name: 'Slett' }));
+    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Slett' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Slett' })).not.toBeInTheDocument();
+  });
+
+  test('viser begrunnelsen når det finnes en vurdering uten perioder og ingen ytelser fra kilder', () => {
+    const grunnlagMedVurderingUtenPerioder: SamordningGraderingGrunnlag = {
+      ...grunnlagMedVurdering,
+      vurdering: {
+        begrunnelse: 'Bruker har ingen andre folketrygdytelser',
+        vurderinger: [],
+        vurderingerMeta: {},
+      },
+    };
+
+    render(<SamordningGradering grunnlag={grunnlagMedVurderingUtenPerioder} behandlingVersjon={1} readOnly={false} />);
+
+    const begrunnelse = screen.getByRole('textbox', { name: 'Vurder vilkåret' });
+    expect(begrunnelse).toBeVisible();
+  });
+
   test('viser relevant informasjon fra søknaden når sykepenger og ferie er oppgitt', () => {
     const grunnlagMedSykepengerOgFerie: SamordningGraderingGrunnlag = {
       ...grunnlagUtenVurdering,
@@ -106,12 +163,54 @@ describe('Samordning gradering', () => {
     expect(gradering).toHaveValue('60');
   });
 
-  test('ferie i sykepengeperiode kan ikke velges i den vanlige ytelsestype-velgeren når autoSplittSykepenger-toggelen er på', () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
-        <SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />
-      </FeatureFlagProvider>
-    );
+  describe('validering og innsending av samordningsgrad', () => {
+    beforeEach(() => {
+      vi.spyOn(clientApi, 'clientLøsBehov').mockResolvedValue({
+        type: 'ERROR',
+        status: 400,
+        apiException: { message: 'Testrespons' },
+      });
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    test('avviser desimaler uten å sende vurderingen', async () => {
+      render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+
+      const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
+      await user.clear(gradering);
+      await user.type(gradering, '36.32');
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+      expect(await screen.findByText('Samordningsgrad må være et heltall')).toBeVisible();
+      expect(gradering).toHaveValue('36.32');
+      expect(clientApi.clientLøsBehov).not.toHaveBeenCalled();
+    });
+
+    test.each([0, 36, 100])('sender samordningsgrad %i som et tall', async (grad) => {
+      render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
+
+      const gradering = screen.getByRole('textbox', { name: 'Samordningsgrad' });
+      await user.clear(gradering);
+      await user.type(gradering, String(grad));
+      await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+      expect(clientApi.clientLøsBehov).toHaveBeenCalledWith(
+        expect.objectContaining({
+          behov: expect.objectContaining({
+            vurderingerForSamordning: expect.objectContaining({
+              vurderteSamordningerData: [expect.objectContaining({ gradering: grad })],
+            }),
+          }),
+        })
+      );
+    });
+  });
+
+  test('ferie i sykepengeperiode kan ikke velges i den vanlige ytelsestype-velgeren', () => {
+    render(<SamordningGradering grunnlag={grunnlagMedVurdering} behandlingVersjon={1} readOnly={false} />);
 
     expect(
       within(screen.getByRole('combobox', { name: 'Ytelsestype' })).queryByRole('option', {
@@ -157,6 +256,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -189,6 +289,7 @@ describe('Samordning gradering', () => {
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
@@ -234,21 +335,100 @@ describe('Samordning gradering', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('viser feilmelding og åpner ikke ferie-modal dersom radene i tabellen ikke er gyldige', async () => {
+  test('gir ikke feilmelding når perioder overlapper på tvers av ytelsestyper', async () => {
     setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
 
     const etGrunnlag: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [],
     };
 
+    render(<SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
+
+    await user.click(screen.getByRole('button', { name: 'Endre' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
+    await user.type(screen.getByRole('textbox', { name: 'Vurder vilkåret' }), 'Dette er en ny begrunnelse');
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+    await user.click(screen.getByRole('button', { name: 'Legg til periode' }));
+
+    const fomFelter = screen.getAllByRole('textbox', { name: 'Fra og med' });
+    const tomFelter = screen.getAllByRole('textbox', { name: 'Til og med' });
+    const ytelsestypeFelter = screen.getAllByRole('combobox', { name: 'Ytelsestype' });
+    const graderingFelter = screen.getAllByRole('textbox', { name: 'Samordningsgrad' });
+
+    await user.type(fomFelter[0], '01.01.2025');
+    await user.type(tomFelter[0], '31.01.2025');
+    await user.selectOptions(ytelsestypeFelter[0], 'SYKEPENGER');
+    await user.type(graderingFelter[0], '50');
+
+    await user.type(fomFelter[1], '15.01.2025');
+    await user.type(tomFelter[1], '15.02.2025');
+    await user.selectOptions(ytelsestypeFelter[1], 'FORELDREPENGER');
+    await user.type(graderingFelter[1], '50');
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(
+      screen.queryByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).not.toBeInTheDocument();
+  });
+
+  test('gir feilmelding når ferie i sykepengeperioden overlapper med sykepenger', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const grunnlagMedOverlappendeFerieOgSykepenger: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [],
+      vurdering: {
+        begrunnelse: 'Min vurdering',
+        vurderinger: [
+          {
+            ytelseType: 'SYKEPENGER',
+            gradering: 100,
+            manuell: true,
+            periode: { fom: '2025-01-01', tom: '2025-01-31' },
+          },
+          {
+            ytelseType: 'FERIE_I_SYKEPENGEPERIODE',
+            gradering: 100,
+            manuell: true,
+            periode: { fom: '2025-01-15', tom: '2025-01-20' },
+          },
+        ],
+        vurderingerMeta: {},
+      },
+    };
+
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
-        <SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />
-      </FeatureFlagProvider>
+      <SamordningGradering grunnlag={grunnlagMedOverlappendeFerieOgSykepenger} readOnly={false} behandlingVersjon={0} />
     );
+
+    await user.click(screen.getByRole('button', { name: 'Endre' }));
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(
+      await screen.findByText('Periodene overlapper. Endre datoene slik at periodene ikke overlapper.')
+    ).toBeVisible();
+  });
+
+  test('viser feilmelding og åpner ikke ferie-modal dersom radene i tabellen ikke er gyldige', async () => {
+    setMockFlytResponse({ ...defaultFlytResponse, aktivtSteg: 'VURDER_BISTANDSBEHOV' });
+
+    const etGrunnlag: SamordningGraderingGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
+      feriePerioder: [],
+      historiskeVurderinger: [],
+      ytelser: [],
+    };
+
+    render(<SamordningGradering grunnlag={etGrunnlag} readOnly={false} behandlingVersjon={0} />);
 
     await user.click(screen.getByRole('button', { name: 'Endre' }));
     await user.click(screen.getByRole('button', { name: 'Legg til folketrygdytelse' }));
@@ -266,6 +446,7 @@ describe('Samordning gradering', () => {
 describe('kopiering av perioder fra oppslag', () => {
   const grunnlagMedFlereYtelserOgVurdering: SamordningGraderingGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
     feriePerioder: [],
     historiskeVurderinger: [],
     ytelser: [
@@ -300,6 +481,7 @@ describe('kopiering av perioder fra oppslag', () => {
 
   const grunnlagMedFerieISykepengeperiode: SamordningGraderingGrunnlag = {
     harTilgangTilÅSaksbehandle: true,
+    vedtattePerioder: [],
     feriePerioder: [],
     historiskeVurderinger: [],
     ytelser: [],
@@ -378,6 +560,7 @@ describe('kopiering av perioder fra oppslag', () => {
   test('kopiert periode får samordningsgrad 0 når kilden mangler gradering', async () => {
     const grunnlagMedYtelseUtenGraderingFraKilde: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [
@@ -406,6 +589,7 @@ describe('kopiering av perioder fra oppslag', () => {
   test('kopiert periode får samordningsgrad 0 når kilden har gradering 0', async () => {
     const grunnlagMedGraderingNull: SamordningGraderingGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
+      vedtattePerioder: [],
       feriePerioder: [],
       historiskeVurderinger: [],
       ytelser: [
@@ -490,22 +674,9 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(screen.getByRole('button', { name: 'Kopier alle perioder' })).toBeDisabled();
   });
 
-  test('viser ikke kopier-knapper når kopierPerioder-toggelen er av', () => {
+  test('kan legge til ferie i sykepengeperiode via egen modal', async () => {
     render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, kopierPerioder: false }}>
-        <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
-      </FeatureFlagProvider>
-    );
-
-    expect(screen.queryByRole('button', { name: 'Kopier periode' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Kopier alle perioder' })).not.toBeInTheDocument();
-  });
-
-  test('kan legge til ferie i sykepengeperiode via egen modal når autoSplittSykepenger-toggelen er på', async () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
-        <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
-      </FeatureFlagProvider>
+      <SamordningGradering grunnlag={grunnlagMedFlereYtelserOgVurdering} behandlingVersjon={1} readOnly={false} />
     );
 
     await user.click(screen.getByRole('button', { name: 'Legg til ferie i sykepengeperiode' }));
@@ -520,26 +691,8 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(within(rader[rader.length - 1]).getByText('Ferie i sykepengeperiode')).toBeVisible();
   });
 
-  test('splitter ikke sykepengeperioden mot ferie når autoSplittSykepenger-toggelen er av', () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: false }}>
-        <SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />
-      </FeatureFlagProvider>
-    );
-
-    const rader = within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row');
-
-    expect(rader).toHaveLength(3);
-    expect(within(rader[1]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('01.01.2026');
-    expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('30.01.2026');
-  });
-
   test('flytter splitten når en ferieperiode innsnevres, uten å etterlate udekkede dager', async () => {
-    render(
-      <FeatureFlagProvider flags={{ ...mockedFlags, autoSplittSykepenger: true }}>
-        <SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />
-      </FeatureFlagProvider>
-    );
+    render(<SamordningGradering grunnlag={grunnlagMedFerieISykepengeperiode} behandlingVersjon={1} readOnly={false} />);
 
     const ferieRadFørRedigering = within(
       within(screen.getByRole('table', { name: 'Perioder med samordning' })).getAllByRole('row')[2]
@@ -565,7 +718,7 @@ describe('kopiering av perioder fra oppslag', () => {
     expect(within(rader[1]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('11.01.2026');
     expect(within(rader[2]).getByText('12.01.2026 - 14.01.2026')).toBeVisible();
     expect(within(rader[3]).getByRole('textbox', { name: 'Fra og med' })).toHaveValue('15.01.2026');
-    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('02.02.2026');
+    expect(within(rader[3]).getByRole('textbox', { name: 'Til og med' })).toHaveValue('04.02.2026');
   });
 
   test('gjenoppretter én sammenhengende sykepengeperiode når ferien slettes', async () => {

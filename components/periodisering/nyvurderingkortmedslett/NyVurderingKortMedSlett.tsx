@@ -12,6 +12,7 @@ import { SlettVurderingModal } from 'components/periodisering/slettvurderingmoda
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Alert } from 'components/alert/Alert';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -42,7 +43,9 @@ export const NyVurderingKortMedSlett = ({
   accordionsSignal,
   visStrekVedManglendeTilDato = true,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert);
+  const { flyt } = useFlyt();
+  const erBeslutterSteg = flyt?.aktivtSteg === 'FATTE_VEDTAK';
+  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert || erBeslutterSteg);
 
   const sisteAccordionSignalVersion = useRef(accordionsSignal.version);
 
@@ -51,7 +54,7 @@ export const NyVurderingKortMedSlett = ({
     sisteAccordionSignalVersion.current = accordionsSignal.version;
   }
 
-  const ref = useRef<HTMLDialogElement>(null);
+  const [visSlettVurdering, setVisSlettVurdering] = useState(false);
 
   return (
     <CustomExpandableCard
@@ -90,10 +93,15 @@ export const NyVurderingKortMedSlett = ({
                 variant="tertiary"
                 size="small"
                 icon={<TrashFillIcon />}
-                onClick={() => ref.current?.showModal()}
+                onClick={() => setVisSlettVurdering(true)}
+                aria-haspopup="dialog"
                 type="button"
               />
-              <SlettVurderingModal ref={ref} onSlettVurdering={onSlettVurdering} />
+              <SlettVurderingModal
+                isOpen={visSlettVurdering}
+                onClose={() => setVisSlettVurdering(false)}
+                onSlettVurdering={onSlettVurdering}
+              />
             </VStack>
           )}
         </HGrid>

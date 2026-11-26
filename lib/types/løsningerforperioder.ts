@@ -5,7 +5,6 @@ import {
   AvklarPeriodisertLovvalgMedlemskapLøsning,
   AvklarPeriodisertStudentLøsning,
   BistandsbehovLøsning,
-  EtableringEgenVirksomhetLøsningDto,
   LøsPeriodisertBehovPåBehandling,
   OvergangArbeidLøsning,
   OvergangUforeLøsning,
@@ -13,7 +12,6 @@ import {
   PeriodisertFritaksvurderingDto,
   SykdomsvurderingLøsningDto,
   SykepengererstatningPeriodeLøsning,
-  VedtakslengdeVurderingDto,
 } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 
@@ -26,11 +24,6 @@ export interface LøsningerForPerioder extends BaseLøsPeriodisertBehovPåBehand
 interface LovvalgOgMedlemskapBehov {
   behovstype: Behovstype.AVKLAR_LOVVALG_MEDLEMSKAP | Behovstype.MANUELL_OVERSTYRING_LOVVALG;
   løsningerForPerioder: AvklarPeriodisertLovvalgMedlemskapLøsning[];
-}
-
-interface StudentBehov {
-  behovstype: Behovstype.AVKLAR_STUDENT_KODE;
-  løsningerForPerioder: AvklarPeriodisertStudentLøsning[];
 }
 
 interface StudentBehovV2 {
@@ -56,11 +49,6 @@ interface FastsettArbeidsevne {
 interface FritakMeldeplikt {
   behovstype: Behovstype.FRITAK_MELDEPLIKT_KODE;
   løsningerForPerioder: PeriodisertFritaksvurderingDto[];
-}
-
-interface EtableringEgenVirksomhet {
-  behovstype: Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE;
-  løsningerForPerioder: EtableringEgenVirksomhetLøsningDto[];
 }
 
 interface Sykepengeerstatning {
@@ -93,24 +81,16 @@ interface ForutgåendeMedlemskapMedOverstyring {
   løsningerForPerioder: AvklarPeriodisertForutgåendeMedlemskapLøsning[];
 }
 
-interface VedtakslengdeBehov {
-  behovstype: Behovstype.FASTSETT_VEDTAKSLENGDE;
-  løsningerForPerioder: VedtakslengdeVurderingDto[];
-}
-
 type Behov =
   | LovvalgOgMedlemskapBehov
-  | StudentBehov
   | StudentBehovV2
   | SykdomsvurderingBehov
   | Bistandsbehov
   | FastsettArbeidsevne
   | FritakMeldeplikt
-  | EtableringEgenVirksomhet
   | Sykepengeerstatning
   | OvergangArbeid
   | Arbeidsopptrapping
   | OvergangUføre
   | OppholdskravvurderingBehov
-  | ForutgåendeMedlemskapMedOverstyring
-  | VedtakslengdeBehov;
+  | ForutgåendeMedlemskapMedOverstyring;

@@ -15,7 +15,7 @@ import { BarnepensjonTidligereVurdering } from 'components/behandlinger/samordni
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormErrorSummary } from 'components/formerrorsummary/FormErrorSummary';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -130,7 +130,7 @@ export const Barnepensjon = ({ readOnly, initialMellomlagretVurdering, behandlin
           <BarnepensjonTidligereVurdering vurderinger={grunnlag.historiskeVurderinger} />
         )}
         <FormField form={form} formField={formFields.begrunnelse} />
-        <BarnepensjonTabell form={form} readOnly={formReadOnly} />
+        <BarnepensjonTabell form={form} readOnly={formReadOnly} vedtattePerioder={grunnlag.vedtattePerioder} />
 
         {feilmeldinger && feilmeldinger.length > 0 && <FormErrorSummary errorList={feilmeldinger} />}
       </VStack>

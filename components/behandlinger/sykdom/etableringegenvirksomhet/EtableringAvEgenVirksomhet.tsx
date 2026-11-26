@@ -1,6 +1,6 @@
 'use client';
 
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { HStack, VStack } from '@navikt/ds-react';
 import {
   NyVurderingExpandableCard,
@@ -8,9 +8,10 @@ import {
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { gyldigDatoEllerNull } from 'lib/validation/dateValidation';
 import { finnesFeilForVurdering, hentFeilmeldingerForForm } from 'lib/utils/formerrors';
-import { SubmitEventHandler } from 'react';
+import { SubmitEventHandler, useState } from 'react';
 import {
   EtableringEgenVirksomhetGrunnlagResponse,
+  EtableringEgenVirksomhetLøsningDto,
   EtableringEierBrukerVirksomheten,
   MellomlagretVurdering,
   Periode,
@@ -39,7 +40,7 @@ import { parseISO } from 'date-fns';
 import { parseDatoFraDatePicker, summerPerioderVarighetIArbeidsdager } from 'lib/utils/date';
 import { IkkeVurderbarPeriode } from 'components/periodisering/IkkeVurderbarPeriode';
 import { validerPeriodiserteVurderingerMotIkkeRelevantePerioder } from 'lib/utils/validering';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { Alert } from 'components/alert/Alert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
@@ -58,12 +59,19 @@ export interface EtableringAvEgenVirksomhetVurderingForm extends VurderingFormMe
   antasDetAtEtableringenFørerTilSelvforsørgelse: JaEllerNei | undefined;
   utviklingsperioder: Periode[];
   oppstartsperioder: Periode[];
+  versjon?: Versjon;
 }
+
+type Versjon = EtableringEgenVirksomhetLøsningDto['versjon'];
+
+const versjonerFra = (form: Partial<EtableringAvEgenVirksomhetForm>): Versjon[] =>
+  form.vurderinger?.map((vurdering) => vurdering.versjon ?? 'V0') ?? [];
 
 export interface EtableringAvEgenVirksomhetForm {
   vurderinger: EtableringAvEgenVirksomhetVurderingForm[];
   virksomhetNavn: string | undefined;
 }
+
 export const EtableringAvEgenVirksomhet = ({
   readOnly,
   initialMellomlagretVurdering,
@@ -74,12 +82,8 @@ export const EtableringAvEgenVirksomhet = ({
 
   const { accordionsSignal, closeAllAccordions } = useAccordionsSignal();
 
-  const {
-    løsPeriodisertAvklaringsbehov,
-    løsAvklaringsbehovIsLoading,
-    løsAvklaringsbehovStatus,
-    løsAvklaringsbehovError,
-  } = useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
+  const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
+    useLøsAvklaringsbehov('ETABLERING_EGEN_VIRKSOMHET');
 
   const defaultValues: EtableringAvEgenVirksomhetForm = initialMellomlagretVurdering
     ? JSON.parse(initialMellomlagretVurdering.data)
@@ -94,19 +98,17 @@ export const EtableringAvEgenVirksomhet = ({
 
   const form = useForm<EtableringAvEgenVirksomhetForm>({ defaultValues, shouldUnregister: true });
   const { fields: nyeVurderinger, append, remove } = useFieldArray({ control: form.control, name: 'vurderinger' });
+  const [versjoner, setVersjoner] = useState<Versjon[]>(versjonerFra(defaultValues));
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.ETABLERING_EGEN_VIRKSOMHET_KODE,
     initialMellomlagretVurdering,
     form
   );
+  const erLagretVurdering = formReadOnly && !mellomlagretVurdering;
 
   const handleSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      if (data.vurderinger.length === 0 && nyeVurderinger.length === 0) {
-        visningActions.avbrytEndringClick();
-        return;
-      }
       // Må finnes minst en oppstart eller utviklingsperiode hvis vilkår er oppfylt
       let validerTidsplan = true;
       data.vurderinger.forEach((vurdering) => {
@@ -146,14 +148,14 @@ export const EtableringAvEgenVirksomhet = ({
         return;
       }
       const validering = validerPeriodiserteVurderingerMotIkkeRelevantePerioder({
-        nyeVurderinger: data.vurderinger,
+        nyeVurderinger: data.vurderinger ?? [],
         form,
         grunnlag,
       });
       if (!validering) {
         return;
       }
-      løsPeriodisertAvklaringsbehov(
+      løsAvklaringsbehov(
         {
           behandlingVersjon: behandlingVersjon,
           behov: {
@@ -161,7 +163,12 @@ export const EtableringAvEgenVirksomhet = ({
             løsningerForPerioder: data.vurderinger.map((vurdering, index) => {
               const isLast = index === data.vurderinger.length - 1;
               const tilDato = isLast ? undefined : data.vurderinger[index + 1].fraDato;
-              return mapEtableringEgenVirksomhetVurderingTilDto(vurdering, data.virksomhetNavn!, tilDato);
+              return mapEtableringEgenVirksomhetVurderingTilDto(
+                vurdering,
+                data.virksomhetNavn!,
+                tilDato,
+                versjoner[index] ?? 'V0'
+              );
             }),
           },
           referanse: behandlingsreferanse,
@@ -176,8 +183,20 @@ export const EtableringAvEgenVirksomhet = ({
     })(event);
   };
 
+  function nullstillSkjema() {
+    const verdier = getDefaultValuesFromGrunnlag(grunnlag);
+    form.reset(verdier);
+    setVersjoner(versjonerFra(verdier));
+  }
+
   function onAddPeriode() {
     append(tomEtableringAvEgenVirksomhetVurdering());
+    setVersjoner((nåværende) => [...nåværende, 'V0']);
+  }
+
+  function onSlettVurdering(index: number) {
+    remove(index);
+    setVersjoner((nåværende) => nåværende.filter((_, i) => i !== index));
   }
   const vedtatteVurderinger = grunnlag?.sisteVedtatteVurderinger ?? [];
   const foersteNyePeriode = nyeVurderinger.length > 0 ? form.watch('vurderinger.0.fraDato') : null;
@@ -193,10 +212,10 @@ export const EtableringAvEgenVirksomhet = ({
       isLoading={løsAvklaringsbehovIsLoading}
       løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
       mellomlagretVurdering={mellomlagretVurdering}
-      onDeleteMellomlagringClick={() => slettMellomlagring(() => form.reset(getDefaultValuesFromGrunnlag(grunnlag)))}
+      onDeleteMellomlagringClick={() => slettMellomlagring(nullstillSkjema)}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset(getDefaultValuesFromGrunnlag(grunnlag))}
+      formReset={nullstillSkjema}
       onLeggTilVurdering={onAddPeriode}
       errorList={errorList}
     >
@@ -241,13 +260,17 @@ export const EtableringAvEgenVirksomhet = ({
             key={vurdering.id}
             accordionsSignal={accordionsSignal}
             fraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index}.fraDato`))}
-            vurderingStatus={getErOppfyltEllerIkkeStatus(nyVurderingErOppfylt(form.watch(`vurderinger.${index}`)))}
+            vurderingStatus={getErOppfyltEllerIkkeStatus(
+              erLagretVurdering
+                ? grunnlag.nyeVurderinger[index]?.oppfylt
+                : nyVurderingErOppfylt(form.watch(`vurderinger.${index}`))
+            )}
             nestePeriodeFraDato={gyldigDatoEllerNull(form.watch(`vurderinger.${index + 1}.fraDato`))}
             isLast={index === vedtatteVurderinger.length - 1}
             vurdering={vurdering}
             finnesFeil={finnesFeilForVurdering(index, errorList)}
             readonly={formReadOnly}
-            onSlettVurdering={() => remove(index)}
+            onSlettVurdering={() => onSlettVurdering(index)}
             // vilkåret er valgfritt, kan derfor slette vurderingen selv om det ikke finnes en tidligere vurdering
             harTidligereVurderinger={true}
             index={index}

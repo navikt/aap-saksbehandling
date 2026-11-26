@@ -52,7 +52,8 @@ function mapTilAnnetRelevantDokumentKontrakt(data: AnnetRelevantDokumentFormFiel
   const dokument = {
     meldingType: 'AnnetRelevantDokumentV1',
     årsakerTilBehandling: data.årsaker,
-    begrunnelse: data.begrunnelse,
+    // Brukes ikke lenger, fylles inn i neste steg (fagsystem-steg)
+    begrunnelse: '',
     underkategori: data.underkategori || undefined,
   } satisfies AnnetRelevantDokument;
   return JSON.stringify(dokument);
@@ -84,7 +85,6 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         type: 'textarea',
         label: 'Begrunnelse',
         defaultValue: annetRelevantDokumentGrunnlag.begrunnelse || '',
-        rules: { required: 'Du må oppgi begrunnelse.' },
       },
       underkategori: {
         type: 'select',
@@ -109,7 +109,9 @@ export const DigitaliserAnnetRelevantDokument = ({ grunnlag, readOnly, submit, i
         <VStack gap={'space-24'}>
           <FormField form={form} formField={formFields.underkategori} />
           <FormField form={form} formField={formFields.årsaker} />
-          <FormField form={form} formField={formFields.begrunnelse} />
+          {readOnly && annetRelevantDokumentGrunnlag.begrunnelse && (
+            <FormField form={form} formField={formFields.begrunnelse} readOnly />
+          )}
           {!readOnly && (
             <Button loading={isLoading} className={'fit-content'}>
               Neste

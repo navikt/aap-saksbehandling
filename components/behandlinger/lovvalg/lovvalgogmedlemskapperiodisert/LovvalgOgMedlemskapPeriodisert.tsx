@@ -34,8 +34,9 @@ import {
   skalVæreInitiellEkspandert,
 } from 'components/periodisering/nyvurderingexpandablecard/NyVurderingExpandableCard';
 import { TidligereVurderingExpandableCard } from 'components/periodisering/tidligerevurderingexpandablecard/TidligereVurderingExpandableCard';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
+import { AutomatiskDelvurdering } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskDelvurdering';
 
 interface Props {
   behandlingVersjon: number;
@@ -203,6 +204,7 @@ export const LovvalgOgMedlemskapPeriodisert = ({
             index={index}
             umamiAddHendelse={addHendelse}
           />
+          {formReadOnly && <AutomatiskDelvurdering delvurdering={vurdering.delvurderinger} />}
         </NyVurderingExpandableCard>
       ))}
     </VilkårskortPeriodisert>

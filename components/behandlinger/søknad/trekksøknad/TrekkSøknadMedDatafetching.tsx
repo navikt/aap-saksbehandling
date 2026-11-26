@@ -1,6 +1,10 @@
 import { TrekkSøknad } from 'components/behandlinger/søknad/trekksøknad/TrekkSøknad';
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
-import { hentMellomlagring, hentTrukketSøknad } from 'lib/services/saksbehandlingservice/saksbehandlingService';
+import {
+  hentMellomlagring,
+  hentTrukketSøknad,
+  hentUbesvarteForespørslerLegeerklæring,
+} from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 
@@ -19,9 +23,16 @@ export const TrekkSøknadMedDatafetching = async ({
 }: Props) => {
   const [trukketSøknadGrunnlag] = await Promise.all([hentTrukketSøknad(behandlingsreferanse)]);
 
+  const ubesvarteForespørslerResponse = await hentUbesvarteForespørslerLegeerklæring(behandlingsreferanse);
+
   if (isError(trukketSøknadGrunnlag)) {
     return <ApiException apiResponses={[trukketSøknadGrunnlag]} />;
   }
+
+  const ubesvarteForespørslerEllerUndefinedVedFeil =
+    ubesvarteForespørslerResponse !== undefined && isError(ubesvarteForespørslerResponse)
+      ? undefined
+      : (ubesvarteForespørslerResponse?.data?.forespørsler ?? []);
 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -36,6 +47,7 @@ export const TrekkSøknadMedDatafetching = async ({
       readOnly={readOnly}
       behandlingVersjon={behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      ubesvarteForespørslerEllerUndefinedVedFeil={ubesvarteForespørslerEllerUndefinedVedFeil}
     />
   );
 };

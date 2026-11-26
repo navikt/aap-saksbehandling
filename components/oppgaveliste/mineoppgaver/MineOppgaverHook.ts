@@ -1,4 +1,3 @@
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useDebouncedValue } from 'hooks/useDebouncedValueHook';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { formaterDatoForFrontend } from 'lib/utils/date';
@@ -6,6 +5,7 @@ import { erDatoFoerDato } from 'lib/validation/dateValidation';
 import { useMemo } from 'react';
 
 import { FormFieldsFilter } from 'components/oppgaveliste/mineoppgaver/MineOppgaver';
+import { erPåminnelsenIFortiden } from 'components/forespørselsendtinfoboks/ForespørselSendtInfoboks';
 
 const oppgaveStatus = {
   VENT: (oppgave: OppgaveMedKontekst) => !!oppgave.oppgavelisteTags?.påVentInfo?.påVentTil,
@@ -20,6 +20,17 @@ const oppgaveStatus = {
   ER_HASTESAK: (oppgave: OppgaveMedKontekst) =>
     oppgave.oppgavelisteTags.markeringer?.some((it) => it.markeringType === 'HASTER') ?? false,
   VENTEFRIST_UTLØPT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.forrigePåVentInfo != null,
+  // TODO: Ta i bruk påminnelseshistorikk her nå det er klart
+  FORESPØRSEL_SENDT: (oppgave: OppgaveMedKontekst) =>
+    oppgave.oppgavelisteTags.forespørselSendtTilBehandler != null &&
+    !erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato) &&
+    oppgave.oppgavelisteTags.harMottattDokument == null,
+  // TODO: Ta i bruk påminnelseshistorikk her nå det er klart
+  PÅMINNELSE_SENDT: (oppgave: OppgaveMedKontekst) =>
+    erPåminnelsenIFortiden(oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseDato) &&
+    !oppgave.oppgavelisteTags.forespørselSendtTilBehandler?.påminnelseAvbrutt &&
+    oppgave.oppgavelisteTags.harMottattDokument == null,
+  SVAR_MOTTATT: (oppgave: OppgaveMedKontekst) => oppgave.oppgavelisteTags.harMottattDokument != null,
 } as const;
 
 interface Props {
@@ -28,7 +39,6 @@ interface Props {
 }
 
 export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
-  const tilbakekrevingBelopFilter = useFeatureFlag('TilbakekrevingBelopFilter');
   const debouncedFilters = useDebouncedValue(filter, 300);
   return useMemo(() => {
     const filtrerOppgave = (oppgave: OppgaveMedKontekst) => {
@@ -65,19 +75,17 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
         return false;
       }
 
-      if (tilbakekrevingBelopFilter) {
-        if (tilbakekrevingBeløpFom) {
-          const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
-          if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
-            return false;
-          }
+      if (tilbakekrevingBeløpFom) {
+        const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
+        if (beløp == null || beløp < Number(tilbakekrevingBeløpFom)) {
+          return false;
         }
+      }
 
-        if (tilbakekrevingBeløpTom) {
-          const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
-          if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
-            return false;
-          }
+      if (tilbakekrevingBeløpTom) {
+        const beløp = oppgave.tilbakekrevingsVars?.tilbakekrevings_beløp;
+        if (beløp == null || beløp > Number(tilbakekrevingBeløpTom)) {
+          return false;
         }
       }
 
@@ -87,5 +95,5 @@ export const useFiltrerteOppgaver = ({ oppgaver, filter }: Props) => {
     };
 
     return oppgaver.filter(filtrerOppgave);
-  }, [oppgaver, debouncedFilters, tilbakekrevingBelopFilter]);
+  }, [oppgaver, debouncedFilters]);
 };

@@ -11,25 +11,31 @@ import { AktivitetspliktTrekk } from 'components/saksoversikt/aktivitetsplikttre
 import { MeldekortOversikt } from 'components/saksoversikt/meldekortoversikt/MeldekortOversikt';
 import { SakerResponse } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import { ArenaSakerListe } from 'components/saksoversikt/ArenaSakerListe';
+import { GosysOppgaverForPerson } from 'components/saksoversikt/gosysoppgaver/GosysOppgaverForPerson';
+import { useGosysOppgaverForPerson } from 'hooks/saksbehandling/GosysOppgaverForPersonHook';
 
 enum Tab {
   OVERSIKT = 'OVERSIKT',
   DOKUMENTER = 'DOKUMENTER',
   MELDEKORT = 'MELDEKORT',
   TREKK = 'TREKK',
+  GOSYS_OPPGAVER = 'GOSYS_OPPGAVER',
 }
 
 export const SakOversiktContainer = ({
   sak,
   rettighetsinfo,
   arenaSaker,
+  gosysUrl,
 }: {
   sak: SaksInfo;
   rettighetsinfo: RettighetsinfoDto | null;
   arenaSaker: SakerResponse | null;
+  gosysUrl?: string;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { antallTreff } = useGosysOppgaverForPerson();
 
   const [tab, setTab] = useState(searchParams.get('t') || Tab.OVERSIKT);
 
@@ -45,6 +51,7 @@ export const SakOversiktContainer = ({
           <Tabs.List>
             <Tabs.Tab label="Oversikt" value={Tab.OVERSIKT} icon={<PersonIcon />} />
             <Tabs.Tab label="Dokumenter" value={Tab.DOKUMENTER} icon={<FileTextIcon />} />
+            <Tabs.Tab label={`Gosys-oppgaver (${antallTreff})`} value={Tab.GOSYS_OPPGAVER} icon={<FileTextIcon />} />
             <Tabs.Tab label="Meldekort" value={Tab.MELDEKORT} icon={<TasklistIcon />} />
             <Tabs.Tab label="Aktivitetsplikt 11-9 trekk" value={Tab.TREKK} icon={<FileTextIcon />} />
           </Tabs.List>
@@ -59,6 +66,10 @@ export const SakOversiktContainer = ({
 
             <Tabs.Panel value={Tab.DOKUMENTER}>
               <DokumentOversikt sak={sak} />
+            </Tabs.Panel>
+
+            <Tabs.Panel value={Tab.GOSYS_OPPGAVER}>
+              <GosysOppgaverForPerson gosysUrl={gosysUrl} />
             </Tabs.Panel>
 
             <Tabs.Panel value={Tab.MELDEKORT}>

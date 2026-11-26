@@ -2,11 +2,14 @@ import { BodyShort, Box, Button, Detail, HStack, Label, VStack } from '@navikt/d
 import { XMarkOctagonIcon } from '@navikt/aksel-icons';
 import styles from './KommendeMeldinger.module.css';
 import { formatDatoMedMånedsnavn } from 'lib/utils/date';
-import { KommendeMeldingDto } from '../../lib/types/types';
-import { clientAvbrytPåminnelsePåLegeerklæring, clientGjenopptaPåminnelsePåLegeerklæring } from '../../lib/clientApi';
+import { KommendeMeldingDto } from 'lib/types/types';
+import { clientAvbrytPåminnelsePåLegeerklæring, clientGjenopptaPåminnelsePåLegeerklæring } from 'lib/clientApi';
 import { useState } from 'react';
 import { Alert } from '../alert/Alert';
-import { isError } from '../../lib/utils/api';
+import { isError } from 'lib/utils/api';
+import { clientOppdaterPåminnelseForForepørsel } from 'lib/oppgaveClientApi';
+import React from 'react';
+import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
 
 export const KommendeMeldinger = ({
   kommendeMeldinger,
@@ -20,12 +23,24 @@ export const KommendeMeldinger = ({
   const [loading, setLoading] = useState<string | null>(null);
   const [feilmelding, setFeilmelding] = useState<string | null>(null);
 
-  const avbrytPåminnelse = async (bestillingId: string) => {
-    setLoading(bestillingId);
+  const avbrytPåminnelse = async (kommendeMelding: KommendeMeldingDto) => {
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_AVBRYT_PÅMINNELSE');
+    setLoading(kommendeMelding.bestillingId);
     try {
-      const res = await clientAvbrytPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
+      const res = await clientAvbrytPåminnelsePåLegeerklæring(kommendeMelding.bestillingId, behandlingsreferanse);
+
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
+        return;
+      }
+      // Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
+      const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
+        referanse: behandlingsreferanse,
+        påminnelseDato: kommendeMelding.påminnelseDato,
+        påminnelseAvbrutt: true,
+      });
+      if (isError(oppdaterPåminnelseResponse)) {
+        setFeilmelding(oppdaterPåminnelseResponse.apiException.message);
         return;
       }
       setFeilmelding(null);
@@ -36,11 +51,22 @@ export const KommendeMeldinger = ({
   };
 
   const gjenopptaPåminnelse = async (bestillingId: string) => {
+    loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GJENOPPTA_PÅMINNELSE');
     setLoading(bestillingId);
     try {
       const res = await clientGjenopptaPåminnelsePåLegeerklæring(bestillingId, behandlingsreferanse);
+
       if (isError(res)) {
         setFeilmelding(res.apiException.message);
+        return;
+      }
+      // Vi oppdaterer tilknyttet oppgave her for å vise riktig påminnelsesinfo i oppgavelisten
+      const oppdaterPåminnelseResponse = await clientOppdaterPåminnelseForForepørsel({
+        referanse: behandlingsreferanse,
+        påminnelseAvbrutt: false,
+      });
+      if (isError(oppdaterPåminnelseResponse)) {
+        setFeilmelding(oppdaterPåminnelseResponse.apiException.message);
         return;
       }
       setFeilmelding(null);
@@ -59,7 +85,7 @@ export const KommendeMeldinger = ({
       </HStack>
 
       {kommendeMeldinger.map((kommendeMelding, index) => (
-        <>
+        <React.Fragment key={index}>
           {kommendeMelding.påminnelseErAvbrutt ? (
             <VStack key={index} gap={'space-4'} align={'end'} className={styles.meldingboksWrapper}>
               <Box className={styles.meldingboks}>
@@ -104,7 +130,7 @@ export const KommendeMeldinger = ({
                         variant={'tertiary'}
                         icon={<XMarkOctagonIcon fontSize="1.2rem" aria-hidden />}
                         onClick={async () => {
-                          await avbrytPåminnelse(kommendeMelding.bestillingId);
+                          await avbrytPåminnelse(kommendeMelding);
                         }}
                       >
                         <BodyShort size={'small'}>Avbryt påminnelse</BodyShort>
@@ -116,7 +142,7 @@ export const KommendeMeldinger = ({
             </VStack>
           )}
           {feilmelding && <Alert variant={'error'}>{feilmelding}</Alert>}
-        </>
+        </React.Fragment>
       ))}
     </VStack>
   );

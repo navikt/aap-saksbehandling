@@ -7,7 +7,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { SubmitEventHandler } from 'react';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { FormField } from 'components/form/FormField';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
@@ -18,7 +18,7 @@ interface Props {
 }
 
 interface FormFields {
-  aarsak?: 'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL' | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
+  aarsak: 'BEHANDLINGEN_BLE_OPPRETTET_VED_EN_FEIL' | 'DET_HAR_OPPSTAATT_EN_FEIL_OG_BEHANDLINGEN_MAA_STARTES_PAA_NYTT';
   begrunnelse: string;
 }
 

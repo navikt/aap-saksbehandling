@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useEffectEvent, useState } from 'react';
 import {
   ActionMenu,
   BodyShort,
@@ -88,20 +88,44 @@ function finnEndringslogg(): HTMLElement {
 }
 
 const lokalLenkeTilSaksoversikt = isLocal();
-export const KelvinAppHeader = () => {
+export const KelvinAppHeader = ({ setSøkOverlay }: { setSøkOverlay: Dispatch<SetStateAction<boolean>> }) => {
   const [søkeresultat, setSøkeresultat] = useState<SøkeResultat | undefined>(undefined);
   const [endringsloggÅpen, setEndringsloggÅpen] = useState<boolean>(false);
   const [migrerSakModalÅpen, setMigrerSakModalÅpen] = useState<boolean>(false);
   const brukerInformasjon = useInnloggetBruker();
   const visMigrereSakFraArena = useFeatureFlag('VisMigrereSakFraArenaKnapp');
+  const visSøkOverlay = useFeatureFlag('SokOverlayFrontend');
+
+  const lukkSøkeresultat = () => {
+    setSøkeresultat(undefined);
+    setSøkOverlay(false);
+  };
+
+  const handleEscape = useEffectEvent(() => {
+    if (søkeresultat) {
+      lukkSøkeresultat();
+    }
+  });
+
+  useEffect(() => {
+    const handleDocumentKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !event.defaultPrevented) {
+        handleEscape();
+      }
+    };
+
+    document.addEventListener('keydown', handleDocumentKeyDown);
+    return () => document.removeEventListener('keydown', handleDocumentKeyDown);
+  }, []);
 
   return (
-    <>
-      <InternalHeader data-color={'neutral'} className={styles.stickyHeader}>
+    <div className={styles.stickyHeader}>
+      {visSøkOverlay && søkeresultat && <div className={styles.sokOverlay} aria-hidden="true" />}
+      <InternalHeader data-color={'neutral'}>
         <InternalHeader.Title href="/">Kelvin</InternalHeader.Title>
 
         <HStack gap="space-16" marginInline="space-16">
-          <Kelvinsøk setSøkeresultat={setSøkeresultat} />
+          <Kelvinsøk setSøkeresultat={setSøkeresultat} setSøkOverlay={setSøkOverlay} />
           <Link data-color={'neutral'} href={`/oppgave/`}>
             Oppgaveliste
           </Link>
@@ -177,7 +201,7 @@ export const KelvinAppHeader = () => {
                   variant={'primary'}
                   size={'small'}
                   icon={<XMarkIcon />}
-                  onClick={() => setSøkeresultat(undefined)}
+                  onClick={lukkSøkeresultat}
                 >
                   Lukk
                 </Button>
@@ -188,6 +212,6 @@ export const KelvinAppHeader = () => {
           </Box>
         </Theme>
       )}
-    </>
+    </div>
   );
 };

@@ -1,23 +1,19 @@
-import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InnhentDokumentasjonSkjema } from 'components/innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { mockedFlags } from 'lib/services/unleash/unleashToggles';
 import { FeatureFlagProvider } from 'context/UnleashContext';
+import { render, screen } from 'lib/test/CustomRender';
 
 const user = userEvent.setup();
 
 describe('InnhentDokumentasjon', () => {
   beforeEach(() => {
-    render(
-      <FeatureFlagProvider flags={mockedFlags}>
-        <InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />
-      </FeatureFlagProvider>
-    );
+    render(<InnhentDokumentasjonSkjema onCancel={vi.fn} onSuccess={vi.fn} />);
   });
 
-  test('har en overskrift på nivå 3 når man viser skjema', async () => {
-    expect(screen.getByRole('heading', { name: 'Send forespørsel til behandler' })).toBeVisible();
+  test('har en overskrift når man viser skjema', async () => {
+    expect(screen.getByText('Send forespørsel til behandler')).toBeVisible();
   });
 
   test('har et felt for å søke etter behandler', async () => {

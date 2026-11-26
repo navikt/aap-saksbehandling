@@ -58,6 +58,7 @@ export function getDefaultValuesFromGrunnlag(
         vurderingerMeta: vurdering.vurderingerMeta,
         erNyVurdering: false,
         behøverVurdering: false,
+        delvurderinger: vurdering.delvurderinger,
       })) || [],
   };
 }

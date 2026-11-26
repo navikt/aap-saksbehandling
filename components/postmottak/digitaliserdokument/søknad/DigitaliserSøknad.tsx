@@ -13,7 +13,6 @@ import {
   stringToJaNeiVetikke,
 } from 'lib/postmottakForm';
 import { Barnetillegg } from './Barnetillegg';
-import { Medlemskap } from './Medlemskap';
 import { DigitaliseringsGrunnlag } from 'lib/types/postmottakTypes';
 import { Student } from './Student';
 import { Button, VStack } from '@navikt/ds-react';
@@ -26,6 +25,8 @@ import { isBefore, parse, startOfDay } from 'date-fns';
 import { validerDato } from 'lib/validation/dateValidation';
 import { SubmitEventHandler } from 'react';
 import { formaterDatoForBackend, parseDatoFraDatePicker } from 'lib/utils/date';
+import { FormProvider } from 'react-hook-form';
+import { Medlemskap } from 'components/postmottak/digitaliserdokument/søknad/Medlemskap';
 
 export type Utenlandsopphold = {
   land: string;
@@ -57,6 +58,13 @@ export interface SøknadFormFields {
   utenlandsOpphold: Utenlandsopphold[];
 }
 
+type SøknadTilSerialisering = Omit<Søknad, 'meldingType' | 'student'> & {
+  student?: {
+    erStudent: Exclude<JaNeiAvbruttIkkeOppgitt, JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT>;
+    kommeTilbake?: JaNeiVetIkke | null;
+  };
+};
+
 interface Props extends Submittable {
   grunnlag: DigitaliseringsGrunnlag;
   registrertDato?: string | null;
@@ -65,7 +73,7 @@ interface Props extends Submittable {
 }
 
 function mapTilSøknadKontrakt(data: SøknadFormFields) {
-  const søknad: Søknad = {
+  const søknad: SøknadTilSerialisering = {
     student:
       data.erStudent === JaNeiAvbruttIkkeOppgitt.IKKE_OPPGITT
         ? undefined
@@ -207,7 +215,7 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
         type: 'fieldArray',
       },
     },
-    { readOnly }
+    { readOnly: readOnly, shouldUnregister: true }
   );
 
   const handleSubmit: SubmitEventHandler = (event) => {
@@ -215,27 +223,30 @@ export const DigitaliserSøknad = ({ grunnlag, registrertDato, readOnly, submit,
       submit('SØKNAD', mapTilSøknadKontrakt(data), parseDatoFraDatePicker(data.søknadsDato)!)
     )(event);
   };
+
   return (
     <VilkårsKort heading={'Søknad'}>
-      <form onSubmit={handleSubmit}>
-        <VStack gap={'space-24'}>
-          <VStack gap={'space-12'}>
-            {grunnlag.erPapir && <p>Papirsøknader skal justeres for postgang</p>}
-            <FormField form={form} formField={formFields.søknadsDato} />
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit}>
+          <VStack gap={'space-24'}>
+            <VStack gap={'space-12'}>
+              {grunnlag.erPapir && <p>Papirsøknader skal justeres for postgang</p>}
+              <FormField form={form} formField={formFields.søknadsDato} />
+            </VStack>
+            <div>
+              <FormField form={form} formField={formFields.yrkesSkade} />
+            </div>
+            <Barnetillegg readOnly={readOnly} />
+            <Medlemskap formFields={formFields} readOnly={readOnly} />
+            <Student formFields={formFields} />
+            {!readOnly && (
+              <Button loading={isLoading} className={'fit-content'}>
+                Neste
+              </Button>
+            )}
           </VStack>
-          <div>
-            <FormField form={form} formField={formFields.yrkesSkade} />
-          </div>
-          <Barnetillegg form={form} readOnly={readOnly} />
-          <Medlemskap form={form} formFields={formFields} readOnly={readOnly} />
-          <Student form={form} formFields={formFields} />
-          {!readOnly && (
-            <Button loading={isLoading} className={'fit-content'}>
-              Neste
-            </Button>
-          )}
-        </VStack>
-      </form>
+        </form>
+      </FormProvider>
     </VilkårsKort>
   );
 };

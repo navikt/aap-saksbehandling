@@ -58,16 +58,22 @@ describe('OppgaveInformasjon', () => {
     expect(screen.getByRole('img', { name: 'Oppgave på vent' })).toBeVisible();
   });
 
-  it('Skal vise ikon for mottat svar fra behandler dersom oppgave er markert med harUlesteDokumenter', () => {
+  it('Skal vise ikon for mottatt svar fra behandler dersom oppgave har mottatt dokument', () => {
     renderWithFlags(
       <OppgaveInformasjon
-        oppgave={{ ...oppgave, oppgavelisteTags: { ...oppgave.oppgavelisteTags, harUlesteDokumenter: true } }}
+        oppgave={{
+          ...oppgave,
+          oppgavelisteTags: {
+            ...oppgave.oppgavelisteTags,
+            harMottattDokument: { dokumentType: 'LEGEERKLÆRING' },
+          },
+        }}
       />
     );
     expect(screen.getByRole('img', { name: 'Mottatt svar fra behandler' })).toBeVisible();
   });
 
-  it('Skal vise både på vent ikon og mottat svar fra behandler ikon dersom saken er på vent og mottat svar', () => {
+  it('Skal vise både på vent ikon og mottatt svar fra behandler ikon dersom saken er på vent og har mottatt dokument', () => {
     renderWithFlags(
       <OppgaveInformasjon
         oppgave={{
@@ -75,7 +81,7 @@ describe('OppgaveInformasjon', () => {
           oppgavelisteTags: {
             ...oppgave.oppgavelisteTags,
             påVentInfo: { påVentTil: addDays(new Date(), 1).toDateString() },
-            harUlesteDokumenter: true,
+            harMottattDokument: { dokumentType: 'LEGEERKLÆRING' },
           },
         }}
       />

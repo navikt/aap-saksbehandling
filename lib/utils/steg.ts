@@ -61,13 +61,6 @@ export const getStegData = (
 };
 
 /**
- * @deprecated Bruk {@link skalViseStegForPeriodisertGrunnlag} eller {@link skalViseStegIkkePeriodisertGrunnlag}
- */
-export const skalViseSteg = (stegData: StegData, harTidligereVurdering: boolean) => {
-  return stegData.avklaringsbehov.length > 0 || (stegData.typeBehandling === 'Revurdering' && harTidligereVurdering);
-};
-
-/**
  * Skal vise vilkårskort dersom vi har et avklaringsbehov, eller dersom vi har fått en vurdering. For periodiserte
  * grunnlag vil det si at det enten finnes vedtatte vurderinger, nye vurderinger, eller begge deler.
  */

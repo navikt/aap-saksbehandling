@@ -9,7 +9,7 @@ import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varig
 import { byggVilkårskortLenke } from 'lib/utils/vilkårskort';
 
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -39,11 +39,7 @@ export const BekreftVurderingerOppfølging = ({ behandlingVersjon, readOnly, ini
                 {grunnlag?.mellomlagredeVurderinger.map((vurdering) => (
                   <ErrorSummary.Item
                     key={vurdering.avklaringsbehovKode}
-                    href={byggVilkårskortLenke(
-                      saksnummer,
-                      behandlingsreferanse,
-                      vurdering.avklaringsbehovKode as Behovstype
-                    )}
+                    href={byggVilkårskortLenke(saksnummer, behandlingsreferanse, vurdering.avklaringsbehovKode)}
                   >
                     {mapBehovskodeTilBehovstype(vurdering.avklaringsbehovKode)}
                   </ErrorSummary.Item>

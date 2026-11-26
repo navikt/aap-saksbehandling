@@ -1,5 +1,6 @@
 import userEvent from '@testing-library/user-event';
-import { render, screen, within } from 'lib/test/CustomRender';
+import { act, render, screen, within } from 'lib/test/CustomRender';
+import { ReactElement } from 'react';
 import { BrevdataDto } from 'lib/types/types';
 import { Behovstype } from 'lib/utils/form';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -21,6 +22,8 @@ const brevdata: BrevdataDto = {
   delmaler: [],
   fritekster: [],
   valg: [],
+  automatiskValgteDelmalIder: [],
+  automatiskValgteValg: [],
 };
 
 const user = userEvent.setup();
@@ -33,14 +36,21 @@ beforeEach(() => {
   vi.restoreAllMocks();
 });
 
+async function renderBrevbygger(ui: ReactElement) {
+  await act(async () => {
+    render(ui);
+  });
+}
+
 describe('Feilhåndtering', () => {
-  test('viser feilmelding når brevmal ikke er gyldig JSON', () => {
-    render(
+  test('viser feilmelding når brevmal ikke er gyldig JSON', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={'ugyldig json'}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -61,7 +71,7 @@ describe('Delmalvelger', () => {
     delmaler: [valgfriDelmal, obligatoriskDelmal],
   };
 
-  test('Overskrift hentes fra beskrivelse når brevbyggerTittel ikke er satt', () => {
+  test('Overskrift hentes fra beskrivelse når brevbyggerTittel ikke er satt', async () => {
     const delmalOverskrift = 'Delmaloverskrift';
     const enMal: BrevmalType = {
       ...sanityAttrs,
@@ -91,14 +101,15 @@ describe('Delmalvelger', () => {
       ],
     };
 
-    render(
+    await renderBrevbygger(
       <Brevbygger
         brevtype={'INNVILGELSE'}
         referanse={'1234'}
         brevmal={JSON.stringify(enMal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
       />
@@ -106,15 +117,16 @@ describe('Delmalvelger', () => {
     expect(screen.getByRole('heading', { name: delmalOverskrift })).toBeVisible();
   });
 
-  test('Overskrift hentes fra brevbyggerTittel når den er satt', () => {
-    render(
+  test('Overskrift hentes fra brevbyggerTittel når den er satt', async () => {
+    await renderBrevbygger(
       <Brevbygger
         brevtype={'INNVILGELSE'}
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
       />
@@ -122,14 +134,15 @@ describe('Delmalvelger', () => {
     expect(screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel })).toBeVisible();
   });
 
-  test('Valgfrie delmaler har en checkbox (Switch fra Aksel)', () => {
-    render(
+  test('Valgfrie delmaler har en checkbox (Switch fra Aksel)', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -144,14 +157,15 @@ describe('Delmalvelger', () => {
     }
   });
 
-  test('Obligatoriske delmaler uten valg vises ikke', () => {
-    render(
+  test('Obligatoriske delmaler uten valg vises ikke', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -160,14 +174,15 @@ describe('Delmalvelger', () => {
     expect(screen.queryByText(obligatoriskDelmal.delmal.beskrivelse)).not.toBeInTheDocument();
   });
 
-  test('Valgfrie delmaler er ikke valgt initielt', () => {
-    render(
+  test('Valgfrie delmaler er ikke valgt initielt', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -182,14 +197,15 @@ describe('Delmalvelger', () => {
     }
   });
 
-  test('Valgfrie delmaler kan være valgt initielt', () => {
-    render(
+  test('Valgfrie delmaler kan være valgt initielt', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmal.delmal._id }] }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -202,6 +218,29 @@ describe('Delmalvelger', () => {
     } else {
       expect(kort).not.toBeNull();
     }
+  });
+
+  test('forhåndsvalgte delmaler er markert med "Forhåndsvalgt"', async () => {
+    await renderBrevbygger(
+      <Brevbygger
+        referanse={'1234'}
+        brevmal={JSON.stringify(brevmal)}
+        brevdata={{
+          ...brevdata,
+          delmaler: [{ id: valgfriDelmal.delmal._id }],
+          automatiskValgteDelmalIder: [valgfriDelmal.delmal._id],
+        }}
+        behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
+        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        behandlingVersjon={1}
+        readOnly={false}
+        brevtype={'INNVILGELSE'}
+      />
+    );
+    const kort = screen.getByRole('heading', { name: valgfriDelmal.delmal.brevbyggerTittel }).closest('div');
+    expect(kort).not.toBeNull();
+    expect(within(kort!).getByText('Forhåndsvalgt')).toBeVisible();
   });
 });
 
@@ -216,14 +255,15 @@ describe('Delmaler med valg', () => {
     delmaler: [valgfriDelmalMedAlternativer],
   };
 
-  test('valg skjules når delmal ikke er valgt', () => {
-    render(
+  test('valg skjules når delmal ikke er valgt', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -232,14 +272,15 @@ describe('Delmaler med valg', () => {
     expect(screen.queryByText('Beskrivelse av alternativ')).not.toBeInTheDocument();
   });
 
-  test('valg vises når delmal er valgt', () => {
-    render(
+  test('valg vises når delmal er valgt', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -248,7 +289,7 @@ describe('Delmaler med valg', () => {
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeInTheDocument();
   });
 
-  test('obligatoriske delmaler med valg vises', () => {
+  test('obligatoriske delmaler med valg vises', async () => {
     const brevmalMedObligatoriskDelmalMedAlternativer: BrevmalType = {
       ...sanityAttrs,
       _id: 'brevmal-id',
@@ -258,13 +299,14 @@ describe('Delmaler med valg', () => {
       kanSendesAutomatisk: false,
       delmaler: [obligatoriskDelmalMedAlternativer],
     };
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -274,7 +316,7 @@ describe('Delmaler med valg', () => {
     expect(screen.getByText('Alternativ 1')).toBeVisible();
   });
 
-  test('Obligatoriske delmaler har ikke en checkbox (Switch fra Aksel)', () => {
+  test('Obligatoriske delmaler har ikke en checkbox (Switch fra Aksel)', async () => {
     const brevmalMedObligatoriskDelmalMedAlternativer: BrevmalType = {
       ...sanityAttrs,
       _id: 'brevmal-id',
@@ -284,13 +326,14 @@ describe('Delmaler med valg', () => {
       kanSendesAutomatisk: false,
       delmaler: [obligatoriskDelmalMedAlternativer],
     };
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmalMedObligatoriskDelmalMedAlternativer)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -305,14 +348,15 @@ describe('Delmaler med valg', () => {
     }
   });
 
-  test('alternativer hentes fra brevmalen', () => {
-    render(
+  test('alternativer hentes fra brevmalen', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={{ ...brevdata, delmaler: [{ id: valgfriDelmalMedAlternativer.delmal._id }] }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -334,13 +378,14 @@ describe('Delmaler med valg', () => {
       delmaler: [obligatoriskDelmal, valgfriDelmalMedAlternativer],
     };
 
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdata}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -353,8 +398,8 @@ describe('Delmaler med valg', () => {
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toBeVisible();
   });
 
-  test('valg er valgt når det kommer som input til brevbyggeren', () => {
-    render(
+  test('valg er valgt når det kommer som input til brevbyggeren', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
@@ -367,9 +412,16 @@ describe('Delmaler med valg', () => {
               key: 'alt1-key',
             },
           ],
+          automatiskValgteValg: [
+            {
+              id: 'valgref-1',
+              key: 'alt1-key',
+            },
+          ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -378,11 +430,13 @@ describe('Delmaler med valg', () => {
 
     expect(screen.getByRole('combobox', { name: 'Beskrivelse av alternativ' })).toBeVisible();
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- getByRole returns HTMLElement; cast to HTMLOptionElement is required by tsc for .selected
-    expect((screen.getByRole('option', { name: 'Alternativ 1' }) as HTMLOptionElement).selected).toBe(true);
+    expect((screen.getByRole('option', { name: 'Alternativ 1 (Forhåndsvalgt)' }) as HTMLOptionElement).selected).toBe(
+      true
+    );
   });
 
-  test('fritekst er valgt når det kommer som input til brevbyggeren', () => {
-    render(
+  test('fritekst er valgt når det kommer som input til brevbyggeren', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
@@ -404,7 +458,8 @@ describe('Delmaler med valg', () => {
           ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -428,12 +483,13 @@ describe('Delmaler med valg', () => {
       kanSendesAutomatisk: false,
       delmaler: [valgfriDelmalMedAlternativer],
     };
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        mottaker={{ ident: '1234' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -455,12 +511,13 @@ describe('Delmaler med valg', () => {
       kanSendesAutomatisk: false,
       delmaler: [valgfriDelmalMedValgfrieAlternativer],
     };
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -486,14 +543,15 @@ describe('Delmaler med fritekst', () => {
 
   const brevdataMedValgtDelmal = { ...brevdata, delmaler: [{ id: valgfriDelmal.delmal._id }] };
 
-  test('viser "Legg til fritekst"-knapp når delmal er valgt og ingen fritekst finnes fra før', () => {
-    render(
+  test('viser "Legg til fritekst"-knapp når delmal er valgt og ingen fritekst finnes fra før', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdataMedValgtDelmal}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -504,13 +562,14 @@ describe('Delmaler med fritekst', () => {
   });
 
   test('viser fritekstfelt og "Slett fritekst"-knapp etter klikk på "Legg til fritekst"', async () => {
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdataMedValgtDelmal}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -522,13 +581,14 @@ describe('Delmaler med fritekst', () => {
   });
 
   test('"Slett fritekst" fjerner fritekstfeltet, tømmer innholdet og viser "Legg til fritekst" igjen', async () => {
-    render(
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
         brevdata={brevdataMedValgtDelmal}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}
@@ -545,8 +605,8 @@ describe('Delmaler med fritekst', () => {
     expect(screen.getByRole('textbox', { name: 'Fritekst' })).toHaveValue('');
   });
 
-  test('viser fritekstfelt direkte når brevdata inneholder eksisterende fritekst', () => {
-    render(
+  test('viser fritekstfelt direkte når brevdata inneholder eksisterende fritekst', async () => {
+    await renderBrevbygger(
       <Brevbygger
         referanse={'1234'}
         brevmal={JSON.stringify(brevmal)}
@@ -561,7 +621,8 @@ describe('Delmaler med fritekst', () => {
           ],
         }}
         behovstype={Behovstype.SKRIV_VEDTAKSBREV_KODE}
-        mottaker={{ ident: '1234', navn: 'Navn' }}
+        bruker={{ ident: '1234', navn: 'Ola Nordmann' }}
+        mottaker={{ ident: '1234' }}
         behandlingVersjon={1}
         readOnly={false}
         brevtype={'INNVILGELSE'}

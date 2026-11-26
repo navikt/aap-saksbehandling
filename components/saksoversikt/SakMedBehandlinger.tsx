@@ -1,6 +1,7 @@
 'use client';
 
-import { BodyShort, Button, Chips, HStack, Heading, Table, Tag, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Chips, HStack, Heading, Table, Tag, Tooltip, VStack } from '@navikt/ds-react';
+import { useFeatureFlag } from 'context/UnleashContext';
 import { useHentOppgaverForSak } from 'hooks/oppgave/OppgaverPåSakHook';
 import { usePostmottakBehandlinger } from 'hooks/postmottak/PostmottakBehandlingerHook';
 import { Dato } from 'lib/types/Dato';
@@ -59,8 +60,8 @@ export const SakMedBehandlinger = ({
   const [feilmelding, setFeilmelding] = useState<string | undefined>(undefined);
 
   const behandlinger = visMeldekortbehandlinger
-    ? sak.behandlinger || []
-    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT');
+    ? sak.behandlinger
+    : sak.behandlinger.filter((b) => b.årsakTilOpprettelse !== 'MELDEKORT' || b.erGjeldende);
 
   const postmottakBehandlinger: BehandlingsflytEllerPostmottakBehandling[] = usePostmottakBehandlinger(sak.ident);
 
@@ -76,6 +77,13 @@ export const SakMedBehandlinger = ({
   const kanRevurdere = !sak.søknadErTrukket;
 
   const kanRegistrerebrudd = sak.behandlinger.some((behandling) => erAvsluttetFørstegangsbehandling(behandling));
+
+  const utenlandsoppholdBehandlingErEnablet = useFeatureFlag('UtenlandsoppholdBehandling');
+  const harÅpenUtenlandsoppholdBehandling = sak.behandlinger.some(
+    (behandling) => behandling.typeBehandling === 'Utenlandsopphold' && !erAvsluttet(behandling)
+  );
+  const kanOppretteUtenlandsoppholdBehandling =
+    utenlandsoppholdBehandlingErEnablet && !harÅpenUtenlandsoppholdBehandling;
 
   const åpne = alleBehandlinger.filter((b) => !erAvsluttet(b.behandling));
 
@@ -113,6 +121,16 @@ export const SakMedBehandlinger = ({
                   onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/aktivitet`)}
                 >
                   Vurder aktivitetsplikt
+                </Button>
+              )}
+
+              {kanOppretteUtenlandsoppholdBehandling && (
+                <Button
+                  variant="secondary"
+                  size="small"
+                  onClick={() => router.push(`/saksbehandling/sak/${sak.saksnummer}/utenlandsopphold`)}
+                >
+                  Utenlandsopphold
                 </Button>
               )}
 
@@ -179,9 +197,11 @@ export const SakMedBehandlinger = ({
                 <Table.DataCell>
                   {mapTypeBehandlingTilTekst(behandling.behandling.typeBehandling)}{' '}
                   {behandling.kilde == 'BEHANDLINGSFLYT' && behandling.behandling.erGjeldende && (
-                    <Tag variant="moderate" data-color="success" size="small">
-                      Gjeldende
-                    </Tag>
+                    <Tooltip content="Gjeldene behandling er det siste fattede vedtaket på saken.">
+                      <Tag variant="moderate" data-color="success" size="small">
+                        Gjeldende vedtak
+                      </Tag>
+                    </Tooltip>
                   )}
                 </Table.DataCell>
                 <Table.DataCell>

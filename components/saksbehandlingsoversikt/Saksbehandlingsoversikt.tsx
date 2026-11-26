@@ -11,17 +11,15 @@ import {
 } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { Saksdokumenter } from 'components/saksdokumenter/Saksdokumenter';
-import { InnhentDokumentasjon } from 'components/innhentdokumentasjon/InnhentDokumentasjon';
 
 import styles from './Saksbehandlingsoversikt.module.css';
 import { SaksHistorikk } from 'components/sakshistorikk/SaksHistorikk';
-import { DetaljertBehandling, KabalKlageResultat, Klageresultat, SaksInfo } from 'lib/types/types';
+import { DetaljertBehandling, KabalKlageResultat, Klageresultat, RettighetsinfoDto, SaksInfo } from 'lib/types/types';
 import { Behandlingsinfo } from 'components/behandlingsinfo/Behandlingsinfo';
 import { FetchResponse, isError } from 'lib/utils/api';
 import { KlageBehandlingInfo } from 'components/behandlingsinfo/KlageBehandlingInfo';
 import { mapTypeBehandlingTilTekst } from 'lib/utils/oversettelser';
-import { useFeatureFlag } from 'context/UnleashContext';
-import { DialogMedBehandler } from 'components/dialogmedbehandler/DialogMedBehandler';
+import { BeOmOpplysninger } from 'components/dialogmedbehandler/BeOmOpplysninger';
 
 enum Tab {
   KLAGEBEHANDLINGINFO = 'KLAGEBEHANDLINGINFO',
@@ -49,6 +47,7 @@ interface Props {
   kabalKlageresultat: FetchResponse<KabalKlageResultat>;
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
+  rettighetsinfo?: RettighetsinfoDto | null;
 }
 
 export const Saksbehandlingsoversikt = ({
@@ -58,6 +57,7 @@ export const Saksbehandlingsoversikt = ({
   kabalKlageresultat,
   expanded: expandedProp,
   onExpandedChange,
+  rettighetsinfo,
 }: Props) => {
   const [expandedState, setExpandedState] = useState<boolean>(true);
   const [toggleGroupValue, setToggleGroupValue] = useState<Tab>(Tab.SAKSDOKUMENTER);
@@ -105,8 +105,6 @@ export const Saksbehandlingsoversikt = ({
     },
   ];
 
-  const featureDialogMedBehandler = useFeatureFlag('DialogMedBehandler');
-
   return (
     <div className={`${styles.saksbehandlingsoversikt} ${expanded ? '' : styles.minimert}`}>
       {expanded && (
@@ -119,7 +117,12 @@ export const Saksbehandlingsoversikt = ({
               </Label>
             </Box>
           </HGrid>
-          <Behandlingsinfo behandling={behandling} sak={sak} klageresultat={klageresultat} />
+          <Behandlingsinfo
+            behandling={behandling}
+            sak={sak}
+            klageresultat={klageresultat}
+            rettighetsinfo={rettighetsinfo}
+          />
           <Tabs
             defaultValue={toggleGroupValue}
             onChange={(value) => setToggleGroupValue(value as Tab)}
@@ -142,8 +145,7 @@ export const Saksbehandlingsoversikt = ({
               <KlageBehandlingInfo kabalKlageResultat={kabalKlageresultat} klageresultat={klageresultat} />
             )}
             {toggleGroupValue === Tab.SAKSDOKUMENTER && <Saksdokumenter />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && featureDialogMedBehandler && <DialogMedBehandler />}
-            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <InnhentDokumentasjon />}
+            {toggleGroupValue === Tab.BE_OM_OPPLYSNINGER && <BeOmOpplysninger />}
             {toggleGroupValue === Tab.HISTORIKK && <SaksHistorikk />}
           </div>
         </>

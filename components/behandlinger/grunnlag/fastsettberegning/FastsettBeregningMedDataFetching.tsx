@@ -7,7 +7,6 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { Behovstype } from 'lib/utils/form';
 import { skalViseStegIkkePeriodisertGrunnlag, StegData } from 'lib/utils/steg';
-import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   behandlingsreferanse: string;
@@ -16,7 +15,6 @@ interface Props {
 
 export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, stegData }: Props) => {
   const grunnlag = await hentBeregningstidspunktVurdering(behandlingsreferanse);
-  const visAarsakDropdowns = unleashService.isEnabled('BeregningstidspunktAarsak');
 
   if (isError(grunnlag)) {
     return <ApiException apiResponses={[grunnlag]} />;
@@ -40,7 +38,6 @@ export const FastsettBeregningMedDataFetching = async ({ behandlingsreferanse, s
       grunnlag={grunnlag.data}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
-      visAarsakDropdowns={visAarsakDropdowns}
     />
   );
 };

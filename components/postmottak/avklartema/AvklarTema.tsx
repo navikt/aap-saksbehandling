@@ -3,10 +3,10 @@
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/postmottakForm';
 import { SubmitEventHandler, useEffect, useState } from 'react';
 import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/PostmottakLøsBehovOgGåTilNesteStegHook';
-import { AvklarTemaGrunnlag } from 'lib/types/postmottakTypes';
+import { AvklarTemaGrunnlag, AvklarTemaLøsning } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { BodyShort, Button, Modal, VStack } from '@navikt/ds-react';
+import { BodyShort, Button, Dialog, HStack, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
@@ -17,6 +17,8 @@ import { Alert } from 'components/alert/Alert';
 import { ClientConfig } from 'lib/types/clientTypes';
 import { clientConfig } from 'lib/clientApi';
 import { isSuccess } from 'lib/utils/api';
+import { useFeatureFlag } from 'context/UnleashContext';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
 interface Props {
   behandlingsVersjon: number;
@@ -25,20 +27,54 @@ interface Props {
   readOnly: boolean;
 }
 
+type Tema = NonNullable<AvklarTemaLøsning['tema']>;
+
 interface FormFields {
   erTemaAAP: string;
+  tema: string;
 }
+
+const temaer: Record<string, string> = {
+  EYB: 'Barnepensjon',
+  BAR: 'Barnetrygd',
+  BID: 'Bidrag',
+  DAG: 'Dagpenger',
+  ENF: 'Enslig mor eller far',
+  ERS: 'Erstatning',
+  FEI: 'Feilutbetaling',
+  FOR: 'Foreldre- og svangerskapspenger',
+  FUL: 'Fullmakt',
+  GEN: 'Generell',
+  GRU: 'Grunn- og hjelpestønad',
+  PAI: 'Innsyn',
+  OMS: 'Omsorgspenger, pleiepenger og opplæringspenger',
+  EYO: 'Omstillingsstønad',
+  OPP: 'Oppfølging',
+  PEN: 'Pensjon',
+  SAK: 'Sakskostnader',
+  SER: 'Serviceklage',
+  SYK: 'Sykepenger',
+  TSO: 'Tilleggsstønad',
+  TIL: 'Tiltak',
+  IND: 'Tiltakspenger',
+  TRK: 'Trekkhåndtering',
+  UFO: 'Uføretrygd',
+  YRK: 'Yrkesskade',
+  UKJENT: 'Send til Gosys',
+};
 
 const NAV_KLAGEINSTANS_ENHET = '4260';
 const KLAGE_ETTERSENDELSE_BREVKODE = 'NAVe 90-00.08 K';
 
 export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
+  const velgTema = useFeatureFlag('PostmottakVelgTema');
   const [config, setConfig] = useState<ClientConfig>();
   const { løsBehovOgGåTilNesteSteg, status, isLoading, løsBehovOgGåTilNesteStegError } =
-    usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_TEMA');
-  const [visModal, setVisModal] = useState<boolean>(grunnlag?.vurdering?.skalTilAap === false || false);
+    usePostmottakLøsBehovOgGåTilNesteSteg<AvklarTemaLøsning>('AVKLAR_TEMA');
+  const [visModal, setVisModal] = useState<boolean>(!velgTema && grunnlag.vurdering?.skalTilAap === false);
 
   const { visningActions, formReadOnly, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'AVKLAR_TEMA');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const { formFields, form } = useConfigForm<FormFields>(
     {
@@ -48,6 +84,19 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
         rules: { required: 'Du må svare på om dokumentet har riktig tema' },
         defaultValue: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap),
         options: JaEllerNeiOptions,
+      },
+      tema: {
+        type: 'select',
+        label: 'Velg tema',
+        defaultValue: grunnlag.vurdering?.tema ?? '',
+        rules: {
+          validate: (value, values) =>
+            !velgTema || values.erTemaAAP !== JaEllerNei.Nei || !!value || 'Du må velge tema',
+        },
+        options: [
+          { value: '', label: 'Velg tema' },
+          ...Object.entries(temaer).map(([value, label]) => ({ value, label })),
+        ],
       },
     },
     { readOnly: formReadOnly }
@@ -59,15 +108,19 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      if (data.erTemaAAP === JaEllerNei.Ja) {
-        løsBehovOgGåTilNesteSteg({
-          behandlingVersjon: behandlingsVersjon,
-          behov: {
-            behovstype: Behovstype.AVKLAR_TEMA,
-            skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
+      if (data.erTemaAAP === JaEllerNei.Ja || velgTema) {
+        løsBehovOgGåTilNesteSteg(
+          {
+            behandlingVersjon: behandlingsVersjon,
+            behov: {
+              behovstype: Behovstype.AVKLAR_TEMA,
+              skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
+              ...(velgTema && data.erTemaAAP === JaEllerNei.Nei ? { tema: data.tema as Tema } : {}),
+            },
+            referanse: behandlingsreferanse,
           },
-          referanse: behandlingsreferanse,
-        });
+          () => loggUmamiVarighet('STEG_AVKLAR_TEMA_VARIGHET', umamiStartTidspunkt, Date.now())
+        );
       } else {
         postmottakLøsBehovClient({
           behandlingVersjon: behandlingsVersjon,
@@ -76,7 +129,12 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
             skalTilAap: data.erTemaAAP === JaEllerNei.Ja,
           },
           referanse: behandlingsreferanse,
-        }).then(() => setVisModal(true));
+        }).then((response) => {
+          if (isSuccess(response)) {
+            loggUmamiVarighet('STEG_AVKLAR_TEMA_VARIGHET', umamiStartTidspunkt, Date.now());
+          }
+          setVisModal(true);
+        });
       }
     })(event);
   };
@@ -98,54 +156,70 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
       knappTekst={'Neste'}
       visningModus={visningModus}
       visningActions={visningActions}
-      formReset={() => form.reset({ erTemaAAP: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap) })}
+      formReset={() =>
+        form.reset({
+          erTemaAAP: getJaNeiEllerUndefined(grunnlag.vurdering?.skalTilAap),
+          tema: grunnlag.vurdering?.tema ?? '',
+        })
+      }
     >
-      <Modal
-        open={visModal}
-        header={{
-          heading: 'Dokumentet er sendt til Gosys for journalføring',
-          icon: <CheckmarkCircleIcon fontSize={'inherit'} />,
-        }}
-        onClose={() => {
-          setVisModal(false);
-        }}
-        onBeforeClose={() => {
-          setVisModal(false);
-          return true;
-        }}
-      >
-        <Modal.Body>
-          <BodyShort spacing>
-            Gå til Gosys for å journalføre dokumentet.{' '}
-            {settesPåVent && (
-              <>
-                Oppgaven settes på vent inntil tema er endret i Gosys. Om den går av vent, trykk <i>Neste</i> igjen
-              </>
-            )}
-          </BodyShort>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type={'button'}
-            onClick={() => {
-              window.location.replace(config?.gosysUrl ?? '');
-              setVisModal(false);
-            }}
-          >
-            Gå til Gosys
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Dialog open={visModal} onOpenChange={setVisModal}>
+        <Dialog.Popup width="large" closeOnOutsideClick={false}>
+          <Dialog.Header>
+            <Dialog.Title>
+              <HStack as={'span'} gap={'space-4'} align={'center'}>
+                <CheckmarkCircleIcon fontSize={'1.5rem'} aria-hidden />
+                <span>Dokumentet er sendt til Gosys for journalføring</span>
+              </HStack>
+            </Dialog.Title>
+          </Dialog.Header>
+          <Dialog.Body>
+            <BodyShort spacing>
+              Gå til Gosys for å journalføre dokumentet.{' '}
+              {settesPåVent && (
+                <>
+                  Oppgaven settes på vent inntil tema er endret i Gosys. Om den går av vent, trykk <i>Neste</i> igjen
+                </>
+              )}
+            </BodyShort>
+          </Dialog.Body>
+          <Dialog.Footer>
+            <Button
+              type={'button'}
+              onClick={() => {
+                window.location.replace(config?.gosysUrl ?? '');
+                setVisModal(false);
+              }}
+            >
+              Gå til Gosys
+            </Button>
+          </Dialog.Footer>
+        </Dialog.Popup>
+      </Dialog>
       <VStack gap={'space-24'}>
         {skalViseKlageEttersendelseInfo && (
           <Alert variant={'info'}>
             Denne journalposten er en ettersendelse til klage, og journalførende enhet er satt til{'  '}
             {NAV_KLAGEINSTANS_ENHET}. Svar <i>Nei</i> dersom du ønsker å opprette journalføringsoppgave i Gosys for Nav
-            Klageinstans.
+            Klageinstans eller journalføre på annet tema.
           </Alert>
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
         <FormField form={form} formField={formFields.erTemaAAP} />
+        {velgTema && form.watch('erTemaAAP') === JaEllerNei.Nei && (
+          <>
+            <FormField form={form} formField={formFields.tema} />
+            {!!form.watch('tema') && (
+              <BodyShort>
+                {form.watch('tema') === 'UKJENT'
+                  ? 'Dokumentet sendes til Gosys for avklaring av tema. Behandlingen i Postmottak avsluttes.'
+                  : form.watch('tema') === 'OPP'
+                    ? 'Dokumentet journalføres på generell sak med tema Oppfølging.'
+                    : 'Tema endres på journalposten uten å ferdigstille den. Behandlingen i Postmottak avsluttes.'}
+              </BodyShort>
+            )}
+          </>
+        )}
       </VStack>
     </PostmottakVilkårskort>
   );

@@ -104,6 +104,7 @@ describe('YrkesskadeGrunnlagBeregning', () => {
           vurderingerMeta: {
             vurdertAv: {
               ident: 'KVALITETSSIKRER',
+              kilde: 'SAKSBEHANDLER',
               dato: '2025-08-26',
             },
           },
@@ -190,6 +191,7 @@ describe('mellomlagring', () => {
         vurderingerMeta: {
           vurdertAv: {
             ident: 'KVALITETSSIKRER',
+            kilde: 'SAKSBEHANDLER',
             dato: '2025-08-26',
             ansattnavn: 'KVALITETSSIKRER',
             enhetsnavn: 'Lokalenhetsnavn',

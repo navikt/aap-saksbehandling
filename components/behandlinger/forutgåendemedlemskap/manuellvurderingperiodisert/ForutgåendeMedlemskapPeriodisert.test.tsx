@@ -39,6 +39,7 @@ const grunnlagMedBekreftetVurdering: PeriodisertForutgåendeMedlemskapGrunnlag =
         vurdertAv: {
           dato: '2025-11-01',
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
         },
       },
     },

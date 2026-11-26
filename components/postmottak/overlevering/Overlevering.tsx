@@ -10,7 +10,7 @@ import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
-import { useFeatureFlag } from 'context/UnleashContext';
+import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 
 interface Props {
   behandlingsVersjon: number;
@@ -25,8 +25,6 @@ interface FormFields {
 }
 
 export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnlag, readOnly }: Props) => {
-  const stoppAutomatikkForLegeerklaringVedAvslag = useFeatureFlag('StoppAutomatikkForLegeerklaringVedAvslag');
-
   const { formFields, form } = useConfigForm<FormFields>(
     {
       skalOverleveres: {
@@ -41,7 +39,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
         type: 'textarea',
         label: 'Begrunnelse',
         defaultValue: grunnlag.vurdering?.begrunnelse || '',
-        rules: stoppAutomatikkForLegeerklaringVedAvslag ? { required: 'Du må oppgi begrunnelse.' } : {},
+        rules: { required: 'Du må oppgi begrunnelse.' },
       },
     },
     { readOnly }
@@ -51,18 +49,22 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
     usePostmottakLøsBehovOgGåTilNesteSteg('OVERLEVER_TIL_FAGSYSTEM');
 
   const { visningActions, visningModus } = usePostmottakVilkårskortVisning(readOnly, 'OVERLEVER_TIL_FAGSYSTEM');
+  const umamiStartTidspunkt = useUmamiStartTidspunkt(visningModus);
 
   const onSubmit: SubmitEventHandler = (event) => {
     form.handleSubmit((data) => {
-      løsBehovOgGåTilNesteSteg({
-        behandlingVersjon: behandlingsVersjon,
-        behov: {
-          behovstype: Behovstype.AVKLAR_OVERLEVERING,
-          skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
-          ...(stoppAutomatikkForLegeerklaringVedAvslag ? { begrunnelse: data.begrunnelse } : {}),
-        } satisfies AvklarOverleveringLøsning,
-        referanse: behandlingsreferanse,
-      });
+      løsBehovOgGåTilNesteSteg(
+        {
+          behandlingVersjon: behandlingsVersjon,
+          behov: {
+            behovstype: Behovstype.AVKLAR_OVERLEVERING,
+            skalOverleveres: data.skalOverleveres === JaEllerNei.Ja,
+            begrunnelse: data.begrunnelse,
+          } satisfies AvklarOverleveringLøsning,
+          referanse: behandlingsreferanse,
+        },
+        () => loggUmamiVarighet('STEG_OVERLEVER_TIL_FAGSYSTEM_VARIGHET', umamiStartTidspunkt, Date.now())
+      );
     })(event);
   };
 
@@ -82,7 +84,7 @@ export const Overlevering = ({ behandlingsVersjon, behandlingsreferanse, grunnla
       <VStack gap={'space-24'}>
         <ServerSentEventStatusAlert status={status} />
         <FormField form={form} formField={formFields.skalOverleveres} />
-        {stoppAutomatikkForLegeerklaringVedAvslag && <FormField form={form} formField={formFields.begrunnelse} />}
+        <FormField form={form} formField={formFields.begrunnelse} />
       </VStack>
     </PostmottakVilkårskort>
   );

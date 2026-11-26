@@ -1,4 +1,5 @@
 import { BodyShort, Table, VStack } from '@navikt/ds-react';
+import { Fragment } from 'react';
 import { GjeldendeGrunnbeløp, UføreInntekt } from 'lib/types/types';
 
 import { formaterTilG, formaterTilNok } from 'lib/utils/string';
@@ -70,8 +71,8 @@ export const UføreInntektTabell = ({
               const erSistePeriodeIGjeldendeÅr = currIndex == perioderIGjeldendeÅr.length - 1;
 
               return (
-                <>
-                  <Table.Row key={fom} className={styles.rad}>
+                <Fragment key={fom}>
+                  <Table.Row className={styles.rad}>
                     <Table.DataCell textSize={'small'}>
                       {år} ({formaterDatoMedKunDagOgMånedForFrontend(fom)} {'- '}
                       {formaterDatoMedKunDagOgMånedForFrontend(tom)})
@@ -104,7 +105,7 @@ export const UføreInntektTabell = ({
                       </Table.DataCell>
                     </Table.Row>
                   )}
-                </>
+                </Fragment>
               );
             });
           })}

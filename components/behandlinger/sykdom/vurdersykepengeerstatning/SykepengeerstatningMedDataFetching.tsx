@@ -20,11 +20,12 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse,
     return <ApiException apiResponses={[grunnlag]} />;
   }
 
-  if (!skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data)) {
+  const skalStegVurderes = skalViseStegForPeriodisertGrunnlag(stegData.avklaringsbehov, grunnlag.data);
+  if (!skalStegVurderes && grunnlag.data.ikkeRelevantePerioder.length === 0) {
     return null;
   }
 
-  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle;
+  const totalReadOnly = stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle || !skalStegVurderes;
 
   const initialMellomlagretVurdering = await hentMellomlagring(
     behandlingsreferanse,
@@ -36,9 +37,10 @@ export const SykepengeerstatningMedDataFetching = async ({ behandlingsreferanse,
   return (
     <Sykepengeerstatning
       grunnlag={grunnlag.data}
-      readOnly={stegData.readOnly || !grunnlag.data.harTilgangTilÅSaksbehandle}
+      readOnly={totalReadOnly}
       behandlingVersjon={stegData.behandlingVersjon}
       initialMellomlagretVurdering={initialMellomlagretVurdering}
+      skalStegVurderes={skalStegVurderes}
     />
   );
 };

@@ -1,3 +1,9 @@
+/**
+ * VisningModus - Styrer visning av felt og knapper
+ *
+ * AKTIV_* - åpen for redigering
+ * LÅST_* - bekreftelse-knapp utilgjengelig
+ */
 export enum VisningModus {
   AKTIV_UTEN_AVBRYT = 'AKTIV_UTEN_AVBRYT',
   AKTIV_MED_AVBRYT = 'AKTIV_MED_AVBRYT',

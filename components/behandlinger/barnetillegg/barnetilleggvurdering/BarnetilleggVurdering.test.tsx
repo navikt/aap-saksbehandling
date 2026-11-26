@@ -305,7 +305,7 @@ describe('Oppgitte barn', () => {
       />
     );
     const felt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+      name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
     });
     expect(felt).toBeVisible();
   });
@@ -535,7 +535,7 @@ describe('Oppgitte barn', () => {
     );
 
     const begrunnelsesFelterFørDetErLagtTilEnNy = screen.getAllByRole('textbox', {
-      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+      name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
     });
 
     expect(begrunnelsesFelterFørDetErLagtTilEnNy.length).toBe(1);
@@ -544,7 +544,7 @@ describe('Oppgitte barn', () => {
     await user.click(knapp);
 
     const begrunnelsesFelter = screen.getAllByRole('textbox', {
-      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+      name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
     });
 
     expect(begrunnelsesFelter.length).toBe(2);
@@ -575,7 +575,7 @@ describe('Oppgitte barn', () => {
 
     expect(
       screen.getAllByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       }).length
     ).toBe(1);
 
@@ -586,7 +586,7 @@ describe('Oppgitte barn', () => {
 
     expect(
       screen.getAllByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       }).length
     ).toBe(2);
 
@@ -676,7 +676,7 @@ describe('Oppgitte barn', () => {
 
   const fyllUtEnBegrunnelse = async () => {
     const begrunnelsesfelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+      name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
     });
     await user.type(begrunnelsesfelt, 'Dette er en begrunnelse');
   };
@@ -722,6 +722,7 @@ describe('mellomlagring', () => {
         dato: '2025-09-02',
         ansattnavn: 'KVALITETSSIKRER',
         enhetsnavn: 'Lokalenhetsnavn',
+        kilde: 'SAKSBEHANDLER',
       },
     },
     barnSomTrengerVurdering: [],
@@ -801,7 +802,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+      name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
@@ -818,7 +819,7 @@ describe('mellomlagring', () => {
     );
 
     const begrunnelseFelt = screen.getByRole('textbox', {
-      name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+      name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er bekreftet');
@@ -837,14 +838,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -854,7 +855,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.queryByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       })
     ).toHaveValue('');
   });
@@ -872,14 +873,14 @@ describe('mellomlagring', () => {
 
     await user.type(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       }),
       ' her er ekstra tekst'
     );
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       })
     ).toHaveValue('Dette er min vurdering som er mellomlagret her er ekstra tekst');
 
@@ -889,7 +890,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       })
     ).toHaveValue('Dette er min vurdering som er bekreftet');
   });
@@ -922,7 +923,7 @@ describe('mellomlagring', () => {
 
     expect(
       screen.getByRole('textbox', {
-        name: 'Vurder om brukeren har rett på barnetillegg for dette barnet',
+        name: 'Vurder om brukeren har rett til barnetillegg for dette barnet',
       })
     ).toBeVisible();
   });

@@ -48,8 +48,6 @@ export interface OpprettSakFormFields {
   kravVurderinger?: KravVurderingOppføring[];
 }
 
-export type SamordningType = 'SYKEPENGER' | 'DAGPENGER' | 'TILTAKSPENGER';
-
 type SamordningPeriode = { fom: string; tom: string };
 
 type SamordningSykepenger = {
@@ -106,6 +104,18 @@ export const AndreUtbetalingerYtelserAlternativer = Object.entries(AndreUtbetali
   label: v,
 }));
 
+const personStatusOptions: { value: OpprettTestcase['personStatus']; label: string }[] = [
+  { value: 'bosatt', label: 'Bosatt' },
+  { value: 'opphort', label: 'Opphørt' },
+  { value: 'doed', label: 'Død' },
+  { value: 'foedselsregistrert', label: 'Fødselsregistrert' },
+  { value: 'forsvunnet', label: 'Forsvunnet' },
+  { value: 'ikkeBosatt', label: 'Ikke bosatt' },
+  { value: 'inaktiv', label: 'Inaktiv' },
+  { value: 'midlertidig', label: 'Midlertidig' },
+  { value: 'utflyttet', label: 'Utflyttet' },
+];
+
 export interface OpprettSakFormFields {
   fødselsdato: Date;
   yrkesskader?: YrkesskadeOppføring[];
@@ -116,6 +126,7 @@ export interface OpprettSakFormFields {
   inntekter?: Inntekt[];
   institusjon?: Institusjon[];
   medlemskap?: JaEllerNei;
+  personStatus: OpprettTestcase['personStatus'];
   søknadsdato: Date;
   samordning?: SamordningOppføring[];
   tjenestePensjon?: JaEllerNei;
@@ -145,7 +156,6 @@ export const OpprettSakLocal = () => {
         ],
         label: 'Har du fått eller skal du få ekstra utbetalinger fra arbeidsgiver?',
       },
-
       afp: {
         type: 'text',
         defaultValue: '',
@@ -204,6 +214,12 @@ export const OpprettSakLocal = () => {
         label: 'Har medlemskap folketrygden?',
         defaultValue: JaEllerNei.Ja,
         options: JaEllerNeiOptions,
+      },
+      personStatus: {
+        type: 'select',
+        label: 'Personstatus',
+        options: personStatusOptions,
+        defaultValue: personStatusOptions[0].value,
       },
       samordning: {
         type: 'fieldArray',
@@ -314,6 +330,7 @@ export const OpprettSakLocal = () => {
         fengsel: data?.institusjon?.includes('fengsel'),
       },
       medlemskap: data.medlemskap === JaEllerNei.Ja,
+      personStatus: data.personStatus,
       fastlege: {
         harFastlege: true,
         harEndretFastlege: false,
@@ -406,6 +423,7 @@ export const OpprettSakLocal = () => {
           )}
           <FormField form={form} formField={formFields.student} horizontalRadio={true} />
           <FormField form={form} formField={formFields.medlemskap} horizontalRadio={true} />
+          <FormField form={form} formField={formFields.personStatus} />
           <FormField form={form} formField={formFields.tjenestePensjon} horizontalRadio={true} />
           <FormField form={form} formField={formFields.institusjon} />
           <FormField form={form} formField={formFields.uføre} />

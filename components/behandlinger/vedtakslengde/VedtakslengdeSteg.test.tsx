@@ -84,6 +84,7 @@ const grunnlagMedManuellVurdering: VedtakslengdeGrunnlag = {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Saksbehandler',
+          kilde: 'SAKSBEHANDLER',
           dato: '2026-03-10',
         },
       },
@@ -132,6 +133,7 @@ const grunnlagMedVedtatteOgNyeVurderinger: VedtakslengdeGrunnlag = {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Maskinansen',
+          kilde: 'SAKSBEHANDLER',
           dato: '2025-10-10',
         },
       },
@@ -162,6 +164,7 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Maskinansen',
+          kilde: 'SAKSBEHANDLER',
           dato: '2025-10-10',
         },
       },
@@ -177,6 +180,7 @@ const grunnlagMedVedtattManuellVurdering: VedtakslengdeGrunnlag = {
       vurderingerMeta: {
         vurdertAv: {
           ident: 'Saksansen',
+          kilde: 'SAKSBEHANDLER',
           dato: '2026-03-10',
         },
       },

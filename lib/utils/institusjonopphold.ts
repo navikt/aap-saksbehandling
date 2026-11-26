@@ -2,10 +2,13 @@ import { addMonths, format, isAfter, isBefore, isEqual, startOfMonth } from 'dat
 import { nb } from 'date-fns/locale';
 import { formatDatoMedMånedsnavn, formaterDatoForFrontend } from 'lib/utils/date';
 import { Dato } from 'lib/types/Dato';
-import { HelseInstiusjonVurdering } from 'lib/types/types';
+import { HelseinstitusjonGrunnlag, HelseInstiusjonVurdering } from 'lib/types/types';
 
 import { JaEllerNei } from 'lib/utils/form';
-import { OppholdVurdering } from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
+import {
+  OppholdMedVurderinger,
+  OppholdVurdering,
+} from 'components/behandlinger/institusjonsopphold/helseinstitusjon/Helseinstitusjon';
 
 /**
  * Formatterer beskrivelse av reduksjonsperioden
@@ -21,15 +24,120 @@ export function lagReduksjonsBeskrivelse(oppholdFra: string, tidligsteReduksjons
   return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjon kan tidligst starte: ${tidligsteReduksjon}`;
 }
 
-export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string): string {
+export function beregnStandardTidligsteReduksjonsdato(oppholdFra: string): string {
+  return format(startOfMonth(addMonths(new Dato(oppholdFra).dato, 4)), 'yyyy-MM-dd');
+}
+
+export function harKorrigertReduksjonsdato(
+  vurderinger: OppholdVurdering[] | undefined,
+  standardTidligsteReduksjonsdato: string
+): boolean {
+  if (harBesvartUtenReduksjon(vurderinger)) return true;
+
+  return (
+    vurderinger?.some((v) => {
+      if (!erReduksjonUtIFraFormFields(v)) return false;
+      const fom = v.periode?.fom;
+      if (!erGyldigDatoFormat(fom)) return false;
+      return !isBefore(new Dato(fom).dato, new Dato(standardTidligsteReduksjonsdato).dato);
+    }) ?? false
+  );
+}
+
+function harBesvartUtenReduksjon(vurderinger: OppholdVurdering[] | undefined): boolean {
+  if (!vurderinger || vurderinger.length === 0) return false;
+  return vurderinger.every((v) => v.faarFriKostOgLosji !== undefined && !erReduksjonUtIFraFormFields(v));
+}
+
+export function erGyldigDatoFormat(dato: string | undefined): dato is string {
+  return !!dato && /^\d{2}\.\d{2}\.\d{4}$/.test(dato);
+}
+
+export function forrigeOppholdHarIngenReduksjonLengre(
+  forrigeOppholdVurderinger: OppholdVurdering[] | undefined,
+  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null
+): boolean {
+  if (forrigeOppholdVurderinger == null || forrigeOppholdVurderinger.length === 0) return false;
+
+  const forrigeErBesvart = forrigeOppholdVurderinger.every((v) => v.faarFriKostOgLosji !== undefined);
+  if (!forrigeErBesvart) return false;
+
+  const harVurderingerMedReduksjon = forrigeOppholdVurderinger.some((v) => erReduksjonUtIFraFormFields(v));
+  if (harVurderingerMedReduksjon) return false;
+
+  // Ingen live vurdering gir reduksjon. Sjekk om det finnes en vedtatt reduksjonsperiode som
+  // fortsatt delvis gjaldt - dvs. den nye "stopp reduksjon fra"-datoen ligger etter vedtatt
+  // reduksjon sin startdato. I så fall har det faktisk vært reduksjon en periode, og 1-månedsregelen
+  // skal fortsatt gjelde for neste opphold.
+  const vedtattReduksjon = forrigeOppholdVedtatteVurderinger?.find((v) => erReduksjonUtIFraVurdering(v));
+  if (!vedtattReduksjon) return false;
+
+  const tidligsteLiveFom = forrigeOppholdVurderinger
+    .map((v) => v.periode?.fom)
+    .filter(erGyldigDatoFormat)
+    .map((fom) => new Dato(fom).dato)
+    .sort((a, b) => a.getTime() - b.getTime())
+    .at(0);
+
+  // Ingen gyldig dato fylt ut ennå - vi vet ikke om reduksjonen faktisk stoppes før oppstart
+  // av vedtatt reduksjon eller ikke. Ikke vis varsel før saksbehandler har fylt ut en dato.
+  if (!tidligsteLiveFom) return false;
+
+  const vedtattReduksjonFom = new Dato(vedtattReduksjon.periode.fom).dato;
+
+  const fortsattReduksjonForEnPeriode = isAfter(tidligsteLiveFom, vedtattReduksjonFom);
+
+  return !fortsattReduksjonForEnPeriode;
+}
+
+export function manglerKorrigertReduksjonsdato(
+  oppholdFra: string,
+  oppholdVurderinger: OppholdVurdering[],
+  forrigeOppholdVurderinger: OppholdVurdering[] | undefined,
+  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null
+): boolean {
+  const forrigeIkkeLengerReduksjon = forrigeOppholdHarIngenReduksjonLengre(
+    forrigeOppholdVurderinger,
+    forrigeOppholdVedtatteVurderinger
+  );
+  if (!forrigeIkkeLengerReduksjon) return false;
+
+  const standardTidligsteReduksjonsdato = beregnStandardTidligsteReduksjonsdato(oppholdFra);
+
+  return !harKorrigertReduksjonsdato(oppholdVurderinger, standardTidligsteReduksjonsdato);
+}
+
+export function lagReduksjonBeskrivelseNyttOpphold(oppholdFra: string, oppholdTil: string): string {
   const oppholdDato = new Dato(oppholdFra).dato;
+  const oppholdTilDato = new Dato(oppholdTil).dato;
 
   const innleggelsesmåned = format(startOfMonth(oppholdDato), 'MMMM yyyy', { locale: nb });
 
   const énMånedEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 1));
   const fireMånederEtterInnleggelsesmåned = startOfMonth(addMonths(oppholdDato, 4));
 
-  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjonen bør som regel starte ${formatDatoMedMånedsnavn(énMånedEtterInnleggelsesmåned)} ved reduksjon i forrige opphold, ellers ${formatDatoMedMånedsnavn(fireMånederEtterInnleggelsesmåned)}. Det finnes likevel unntak.`;
+  const visFireMånederRegel =
+    isAfter(oppholdTilDato, fireMånederEtterInnleggelsesmåned) ||
+    isEqual(oppholdTilDato, fireMånederEtterInnleggelsesmåned);
+
+  const fireMånederTekst = visFireMånederRegel
+    ? `, ellers ${formatDatoMedMånedsnavn(fireMånederEtterInnleggelsesmåned)}`
+    : '';
+
+  return `Innleggelsesmåned: ${innleggelsesmåned}. Reduksjonen bør som regel starte ${formatDatoMedMånedsnavn(
+    énMånedEtterInnleggelsesmåned
+  )} ved reduksjon i forrige opphold${fireMånederTekst}. Det finnes likevel unntak.`;
+}
+
+/**
+ * Sjekker om reduksjon i det hele tatt er mulig for oppholdet, gitt tidligste reduksjonsdato.
+ * Hvis tidligste reduksjonsdato er etter oppholdets sluttdato, rekker oppholdet aldri å bli redusert.
+ */
+export function erReduksjonMuligForOpphold(oppholdTil: string, tidligsteReduksjonsdato?: string | null): boolean {
+  if (!tidligsteReduksjonsdato) return true;
+  const tilDato = new Dato(oppholdTil).dato;
+  const reduksjonDato = new Dato(tidligsteReduksjonsdato).dato;
+  return !isAfter(reduksjonDato, tilDato);
 }
 
 /**
@@ -57,6 +165,40 @@ export const validerDatoErInnenforOpphold = (
 
   return true;
 };
+
+export function beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+  oppholdFra,
+  forrigeOppholdAvsluttetDato,
+  forrigeOppholdVurderinger,
+  forrigeGirReduksjon,
+}: {
+  oppholdFra: string;
+  forrigeOppholdAvsluttetDato?: string | null;
+  forrigeOppholdVurderinger?: OppholdVurdering[];
+  forrigeOppholdVedtatteVurderinger?: HelseInstiusjonVurdering[] | null;
+  forrigeGirReduksjon?: boolean;
+}): { effektivTidligsteReduksjonsdato: string | null | undefined; bruker1Månedsregelen: boolean } {
+  const forrigeGaReduksjonNå =
+    forrigeGirReduksjon ?? forrigeOppholdVurderinger?.some((v) => erReduksjonUtIFraFormFields(v)) ?? false;
+
+  const innenforTreMåneder =
+    !!forrigeOppholdAvsluttetDato &&
+    erNyttOppholdInnenfor3MaanederEtterSistOpphold(forrigeOppholdAvsluttetDato, oppholdFra);
+
+  const bruker1Månedsregelen = forrigeGaReduksjonNå && innenforTreMåneder;
+
+  if (bruker1Månedsregelen) {
+    return {
+      bruker1Månedsregelen,
+      effektivTidligsteReduksjonsdato: format(startOfMonth(addMonths(new Dato(oppholdFra).dato, 1)), 'yyyy-MM-dd'),
+    };
+  }
+
+  return {
+    bruker1Månedsregelen,
+    effektivTidligsteReduksjonsdato: beregnStandardTidligsteReduksjonsdato(oppholdFra),
+  };
+}
 
 export const validerDatoForStoppAvReduksjon = (reduksjonDato: string, tidligsteReduksjonsdato?: string | null) => {
   const dato = new Dato(reduksjonDato).dato;
@@ -105,4 +247,73 @@ export function erNyttOppholdInnenfor3MaanederEtterSistOpphold(utskrevetDato: st
   const treMndEtterUtskrivelse = addMonths(utskrevet, 3);
 
   return nyttOpphold <= treMndEtterUtskrivelse;
+}
+
+export function erVurderingHistorisk(vurdering: OppholdVurdering, reduksjonErMulig: boolean): boolean {
+  return erReduksjonUtIFraFormFields(vurdering) && !reduksjonErMulig;
+}
+
+export function grupperVedtattePerOppholdId(
+  vedtatte: HelseinstitusjonGrunnlag['vedtatteVurderinger']
+): Record<string, HelseInstiusjonVurdering[]> {
+  return vedtatte.reduce<Record<string, HelseInstiusjonVurdering[]>>((acc, v) => {
+    const id = v.oppholdId ?? '';
+    acc[id] = [...(acc[id] ?? []), ...(v.vurderinger ?? [])];
+    return acc;
+  }, {});
+}
+
+export interface OppholdReduksjonsstatus {
+  effektivTidligsteReduksjonsdato: string | null | undefined;
+  bruker1Månedsregelen: boolean;
+  reduksjonErMulig: boolean;
+  girReduksjon: boolean;
+}
+
+function girOppholdReduksjon(
+  opphold: OppholdMedVurderinger,
+  vedtatte: HelseInstiusjonVurdering[] | undefined,
+  reduksjonErMulig: boolean
+): boolean {
+  if (opphold.vurderinger.length > 0) {
+    return opphold.vurderinger.some(
+      (v) => erReduksjonUtIFraFormFields(v) && !erVurderingHistorisk(v, reduksjonErMulig)
+    );
+  }
+
+  const oppholdTil = new Dato(opphold.periode.tom).dato;
+  return (vedtatte ?? []).some(
+    (v) =>
+      !v.erHistoriskUtenReduksjonsberegning &&
+      erReduksjonUtIFraVurdering(v) &&
+      !isAfter(new Dato(v.periode.fom).dato, oppholdTil)
+  );
+}
+
+export function beregnReduksjonskjede(
+  opphold: OppholdMedVurderinger[],
+  vedtattePerOppholdId: Record<string, HelseInstiusjonVurdering[]>,
+  tilOgMedIndex: number
+): OppholdReduksjonsstatus[] {
+  const resultat: OppholdReduksjonsstatus[] = [];
+
+  opphold.slice(0, tilOgMedIndex + 1).forEach((o, i) => {
+    const forrige = i > 0 ? opphold[i - 1] : undefined;
+
+    const { effektivTidligsteReduksjonsdato, bruker1Månedsregelen } = beregnEffektivTidligsteReduksjonsdatoFraSkjema({
+      oppholdFra: o.periode.fom,
+      forrigeOppholdAvsluttetDato: forrige?.periode.tom,
+      forrigeOppholdVurderinger: forrige?.vurderinger,
+      forrigeOppholdVedtatteVurderinger: forrige ? vedtattePerOppholdId[forrige.oppholdId] : undefined,
+      forrigeGirReduksjon: i > 0 ? resultat[i - 1].girReduksjon : undefined,
+    });
+
+    const reduksjonErMulig = erReduksjonMuligForOpphold(o.periode.tom, effektivTidligsteReduksjonsdato);
+
+    const girReduksjon = girOppholdReduksjon(o, vedtattePerOppholdId[o.oppholdId], reduksjonErMulig);
+
+    resultat.push({ effektivTidligsteReduksjonsdato, bruker1Månedsregelen, reduksjonErMulig, girReduksjon });
+  });
+
+  return resultat;
 }

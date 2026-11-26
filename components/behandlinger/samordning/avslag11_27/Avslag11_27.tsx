@@ -19,7 +19,7 @@ import { useFieldArray } from 'react-hook-form';
 
 import { Avslag11_27Krav } from 'components/behandlinger/samordning/avslag11_27/avslag11_27Krav/Avslag11_27Krav';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { formaterDatoForBackend, formaterDatoForFrontend } from 'lib/utils/date';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { Alert } from 'components/alert/Alert';

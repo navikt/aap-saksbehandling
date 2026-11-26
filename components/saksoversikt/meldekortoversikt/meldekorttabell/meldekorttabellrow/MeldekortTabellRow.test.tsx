@@ -110,7 +110,24 @@ describe('MeldekortTabellRow', () => {
     });
   });
 
-  describe('Levert dato og sist endret', () => {
+  describe('Meldedato', () => {
+    it('viser meldedato fra API-et, ikke datoen meldekortet ble mottatt eller endret', () => {
+      renderRow({ ...meldekortMedDager, meldedato: '2025-01-10' });
+      expect(screen.getByRole('cell', { name: '10.01.2025' })).toBeVisible();
+    });
+
+    it('viser meldedato også når meldekort mangler', () => {
+      renderRow({ ...meldekortUtenDager, meldedato: '2025-01-10' });
+      expect(screen.getByRole('cell', { name: '10.01.2025' })).toBeVisible();
+    });
+
+    it.each([null, undefined])('viser "-" når meldedato er %s', (meldedato) => {
+      renderRow({ ...meldekortMedDager, meldedato });
+      expect(screen.getAllByRole('cell')[2]).toHaveTextContent(/^-$/);
+    });
+  });
+
+  describe('Sist endret', () => {
     it('viser oppdatertTidspunkt formatert for frontend', () => {
       renderRow(meldekortMedDager);
       expect(screen.getByText('21.01.2025')).toBeVisible();
@@ -121,7 +138,7 @@ describe('MeldekortTabellRow', () => {
       expect(screen.getByText('saksbehandler')).toBeVisible();
     });
 
-    it('viser "-" for meldedato når meldekort mangler', () => {
+    it('viser "-" når meldekort mangler', () => {
       renderRow(meldekortUtenDager);
       expect(screen.getAllByText('-').length).toBeGreaterThan(0);
     });

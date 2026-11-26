@@ -17,26 +17,22 @@ type UmamiOppgaveHandling = (typeof UMAMI_OPPGAVE_HANDLING)[number];
 export type UmamiNavigeringNavn = `GÅ_TIL_${UmamiNavigeringMål}` | `${UmamiOppgaveHandling}_OPPGAVE`;
 
 export interface UmamiNavigeringEvent {
-  type: 'NAVIGERING';
   name: UmamiNavigeringNavn;
-  inngang: BehandlingInngang | SaksoversiktInngang | OppgaveInngang;
-  reserverer?: boolean;
+  data: {
+    inngang: BehandlingInngang | SaksoversiktInngang | OppgaveInngang;
+    reserverer?: 'true';
+  };
 }
 
 export const loggUmamiGåTilBehandling = (inngang: BehandlingInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'GÅ_TIL_BEHANDLING', inngang });
+  clientLoggUmamiEvent('GÅ_TIL_BEHANDLING', { inngang });
 
 export const loggUmamiGåTilBehandlingOgReserver = (inngang: BehandlingInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'GÅ_TIL_BEHANDLING', inngang, reserverer: true });
+  clientLoggUmamiEvent('GÅ_TIL_BEHANDLING', { inngang, reserverer: 'true' });
 
 export const loggUmamiGåTilSaksoversikt = (inngang: SaksoversiktInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'GÅ_TIL_SAKSOVERSIKT', inngang });
+  clientLoggUmamiEvent('GÅ_TIL_SAKSOVERSIKT', { inngang });
 
-export const loggUmamiReserverOppgave = (inngang: BehandlingInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'RESERVER_OPPGAVE', inngang });
+export const loggUmamiFrigiOppgave = (inngang: OppgaveInngang) => clientLoggUmamiEvent('FRIGI_OPPGAVE', { inngang });
 
-export const loggUmamiFrigiOppgave = (inngang: OppgaveInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'FRIGI_OPPGAVE', inngang });
-
-export const loggUmamiTildelOppgave = (inngang: OppgaveInngang) =>
-  clientLoggUmamiEvent({ type: 'NAVIGERING', name: 'TILDEL_OPPGAVE', inngang });
+export const loggUmamiTildelOppgave = (inngang: OppgaveInngang) => clientLoggUmamiEvent('TILDEL_OPPGAVE', { inngang });

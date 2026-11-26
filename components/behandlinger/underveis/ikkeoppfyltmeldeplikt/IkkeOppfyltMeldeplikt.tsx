@@ -16,7 +16,7 @@ import {
   MeldepliktOverstyringVurdering,
 } from 'components/behandlinger/underveis/ikkeoppfyltmeldeplikt/types';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedForm } from 'components/vilkårskort/vilkårskortmedform/VilkårskortMedForm';
+import { VilkårskortMedForm } from 'components/vilkaarskort/vilkårskortmedform/VilkårskortMedForm';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 type Props = {

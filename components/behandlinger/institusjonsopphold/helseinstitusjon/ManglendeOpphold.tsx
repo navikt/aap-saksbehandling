@@ -1,4 +1,4 @@
-import { VilkårsKort } from 'components/vilkårskort/Vilkårskort';
+import { VilkårsKort } from 'components/vilkaarskort/Vilkårskort';
 import { Alert } from 'components/alert/Alert';
 
 export const ManglendeOpphold = () => {

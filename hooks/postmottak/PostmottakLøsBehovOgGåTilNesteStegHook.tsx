@@ -5,19 +5,23 @@ import {
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useOverstyrTildelingHook } from 'hooks/saksbehandling/OverstyrTildelingHook';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
-import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
+import { postmottakHentFlyt, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
+import { Losninger, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 
-export const usePostmottakLøsBehovOgGåTilNesteSteg = (
+export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Losninger>(
   steg: StegType
 ): {
   status: ServerSentEventStatus | undefined;
   resetStatus: () => void;
   isLoading: boolean;
-  løsBehovOgGåTilNesteSteg: (behov: LøsAvklaringsbehovPåBehandling, sjekkTildeltStatus?: boolean) => void;
+  løsBehovOgGåTilNesteSteg: (
+    behov: LøsAvklaringsbehovPåBehandling<B>,
+    onSuccess?: () => void,
+    sjekkTildeltStatus?: boolean
+  ) => void;
   løsBehovOgGåTilNesteStegError?: ApiException;
 } => {
   const params = useParamsMedType();
@@ -26,14 +30,17 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ApiException | undefined>();
   const [isPending, startTransition] = useTransition();
-  const { setVisOverstyrModal, setCallback, setReservertAvNavn } = useOverstyrTildelingHook();
+  const { setVisOverstyrModal, setBekreftOverstyring, setAvbrytOverstyring, setReservertAvNavn } =
+    useOverstyrTildelingHook();
 
   const sisteBehovRef = useRef<{
-    behov: LøsAvklaringsbehovPåBehandling;
+    behov: LøsAvklaringsbehovPåBehandling<B>;
+    onSuccess?: () => void;
   }>(null);
 
   const løsBehovOgGåTilNesteSteg = async (
-    behov: LøsAvklaringsbehovPåBehandling,
+    behov: LøsAvklaringsbehovPåBehandling<B>,
+    onSuccess?: () => void,
     sjekkTildeltStatus: boolean = true
   ) => {
     setIsLoading(true);
@@ -53,22 +60,39 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
               nyesteOppgavePåBehandling.data.tildeltSaksbehandlerIdent
           );
           setIsLoading(false);
-          setCallback(() => bekreftOgFortsett);
-          sisteBehovRef.current = { behov };
+          setBekreftOverstyring(() => bekreftOgFortsett);
+          setAvbrytOverstyring(() => () => {
+            sisteBehovRef.current = null;
+          });
+          sisteBehovRef.current = { behov, onSuccess };
           return;
         }
       } // Hvis henting av tildelt-status feiler, la saksbehandler fortsette
     }
 
-    const løsbehovRes = await postmottakLøsBehovClient(behov);
+    let løsbehovRes = await postmottakLøsBehovClient(behov);
+    if (isError(løsbehovRes) && løsbehovRes.status === 409) {
+      const flytResponse = await postmottakHentFlyt(behov.referanse);
+      if (isError(flytResponse)) {
+        setError(flytResponse.apiException);
+        setIsLoading(false);
+        return;
+      }
+
+      løsbehovRes = await postmottakLøsBehovClient({
+        ...behov,
+        behandlingVersjon: flytResponse.data.behandlingVersjon,
+      });
+    }
+
     if (isError(løsbehovRes)) {
       setError(løsbehovRes.apiException);
       setIsLoading(false);
       return;
     }
-    listenSSE();
+    listenSSE(onSuccess);
   };
-  const listenSSE = () => {
+  const listenSSE = (onSuccess?: () => void) => {
     const eventSource = new EventSource(
       `/postmottak/api/post/${params.behandlingsreferanse}/hent/${params.aktivGruppe}/${steg}/nesteSteg/`,
       {
@@ -79,6 +103,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
       const eventData: ServerSentEventData = JSON.parse(event.data);
       if (eventData.status === 'DONE') {
         eventSource.close();
+        onSuccess?.();
         if (eventData.skalBytteGruppe || eventData.skalBytteSteg) {
           // TODO: Legge tilbake igjen hash for aktivt-steg hvis vi tar i bruk dette?
           router.push(`/postmottak/${params.behandlingsreferanse}/${eventData.aktivGruppe}/`);
@@ -110,7 +135,8 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = (
       setError({ message: 'Noe gikk galt ved overstyring av tildeling. Prøv igjen.' });
       return;
     }
-    sisteBehovRef.current && løsBehovOgGåTilNesteSteg(sisteBehovRef.current.behov, false);
+    sisteBehovRef.current &&
+      løsBehovOgGåTilNesteSteg(sisteBehovRef.current.behov, sisteBehovRef.current.onSuccess, false);
   };
 
   return {

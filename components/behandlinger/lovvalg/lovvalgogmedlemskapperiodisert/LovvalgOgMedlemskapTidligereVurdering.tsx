@@ -1,6 +1,7 @@
 import { VStack } from '@navikt/ds-react';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 import { PeriodisertManuellVurderingForLovvalgMedlemskapResponse } from 'lib/types/types';
+import { AutomatiskDelvurdering } from 'components/behandlinger/lovvalg/automatiskvurderingavlovvalgogmedlemskap/AutomatiskDelvurdering';
 import { SpørsmålOgSvar } from 'components/sporsmaalogsvar/SpørsmålOgSvar';
 
 type Props = {
@@ -25,6 +26,7 @@ export const LovvalgOgMedlemskapTidligereVurdering = ({ vurdering }: Props) => {
           />
         </>
       )}
+      <AutomatiskDelvurdering delvurdering={vurdering.delvurderinger} />
     </VStack>
   );
 };

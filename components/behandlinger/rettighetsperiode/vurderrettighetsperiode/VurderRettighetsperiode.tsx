@@ -15,7 +15,7 @@ import { SubmitEventHandler } from 'react';
 import { Alert } from 'components/alert/Alert';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -84,20 +84,20 @@ export const VurderRettighetsperiode = ({
       begrunnelse: {
         type: 'textarea',
         label: 'Vilkårsvurdering',
-        description: 'Vurder om første mulige dato med rett på ytelse skal tilbakedateres etter § 22-13 7. ledd',
+        description: 'Vurder om første mulige dato med rett til ytelse skal tilbakedateres etter § 22-13 7. ledd',
         rules: { required: 'Du må begrunne hvorfor starttidspunktet for saken skal endres' },
         defaultValue: defaultValues.begrunnelse,
       },
       harRett: {
         type: 'radio',
-        label: 'Skal brukerens rett på ytelse tilbakedateres før søknadstidspunkt?',
-        rules: { required: 'Du må ta stilling til om brukeren har rett på AAP fra en annen dato enn søknadsdatoen' },
+        label: 'Skal brukerens rett til ytelse tilbakedateres før søknadstidspunkt?',
+        rules: { required: 'Du må ta stilling til om brukeren har rett til AAP fra en annen dato enn søknadsdatoen' },
         options: harRettOptions,
         defaultValue: defaultValues.harRett,
       },
       startDato: {
         type: 'date_input',
-        label: 'Bruker har tidligst rett på AAP fra',
+        label: 'Bruker har tidligst rett til AAP fra',
         rules: {
           required: 'Du må sette en dato for behandlingen',
           validate: {
@@ -157,7 +157,7 @@ export const VurderRettighetsperiode = ({
 
   return (
     <VilkårskortMedFormOgMellomlagring
-      heading={'§ 22-13 syvende ledd. Første mulige dato med rett på ytelse'}
+      heading={'§ 22-13 syvende ledd. Første mulige dato med rett til ytelse'}
       steg={'VURDER_RETTIGHETSPERIODE'}
       onSubmit={handleSubmit}
       status={løsAvklaringsbehovStatus}

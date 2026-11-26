@@ -36,7 +36,8 @@ function mapArbeidsevneOgYrkesskade(
   const yrkesskadeBegrunnelse = skalBegrunneYrkesskaden ? data?.yrkesskadeBegrunnelse : undefined;
 
   const erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense =
-    skalBegrunneYrkesskaden || (skalVurdereYrkesskade && !vurderingDatoSammeSomRettighetsperiodeStart)
+    erNedsettelseIArbeidsevneMerEnnHalvparten !== true &&
+    (skalBegrunneYrkesskaden || (skalVurdereYrkesskade && !vurderingDatoSammeSomRettighetsperiodeStart))
       ? getTrueFalseEllerUndefined(data.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense)
       : undefined;
 
@@ -59,7 +60,8 @@ function mapTilPeriodisertVurdering(
 ): SykdomsvurderingLøsningDto {
   const harSkadeSykdomEllerLyte = data.harSkadeSykdomEllerLyte === JaEllerNei.Ja;
 
-  const erArbeidsevnenNedsatt = data.harNedsattArbeidsevne && data.harNedsattArbeidsevne !== 'NEI';
+  const erArbeidsevnenNedsatt =
+    data.harNedsattArbeidsevne && ['JA', 'JA_FORBIGÅENDE_PROBLEMER'].includes(data.harNedsattArbeidsevne);
 
   const nedsattArbeidsevneOgYrkesskade = erArbeidsevnenNedsatt
     ? mapArbeidsevneOgYrkesskade(

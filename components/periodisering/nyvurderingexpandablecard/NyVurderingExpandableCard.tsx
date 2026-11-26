@@ -12,6 +12,7 @@ import { SlettVurderingModal } from 'components/periodisering/slettvurderingmoda
 import { VurderingStatus, VurderingStatusTag } from 'components/periodisering/VurderingStatusTag';
 import { AccordionsSignal } from 'hooks/AccordionSignalHook';
 import { Alert } from 'components/alert/Alert';
+import { useFlyt } from 'hooks/saksbehandling/FlytHook';
 
 interface Props {
   initiellEkspandert: boolean;
@@ -27,6 +28,7 @@ interface Props {
   index: number;
   accordionsSignal: AccordionsSignal;
   harTidligereVurderinger?: boolean;
+  customTag?: ReactNode;
 }
 
 export const NyVurderingExpandableCard = ({
@@ -43,8 +45,11 @@ export const NyVurderingExpandableCard = ({
   initiellEkspandert = false,
   index,
   accordionsSignal,
+  customTag,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert);
+  const { flyt } = useFlyt();
+  const erBeslutterSteg = flyt?.aktivtSteg === 'FATTE_VEDTAK';
+  const [isOpen, setIsOpen] = useState<boolean>(initiellEkspandert || erBeslutterSteg);
 
   const sisteAccordionSignalVersion = useRef(accordionsSignal.version);
 
@@ -53,7 +58,7 @@ export const NyVurderingExpandableCard = ({
     sisteAccordionSignalVersion.current = accordionsSignal.version;
   }
 
-  const ref = useRef<HTMLDialogElement>(null);
+  const [visSlettVurdering, setVisSlettVurdering] = useState(false);
 
   return (
     <CustomExpandableCard
@@ -71,7 +76,10 @@ export const NyVurderingExpandableCard = ({
               <span>{isLast ? ' ' : '[Ikke valgt]'}</span>
             )}
           </BodyShort>
-          <VurderingStatusTag status={vurderingStatus} />
+          <HStack gap={'space-8'}>
+            {customTag && customTag}
+            <VurderingStatusTag status={vurderingStatus} />
+          </HStack>
         </HStack>
       }
     >
@@ -92,10 +100,15 @@ export const NyVurderingExpandableCard = ({
                 variant="tertiary"
                 size="small"
                 icon={<TrashFillIcon />}
-                onClick={() => ref.current?.showModal()}
+                onClick={() => setVisSlettVurdering(true)}
+                aria-haspopup="dialog"
                 type="button"
               />
-              <SlettVurderingModal ref={ref} onSlettVurdering={onSlettVurdering} />
+              <SlettVurderingModal
+                isOpen={visSlettVurdering}
+                onClose={() => setVisSlettVurdering(false)}
+                onSlettVurdering={onSlettVurdering}
+              />
             </VStack>
           )}
         </HGrid>

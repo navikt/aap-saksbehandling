@@ -11,27 +11,30 @@ import {
   FastlegeResponse,
   ForhåndsvisDialogmelding,
   ForhåndsvisDialogmeldingResponse,
+  GjenåpneAvklaringsbehovPåBehandling,
   HarRegistrertTimerResponse,
   KanDistribuereBrevRequest,
   KanDistribuereBrevResponse,
+  KanDistribuereBrevV2Request,
   KvalitetssikringTilgang,
-  LegeerklæringStatus,
   LøsAvklaringsbehovPåBehandling,
   LøsPeriodisertBehovPåBehandling,
   MeldePerioderMedMEldekortResponse,
   MeldingerResponse,
   MellomlagretVurderingRequest,
   MellomlagretVurderingResponse,
+  Mottaker,
   NavEnheterResponse,
   NavEnhetRequest,
   OppdaterMeldekortRequest,
   OppdaterMeldekortResponse,
   OpprettAktivitetspliktBehandlingDto,
+  OpprettUtenlandsoppholdBehandlingDto,
   OpprettDummySakDto,
   OpprettTestcase,
-  RettighetsinfoDto,
+  RegistrerMeldedatoRequest,
   SakPersoninfo,
-  SaksInfo,
+  SaksinfoDTO,
   SettPåVent,
 } from './types/types';
 import { getErrorMessage } from 'lib/utils/errorUtil';
@@ -42,6 +45,8 @@ import { TilgangResponse } from 'lib/services/tilgangservice/tilgangsService';
 import { OpprettMarkeringDto, SaksbehandlerSøkRespons, TildelOppgaveRequest } from 'lib/types/oppgaveTypes';
 import { MellomLagringIdentifikator } from 'app/saksbehandling/api/mellomlagring/route';
 import { buildOAuthLoginUrl } from 'lib/services/azure/redirectUtils';
+import { KodeverkResponse } from 'lib/types/kodeverk';
+import { FinnGosysOppgaverQueryParams, FinnGosysOppgaverResponse } from 'lib/types/gosysTypes';
 
 const BASE_URL = '/saksbehandling';
 
@@ -106,14 +111,14 @@ export function clientOpprettDummySak(sak: OpprettDummySakDto) {
 }
 
 export function clientHentAlleSaker() {
-  return clientFetch<SaksInfo[]>(`${BASE_URL}/api/sak/siste/20`, 'GET');
+  return clientFetch<SaksinfoDTO[]>(`${BASE_URL}/api/sak/siste/20`, 'GET');
 }
 
 export function clientLøsPeriodisertBehov(avklaringsBehov: LøsPeriodisertBehovPåBehandling) {
   return clientFetch(`${BASE_URL}/api/behandling/los-periodisert-behov/`, 'POST', avklaringsBehov);
 }
 
-export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling) {
+export function clientLøsBehov(avklaringsBehov: LøsAvklaringsbehovPåBehandling | GjenåpneAvklaringsbehovPåBehandling) {
   return clientFetch(`${BASE_URL}/api/behandling/los-behov/`, 'POST', avklaringsBehov);
 }
 
@@ -125,8 +130,19 @@ export function clientKanDistribuereBrev(brevbestillingReferanse: string, reques
   );
 }
 
+export function clientKanDistribuereBrevV2(brevbestillingReferanse: string, request: KanDistribuereBrevV2Request) {
+  return clientFetch<Boolean>(`${BASE_URL}/api/${brevbestillingReferanse}/v2/kan-distribuere-brev`, 'POST', request);
+}
+
 export function clientOpprettAktivitetsplikt(saksnummer: string, data: OpprettAktivitetspliktBehandlingDto) {
   return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettAktivitetspliktBehandling`, 'POST', data);
+}
+
+export function clientOpprettUtenlandsoppholdBehandling(
+  saksnummer: string,
+  data: OpprettUtenlandsoppholdBehandlingDto
+) {
+  return clientFetch(`${BASE_URL}/api/sak/${saksnummer}/opprettUtenlandsoppholdBehandling`, 'POST', data);
 }
 
 export function clientSøkPåBehandler(fritekst: string, saksnummer: string) {
@@ -154,10 +170,6 @@ export function clientHentBekreftVurderingerOppfølgingGrunnlag(behandlingsrefer
   );
 }
 
-export function clientHentAlleDialogmeldingerPåSak(saksnummer: string) {
-  return clientFetch<LegeerklæringStatus[]>(`${BASE_URL}/api/dokumentinnhenting/status/${saksnummer}`, 'GET');
-}
-
 export function clientHentTilgangForKvalitetssikring(referanse: string) {
   return clientFetch<KvalitetssikringTilgang>(
     `${BASE_URL}/api/behandling/${referanse}/kvalitetssikring-tilgang`,
@@ -173,26 +185,29 @@ export function hentAlleDialogmeldingerMedDokumentIdPåSak(saksnummer: string) {
   return clientFetch<MeldingerResponse>(`${BASE_URL}/api/dokumentinnhenting/syfo/dialogmeldinger/${saksnummer}`, 'GET');
 }
 
+export function clientSendPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
+  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/send`, 'POST', {
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
+  });
+}
+
 export function clientAvbrytPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/avbryt`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingId,
-    behandlingsReferanse: behandlingsreferanse,
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
   });
 }
 
 export function clientGjenopptaPåminnelsePåLegeerklæring(dialogmeldingId: string, behandlingsreferanse: string) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse/gjenoppta`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingId,
-    behandlingsReferanse: behandlingsreferanse,
+    dialogmeldingUuid: dialogmeldingId,
+    behandlingsreferanse: behandlingsreferanse,
   });
 }
 
 export function clientBestillDialogmelding(bestilling: BestillLegeerklæring) {
   return clientFetch(`${BASE_URL}/api/dokumentinnhenting/bestill`, 'POST', bestilling);
-}
-
-export function clientHentRettighetsinfo(saksnummer: string) {
-  return clientFetch<RettighetsinfoDto>(`${BASE_URL}/api/sak/${saksnummer}/rettighetsinfo`, 'GET');
 }
 
 export function clientForhåndsvisDialogmelding(dialogmelding: ForhåndsvisDialogmelding) {
@@ -219,15 +234,15 @@ export function clientOppdaterBrevmal(brevbestillingReferanse: string) {
   return clientFetch(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-brevmal`, 'PUT');
 }
 
-export function clientBestillTestBrev(behandlingReferanse: string) {
-  return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
+export function clientOppdaterMottakere(brevbestillingReferanse: string, mottaker: Mottaker, kopimottaker?: Mottaker) {
+  return clientFetch<FetchResponse<void>>(`${BASE_URL}/api/brev/${brevbestillingReferanse}/oppdater-mottakere`, 'PUT', {
+    mottaker,
+    kopimottaker,
+  });
 }
 
-export function clientPurrPåLegeerklæring(dialogmeldingUUID: string, behandlingsreferanse: string) {
-  return clientFetch(`${BASE_URL}/api/dokumentinnhenting/paaminnelse`, 'POST', {
-    dialogmeldingPurringUUID: dialogmeldingUUID,
-    behandlingsReferanse: behandlingsreferanse,
-  });
+export function clientBestillTestBrev(behandlingReferanse: string) {
+  return clientFetch(`${BASE_URL}/api/test/bestill/brev`, 'POST', { behandlingReferanse });
 }
 
 export function clientSendHendelse(saksnummer: string, body: Object) {
@@ -236,6 +251,10 @@ export function clientSendHendelse(saksnummer: string, body: Object) {
 
 export function clientConfig() {
   return clientFetch<ClientConfig>('/api/config', 'GET');
+}
+
+export function clientHentLandkoderIso2() {
+  return clientFetch<KodeverkResponse>('/api/kodeverk/landkoderiso2', 'GET');
 }
 
 export async function clientSjekkTilgang(behandlingsreferanse: string, behovsKode: BehandlingsFlytAvklaringsbehovKode) {
@@ -299,12 +318,20 @@ export function clientKorrigerMeldekort(saksnummer: string, oppdaterMeldekortReq
   );
 }
 
+export function clientRegistrerMeldedato(saksnummer: string, registrerMeldedatoRequest: RegistrerMeldedatoRequest) {
+  return clientFetch(`${BASE_URL}/api/meldekort/${saksnummer}/registrer-meldedato`, 'POST', registrerMeldedatoRequest);
+}
+
 export function clientHentAInntektRedirectUrl(saksnummer: string) {
   return clientFetch<{ redirectUrl: string }>(`${BASE_URL}/api/ainntekt`, 'POST', { saksnummer });
 }
 
 export function clientHentSakPersoninfo(saksnummer: string) {
   return clientFetch<SakPersoninfo>(`${BASE_URL}/api/sak/${saksnummer}/personinformasjon`, 'GET');
+}
+
+export function clientHentGosysOppgaver(request: FinnGosysOppgaverQueryParams) {
+  return clientFetch<FinnGosysOppgaverResponse>('/oppgave/api/gosys', 'POST', request);
 }
 
 interface LeggTilYrkesskadeRequest {

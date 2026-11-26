@@ -14,7 +14,7 @@ import { SubmitEventHandler } from 'react';
 import { SykestipendPeriodeTabell } from 'components/behandlinger/samordning/sykestipend/SykestipendPeriodeTabell';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -55,7 +55,7 @@ export const SykestipendVurdering = ({
     {
       begrunnelse: {
         type: 'textarea',
-        label: 'Vurder om brukeren har rett på sykestipend',
+        label: 'Vurder om brukeren har rett til sykestipend',
         rules: { required: 'Du må skrive en begrunnelse' },
         defaultValue: defaultValue.begrunnelse,
       },

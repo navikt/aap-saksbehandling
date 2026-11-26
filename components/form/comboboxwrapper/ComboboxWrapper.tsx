@@ -47,8 +47,10 @@ const ComboboxWrapper = <FormFieldValues extends FieldValues>({
           description={description}
           error={error?.message}
           options={options}
-          onToggleSelected={onChange}
-          selectedOptions={[options.find((option) => option.value === value)?.label ?? '']}
+          onToggleSelected={(optionValue, isSelected) => {
+            onChange(isSelected ? optionValue : '');
+          }}
+          selectedOptions={options.filter((option) => option.value === value)}
           readOnly={readOnly}
           className={className}
           onBlur={onBlur}

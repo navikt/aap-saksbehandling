@@ -1,6 +1,6 @@
 'use client';
 
-import { BodyLong, BodyShort, Box, Heading, Label, List, VStack } from '@navikt/ds-react';
+import { BodyLong, BodyShort, Box, Label, List, VStack } from '@navikt/ds-react';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import {
   ForeløpigBehandlingsutfall,
@@ -18,9 +18,9 @@ import { TidligereVurderinger } from 'components/tidligerevurderinger/TidligereV
 import { Veiledning } from 'components/veiledning/Veiledning';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { ForeløpigBehandlingsutfallOppsummering } from 'components/behandlingsutfall/ForeløpigBehandlingsutfallOppsummering';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -127,6 +127,7 @@ export const SykdomsvurderingBrev = ({
     >
       <VStack gap={'space-16'}>
         <>
+          <EksterneLenkerIVilkårskort steg={'SYKDOMSVURDERING_BREV'} />
           <BodyShort size={'small'}>
             Tabellen viser hvilke perioder brukeren har blitt vurdert til å oppfylle vilkår for ulike rettighetstyper.
             Resultatet kan endre seg videre i behandlingen.
@@ -149,9 +150,6 @@ export const SykdomsvurderingBrev = ({
           header={'Hva skal være med i teksten?'}
           tekst={
             <Box>
-              <Box marginBlock="space-16">
-                <EksterneLenkerIVilkårskort steg={'SYKDOMSVURDERING_BREV'} />
-              </Box>
               <BodyLong size={'small'}>Melding om innvilgelse skal innholde en beskrivelse av</BodyLong>
               <Box marginBlock="space-16" asChild>
                 <List size={'small'}>
@@ -175,23 +173,6 @@ export const SykdomsvurderingBrev = ({
           defaultOpen={false}
         />
 
-        <Veiledning
-          header={'Hvor står denne teksten i brevet?'}
-          tekst={
-            <Box>
-              <BodyLong size={'small'}>Før avsnittet du skriver, står dette avsnittet:</BodyLong>
-              <Box marginBlock={'space-12 space-0'}>
-                <Heading size={'xsmall'}>Hvem kan få AAP?</Heading>
-                <BodyLong size={'small'}>
-                  For å ha rett til arbeidsavklaringspenger må arbeidsevnen din være nedsatt med minst halvparten på
-                  grunn av sykdom eller skade, og du trenger behandling eller bistand fra Nav for å bedre arbeidsevnen
-                  din. Dette går fram av folketrygdloven § 11-5 og § 11-6.
-                </BodyLong>
-              </Box>
-            </Box>
-          }
-          defaultOpen={false}
-        />
         <FormField form={form} formField={formFields.vurdering} />
       </VStack>
     </VilkårskortMedFormOgMellomlagring>

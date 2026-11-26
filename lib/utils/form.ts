@@ -1,4 +1,4 @@
-import { ArbeidsevneNedsattValg } from 'lib/types/types';
+import type { ArbeidsevneNedsattValg, AvklaringsbehovKode } from 'lib/types/types';
 
 import { ValuePair } from 'components/form/FormField';
 
@@ -7,6 +7,7 @@ export enum Behovstype {
   VURDER_BRUDD_11_7_KODE = '4101',
   VENTE_PÅ_FRIST_FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT = '4102',
   VURDER_BRUDD_11_9_KODE = '4201',
+  VURDER_SØKNAD_UTENLANDSOPPHOLD_KODE = '4401',
   AVKLAR_STUDENT_KODE = '5001',
   AVKLAR_STUDENT_KODE_V2 = '5037',
   OVERSTYR_IKKE_OPPFYLT_MELDEPLIKT_KODE = '5002',
@@ -90,7 +91,7 @@ export enum Behovstype {
 
 type BehovsKode = `${Behovstype}`;
 
-export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
+export function mapBehovskodeTilBehovstype(kode: BehovsKode | AvklaringsbehovKode): string {
   switch (kode) {
     case '4101':
       return '§ 11-7 Medlemmets aktivitetsplikt';
@@ -100,6 +101,8 @@ export function mapBehovskodeTilBehovstype(kode: BehovsKode): string {
       return '§ 11-9 Aktivitetsplikt';
     case '4301':
       return 'Avbryt behandling';
+    case '4401':
+      return 'Vurder søknad om AAP under opphold i utlandet';
     case '5001':
       return '§ 11-14 Student';
     case '5002':

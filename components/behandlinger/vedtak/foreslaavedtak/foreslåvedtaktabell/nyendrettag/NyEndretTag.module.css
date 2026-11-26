@@ -1,0 +1,13 @@
+.tagKolonne {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 3rem;
+}
+
+.tagKolonneKunNy {
+  width: 1.5rem;
+}
+
+.tekst {
+  color: var(--ax-text-info);
+}

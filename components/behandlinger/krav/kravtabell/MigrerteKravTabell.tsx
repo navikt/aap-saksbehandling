@@ -2,7 +2,7 @@ import { Button, Heading, Table } from '@navikt/ds-react';
 import { MigrertKravVurdering } from 'lib/types/types';
 import { formaterDatoForFrontend } from 'lib/utils/date';
 
-import { formaterKravtype } from 'components/behandlinger/krav/kravutils';
+import { formaterKravtype } from 'components/behandlinger/krav/vurderKravUtils';
 import { TableStyled } from 'components/tablestyled/TableStyled';
 
 interface Props {
@@ -11,6 +11,17 @@ interface Props {
   åpen: boolean;
   onToggleÅpen: () => void;
 }
+
+const formaterVurdertAv = (vurdertAv: string) => {
+  switch (vurdertAv) {
+    case 'ArenaMigrering':
+      return 'Migrering';
+    case 'Kelvin':
+      return 'Automatisk';
+    default:
+      return vurdertAv;
+  }
+};
 
 export const MigrerteKravTabell = ({ migrertKrav, readOnly, åpen, onToggleÅpen }: Props) => {
   return (
@@ -38,7 +49,7 @@ export const MigrerteKravTabell = ({ migrertKrav, readOnly, åpen, onToggleÅpen
             </Table.DataCell>
             <Table.DataCell textSize={'small'}>{formaterDatoForFrontend(migrertKrav.muligRettFra)}</Table.DataCell>
             <Table.DataCell textSize={'small'}>Ordinær: {migrertKrav.resterendeKvoteOrdinær}</Table.DataCell>
-            <Table.DataCell textSize={'small'}>{migrertKrav.vurdertAv}</Table.DataCell>
+            <Table.DataCell textSize={'small'}>{formaterVurdertAv(migrertKrav.vurdertAv)}</Table.DataCell>
             <Table.DataCell textSize={'small'}>
               <Button
                 type="button"

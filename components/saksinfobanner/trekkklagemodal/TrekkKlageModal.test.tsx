@@ -1,11 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { TrekkKlageModal } from 'components/saksinfobanner/trekkklagemodal/TrekkKlageModal';
 
 describe('Trekk klage', () => {
-  beforeEach(() =>
-    render(<TrekkKlageModal saksnummer={'1'} behandlingReferanse={'2'} isOpen={true} onClose={vi.fn} />)
-  );
+  beforeEach(async () => {
+    await act(async () => {
+      render(<TrekkKlageModal saksnummer={'1'} behandlingReferanse={'2'} isOpen={true} onClose={vi.fn} />);
+    });
+  });
 
   it('har en overskrift', () => {
     expect(screen.getByRole('heading', { name: 'Er du sikker på at du vil trekke klagen?' })).toBeVisible();

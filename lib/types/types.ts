@@ -1,25 +1,22 @@
 import { components, paths } from './schema';
+import type { RequestBody, ResponseBody } from './openapi';
+
+export type OppdaterMottakereRequest = RequestOfPut<'/api/brev/{brevbestillingReferanse}/oppdater-mottakere'>;
 
 // Grunnlag
-export type StønadsperiodeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.stønadsperiode.StønadsperiodeGrunnlagResponse'];
-export type StønadsperiodeVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.st\u00F8nadsperiode.St\u00F8nadsperiodeVurderingResponse'];
-export type StudentGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentGrunnlagResponse'];
-export type SykestipendGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.sykestipend.SykestipendGrunnlagResponse'];
-export type SykdomsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomGrunnlagResponse'];
-export type Sykdomvurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse'];
-export type SykdomsvurderingBrevGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.SykdomsvurderingForBrevDto'];
-export type SykepengeerstatningGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerGrunnlagResponse'];
-export type SykepengerVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse'];
+export type StønadsperiodeGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/stonadsperiode'>;
+export type StønadsperiodeVurdering = StønadsperiodeGrunnlag['nyeVurderinger'][number];
 
+export type StudentGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/student'>;
+export type SykestipendGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/sykestipend'>;
+export type SykdomsGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/sykdom/sykdom'>;
+export type Sykdomvurdering = SykdomsGrunnlag['nyeVurderinger'][number];
+export type SykdomsvurderingBrevGrunnlag =
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/sykdomsvurdering-for-brev'>;
+export type SykepengerVurderingResponse = SykepengeerstatningGrunnlag['nyeVurderinger'][number];
+
+export type SykepengeerstatningGrunnlag =
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/sykdom/sykepengergrunnlag'>;
 export type SykepengererstatningPeriodeLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.PeriodisertSykepengerVurderingDto'];
 
@@ -28,60 +25,46 @@ export type SykdomsvurderingLøsningDto =
 
 export type SykepengeerstatningVurderingGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykepengergrunnlag.SykepengerVurderingResponse']['grunn'];
-export type BistandsGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandGrunnlagResponse'];
-export type BistandVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
 
-export type OvergangUforeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUf\u00F8reGrunnlagResponse'];
+export type BistandsGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/bistand'>;
+export type BistandVurderingResponse = BistandsGrunnlag['nyeVurderinger'][number];
+
+export type OvergangUforeGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/overgangufore'>;
 
 export type OvergangUforeLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangufore.flate.OvergangUf\u00F8reL\u00F8sningDto'];
 
-export type OvergangArbeidGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidGrunnlagResponse'];
+export type OvergangArbeidGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/overgangarbeid'>;
 
-export type FritakMeldepliktGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.fritakmeldeplikt.FritakMeldepliktGrunnlagResponse'];
+export type FritakMeldepliktGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/fritak-meldeplikt'>;
 
 export type PeriodisertFritaksvurderingDto =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.PeriodisertFritaksvurderingDto'];
+  components['schemas']['no.nav.aap.meldeplikt.PeriodisertFritaksvurderingDto'];
 
 export type OverstyringMeldepliktGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringGrunnlagResponse'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/meldeplikt-overstyring'>;
 export type MeldepliktOverstyringLøsningDto =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.meldeplikt.flate.MeldepliktOverstyringL\u00F8sningDto'];
+  components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringLøsningDto'];
 export type OverstyringMeldepliktGrunnlagVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.MeldepliktOverstyringVurderingResponse'];
+  components['schemas']['no.nav.aap.meldeplikt.MeldepliktOverstyringVurderingResponse'];
 export type MeldepliktOverstyringStatus = 'RIMELIG_GRUNN' | 'IKKE_MELDT_SEG' | 'HAR_MELDT_SEG';
-export type ArbeidsevneGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.arbeidsevne.ArbeidsevneGrunnlagDto'];
+export type ArbeidsevneGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/arbeidsevne'>;
 
 export type PeriodisertArbeidsevneVurderingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.arbeidsevne.flate.PeriodisertFastsettArbeidsevneDto'];
 
-export type BarnepensjonGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonGrunnlagDto'];
+export type BarnepensjonGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/barnepensjon'>;
+export type BarnepensjonVurdering = Exclude<BarnepensjonGrunnlag['vurdering'], undefined>;
 
-export type BarnepensjonVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnepensjon.BarnepensjonVurderingDto'];
+export type RefusjonskravGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/refusjon'>;
 
-export type RefusjonskravGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravGrunnlagResponse'];
-export type RefusjonkravVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.RefusjonkravVurderingResponse'];
+export type RefusjonkravVurderingResponse = NonNullable<RefusjonskravGrunnlag['gjeldendeVurderinger']>[number];
 
-export type BeregningTidspunktGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningTidspunktAvklaringResponse'];
-export type BeregningstidspunktVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningstidspunktVurderingResponse'];
+export type BeregningTidspunktGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/beregning/tidspunkt'>;
+export type BeregningstidspunktVurderingResponse = NonNullable<BeregningTidspunktGrunnlag['vurdering']>;
 
 export type ÅrsakBeregningstidspunkt = NonNullable<BeregningstidspunktVurderingResponse['årsak']>;
 export type ÅrsakYtterligereNedsatt = NonNullable<BeregningstidspunktVurderingResponse['ytterligereNedsattÅrsak']>;
-
-export type TilkjentYtelseGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelse2Dto'];
 
 export type TilkjentYtelsePeriode =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.tilkjentytelse.TilkjentYtelsePeriode2Dto'];
@@ -116,61 +99,40 @@ export type TilkjentYtelseGrunnlagMedDiff = Omit<TilkjentYtelseGrunnlagMedDiffFr
   perioder: Diff<TilkjentYtelsePeriode>[];
 };
 
-// Type guards for Diff-utledning
-export function erDiffUendret<T>(d: Diff<T>): d is DiffUendret<T> {
-  return d.diff === 'Uendret';
-}
-export function erDiffEndret<T>(d: Diff<T>): d is DiffEndret<T> {
-  return d.diff === 'Endret';
-}
-export function erDiffFjernet<T>(d: Diff<T>): d is DiffFjernet<T> {
-  return d.diff === 'Fjernet';
-}
+export type KvalitetssikringGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/kvalitetssikring'>;
 
-export function erDiffLagtTil<T>(d: Diff<T>): d is DiffLagtTil<T> {
-  return d.diff === 'LagtTil';
-}
-
-export type KvalitetssikringGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringGrunnlagResponse'];
-
-export type KvalitetssikringTilgang =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.kvalitetssikring.KvalitetssikringTilgangDto'];
-export type BarnetilleggGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.BarnetilleggDto'];
-export type Soningsgrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.SoningsGrunnlagDto'];
-export type HelseinstitusjonGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonGrunnlagDto'];
+export type KvalitetssikringTilgang = ResponseOfGet<'/api/behandling/{referanse}/kvalitetssikring-tilgang'>;
+export type BarnetilleggGrunnlag = ResponseOfGet<'/api/barnetillegg/grunnlag/{referanse}'>;
+export type Soningsgrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/institusjon/soning'>;
+export type HelseinstitusjonGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/institusjon/helse'>;
 export type Institusjonsopphold =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.InstitusjonsoppholdDto'];
 export type HelseInstiusjonVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.institusjonsopphold.HelseinstitusjonVurderingDto'];
 
-export type FatteVedtakGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.FatteVedtakGrunnlagResponse'];
+export type FatteVedtakGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/fatte-vedtak'>;
 
-export type AlderGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.alder.AlderDTO'];
+export type AlderGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/alder'>;
 export type BekreftVurderingerOppfølgingGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.bekreftvurderingeroppfølging.BekreftVurderingerOppfølgingDto'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/bekreft-vurderinger-oppfolging'>;
 
-export type BrevGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag'];
-export type BrevGrunnlagBrev = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev'];
+export type BrevGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/brev'>;
+export type BrevGrunnlagBrev = BrevGrunnlag['brevGrunnlag'][number];
+export type IdentOgNavn =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.IdentOgNavn'];
 export type Brev = components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
 export type BrevStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
 export type BrevMottaker =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type KanDistribuereBrevRequest = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest'];
+export type KanDistribuereBrevV2Request = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevV2Request'];
 export type KanDistribuereBrevResponse = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
 export type Signatur = components['schemas']['no.nav.aap.brev.kontrakt.Signatur'];
-export type Mottaker =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.SkrivVedtaksbrevLøsning']['mottakere'][number];
+export type Mottaker = components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type SamordningTjenestePensjonGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.TjenestepensjonGrunnlagDTO'];
-export type SamordningGraderingGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingGrunnlagDTO'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning/tjenestepensjon'>;
+export type SamordningGraderingGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning'>;
 export type SamordningYtelseVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseVurderingDTO'];
 export type SamordningYtelseVurderingElement =
@@ -179,14 +141,11 @@ export type SamordningGraderingYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO'];
 export type SamordningYtelsestype =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningYtelseDTO']['ytelseType'];
-export type SamordningUføreGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningUføreVurderingGrunnlagDTO'];
+export type SamordningUføreGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning-ufore'>;
 export type SamordningAndreStatligeYtelserGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserGrunnlagDTO'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning-andre-statlige-ytelser'>;
 export type AndreStatligeYtelserPeriodeDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto'];
-export type AndreStatligeYtelserKilde =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['kilde'];
 export type AndreStatligeYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.AndreStatligeYtelserPeriodeDto']['ytelseType'];
 export type DagpengerYtelserType =
@@ -197,22 +156,17 @@ export type TiltakspengerYtelserType =
   components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['ytelseType'];
 export type TiltakspengerKilde =
   components['schemas']['no.nav.aap.behandlingsflyt.test.modell.TestPerson.Tiltakspenger']['kilde'];
-export type SamordningAndreStatligeYtelserVurderinger =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningAndreStatligeYtelserVurderingDTO'];
 
 export type SamordningArbeidsgiverGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverGrunnlagDTO'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/samordning-arbeidsgiver'>;
 
 export type SamordningArbeidsgiverVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.samordning.SamordningArbeidsgiverVurderingDTO'];
 
-export type SamordningAndreStatligeYtelserData =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto'];
-
 export type SamordningAndreStatligeYtelserYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.delvurdering.samordning.andrestatligeytelservurdering.SamordningAndreStatligeYtelserVurderingPeriodeDto']['ytelse'];
 
-export type KravGrunnlag = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravGrunnlagDto'];
+export type KravGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/krav'>;
 
 export type KravVurdering = components['schemas']['no.nav.aap.behandlingsflyt.behandling.krav.KravVurderingDto'];
 
@@ -257,9 +211,6 @@ export type Avslag11_27Grunnlag =
 export type Avslag11_27BrukersYtelse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto']['brukersYtelse'];
 
-export type Avslag11_27Krav =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27KravDto'];
-
 export type Avslag11_27Vurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.grunnlag.avslag_11_27.Avslag11_27VurderingDto'];
 
@@ -268,6 +219,9 @@ export type TrukketSøknadGrunnlag =
 
 export type TrukketSøknadVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.søknad.TrukketSøknadVurderingDto'];
+
+export type UbesvarteForespørslerLegeerklæringResponse =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.UbesvarteForespørslerLegeerklæringResponse'];
 
 export type AvbrytRevurderingGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.revurdering.AvbrytRevurderingGrunnlagDto'];
@@ -278,22 +232,15 @@ export type AvbrytAktivitetspliktbehandlingGrunnlag =
 export type RettighetsinfoDto =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighet.RettighetsinfoDto'];
 
-export type RettighetsperiodeGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.rettighetsperiode.RettighetsperiodeGrunnlagResponse'];
-export type FullmektigGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigGrunnlagDto'];
+export type RettighetsperiodeGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/rettighetsperiode'>;
+export type FullmektigGrunnlag = ResponseOfGet<'/api/klage/{referanse}/grunnlag/fullmektig'>;
 export type FullmektigVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.fullmektig.FullmektigVurderingDto'];
-export type FormkravGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.formkrav.FormkravGrunnlagDto'];
-export type PåklagetBehandlingGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.påklagetbehandling.PåklagetBehandlingGrunnlagDto'];
-export type BehandlendeEnhetGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.behandlendeenhet.BehandlendeEnhetGrunnlagDto'];
-export type KlagebehandlingKontorGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingKontorGrunnlagDto'];
-export type KlagebehandlingNayGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.klagebehandling.KlagebehandlingNayGrunnlagDto'];
+export type FormkravGrunnlag = ResponseOfGet<'/api/klage/{referanse}/grunnlag/formkrav'>;
+export type PåklagetBehandlingGrunnlag = ResponseOfGet<'/api/klage/{referanse}/grunnlag/påklaget-behandling'>;
+export type BehandlendeEnhetGrunnlag = ResponseOfGet<'/api/klage/{referanse}/grunnlag/behandlende-enhet'>;
+export type KlagebehandlingKontorGrunnlag = ResponseOfGet<'/api/klage/{referanse}/grunnlag/klagebehandling-kontor'>;
+export type KlagebehandlingNayGrunnlag = ResponseOfGet<'/api/klage/{referanse}/grunnlag/klagebehandling-nay'>;
 export type Hjemmel =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.klage.klagebehandling.kontor.KlagevurderingKontorLøsningDto']['vilkårSomOmgjøres'][number];
 export type KlageInnstilling =
@@ -306,7 +253,7 @@ export type TrekkKlageGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.klage.trekk.TrekkKlageGrunnlagDto'];
 
 export type SvarFraAndreinstansGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansGrunnlagDto'];
+  ResponseOfGet<'/api/svar-fra-andreinstans/{referanse}/grunnlag/svar-fra-andreinstans'>;
 export type SvarFraAndreinstansVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.svarfraandreinstans.svarfraandreinstans.SvarFraAndreinstansVurderingDto'];
 export type SvarKonsekvens =
@@ -321,7 +268,7 @@ export type SimulertUtbetaling = components['schemas']['no.nav.aap.utbetal.simul
 
 // Behandling
 export type DetaljertBehandling = components['schemas']['no.nav.aap.behandlingsflyt.flyt.DetaljertBehandlingDTO'];
-export type Arenastatus = components['schemas']['no.nav.aap.behandlingsflyt.flyt.ArenaStatusDTO'];
+export type BehandlingEgenskaper = components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingEgenskaperDTO'];
 export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto'];
 export type FlytGruppe = components['schemas']['no.nav.aap.behandlingsflyt.flyt.FlytGruppe'];
@@ -329,8 +276,28 @@ export type FlytVisning = components['schemas']['no.nav.aap.behandlingsflyt.flyt
 export type TypeBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.flate.visning.Visning']['typeBehandling'];
 
-export type LøsAvklaringsbehovPåBehandling =
+type GeneratedLøsAvklaringsbehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.LøsAvklaringsbehovPåBehandling'];
+export type BrevBehovstype =
+  '5050' | Extract<GeneratedLøsAvklaringsbehovPåBehandling['behov'], { brevbestillingReferanse: string }>['behovstype'];
+
+type BrevLøsning = {
+  behovstype: BrevBehovstype;
+  brevbestillingReferanse: string;
+  begrunnelse?: string | null;
+  handling: 'AVBRYT' | 'FERDIGSTILL';
+  mottakere?: Mottaker[];
+};
+
+export type LøsAvklaringsbehovPåBehandling = Omit<GeneratedLøsAvklaringsbehovPåBehandling, 'behov'> & {
+  behov: GeneratedLøsAvklaringsbehovPåBehandling['behov'] | BrevLøsning;
+};
+
+export type GjenåpneAvklaringsbehovPåBehandling = Omit<GeneratedLøsAvklaringsbehovPåBehandling, 'behov'> & {
+  behov: {
+    behovstype: components['schemas']['no.nav.aap.behandlingsflyt.flyt.Venteinformasjon']['definisjon']['kode'];
+  };
+};
 export type LøsPeriodisertBehovPåBehandling =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.L\u00F8sPeriodisertAvklaringsbehovP\u00E5Behandling'];
 
@@ -341,6 +308,7 @@ export type FatteVedtakLøsning =
 
 // Sak
 export type SaksInfo = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.UtvidetSaksinfoDTO'];
+export type SaksinfoDTO = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO'];
 export type SakPersoninfo =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SakPersoninfoDTO'];
 export type BehandlingsHistorikk =
@@ -350,8 +318,6 @@ export type SøkPåSakInfo = components['schemas']['no.nav.aap.behandlingsflyt.s
 export type OpprettTestcase = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO'];
 export type TestcaseSteg = components['schemas']['no.nav.aap.behandlingsflyt.OpprettTestcaseDTO']['steg'];
 export type OpprettDummySakDto = components['schemas']['no.nav.aap.behandlingsflyt.test.OpprettDummySakDto'];
-export type FinnSakForIdent =
-  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO'];
 
 export type Vilkår = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårDTO'];
 
@@ -366,12 +332,6 @@ export type ToTrinnsVurdering =
 
 export type ToTrinnsVurderingGrunn =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.ÅrsakTilRetur']['årsak'];
-
-export type HistorikkType =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk'];
-
-export type HistorikkAksjon =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.flate.Historikk']['aksjon'];
 
 export type FlytProsessering =
   components['schemas']['no.nav.aap.behandlingsflyt.flyt.BehandlingFlytOgTilstandDto']['prosessering'];
@@ -394,9 +354,6 @@ export type YrkesskadeGrunnlag =
 export type YrkesskadeUføreGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.YrkesskadeUføreGrunnlagDTO'];
 
-export type Yrkesskadevurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.avklaringsbehov.løsning.YrkesskadevurderingDto'];
-
 export type AvklarOppholdkravLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.oppholdskrav.AvklarOppholdkravLøsningForPeriodeDto'];
 export type OppholdskravVurderingDto =
@@ -416,13 +373,9 @@ export type VenteInformasjon = components['schemas']['no.nav.aap.behandlingsflyt
 export type VilkårUtfall = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['utfall'];
 export type AvslagÅrsak = components['schemas']['no.nav.aap.behandlingsflyt.flyt.VilkårsperiodeDTO']['avslagsårsak'];
 
-export type ErStudentStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['erStudentStatus'];
+export type ErStudentStatus = components['schemas']['no.nav.aap.student.OppgittStudent']['erStudentStatus'];
 export type SkalGjenopptaStudieStatus =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.OppgittStudent']['skalGjenopptaStudieStatus'];
-
-export type IdentifisertBarn =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.barnetillegg.IdentifiserteBarnDto'];
+  components['schemas']['no.nav.aap.student.OppgittStudent']['skalGjenopptaStudieStatus'];
 
 export type Ident = components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.Ident'];
 
@@ -446,8 +399,6 @@ export type AvklaringsbehovKode =
 export type BehandlingsFlytAvklaringsbehovKode =
   components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon']['kode'];
 
-export type LegeerklæringStatus =
-  components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingStatusTilBehandslingsflytDto'];
 export type FastlegeResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.FastlegeResponse'];
 export type YrkesskadeVurderingGrunnlag =
@@ -465,22 +416,16 @@ export type DelperiodeData =
 export type RegistrerYrkesskade =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.sykdom.flate.RegistrertYrkesskade'];
 
-export type YrkeskadeBeregningGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.BeregningYrkesskadeAvklaringResponse'];
+export type YrkeskadeBeregningGrunnlag = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/beregning/yrkesskade'>;
 export type YrkesskadeBeløpVurderingResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.tidspunkt.YrkesskadeBel\u00F8pVurderingResponse'];
 
-export type InntektsbortfallResponse =
-  paths['/api/behandling/{referanse}/grunnlag/inntektsbortfall']['get']['responses']['200']['content']['application/json'];
+export type InntektsbortfallResponse = ResponseOfGet<'/api/behandling/{referanse}/grunnlag/inntektsbortfall'>;
 
-export type BestillLegeerklæring =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.BestillLegeerklæringDto'];
+export type BestillLegeerklæring = RequestOfPost<'/api/dokumentinnhenting/syfo/bestill'>;
 
-export type ForhåndsvisDialogmelding =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.behandlerdialog.ForhåndsvisBrevRequest'];
-
-export type ForhåndsvisDialogmeldingResponse =
-  components['schemas']['no.nav.aap.dokumentinnhenting.kontrakt.DialogmeldingForhåndsvisningDto'];
+export type ForhåndsvisDialogmelding = RequestOfPost<'/api/dokumentinnhenting/syfo/brevpreview'>;
+export type ForhåndsvisDialogmeldingResponse = ResponseOfPost<'/api/dokumentinnhenting/syfo/brevpreview'>;
 
 export type UnderveisGrunnlag =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.underveis.UnderveisperiodeDto'];
@@ -519,17 +464,18 @@ export type VilkårsavslagDto =
 export type AutomatiskLovvalgOgMedlemskapVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.KanBehandlesAutomatiskVurdering'];
 
+export type DelvurderingForKrav =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.DelvurderingForKravResponse'];
+
 export type tilhørighetVurdering =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.Tilh\u00F8righetVurdering'];
 
 export type VisuellTidslinjeArbeidInntekt =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.vilk\u00E5r.medlemskap.VisuellTidslinjeArbeidInntektINorge'];
 
-export type AvklarPeriodisertStudentLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.student.PeriodisertStudentDto'];
+export type AvklarPeriodisertStudentLøsning = components['schemas']['no.nav.aap.student.PeriodisertStudentDto'];
 
-export type StudentVurderingResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.student.StudentVurderingResponse'];
+export type StudentVurderingResponse = components['schemas']['no.nav.aap.student.StudentVurderingResponse'];
 
 export type AvklarPeriodisertLovvalgMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForLovvalgMedlemskapDto'];
@@ -544,10 +490,10 @@ export type AvklarPeriodisertForutgåendeMedlemskapLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.lovvalgmedlemskap.PeriodisertManuellVurderingForForutgåendeMedlemskapDto'];
 
 export type PeriodisertForutgåendeMedlemskapGrunnlag =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertForutgåendeMedlemskapGrunnlagResponse'];
+  ResponseOfGet<'/api/behandling/{referanse}/grunnlag/forutgaaendemedlemskap'>;
 
 export type PeriodisertManuellVurderingForForutgåendeMedlemskapResponse =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.lovvalgmedlemskap.grunnlag.PeriodisertManuellVurderingForForutgåendeMedlemskapResponse'];
+  PeriodisertForutgåendeMedlemskapGrunnlag['nyeVurderinger'][number];
 
 export type EtableringEgenVirksomhetGrunnlagResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.etableringegenvirksomhet.EtableringEgenVirksomhetGrunnlagResponse'];
@@ -575,34 +521,16 @@ export type VurdertAvAnsatt =
 export type ArbeidsevneNedsattValg =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.sykdom.SykdomsvurderingResponse']['harNedsattArbeidsevne'];
 
-export type BistandsbehovVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.bistand.BistandVurderingResponse'];
-
-export type BistandsbehovLøsning =
-  components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.bistand.flate.BistandL\u00F8sningDto'];
-
-export type OvergangUføreVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse'];
+export type BistandsbehovLøsning = components['schemas']['no.nav.aap.bistandsbehov.BistandL\u00F8sningDto'];
 
 export type OvergangUføreVedtakResultat =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangufore.OvergangUføreVurderingResponse']['brukerHarFåttVedtakOmUføretrygd'];
-
-export type OvergangArbeidVurdering =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.sykdom.overgangarbeid.OvergangArbeidVurderingResponse'];
 
 export type OvergangArbeidLøsning =
   components['schemas']['no.nav.aap.behandlingsflyt.faktagrunnlag.saksbehandler.overgangarbeid.flate.OvergangArbeidVurderingLøsningDto'];
 
 export type NavEnhetRequest =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterRequest'];
-
-export type YtelseoppslagRequest =
-  components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.YtelseoppslagRequest'];
-
-export type ForeldrepengeperiodeDTO =
-  components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.ForeldrepengeperiodeDTO'];
-
-export type SykepengeperiodeDTO = components['schemas']['no.nav.aap.behandlingsflyt.ytelseoppslag.SykepengeperiodeDTO'];
 
 export type NavEnheterResponse =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.beregning.grunnlag.refusjon.NavEnheterResponse'];
@@ -684,6 +612,9 @@ export type Aktivitetsplikt11_7Vurdering =
 export type OpprettAktivitetspliktBehandlingDto =
   components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettAktivitetspliktBehandlingDto'];
 
+export type OpprettUtenlandsoppholdBehandlingDto =
+  components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.OpprettUtenlandsoppholdBehandlingDto'];
+
 export type DokumentÅrsakTilBehandling = AnnetRelevantDokument['årsakerTilBehandling'][number];
 
 export type BehandlingInfo =
@@ -755,10 +686,12 @@ export type MeldekortProsesseringResponse =
 export type MeldekortProsesseringStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.MeldekortProsesseringResponse']['meldekortProsesseringStatus'];
 
+export type RegistrerMeldedatoRequest =
+  components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.RegistrerMeldedatoRequest'];
+
 export type DagDto = components['schemas']['no.nav.aap.behandlingsflyt.behandling.meldekort.DagDto'];
 
 export type BrevdataDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto'];
-export type DelmalDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Delmal'];
 export type ValgDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Valg'];
 export type FritekstDto = components['schemas']['no.nav.aap.brev.kontrakt.BrevdataDto.Fritekst'];
 
@@ -813,3 +746,9 @@ export enum Roller {
   DRIFT = 'Drift',
   PRODUKSJONSSTYRING = 'Produksjonsstyring',
 }
+
+type ResponseOfGet<Url extends keyof paths> = ResponseBody<paths[Url]['get']>;
+
+type RequestOfPost<Url extends keyof paths> = RequestBody<paths[Url]['post']>;
+type RequestOfPut<Url extends keyof paths> = RequestBody<paths[Url]['put']>;
+type ResponseOfPost<Url extends keyof paths> = ResponseBody<paths[Url]['post']>;

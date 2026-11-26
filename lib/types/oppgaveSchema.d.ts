@@ -115,6 +115,43 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/oppdater-paaminnelse': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.oppgave.OppdaterPåminnelseRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/plukk-oppgave': {
     parameters: {
       query?: never;
@@ -285,7 +322,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerS\u00F8kRequest'];
+          'application/json': components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkRequest'];
         };
       };
       responses: {
@@ -295,7 +332,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerS\u00F8kResponse'];
+            'application/json': components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerSøkResponse'];
           };
         };
       };
@@ -408,7 +445,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.oppgave.hent.OppgaverP\u00E5SakResponse'];
+            'application/json': components['schemas']['no.nav.aap.oppgave.hent.OppgaverPåSakResponse'];
           };
         };
       };
@@ -591,6 +628,7 @@ export interface paths {
             | 'AVKLARINGSBEHOV_KODE'
             | 'BEHANDLINGSTYPE'
             | 'BEHANDLING_OPPRETTET'
+            | 'MAKSDATO_SP'
             | 'OPPRETTET_TIDSPUNKT'
             | 'PERSONIDENT'
             | 'RESERVERT_AV'
@@ -643,7 +681,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.oppgave.s\u00F8k.S\u00F8kRequest'];
+          'application/json': components['schemas']['no.nav.aap.oppgave.søk.SøkRequest'];
         };
       };
       responses: {
@@ -653,7 +691,7 @@ export interface paths {
             [name: string]: unknown;
           };
           content: {
-            'application/json': components['schemas']['no.nav.aap.oppgave.s\u00F8k.S\u00F8kResponse'];
+            'application/json': components['schemas']['no.nav.aap.oppgave.søk.SøkResponse'];
           };
         };
       };
@@ -782,7 +820,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/fjern-uf\u00F8revedtak-ikon': {
+  '/fjern-uførevedtak-ikon': {
     parameters: {
       query?: never;
       header?: never;
@@ -800,7 +838,7 @@ export interface paths {
       };
       requestBody?: {
         content: {
-          'application/json': components['schemas']['no.nav.aap.oppgave.uf\u00F8reVedtak.Uf\u00F8reVedtak'];
+          'application/json': components['schemas']['no.nav.aap.oppgave.uføreVedtak.UføreVedtak'];
         };
       };
       responses: {
@@ -1401,7 +1439,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/drift/api/jobb/sisteKj\u00F8rte': {
+  '/drift/api/jobb/sisteKjørte': {
     parameters: {
       query?: never;
       header?: never;
@@ -1424,6 +1462,46 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.motor.api.JobbInfoDto'][];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/oppgaver-ikke-endret': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: {
+          /** @description Antall uker uten endring. Defaultverdi er 5. */
+          antallUker?: number;
+          /** @description Bare ureserverte oppgaver. Defaultverdi er true. */
+          kunUreserverte?: boolean;
+        };
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.oppgave.drift.OppgaveIkkeEndretDto'][];
           };
         };
       };
@@ -1661,7 +1739,7 @@ export interface components {
         | '9083';
       kreverToTrinn: boolean;
       kvalitetssikres: boolean;
-      'l\u00F8sesAv': (
+      løsesAv: (
         | 'BESLUTTER'
         | 'DRIFT'
         | 'DRIFT_LES'
@@ -1672,7 +1750,7 @@ export interface components {
         | 'SAKSBEHANDLER_OPPFOLGING'
       )[];
       /** @enum {string} */
-      'l\u00F8sesISteg':
+      løsesISteg:
         | 'ARBEIDSOPPTRAPPING'
         | 'AVBRYT_AKTIVITETSPLIKTBEHANDLING'
         | 'AVBRYT_REVURDERING'
@@ -1751,11 +1829,11 @@ export interface components {
         | 'VURDER_RETTIGHETSPERIODE'
         | 'VURDER_SYKEPENGEERSTATNING'
         | 'VURDER_YRKESSKADE';
-      'm\u00E5RevurderesEtterOpph\u00F8r': boolean;
+      måRevurderesEtterOpphør: boolean;
       /** @enum {string} */
       type: 'BREV' | 'BREV_VENTEPUNKT' | 'MANUELT_FRIVILLIG' | 'MANUELT_PÅKREVD' | 'OVERSTYR' | 'VENTEPUNKT';
       /** @enum {string|null} */
-      'vurdererVilk\u00E5r'?:
+      vurdererVilkår?:
         | 'AKTIVITETSPLIKT'
         | 'ALDERSVILKÅRET'
         | 'BISTANDSVILKÅRET'
@@ -1795,8 +1873,9 @@ export interface components {
         | 'TOTRINNS_VURDERT';
     };
     /** Format: uuid */
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerkl\u00E6ringId': string;
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerklæringId': string;
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.BehandlingFlytStoppetHendelse': {
+      aktivtAvklaringsbehov?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.avklaringsbehov.Definisjon'];
       /** @enum {string|null} */
       aktivtSteg?:
         | 'ARBEIDSOPPTRAPPING'
@@ -1891,7 +1970,8 @@ export interface components {
         | 'Revurdering'
         | 'SvarFraAndreinstans'
         | 'Tilbakekreving';
-      'erP\u00E5Vent': boolean;
+      erPåVent: boolean;
+      gjenståendeSykedager?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.GjenståendeSykedagerDto'];
       /**
        * Format: date-time
        * @example 2025-04-01T12:30:00
@@ -1905,7 +1985,7 @@ export interface components {
       opprettetTidspunkt: string;
       personIdent: string;
       referanse: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.behandling.BehandlingReferanse'];
-      'relevanteIdenterP\u00E5Behandling'?: string[] | null;
+      relevanteIdenterPåBehandling?: string[] | null;
       /**
        * @deprecated
        * @description Kan fjernes når oppgave har byttet til å bruke reserverTilPerAvklaringsbehov
@@ -1918,11 +1998,11 @@ export interface components {
       saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
-      'uf\u00F8reVedtak'?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.Uf\u00F8revedtakDto'];
+      uføreVedtak?: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.UførevedtakDto'];
       versjon: string;
       vurderingsbehov: string[];
       /** @enum {string} */
-      '\u00E5rsakTilOpprettelse':
+      årsakTilOpprettelse:
         | 'AKTIVITETSMELDING'
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
@@ -1935,6 +2015,7 @@ export interface components {
         | 'G_REGULERING'
         | 'HELSEOPPLYSNINGER'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'MANUELL_OPPRETTELSE'
         | 'MELDEKORT'
         | 'MIGRERING_FRA_ARENA'
@@ -1953,7 +2034,7 @@ export interface components {
        * @deprecated
        * @description Kan fjernes når oppgave har byttet til å bruke vurderingsbehov
        */
-      '\u00E5rsakerTilBehandling': string[];
+      årsakerTilBehandling: string[];
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.EndringDTO': {
       begrunnelse?: string | null;
@@ -1963,6 +2044,8 @@ export interface components {
        * @example 2025-04-01
        */
       frist?: string | null;
+      /** @enum {string|null} */
+      gradBehov?: 'FRIVILLIG' | 'PÅKREVD' | null;
       /** @enum {string} */
       status:
         | 'AVBRUTT'
@@ -1977,9 +2060,9 @@ export interface components {
        * @example 2025-04-01T12:30:00
        */
       tidsstempel: string;
-      '\u00E5rsakTilRetur': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.\u00C5rsakTilRetur'][];
+      årsakTilRetur: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.ÅrsakTilRetur'][];
       /** @enum {string|null} */
-      '\u00E5rsakTilSattP\u00E5Vent'?:
+      årsakTilSattPåVent?:
         | 'VENTER_PÅ_FUNKSJONALITET'
         | 'VENTER_PÅ_FUNKSJONALITET_AVSLAG_11_27'
         | 'VENTER_PÅ_KLAGE_IMPLEMENTASJON'
@@ -1993,10 +2076,31 @@ export interface components {
         | 'VENTER_PÅ_VURDERING_AV_ROL'
         | null;
     };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.GjenståendeSykedagerDto': {
+      /** Format: int32 */
+      gjenståendeDager?: number | null;
+      /** @enum {string} */
+      grunnlag:
+        | 'INGEN_SYKEPENGER_SISTE_26_UKER'
+        | 'MAKSDATO_I_INFOTRYGD'
+        | 'MANGLER_MAKSDATO_I_INFOTRYGD'
+        | 'SISTE_UTBETALING_I_INFOTRYGD'
+        | 'VEDTAK_I_NY_LØSNING';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      maksdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurdertTilOgMed?: string | null;
+    };
     /** Format: uuid */
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingId': string;
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingReferanse': {
-      'asAvvistLegeerkl\u00E6ringId': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerkl\u00E6ringId'];
+      asAvvistLegeerklæringId: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.AvvistLegeerklæringId'];
       asInnsendingId: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.InnsendingId'];
       asJournalpostId: components['schemas']['no.nav.aap.verdityper.dokument.JournalpostId'];
       asKabalHendelseId: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.KabalHendelseId'];
@@ -2039,6 +2143,7 @@ export interface components {
         | 'INSTITUSJONSOPPHOLD'
         | 'KABAL_HENDELSE'
         | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
         | 'LEGEERKLÆRING'
         | 'LEGEERKLÆRING_AVVIST'
         | 'MANUELL_REVURDERING'
@@ -2079,11 +2184,11 @@ export interface components {
       sakOpprettet: string;
       saksbehandlingURL: string;
       saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
-      'totaltFeilutbetaltBel\u00F8p': number;
+      totaltFeilutbetaltBeløp: number;
       /** @enum {string|null} */
       venteGrunn?: 'AVVENTER_BRUKERUTTALELSE' | null;
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.Uf\u00F8revedtakDto': {
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.UførevedtakDto': {
       /** @enum {string} */
       resultat: 'AVSLAG' | 'ENDRET' | 'INNVILGELSE' | 'OPPHØR';
       /**
@@ -2092,9 +2197,9 @@ export interface components {
        */
       virkningsdato: string;
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.\u00C5rsakTilRetur': {
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.ÅrsakTilRetur': {
       /** @enum {string} */
-      '\u00E5rsak':
+      årsak:
         | 'ANNET'
         | 'FEIL_LOVANVENDELSE'
         | 'FOR_DETALJERT'
@@ -2120,7 +2225,7 @@ export interface components {
     };
     'no.nav.aap.motor.api.JobbInfoDto': {
       /** Format: int32 */
-      'antallFeilendeFors\u00F8k': number;
+      antallFeilendeForsøk: number;
       beskrivelse: string;
       feilmelding?: string | null;
       /** Format: int64 */
@@ -2139,7 +2244,7 @@ export interface components {
        * Format: date-time
        * @example 2025-04-01T12:30:00
        */
-      'planlagtKj\u00F8retidspunkt': string;
+      planlagtKjøretidspunkt: string;
       /** Format: int32 */
       prioritet?: number | null;
       /** @enum {string} */
@@ -2174,16 +2279,52 @@ export interface components {
       saksnummer?: string | null;
       tilbakekrevingUrl?: string | null;
     };
-    'no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler': {
+    'no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto': {
+      påminnelseAvbrutt?: boolean | null;
       /**
-       * Format: date-time
-       * @example 2025-04-01T12:30:00
+       * Format: date
+       * @example 2025-04-01
        */
-      'p\u00E5minnelseDato'?: string | null;
+      påminnelseDato?: string | null;
     };
     'no.nav.aap.oppgave.ForrigeKvalitetssikrerDto': {
       forrigeKvalitetssikrerIdent: string;
       forrigeKvalitetssikrerNavn?: string | null;
+    };
+    'no.nav.aap.oppgave.GjenståendeSykedagerDto': {
+      /** Format: int32 */
+      gjenståendeDager?: number | null;
+      /** @enum {string} */
+      grunnlag:
+        | 'INGEN_SYKEPENGER_SISTE_26_UKER'
+        | 'MAKSDATO_I_INFOTRYGD'
+        | 'MANGLER_MAKSDATO_I_INFOTRYGD'
+        | 'SISTE_UTBETALING_I_INFOTRYGD'
+        | 'VEDTAK_I_NY_LØSNING';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      maksdato?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vurdertTilOgMed?: string | null;
+    };
+    'no.nav.aap.oppgave.HarMottattDokument': {
+      /** @enum {string} */
+      dokumentType: 'DIALOGMELDING' | 'LEGEERKLÆRING';
+    };
+    'no.nav.aap.oppgave.OppdaterPåminnelseRequest': {
+      påminnelseAvbrutt?: boolean | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      påminnelseDato?: string | null;
+      /** Format: uuid */
+      referanse: string;
     };
     'no.nav.aap.oppgave.OppgaveId': {
       /** Format: int64 */
@@ -2196,7 +2337,7 @@ export interface components {
       endretAv: string;
       /** @enum {string} */
       status: 'RETUR_FRA_BESLUTTER' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_SAKSBEHANDLER' | 'RETUR_FRA_VEILEDER';
-      '\u00E5rsaker': (
+      årsaker: (
         | 'ANNET'
         | 'FEIL_LOVANVENDELSE'
         | 'FOR_DETALJERT'
@@ -2214,9 +2355,9 @@ export interface components {
     };
     'no.nav.aap.oppgave.TilbakekrevingsVarsDto': {
       tilbakekrevings_URL: string;
-      'tilbakekrevings_bel\u00F8p': number;
+      tilbakekrevings_beløp: number;
     };
-    'no.nav.aap.oppgave.Uf\u00F8revedtakRespons': {
+    'no.nav.aap.oppgave.UførevedtakRespons': {
       /** Format: uuid */
       referanse: string;
       /** @enum {string} */
@@ -2319,7 +2460,7 @@ export interface components {
       endretTidspunkt?: string | null;
       enhet: string;
       historikk: components['schemas']['no.nav.aap.oppgave.drift.OppgaveHistorikkDto'][];
-      'oppf\u00F8lgingsenhet'?: string | null;
+      oppfølgingsenhet?: string | null;
       /** Format: int64 */
       oppgaveId: number;
       /**
@@ -2341,7 +2482,7 @@ export interface components {
        */
       endretTidspunkt?: string | null;
       enhet: string;
-      'oppf\u00F8lgingsenhet'?: string | null;
+      oppfølgingsenhet?: string | null;
       reservertAv?: string | null;
       /**
        * Format: date-time
@@ -2350,6 +2491,25 @@ export interface components {
       reservertTidspunkt?: string | null;
       /** @enum {string} */
       status: 'AVSLUTTET' | 'OPPRETTET';
+    };
+    'no.nav.aap.oppgave.drift.OppgaveIkkeEndretDto': {
+      avklaringsbehovKode: string;
+      /** Format: uuid */
+      behandlingRef: string;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      endretTidspunkt?: string | null;
+      enhetForKø: string;
+      /** Format: int64 */
+      oppgaveId: number;
+      /**
+       * Format: date-time
+       * @example 2025-04-01T12:30:00
+       */
+      opprettetTidspunkt: string;
+      saksnummer?: string | null;
     };
     'no.nav.aap.oppgave.drift.SlettFilterRequest': {
       /** Format: int64 */
@@ -2367,7 +2527,7 @@ export interface components {
       enhetNr: string;
     };
     'no.nav.aap.oppgave.enhet.EnhetOgOversendelse': {
-      tilstand?: components['schemas']['no.nav.aap.oppgave.enhet.N\u00E5v\u00E6rendeEnhet'];
+      tilstand?: components['schemas']['no.nav.aap.oppgave.enhet.NåværendeEnhet'];
     };
     'no.nav.aap.oppgave.enhet.EnhetSynkroniseringRequest': {
       /** Format: int64 */
@@ -2377,7 +2537,7 @@ export interface components {
       gammelEnhet: string;
       nyEnhet: string;
     };
-    'no.nav.aap.oppgave.enhet.N\u00E5v\u00E6rendeEnhet': {
+    'no.nav.aap.oppgave.enhet.NåværendeEnhet': {
       enhet: string;
       markertSomHasteSak: boolean;
       /** @enum {string} */
@@ -2388,7 +2548,7 @@ export interface components {
        */
       oversendtDato: string;
       saksnummer: string;
-      'vente\u00C5rsak'?: string | null;
+      venteÅrsak?: string | null;
     };
     'no.nav.aap.oppgave.enhet.OppgaveEnhetDto': {
       avklaringsbehovKode: string;
@@ -2409,7 +2569,7 @@ export interface components {
       /** @enum {string} */
       type: 'ALLE_OPPGAVER' | 'GENERELL' | 'KVALITETSSIKRING';
     };
-    'no.nav.aap.oppgave.hent.OppgaveP\u00E5BehandlingResponse': {
+    'no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse': {
       /** Format: uuid */
       behandlingsreferanse: string;
       /** Format: int64 */
@@ -2420,25 +2580,38 @@ export interface components {
       versjon: number;
     };
     'no.nav.aap.oppgave.hent.OppgaveVisningsinformasjonResponse': {
-      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
+      forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
+      harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];
+      /**
+       * @deprecated
+       * @description Bruk harMottattDokument når denne er implementert i frontend
+       */
       harUlesteDokumenter: boolean;
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @deprecated
+       * @description Brukes ikke av frontend
+       */
       id: number;
       markeringer: components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'][];
-      'p\u00E5VentInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      påVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       reservertAvIdent?: string | null;
       reservertAvNavn?: string | null;
       returInformasjon?: components['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
       saksnummer?: string | null;
       skjermingInfo: components['schemas']['no.nav.aap.oppgave.hent.SkjermingInfoResponse'];
-      'tilh\u00F8rerUtlandEnhet': boolean;
-      'uf\u00F8revedtakinfo'?: components['schemas']['no.nav.aap.oppgave.Uf\u00F8revedtakRespons'];
-      'utl\u00F8ptVenteInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
-      /** Format: int64 */
+      tilhørerUtlandEnhet: boolean;
+      uførevedtakinfo?: components['schemas']['no.nav.aap.oppgave.UførevedtakRespons'];
+      utløptVenteInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      /**
+       * Format: int64
+       * @deprecated
+       * @description Brukes ikke av frontend
+       */
       versjon: number;
     };
-    'no.nav.aap.oppgave.hent.OppgaverP\u00E5SakResponse': {
-      oppgaver: components['schemas']['no.nav.aap.oppgave.hent.OppgaveP\u00E5BehandlingResponse'][];
+    'no.nav.aap.oppgave.hent.OppgaverPåSakResponse': {
+      oppgaver: components['schemas']['no.nav.aap.oppgave.hent.OppgavePåBehandlingResponse'][];
     };
     'no.nav.aap.oppgave.hent.SaksnummerResponse': {
       saksnummer: string;
@@ -2453,8 +2626,8 @@ export interface components {
        * Format: date
        * @example 2025-04-01
        */
-      'p\u00E5VentTil': string;
-      'p\u00E5Vent\u00C5rsak'?: string | null;
+      påVentTil: string;
+      påVentÅrsak?: string | null;
       venteBegrunnelse?: string | null;
     };
     'no.nav.aap.oppgave.liste.OppgaveMedKontekstResponse': {
@@ -2465,6 +2638,7 @@ export interface components {
        */
       behandlingOpprettet: string;
       behandlingskontekst: components['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse'];
+      gjenståendeSykedager?: components['schemas']['no.nav.aap.oppgave.GjenståendeSykedagerDto'];
       oppgaveMetadata: components['schemas']['no.nav.aap.oppgave.liste.OppgaveMetadataResponse'];
       oppgavelisteTags: components['schemas']['no.nav.aap.oppgave.liste.OppgavelisteTagsResponse'];
       personOgEnhet: components['schemas']['no.nav.aap.oppgave.liste.PersonOgEnhetResponse'];
@@ -2474,7 +2648,7 @@ export interface components {
       veilederArbeid?: string | null;
       veilederSykdom?: string | null;
       vurderingsbehov: string[];
-      '\u00E5rsakTilOpprettelse'?: string | null;
+      årsakTilOpprettelse?: string | null;
     };
     'no.nav.aap.oppgave.liste.OppgaveMetadataResponse': {
       /** Format: int64 */
@@ -2495,6 +2669,7 @@ export interface components {
         | 'AVKLARINGSBEHOV_KODE'
         | 'BEHANDLINGSTYPE'
         | 'BEHANDLING_OPPRETTET'
+        | 'MAKSDATO_SP'
         | 'OPPRETTET_TIDSPUNKT'
         | 'PERSONIDENT'
         | 'RESERVERT_AV'
@@ -2509,7 +2684,7 @@ export interface components {
       enheter: string[];
       /** Format: int64 */
       filterId: number;
-      'hastemarkeringerF\u00F8rst'?: boolean | null;
+      hastemarkeringerFørst?: boolean | null;
       kunLedigeOppgaver?: boolean | null;
       paging: components['schemas']['no.nav.aap.oppgave.liste.Paging'];
       sortering?: components['schemas']['no.nav.aap.oppgave.liste.OppgaveSortering'];
@@ -2539,15 +2714,20 @@ export interface components {
         | null;
     };
     'no.nav.aap.oppgave.liste.OppgavelisteTagsResponse': {
-      'foresp\u00F8rselSendtTilBehandler'?: components['schemas']['no.nav.aap.oppgave.Foresp\u00F8rselSendtTilBehandler'];
+      forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
-      'forrigeP\u00E5VentInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      forrigePåVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];
+      /**
+       * @deprecated
+       * @description Bruk harMottattDokument når denne er implementert i frontend
+       */
       harUlesteDokumenter?: boolean | null;
       markeringer: components['schemas']['no.nav.aap.oppgave.markering.MarkeringDto'][];
-      'p\u00E5VentInfo'?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      påVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
       returInformasjon?: components['schemas']['no.nav.aap.oppgave.ReturInformasjonDto'];
       skjermingInfo: components['schemas']['no.nav.aap.oppgave.hent.SkjermingInfoResponse'];
-      'uf\u00F8reVedtak'?: components['schemas']['no.nav.aap.oppgave.Uf\u00F8revedtakRespons'];
+      uføreVedtak?: components['schemas']['no.nav.aap.oppgave.UførevedtakRespons'];
     };
     'no.nav.aap.oppgave.liste.Paging': {
       /** Format: int32 */
@@ -2558,7 +2738,7 @@ export interface components {
     'no.nav.aap.oppgave.liste.PersonOgEnhetResponse': {
       enhet: string;
       enhetForrigeOppgave?: components['schemas']['no.nav.aap.oppgave.enhet.EnhetDto'];
-      'oppf\u00F8lgingsenhet'?: string | null;
+      oppfølgingsenhet?: string | null;
       personIdent: string;
       personNavn?: string | null;
     };
@@ -2577,20 +2757,17 @@ export interface components {
         | 'SVAR_FRA_ANDREINSTANS'
         | 'TILBAKEKREVING'
       )[];
-      'bel\u00F8pMerEnn'?: number | null;
-      'bel\u00F8pMindreEnn'?: number | null;
+      beløpMerEnn?: number | null;
+      beløpMindreEnn?: number | null;
       /**
        * Format: date
        * @example 2025-04-01
        */
       fom?: string | null;
       markertHaster?: boolean | null;
-      'p\u00E5Vent'?: boolean | null;
+      påVent?: boolean | null;
       returStatuser: (
-        | 'RETUR_FRA_BESLUTTER'
-        | 'RETUR_FRA_KVALITETSSIKRER'
-        | 'RETUR_FRA_SAKSBEHANDLER'
-        | 'RETUR_FRA_VEILEDER'
+        'RETUR_FRA_BESLUTTER' | 'RETUR_FRA_KVALITETSSIKRER' | 'RETUR_FRA_SAKSBEHANDLER' | 'RETUR_FRA_VEILEDER'
       )[];
       saksbehandlere: string[];
       /**
@@ -2598,8 +2775,8 @@ export interface components {
        * @example 2025-04-01
        */
       tom?: string | null;
-      'ventefristUtl\u00F8pt'?: boolean | null;
-      '\u00E5rsaker': string[];
+      ventefristUtløpt?: boolean | null;
+      årsaker: string[];
     };
     'no.nav.aap.oppgave.markering.MarkeringDto': {
       begrunnelse?: string | null;
@@ -2653,33 +2830,33 @@ export interface components {
     'no.nav.aap.oppgave.plukk.PlukkOppgaveResponse': {
       behandlingskontekst: components['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse'];
     };
-    'no.nav.aap.oppgave.s\u00F8k.OppgaveIS\u00F8kResponse': {
+    'no.nav.aap.oppgave.søk.OppgaveISøkResponse': {
       avklaringsbehovKode: string;
       behandlingskontekst: components['schemas']['no.nav.aap.oppgave.BehandlingskontekstResponse'];
-      'enhetForK\u00F8': string;
-      'erP\u00E5Vent': boolean;
+      enhetForKø: string;
+      erPåVent: boolean;
       personNavn?: string | null;
       reservertAvIdent?: string | null;
       typeMarkeringer: ('AVSLAG_11_5' | 'HASTER')[];
     };
-    'no.nav.aap.oppgave.s\u00F8k.S\u00F8kRequest': {
-      's\u00F8ketekst': string;
+    'no.nav.aap.oppgave.søk.SøkRequest': {
+      søketekst: string;
     };
-    'no.nav.aap.oppgave.s\u00F8k.S\u00F8kResponse': {
+    'no.nav.aap.oppgave.søk.SøkResponse': {
       harAdressebeskyttelse: boolean;
       harTilgang: boolean;
-      oppgaver: components['schemas']['no.nav.aap.oppgave.s\u00F8k.OppgaveIS\u00F8kResponse'][];
+      oppgaver: components['schemas']['no.nav.aap.oppgave.søk.OppgaveISøkResponse'][];
     };
     'no.nav.aap.oppgave.tildel.SaksbehandlerDto': {
       navIdent: string;
       navn?: string | null;
     };
-    'no.nav.aap.oppgave.tildel.SaksbehandlerS\u00F8kRequest': {
+    'no.nav.aap.oppgave.tildel.SaksbehandlerSøkRequest': {
       enheter?: string[] | null;
       oppgaver: number[];
-      's\u00F8ketekst': string;
+      søketekst: string;
     };
-    'no.nav.aap.oppgave.tildel.SaksbehandlerS\u00F8kResponse': {
+    'no.nav.aap.oppgave.tildel.SaksbehandlerSøkResponse': {
       saksbehandlere: components['schemas']['no.nav.aap.oppgave.tildel.SaksbehandlerDto'][];
     };
     'no.nav.aap.oppgave.tildel.TildelOppgaveRequest': {
@@ -2695,7 +2872,7 @@ export interface components {
       tildeltSaksbehandlerIdent?: string | null;
       tildeltSaksbehandlerNavn?: string | null;
     };
-    'no.nav.aap.oppgave.uf\u00F8reVedtak.Uf\u00F8reVedtak': {
+    'no.nav.aap.oppgave.uføreVedtak.UføreVedtak': {
       /** Format: uuid */
       referanse: string;
       /** @enum {string} */
@@ -2710,7 +2887,7 @@ export interface components {
       /** @enum {string} */
       kode: '1337' | '1338' | '1339' | '1340' | '1341' | '1342' | '1343' | '9001';
       kreverToTrinn: boolean;
-      'l\u00F8sesAv': (
+      løsesAv: (
         | 'BESLUTTER'
         | 'DRIFT'
         | 'DRIFT_LES'
@@ -2721,7 +2898,7 @@ export interface components {
         | 'SAKSBEHANDLER_OPPFOLGING'
       )[];
       /** @enum {string} */
-      'l\u00F8sesISteg':
+      løsesISteg:
         | 'AVKLAR_FORDELING'
         | 'AVKLAR_FORDELING_VIDERESEND'
         | 'AVKLAR_SAK'
@@ -2745,6 +2922,7 @@ export interface components {
       status: 'AVBRUTT' | 'AVSLUTTET' | 'OPPRETTET' | 'SENDT_TILBAKE_FRA_BESLUTTER';
     };
     'no.nav.aap.postmottak.kontrakt.hendelse.DokumentflytStoppetHendelse': {
+      aktivtAvklaringsbehov?: components['schemas']['no.nav.aap.postmottak.kontrakt.avklaringsbehov.Definisjon'];
       avklaringsbehov: components['schemas']['no.nav.aap.postmottak.kontrakt.hendelse.AvklaringsbehovHendelseDto'][];
       /** @enum {string} */
       behandlingType: 'DokumentHåndtering' | 'Fordeling' | 'Journalføring';
@@ -2781,7 +2959,7 @@ export interface components {
        */
       tidsstempel: string;
       /** @enum {string|null} */
-      '\u00E5rsakTilSattP\u00E5Vent'?:
+      årsakTilSattPåVent?:
         | 'VENTER_PÅ_BEHANDLING_I_GOSYS'
         | 'VENTER_PÅ_MEDISINSKE_OPPLYSNINGER'
         | 'VENTER_PÅ_OPPLYSNINGER'

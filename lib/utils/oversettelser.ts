@@ -15,6 +15,7 @@ const behovskodeMap = {
   '4102': 'Venter på uttalelse fra brukeren på forhåndsvarsel aktivitetsplikt § 11-7',
   '4201': '§ 11-9 Aktivitetsplikt',
   '4301': 'Avbryt behandling',
+  '4401': 'Vurder søknad om AAP under opphold i utlandet',
   '5001': '§ 11-14 Student',
   '5002': '§ 11-10 andre ledd. Perioder uten overholdt meldeplikt',
   '5003': '§ 11-5 Nedsatt arbeidsevne',
@@ -67,7 +68,7 @@ const behovskodeMap = {
   '5058': '§ 11-15 Etablering av egen virksomhet',
   '5059': 'Avklar vedtaksperiode',
   '5060': 'Oppsummert rettighet i vedtaket',
-  '5096': 'Forslå uttak',
+  '5096': 'Foreslå uttak',
   '5097': 'Kvalitetssikre sak',
   '5098': 'Foreslå vedtak',
   '5099': 'Beslutte sak',
@@ -146,13 +147,13 @@ export function mapTilVenteÅrsakTekst(
 export function mapTilResultat(resultat: UføreVedtakStatus): string {
   switch (resultat) {
     case 'INNVILGELSE':
-      return 'innvilgelse';
+      return 'Innvilgelse';
     case 'OPPHØR':
-      return 'opphør';
+      return 'Opphør';
     case 'AVSLAG':
-      return 'avslag';
+      return 'Avslag';
     case 'ENDRET':
-      return 'endret';
+      return 'Endret';
   }
   exhaustiveCheck(resultat);
 }
@@ -235,6 +236,8 @@ export function mapTilSteggruppeTekst(steggruppe: string) {
       return '§ 11-7 Aktivitetsplikt';
     case 'AKTIVITETSPLIKT_11_9':
       return '§ 11-9 Aktivitetsplikt';
+    case 'SØKNAD_UTENLANDSOPPHOLD':
+      return 'Søknad om å beholde AAP i utlandet';
     case 'UDEFINERT':
       return 'Udefinert';
     case 'OPPHOLDSKRAV':
@@ -312,6 +315,8 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
       return 'Utvid vedtaksperiode';
     case 'MIGRERING_FRA_ARENA':
       return 'Migrering';
+    case 'SØKNAD_UTENLANDSOPPHOLD':
+      return 'Søknad om å beholde AAP i utlandet';
   }
 }
 
@@ -372,6 +377,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Aktivitetsplikt § 11-7';
     case 'Aktivitetsplikt11_9':
       return 'Aktivitetsplikt § 11-9';
+    case 'Utenlandsopphold':
+      return 'Opphold i utlandet';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
     default:
@@ -389,6 +396,9 @@ export function mapStatusTilTekst(
     | 'RETUR_FRA_VEILEDER'
     | 'RETUR_FRA_SAKSBEHANDLER'
     | 'AVSLAG_11_5'
+    | 'FORESPØRSEL_SENDT'
+    | 'PÅMINNELSE_SENDT'
+    | 'SVAR_MOTTATT'
 ): string {
   switch (status) {
     case 'VENT':
@@ -407,16 +417,11 @@ export function mapStatusTilTekst(
       return 'Retur fra saksbehandler';
     case 'AVSLAG_11_5':
       return 'Avslag § 11-5';
-  }
-}
-
-export function mapReturFraStatusTilTekst(status: string): string {
-  switch (status) {
-    case 'SENDT_TILBAKE_FRA_BESLUTTER':
-      return 'Sendt tilbake fra beslutter';
-    case 'SENDT_TILBAKE_FRA_KVALITETSSIKRER':
-      return 'Sendt tilbake fra kvalitetssikrer';
-    default:
-      return status;
+    case 'FORESPØRSEL_SENDT':
+      return 'Forespørsel sendt';
+    case 'PÅMINNELSE_SENDT':
+      return 'Påminnelse sendt';
+    case 'SVAR_MOTTATT':
+      return 'Svar mottatt';
   }
 }

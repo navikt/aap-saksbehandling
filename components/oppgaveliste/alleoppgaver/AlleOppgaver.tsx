@@ -1,7 +1,6 @@
 'use client';
 
 import { BodyShort, Box, Button, HStack, Label, Switch, VStack } from '@navikt/ds-react';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { useBackendSortering } from 'hooks/oppgave/BackendSorteringHook';
 import { useAlleOppgaverForEnhet } from 'hooks/oppgave/OppgaveHook';
@@ -40,7 +39,6 @@ export const AlleOppgaver = ({ enheter }: Props) => {
   const { hentLagredeAktiveEnheter, lagreAktiveEnheter } = useLagreAktiveEnheter();
 
   const bruker = useInnloggetBruker();
-  const oppgavelisteMedBeløp = useFeatureFlag('OppgavelisteMedBelopISaksbehandling');
   const [aktivKø, setAktivKø] = useState<AktivKø | undefined>(undefined);
   const [hasteoppgaverØverst, setHasteOppgaverØverst] = useState<boolean>(true);
 
@@ -265,9 +263,7 @@ export const AlleOppgaver = ({ enheter }: Props) => {
             setSortBy={setSort}
             sort={sort}
             aktivKø={aktivKø}
-            visBeløpKolonne={
-              oppgavelisteMedBeløp && (oppgaveKøer?.find((e) => e.id === aktivKø.id)?.inneholderTilbakekreving ?? false)
-            }
+            visBeløpKolonne={oppgaveKøer?.find((e) => e.id === aktivKø.id)?.inneholderTilbakekreving ?? false}
           />
         ) : (
           <BodyShort size={'small'} className={styles.ingenoppgaver}>

@@ -2,19 +2,19 @@ import { VStack } from '@navikt/ds-react';
 import styles from 'app/saksbehandling/sak/[saksnummer]/[behandlingsreferanse]/layout.module.css';
 import { IngenFlereOppgaverModalContextProvider } from 'context/saksbehandling/IngenFlereOppgaverModalContext';
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
-import { SakContextProvider } from 'context/saksbehandling/SakContext';
 import { hentOppgaveVisningsinfo } from 'lib/services/oppgaveservice/oppgaveservice';
 import {
   auditlog,
-  hentArenaStatus,
   hentBehandling,
+  hentBehandlingEgenskaper,
   hentFlyt,
   hentKabalKlageresultat,
   hentKlageresultat,
+  hentRettighetsinfo,
   hentSak,
 } from 'lib/services/saksbehandlingservice/saksbehandlingService';
 import { StegGruppe } from 'lib/types/types';
-import { isError } from 'lib/utils/api';
+import { isError, isSuccess } from 'lib/utils/api';
 import { ReactNode } from 'react';
 import { SWRConfig } from 'swr';
 
@@ -26,6 +26,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
 import { StegGruppeIndikatorAksel } from 'components/steggruppeindikator/StegGruppeIndikatorAksel';
 import { ToTrinnsvurderingMedDataFetching } from 'components/totrinnsvurdering/ToTrinnsvurderingMedDataFetching';
+import { unleashService } from 'lib/services/unleash/unleashService';
 
 interface Props {
   saksnummer: string;
@@ -35,6 +36,7 @@ interface Props {
 
 export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, children }: Props) => {
   const behandling = await hentBehandling(behandlingsreferanse);
+  const vedtaksperiodeBeslutterEnabled = unleashService.isEnabled('VedtaksperiodeBeslutter');
 
   if (isError(behandling)) {
     return (
@@ -47,13 +49,22 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
   // noinspection ES6MissingAwait - trenger ikke vente på svar fra auditlog-kall
   auditlog(behandlingsreferanse);
 
-  const [oppgaveVisningsinfo, flytResponse, sak, kabalKlageResultat, klageresultat, arenaStatus] = await Promise.all([
+  const [
+    oppgaveVisningsinfo,
+    flytResponse,
+    sak,
+    kabalKlageResultat,
+    klageresultat,
+    behandlingEgenskaper,
+    rettighetsinfoRes,
+  ] = await Promise.all([
     hentOppgaveVisningsinfo(behandlingsreferanse),
     hentFlyt(behandlingsreferanse),
     hentSak(saksnummer),
     hentKabalKlageresultat(behandlingsreferanse),
     hentKlageresultat(behandlingsreferanse),
-    hentArenaStatus(saksnummer),
+    hentBehandlingEgenskaper(behandlingsreferanse),
+    vedtaksperiodeBeslutterEnabled ? hentRettighetsinfo(saksnummer) : Promise.resolve(null),
   ]);
 
   if (isError(flytResponse) || isError(klageresultat) || isError(oppgaveVisningsinfo)) {
@@ -70,6 +81,8 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
 
   const visTotrinnsvurdering =
     flytResponse.data.visning.visBeslutterKort || flytResponse.data.visning.visKvalitetssikringKort;
+
+  const rettighetsinfo = rettighetsinfoRes && isSuccess(rettighetsinfoRes) ? rettighetsinfoRes.data : null;
 
   return (
     <SWRConfig
@@ -92,7 +105,7 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               oppgaveVisningsinfo={oppgaveVisningsinfo.data}
               flyt={flytResponse.data.flyt}
               visning={flytResponse.data.visning}
-              arenaStatus={isError(arenaStatus) ? undefined : arenaStatus.data}
+              behandlingEgenskaper={behandlingEgenskaper}
             />
 
             <StegGruppeIndikatorAksel
@@ -100,35 +113,26 @@ export const BehandlingLayout = async ({ saksnummer, behandlingsreferanse, child
               stegGrupperSomSkalVises={stegGrupperSomSkalVises}
             />
 
-            <SakContextProvider
-              sak={{
-                ident: sak.ident,
-                opprettetTidspunkt: sak.opprettetTidspunkt,
-                periode: sak.periode,
-                saksnummer: sak.saksnummer,
-                virkningsTidspunkt: behandling.data.virkningstidspunkt,
-              }}
-            >
-              <Kolonnelayout
-                visTotrinnsvurdering={visTotrinnsvurdering}
-                toTrinnsvurdering={
-                  visTotrinnsvurdering ? (
-                    <ToTrinnsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} />
-                  ) : undefined
-                }
-                behandling={behandling.data}
-                sak={sak}
-                klageresultat={klageresultat.data}
-                kabalKlageresultat={kabalKlageResultat}
-                hovedkolonneInnhold={
-                  <VStack gap={'space-20'}>
-                    <ÅrsakTilBehandling behandling={behandling.data} />
-                    {/*Vi må ha children inne i en div for å unngå layoutshift*/}
-                    <div style={{ width: '100%' }}>{children}</div>
-                  </VStack>
-                }
-              />
-            </SakContextProvider>
+            <Kolonnelayout
+              visTotrinnsvurdering={visTotrinnsvurdering}
+              toTrinnsvurdering={
+                visTotrinnsvurdering ? (
+                  <ToTrinnsvurderingMedDataFetching behandlingsreferanse={behandlingsreferanse} />
+                ) : undefined
+              }
+              behandling={behandling.data}
+              sak={sak}
+              klageresultat={klageresultat.data}
+              kabalKlageresultat={kabalKlageResultat}
+              rettighetsinfo={rettighetsinfo}
+              hovedkolonneInnhold={
+                <VStack gap={'space-20'}>
+                  <ÅrsakTilBehandling behandling={behandling.data} />
+                  {/*Vi må ha children inne i en div for å unngå layoutshift*/}
+                  <div style={{ width: '100%' }}>{children}</div>
+                </VStack>
+              }
+            />
           </div>
         </OverstyrTildelingContextProvider>
       </IngenFlereOppgaverModalContextProvider>

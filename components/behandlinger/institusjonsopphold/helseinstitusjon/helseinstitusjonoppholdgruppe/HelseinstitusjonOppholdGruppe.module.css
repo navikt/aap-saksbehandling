@@ -14,3 +14,7 @@
   border-bottom: 1px solid var(--ax-border-neutral-subtle);
   border-radius: var(--ax-radius-12) var(--ax-radius-12) 0 0;
 }
+
+.delperioder {
+  margin-top: var(--ax-space-8);
+}

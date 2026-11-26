@@ -26,6 +26,7 @@ const grunnlagUtenVurdering: HelseinstitusjonGrunnlag = {
       avsluttetDato: '2025-08-01',
       tidligsteReduksjonsdato: '2025-05-01',
       kildeinstitusjon: 'St. Mungos Hospital',
+      delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-08-01' }],
     },
   ],
   vurderinger: [],
@@ -43,11 +44,13 @@ const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
       oppholdId: '123',
       avsluttetDato: '2025-10-24',
       kildeinstitusjon: 'St. Mungos Hospital',
+      delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2022-10-24', tom: '2025-10-24' }],
     },
   ],
   vurderinger: [
     {
       oppholdId: '123',
+      delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2022-10-24', tom: '2025-10-24' }],
       status: 'UAVKLART',
       periode: {
         fom: '2022-10-24',
@@ -63,6 +66,7 @@ const grunnlagMedVurdering: HelseinstitusjonGrunnlag = {
           },
           faarFriKostOgLosji: false,
           vurderingerMeta: {},
+          erHistoriskUtenReduksjonsberegning: false,
         },
       ],
     },
@@ -184,6 +188,7 @@ describe('Helseinstitusjonsvurdering med flere opphold', () => {
     oppholdFra: '2025-10-01',
     avsluttetDato: '2026-06-01',
     kildeinstitusjon: 'St. Mungos Hospital',
+    delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-10-01', tom: '2026-06-01' }],
   };
 
   const opphold2 = {
@@ -194,6 +199,8 @@ describe('Helseinstitusjonsvurdering med flere opphold', () => {
     oppholdFra: '2026-06-15',
     avsluttetDato: '2026-12-01',
     kildeinstitusjon: 'Hello Pello sykehus',
+    delperioder: [{ institusjonsnavn: 'Hello Pello sykehus', fom: '2026-06-15', tom: '2026-12-01' }],
+    tidligsteReduksjonsdato: '2026-06-15', // signaliserer 1-månedsregelen (innen 3 mnd, backend setter lik oppholdFra)
   };
 
   const grunnlagMedToOpphold = {
@@ -271,6 +278,7 @@ describe('revurdering', () => {
         status: 'UAVKLART',
         periode: { fom: '2025-01-01', tom: '2025-08-01' },
         oppholdId: '123',
+        delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-08-01' }],
         vurderinger: [
           {
             oppholdId: '123',
@@ -278,6 +286,7 @@ describe('revurdering', () => {
             faarFriKostOgLosji: false,
             begrunnelse: 'hei og hå',
             vurderingerMeta: {},
+            erHistoriskUtenReduksjonsberegning: false,
           },
         ],
       },
@@ -314,6 +323,534 @@ describe('form med reduksjon', () => {
 
     const datoFelt = screen.queryByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
     expect(datoFelt).not.toBeInTheDocument();
+  });
+});
+
+describe('sammenhengende opphold med delperioder', () => {
+  const kjedetOpphold: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vedtatteVurderinger: [],
+    opphold: [
+      {
+        institusjonstype: 'Helseinstitusjon',
+        oppholdstype: 'Heldøgnpasient',
+        oppholdId: '123',
+        status: 'AKTIV',
+        oppholdFra: '2025-01-01',
+        avsluttetDato: '2025-08-01',
+        kildeinstitusjon: 'St. Mungos Hospital → Helgelandssykehus Dialyse',
+        delperioder: [
+          { institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-05-01' },
+          { institusjonsnavn: 'Helgelandssykehus Dialyse', fom: '2025-05-02', tom: '2025-08-01' },
+        ],
+      },
+    ],
+    vurderinger: [],
+  };
+
+  it('viser start- og sluttdato for hver delperiode i en sammenhengende kjede', () => {
+    render(<Helseinstitusjon grunnlag={kjedetOpphold} behandlingVersjon={0} readOnly={false} />);
+
+    expect(screen.getByText(/St\. Mungos Hospital: 1\. januar 2025 – 1\. mai 2025/i)).toBeVisible();
+    expect(screen.getByText(/Helgelandssykehus Dialyse: 2\. mai 2025 – 1\. august 2025/i)).toBeVisible();
+  });
+
+  it('viser ikke delperioder når oppholdet kun har én delperiode', () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    expect(screen.queryByText(/St\. Mungos Hospital: /i)).not.toBeInTheDocument();
+  });
+});
+
+describe('harTidligereVurderingerOgIngenNåværendeVurderinger - regresjonstester', () => {
+  it('Skal ikke legge til en ny tom vurdering når det finnes tidligere vurderinger og ingen nåværende vurderinger', () => {
+    const grunnlagMedTidligereVurdering: HelseinstitusjonGrunnlag = {
+      ...grunnlagUtenVurdering,
+      vurderinger: [],
+      vedtatteVurderinger: [
+        {
+          status: 'UAVKLART',
+          periode: { fom: '2025-01-01', tom: '2025-08-01' },
+          oppholdId: '123',
+          delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-08-01' }],
+          vurderinger: [
+            {
+              oppholdId: '123',
+              periode: { fom: '2025-01-01', tom: '2025-08-01' },
+              faarFriKostOgLosji: false,
+              begrunnelse: 'hei og hå',
+              vurderingerMeta: {},
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ],
+        },
+      ],
+    };
+
+    render(<Helseinstitusjon grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    // Skal kun vise den tidligere vurderingen, ingen ny tom vurdering skal være lagt til initielt
+    expect(screen.queryByRole('textbox', { name: 'Vilkårsvurdering' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /1\. januar 2025 – 1\. august 2025 ikke reduksjon/i })).toBeVisible();
+  });
+
+  it('Skal vise kun ett dato-felt (ikke duplikat) når bruker legger til ny vurdering etter tidligere vurdering', async () => {
+    const grunnlagMedTidligereVurdering: HelseinstitusjonGrunnlag = {
+      ...grunnlagUtenVurdering,
+      vurderinger: [],
+      vedtatteVurderinger: [
+        {
+          status: 'UAVKLART',
+          periode: { fom: '2025-01-01', tom: '2025-08-01' },
+          oppholdId: '123',
+          delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-08-01' }],
+          vurderinger: [
+            {
+              oppholdId: '123',
+              periode: { fom: '2025-01-01', tom: '2025-08-01' },
+              faarFriKostOgLosji: false,
+              begrunnelse: 'hei og hå',
+              vurderingerMeta: {},
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ],
+        },
+      ],
+    };
+
+    render(<Helseinstitusjon grunnlag={grunnlagMedTidligereVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    const leggTilKnapp = screen.getByRole('button', { name: 'Legg til ny vurdering' });
+    await user.click(leggTilKnapp);
+
+    const datoFelter = screen.getAllByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+    expect(datoFelter).toHaveLength(1);
+  });
+
+  it('Skal vise nåværende vurdering (ikke tom skjema) når det finnes både tidligere og nåværende vurderinger for oppholdet', () => {
+    const grunnlagMedBeggeTyperVurdering: HelseinstitusjonGrunnlag = {
+      ...grunnlagUtenVurdering,
+      vurderinger: [
+        {
+          oppholdId: '123',
+          delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-08-01' }],
+          status: 'UAVKLART',
+          periode: { fom: '2025-01-01', tom: '2025-08-01' },
+          vurderinger: [
+            {
+              oppholdId: '123',
+              begrunnelse: 'Nåværende vurdering fra behandling',
+              periode: { fom: '2025-01-01', tom: '2025-08-01' },
+              faarFriKostOgLosji: false,
+              vurderingerMeta: {},
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ],
+        },
+      ],
+      vedtatteVurderinger: [
+        {
+          status: 'UAVKLART',
+          periode: { fom: '2025-01-01', tom: '2025-08-01' },
+          oppholdId: '123',
+          delperioder: [{ institusjonsnavn: 'St. Mungos Hospital', fom: '2025-01-01', tom: '2025-08-01' }],
+          vurderinger: [
+            {
+              oppholdId: '123',
+              periode: { fom: '2025-01-01', tom: '2025-08-01' },
+              faarFriKostOgLosji: false,
+              begrunnelse: 'Vedtatt vurdering',
+              vurderingerMeta: {},
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ],
+        },
+      ],
+    };
+
+    render(<Helseinstitusjon grunnlag={grunnlagMedBeggeTyperVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    // Skal vise den nåværende vurderingen i skjemaet, ikke en tom vurdering
+    const begrunnelseFelt = screen.getByRole('textbox', { name: 'Vilkårsvurdering' });
+    expect(begrunnelseFelt).toHaveValue('Nåværende vurdering fra behandling');
+  });
+});
+
+describe('handleSubmit - historiske vurderinger og gap', () => {
+  let capturedRequest: unknown = null;
+
+  beforeEach(() => {
+    capturedRequest = null;
+    vi.stubGlobal(
+      'EventSource',
+      vi.fn().mockImplementation(function () {
+        return { close: vi.fn(), addEventListener: vi.fn(), onmessage: null, onerror: null };
+      })
+    );
+    fetchMock.mockResponse(async (req) => {
+      if (req.method === 'POST') {
+        try {
+          const body = JSON.parse(await req.text());
+          if (body?.behov?.behovstype) capturedRequest = body;
+        } catch {
+          // ignore
+        }
+      }
+      return JSON.stringify({ type: 'SUCCESS', status: 200, data: {} });
+    });
+  });
+
+  it('sender historisk vurdering med brukerens faktiske reduksjonsdato (ikke oppholdets periode)', async () => {
+    const kortOpphold: HelseinstitusjonGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      vedtatteVurderinger: [],
+      vurderinger: [],
+      opphold: [
+        {
+          oppholdId: '123',
+          institusjonstype: 'Helseinstitusjon',
+          oppholdstype: 'Heldøgnpasient',
+          status: 'AKTIV',
+          oppholdFra: '2025-12-01',
+          avsluttetDato: '2026-02-01',
+          tidligsteReduksjonsdato: '2026-04-01', // reduksjon rekker ikke innenfor oppholdet
+          kildeinstitusjon: 'Solgløtt',
+          delperioder: [],
+        },
+      ],
+    };
+
+    render(<Helseinstitusjon grunnlag={kortOpphold} behandlingVersjon={0} readOnly={false} />);
+
+    await svarReduksjon(0);
+    const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+    await user.clear(datoFelt);
+    await user.type(datoFelt, '01.04.2026'); // utenfor oppholdet - historisk
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), 'historisk vurdering');
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    // Ingen vedtatt reduksjon å overskrive -> kun selve den historiske vurderingen sendes
+    expect(vurderinger).toHaveLength(1);
+    expect(vurderinger[0].periode.fom).toBe('2026-04-01');
+    expect(vurderinger[0].periode.tom).toBe('2026-04-01');
+    expect(vurderinger[0].erHistoriskUtenReduksjonsberegning).toBe(true);
+  });
+
+  it('blokkerer innsending og viser feilmelding når reduksjonsdato ikke er korrigert etter at forrige opphold mistet reduksjon', async () => {
+    const toOpphold: HelseinstitusjonGrunnlag = {
+      harTilgangTilÅSaksbehandle: true,
+      vurderinger: [],
+      opphold: [
+        {
+          oppholdId: 'kysthaven',
+          institusjonstype: 'Helseinstitusjon',
+          oppholdstype: 'Heldøgnpasient',
+          status: 'AKTIV',
+          oppholdFra: '2025-04-01',
+          avsluttetDato: '2025-10-01',
+          kildeinstitusjon: 'Kysthaven',
+          delperioder: [],
+        },
+        {
+          oppholdId: 'solglott',
+          institusjonstype: 'Helseinstitusjon',
+          oppholdstype: 'Heldøgnpasient',
+          status: 'AKTIV',
+          oppholdFra: '2025-12-01',
+          avsluttetDato: '2026-06-01',
+          tidligsteReduksjonsdato: '2026-01-01', // basert på 1-månedsregel (utdatert)
+          kildeinstitusjon: 'Solgløtt',
+          delperioder: [],
+        },
+      ],
+      vedtatteVurderinger: [
+        {
+          oppholdId: 'kysthaven',
+          status: 'UAVKLART',
+          periode: { fom: '2025-04-01', tom: '2025-10-01' },
+          delperioder: [],
+          vurderinger: [
+            {
+              oppholdId: 'kysthaven',
+              begrunnelse: 'Vedtatt reduksjon Kysthaven',
+              periode: { fom: '2025-08-01', tom: '2025-10-01' },
+              faarFriKostOgLosji: true,
+              forsoergerEktefelle: false,
+              harFasteUtgifter: false,
+              vurderingerMeta: {},
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ],
+        },
+        {
+          oppholdId: 'solglott',
+          status: 'UAVKLART',
+          periode: { fom: '2026-01-01', tom: '2026-02-01' },
+          delperioder: [],
+          vurderinger: [
+            {
+              oppholdId: 'solglott',
+              begrunnelse: '1-månedsregel',
+              periode: { fom: '2026-01-01', tom: '2026-02-01' },
+              faarFriKostOgLosji: true,
+              forsoergerEktefelle: false,
+              harFasteUtgifter: false,
+              vurderingerMeta: {},
+              erHistoriskUtenReduksjonsberegning: false,
+            },
+          ],
+        },
+      ],
+    };
+
+    render(<Helseinstitusjon grunnlag={toOpphold} behandlingVersjon={0} readOnly={false} />);
+
+    // Kysthaven har vedtatt reduksjon fra 01.08.2025. Legg til ny vurdering som setter
+    // "ikke reduksjon" med stoppdato lik/før den vedtatte reduksjonens startdato,
+    // slik at hele perioden blir uten reduksjon.
+    const leggTilKnapp = screen.getAllByRole('button', { name: 'Legg til ny vurdering' })[0];
+    await user.click(leggTilKnapp);
+
+    const stoppDatoFelt = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+    await user.clear(stoppDatoFelt);
+    await user.type(stoppDatoFelt, '01.08.2025');
+
+    await svarIkkeReduksjon(0);
+    await user.type(screen.getAllByRole('textbox', { name: 'Vilkårsvurdering' })[0], 'Ingen reduksjon Kysthaven');
+
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    expect(
+      screen.getByText(
+        'Reduksjonen i forrige opphold er fjernet for hele perioden. Legg til en ny vurdering med korrigert reduksjonsdato før du bekrefter.'
+      )
+    ).toBeVisible();
+    expect(capturedRequest).toBeNull();
+  });
+});
+
+describe('én-månedsregelen for sammenhengende opphold', () => {
+  const kysthaven: HelseinstitusjonGrunnlag['opphold'][0] = {
+    oppholdId: 'kysthaven',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2025-02-01',
+    avsluttetDato: '2025-09-01',
+    tidligsteReduksjonsdato: '2025-06-01',
+    kildeinstitusjon: 'Kysthaven Helseinstitusjon',
+    delperioder: [],
+  };
+
+  const solglott: HelseinstitusjonGrunnlag['opphold'][0] = {
+    oppholdId: 'solglott',
+    institusjonstype: 'Helseinstitusjon',
+    oppholdstype: 'Heldøgnpasient',
+    status: 'AKTIV',
+    oppholdFra: '2025-11-01',
+    avsluttetDato: '2026-02-01',
+    tidligsteReduksjonsdato: '2026-03-01',
+    kildeinstitusjon: 'Solgløtt Rehabiliteringssenter',
+    delperioder: [],
+  };
+
+  const grunnlag: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    opphold: [kysthaven, solglott],
+    vurderinger: [],
+    vedtatteVurderinger: [],
+  };
+
+  const enManedsTekst =
+    'Innleggelsesmåned: november 2025. Reduksjonen bør som regel starte 1. desember 2025 ved reduksjon i forrige opphold. Det finnes likevel unntak.';
+
+  async function svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon() {
+    await svarPåSpørsmålOmFriKostOgLosji(true, 1);
+    await svarPåSpørsmålOmBrukerHarFasteUtgifter(false, 0);
+    await svarPåSpørsmålOmBrukerForsørgerEktefelleEllerTilsvarende(false, 0);
+  }
+
+  it('foreslår én-månedsregelen når forrige opphold har reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
+
+    await svarReduksjon(0);
+    await svarReduksjon(1);
+
+    expect(screen.getByText(enManedsTekst)).toBeVisible();
+    expect(screen.queryByText(/for kort til at det rekker å bli reduksjon/)).not.toBeInTheDocument();
+  });
+
+  it('bruker standard dato og varsler om for kort opphold når forrige opphold ikke har reduksjon', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlag} behandlingVersjon={0} readOnly={false} />);
+
+    await svarIkkeReduksjon(0);
+    await svarReduksjonForSolglottNårKysthavenIkkeHarReduksjon();
+
+    expect(
+      screen.getByText('Innleggelsesmåned: november 2025. Reduksjon kan tidligst starte: 1. mars 2026')
+    ).toBeVisible();
+    expect(screen.getByText(/for kort til at det rekker å bli reduksjon/)).toBeVisible();
+    expect(screen.queryByText(enManedsTekst)).not.toBeInTheDocument();
+  });
+});
+
+describe('handleSubmit - gap mellom vedtatt og ny vurdering', () => {
+  let capturedRequest: unknown = null;
+
+  beforeEach(() => {
+    capturedRequest = null;
+    vi.stubGlobal(
+      'EventSource',
+      vi.fn().mockImplementation(function () {
+        return { close: vi.fn(), addEventListener: vi.fn(), onmessage: null, onerror: null };
+      })
+    );
+    fetchMock.mockResponse(async (req) => {
+      if (req.method === 'POST') {
+        try {
+          const body = JSON.parse(await req.text());
+          if (body?.behov?.behovstype) capturedRequest = body;
+        } catch {
+          // ignore
+        }
+      }
+      return JSON.stringify({ type: 'SUCCESS', status: 200, data: {} });
+    });
+  });
+
+  const grunnlagMedVedtattDelperiode: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [],
+    opphold: [
+      {
+        oppholdId: 'solglott',
+        institusjonstype: 'Helseinstitusjon',
+        oppholdstype: 'Heldøgnpasient',
+        status: 'AKTIV',
+        oppholdFra: '2025-12-01',
+        avsluttetDato: '2026-02-01',
+        tidligsteReduksjonsdato: '2026-04-01',
+        kildeinstitusjon: 'Solgløtt',
+        delperioder: [],
+      },
+    ],
+    vedtatteVurderinger: [
+      {
+        oppholdId: 'solglott',
+        status: 'UAVKLART',
+        periode: { fom: '2025-12-01', tom: '2026-01-15' },
+        delperioder: [],
+        vurderinger: [
+          {
+            oppholdId: 'solglott',
+            begrunnelse: 'vedtatt',
+            periode: { fom: '2025-12-01', tom: '2026-01-15' },
+            faarFriKostOgLosji: false,
+            vurderingerMeta: {},
+            erHistoriskUtenReduksjonsberegning: false,
+          },
+        ],
+      },
+    ],
+  };
+
+  it('fyller gap mellom vedtatt tom og ny vurdering med siste vedtatte vurdering', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedVedtattDelperiode} behandlingVersjon={0} readOnly={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Legg til ny vurdering' }));
+    await svarIkkeReduksjon(0);
+
+    const stoppDato = screen.getByRole('textbox', { name: 'Når skal reduksjonen stoppes?' });
+    await user.clear(stoppDato);
+    await user.type(stoppDato, '25.01.2026');
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), 'Ny vurdering');
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger).toHaveLength(2);
+    expect(vurderinger[0].periode).toEqual({ fom: '2026-01-16', tom: '2026-01-24' });
+    expect(vurderinger[0].begrunnelse).toBe('vedtatt');
+    expect(vurderinger[0].erHistoriskUtenReduksjonsberegning).toBe(false);
+    expect(vurderinger[1].periode).toEqual({ fom: '2026-01-25', tom: '2026-02-01' });
+  });
+});
+
+describe('vedtatt reduksjon etter oppholdets nye sluttdato', () => {
+  const grunnlagMedReduksjonEtterSlutt: HelseinstitusjonGrunnlag = {
+    harTilgangTilÅSaksbehandle: true,
+    vurderinger: [],
+    opphold: [
+      {
+        oppholdId: 'solglott',
+        institusjonstype: 'Helseinstitusjon',
+        oppholdstype: 'Heldøgnpasient',
+        status: 'AVSLUTTET',
+        oppholdFra: '2025-11-01',
+        avsluttetDato: '2026-02-01',
+        tidligsteReduksjonsdato: '2026-03-01',
+        kildeinstitusjon: 'Solgløtt',
+        delperioder: [],
+      },
+    ],
+    vedtatteVurderinger: [
+      {
+        oppholdId: 'solglott',
+        status: 'UAVKLART',
+        periode: { fom: '2026-03-01', tom: '2999-01-01' },
+        delperioder: [],
+        vurderinger: [
+          {
+            oppholdId: 'solglott',
+            begrunnelse: 'Vedtatt reduksjon',
+            periode: { fom: '2026-03-01', tom: '2999-01-01' },
+            faarFriKostOgLosji: true,
+            forsoergerEktefelle: false,
+            harFasteUtgifter: false,
+            vurderingerMeta: {},
+            erHistoriskUtenReduksjonsberegning: false,
+          },
+        ],
+      },
+    ],
+  };
+
+  it('viser vedtatt reduksjon som starter etter oppholdets slutt som overskrevet', () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedReduksjonEtterSlutt} behandlingVersjon={0} readOnly={false} />);
+
+    expect(screen.getByRole('button', { name: /1\. mars 2026.*overskrevet/i })).toBeVisible();
+  });
+
+  it('viser kun fra-dato og ikke den åpne sluttdatoen', () => {
+    render(<Helseinstitusjon grunnlag={grunnlagMedReduksjonEtterSlutt} behandlingVersjon={0} readOnly={false} />);
+
+    const kort = screen.getByRole('button', { name: /1\. mars 2026/i });
+    expect(kort).not.toHaveTextContent(/2999/);
+    expect(kort).not.toHaveTextContent('–');
+  });
+
+  it('marker ikke vedtatt reduksjon innenfor oppholdet som overskrevet', () => {
+    const grunnlagInnenfor: HelseinstitusjonGrunnlag = {
+      ...grunnlagMedReduksjonEtterSlutt,
+      vedtatteVurderinger: [
+        {
+          ...grunnlagMedReduksjonEtterSlutt.vedtatteVurderinger[0],
+          periode: { fom: '2026-01-01', tom: '2026-02-01' },
+          vurderinger: [
+            {
+              ...grunnlagMedReduksjonEtterSlutt.vedtatteVurderinger[0].vurderinger![0],
+              periode: { fom: '2026-01-01', tom: '2026-02-01' },
+            },
+          ],
+        },
+      ],
+    };
+
+    render(<Helseinstitusjon grunnlag={grunnlagInnenfor} behandlingVersjon={0} readOnly={false} />);
+
+    const kort = screen.getByRole('button', { name: /1\. januar 2026/i });
+    expect(kort).toBeVisible();
+    expect(kort).not.toHaveTextContent(/overskrevet/i);
   });
 });
 
@@ -589,6 +1126,23 @@ describe('handleSubmit - periode beregning', () => {
     expect(vurderinger[0].periode.fom).toBe('2025-01-01');
   });
 
+  it('fjerner reduksjonsdato når bruker ikke får fri kost og losji', async () => {
+    render(<Helseinstitusjon grunnlag={grunnlagUtenVurdering} behandlingVersjon={0} readOnly={false} />);
+
+    await svarReduksjon(0);
+
+    const datoFelt = screen.getByRole('textbox', { name: 'Oppgi dato for reduksjon av AAP' });
+    await user.clear(datoFelt);
+    await user.type(datoFelt, '01.01.2099');
+
+    await svarIkkeReduksjon(0);
+    await user.type(screen.getByRole('textbox', { name: 'Vilkårsvurdering' }), 'Ingen reduksjon');
+    await user.click(screen.getByRole('button', { name: 'Bekreft' }));
+
+    const vurderinger = hentVurderingerFraRequest(capturedRequest);
+    expect(vurderinger[0].periode.fom).toBe('2025-01-01');
+  });
+
   it('sender riktige perioder for to opphold med én vurdering hver', async () => {
     const grunnlagToOpphold: HelseinstitusjonGrunnlag = {
       harTilgangTilÅSaksbehandle: true,
@@ -603,6 +1157,7 @@ describe('handleSubmit - periode beregning', () => {
           avsluttetDato: '2025-06-01',
           tidligsteReduksjonsdato: '2025-05-01',
           kildeinstitusjon: 'Sykehus A',
+          delperioder: [],
         },
         {
           oppholdId: 'opphold-2',
@@ -613,6 +1168,7 @@ describe('handleSubmit - periode beregning', () => {
           avsluttetDato: '2025-12-01',
           tidligsteReduksjonsdato: '2025-11-01',
           kildeinstitusjon: 'Sykehus B',
+          delperioder: [],
         },
       ],
       vurderinger: [],
@@ -676,6 +1232,7 @@ function hentVurderingerFraRequest(request: unknown): Array<{
   harFasteUtgifter: boolean;
   begrunnelse: string;
   oppholdId: string;
+  erHistoriskUtenReduksjonsberegning: boolean;
 }> {
   return (request as { behov: { helseinstitusjonVurdering: { vurderinger: [] } } }).behov.helseinstitusjonVurdering
     .vurderinger;

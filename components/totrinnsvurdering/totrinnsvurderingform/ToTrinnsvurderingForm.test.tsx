@@ -116,6 +116,35 @@ describe('totrinnsvurderingform', () => {
     expect(knapp).toBeVisible();
   });
 
+  it('skal åpne bekreftelsesmodalen når kvalitetssikrer fatter vedtak og alle vilkår er godkjent', async () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={{ ...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: true }}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Send vedtak om avslag' }));
+    expect(await screen.findByRole('dialog', { name: 'Send vedtak om avslag til bruker' })).toBeVisible();
+  });
+
+  it('skal ikke åpne bekreftelsesmodalen når kvalitetssikrer underkjenner et vilkår', async () => {
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        grunnlag={{ ...grunnlagMedAlleGodkjent, kvalitetssikrerFatterVedtak: false }}
+        erKvalitetssikring={true}
+        readOnly={false}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Godkjenn' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   it('skal dukke opp felt for begrunnelse dersom vurderingen har blitt avslått', async () => {
     render(
       <TotrinnsvurderingForm
@@ -320,7 +349,7 @@ it('skal vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert mens
       erKvalitetssikring={true}
       readOnly={false}
       hastemarkering={{
-        begrunnelse: 'Avtalt med leder',
+        begrunnelse: 'Avtalt mellom ledere',
         markeringType: 'HASTER',
         opprettetAv: null,
         opprettetAvNavn: null,
@@ -352,7 +381,7 @@ it('skal ikke vise en feilmelding dersom hastemarkeringsboksen ikke blir vurdert
       erKvalitetssikring={true}
       readOnly={false}
       hastemarkering={{
-        begrunnelse: 'Avtalt med leder',
+        begrunnelse: 'Avtalt mellom ledere',
         markeringType: 'HASTER',
         opprettetAv: null,
         opprettetAvNavn: null,
@@ -533,6 +562,37 @@ describe('mellomlagring', () => {
     });
 
     expect(begrunnelseFelt).toHaveValue('Dette er min vurdering som er mellomlagret');
+  });
+
+  it('Skal bare bruke mellomlagrede vurderinger som finnes i grunnlaget, og ta med nye vurderinger fra grunnlaget', () => {
+    const grunnlagMedNyVurdering = {
+      ...grunnlagMedVurdering,
+      vurderinger: [...grunnlagMedVurdering.vurderinger, { definisjon: Behovstype.AVKLAR_BISTANDSBEHOV_KODE }],
+    };
+    const mellomlagringMedUtdatertVurdering = {
+      ...mellomlagring.mellomlagretVurdering!,
+      data: '{"totrinnsvurderinger":[{"definisjon":"5003","godkjent":"false","begrunnelse":"Dette er min vurdering som er mellomlagret","grunner":[],"årsakFritekst":""},{"definisjon":"5004","godkjent":"false","begrunnelse":"Utdatert vurdering","grunner":[],"årsakFritekst":""}]}',
+    };
+
+    render(
+      <TotrinnsvurderingForm
+        behandlingsversjon={1}
+        readOnly={false}
+        erKvalitetssikring={false}
+        grunnlag={grunnlagMedNyVurdering}
+        initialMellomlagretVurdering={mellomlagringMedUtdatertVurdering}
+      />
+    );
+
+    expect(
+      screen.getByRole('link', { name: '§ 11-6 Behov for bistand til å skaffe seg eller beholde arbeid' })
+    ).toBeVisible();
+    expect(
+      screen.queryByRole('link', { name: '§ 11-23 andre ledd. Arbeidsevne som ikke er utnyttet' })
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Begrunnelse for retur' })).toHaveValue(
+      'Dette er min vurdering som er mellomlagret'
+    );
   });
 
   it('Skal bruke bekreftet vurdering fra grunnlag som defaultValue i skjema dersom mellomlagring ikke finnes', () => {

@@ -6,6 +6,10 @@ import { userEvent } from '@testing-library/user-event';
 import createFetchMock from 'vitest-fetch-mock';
 import { render, screen } from 'lib/test/CustomRender';
 
+vi.mock('@navikt/endringslogg', () => ({
+  default: () => null,
+}));
+
 const fetchMock = createFetchMock(vi);
 fetchMock.enableMocks();
 
@@ -17,14 +21,14 @@ describe('Header', () => {
   it('skal vise navnet på brukeren i header', async () => {
     mockFetchConfig();
 
-    render(<KelvinAppHeader />);
+    render(<KelvinAppHeader setSøkOverlay={vi.fn()} />);
     expect(screen.getByText('Test Testesen')).toBeVisible();
   });
 
   it('skal vise knapp for å logge ut', async () => {
     mockFetchConfig();
 
-    render(<KelvinAppHeader />);
+    render(<KelvinAppHeader setSøkOverlay={vi.fn()} />);
 
     await user.click(screen.getByText('Test Testesen'));
 

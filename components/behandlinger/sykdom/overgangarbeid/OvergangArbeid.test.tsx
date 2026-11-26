@@ -32,7 +32,7 @@ const overgangArbeidgrunnlag: OvergangArbeidGrunnlag = {
       begrunnelse: 'Dette er min vurdering som er bekreftet',
       brukerRettPåAAP: true,
       fom: '2025-08-19',
-      vurderingerMeta: { vurdertAv: { ident: 'TESTER', dato: '2025-08-19' } },
+      vurderingerMeta: { vurdertAv: { ident: 'TESTER', dato: '2025-08-19', kilde: 'SAKSBEHANDLER' } },
     },
   ],
   gjeldendeSykdsomsvurderinger: [],
@@ -238,10 +238,10 @@ describe('Førstegangsbehandling', () => {
     expect(begrunnelse).toBeVisible();
   });
 
-  it('Skal ha felt for om brukeren har rett på AAP', () => {
+  it('Skal ha felt for om brukeren har rett til AAP', () => {
     render(<OvergangArbeid grunnlag={grunnlagTomt} readOnly={false} behandlingVersjon={0} skalStegVurderes={true} />);
     const felt = screen.getByRole('radiogroup', {
-      name: 'Har brukeren rett på AAP i perioden som arbeidssøker etter § 11-17?',
+      name: 'Har brukeren rett til AAP i perioden som arbeidssøker etter § 11-17?',
     });
     expect(felt).toBeVisible();
   });

@@ -22,10 +22,9 @@ interface Props {
   felterMap: Map<string, FieldArrayWithIndex>;
   erSisteFeltiRaden: boolean;
   radHarError: boolean;
-  readOnly: boolean;
 }
 
-export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError, readOnly }: Props) => {
+export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError }: Props) => {
   const form = useFormContext<RedigerMeldekortFormFields>();
   const dagStr = format(dag, 'yyyy-MM-dd');
   const eksisterendeFelt = felterMap.get(dagStr);
@@ -68,7 +67,6 @@ export const UkeDag = ({ dag, felterMap, erSisteFeltiRaden, radHarError, readOnl
                 hideLabel
                 hideErrorMessage
                 autocomplete={'off'}
-                readOnly={readOnly}
                 rules={{
                   validate: (value) => {
                     if (!value || value === '') {

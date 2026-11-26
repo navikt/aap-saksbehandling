@@ -3,22 +3,32 @@
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { MellomlagretVurdering, TrukketSøknadGrunnlag, TrukketSøknadVurdering, VurderingerMeta } from 'lib/types/types';
+import {
+  MeldingDto,
+  MellomlagretVurdering,
+  TrukketSøknadGrunnlag,
+  TrukketSøknadVurdering,
+  VurderingerMeta,
+} from 'lib/types/types';
 import { Behovstype, getJaNeiEllerUndefined, JaEllerNei, JaEllerNeiOptions } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
 import { SubmitEventHandler } from 'react';
 
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 import { Alert } from 'components/alert/Alert';
+import { BodyShort, InfoCard } from '@navikt/ds-react';
+import { LightBulbIcon } from '@navikt/aksel-icons';
+
 interface Props {
   grunnlag: TrukketSøknadGrunnlag;
   readOnly: boolean;
   behandlingVersjon: number;
   initialMellomlagretVurdering?: MellomlagretVurdering;
+  ubesvarteForespørslerEllerUndefinedVedFeil: MeldingDto[] | undefined;
 }
 
 type TrukketSøknadÅrsak = TrukketSøknadVurdering['aarsak'];
@@ -31,7 +41,13 @@ interface FormFields {
 
 type DraftFormFields = Partial<FormFields>;
 
-export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMellomlagretVurdering }: Props) => {
+export const TrekkSøknad = ({
+  grunnlag,
+  readOnly,
+  behandlingVersjon,
+  initialMellomlagretVurdering,
+  ubesvarteForespørslerEllerUndefinedVedFeil,
+}: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
   const { løsAvklaringsbehov, løsAvklaringsbehovIsLoading, løsAvklaringsbehovStatus, løsAvklaringsbehovError } =
     useLøsAvklaringsbehov('SØKNAD');
@@ -81,6 +97,9 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
   );
 
   const harValgtAtSoknadTrekkes = form.watch('skalTrekkes') === JaEllerNei.Ja;
+  const skalViseVentendeLegeerklæringFeilmelding = ubesvarteForespørslerEllerUndefinedVedFeil === undefined;
+  const skalViseVentendeLegeerklæringBeskjed =
+    ubesvarteForespørslerEllerUndefinedVedFeil !== undefined && ubesvarteForespørslerEllerUndefinedVedFeil.length > 0;
 
   const { slettMellomlagring, mellomlagretVurdering, nullstillMellomlagretVurdering } = useMellomlagring(
     Behovstype.VURDER_TREKK_AV_SØKNAD_KODE,
@@ -134,6 +153,25 @@ export const TrekkSøknad = ({ grunnlag, readOnly, behandlingVersjon, initialMel
       {harValgtAtSoknadTrekkes && (
         <>
           <FormField form={form} formField={formFields.aarsak} />
+          {skalViseVentendeLegeerklæringBeskjed && (
+            <InfoCard data-color="meta-purple" size="small">
+              <InfoCard.Message icon={<LightBulbIcon aria-hidden />}>
+                Behandlingen venter på legeerklæring. Hvis det ikke er behov for denne, send en melding til behandler
+                før du trekker saken.
+              </InfoCard.Message>
+            </InfoCard>
+          )}
+          {skalViseVentendeLegeerklæringFeilmelding && (
+            <Alert variant={'error'}>
+              <>
+                <BodyShort size={'small'}>500</BodyShort>
+                <BodyShort size={'small'}>Internfeil</BodyShort>
+              </>
+              <BodyShort size={'small'}>
+                Klarte ikke å hente liste over ubesvarte forespørsler om legeerklæring!
+              </BodyShort>
+            </Alert>
+          )}
           <Alert variant={'info'}>
             Husk at trekk av søknad skal være brukers eget ønske, og at dialogen med bruker må journalføres. Informer
             bruker om at saken avsluttes, og at ny søknad må sendes dersom bruker ombestemmer seg. Alle vurderinger som

@@ -22,7 +22,7 @@ import { TextFieldWrapper } from 'components/form/textfieldwrapper/TextFieldWrap
 import { DateInputWrapper } from 'components/form/dateinputwrapper/DateInputWrapper';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { useVilkårskortVisning } from 'hooks/saksbehandling/visning/VisningHook';
-import { VilkårskortPeriodisert } from 'components/vilkårskort/vilkårskortperiodisert/VilkårskortPeriodisert';
+import { VilkårskortPeriodisert } from 'components/vilkaarskort/vilkårskortperiodisert/VilkårskortPeriodisert';
 import {
   NyVurderingExpandableCard,
   skalVæreInitiellEkspandert,
@@ -35,7 +35,7 @@ import { LøsningerForPerioder } from 'lib/types/løsningerforperioder';
 import { HvordanLeggeTilSluttdatoReadMore } from 'components/hvordanleggetilsluttdatoreadmore/HvordanLeggeTilSluttdatoReadMore';
 import { useAccordionsSignal } from 'hooks/AccordionSignalHook';
 import { getErOppfyltEllerIkkeStatus } from 'components/periodisering/VurderingStatusTag';
-import { EksterneLenkerIVilkårskort } from 'components/vilkårskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
+import { EksterneLenkerIVilkårskort } from 'components/vilkaarskort/eksternelenkerivilkårskort/EksterneLenkerIVilkårskort';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 
 interface Props {
@@ -234,7 +234,7 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
             <TextAreaWrapper
               label={'Vilkårsvurdering'}
               description={
-                'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett på full ytelse.'
+                'Vurder om brukeren har en arbeidsevne som ikke er utnyttet. Hvis det ikke legges inn en vurdering, har brukeren rett til full ytelse.'
               }
               control={form.control}
               name={`vurderinger.${index}.begrunnelse`}
@@ -259,6 +259,8 @@ export const FastsettArbeidsevnePeriodisertFrontend = ({
                         const valueAsNumber = Number(value);
                         if (isNaN(valueAsNumber)) {
                           return 'Prosent må være et tall';
+                        } else if (!/^\d+$/.test(String(value))) {
+                          return 'Prosent kan bare være et heltall.';
                         } else if (!erProsent(valueAsNumber)) {
                           return 'Prosent kan bare være mellom 0 og 100.';
                         }

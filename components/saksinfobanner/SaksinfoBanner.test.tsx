@@ -3,9 +3,22 @@ import userEvent from '@testing-library/user-event';
 import { customRender, customRenderMedRoller } from 'lib/test/CustomRender';
 import { OppgaveVisningsinformasjon } from 'lib/types/oppgaveTypes';
 import { DetaljertBehandling, FlytVisning, Roller, SaksInfo } from 'lib/types/types';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { SaksinfoBanner } from 'components/saksinfobanner/SaksinfoBanner';
+
+vi.mock('hooks/oppgave/GosysOppgaverHook', () => ({
+  useGosysOppgaver: vi.fn(() => ({
+    oppgaver: [],
+    antallTreff: 0,
+    kanLasteFlere: false,
+    isLoading: false,
+    isValidating: false,
+    error: undefined,
+    harLastetOppgaver: true,
+    lastInnFlere: vi.fn(),
+  })),
+}));
 
 const user = userEvent.setup();
 
@@ -14,7 +27,7 @@ const sak: SaksInfo = {
   behandlinger: [],
   opprettetTidspunkt: '12. mai',
   saksnummer: '12345',
-  status: 'OPPRETTET',
+  status: 'UTREDES',
   periode: { fom: '12 mai', tom: '27 mai' },
 };
 
@@ -23,7 +36,7 @@ const avsluttetSak: SaksInfo = {
   behandlinger: [],
   opprettetTidspunkt: '12. mai',
   saksnummer: '12345',
-  status: 'AVSLUTTET',
+  status: 'UTREDES',
   periode: { fom: '12 mai', tom: '27 mai' },
 };
 
@@ -185,6 +198,54 @@ describe('SaksinfoBanner på behandling siden', () => {
     expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
   });
 
+  it('menyvalg for § 22-13 vises når behandlingen ikke er kant i kant eller migrert fra Arena', async () => {
+    customRenderMedRoller(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        visning={visning}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.getByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Korriger søknadsdato (§ 22-13 femte ledd)' })).toBeVisible();
+  });
+
+  it('menyvalg for § 22-13 vises ikke når behandlingen er kant i kant med Arena', async () => {
+    customRenderMedRoller(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        visning={visning}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: true }}
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Korriger søknadsdato (§ 22-13 femte ledd)' })).not.toBeInTheDocument();
+  });
+
+  it('menyvalg for § 22-13 vises ikke når behandlingen er migrert fra Arena', async () => {
+    customRenderMedRoller(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        visning={visning}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />,
+      [Roller.SAKSBEHANDLER_OPPFØLGING]
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Saksmeny' }));
+    expect(screen.queryByRole('button', { name: 'Vurder § 22-13 syvende ledd' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Korriger søknadsdato (§ 22-13 femte ledd)' })).not.toBeInTheDocument();
+  });
+
   it('menyvalg for å sette markeringer på behandling vises', async () => {
     customRenderMedRoller(
       <SaksinfoBanner sak={sak} behandling={{ ...behandling, status: 'IVERKSETTES' }} visning={visning} />,
@@ -208,11 +269,72 @@ describe('SaksinfoBanner på behandling siden', () => {
         sak={sak}
         behandling={behandling}
         oppgaveVisningsinfo={oppgaveVisningsinfo}
-        arenaStatus={{ harArenaHistorikk: true }}
+        behandlingEgenskaper={{ harArenaHistorikk: true, erMigrertFraArena: false, erKantIKantMedArena: false }}
       />
     );
     const returTag = screen.queryByText('Arenahistorikk');
     expect(returTag).toBeInTheDocument();
+  });
+
+  it('skal ikke vise migrert-tag når behandlingen ikke er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.queryByText('Migrert fra Arena')).not.toBeInTheDocument();
+  });
+
+  it('skal vise migrert-tag når behandlingen er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.getByText('Migrert fra Arena')).toBeVisible();
+  });
+
+  it('skal ikke vise Arena-tag når behandlingen er migrert fra Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: true, harArenaHistorikk: true, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.getByText('Migrert fra Arena')).toBeVisible();
+    expect(screen.queryByText('Arenahistorikk')).not.toBeInTheDocument();
+  });
+
+  it('skal vise kant-i-kant-tag når behandlingen er kant i kant med Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: true }}
+      />
+    );
+    expect(screen.getByText('Kant i kant med Arena')).toBeVisible();
+  });
+
+  it('skal ikke vise kant-i-kant-tag når behandlingen ikke er kant i kant med Arena', () => {
+    customRender(
+      <SaksinfoBanner
+        sak={sak}
+        behandling={behandling}
+        oppgaveVisningsinfo={oppgaveVisningsinfo}
+        behandlingEgenskaper={{ erMigrertFraArena: false, harArenaHistorikk: false, erKantIKantMedArena: false }}
+      />
+    );
+    expect(screen.queryByText('Kant i kant med Arena')).not.toBeInTheDocument();
   });
 });
 

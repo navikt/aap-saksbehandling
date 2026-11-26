@@ -139,6 +139,24 @@ describe('mapTilPeriodisertVurdering', () => {
       });
     });
 
+    describe('harNedsattArbeidsevne = NEI_MEN_STUDENT', () => {
+      const data: Sykdomsvurdering = { ...baseSykdomsvurdering, harNedsattArbeidsevne: 'NEI_MEN_STUDENT' };
+
+      it('skal sette erArbeidsevnenNedsatt til false', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart);
+        expect(result.harNedsattArbeidsevne).toBe('NEI_MEN_STUDENT');
+      });
+
+      it('skal nullstille alle arbeidsevne- og yrkesskade-felt', () => {
+        const result = mapTilPeriodisertVurdering(data, false, false, rettighetsperiodeStart);
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.erSkadeSykdomEllerLyteVesentligdel).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
+        expect(result.erNedsettelseIArbeidsevneMerEnnHalvparten).toBeUndefined();
+        expect(result.yrkesskadeBegrunnelse).toBeUndefined();
+      });
+    });
+
     describe('harNedsattArbeidsevne = NEI', () => {
       const data: Sykdomsvurdering = {
         ...baseSykdomsvurdering,
@@ -215,19 +233,20 @@ describe('mapTilPeriodisertVurdering', () => {
           expect(result.yrkesskadeBegrunnelse).toBeUndefined();
         });
 
-        it('skal sette yrkesskade-felt selv når skalVurdereYrkesskade er true', () => {
+        it('skal ikke sette yrkesskade-felt når arbeidsevnen er nedsatt med minst halvparten', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
             fraDato: fraDatoEtterRettighetsperiodeStart,
           };
           const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart);
-          expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);
+          expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBeUndefined();
         });
 
         it('skal sette yrkesskade-felt når skalVurdereYrkesskade er true', () => {
           const data: Sykdomsvurdering = {
             ...baseSykdomsvurdering,
             fraDato: fraDatoEtterRettighetsperiodeStart,
+            erNedsettelseIArbeidsevneMerEnnHalvparten: JaEllerNei.Nei,
           };
           const result = mapTilPeriodisertVurdering(data, true, false, rettighetsperiodeStart);
           expect(result.erNedsettelseIArbeidsevneMerEnnYrkesskadeGrense).toBe(true);

@@ -18,10 +18,10 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
 
   return (
     <TagMedPopover
-      ikon={<FirstAidKitIcon title={'Mottatt svar fra behandler'} />}
+      ikon={<FirstAidKitIcon title={'Mottatt mottatt fra behandler'} />}
       dataColor={'meta-purple'}
       størrelse={'small'}
-      tagContent={'Svar fra behandler'}
+      tagContent={'Svar mottatt'}
       popoverContent={
         <Box maxWidth={'400px'} minWidth={'400px'}>
           <VStack gap={'space-0'}>
@@ -33,7 +33,7 @@ export const SvarFraBehandler = ({ behandlingReferanse, oppdaterVisHarUlesteDoku
               className={styles.tag}
             >
               <BodyShort size={'small'} weight={'semibold'}>
-                Svar fra behandler
+                Svar mottatt fra behandler
               </BodyShort>
             </Tag>
             <Box padding={'space-8'}>

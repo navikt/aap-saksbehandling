@@ -1,0 +1,15 @@
+.beskrivelse {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  transition: max-height 0.2s ease-in-out;
+}
+
+.forhaandsvisning {
+  max-height: 3lh;
+  overflow: hidden;
+}
+
+.utvidet {
+  max-height: none;
+}

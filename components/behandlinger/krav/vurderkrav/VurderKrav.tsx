@@ -20,16 +20,17 @@ import {
   KravVurderingFormFields,
   MigrertKravFormFields,
   migrertKravTilFormFields,
-} from 'components/behandlinger/krav/kravutils';
+} from 'components/behandlinger/krav/vurderKravUtils';
 import { KravBoks } from 'components/behandlinger/krav/kravboks/KravBoks';
 import { MigrertKravBoks } from 'components/behandlinger/krav/migrertkravboks/MigrertKravBoks';
 import { useMellomlagring } from 'hooks/saksbehandling/MellomlagringHook';
 import { Behovstype } from 'lib/utils/form';
 import { loggUmamiVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
-import { VilkårskortMedFormOgMellomlagring } from 'components/vilkårskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
+import { VilkårskortMedFormOgMellomlagring } from 'components/vilkaarskort/vilkårskortmedformogmellomlagring/VilkårskortMedFormOgMellomlagring';
 import { SubmitEventHandler, useState } from 'react';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { MigrerteKravTabell } from 'components/behandlinger/krav/kravtabell/MigrerteKravTabell';
+import { useFeatureFlag } from 'context/UnleashContext';
 
 interface Props {
   grunnlag: KravGrunnlag;
@@ -53,6 +54,7 @@ export const VurderKrav = ({
   harMigreringsbehov,
 }: Props) => {
   const { behandlingsreferanse } = useParamsMedType();
+  const kravManuellVurderingErEnablet = useFeatureFlag('KravManuellVurdering');
 
   const { visningModus, visningActions, formReadOnly } = useVilkårskortVisning(
     readOnly,
@@ -177,24 +179,27 @@ export const VurderKrav = ({
             )}
             {migrertKravÅpen && <MigrertKravBoks erNyRad={migrertKrav == null} onLukk={lukkMigrertKrav} />}
 
-            {harKravForSøknad && <KravTabell grunnlag={grunnlag} readOnly={formReadOnly} />}
+            {harKravForSøknad && (
+              <KravTabell grunnlag={grunnlag} readOnly={formReadOnly || !kravManuellVurderingErEnablet} />
+            )}
 
-            {valgteKrav.map((referanse) => {
-              const krav = finnKravVurderingByReferanse(grunnlag, referanse);
-              const søknad = !krav ? finnSøknadUtenKravByReferanse(grunnlag, referanse) : undefined;
-              if (!krav && !søknad) return null;
+            {kravManuellVurderingErEnablet &&
+              valgteKrav.map((referanse) => {
+                const krav = finnKravVurderingByReferanse(grunnlag, referanse);
+                const søknad = !krav ? finnSøknadUtenKravByReferanse(grunnlag, referanse) : undefined;
+                if (!krav && !søknad) return null;
 
-              const erVedtatt = krav ? grunnlag.vedtatteVurderinger.some((v) => v.referanse === referanse) : false;
+                const erVedtatt = krav ? grunnlag.vedtatteVurderinger.some((v) => v.referanse === referanse) : false;
 
-              return (
-                <KravBoks
-                  key={referanse}
-                  innhold={krav ? { kilde: 'EKSISTERENDE', krav } : { kilde: 'NY_SØKNAD', søknad: søknad! }}
-                  erVedtatt={erVedtatt}
-                  onLukk={() => lukkKrav(referanse)}
-                />
-              );
-            })}
+                return (
+                  <KravBoks
+                    key={referanse}
+                    innhold={krav ? { kilde: 'EKSISTERENDE', krav } : { kilde: 'NY_SØKNAD', søknad: søknad! }}
+                    erVedtatt={erVedtatt}
+                    onLukk={() => lukkKrav(referanse)}
+                  />
+                );
+              })}
           </VStack>
         </FormProvider>
       </VStack>

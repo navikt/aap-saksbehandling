@@ -1,0 +1,58 @@
+import { useParamsMedType } from '/hooks/saksbehandling/BehandlingHook';
+import { useState } from 'react';
+import { Button, VStack } from '@navikt/ds-react';
+import styles from './BeOmOpplysninger.module.css';
+import { InnhentDokumentasjonSkjema } from '../innhentdokumentasjon/innhentdokumentasjonskjema/InnhentDokumentasjonSkjema';
+import { RelevanteDokumenter } from '../innhentdokumentasjon/relevantedokumenter/RelevanteDokumenter';
+import { useMeldingerFraDialog } from 'hooks/saksbehandling/SakMeldingerFraDialogHook';
+import { Behandlerdialog } from 'components/dialogmedbehandler/Behandlerdialog';
+import { revalidateBehandlingPath } from 'lib/actions/actions';
+import { loggUmamiBehandlerdialogKlikk } from 'lib/utils/umami/behandlerdialog';
+
+export const BeOmOpplysninger = () => {
+  const { meldingerMedDokumentliste, kommendeMeldinger, isLoading, error, refetchDialogmeldingerClient } =
+    useMeldingerFraDialog();
+  const params = useParamsMedType();
+
+  const [visSkjema, oppdaterVisSkjema] = useState<boolean>(false);
+  const skjulSkjema = () => oppdaterVisSkjema(false);
+  const skjulOgRefresh = async () => {
+    skjulSkjema();
+    await Promise.all([
+      refetchDialogmeldingerClient(),
+      revalidateBehandlingPath(params.saksnummer, params.behandlingsreferanse),
+    ]);
+  };
+  return (
+    <section>
+      {!visSkjema && (
+        <>
+          <Behandlerdialog
+            behandlingsreferanse={params.behandlingsreferanse}
+            meldingerMedDokumentliste={meldingerMedDokumentliste}
+            kommendeMeldinger={kommendeMeldinger}
+            isLoading={isLoading}
+            error={error}
+            refetchDialogmeldingerClient={refetchDialogmeldingerClient}
+          />
+          <VStack gap={'space-16'} align={'end'}>
+            <div>
+              <Button
+                type="button"
+                variant={'secondary'}
+                onClick={() => {
+                  loggUmamiBehandlerdialogKlikk('BEHANDLERDIALOG_GÅ_TIL_SEND_FORESPØRSEL');
+                  oppdaterVisSkjema(true);
+                }}
+              >
+                Send forespørsel til behandler
+              </Button>
+            </div>
+          </VStack>
+        </>
+      )}
+      {visSkjema && <InnhentDokumentasjonSkjema onCancel={skjulSkjema} onSuccess={skjulOgRefresh} />}
+      <div className={styles.marginTop}>{!visSkjema && <RelevanteDokumenter />}</div>
+    </section>
+  );
+};

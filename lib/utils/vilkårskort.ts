@@ -1,10 +1,17 @@
 import { Behovstype } from 'lib/utils/form';
+import type { AvklaringsbehovKode } from 'lib/types/types';
 
-export function byggVilkårskortLenke(saknummer: string, behandlingsreferanse: string, behovstype: Behovstype): string {
+type VilkårskortBehovstype = Behovstype | AvklaringsbehovKode;
+
+export function byggVilkårskortLenke(
+  saknummer: string,
+  behandlingsreferanse: string,
+  behovstype: VilkårskortBehovstype
+): string {
   return `/saksbehandling/sak/${saknummer}/${behandlingsreferanse}/${behovstypeTilVilkårskortLink(behovstype)}`;
 }
 
-export function behovstypeTilVilkårskortLink(behovstype: Behovstype): string {
+export function behovstypeTilVilkårskortLink(behovstype: VilkårskortBehovstype): string {
   switch (behovstype) {
     case Behovstype.AVKLAR_SYKDOM_KODE:
       return 'SYKDOM/#AVKLAR_SYKDOM';
