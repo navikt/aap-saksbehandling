@@ -8,6 +8,7 @@ import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { postmottakHentFlyt, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
 import { Losninger, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { ApiException, isError, isSuccess } from 'lib/utils/api';
+import { isLocal } from 'lib/utils/environment';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 
@@ -33,6 +34,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
   const { setVisOverstyrModal, setBekreftOverstyring, setAvbrytOverstyring, setReservertAvNavn } =
     useOverstyrTildelingHook();
 
+  const erLokal = isLocal();
   const sisteBehovRef = useRef<{
     behov: LøsAvklaringsbehovPåBehandling<B>;
     onSuccess?: () => void;
@@ -47,7 +49,7 @@ export const usePostmottakLøsBehovOgGåTilNesteSteg = <B extends Losninger = Lo
     setStatus(undefined);
     setError(undefined);
 
-    if (sjekkTildeltStatus) {
+    if (sjekkTildeltStatus && !erLokal) {
       const nyesteOppgavePåBehandling = await hentTildeltStatusClient(params.behandlingsreferanse);
       if (isSuccess(nyesteOppgavePåBehandling)) {
         if (
