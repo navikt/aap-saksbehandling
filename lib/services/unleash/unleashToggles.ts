@@ -15,7 +15,6 @@ export const FLAGS = [
   'MaksdatoSykepenger',
   'SeOriginalDokumentVariant',
   'VedtaksperiodeBeslutter',
-  'SokOverlayFrontend',
   'UtenlandsoppholdBehandling',
 ] as const;
 
@@ -39,6 +38,5 @@ export const mockedFlags: Flags = {
   MaksdatoSykepenger: true,
   SeOriginalDokumentVariant: true,
   VedtaksperiodeBeslutter: true,
-  SokOverlayFrontend: true,
   UtenlandsoppholdBehandling: true,
 };
