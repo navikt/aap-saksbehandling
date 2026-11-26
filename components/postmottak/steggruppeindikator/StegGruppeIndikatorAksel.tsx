@@ -31,6 +31,8 @@ function stegGruppeNavnTilLabel(stegGruppeNavn: FlytGruppe['stegGruppe']) {
       return 'Iverksettes';
     case 'SETT_FAGSAK':
       return 'Sett fagsak';
+    case 'UNDER18':
+      return 'Under 18 år';
   }
   exhaustiveCheck(stegGruppeNavn);
 }
