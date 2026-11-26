@@ -73,17 +73,11 @@ const fetchWithRetry = async <ResponseType>(
     }
 
     const contentType = response.headers.get('content-type');
-    const responseText = typeof response.text === 'function' ? await response.text() : undefined;
-
-    if (responseText !== undefined && !responseText.trim()) {
-      return { type: 'SUCCESS', status: response.status, data: undefined as ResponseType };
+    if (contentType && contentType.includes('text')) {
+      return { type: 'SUCCESS', status: response.status, data: (await response.text()) as ResponseType };
     }
 
-    if (responseText !== undefined && contentType && contentType.includes('text')) {
-      return { type: 'SUCCESS', status: response.status, data: responseText as ResponseType };
-    }
-
-    const responseJson: ResponseType = responseText === undefined ? await response.json() : JSON.parse(responseText);
+    const responseJson: ResponseType = await response.json();
 
     return { type: 'SUCCESS', status: response.status, data: responseJson };
   } catch (error) {
