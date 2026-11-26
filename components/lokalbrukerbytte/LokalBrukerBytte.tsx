@@ -1,16 +1,14 @@
 import { BodyShort, Dropdown, HStack } from '@navikt/ds-react';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
-import { useRouter } from 'next/navigation';
 import { useInnloggetBruker } from 'hooks/BrukerHook';
 import { lokaleBrukere } from 'lib/utils/lokaleBrukere';
 
 export const LokalBrukerBytte = () => {
-  const router = useRouter();
   const bruker = useInnloggetBruker();
 
   const byttBruker = (ident: string) => {
     settBrukerCookie(ident);
-    router.refresh();
+    window.location.reload();
   };
 
   return (
