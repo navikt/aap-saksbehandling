@@ -12,6 +12,7 @@ const baseOppgave: OppgaveMedKontekst = {
   behandlingskontekst: {
     behandlingsreferanse: '',
     behandlingstype: 'FØRSTEGANGSBEHANDLING',
+    saksnummer: '12345',
   },
   oppgaveMetadata: {
     id: 0,
@@ -25,6 +26,7 @@ const baseOppgave: OppgaveMedKontekst = {
   },
   vurderingsbehov: [],
   oppgavelisteTags: {
+    harBeslutterbegrensning: false,
     markeringer: [],
     skjermingInfo: {
       erSkjermet: false,

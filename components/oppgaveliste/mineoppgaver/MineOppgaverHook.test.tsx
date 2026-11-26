@@ -24,6 +24,7 @@ const baseOppgave: OppgaveMedKontekst = {
   },
   vurderingsbehov: [],
   oppgavelisteTags: {
+    harBeslutterbegrensning: false,
     markeringer: [],
     skjermingInfo: {
       erSkjermet: false,
