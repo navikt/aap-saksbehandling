@@ -45,23 +45,19 @@ bare én gang):
 
 ## Kjøre opp lokalt mot devmiljø
 
-1. Hent secret (se: https://github.com/navikt/aap-cli)
+1. Initialiser .env.local med verdier fra localauth
    ```bash
-   get-secret
+   ./init-localauth.sh
    ```
-2. Kopier miljøvariabler inn i `.env.local`:
-   ```bash
-   cat .env.dev-gcp .env-template-dev > .env.local
-   ```
-3. Start Wonderwall:
+2. Start Wonderwall:
    ```bash
    colima start
    docker-compose up -d
    ```
-4. Installer avhengigheter og start applikasjonen:
+3. Installer avhengigheter og start applikasjonen:
    ```bash
     yarn install
-    yarn dev
+    yarn dev:gcp
    ```
    Applikasjonen skal nå være tilgjengelig i nettleseren på http://localhost:4000
 
