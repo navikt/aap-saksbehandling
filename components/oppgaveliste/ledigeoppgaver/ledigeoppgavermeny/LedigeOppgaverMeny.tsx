@@ -79,16 +79,18 @@ export const LedigeOppgaverMeny = ({
   }
 
   return (
-    <HStack style={{ display: 'flex', justifyContent: 'flex-end' }} gap={'space-4'}>
-      <Button
-        type={'button'}
-        size={'small'}
-        variant={'secondary'}
-        onClick={() => plukkOgGåTilOppgave(oppgave)}
-        loading={isPendingBehandle}
-      >
-        Behandle
-      </Button>
+    <HStack justify={'end'} align={'center'} gap={'space-8'} wrap={false}>
+      {!oppgave.oppgavelisteTags.harBeslutterbegrensning && (
+        <Button
+          type={'button'}
+          size={'small'}
+          variant={'secondary'}
+          onClick={() => plukkOgGåTilOppgave(oppgave)}
+          loading={isPendingBehandle}
+        >
+          Behandle
+        </Button>
+      )}
       {!isPendingMeny ? (
         <ActionMenu>
           <ActionMenu.Trigger>

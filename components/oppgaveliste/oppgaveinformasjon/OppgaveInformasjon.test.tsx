@@ -31,6 +31,7 @@ const oppgave: OppgaveMedKontekst = {
   },
   vurderingsbehov: [],
   oppgavelisteTags: {
+    harBeslutterbegrensning: false,
     markeringer: [],
     skjermingInfo: {
       erSkjermet: false,
@@ -43,6 +44,31 @@ const oppgave: OppgaveMedKontekst = {
 const user = userEvent.setup();
 
 describe('OppgaveInformasjon', () => {
+  it('skal skjule taggen når oppgaven ikke har beslutterbegrensning', () => {
+    renderWithFlags(<OppgaveInformasjon oppgave={oppgave} />);
+
+    expect(screen.queryByRole('button', { name: 'Kan ikke være beslutter' })).not.toBeInTheDocument();
+  });
+
+  it('skal forklare beslutterbegrensningen når brukeren åpner taggen', async () => {
+    renderWithFlags(
+      <OppgaveInformasjon
+        oppgave={{
+          ...oppgave,
+          oppgavelisteTags: {
+            ...oppgave.oppgavelisteTags,
+            harBeslutterbegrensning: true,
+          },
+        }}
+      />
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Kan ikke være beslutter' }));
+    expect(
+      await screen.findByText('Du har jobbet på denne behandlingen tidligere og kan ikke være beslutter.')
+    ).toBeVisible();
+  });
+
   it('Skal vise på vent ikon dersom oppgave er på vent', () => {
     renderWithFlags(
       <OppgaveInformasjon

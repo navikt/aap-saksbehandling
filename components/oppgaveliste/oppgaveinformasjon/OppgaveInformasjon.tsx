@@ -1,6 +1,7 @@
 'use client';
 
-import { HStack } from '@navikt/ds-react';
+import { CircleSlashIcon } from '@navikt/aksel-icons';
+import { BodyShort, HStack, Popover } from '@navikt/ds-react';
 import { useFeatureFlag } from 'context/UnleashContext';
 import { OppgaveMedKontekst } from 'lib/types/oppgaveTypes';
 import { utledAdressebeskyttelse } from 'lib/utils/adressebeskyttelse';
@@ -10,6 +11,7 @@ import { AdressebeskyttelseInfoBoks } from 'components/oppgaveliste/adressebesky
 import { PåVentInfoboks } from 'components/oppgaveliste/påventinfoboks/PåVentInfoboks';
 import { SvarFraBehandler } from 'components/oppgaveliste/svarfrabehandler/SvarFraBehandler';
 import { UtløptVentefristBoks } from 'components/oppgaveliste/utløptventefristboks/UtløptVentefristBoks';
+import { TagMedPopover } from 'components/tagmedpopover/TagMedPopover';
 
 import { Returboks } from '../returboks/Returboks';
 import { UførevedtakInfoBoks } from '../uførevedtakBoks/UførevedtakInfoBoks';
@@ -26,7 +28,21 @@ export const OppgaveInformasjon = ({ oppgave }: Props) => {
   const [visUføreTag, settVisUføreTag] = useState(!!oppgave.oppgavelisteTags.uføreVedtak);
 
   return (
-    <HStack gap={'space-4'}>
+    <HStack gap={'space-4'} align={'center'}>
+      {oppgave.oppgavelisteTags.harBeslutterbegrensning && (
+        <TagMedPopover
+          dataColor={'meta-purple'}
+          ikon={<CircleSlashIcon title={'Kan ikke være beslutter'} />}
+          størrelse={'small'}
+          popoverContent={
+            <Popover.Content>
+              <BodyShort size={'small'}>
+                Du har jobbet på denne behandlingen tidligere og kan ikke være beslutter.
+              </BodyShort>
+            </Popover.Content>
+          }
+        />
+      )}
       {oppgave.oppgavelisteTags.påVentInfo &&
         (oppgave.behandlingskontekst.behandlingstype !== 'TILBAKEKREVING' || ventStatusForTilbakekreving) && (
           <PåVentInfoboks

@@ -1995,6 +1995,7 @@ export interface components {
       reserverTilPerAvklaringsbehov: {
         [key: string]: string;
       };
+      saksbehandlereSomIkkeKanBeslutte?: string[] | null;
       saksnummer: components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.sak.Saksnummer'];
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
@@ -2383,6 +2384,16 @@ export interface components {
     };
     'no.nav.aap.oppgave.drift.FilterDriftRequest': {
       avklaringsbehovKoder: string[];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      behandlingOpprettetFom?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      behandlingOpprettetTom?: string | null;
       behandlingstyper: (
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
@@ -2407,6 +2418,16 @@ export interface components {
     };
     'no.nav.aap.oppgave.drift.FilterDriftResponse': {
       avklaringsbehov: components['schemas']['no.nav.aap.oppgave.drift.AvklaringsbehovDto'][];
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      behandlingOpprettetFom?: string | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      behandlingOpprettetTom?: string | null;
       behandlingstyper: (
         | 'AKTIVITETSPLIKT'
         | 'AKTIVITETSPLIKT_11_9'
@@ -2717,6 +2738,7 @@ export interface components {
       forespørselSendtTilBehandler?: components['schemas']['no.nav.aap.oppgave.ForespørselSendtTilBehandlerDto'];
       forrigeKvalitetssikrerInfo?: components['schemas']['no.nav.aap.oppgave.ForrigeKvalitetssikrerDto'];
       forrigePåVentInfo?: components['schemas']['no.nav.aap.oppgave.hent.VenteInformasjonResponse'];
+      harBeslutterbegrensning: boolean;
       harMottattDokument?: components['schemas']['no.nav.aap.oppgave.HarMottattDokument'];
       /**
        * @deprecated
