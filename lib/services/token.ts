@@ -2,10 +2,10 @@ import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { headers } from 'next/headers';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError, logWarning } from 'lib/serverutlis/logger';
-import { hentLocalToken } from 'lib/services/localFetch';
+import { hentLocalToken } from 'lib/services/localToken';
 import { isLocal } from 'lib/utils/environment';
 
-type TokenResult = { ok: true; token: string } | { ok: false; error: Error };
+export type TokenResult = { ok: true; token: string } | { ok: false; error: Error };
 
 const NUMBER_OF_RETRIES = 3;
 
@@ -34,7 +34,7 @@ const getAzureOboToken = async (
 
 export const getToken = async (audience: string, url: string): Promise<TokenResult> => {
   if (isLocal()) {
-    return { ok: true, token: await hentLocalToken(audience) };
+    return hentLocalToken(audience);
   }
 
   const token = getAccessTokenOrRedirectToLogin(await headers());
