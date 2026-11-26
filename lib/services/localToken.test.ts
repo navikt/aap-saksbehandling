@@ -25,15 +25,16 @@ describe('hentLocalToken', () => {
   });
 
   it.each([
-    ['V123456', 'veileder-rolle'],
-    ['K123456', 'kvalitetssikrer-rolle'],
-    ['S123456', 'saksbehandler-rolle'],
-    ['B123456', 'beslutter-rolle'],
-  ])('henter token med kun riktig gruppe for %s', async (ident, gruppe) => {
+    ['V123456', ['veileder-rolle']],
+    ['K123456', ['kvalitetssikrer-rolle']],
+    ['S123456', ['saksbehandler-rolle']],
+    ['B123456', ['beslutter-rolle']],
+    ['X123456', ['veileder-rolle', 'kvalitetssikrer-rolle', 'saksbehandler-rolle', 'beslutter-rolle']],
+  ])('henter token med riktige grupper for %s', async (ident, grupper) => {
     mocks.cookieGet.mockReturnValue({ value: ident });
     vi.mocked(fetch).mockResolvedValue(new Response('fake-token'));
 
-    await expect(hentLocalToken('api://scope')).resolves.toBe('fake-token');
+    await expect(hentLocalToken('api://scope')).resolves.toEqual({ ok: true, token: 'fake-token' });
 
     expect(mocks.cookies).toHaveBeenCalledOnce();
     expect(mocks.cookieGet).toHaveBeenCalledExactlyOnceWith('bruker');
@@ -46,18 +47,25 @@ describe('hentLocalToken', () => {
     expect(url.pathname).toBe('/fake/aad');
     expect(url.searchParams.get('aud')).toBe('api://scope');
     expect(url.searchParams.get('NAVident')).toBe(ident);
-    expect(url.searchParams.getAll('groups')).toEqual([gruppe]);
+    expect(url.searchParams.getAll('groups')).toEqual([grupper.join(',')]);
     expect(options).toEqual({ method: 'POST', next: { revalidate: 0 } });
   });
 
-  it('velger superbruker når cookien mangler', async () => {
-    vi.mocked(fetch).mockResolvedValue(new Response('fake-token'));
+  it.each([undefined, '', 'ukjent-ident'])(
+    'velger superbruker når cookie mangler eller er ukjent: %s',
+    async (verdi) => {
+      mocks.cookieGet.mockReturnValue(verdi === undefined ? undefined : { value: verdi });
+      vi.mocked(fetch).mockResolvedValue(new Response('fake-token'));
 
-    await hentLocalToken('api://scope');
+      await hentLocalToken('api://scope');
 
-    const [url] = vi.mocked(fetch).mock.calls[0];
-    expect((url as URL).searchParams.get('NAVident')).toBe('X123456');
-  });
+      const [url] = vi.mocked(fetch).mock.calls[0];
+      expect((url as URL).searchParams.get('NAVident')).toBe('X123456');
+      expect((url as URL).searchParams.getAll('groups')).toEqual([
+        'veileder-rolle,kvalitetssikrer-rolle,saksbehandler-rolle,beslutter-rolle',
+      ]);
+    }
+  );
 
   it('normaliserer eldre brukercookie før token hentes', async () => {
     mocks.cookieGet.mockReturnValue({ value: 'BESLUTTER' });
@@ -70,10 +78,13 @@ describe('hentLocalToken', () => {
     expect((url as URL).searchParams.getAll('groups')).toEqual(['beslutter-rolle']);
   });
 
-  it('avviser mislykket tokenhenting med HTTP-status', async () => {
+  it('returnerer feilresultat med HTTP-status når tokenhenting feiler', async () => {
     vi.mocked(fetch).mockResolvedValue(new Response('unavailable', { status: 503 }));
 
-    await expect(hentLocalToken('api://scope')).rejects.toThrow('Kunne ikke hente lokalt token (status 503).');
+    await expect(hentLocalToken('api://scope')).resolves.toEqual({
+      ok: false,
+      error: new Error('Kunne ikke hente lokalt token (status 503).'),
+    });
   });
 
   it('viderefører nettverksfeil', async () => {

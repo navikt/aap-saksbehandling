@@ -1,20 +1,9 @@
 import { Dropdown } from '@navikt/ds-react';
-import { render, screen, cleanup } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useRouter } from 'next/navigation';
 import { InnloggetBrukerContextProvider } from 'context/InnloggetBrukerContext';
 import { LokalBrukerBytte } from './LokalBrukerBytte';
-
-const router = {
-  bfcacheId: 'test',
-  back: vi.fn(),
-  forward: vi.fn(),
-  refresh: vi.fn(),
-  push: vi.fn(),
-  replace: vi.fn(),
-  prefetch: vi.fn(),
-};
 
 function renderBrukerbytte(aktivIdent = 'Z000000') {
   return render(
@@ -31,8 +20,6 @@ function renderBrukerbytte(aktivIdent = 'Z000000') {
 
 beforeEach(() => {
   document.cookie = 'bruker=; path=/; max-age=0; SameSite=Strict';
-  vi.mocked(useRouter).mockReturnValue(router);
-  router.refresh.mockClear();
 });
 
 afterEach(() => {
@@ -57,7 +44,6 @@ describe('LokalBrukerBytte', () => {
 
     expect(settCookie).toHaveBeenCalledWith(`bruker=${ident}; path=/; max-age=86400; SameSite=Strict`);
     expect(document.cookie).toBe(`bruker=${ident}`);
-    expect(router.refresh).toHaveBeenCalledOnce();
   });
 
   it('markerer kun den aktive brukeren', async () => {
