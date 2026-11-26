@@ -1082,6 +1082,86 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/test/saf/tilknyttede-journalposter/{dokumentInfoId}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Dokumentinfo-ID det skal finnes gjenbruk av */
+          dokumentInfoId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.gateway.SafTilknyttetJournalpost'][];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/test/dokarkiv/journalposter/{journalpostId}/knytt-til-annen-sak': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description Kildejournalpost-ID */
+          journalpostId: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.postmottak.api.test.KnyttTilAnnenSakTestRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.api.test.KnyttTilAnnenSakTestResponse'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/journalpost/{referanse}/auditlog': {
     parameters: {
       query?: never;
@@ -1112,6 +1192,117 @@ export interface paths {
         };
       };
     };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/joark-avstemming': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.AvstemmingsrapportDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/journalpost/{referanse}/vurderinger': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description referanse */
+          referanse: number;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.VurderingerDriftsinfo'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/sak/{saksnummer}/journalposter': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          /** @description saksnummer */
+          saksnummer: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.SakJournalposterDto'];
+          };
+        };
+      };
+    };
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -1183,6 +1374,45 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.PersonSøkDriftsinfoDto'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/drift/ettersend-for-person': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path?: never;
+        cookie?: never;
+      };
+      requestBody?: {
+        content: {
+          'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.EttersendForPersonRequest'];
+        };
+      };
+      responses: {
+        /** @description OK */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['no.nav.aap.postmottak.api.drift.EttersendForPersonResponse'];
           };
         };
       };
@@ -1393,6 +1623,19 @@ export interface components {
       tema: string;
       temaGammelt?: string | null;
     };
+    'no.nav.aap.postmottak.api.drift.AvstemmingsrapportDto': {
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      fullfortTidspunkt?: string | null;
+      resultater: components['schemas']['no.nav.aap.postmottak.api.drift.JournalpostAvstemmingsresultatDto'][];
+      /**
+       * Format: date-time
+       * @example 2025-04-01T10:30:00Z
+       */
+      startetTidspunkt?: string | null;
+    };
     'no.nav.aap.postmottak.api.drift.BehandlingDriftsinfo': {
       aktivtSteg: string;
       avklaringsbehov: components['schemas']['no.nav.aap.postmottak.api.drift.ForenkletAvklaringsbehov'][];
@@ -1406,6 +1649,49 @@ export interface components {
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
       type: string;
+    };
+    'no.nav.aap.postmottak.api.drift.DigitaliseringsvurderingDriftsinfo': {
+      digitalisertManueltGjennomPostmottak?: boolean | null;
+      /** @enum {string} */
+      kategori:
+        | 'AKTIVITETSKORT'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'DIALOGMELDING'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KABAL_HENDELSE'
+        | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
+        | 'LEGEERKLÆRING'
+        | 'LEGEERKLÆRING_AVVIST'
+        | 'MANUELL_REVURDERING'
+        | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
+        | 'NY_ÅRSAK_TIL_BEHANDLING'
+        | 'OMGJØRING_KLAGE_REVURDERING'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'PDL_HENDELSE_DODSFALL_BARN'
+        | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
+        | 'SYKEPENGE_VEDTAK_HENDELSE'
+        | 'SØKNAD'
+        | 'TILBAKEKREVING_HENDELSE'
+        | 'UFØRE_VEDTAK_HENDELSE';
+    };
+    'no.nav.aap.postmottak.api.drift.EttersendForPersonRequest': {
+      eksternReferanseId?: string | null;
+      filNavn: string;
+      ident: string;
+      pdfBase64: string;
+    };
+    'no.nav.aap.postmottak.api.drift.EttersendForPersonResponse': {
+      /** Format: int64 */
+      journalpostId: number;
+    };
+    'no.nav.aap.postmottak.api.drift.FordelingsvurderingDriftsinfo': {
+      /** @enum {string} */
+      system: 'ARENA' | 'BEGGE' | 'IGNORERT' | 'KELVIN';
     };
     'no.nav.aap.postmottak.api.drift.ForenkletAvklaringsbehov': {
       definisjon: components['schemas']['no.nav.aap.postmottak.kontrakt.avklaringsbehov.Definisjon'];
@@ -1440,6 +1726,24 @@ export interface components {
       status: 'EVALUERT' | 'GOSYS_FDR' | 'GOSYS_JFR' | 'IGNORERT' | 'VIDERESENDT_TIL_ARENA' | 'VIDERSENDT_TIL_KELVIN';
       /** @enum {string|null} */
       årsakTilStatus?: 'ALLEREDE_JOURNALFØRT' | 'MANGLER_IDENT' | 'ORGNR' | 'UTGÅTT' | null;
+    };
+    'no.nav.aap.postmottak.api.drift.JournalpostAvstemmingsresultatDto': {
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      datoOpprettet?: string | null;
+      /** Format: int64 */
+      journalpostId: number;
+      kanal?: string | null;
+      /** @enum {string} */
+      utfall:
+        | 'ALLEREDE_HAR_OPPGAVE'
+        | 'FORDELINGSOPPGAVE_OPPRETTET'
+        | 'GOSYS_OPPGAVE_OPPRETTET'
+        | 'IKKE_NOK_INFORMASJON'
+        | 'UAVSTEMT_KELVIN'
+        | 'UAVSTEMT_UKJENT';
     };
     'no.nav.aap.postmottak.api.drift.JournalpostDriftsinfoDto': {
       behandlinger: components['schemas']['no.nav.aap.postmottak.api.drift.BehandlingDriftsinfo'][];
@@ -1495,8 +1799,106 @@ export interface components {
       saksnummer?: string | null;
       tema?: string | null;
     };
+    'no.nav.aap.postmottak.api.drift.JournalpostPåSakDto': {
+      journalpostId: components['schemas']['no.nav.aap.postmottak.kontrakt.journalpost.JournalpostId'];
+      /** @enum {string|null} */
+      journalstatus?:
+        | 'AVBRUTT'
+        | 'EKSPEDERT'
+        | 'FEILREGISTRERT'
+        | 'FERDIGSTILT'
+        | 'JOURNALFOERT'
+        | 'MOTTATT'
+        | 'OPPLASTING_DOKUMENT'
+        | 'RESERVERT'
+        | 'UKJENT'
+        | 'UKJENT_BRUKER'
+        | 'UNDER_ARBEID'
+        | 'UTGAAR'
+        | null;
+      /** @enum {string|null} */
+      kanal?:
+        | 'ALTINN'
+        | 'ALTINN_INNBOKS'
+        | 'DPVT'
+        | 'EESSI'
+        | 'EIA'
+        | 'EKST_OPPS'
+        | 'E_POST'
+        | 'HELSENETTET'
+        | 'INGEN_DISTRIBUSJON'
+        | 'INNSENDT_NAV_ANSATT'
+        | 'LOKAL_UTSKRIFT'
+        | 'NAV_NO'
+        | 'NAV_NO_CHAT'
+        | 'NAV_NO_UINNLOGGET'
+        | 'SDP'
+        | 'SENTRAL_UTSKRIFT'
+        | 'SKAN_IM'
+        | 'SKAN_NETS'
+        | 'SKAN_PEN'
+        | 'TRYGDERETTEN'
+        | 'UKJENT'
+        | null;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      mottattDato?: string | null;
+      tema?: string | null;
+    };
+    'no.nav.aap.postmottak.api.drift.OverleveringsvurderingDriftsinfo': {
+      skalOverleveresTilKelvin: boolean;
+    };
     'no.nav.aap.postmottak.api.drift.PersonSøkDriftsinfoDto': {
       journalposter: components['schemas']['no.nav.aap.postmottak.api.drift.InnkommendeJournalpostDto'][];
+    };
+    'no.nav.aap.postmottak.api.drift.SakJournalposterDto': {
+      journalposter: components['schemas']['no.nav.aap.postmottak.api.drift.JournalpostPåSakDto'][];
+    };
+    'no.nav.aap.postmottak.api.drift.SaksvurderingDriftsinfo': {
+      generellSak: boolean;
+      opprettetNy: boolean;
+    };
+    'no.nav.aap.postmottak.api.drift.TemavurderingDriftsinfo': {
+      skalTilAap: boolean;
+      /** @enum {string} */
+      tema:
+        | 'AAP'
+        | 'BAR'
+        | 'BID'
+        | 'DAG'
+        | 'ENF'
+        | 'ERS'
+        | 'EYB'
+        | 'EYO'
+        | 'FEI'
+        | 'FOR'
+        | 'FUL'
+        | 'GEN'
+        | 'GRU'
+        | 'IND'
+        | 'KOM'
+        | 'OMS'
+        | 'OPP'
+        | 'PAI'
+        | 'PEN'
+        | 'SAK'
+        | 'SER'
+        | 'SYK'
+        | 'TIL'
+        | 'TRK'
+        | 'TSO'
+        | 'UFO'
+        | 'UKJENT'
+        | 'YRK';
+    };
+    'no.nav.aap.postmottak.api.drift.VurderingerDriftsinfo': {
+      digitalisering?: components['schemas']['no.nav.aap.postmottak.api.drift.DigitaliseringsvurderingDriftsinfo'];
+      fordeling?: components['schemas']['no.nav.aap.postmottak.api.drift.FordelingsvurderingDriftsinfo'];
+      overlevering?: components['schemas']['no.nav.aap.postmottak.api.drift.OverleveringsvurderingDriftsinfo'];
+      sak?: components['schemas']['no.nav.aap.postmottak.api.drift.SaksvurderingDriftsinfo'];
+      tema?: components['schemas']['no.nav.aap.postmottak.api.drift.TemavurderingDriftsinfo'];
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.dokument.DokumentDto': {
       dokumentInfoId: string;
@@ -1551,7 +1953,7 @@ export interface components {
       /** @enum {string} */
       status: 'AVSLUTTET' | 'IVERKSETTES' | 'OPPRETTET' | 'UTREDES';
       /** @enum {string} */
-      typeBehandling: 'DokumentHåndtering' | 'Fordeling' | 'Journalføring';
+      typeBehandling: 'DokumentHåndtering' | 'Fordeling' | 'Journalføring' | 'Under18';
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.sak.FinnBehandlingerResponse': {
       behandlinger: components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.sak.BehandlinginfoDTO'][];
@@ -1577,6 +1979,7 @@ export interface components {
     };
     'no.nav.aap.postmottak.api.faktagrunnlag.strukturering.DigitaliseringGrunnlagDto': {
       erPapir: boolean;
+      journalpostMetadata: components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.strukturering.JournalpostMetadata'];
       klagebehandlinger: components['schemas']['no.nav.aap.postmottak.gateway.Klagebehandling'][];
       vurdering?: components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.strukturering.DigitaliseringvurderingDto'];
     };
@@ -1614,6 +2017,38 @@ export interface components {
        */
       søknadsdato?: string | null;
     };
+    'no.nav.aap.postmottak.api.faktagrunnlag.strukturering.JournalpostMetadata': {
+      brevkode?: string | null;
+      erPapir: boolean;
+      harStrukturertData: boolean;
+      /** @enum {string|null} */
+      kategori?:
+        | 'AKTIVITETSKORT'
+        | 'ANNET_RELEVANT_DOKUMENT'
+        | 'DIALOGMELDING'
+        | 'FAGSYSTEMINFO_BEHOV_HENDELSE'
+        | 'FORELDREPENGE_VEDTAK_HENDELSE'
+        | 'INSTITUSJONSOPPHOLD'
+        | 'KABAL_HENDELSE'
+        | 'KLAGE'
+        | 'KORRIGER_SØKNADSDATO'
+        | 'LEGEERKLÆRING'
+        | 'LEGEERKLÆRING_AVVIST'
+        | 'MANUELL_REVURDERING'
+        | 'MELDEKORT'
+        | 'MIGRERING_FRA_ARENA'
+        | 'NY_ÅRSAK_TIL_BEHANDLING'
+        | 'OMGJØRING_KLAGE_REVURDERING'
+        | 'OPPFØLGINGSOPPGAVE'
+        | 'PDL_HENDELSE_DODSFALL_BARN'
+        | 'PDL_HENDELSE_DODSFALL_BRUKER'
+        | 'PDL_HENDELSE_FOLKEREGISTERIDENT'
+        | 'SYKEPENGE_VEDTAK_HENDELSE'
+        | 'SØKNAD'
+        | 'TILBAKEKREVING_HENDELSE'
+        | 'UFØRE_VEDTAK_HENDELSE'
+        | null;
+    };
     'no.nav.aap.postmottak.api.faktagrunnlag.tema.AvklarTemaGrunnlagDto': {
       dokumenter: string[];
       journalpostMetadata: components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.tema.JournalpostMetadata'];
@@ -1647,6 +2082,7 @@ export interface components {
         | 'SETT_FAGSAK'
         | 'START_BEHANDLING'
         | 'UDEFINERT'
+        | 'UNDER18'
         | 'VIDERESEND';
       /** @enum {string} */
       aktivtSteg:
@@ -1654,9 +2090,12 @@ export interface components {
         | 'AVKLAR_FORDELING_VIDERESEND'
         | 'AVKLAR_SAK'
         | 'AVKLAR_TEMA'
+        | 'AVKLAR_UNDER18'
+        | 'AVKLAR_UNDER18_SAMTYKKE'
         | 'DIGITALISER_DOKUMENT'
         | 'ENDELIG_JOURNALFØRING'
         | 'IVERKSETTES'
+        | 'OPPRETT_UNDER18_SAK'
         | 'OVERLEVER_TIL_FAGSYSTEM'
         | 'SETT_FAGSAK'
         | 'START_BEHANDLING'
@@ -1678,9 +2117,12 @@ export interface components {
         | 'AVKLAR_FORDELING_VIDERESEND'
         | 'AVKLAR_SAK'
         | 'AVKLAR_TEMA'
+        | 'AVKLAR_UNDER18'
+        | 'AVKLAR_UNDER18_SAMTYKKE'
         | 'DIGITALISER_DOKUMENT'
         | 'ENDELIG_JOURNALFØRING'
         | 'IVERKSETTES'
+        | 'OPPRETT_UNDER18_SAK'
         | 'OVERLEVER_TIL_FAGSYSTEM'
         | 'SETT_FAGSAK'
         | 'START_BEHANDLING'
@@ -1728,6 +2170,7 @@ export interface components {
         | 'SETT_FAGSAK'
         | 'START_BEHANDLING'
         | 'UDEFINERT'
+        | 'UNDER18'
         | 'VIDERESEND';
     };
     'no.nav.aap.postmottak.api.flyt.FlytSteg': {
@@ -1738,9 +2181,12 @@ export interface components {
         | 'AVKLAR_FORDELING_VIDERESEND'
         | 'AVKLAR_SAK'
         | 'AVKLAR_TEMA'
+        | 'AVKLAR_UNDER18'
+        | 'AVKLAR_UNDER18_SAMTYKKE'
         | 'DIGITALISER_DOKUMENT'
         | 'ENDELIG_JOURNALFØRING'
         | 'IVERKSETTES'
+        | 'OPPRETT_UNDER18_SAK'
         | 'OVERLEVER_TIL_FAGSYSTEM'
         | 'SETT_FAGSAK'
         | 'START_BEHANDLING'
@@ -1808,6 +2254,13 @@ export interface components {
       status: string;
       steg: string;
     };
+    'no.nav.aap.postmottak.api.test.KnyttTilAnnenSakTestRequest': {
+      fagsakId: string;
+      journalfoerendeEnhet: string;
+    };
+    'no.nav.aap.postmottak.api.test.KnyttTilAnnenSakTestResponse': {
+      nyJournalpostId: components['schemas']['no.nav.aap.postmottak.kontrakt.journalpost.JournalpostId'];
+    };
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarOverleveringLøsning': {
       begrunnelse?: string | null;
       behovstype: string;
@@ -1857,10 +2310,23 @@ export interface components {
         | 'YRK'
         | null;
     };
+    'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarUnder18SamtykkeLøsning': {
+      beggeForeldreSamtykket: boolean;
+      behovstype: string;
+      samtykkeJournalpostIder: number[];
+    };
+    'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarUnder18SøknadLøsning': {
+      behovstype: string;
+      /** @enum {string} */
+      situasjon: 'SØKER_FOR_UNG' | 'SØKER_FYLT_18';
+      søkerVilFortsette: boolean;
+    };
     'no.nav.aap.postmottak.avklaringsbehov.løsning.AvklaringsbehovLøsning':
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarOverleveringLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarSaksnummerLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarTemaLøsning']
+      | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarUnder18SamtykkeLøsning']
+      | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarUnder18SøknadLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.DigitaliserDokumentLøsning']
       | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.SattPåVentLøsning'];
     'no.nav.aap.postmottak.avklaringsbehov.løsning.DigitaliserDokumentLøsning': {
@@ -1908,7 +2374,7 @@ export interface components {
     'no.nav.aap.postmottak.flyt.flate.visning.Visning': {
       readOnly: boolean;
       /** @enum {string} */
-      typeBehandling: 'DokumentHåndtering' | 'Fordeling' | 'Journalføring';
+      typeBehandling: 'DokumentHåndtering' | 'Fordeling' | 'Journalføring' | 'Under18';
       visVentekort: boolean;
     };
     'no.nav.aap.postmottak.gateway.AvsenderMottakerDto': {
@@ -1925,6 +2391,20 @@ export interface components {
        * @example 2025-04-01
        */
       opprettetDato: string;
+    };
+    'no.nav.aap.postmottak.gateway.SafTilknyttetDokument': {
+      dokumentInfoId: string;
+    };
+    'no.nav.aap.postmottak.gateway.SafTilknyttetJournalpost': {
+      dokumenter: components['schemas']['no.nav.aap.postmottak.gateway.SafTilknyttetDokument'][];
+      journalpostId: string;
+      sak?: components['schemas']['no.nav.aap.postmottak.gateway.Sak'];
+    };
+    'no.nav.aap.postmottak.gateway.Sak': {
+      fagsakId?: string | null;
+      fagsaksystem?: string | null;
+      /** @enum {string} */
+      sakstype: 'FAGSAK' | 'GENERELL_SAK';
     };
     'no.nav.aap.postmottak.joarkavstemmer.UavstemtJournalpost': {
       /** Format: uuid */
@@ -1966,7 +2446,7 @@ export interface components {
     };
     'no.nav.aap.postmottak.kontrakt.avklaringsbehov.Definisjon': {
       /** @enum {string} */
-      kode: '1337' | '1338' | '1339' | '1340' | '1341' | '1342' | '1343' | '9001';
+      kode: '1337' | '1338' | '1339' | '1340' | '1341' | '1342' | '1343' | '1344' | '1345' | '1347' | '9001';
       kreverToTrinn: boolean;
       løsesAv: (
         | 'BESLUTTER'
@@ -1984,9 +2464,12 @@ export interface components {
         | 'AVKLAR_FORDELING_VIDERESEND'
         | 'AVKLAR_SAK'
         | 'AVKLAR_TEMA'
+        | 'AVKLAR_UNDER18'
+        | 'AVKLAR_UNDER18_SAMTYKKE'
         | 'DIGITALISER_DOKUMENT'
         | 'ENDELIG_JOURNALFØRING'
         | 'IVERKSETTES'
+        | 'OPPRETT_UNDER18_SAK'
         | 'OVERLEVER_TIL_FAGSYSTEM'
         | 'SETT_FAGSAK'
         | 'START_BEHANDLING'

@@ -6,6 +6,7 @@ import { render, screen, within } from 'lib/test/CustomRender';
 
 const grunnlag: DigitaliseringsGrunnlag = {
   erPapir: false,
+  journalpostMetadata: { erPapir: false, harStrukturertData: false, kategori: 'SØKNAD' },
   klagebehandlinger: [],
   vurdering: {
     kategori: 'SØKNAD',

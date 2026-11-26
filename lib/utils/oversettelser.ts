@@ -104,6 +104,9 @@ const behovskodeMap = {
   '1341': 'Endre tema',
   '1342': 'Vent på Gosys',
   '1343': 'Avklar fordeling',
+  '1344': 'Avklar søknad for bruker under 18 år',
+  '1345': 'Avklar samtykke for bruker under 18 år',
+  '1347': 'Vent på samtykke for bruker under 18 år',
 } as const;
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {

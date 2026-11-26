@@ -8,6 +8,7 @@ import { DigitaliserAnnetRelevantDokument } from './DigitaliserAnnetRelevantDoku
 const grunnlag: DigitaliseringsGrunnlag = {
   klagebehandlinger: [],
   erPapir: false,
+  journalpostMetadata: { erPapir: false, harStrukturertData: false, kategori: 'ANNET_RELEVANT_DOKUMENT' },
   vurdering: {
     kategori: 'ANNET_RELEVANT_DOKUMENT',
     strukturertDokumentJson: '{}',
