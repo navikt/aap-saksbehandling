@@ -1,0 +1,110 @@
+name: Oppdater OpenAPI-typer fra postmottak
+
+on:
+  workflow_dispatch:
+    inputs:
+      run-id:
+        description: 'Run ID i aap-postmottak-backend som produserte openapi.json'
+        required: true
+        type: string
+
+concurrency:
+  group: oppdater-postmottak-openapi-typer
+  queue: max
+
+permissions:
+  contents: read
+
+jobs:
+  oppdater-typer:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      SKIP_YARN_COREPACK_CHECK: true
+      RUN_ID: ${{ inputs.run-id }}
+    steps:
+      - name: Valider run ID
+        run: |
+          if [[ ! "$RUN_ID" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::error::run-id må være et positivt heltall."
+            exit 1
+          fi
+
+      - uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3
+        id: get-saksbehandling-token
+        with:
+          app-id: '${{ secrets.TEAM_AAP_GITHUB_APP_ID }}'
+          private-key: '${{ secrets.TEAM_AAP_GITHUB_APP_PRIVATE_KEY }}'
+          owner: navikt
+          repositories: aap-saksbehandling
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          token: ${{ steps.get-saksbehandling-token.outputs.token }}
+
+      - uses: actions/create-github-app-token@f418cff399f7aef4c2f0ad47e25ca7a6abbdd6fc # v3
+        id: get-postmottak-token
+        with:
+          app-id: '${{ secrets.TEAM_AAP_GITHUB_APP_ID }}'
+          private-key: '${{ secrets.TEAM_AAP_GITHUB_APP_PRIVATE_KEY }}'
+          owner: navikt
+          repositories: aap-postmottak-backend
+          permission-actions: read
+
+      - name: Last ned openapi.json fra aap-postmottak-backend
+        run: gh run download "$RUN_ID" --repo navikt/aap-postmottak-backend --name openapi --dir .
+        env:
+          GH_TOKEN: ${{ steps.get-postmottak-token.outputs.token }}
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+          registry-url: https://npm.pkg.github.com
+          package-manager-cache: false
+
+      - name: Aktiver Corepack
+        run: corepack enable
+
+      - name: Installer avhengigheter
+        run: yarn install --immutable
+
+      - name: Generer postmottak-typer fra openapi.json
+        run: yarn gentypes:postmottak:ci
+
+      - name: Fjern midlertidig fil
+        run: rm -f openapi.json
+
+      - name: Opprett eller oppdater PR med postmottak-typer
+        run: |
+          if git diff --quiet -- lib/types/postmottakSchema.d.ts; then
+            echo "Ingen endringer i postmottak-typene, avslutter."
+            exit 0
+          fi
+
+          git config user.email "aap-openapi-typer-updater@nav.no"
+          git config user.name "AAP openapi-typer sync"
+
+          BRANCH_NAME="chore/oppdater-postmottak-openapi-typer"
+          git checkout -B "$BRANCH_NAME"
+          git add lib/types/postmottakSchema.d.ts
+          git commit -m "AAP-BAU oppdater genererte typer fra aap-postmottak-backend" \
+            -m "Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+          git push --force origin HEAD:"$BRANCH_NAME"
+
+          RUN_URL="https://github.com/navikt/aap-postmottak-backend/actions/runs/$RUN_ID"
+          EXISTING_PR=$(gh pr list --repo navikt/aap-saksbehandling --state open \
+            --base main --head "$BRANCH_NAME" --json number --jq '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            gh pr comment "$EXISTING_PR" --repo navikt/aap-saksbehandling \
+              --edit-last --create-if-none --body "Oppdatert med postmottak-typer fra $RUN_URL."
+          else
+            gh pr create --repo navikt/aap-saksbehandling --base main --head "$BRANCH_NAME" \
+              --title "AAP-BAU: Oppdater genererte typer fra aap-postmottak-backend" \
+              --body "Automatisk generert PR fra $RUN_URL. \`lib/types/postmottakSchema.d.ts\` er regenerert med \`yarn gentypes:postmottak:ci\`."
+          fi
+        env:
+          GH_TOKEN: ${{ steps.get-saksbehandling-token.outputs.token }}
