@@ -26,7 +26,6 @@ export const GruppeSteg = ({
 }: Props) => {
   const skalViseAlertForGjennomførtKvalitetssikring =
     aktivtSteg !== 'KVALITETSSIKRING' && aktivtSteg !== 'BREV' && visning.brukerHarKvalitetssikret;
-
   const skalViseAlertForGjennomførtBesluttet = visning.brukerHarBesluttet && aktivtSteg !== 'BREV';
 
   return (
@@ -53,6 +52,7 @@ export const GruppeSteg = ({
           behandlingReferanse={behandlingReferanse}
           behandlingVersjon={behandlingVersjon}
           aktivtSteg={aktivtSteg}
+          behandlingstype={visning.typeBehandling}
         />
       )}
       {children}

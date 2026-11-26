@@ -39,6 +39,7 @@ export const Aktivitetsplikt11_7 = async ({ behandlingsreferanse, flyt }: Props)
           visAvbryt={false}
           behandlingVersjon={behandlingVersjon}
           aktivtSteg={flyt.aktivtSteg}
+          behandlingstype={flyt.visning.typeBehandling}
         />
       )}
     </GruppeSteg>
