@@ -7,7 +7,10 @@ if [[ "$OVERWRITE_ENV" =~ ^[Nn] ]]; then
   exit 0
 fi
 
-ENV=$(curl -s "https://localauth-aap.intern.dev.nav.no/entraid/env")
+if ! ENV=$(curl -fsS "https://localauth-aap.intern.dev.nav.no/entraid/env"); then
+  echo "ERROR: Kunne ikke hente env-verdier fra localauth" >&2
+  exit 1
+fi
 
 if [ -z "$ENV" ]; then
   echo "ERROR: Fikk ingen env-verdier fra localauth"
