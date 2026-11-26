@@ -2,7 +2,7 @@ import { requestAzureOboToken, validateToken } from '@navikt/oasis';
 import { headers } from 'next/headers';
 import { getAccessTokenOrRedirectToLogin } from './azure/azuread';
 import { logError, logWarning } from 'lib/serverutlis/logger';
-import { hentLocalToken } from 'lib/services/localFetch';
+import { hentLocalToken } from 'lib/services/localToken';
 import { isLocal } from 'lib/utils/environment';
 
 type TokenResult = { ok: true; token: string } | { ok: false; error: Error };

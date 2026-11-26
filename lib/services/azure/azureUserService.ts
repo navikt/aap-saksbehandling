@@ -1,10 +1,11 @@
 import 'server-only';
 
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { getAccessTokenOrRedirectToLogin } from './azuread';
 import { isDev, isLocal } from 'lib/utils/environment';
 import { Roller } from 'lib/types/types';
 import { decodeJwt, JWTPayload } from 'jose';
+import { finnLokalBruker } from 'lib/utils/lokaleBrukere';
 
 export interface BrukerInformasjon {
   navn: string;
@@ -12,20 +13,10 @@ export interface BrukerInformasjon {
   roller: Roller[];
 }
 
-const lokaltOverstyrtBruker = isLocal();
-const lokaltOverstyrteRoller = [
-  Roller.BESLUTTER,
-  Roller.KVALITETSSIKRER,
-  Roller.LES,
-  Roller.SAKSBEHANDLER_NASJONAL,
-  Roller.SAKSBEHANDLER_OPPFØLGING,
-  Roller.DRIFT,
-  Roller.PRODUKSJONSSTYRING,
-];
-
 export async function hentInnloggetBrukerInformasjon(): Promise<BrukerInformasjon> {
-  if (lokaltOverstyrtBruker) {
-    return { navn: 'Iren Panikk', NAVident: 'z123456', roller: lokaltOverstyrteRoller };
+  if (isLocal()) {
+    const cookieStore = await cookies();
+    return finnLokalBruker(cookieStore.get('bruker')?.value);
   }
   const requestHeaders = await headers();
   const token = getAccessTokenOrRedirectToLogin(requestHeaders);
