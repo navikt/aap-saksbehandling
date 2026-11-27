@@ -10,7 +10,7 @@ import { MottakerInfoCard } from 'components/brevbygger/mottaker/MottakerInfoCar
 import { RedigerMottakerDialog } from 'components/brevbygger/mottaker/RedigerMottakerDialog';
 import { isSuccess } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
-import { erGyldigFullmektig, formaterNavn, mottakerErBrukerUtenAdresse } from 'lib/utils/brevmottakere';
+import { kanLeggeTilFullmektig, formaterNavn, mottakerErBrukerUtenAdresse } from 'lib/utils/brevmottakere';
 
 export enum MottakerType {
   HOVEDMOTTAKER = 'HOVEDMOTTAKER',
@@ -96,7 +96,7 @@ export function VelgMottakere({
     });
   };
 
-  const fullmektigKanTilbys = erGyldigFullmektig(fullmektig, hovedmottaker, kopimottaker);
+  const fullmektigKanTilbys = kanLeggeTilFullmektig(fullmektig, hovedmottaker, kopimottaker);
   const antallMottakere = [hovedmottaker, kopimottaker].filter(Boolean).length;
 
   return (

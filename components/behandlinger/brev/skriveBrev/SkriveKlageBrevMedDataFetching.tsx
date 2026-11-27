@@ -14,8 +14,8 @@ import styles from 'components/behandlinger/brev/skriveBrev/SkriveBrevMedDataFet
 import { SkriveBrev } from 'components/behandlinger/brev/skriveBrev/SkriveBrev';
 import { KlagesaksopplysningerKolonne } from 'components/behandlinger/brev/skriveBrev/KlagesaksopplysningerKolonne';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
-import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
+import { mapFullmektigTilMottaker } from 'lib/utils/brevmottakere';
 
 export const SkriveKlageBrevMedDataFetching = async ({
   behandlingsreferanse,
@@ -75,8 +75,7 @@ export const SkriveKlageBrevMedDataFetching = async ({
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
 
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
-  const brukerMottaker = { ident: brev.mottaker.ident || '', navn: brev.mottaker.navn || '' }; // Midlertidig
-  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
+  const fullmektig = mapFullmektigTilMottaker(fullmektigGrunnlag.data.vurdering);
 
   return (
     <div className={styles.flex}>
@@ -114,7 +113,6 @@ export const SkriveKlageBrevMedDataFetching = async ({
           readOnly={readOnlyBrev}
           signaturer={brev.signaturer}
           fullmektigMottaker={fullmektig}
-          brukerMottaker={bruker}
           behandlingVersjon={behandlingVersjon}
           brevtype={brev.brevtype}
         />

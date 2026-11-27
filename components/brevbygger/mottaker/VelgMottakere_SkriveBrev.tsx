@@ -11,7 +11,7 @@ import { RedigerMottakerDialog } from 'components/brevbygger/mottaker/RedigerMot
 import { isSuccess } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
 import { LeggTilFullmektigKnapp, MottakerType, VelgMottakereProps } from 'components/brevbygger/mottaker/VelgMottakere';
-import { erGyldigFullmektig } from 'lib/utils/brevmottakere';
+import { kanLeggeTilFullmektig } from 'lib/utils/brevmottakere';
 
 /**
  * Duplikat av VelgMottakere som brukes i [Brevbygger.tsx] med styling tilpasset gammel løsning.
@@ -87,7 +87,7 @@ export function VelgMottakere_SkriveBrev({
     });
   };
 
-  const fullmektigKanTilbys = erGyldigFullmektig(fullmektig, hovedmottaker, kopimottaker);
+  const fullmektigKanTilbys = kanLeggeTilFullmektig(fullmektig, hovedmottaker, kopimottaker);
   const visKopiKolonne = !!kopimottaker || !readOnly;
 
   return (
