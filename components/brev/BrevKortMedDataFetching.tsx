@@ -5,7 +5,7 @@ import { AvklaringsbehovKode, BrevBehovstype, StegType, TypeBehandling } from 'l
 import { ApiException } from 'components/saksbehandling/apiexception/ApiException';
 import { isError } from 'lib/utils/api';
 import { Behovstype, mapBehovskodeTilBehovstype } from 'lib/utils/form';
-import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
+import { mapFullmektigTilMottaker } from 'lib/utils/brevmottakere';
 
 interface Props {
   behandlingReferanse: string;
@@ -44,8 +44,7 @@ export const BrevKortMedDataFetching = async ({
   const readOnly = aktivtSteg === 'BREV' && !grunnlag.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(grunnlag.avklaringsbehovKode);
   const brevtekst = mapBehovskodeTilBehovstype(behovstype);
-  const brukerMottaker = { ident: mottaker.ident || '', navn: mottaker.navn || '' }; // Midlertidig
-  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
+  const fullmektig = mapFullmektigTilMottaker(fullmektigGrunnlag.data.vurdering);
 
   return (
     <VilkårsKort heading={brevtekst} steg="BREV" defaultOpen={true} aktivMarkering={!readOnly}>
@@ -55,7 +54,6 @@ export const BrevKortMedDataFetching = async ({
           grunnlag={brev}
           mottaker={mottaker}
           bruker={grunnlag.bruker}
-          brukerMottaker={bruker}
           kopimottaker={grunnlag.kopimottaker}
           fullmektigMottaker={fullmektig}
           behandlingVersjon={behandlingVersjon}

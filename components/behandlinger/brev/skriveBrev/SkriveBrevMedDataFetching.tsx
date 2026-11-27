@@ -13,7 +13,7 @@ import { ApiException } from 'components/saksbehandling/apiexception/ApiExceptio
 import { isError } from 'lib/utils/api';
 import { skrivBrevBehovstype } from 'components/brev/BrevKortMedDataFetching';
 import { BrevOppsummering } from 'components/behandlinger/brev/skriveBrev/BrevOppsummering';
-import { mapGrunnlagTilMottakere } from 'lib/utils/brevmottakere';
+import { mapFullmektigTilMottaker } from 'lib/utils/brevmottakere';
 import { Brevbygger } from 'components/brevbygger/Brevbygger';
 
 interface Props {
@@ -92,13 +92,7 @@ export const SkriveBrevMedDataFetching = async ({
   const readOnlyBrev = aktivtSteg === 'BREV' && !brev.harTilgangTilÅSendeBrev;
   const behovstype = skrivBrevBehovstype(brev.avklaringsbehovKode);
 
-  /*
-   * TODO:
-   *  Dette må ryddes opp i når vi skroter den gamle brevbyggeren.
-   *  Kan forenkles litt når vi går over til ny Brevbygger.
-   */
-  const brukerMottaker = { ident: brev.mottaker.ident || '', navn: brev.mottaker.navn || '' }; // Midlertidig
-  const { bruker, fullmektig } = mapGrunnlagTilMottakere(brukerMottaker, fullmektigGrunnlag.data.vurdering);
+  const fullmektig = mapFullmektigTilMottaker(fullmektigGrunnlag.data.vurdering);
 
   return (
     <div className={styles.flex}>
@@ -136,7 +130,6 @@ export const SkriveBrevMedDataFetching = async ({
           mottaker={brev.mottaker}
           kopimottaker={brev.kopimottaker}
           bruker={brev.bruker}
-          brukerMottaker={bruker}
           fullmektigMottaker={fullmektig}
           readOnly={readOnlyBrev}
           signaturer={brev.signaturer}

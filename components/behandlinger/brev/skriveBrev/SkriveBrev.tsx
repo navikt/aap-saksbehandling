@@ -7,16 +7,7 @@ import { useDebounce } from 'hooks/DebounceHook';
 import { useParamsMedType } from 'hooks/saksbehandling/BehandlingHook';
 import { revalidateBehandlingPath } from 'lib/actions/actions';
 import { clientHentFlyt, clientMellomlagreBrev } from 'lib/clientApi';
-import {
-  Brev,
-  BrevBehovstype,
-  BrevGrunnlagBrev,
-  BrevMottaker,
-  BrevStatus,
-  IdentOgNavn,
-  Mottaker,
-  Signatur,
-} from 'lib/types/types';
+import { Brev, BrevBehovstype, BrevGrunnlagBrev, BrevStatus, IdentOgNavn, Mottaker, Signatur } from 'lib/types/types';
 import { isError, isSuccess } from 'lib/utils/api';
 import { formaterDatoMedTidspunktForFrontend } from 'lib/utils/date';
 import { loggUmamiBrevVarighet, useUmamiStartTidspunkt } from 'lib/utils/umami/varighet';
@@ -26,13 +17,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert } from 'components/alert/Alert';
 import { ForhåndsvisBrevModal } from 'components/behandlinger/brev/skriveBrev/ForhåndsvisBrevModal';
 import { IkkeSendBrevModal, IkkeSendFields } from 'components/behandlinger/brev/skriveBrev/IkkeSendBrevModal';
-import { Distribusjonssjekk } from 'components/brev/Distribusjonssjekk';
-import { FormField } from 'components/form/FormField';
-import { useConfigForm } from 'components/form/FormHook';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { useLøsAvklaringsbehov } from 'hooks/saksbehandling/løsavklaringsbehov/useLøsAvklaringsbehov';
 import { FerdigstillBrevDialog } from 'components/brevbygger/FerdigstillBrevDialog';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { VelgMottakere_SkriveBrev } from 'components/brevbygger/mottaker/VelgMottakere_SkriveBrev';
 
 export const SkriveBrev = ({
@@ -43,7 +30,6 @@ export const SkriveBrev = ({
   kopimottaker,
   fullmektigMottaker,
   bruker,
-  brukerMottaker,
   grunnlag,
   signaturer,
   visAvbryt = true,
@@ -54,11 +40,10 @@ export const SkriveBrev = ({
 }: {
   referanse: string;
   behovstype: BrevBehovstype;
-  mottaker: BrevMottaker;
-  kopimottaker?: BrevMottaker;
+  mottaker: Mottaker;
+  kopimottaker?: Mottaker;
   fullmektigMottaker?: Mottaker;
   bruker: IdentOgNavn;
-  brukerMottaker?: Mottaker;
   behandlingVersjon: number;
   grunnlag: Brev;
   signaturer: Signatur[];
@@ -74,12 +59,9 @@ export const SkriveBrev = ({
   const [sistLagret, setSistLagret] = useState<Date | undefined>();
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string>();
-  const [distribusjonssjekkFeil, setDistribusjonssjekkFeil] = useState<string>();
   const debouncedBrev = useDebounce<Brev>(brev, 2000);
   const [kanMellomlagreBrev, setKanMellomlagreBrev] = useState(true);
-  const [valgteMottakere, setMottakere] = useState<Mottaker[]>([]);
   const umamiStartTidspunkt = useUmamiStartTidspunkt('AKTIV');
-  const redigerMottakerBrevbygger = useFeatureFlag('RedigerMottakerBrevbygger');
 
   const [forhåndsvisModalOpen, setForhåndsvisModalOpen] = useState(false);
   const [ikkeSendBrevModalOpen, settIkkeSendBrevModalOpen] = useState(false);
@@ -135,7 +117,6 @@ export const SkriveBrev = ({
           behov: {
             behovstype: behovstype,
             brevbestillingReferanse: referanse,
-            mottakere: valgteMottakere,
             handling: 'FERDIGSTILL',
           },
           referanse: behandlingsreferanse,
@@ -147,26 +128,15 @@ export const SkriveBrev = ({
 
   return (
     <>
-      {!redigerMottakerBrevbygger && fullmektigMottaker && brukerMottaker && (
-        <VelgeMottakere
-          setMottakere={setMottakere}
+      <div>
+        <VelgMottakere_SkriveBrev
+          bestillingsreferanse={referanse}
           readOnly={readOnly}
-          brukerNavn={mottaker.navn || 'Mangler'}
-          bruker={brukerMottaker}
+          bruker={bruker}
+          initellMottaker={mottaker}
+          initiellKopimottaker={kopimottaker}
           fullmektig={fullmektigMottaker}
         />
-      )}
-      <div>
-        {redigerMottakerBrevbygger && (
-          <VelgMottakere_SkriveBrev
-            bestillingsreferanse={referanse}
-            readOnly={readOnly}
-            bruker={bruker}
-            initellMottaker={mottaker}
-            initiellKopimottaker={kopimottaker}
-            fullmektig={fullmektigMottaker}
-          />
-        )}
 
         <HStack gap="space-16" justify="space-between" wrap={false} align="center" marginBlock="space-0 space-16">
           <HStack gap="space-8">
@@ -234,7 +204,8 @@ export const SkriveBrev = ({
           )}
           <BrevbyggerBeta
             brevmal={brev}
-            mottaker={{ ident: mottaker.ident || 'Mangler', navn: mottaker.navn || 'Mangler' }}
+            // Selve brevet skal alltid innholde den som mottar ytelsen, ikke den som mottar brevet.
+            mottaker={{ ident: bruker.ident || 'Mangler', navn: bruker.navn || 'Mangler' }}
             saksnummer={saksnummer}
             onBrevChange={onChange}
             logo={NavLogo}
@@ -245,20 +216,12 @@ export const SkriveBrev = ({
             status={løsAvklaringsbehovStatus}
             løsBehovOgGåTilNesteStegError={løsAvklaringsbehovError}
           />
-          <Distribusjonssjekk
-            readOnly={readOnly}
-            referanse={referanse}
-            valgteMottakere={valgteMottakere}
-            distribusjonssjekkFeil={distribusjonssjekkFeil}
-            setDistribusjonssjekkFeil={setDistribusjonssjekkFeil}
-            brukerMottaker={brukerMottaker}
-          />
           {!readOnly && (
             <HStack justify="end">
               <Button
                 type="button"
                 onClick={() => settVisFerdigstillBrevDialog(true)}
-                disabled={status !== 'FORHÅNDSVISNING_KLAR' || !!distribusjonssjekkFeil}
+                disabled={status !== 'FORHÅNDSVISNING_KLAR'}
               >
                 Ferdigstill brev
               </Button>
@@ -294,50 +257,3 @@ export const SkriveBrev = ({
     </>
   );
 };
-
-function VelgeMottakere({
-  setMottakere,
-  readOnly,
-  fullmektig,
-  brukerNavn,
-  bruker,
-}: {
-  setMottakere: (mottakere: Mottaker[]) => void;
-  readOnly: boolean;
-  brukerNavn: string;
-  bruker: Mottaker;
-  fullmektig: Mottaker;
-}) {
-  interface FormFields {
-    mottakere: ('BRUKER' | 'FULLMEKTIG')[];
-  }
-
-  const fullmektigNavn = fullmektig.navnOgAdresse?.navn;
-
-  const { formFields, form } = useConfigForm<FormFields>(
-    {
-      mottakere: {
-        type: 'checkbox',
-        label: 'Velg mottakere',
-        options: [
-          { label: brukerNavn ? `${brukerNavn} (Bruker)` : 'Bruker', value: 'BRUKER' },
-          { label: fullmektigNavn ? `${fullmektigNavn} (Fullmektig)` : 'Fullmektig', value: 'FULLMEKTIG' },
-        ],
-        defaultValue: ['FULLMEKTIG'],
-      },
-    },
-    { readOnly }
-  );
-
-  const valgteMottakere = form.watch('mottakere');
-  useEffect(() => {
-    const mottakere = valgteMottakere.map((mottaker) => (mottaker === 'BRUKER' ? bruker : fullmektig));
-    setMottakere(mottakere);
-  }, [bruker, fullmektig, setMottakere, valgteMottakere]);
-
-  return (
-    <div>
-      <FormField form={form} formField={formFields.mottakere} />
-    </div>
-  );
-}

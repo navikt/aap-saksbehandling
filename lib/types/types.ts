@@ -123,8 +123,6 @@ export type IdentOgNavn =
 export type Brev = components['schemas']['no.nav.aap.brev.kontrakt.Brev'];
 export type BrevStatus =
   components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev']['status'];
-export type BrevMottaker =
-  components['schemas']['no.nav.aap.behandlingsflyt.behandling.brev.BrevGrunnlag.Brev.Mottaker'];
 export type KanDistribuereBrevRequest = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevRequest'];
 export type KanDistribuereBrevV2Request = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevV2Request'];
 export type KanDistribuereBrevResponse = components['schemas']['no.nav.aap.brev.kontrakt.KanDistribuereBrevReponse'];
