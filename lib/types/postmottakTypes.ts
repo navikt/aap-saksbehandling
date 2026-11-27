@@ -10,6 +10,10 @@ export type BehandlingFlytOgTilstand =
   components['schemas']['no.nav.aap.postmottak.api.flyt.BehandlingFlytOgTilstandDto'];
 
 export type FlytGruppe = components['schemas']['no.nav.aap.postmottak.api.flyt.FlytGruppe'];
+export type Under18Grunnlag = components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.under18.Under18Grunnlag'];
+export type Under18Løsning =
+  | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarUnder18SøknadLøsning']
+  | components['schemas']['no.nav.aap.postmottak.avklaringsbehov.løsning.AvklarUnder18SamtykkeLøsning'];
 export type FlytProsessering = components['schemas']['no.nav.aap.postmottak.api.flyt.Prosessering'];
 
 export type StegGruppe = components['schemas']['no.nav.aap.postmottak.api.flyt.FlytGruppe']['stegGruppe'];
@@ -53,6 +57,8 @@ export type KategoriserDokumentKategori =
 export type JournalpostInfo =
   components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.dokument.DokumentInfoResponsDTO'];
 export type Dokument = components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.dokument.DokumentDto'];
+export type JournalposterRespons = ResponseOfGet<'/api/behandling/{referanse}/journalposter'>;
+export type JournalpostOversikt = JournalposterRespons['journalposter'][number];
 
 export type AvklarTemaGrunnlag =
   components['schemas']['no.nav.aap.postmottak.api.faktagrunnlag.tema.AvklarTemaGrunnlagDto'];
@@ -76,5 +82,6 @@ export type UbehandletJournalpost = components['schemas']['no.nav.aap.postmottak
 export type SimulerJournalpostHendelseRequest =
   components['schemas']['no.nav.aap.postmottak.SimulerJournalpostHendelseRequest'];
 
+type ResponseOfGet<Url extends keyof paths> = ResponseBody<paths[Url]['get']>;
 type RequestOfPost<Url extends keyof paths> = RequestBody<paths[Url]['post']>;
 type ResponseOfPost<Url extends keyof paths> = ResponseBody<paths[Url]['post']>;
