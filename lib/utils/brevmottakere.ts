@@ -44,10 +44,21 @@ function erSamme(mottaker1?: Mottaker, mottaker2?: Mottaker): boolean {
   if (!mottaker1 || !mottaker2) {
     return false;
   }
-  return mottaker1.ident === mottaker2.ident || mottaker1.navnOgAdresse?.navn === mottaker2.navnOgAdresse?.navn;
+  return (
+    (!!mottaker1.ident && mottaker1.ident === mottaker2.ident) ||
+    (!!mottaker1.navnOgAdresse?.navn && mottaker1.navnOgAdresse.navn === mottaker2.navnOgAdresse?.navn)
+  );
 }
 
-export function erGyldigFullmektig(fullmektig?: Mottaker, hovedmottaker?: Mottaker, kopimottaker?: Mottaker): boolean {
+/**
+ * Sjekker om fullmektig allerede er en av de eksisterende mottakerne (hovedmottaker eller kopimottaker).
+ * Hvis fullmektig har samme ident eller navn som en av mottakerne, kan fullmektig ikke legges til.
+ **/
+export function kanLeggeTilFullmektig(
+  fullmektig?: Mottaker,
+  hovedmottaker?: Mottaker,
+  kopimottaker?: Mottaker
+): boolean {
   if (!fullmektig) return false;
   const fullmektigErHovedmottaker = erSamme(fullmektig, hovedmottaker);
   const fullmektigErKopimottaker = erSamme(fullmektig, kopimottaker);
