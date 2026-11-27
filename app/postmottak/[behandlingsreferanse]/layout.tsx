@@ -84,7 +84,12 @@ const Layout = async (props: LayoutProps) => {
             flytRespons={flytResponse.data}
           />
 
-          <SplitVindu journalpostId={journalpostInfo.data.journalpostId} dokumenter={dokumenter}>
+          <SplitVindu
+            visAlleJournalposter={flytResponse.data.visning.typeBehandling === 'Under18'}
+            behandlingsreferanse={params.behandlingsreferanse}
+            journalpostId={journalpostInfo.data.journalpostId}
+            dokumenter={dokumenter}
+          >
             <VStack gap={'space-16'}>
               {flytResponse.data.prosessering.status === 'FEILET' && (
                 <FlytProsesseringAlert flytProsessering={flytResponse.data.prosessering} />

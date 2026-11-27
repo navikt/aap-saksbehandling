@@ -6,10 +6,10 @@ import { usePostmottakLøsBehovOgGåTilNesteSteg } from 'hooks/postmottak/Postmo
 import { AvklarTemaGrunnlag, AvklarTemaLøsning } from 'lib/types/postmottakTypes';
 import { LøsBehovOgGåTilNesteStegStatusAlert } from 'components/løsbehovoggåtilnestestegstatusalert/LøsBehovOgGåTilNesteStegStatusAlert';
 import { postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { BodyShort, Button, Dialog, HStack, VStack } from '@navikt/ds-react';
+import { BodyShort, Box, Button, Dialog, HStack, InfoCard, VStack } from '@navikt/ds-react';
 import { useConfigForm } from 'components/form/FormHook';
 import { FormField } from 'components/form/FormField';
-import { CheckmarkCircleIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 import { toggles } from 'lib/utils/toggles';
 import { PostmottakVilkårskort } from 'components/postmottak/vilkårskort/PostmottakVilkårskort';
 import { usePostmottakVilkårskortVisning } from 'hooks/postmottak/PostmottakVisningHook';
@@ -205,6 +205,20 @@ export const AvklarTema = ({ behandlingsVersjon, behandlingsreferanse, grunnlag,
           </Alert>
         )}
         <LøsBehovOgGåTilNesteStegStatusAlert status={status} />
+        {grunnlag.under18VedBekreftetAap != null && (
+          <Box maxWidth="30rem">
+            <InfoCard data-color="info" size="small">
+              <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                <InfoCard.Title>Behandling for bruker under 18 år</InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                {grunnlag.under18VedBekreftetAap === 'OPPRETT'
+                  ? 'Svarer du ja, opprettes en under 18-behandling for søknaden etter journalføring.'
+                  : 'Svarer du ja, legges denne journalposten til i den åpne under 18-behandlingen etter journalføring.'}
+              </InfoCard.Content>
+            </InfoCard>
+          </Box>
+        )}
         <FormField form={form} formField={formFields.erTemaAAP} />
         {velgTema && form.watch('erTemaAAP') === JaEllerNei.Nei && (
           <>

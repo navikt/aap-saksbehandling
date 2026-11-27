@@ -1,0 +1,27 @@
+.arbeidsflate {
+  align-self: start;
+  min-width: 0;
+}
+
+.faktaboks {
+  max-width: 30rem;
+}
+
+.søknader {
+  border-top: 1px solid var(--ax-border-neutral-subtle);
+  padding-top: var(--ax-space-12);
+  font-size: var(--ax-font-size-small);
+}
+
+.søknader summary {
+  cursor: pointer;
+}
+
+.søknader ul {
+  margin: var(--ax-space-8) 0 0;
+  padding-inline-start: var(--ax-space-20);
+}
+
+.søknader li + li {
+  margin-top: var(--ax-space-8);
+}

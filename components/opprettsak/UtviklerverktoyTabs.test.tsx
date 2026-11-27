@@ -50,6 +50,21 @@ describe('UtviklerverktoyTabs', () => {
       expect(postmottakSimulerJournalpostHendelseClient).not.toHaveBeenCalled();
     });
 
+    it('sender annet relevant dokument som scenario', async () => {
+      render(<SimulerJournalpostHendelse />);
+
+      await user.type(screen.getByRole('textbox', { name: 'JournalpostID' }), '1234567890');
+      await user.selectOptions(
+        screen.getByRole('combobox', { name: 'Scenario (samme oppsett som TestJournalPostBuilder)' }),
+        'ANNET_RELEVANT_DOKUMENT'
+      );
+      await user.click(screen.getByRole('button', { name: 'Simuler journalpost-hendelse' }));
+
+      expect(postmottakSimulerJournalpostHendelseClient).toHaveBeenCalledWith(
+        expect.objectContaining({ journalpostId: 1234567890, scenario: 'ANNET_RELEVANT_DOKUMENT' })
+      );
+    });
+
     it('sender fødselsdato til backend i ISO-format', async () => {
       render(<SimulerJournalpostHendelse />);
 

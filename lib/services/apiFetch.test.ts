@@ -96,6 +96,11 @@ describe('apiFetch', () => {
     expect(result).toEqual({ type: 'SUCCESS', status: 204, data: undefined });
   });
 
+  it('should accept an empty 202 response from løs-behov', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(null, { status: 202, headers: { 'content-length': '0' } }));
+    expect(await apiFetch(mockUrl, mockScope, 'POST')).toEqual({ type: 'SUCCESS', status: 202, data: undefined });
+  });
+
   it('should handle POST with request body', async () => {
     const requestBody = { name: 'New Item' };
     const mockResponse = { id: 2, name: 'New Item' };
@@ -145,6 +150,12 @@ describe('apiFetch', () => {
 
     expect(result).toEqual({ type: 'ERROR', apiException, status: 500 });
     expect(logError).toHaveBeenCalled();
+  });
+
+  it('beholder 403 når backend avviser uten responskropp', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(null, { status: 403 }));
+    expect(await apiFetch(mockUrl, mockScope)).toMatchObject({ type: 'ERROR', status: 403 });
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it('should retry on network failure for GET requests', async () => {

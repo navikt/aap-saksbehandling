@@ -15,11 +15,18 @@ export const FullførtOppgaveModal = ({ nesteBehandlingId, typeBehandling }: Pro
   const [isModalOpen, setIsModalOpen] = useState(true);
   const router = useRouter();
   const heading =
-    typeBehandling === 'Journalføring' ? 'Dokumentet er journalført' : 'Dokumentet er kategorisert og sendt.';
+    typeBehandling === 'Under18'
+      ? 'Under 18-behandlingen er fullført'
+      : typeBehandling === 'Journalføring'
+        ? 'Dokumentet er journalført'
+        : 'Dokumentet er kategorisert og sendt.';
   // hvis nesteBehandlingId er satt vet vi at vi er i en avsluttet journalføring og at det har blitt opprettet en ny dokumenthåndtering
-  const message = nesteBehandlingId
-    ? 'Dokumentet er journalført og det har blitt opprettet en ny oppgave for å digitalisere dokumentet. Start digitalisering for å fullføre hele dokumenthåndteringen. '
-    : 'Gå tilbake til oppgavelisten for å starte på neste oppgave.';
+  const message =
+    typeBehandling === 'Under18'
+      ? 'Behandlingen av søknaden for søkeren under 18 år er fullført i postmottak. Gå tilbake til oppgavelisten for å starte på neste oppgave.'
+      : nesteBehandlingId
+        ? 'Dokumentet er journalført og det har blitt opprettet en ny oppgave for å digitalisere dokumentet. Start digitalisering for å fullføre hele dokumenthåndteringen. '
+        : 'Gå tilbake til oppgavelisten for å starte på neste oppgave.';
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <Dialog.Popup width="large" closeOnOutsideClick={false}>

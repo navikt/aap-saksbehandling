@@ -9,6 +9,12 @@
   margin-left: var(--ax-space-8);
 }
 
+.dokumentfaner {
+  min-width: 0;
+  flex: 1;
+  overflow-x: auto;
+}
+
 .pdf {
   padding: var(--ax-space-8);
   height: 100vh;
