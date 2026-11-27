@@ -1,16 +1,21 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, HGrid, InfoCard } from '@navikt/ds-react';
+import { BodyShort, Button, HGrid, HStack, InfoCard } from '@navikt/ds-react';
 import { postmottakSimulerJournalpostHendelseClient } from 'lib/postmottakClientApi';
 import { isSuccess } from 'lib/utils/api';
 import { Alert } from 'components/alert/Alert';
 import { FormField } from 'components/form/FormField';
 import { useConfigForm } from 'components/form/FormHook';
+import { intervalToDuration } from 'date-fns';
+import { parseDatoFraDatePicker } from 'lib/utils/date';
+import { validerDato } from 'lib/validation/dateValidation';
+import { Dato } from 'lib/types/Dato';
 
 interface SimulerJournalpostHendelseFormFields {
   journalpostId: string;
   fnr: string;
+  fødselsdato: string;
   tema: string;
   temaGammelt: string;
   journalpostStatus: string;
@@ -26,7 +31,6 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
     journalpostId: {
       type: 'text',
       label: 'JournalpostID',
-      defaultValue: '1234567890',
       rules: {
         required: 'Du må skrive inn en journalpostID',
         validate: (value: string | boolean) => {
@@ -49,6 +53,14 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
             return 'Fødselsnummeret må være 11 siffer';
           }
         },
+      },
+    },
+    fødselsdato: {
+      type: 'date_input',
+      defaultValue: '01.01.2000',
+      label: 'Fødselsdato',
+      rules: {
+        validate: (value: string) => (value ? validerDato(value) : undefined),
       },
     },
     tema: {
@@ -85,6 +97,9 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
     },
   });
 
+  const fødselsdato = parseDatoFraDatePicker(form.watch('fødselsdato'));
+  const alder = fødselsdato ? intervalToDuration({ start: fødselsdato, end: new Date() }) : undefined;
+
   const handleSubmit = async (data: SimulerJournalpostHendelseFormFields) => {
     setIsLoading(true);
     setMessage('');
@@ -92,6 +107,7 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
       const res = await postmottakSimulerJournalpostHendelseClient({
         journalpostId: parseInt(data.journalpostId),
         fnr: data.fnr || undefined,
+        fødselsdato: data.fødselsdato ? new Dato(data.fødselsdato).formaterForBackend() : undefined,
         tema: data.tema,
         temaGammelt: data.temaGammelt || undefined,
         journalpostStatus: data.journalpostStatus,
@@ -115,12 +131,23 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
         <InfoCard.Header>
           <InfoCard.Title>Postmottak må kjøre</InfoCard.Title>
         </InfoCard.Header>
-        <InfoCard.Content>Kjør TestApp i postmottak for å kunne simulere journalposter.</InfoCard.Content>
+        <InfoCard.Content>
+          Kjør TestApp i postmottak og start frontend med yarn dev:postmottak eller yarn dev:all for å kunne simulere
+          journalposter.
+        </InfoCard.Content>
       </InfoCard>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <HGrid columns={2} gap="space-16">
           <FormField form={form} formField={formFields.journalpostId} />
           <FormField form={form} formField={formFields.fnr} />
+          <HStack gap="space-8" align="end">
+            <FormField form={form} formField={formFields.fødselsdato} />
+            {alder && (
+              <BodyShort>
+                {alder.years ?? 0} år og {alder.months ?? 0} måneder
+              </BodyShort>
+            )}
+          </HStack>
           <FormField form={form} formField={formFields.tema} />
           <FormField form={form} formField={formFields.temaGammelt} />
           <FormField form={form} formField={formFields.journalpostStatus} />
