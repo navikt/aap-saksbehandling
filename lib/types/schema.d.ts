@@ -4,45 +4,6 @@
  */
 
 export interface paths {
-  '/api/person/personinformasjon': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersoninfoRequest'];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.PersoninfoDTO'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/person/sykepengeperioder': {
     parameters: {
       query?: never;
@@ -234,45 +195,6 @@ export interface paths {
           };
           content: {
             'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.BehandlingAvTypeDTO'];
-          };
-        };
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/sak/finn': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: {
-        content: {
-          'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.FinnSakForIdentDTO'];
-        };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['no.nav.aap.behandlingsflyt.sakogbehandling.sak.flate.SaksinfoDTO'][];
           };
         };
       };
@@ -6995,24 +6917,6 @@ export interface components {
        */
       tom: string;
     };
-    'no.nav.aap.behandlingsflyt.PersoninfoDTO': {
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      dødsdato?: string | null;
-      fnr: string;
-      /**
-       * Format: date
-       * @example 2025-04-01
-       */
-      fødselsdato?: string | null;
-      navn: string;
-    };
-    'no.nav.aap.behandlingsflyt.PersoninfoRequest': {
-      /** Format: uuid */
-      personReferanse: string;
-    };
     'no.nav.aap.behandlingsflyt.SamordningDto': {
       dagpengerKilde?: string | null;
       dagpengerYtelseType?: string | null;
@@ -8758,6 +8662,7 @@ export interface components {
         | 'FORHÅNDSVARSEL_BRUDD_AKTIVITETSPLIKT'
         | 'FORHÅNDSVARSEL_KLAGE_FORMKRAV'
         | 'FORVALTNINGSMELDING'
+        | 'FORVALTNINGSMELDING_KANT_I_KANT'
         | 'INNVILGELSE'
         | 'KLAGE_AVVIST'
         | 'KLAGE_MOTTATT'
@@ -14792,7 +14697,8 @@ export interface components {
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.SøknadUtenlandsoppholdV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.FagsysteminfoBehovV0']
       | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.TilbakekrevingHendelseV0']
-      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0'];
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV1'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.MigreringFraArenaV0': {
       beskrivelse: string;
       /**
@@ -15280,7 +15186,9 @@ export interface components {
       /** @enum {string} */
       grunn: 'AVVENTER_BRUKERUTTALELSE';
     };
-    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uførevedtak': components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0'];
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.Uførevedtak':
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0']
+      | components['schemas']['no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV1'];
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV0': {
       avslag12_5: boolean;
       /** @enum {string} */
@@ -15298,6 +15206,29 @@ export interface components {
        * @enum {string}
        */
       meldingType: 'UførevedtakV0';
+    };
+    'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UførevedtakV1': {
+      avslag12_5: boolean;
+      /** @enum {string} */
+      kilde: 'PENSJON';
+      personId: string;
+      /** @enum {string} */
+      resultat: 'AVSL' | 'ENDR' | 'INNV' | 'OPPH';
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      vedtaksdato: string;
+      /**
+       * Format: date
+       * @example 2025-04-01
+       */
+      virkningsdato: string;
+      /**
+       * @description discriminator enum property added by openapi-typescript
+       * @enum {string}
+       */
+      meldingType: 'UførevedtakV1';
     };
     'no.nav.aap.behandlingsflyt.kontrakt.hendelse.dokumenter.UtenlandsPeriodeDto': {
       /**
