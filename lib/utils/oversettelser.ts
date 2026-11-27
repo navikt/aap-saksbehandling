@@ -3,6 +3,7 @@ import { PostmottakSettPåVentÅrsaker, PostmottakTypeBehandling } from 'lib/typ
 import {
   SettPåVentÅrsaker,
   TilbakekrevingVenteÅrsaker,
+  ToTrinnsVurderingGrunn,
   TypeBehandling,
   VilkårUtfall,
   ÅrsakTilOpprettelse,
@@ -323,16 +324,26 @@ export function mapTilÅrsakTilOpprettelseTilTekst(årsakTilOpprettelse: ÅrsakT
   }
 }
 
-export function mapGrunnTilString(grunn: string): string {
+export function mapGrunnTilString(grunn: ToTrinnsVurderingGrunn): string {
   switch (grunn) {
     case 'FEIL_LOVANVENDELSE':
-      return 'Feil lovanvendelse';
+      return 'Feil resultat i vedtaket';
     case 'MANGELFULL_BEGRUNNELSE':
-      return 'Mangelfull begrunnelse';
+      return 'Mangler i vilkårsvurdering';
     case 'MANGLENDE_UTREDNING':
       return 'Manglende utredning';
     case 'SKRIVEFEIL':
       return 'Skrivefeil';
+    case 'FOR_DETALJERT':
+      return 'For detaljerte beskrivelser';
+    case 'IKKE_INDIVIDUELL_OG_KONKRET':
+      return 'Ikke individuell og konkret nok';
+    case 'MANGLENDE_KILDEHENVISNING':
+      return 'Manglende kildehenvisning';
+    case 'MANGLENDE_JOURNALFØRING':
+      return 'Manglende journalføring';
+    case 'ANNET':
+      return 'Annen returårsak';
     default:
       return grunn;
   }
