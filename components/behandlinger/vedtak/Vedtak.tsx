@@ -2,6 +2,7 @@ import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 import { ForeslåVedtakMedDataFetching } from 'components/behandlinger/vedtak/foreslaavedtak/ForeslåVedtakMedDataFetching';
 import { GruppeSteg } from 'components/gruppesteg/GruppeSteg';
 import { BehandlingFlytOgTilstand } from 'lib/types/types';
+import { BeslutterMedDataFetching } from 'components/behandlinger/vedtak/beslutter/BeslutterMedDataFetching';
 
 interface Props {
   behandlingsreferanse: string;
@@ -24,6 +25,13 @@ export const Vedtak = async ({ behandlingsreferanse, flyt }: Props) => {
           behandlingVersjon={behandlingVersjon}
           behandlingsreferanse={behandlingsreferanse}
           readonly={flyt.visning.saksbehandlerReadOnly}
+        />
+      </StegSuspense>
+      <StegSuspense>
+        <BeslutterMedDataFetching
+          behandlingsreferanse={behandlingsreferanse}
+          readOnly={flyt.visning.beslutterReadOnly}
+          behandlingsversjon={behandlingVersjon}
         />
       </StegSuspense>
     </GruppeSteg>
