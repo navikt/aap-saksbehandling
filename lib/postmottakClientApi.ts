@@ -7,6 +7,7 @@ import {
   BehandlingFlytOgTilstand,
   FinnBehandlingerRespons,
   SimulerJournalpostHendelseRequest,
+  JournalposterRespons,
 } from 'lib/types/postmottakTypes';
 
 // TODO: Test-endepunkt - skal fjernes
@@ -35,9 +36,27 @@ export function postmottakAlleBehandlinger(ident: string) {
   return clientFetch<FinnBehandlingerRespons>(`/postmottak/api/post/alle-behandlinger`, 'POST', { ident: ident });
 }
 
-export async function postmottakHentDokumentClient(journalpostId: number, dokumentInfoId: string): Promise<Blob> {
-  return fetch(`/postmottak/api/post/dokumenter/${journalpostId}/${dokumentInfoId}`, { method: 'GET' }).then((res) =>
-    res.blob()
+export async function postmottakHentDokumentClient(
+  journalpostId: string | number,
+  dokumentInfoId: string,
+  signal?: AbortSignal
+): Promise<Blob> {
+  const res = await fetch(
+    `/postmottak/api/post/dokumenter/${encodeURIComponent(journalpostId)}/${encodeURIComponent(dokumentInfoId)}`,
+    { method: 'GET', signal }
+  );
+  if (!res.ok) {
+    throw new Error(`Kunne ikke hente dokumentet (HTTP ${res.status}).`);
+  }
+  return res.blob();
+}
+
+export function postmottakHentJournalposterClient(behandlingsreferanse: string, etter?: string) {
+  const query = new URLSearchParams();
+  if (etter) query.set('etter', etter);
+  return clientFetch<JournalposterRespons>(
+    `/postmottak/api/post/${behandlingsreferanse}/journalposter?${query}`,
+    'GET'
   );
 }
 

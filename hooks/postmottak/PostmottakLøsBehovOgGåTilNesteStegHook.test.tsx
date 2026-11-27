@@ -4,8 +4,9 @@ import { OverstyrTildelingModal } from 'components/overstyrtildelingmodal/Overst
 import { OverstyrTildelingContextProvider } from 'context/saksbehandling/OverstyrTildelingContext';
 import { hentTildeltStatusClient } from 'lib/oppgaveClientApi';
 import { postmottakHentFlyt, postmottakLøsBehovClient } from 'lib/postmottakClientApi';
-import { AvklarSaksnummerLøsning, LøsAvklaringsbehovPåBehandling } from 'lib/types/postmottakTypes';
+import { AvklarSaksnummerLøsning, LøsAvklaringsbehovPåBehandling, StegType } from 'lib/types/postmottakTypes';
 import { ReactNode } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { PostmottakFlytResponse } from 'vitestSetup';
 
@@ -39,9 +40,9 @@ function wrapper({ children }: { children: ReactNode }) {
   );
 }
 
-function setupTest() {
+function setupTest(steg: StegType = 'AVKLAR_SAK') {
   const user = userEvent.setup();
-  const { result } = renderHook(() => usePostmottakLøsBehovOgGåTilNesteSteg('AVKLAR_SAK'), { wrapper });
+  const { result } = renderHook(() => usePostmottakLøsBehovOgGåTilNesteSteg(steg), { wrapper });
 
   const løsBehov = async (løsning: typeof behov) => {
     await act(async () => {
@@ -60,6 +61,7 @@ function setupTest() {
 describe('usePostmottakLøsBehovOgGåTilNesteSteg', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useParams).mockReturnValue({ behandlingsreferanse: '456', aktivGruppe: 'AVKLAR_SAK' });
     vi.stubEnv('NEXT_PUBLIC_ENVIRONMENT', 'dev');
     vi.mocked(hentTildeltStatusClient).mockResolvedValue({
       type: 'SUCCESS',
@@ -114,6 +116,45 @@ describe('usePostmottakLøsBehovOgGåTilNesteSteg', () => {
     });
   });
 
+  test('Under18 bruker steggruppen fra URL-en og navigerer til neste gruppe etter prosessering', async () => {
+    vi.mocked(useParams).mockReturnValue({ behandlingsreferanse: '456', aktivGruppe: 'UNDER18' });
+    const router = {
+      bfcacheId: 'test',
+      push: vi.fn(),
+      replace: vi.fn(),
+      refresh: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      prefetch: vi.fn(),
+    };
+    vi.mocked(useRouter).mockReturnValue(router);
+    const eventSource = new EventSource('test');
+    vi.mocked(EventSource).mockClear();
+    vi.mocked(EventSource).mockImplementationOnce(function () {
+      return eventSource;
+    });
+    const { løsBehov, bekreftOverstyring } = setupTest('AVKLAR_UNDER18_SAMTYKKE');
+
+    await løsBehov(behov);
+    await bekreftOverstyring();
+
+    expect(EventSource).toHaveBeenCalledWith(
+      '/postmottak/api/post/456/hent/UNDER18/AVKLAR_UNDER18_SAMTYKKE/nesteSteg/',
+      { withCredentials: true }
+    );
+    await act(async () => {
+      await eventSource.onmessage?.(
+        new MessageEvent('message', {
+          data: JSON.stringify({ status: 'DONE', skalBytteGruppe: true, aktivGruppe: 'IVERKSETTES' }),
+        })
+      );
+    });
+
+    expect(router.push).toHaveBeenCalledWith('/postmottak/456/IVERKSETTES/');
+    expect(router.refresh).toHaveBeenCalledOnce();
+    expect(eventSource.close).toHaveBeenCalledOnce();
+  });
+
   test('feil ved innsending etter bekreftelse returneres til skjemaet', async () => {
     vi.mocked(postmottakLøsBehovClient).mockResolvedValue({
       type: 'ERROR',
@@ -133,31 +174,34 @@ describe('usePostmottakLøsBehovOgGåTilNesteSteg', () => {
     expect(EventSource).not.toHaveBeenCalled();
   });
 
-  test('versjonskonflikt henter siste versjon og sender samme løsning på nytt før prosessering', async () => {
-    vi.mocked(postmottakLøsBehovClient).mockResolvedValueOnce({
-      type: 'ERROR',
-      status: 409,
-      apiException: { message: 'Behandlingen har blitt oppdatert' },
-    });
-    vi.mocked(postmottakHentFlyt).mockResolvedValue({
-      type: 'SUCCESS',
-      data: { ...PostmottakFlytResponse, behandlingVersjon: 2 },
-    });
-    const { result, løsBehov, bekreftOverstyring } = setupTest();
+  test.each(['AVKLAR_SAK', 'AVKLAR_UNDER18_SAMTYKKE'] as const)(
+    'versjonskonflikt i %s henter siste versjon og sender samme løsning på nytt før prosessering',
+    async (steg) => {
+      vi.mocked(postmottakLøsBehovClient).mockResolvedValueOnce({
+        type: 'ERROR',
+        status: 409,
+        apiException: { message: 'Behandlingen har blitt oppdatert' },
+      });
+      vi.mocked(postmottakHentFlyt).mockResolvedValue({
+        type: 'SUCCESS',
+        data: { ...PostmottakFlytResponse, behandlingVersjon: 2 },
+      });
+      const { result, løsBehov, bekreftOverstyring } = setupTest(steg);
 
-    await løsBehov(behov);
-    await bekreftOverstyring();
+      await løsBehov(behov);
+      await bekreftOverstyring();
 
-    await waitFor(() => {
-      expect(EventSource).toHaveBeenCalledTimes(1);
-    });
-    expect(postmottakHentFlyt).toHaveBeenCalledExactlyOnceWith(behov.referanse);
-    expect(postmottakLøsBehovClient).toHaveBeenCalledTimes(2);
-    expect(postmottakLøsBehovClient).toHaveBeenNthCalledWith(1, behov);
-    expect(postmottakLøsBehovClient).toHaveBeenNthCalledWith(2, { ...behov, behandlingVersjon: 2 });
-    expect(behov.behandlingVersjon).toBe(1);
-    expect(result.current.løsBehovOgGåTilNesteStegError).toBeUndefined();
-  });
+      await waitFor(() => {
+        expect(EventSource).toHaveBeenCalledTimes(1);
+      });
+      expect(postmottakHentFlyt).toHaveBeenCalledExactlyOnceWith(behov.referanse);
+      expect(postmottakLøsBehovClient).toHaveBeenCalledTimes(2);
+      expect(postmottakLøsBehovClient).toHaveBeenNthCalledWith(1, behov);
+      expect(postmottakLøsBehovClient).toHaveBeenNthCalledWith(2, { ...behov, behandlingVersjon: 2 });
+      expect(behov.behandlingVersjon).toBe(1);
+      expect(result.current.løsBehovOgGåTilNesteStegError).toBeUndefined();
+    }
+  );
 
   test('feil ved henting av siste versjon vises uten ny innsending eller prosessering', async () => {
     vi.mocked(postmottakLøsBehovClient).mockResolvedValueOnce({

@@ -3,12 +3,12 @@ import { cookies } from 'next/headers';
 
 export async function hentLocalToken(scope: string) {
   const cookieStore = await cookies();
-  const ident = cookieStore.get('bruker');
+  const ident = cookieStore.get('bruker')?.value || 'VEILEDER';
 
   try {
     const params = new URLSearchParams({
       aud: scope,
-      NAVident: ident?.value || 'VEILEDER',
+      NAVident: ident,
       groups: ['saksbehandler-rolle', 'veileder-rolle', 'kvalitetssikrer-rolle', 'beslutter-rolle'].join(','),
     });
 

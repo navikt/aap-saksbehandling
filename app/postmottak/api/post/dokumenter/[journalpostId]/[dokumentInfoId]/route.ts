@@ -3,7 +3,7 @@ import { hentDokumentFraDokumentInfoId } from 'lib/services/postmottakservice/po
 
 export async function GET(
   _: NextRequest,
-  props: { params: Promise<{ journalpostId: number; dokumentInfoId: string }> }
+  props: { params: Promise<{ journalpostId: string; dokumentInfoId: string }> }
 ) {
   const params = await props.params;
 

@@ -101,9 +101,12 @@ const behovskodeMap = {
   '1338': 'Digitaliser dokument',
   '1339': 'Avklar tema',
   '1340': 'Avklar saksnummer',
-  '1341': 'Endre tema',
+  '1341': 'Avklar overlevering',
   '1342': 'Vent på Gosys',
   '1343': 'Avklar fordeling',
+  '1344': 'Avklar søknad fra person under 18 år',
+  '1345': 'Avklar samtykke',
+  '1347': 'Venter på samtykke',
 } as const;
 
 export function mapBehovskodeTilBehovstype(kode: OppgaveAvklaringsbehovKode | string): string {
@@ -381,6 +384,8 @@ export function mapTypeBehandlingTilTekst(typeBehandling: TypeBehandling | Postm
       return 'Opphold i utlandet';
     case 'DokumentHåndtering':
       return 'Dokumenthåndtering';
+    case 'Under18':
+      return 'Søknad fra person under 18 år';
     default:
       return typeBehandling;
   }

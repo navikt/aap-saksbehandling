@@ -82,6 +82,8 @@ export enum Behovstype {
   AVKLAR_TEMA = '1339',
   FINN_SAK = '1340',
   AVKLAR_OVERLEVERING = '1341',
+  AVKLAR_UNDER18_SØKNAD = '1344',
+  AVKLAR_UNDER18_SAMTYKKE = '1345',
 }
 
 export const getJaNeiEllerUndefined = (value?: boolean | null): JaEllerNei | undefined => {

@@ -68,6 +68,36 @@ describe('AvklarTema', () => {
     expect(løsBehov).not.toHaveBeenCalled();
   });
 
+  it('informerer om at Ja oppretter en ny under 18-behandling', async () => {
+    await act(async () => {
+      visTema(true, { ...grunnlag, under18VedBekreftetAap: 'OPPRETT' });
+    });
+
+    expect(
+      screen.getByText('Svarer du ja, opprettes en under 18-behandling for søknaden etter journalføring.')
+    ).toBeVisible();
+  });
+
+  it('informerer om at Ja legger journalposten til i en eksisterende under 18-behandling', async () => {
+    await act(async () => {
+      visTema(false, { ...grunnlag, under18VedBekreftetAap: 'LEGG_TIL' });
+    });
+
+    expect(
+      screen.getByText(
+        'Svarer du ja, legges denne journalposten til i den åpne under 18-behandlingen etter journalføring.'
+      )
+    ).toBeVisible();
+  });
+
+  it.each([undefined, null])('viser ikke under 18-informasjon når feltet er %s', async (under18VedBekreftetAap) => {
+    await act(async () => {
+      visTema(true, { ...grunnlag, under18VedBekreftetAap });
+    });
+
+    expect(screen.queryByText('Behandling for bruker under 18 år')).not.toBeInTheDocument();
+  });
+
   it('krever tema for Nei og sender valgt kode uten Gosys-modal', async () => {
     visTema(true);
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();

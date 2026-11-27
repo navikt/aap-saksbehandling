@@ -7,6 +7,7 @@ import { AvklarTemaMedDataFetching } from 'components/postmottak/avklartema/Avkl
 import { DigitaliserDokumentMedDatafetching } from 'components/postmottak/digitaliserdokument/DigitaliserDokumentMedDatafetching';
 import { FullførtOppgaveModal } from 'components/postmottak/fullførtoppgavemodal/FullførtOppgaveModal';
 import { OverleveringMedDataFetching } from 'components/postmottak/overlevering/OverleveringMedDataFetching';
+import { Under18MedDataFetching } from 'components/postmottak/under18/Under18MedDataFetching';
 import { StegSuspense } from 'components/stegsuspense/StegSuspense';
 
 interface Props {
@@ -26,6 +27,11 @@ export const StegKolonne = async ({ aktivGruppe, behandlingsreferanse }: Props) 
   }
   return (
     <>
+      {aktivGruppe === 'UNDER18' && (
+        <StegSuspense>
+          <Under18MedDataFetching behandlingsreferanse={behandlingsreferanse} />
+        </StegSuspense>
+      )}
       {aktivGruppe === 'AVKLAR_TEMA' && (
         <StegSuspense>
           <AvklarTemaMedDataFetching behandlingsreferanse={behandlingsreferanse} />

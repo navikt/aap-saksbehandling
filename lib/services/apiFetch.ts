@@ -57,11 +57,14 @@ const fetchWithRetry = async <ResponseType>(
 
     const response = await fetch(url, { ...options, signal: combinedSignal });
 
-    if (response.status === 204) {
+    if (response.status === 204 || (response.status === 202 && response.headers.get('content-length') === '0')) {
       return { type: 'SUCCESS', status: response.status, data: undefined as ResponseType };
     }
 
     if (!response.ok) {
+      if (response.status === 403 && !response.headers.get('content-type')?.includes('json')) {
+        return { type: 'ERROR', status: 403, apiException: { message: 'Du har ikke tilgang.' } };
+      }
       const responseJson: ApiException = await response.json();
       const feilmelding = `klarte ikke å hente ${url}: ${responseJson.message} med status ${response.status}`;
       if (response.status >= 500) {

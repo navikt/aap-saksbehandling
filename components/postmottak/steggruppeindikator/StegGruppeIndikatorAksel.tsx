@@ -9,6 +9,8 @@ function stegGruppeNavnTilLabel(stegGruppeNavn: FlytGruppe['stegGruppe']) {
   switch (stegGruppeNavn) {
     case 'AVKLAR_FORDELING':
       return 'Avklar fordeling';
+    case 'UNDER18':
+      return 'Søknad fra person under 18 år';
     case 'AVKLAR_TEMA':
       return 'Avklar tema';
     case 'AVKLAR_SAK':

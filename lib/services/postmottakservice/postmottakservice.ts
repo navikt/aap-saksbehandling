@@ -8,11 +8,13 @@ import {
   FinnSakGrunnlag,
   FlytProsessering,
   JournalpostInfo,
+  JournalposterRespons,
   LøsAvklaringsbehovPåBehandling,
   OverleveringGrunnlag,
   SettPåVentRequest,
   SimulerJournalpostHendelseRequest,
   UbehandletJournalpost,
+  Under18Grunnlag,
   Venteinformasjon,
 } from 'lib/types/postmottakTypes';
 import { logError, logInfo, logWarning } from 'lib/serverutlis/logger';
@@ -30,6 +32,9 @@ export const hentFlyt = async (behandlingsreferanse: string) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/flyt`;
   return await apiFetch<BehandlingFlytOgTilstand>(url, postmottakApiScope, 'GET');
 };
+
+export const hentUnder18Grunnlag = (referanse: string) =>
+  apiFetch<Under18Grunnlag>(`${postmottakApiBaseUrl}/api/behandling/${referanse}/grunnlag/under18`, postmottakApiScope);
 
 export const hentAvklarTemaGrunnlag = async (behandlingsreferanse: string) => {
   const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/grunnlag/avklarTemaVurdering`;
@@ -52,6 +57,13 @@ export const hentJournalpostInfo = async (behandlingsreferanse: string) => {
   return apiFetch<JournalpostInfo>(url, postmottakApiScope, 'GET');
 };
 
+export const hentJournalposter = async (behandlingsreferanse: string, etter?: string) => {
+  const query = new URLSearchParams();
+  if (etter) query.set('etter', etter);
+  const url = `${postmottakApiBaseUrl}/api/behandling/${behandlingsreferanse}/journalposter?${query}`;
+  return apiFetch<JournalposterRespons>(url, postmottakApiScope, 'GET');
+};
+
 export const hentUbehandledeJournalposter = async () => {
   const url = `${postmottakApiBaseUrl}/api/dokumenter/finn-ubehandlede`;
   return await apiFetch<UbehandletJournalpost[]>(url, postmottakApiScope, 'GET');
@@ -70,10 +82,13 @@ export const hentVenteInformasjon = async (behandlingsreferanse: string) => {
   return await apiFetch<Venteinformasjon>(url, postmottakApiScope, 'GET');
 };
 export const hentDokumentFraDokumentInfoId = async (
-  journalpostId: number,
+  journalpostId: string | number,
   dokumentInfoId: string
 ): Promise<Response> => {
-  return apiFetchPdf(`${postmottakApiBaseUrl}/api/dokumenter/${journalpostId}/${dokumentInfoId}`, postmottakApiScope);
+  return apiFetchPdf(
+    `${postmottakApiBaseUrl}/api/dokumenter/${encodeURIComponent(journalpostId)}/${encodeURIComponent(dokumentInfoId)}`,
+    postmottakApiScope
+  );
 };
 
 export const endreTema = async (behandlingsreferanse: string) => {

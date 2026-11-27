@@ -11,6 +11,7 @@ import { intervalToDuration } from 'date-fns';
 import { parseDatoFraDatePicker } from 'lib/utils/date';
 import { validerDato } from 'lib/validation/dateValidation';
 import { Dato } from 'lib/types/Dato';
+import { SimulerJournalpostHendelseRequest } from 'lib/types/postmottakTypes';
 
 interface SimulerJournalpostHendelseFormFields {
   journalpostId: string;
@@ -20,7 +21,7 @@ interface SimulerJournalpostHendelseFormFields {
   temaGammelt: string;
   journalpostStatus: string;
   hendelsesType: string;
-  scenario: string;
+  scenario: SimulerJournalpostHendelseRequest['scenario'];
 }
 
 export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string }) => {
@@ -92,6 +93,7 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
         { value: 'LEGEERKLÆRING', label: 'Legeerklæring' },
         { value: 'DIGITAL_SØKNAD', label: 'Digital søknad' },
         { value: 'PAPIRSØKNAD', label: 'Papirsøknad' },
+        { value: 'ANNET_RELEVANT_DOKUMENT', label: 'Annet relevant dokument' },
         { value: 'UTENLANDSK_ORGNR', label: 'Utenlandsk orgnr (krever journalpoststatus JOURNALFOERT)' },
       ],
     },
@@ -112,7 +114,7 @@ export const SimulerJournalpostHendelse = ({ defaultFnr }: { defaultFnr?: string
         temaGammelt: data.temaGammelt || undefined,
         journalpostStatus: data.journalpostStatus,
         hendelsesType: data.hendelsesType,
-        scenario: data.scenario as 'DIGITAL_SØKNAD' | 'LEGEERKLÆRING' | 'PAPIRSØKNAD' | 'UTENLANDSK_ORGNR',
+        scenario: data.scenario,
       });
       if (isSuccess(res)) {
         setMessage(`Journalpost ${data.journalpostId} sendt som Kafka-hendelse til postmottak`);
