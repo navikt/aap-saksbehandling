@@ -38,7 +38,6 @@ export const OppgaveListe = ({ enheter, gosysUrl }: Props) => {
       paddingBlock={'space-32'}
       maxWidth={'1680px'}
       marginInline={'auto'}
-      marginBlock={'space-0'}
     >
       <TildelOppgaverProvider>
         <HStack gap={'space-16'} align={'center'}>
