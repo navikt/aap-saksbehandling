@@ -3,14 +3,11 @@
 import { BodyShort, Heading, HStack, Link, Tag } from '@navikt/ds-react';
 import { ArenaSakOppsummeringKontrakt } from 'lib/services/apiinternservice/apiInternServiceDTOs';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { useFeatureFlag } from 'context/UnleashContext';
 import { Kort } from 'components/kort/Kort';
 
 const arenaVisningsklientBaseUrl = process.env.NEXT_PUBLIC_ARENA_VISNINGSKLIENT_BASE_URL ?? '';
 
 export function ArenaSakKort({ sak }: { sak: ArenaSakOppsummeringKontrakt }) {
-  const visLenke = useFeatureFlag('ArenasakerLenkeTilVisninsklient');
-
   return (
     <Kort background="default">
       <HStack gap="space-16" justify="space-between" align="center" wrap={false}>
@@ -18,18 +15,12 @@ export function ArenaSakKort({ sak }: { sak: ArenaSakOppsummeringKontrakt }) {
           <Heading as="h3" size="small">
             Arena {sak.sakstype}
           </Heading>
-          {visLenke ? (
-            <Link href={`${arenaVisningsklientBaseUrl}sak/${sak.aar}-${sak.lopenummer}`} target="_blank">
-              <Heading as="h3" size="small">
-                {sak.aar} {sak.lopenummer}
-              </Heading>
-              <ExternalLinkIcon />
-            </Link>
-          ) : (
+          <Link href={`${arenaVisningsklientBaseUrl}sak/${sak.aar}-${sak.lopenummer}`} target="_blank">
             <Heading as="h3" size="small">
               {sak.aar} {sak.lopenummer}
             </Heading>
-          )}
+            <ExternalLinkIcon />
+          </Link>
           <BodyShort size="medium">{sak.antallVedtak} vedtak</BodyShort>
         </HStack>
         <Tag variant="moderate" data-color={sak.statuskode === 'AKTIV' ? 'success' : 'neutral'} size="small">
